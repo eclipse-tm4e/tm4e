@@ -10,6 +10,8 @@ Require-Bundle: fr.opensagres.language.textmate.core,
  org.eclipse.core.runtime,
  org.eclipse.ui,
  org.eclipse.ui.editors,
- fr.opensagres.language.textmate.eclipse
+ fr.opensagres.language.textmate.eclipse,
+ org.eclipse.languageserver;bundle-version="0.1.0";resolution:=optional,
+ org.eclipse.languageserver.languages;bundle-version="0.1.0";resolution:=optional
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 

@@ -1,4 +1,4 @@
-package org.eclipse.languageserver.languages.css;
+package fr.opensagres.language.textmate.eclipse.samples.csharp;
 
 import fr.opensagres.language.textmate.core.grammar.IGrammar;
 import fr.opensagres.language.textmate.core.registry.Registry;
@@ -6,9 +6,9 @@ import fr.opensagres.language.textmate.eclipse.text.TMPresentationReconciler;
 import fr.opensagres.language.textmate.eclipse.text.styles.CSSTokenProvider;
 import fr.opensagres.language.textmate.eclipse.text.styles.ITokenProvider;
 
-public class CSSPresentationReconcilier extends TMPresentationReconciler {
+public class CSharpPresentationReconclier extends TMPresentationReconciler {
 
-	public CSSPresentationReconcilier() {
+	public CSharpPresentationReconclier() {
 		// Set the C# grammar
 		super.setGrammar(initGrammar());
 		// Set the token provider used to style editor tokens
@@ -19,8 +19,8 @@ public class CSSPresentationReconcilier extends TMPresentationReconciler {
 		// TODO: cache the grammar
 		Registry registry = new Registry();
 		try {
-			return registry.loadGrammarFromPathSync("css.plist",
-					CSSPresentationReconcilier.class.getResourceAsStream("css.plist"));
+			return registry.loadGrammarFromPathSync("csharp.json",
+					CSharpPresentationReconclier.class.getResourceAsStream("csharp.json"));
 		} catch (Exception e) {
 			e.printStackTrace();
 			return null;
@@ -29,7 +29,6 @@ public class CSSPresentationReconcilier extends TMPresentationReconciler {
 
 	private ITokenProvider initTokenProvider() {
 		// TODO: cache the token provider
-		return new CSSTokenProvider(CSSPresentationReconcilier.class.getResourceAsStream("style_Solarized-light.css"));
+		return new CSSTokenProvider(CSharpPresentationReconclier.class.getResourceAsStream("style.css"));
 	}
-
 }

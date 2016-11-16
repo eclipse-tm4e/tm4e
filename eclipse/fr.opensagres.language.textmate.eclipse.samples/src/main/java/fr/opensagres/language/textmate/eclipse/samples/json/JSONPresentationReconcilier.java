@@ -1,4 +1,4 @@
-package org.eclipse.languageserver.languages.json;
+package fr.opensagres.language.textmate.eclipse.samples.json;
 
 import fr.opensagres.language.textmate.core.grammar.IGrammar;
 import fr.opensagres.language.textmate.core.registry.Registry;

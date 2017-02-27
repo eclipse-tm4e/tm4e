@@ -4,4 +4,8 @@ jdk:
   - oraclejdk8
 
 notifications:
-  email: false
+   email:
+    recipients:
+      - pascal.leclercq@gmail.com
+    on_success: never # default: change
+    on_failure: always # default: always

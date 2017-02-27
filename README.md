@@ -1,6 +1,6 @@
 # TextMate support in Eclipse IDE (tm4e)
-
-[![Build Status](https://secure.travis-ci.org/pascalleclercq/textmate.java.png)](http://travis-ci.org/pascalleclercq/textmate.java)
+https://travis-ci.org/pascalleclercq/tm4e
+[![Build Status](https://travis-ci.org/pascalleclercq/tm4e.png)](https://travis-ci.org/pascalleclercq/tm4e)
 
 **tm4e** provides the capability to support TextMate tokenizer with Java. It provides:
 

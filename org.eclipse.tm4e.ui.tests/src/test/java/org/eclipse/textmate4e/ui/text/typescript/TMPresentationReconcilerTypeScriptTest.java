@@ -12,7 +12,7 @@ import org.junit.Assert;
 import org.junit.Ignore;
 import org.junit.Test;
 
-public class TMPresentationReconcilerTypeScriptTests {
+public class TMPresentationReconcilerTypeScriptTest {
 
 	@Ignore ("Remove this annotation when org.eclipse.swt.SWTError: No more handles [gtk_init_check() failed] will be fixed")
 	@Test
@@ -329,7 +329,7 @@ public class TMPresentationReconcilerTypeScriptTests {
 		Registry registry = new Registry();
 		try {
 			return registry.loadGrammarFromPathSync("TypeScript.tmLanguage.json",
-					TMPresentationReconcilerTypeScriptTests.class.getResourceAsStream("TypeScript.tmLanguage.json"));
+					TMPresentationReconcilerTypeScriptTest.class.getResourceAsStream("TypeScript.tmLanguage.json"));
 		} catch (Exception e) {
 			e.printStackTrace();
 			return null;

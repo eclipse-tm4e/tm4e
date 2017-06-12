@@ -37,7 +37,7 @@ import junit.framework.TestSuite;
 @RunWith(AllTests.class)
 public class GrammarSuiteTest {
 
-	private static final File REPO_ROOT = new File("src/test/resources");
+	private static final File REPO_ROOT = new File("src/main/resources");
 
 	// TODO: fix thoses tests:
 	// It seems that problem comes from with encoding. OnigString should support UTF-16 like https://github.com/atom/node-oniguruma/blob/master/src/onig-string.cc 

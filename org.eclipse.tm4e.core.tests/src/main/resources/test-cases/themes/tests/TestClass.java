@@ -34,7 +34,7 @@ public class TestClass {
 	@Test
 	public void someTests() {
 		int hex = 0x5;
-		Vector<Number> v = new Vector();
+		java.util.Vector<Number> v = new java.util.Vector();
 	}
 
 

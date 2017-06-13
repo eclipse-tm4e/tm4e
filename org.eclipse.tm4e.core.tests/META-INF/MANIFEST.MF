@@ -10,7 +10,7 @@ Require-Bundle: org.apache.batik.css;bundle-version="1.7.0";resolution:=optional
  com.google.gson;resolution:=optional,
  org.eclipse.core.runtime,
  org.eclipse.tm4e.core
-Import-Package: org.junit,
+Import-Package: org.junit,org.junit.runner,org.junit.runners,junit.framework,
  org.w3c.css.sac;resolution:=optional,
  org.w3c.css.sac.helpers;resolution:=optional
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8

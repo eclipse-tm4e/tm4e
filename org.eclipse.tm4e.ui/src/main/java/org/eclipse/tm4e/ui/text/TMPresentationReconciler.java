@@ -16,7 +16,9 @@ import java.util.List;
 
 import org.eclipse.core.runtime.Assert;
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Path;
+import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.content.IContentType;
 import org.eclipse.core.runtime.preferences.IEclipsePreferences.IPreferenceChangeListener;
 import org.eclipse.core.runtime.preferences.IEclipsePreferences.PreferenceChangeEvent;
@@ -277,22 +279,6 @@ public class TMPresentationReconciler implements IPresentationReconciler {
 			}
 		}
 
-		private IGrammar findGrammar(ContentTypeInfo info) {
-			IGrammar grammar;
-			IContentType[] contentTypes = info.getContentTypes();
-			// Discover the well grammar from the contentTypes
-			grammar = TMEclipseRegistryPlugin.getGrammarRegistryManager().getGrammarFor(contentTypes);
-			if (grammar == null) {
-				// Discover the well grammar from the filetype
-				String fileName = info.getFileName();
-				if (fileName != null) {
-					String fileType = new Path(fileName).getFileExtension();
-					grammar = TMEclipseRegistryPlugin.getGrammarRegistryManager().getGrammarForFileType(fileType);
-				}
-			}
-			return grammar;
-		}
-
 		@Override
 		public void textChanged(TextEvent e) {
 			if (!enabled || !e.getViewerRedrawState()) {
@@ -385,6 +371,22 @@ public class TMPresentationReconciler implements IPresentationReconciler {
 		}
 	}
 
+	private static IGrammar findGrammar(ContentTypeInfo info) {
+		IGrammar grammar;
+		IContentType[] contentTypes = info.getContentTypes();
+		// Discover the well grammar from the contentTypes
+		grammar = TMEclipseRegistryPlugin.getGrammarRegistryManager().getGrammarFor(contentTypes);
+		if (grammar == null) {
+			// Discover the well grammar from the filetype
+			String fileName = info.getFileName();
+			if (fileName != null) {
+				String fileType = new Path(fileName).getFileExtension();
+				grammar = TMEclipseRegistryPlugin.getGrammarRegistryManager().getGrammarForFileType(fileType);
+			}
+		}
+		return grammar;
+	}
+
 	public void setGrammar(IGrammar grammar) {
 		boolean changed = (viewer != null && ((this.grammar == null) || !this.grammar.equals(grammar)));
 		this.grammar = grammar;
@@ -451,7 +453,21 @@ public class TMPresentationReconciler implements IPresentationReconciler {
 	@Override
 	public void install(ITextViewer viewer) {
 		Assert.isNotNull(viewer);
-
+		
+		if (this.grammar == null && viewer.getDocument() != null) {
+			try {
+				ContentTypeInfo info = ContentTypeHelper.findContentTypes(viewer.getDocument());
+				if (info != null) {
+					this.grammar = findGrammar(info);
+				}
+			} catch (CoreException e) {
+				TMUIPlugin.getDefault().getLog().log(new Status(IStatus.ERROR, TMUIPlugin.PLUGIN_ID, e.getMessage(), e));
+			}
+			if (this.grammar == null) {
+				throw new IllegalArgumentException("No TextMate Grammar for provided editor/viewer/document.");
+			}
+		}
+		
 		this.viewer = viewer;
 		viewer.addTextInputListener(internalListener);
 

@@ -136,6 +136,13 @@
          </menu>
       </menuContribution>
    </extension>
+   <extension
+         point="org.eclipse.ui.genericeditor.presentationReconcilers">
+      <presentationReconciler
+            class="org.eclipse.tm4e.ui.text.TMPresentationReconciler"
+            contentType="org.eclipse.core.runtime.text">
+      </presentationReconciler>
+   </extension>
 
    <!-- By default GenericEditor uses TextMate presentation reconciler -->
    <extension

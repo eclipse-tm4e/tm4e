@@ -13,9 +13,12 @@
  *  - GitHub Inc.: Initial code, written in JavaScript, licensed under MIT license
  *  - Angelo Zerr <angelo.zerr@gmail.com> - translation and adaptation to Java
  *  - Fabio Zadrozny <fabiofz@gmail.com> - Convert uniqueId to Object (for identity compare)
+ *  - Fabio Zadrozny <fabiofz@gmail.com> - Fix recursion error on OnigRegExp with unicode chars
  */
 
 package org.eclipse.tm4e.core.internal.oniguruma;
+
+import java.io.UnsupportedEncodingException;
 
 import org.jcodings.specific.UTF8Encoding;
 import org.joni.Matcher;
@@ -41,7 +44,12 @@ public class OnigRegExp {
 		lastSearchStrUniqueId = null;
 		lastSearchPosition = -1;
 		lastSearchResult = null;
-		byte[] pattern = source.getBytes();
+		byte[] pattern;
+		try {
+			pattern = source.getBytes("utf-8");
+		} catch (UnsupportedEncodingException e) {
+			throw new RuntimeException(e);
+		}
 		this.regex = new Regex(pattern, 0, pattern.length, Option.CAPTURE_GROUP, UTF8Encoding.INSTANCE, Syntax.DEFAULT,
 				WarnCallback.DEFAULT);
 	}

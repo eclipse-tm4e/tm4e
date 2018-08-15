@@ -24,7 +24,7 @@ public class TextUtils {
 
 	/**
 	 * Returns true if text of the command is an enter and false otherwise.
-	 * 
+	 *
 	 * @param d
 	 * @param c
 	 * @return true if text of the command is an enter and false otherwise.
@@ -69,6 +69,25 @@ public class TextUtils {
 	}
 
 	/**
+	 * Returns the start of the string at the offset in the text. If the string is
+	 * not in the text at the offset, returns -1.</br>
+	 * Ex: </br>
+	 * text = "apple banana", offset=8, string="banana" returns=6
+	 */
+	public static int startIndexOfOffsetTouchingString(String text, int offset, String string) {
+		int start = offset - string.length();
+		start = start < 0 ? 0 : start;
+		int end = offset + string.length();
+		end = end >= text.length() ? text.length() : end;
+		try {
+			int indexInSubtext = text.substring(start, end).indexOf(string);
+			return indexInSubtext == -1 ? -1 : start + indexInSubtext;
+		} catch (IndexOutOfBoundsException e) {
+			return -1;
+		}
+	}
+
+	/**
 	 * Returns first index of the string that is not whitespace. If string is empty
 	 * or contains only whitespaces, returns -1
 	 */
@@ -104,16 +123,13 @@ public class TextUtils {
 	 * <code>end</code> whose character is not a space or tab character. If no such
 	 * offset is found, <code>end</code> is returned.
 	 *
-	 * @param document
-	 *            the document to search in
-	 * @param offset
-	 *            the offset at which searching start
-	 * @param end
-	 *            the offset at which searching stops
+	 * @param document the document to search in
+	 * @param offset   the offset at which searching start
+	 * @param end      the offset at which searching stops
 	 * @return the offset in the specified range whose character is not a space or
 	 *         tab
-	 * @exception BadLocationException
-	 *                if position is an invalid range in the given document
+	 * @exception BadLocationException if position is an invalid range in the given
+	 *                                 document
 	 */
 	private static int findEndOfWhiteSpace(IDocument document, int offset, int end) throws BadLocationException {
 		while (offset < end) {

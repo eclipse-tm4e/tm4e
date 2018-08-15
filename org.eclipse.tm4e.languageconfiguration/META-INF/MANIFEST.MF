@@ -19,6 +19,7 @@ Require-Bundle: org.eclipse.jface.text,
  org.eclipse.core.filesystem,
  org.eclipse.tm4e.registry,
  org.eclipse.ui.editors,
- org.eclipse.e4.ui.css.swt.theme
+ org.eclipse.e4.ui.css.swt.theme,
+ org.eclipse.core.expressions
 Bundle-Activator: org.eclipse.tm4e.languageconfiguration.internal.LanguageConfigurationPlugin
 Export-Package: org.eclipse.tm4e.languageconfiguration

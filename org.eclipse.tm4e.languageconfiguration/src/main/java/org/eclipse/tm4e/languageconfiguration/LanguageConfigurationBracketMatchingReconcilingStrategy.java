@@ -43,6 +43,7 @@ import org.eclipse.tm4e.languageconfiguration.internal.LanguageConfigurationRegi
 import org.eclipse.tm4e.languageconfiguration.internal.preferences.PreferenceConstants;
 import org.eclipse.tm4e.languageconfiguration.internal.preferences.PreferenceHelper;
 import org.eclipse.tm4e.languageconfiguration.internal.supports.CharacterPair;
+import org.eclipse.tm4e.languageconfiguration.internal.utils.TextUtils;
 import org.eclipse.tm4e.ui.utils.ContentTypeHelper;
 import org.eclipse.tm4e.ui.utils.ContentTypeInfo;
 
@@ -98,22 +99,14 @@ public class LanguageConfigurationBracketMatchingReconcilingStrategy
 		String closing = surroundingPair.getValue();
 		int startOfMatchingPair = -1;
 		int lengthOfMatchingPair = -1;
-		int closeSearchStart = offset - closing.length();
-		closeSearchStart = closeSearchStart < 0 ? 0 : closeSearchStart;
-		int closeSearchEnd = offset + closing.length();
-		closeSearchEnd = closeSearchEnd >= text.length() ? text.length() : closeSearchEnd;
-		int indexOfClose = text.substring(closeSearchStart, closeSearchEnd).indexOf(closing);
+		int indexOfClose = TextUtils.startIndexOfOffsetTouchingString(text, offset, closing);
 		if (indexOfClose != -1) {
-			startOfMatchingPair = findOpenning(text, closeSearchStart + indexOfClose, surroundingPair);
+			startOfMatchingPair = findOpenning(text, indexOfClose, surroundingPair);
 			lengthOfMatchingPair = closing.length();
 		} else {
-			int openSearchStart = offset - openning.length();
-			openSearchStart = openSearchStart < 0 ? 0 : openSearchStart;
-			int openSearchEnd = offset + openning.length();
-			openSearchEnd = openSearchEnd >= text.length() ? text.length() : openSearchEnd;
-			int indexOfOpen = text.substring(openSearchStart, openSearchEnd).indexOf(openning);
+			int indexOfOpen = TextUtils.startIndexOfOffsetTouchingString(text, offset, openning);
 			if (indexOfOpen != -1) {
-				startOfMatchingPair = findClosing(text, openSearchStart + indexOfOpen, surroundingPair);
+				startOfMatchingPair = findClosing(text, indexOfOpen, surroundingPair);
 				lengthOfMatchingPair = openning.length();
 			}
 		}

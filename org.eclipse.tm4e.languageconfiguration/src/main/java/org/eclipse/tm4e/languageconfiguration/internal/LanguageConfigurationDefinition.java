@@ -19,6 +19,7 @@ import org.eclipse.core.runtime.content.IContentType;
 import org.eclipse.tm4e.languageconfiguration.ILanguageConfiguration;
 import org.eclipse.tm4e.languageconfiguration.ILanguageConfigurationDefinition;
 import org.eclipse.tm4e.languageconfiguration.internal.supports.CharacterPairSupport;
+import org.eclipse.tm4e.languageconfiguration.internal.supports.CommentSupport;
 import org.eclipse.tm4e.languageconfiguration.internal.supports.OnEnterSupport;
 import org.eclipse.tm4e.registry.TMResource;
 import org.eclipse.tm4e.registry.XMLConstants;
@@ -37,6 +38,7 @@ public class LanguageConfigurationDefinition extends TMResource implements ILang
 
 	private CharacterPairSupport characterPair;
 	private OnEnterSupport onEnter;
+	private CommentSupport comment;
 
 	public LanguageConfigurationDefinition(IContentType contentType, String path) {
 		super(path);
@@ -87,6 +89,19 @@ public class LanguageConfigurationDefinition extends TMResource implements ILang
 			}
 		}
 		return onEnter;
+	}
+
+	/**
+	 * Returns the "commment" support and null otherwise.
+	 *
+	 * @return the "commment" support and null otherwise.
+	 */
+	public CommentSupport getCommentSupport() {
+		if (this.comment == null) {
+			ILanguageConfiguration conf = getLanguageConfiguration();
+			this.comment = new CommentSupport(conf.getComments());
+		}
+		return comment;
 	}
 
 	@Override

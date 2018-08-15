@@ -28,6 +28,7 @@ import org.eclipse.tm4e.languageconfiguration.internal.preferences.PreferenceCon
 import org.eclipse.tm4e.languageconfiguration.internal.preferences.PreferenceHelper;
 import org.eclipse.tm4e.languageconfiguration.internal.supports.CharacterPair;
 import org.eclipse.tm4e.languageconfiguration.internal.supports.CharacterPairSupport;
+import org.eclipse.tm4e.languageconfiguration.internal.supports.CommentSupport;
 import org.eclipse.tm4e.languageconfiguration.internal.supports.EnterAction;
 import org.eclipse.tm4e.languageconfiguration.internal.supports.EnterAction.IndentAction;
 import org.eclipse.tm4e.languageconfiguration.internal.supports.EnterActionAndIndent;
@@ -74,14 +75,6 @@ public class LanguageConfigurationRegistryManager extends AbstractLanguageConfig
 		return bestFit;
 	}
 
-	public List<CharacterPair> getAutoClosingPairs(IContentType contentType) {
-		CharacterPairSupport characterPairSupport = this._getCharacterPairSupport(contentType);
-		if (characterPairSupport == null) {
-			return Collections.emptyList();
-		}
-		return characterPairSupport.getAutoClosingPairs();
-	}
-
 	public boolean shouldAutoClosePair(String character, IContentType contentType) {
 		LanguageConfigurationDefinition definition = getDefinition(contentType);
 		if (definition == null || !definition.isBracketAutoClosingEnabled()) {
@@ -91,14 +84,6 @@ public class LanguageConfigurationRegistryManager extends AbstractLanguageConfig
 		return characterPairSupport != null && characterPairSupport.shouldAutoClosePair(character);
 	}
 
-	public List<CharacterPair> getSurroundingPairs(IContentType contentType) {
-		CharacterPairSupport characterPairSupport = this._getCharacterPairSupport(contentType);
-		if (characterPairSupport == null) {
-			return Collections.emptyList();
-		}
-		return characterPairSupport.getSurroundingPairs();
-	}
-
 	public boolean shouldSurroundingPairs(IDocument document, int offset, IContentType contentType) {
 		LanguageConfigurationDefinition definition = getDefinition(contentType);
 		if (definition == null || !definition.isMatchingPairsEnabled()) {
@@ -106,6 +91,43 @@ public class LanguageConfigurationRegistryManager extends AbstractLanguageConfig
 		}
 		CharacterPairSupport characterPairSupport = this._getCharacterPairSupport(contentType);
 		return characterPairSupport != null;
+	}
+
+	public boolean shouldEnterAction(IDocument document, int offset, IContentType contentType) {
+		LanguageConfigurationDefinition definition = getDefinition(contentType);
+		if (definition == null || !definition.isOnEnterEnabled()) {
+			return false;
+		}
+		OnEnterSupport onEnterSupport = this._getOnEnterSupport(contentType);
+		return onEnterSupport != null;
+	}
+
+	public boolean shouldComment(IContentType contentType) {
+		LanguageConfigurationDefinition definition = getDefinition(contentType);
+		if (definition == null || !definition.isOnEnterEnabled()) {
+			return false;
+		}
+		CommentSupport commentSupport = this.getCommentSupport(contentType);
+		if (commentSupport == null) {
+			return false;
+		}
+		return true;
+	}
+
+	public List<CharacterPair> getAutoClosingPairs(IContentType contentType) {
+		CharacterPairSupport characterPairSupport = this._getCharacterPairSupport(contentType);
+		if (characterPairSupport == null) {
+			return Collections.emptyList();
+		}
+		return characterPairSupport.getAutoClosingPairs();
+	}
+
+	public List<CharacterPair> getSurroundingPairs(IContentType contentType) {
+		CharacterPairSupport characterPairSupport = this._getCharacterPairSupport(contentType);
+		if (characterPairSupport == null) {
+			return Collections.emptyList();
+		}
+		return characterPairSupport.getSurroundingPairs();
 	}
 
 	public EnterActionAndIndent getEnterAction(IDocument document, int offset, IContentType contentType) {
@@ -183,13 +205,12 @@ public class LanguageConfigurationRegistryManager extends AbstractLanguageConfig
 		return null;
 	}
 
-	public boolean shouldEnterAction(IDocument document, int offset, IContentType contentType) {
-		LanguageConfigurationDefinition definition = getDefinition(contentType);
-		if (definition == null || !definition.isOnEnterEnabled()) {
-			return false;
+	public CommentSupport getCommentSupport(IContentType contentType) {
+		LanguageConfigurationDefinition value = this.getDefinition(contentType);
+		if (value == null) {
+			return null;
 		}
-		OnEnterSupport onEnterSupport = this._getOnEnterSupport(contentType);
-		return onEnterSupport != null;
+		return value.getCommentSupport();
 	}
 
 	private OnEnterSupport _getOnEnterSupport(IContentType contentType) {

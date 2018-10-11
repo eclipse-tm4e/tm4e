@@ -16,6 +16,7 @@ import org.eclipse.core.runtime.content.IContentType;
 import org.eclipse.jface.text.IDocument;
 import org.eclipse.tm4e.languageconfiguration.internal.LanguageConfigurationRegistryManager;
 import org.eclipse.tm4e.ui.utils.ContentTypeHelper;
+import org.eclipse.tm4e.ui.utils.ContentTypeInfo;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.texteditor.IDocumentProvider;
 import org.eclipse.ui.texteditor.ITextEditor;
@@ -42,7 +43,11 @@ public class HasLanguageConfigurationPropertyTester extends PropertyTester {
 
 		IContentType[] contentTypes;
 		try {
-			contentTypes = ContentTypeHelper.findContentTypes(document).getContentTypes();
+			ContentTypeInfo info = ContentTypeHelper.findContentTypes(document);
+			if(info == null) {
+				return false;
+			}
+			contentTypes = info.getContentTypes();
 		} catch (CoreException e) {
 			return false;
 		}

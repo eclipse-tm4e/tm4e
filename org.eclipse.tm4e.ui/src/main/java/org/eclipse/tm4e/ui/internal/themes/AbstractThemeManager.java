@@ -106,7 +106,7 @@ public abstract class AbstractThemeManager implements IThemeManager {
 
 	@Override
 	public boolean isDarkEclipseTheme(String eclipseThemeId) {
-		return E4_DARK.equals(eclipseThemeId) || isDarkDevStyleTheme(eclipseThemeId);
+		return eclipseThemeId.contains(E4_DARK) || isDarkDevStyleTheme(eclipseThemeId);
 	}
 
 	protected IEclipsePreferences getPreferenceE4CSSTheme() {

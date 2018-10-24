@@ -31,9 +31,11 @@ import org.eclipse.tm4e.ui.themes.ThemeAssociation;
 public abstract class AbstractThemeManager implements IThemeManager {
 
 	// Theme for E4 CSS Engine
-	private static final String E4_CSS_THEME_PREFERENCE_ID = "org.eclipse.e4.ui.css.swt.theme"; //$NON-NLS-1$
 	public static final String E4_THEME_ID = "themeid"; //$NON-NLS-1$
-	private final static String E4_DARK = "org.eclipse.e4.ui.css.theme.e4_dark";
+
+	private static final String E4_CSS_THEME_PREFERENCE_ID = "org.eclipse.e4.ui.css.swt.theme"; //$NON-NLS-1$
+	private static final String E4_DARK = "org.eclipse.e4.ui.css.theme.e4_dark";
+	private static final String DEVSTYLE_DARK = "com.genuitec.eclipse.themes.dark";
 
 	private final Map<String /* theme id */ , ITheme> themes;
 	private final ThemeAssociationRegistry themeAssociationRegistry;
@@ -93,6 +95,10 @@ public abstract class AbstractThemeManager implements IThemeManager {
 		return preferences != null ? preferences.get(E4_THEME_ID, null) : null;
 	}
 
+	protected boolean isDarkDevStyleTheme(String themeId) {
+		return themeId.contains(DEVSTYLE_DARK);
+	}
+
 	@Override
 	public boolean isDarkEclipseTheme() {
 		return isDarkEclipseTheme(getPreferenceE4CSSThemeId());
@@ -100,7 +106,7 @@ public abstract class AbstractThemeManager implements IThemeManager {
 
 	@Override
 	public boolean isDarkEclipseTheme(String eclipseThemeId) {
-		return E4_DARK.equals(eclipseThemeId);
+		return E4_DARK.equals(eclipseThemeId) || isDarkDevStyleTheme(eclipseThemeId);
 	}
 
 	protected IEclipsePreferences getPreferenceE4CSSTheme() {

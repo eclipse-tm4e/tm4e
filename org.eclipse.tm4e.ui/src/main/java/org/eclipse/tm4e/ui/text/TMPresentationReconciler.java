@@ -73,11 +73,13 @@ import org.eclipse.tm4e.ui.internal.themes.ThemeManager;
 import org.eclipse.tm4e.ui.internal.wizards.TextMateGrammarImportWizard;
 import org.eclipse.tm4e.ui.model.ITMModelManager;
 import org.eclipse.tm4e.ui.themes.ITheme;
+import org.eclipse.tm4e.ui.themes.IThemeBehaviour;
 import org.eclipse.tm4e.ui.themes.IThemeManager;
 import org.eclipse.tm4e.ui.themes.ITokenProvider;
 import org.eclipse.tm4e.ui.utils.ClassHelper;
 import org.eclipse.tm4e.ui.utils.ContentTypeHelper;
 import org.eclipse.tm4e.ui.utils.ContentTypeInfo;
+import org.eclipse.tm4e.ui.utils.PreferenceUtils;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.PlatformUI;
 
@@ -163,13 +165,16 @@ public class TMPresentationReconciler implements IPresentationReconciler {
 	 */
 	private class ThemeChangeListener implements IPreferenceChangeListener {
 
+		protected IThemeBehaviour behaviour = TMUIPlugin.getThemeBehaviourManager().getThemeBehaviour();
+
 		@Override
 		public void preferenceChange(PreferenceChangeEvent event) {
 			IThemeManager themeManager = TMUIPlugin.getThemeManager();
-			if (ThemeManager.E4_THEME_ID.equals(event.getKey())) {
+
+			if (PreferenceConstants.E4_THEME_ID.equals(event.getKey())) {
 				preferenceThemeChange((String) event.getNewValue(), themeManager);
 			} else if (PreferenceConstants.THEME_ASSOCIATIONS.equals(event.getKey())) {
-				preferenceThemeChange(themeManager.getPreferenceE4CSSThemeId(), themeManager);
+				preferenceThemeChange(PreferenceUtils.getPreferenceE4CSSThemeId(), themeManager);
 			}
 		}
 
@@ -188,7 +193,7 @@ public class TMPresentationReconciler implements IPresentationReconciler {
 			}
 			ITokenProvider oldTheme = tokenProvider;
 			// Select the well TextMate theme from the given E4 theme id.
-			boolean dark = themeManager.isDarkEclipseTheme(eclipseThemeId);
+			boolean dark = behaviour.isDarkEclipseTheme(eclipseThemeId);
 			ITokenProvider newTheme = themeManager.getThemeForScope(grammar.getScopeName(), dark);
 			themeChange(oldTheme, newTheme, document);
 		}
@@ -310,7 +315,7 @@ public class TMPresentationReconciler implements IPresentationReconciler {
 					}
 				}
 			} else { // TextViewer#invalidateTextPresentation is called (because
-						// of validation, folding, etc)
+					 // of validation, folding, etc)
 				// case 2), do the colorization.
 				IDocument document = viewer.getDocument();
 				if (document != null) {

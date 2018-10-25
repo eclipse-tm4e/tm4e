@@ -12,6 +12,7 @@ package org.eclipse.tm4e.ui;
 
 import org.eclipse.tm4e.ui.internal.model.TMModelManager;
 import org.eclipse.tm4e.ui.internal.snippets.SnippetManager;
+import org.eclipse.tm4e.ui.internal.themes.ThemeBehaviourManager;
 import org.eclipse.tm4e.ui.internal.themes.ThemeManager;
 import org.eclipse.tm4e.ui.model.ITMModelManager;
 import org.eclipse.tm4e.ui.snippets.ISnippetManager;
@@ -40,6 +41,7 @@ public class TMUIPlugin extends AbstractUIPlugin {
 	@Override
 	public void start(BundleContext context) throws Exception {
 		super.start(context);
+		ThemeBehaviourManager.getInstance().init();
 		plugin = this;
 	}
 
@@ -84,6 +86,15 @@ public class TMUIPlugin extends AbstractUIPlugin {
 	 */
 	public static ISnippetManager getSnippetManager() {
 		return SnippetManager.getInstance();
+	}
+
+	/**
+	 * Returns the ThemeBehaviour manager
+	 * 
+	 * @return the ThemeBehaviour manager
+	 */
+	public static ThemeBehaviourManager getThemeBehaviourManager() {
+		return ThemeBehaviourManager.getInstance();
 	}
 
 }

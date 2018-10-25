@@ -25,6 +25,7 @@ import org.eclipse.tm4e.ui.themes.ITheme;
 import org.eclipse.tm4e.ui.themes.IThemeAssociation;
 import org.eclipse.tm4e.ui.themes.Theme;
 import org.eclipse.tm4e.ui.themes.ThemeAssociation;
+import org.eclipse.tm4e.ui.utils.PreferenceUtils;
 import org.osgi.service.prefs.BackingStoreException;
 
 /**
@@ -138,7 +139,7 @@ public class ThemeManager extends AbstractThemeManager {
 	 */
 	public void addPreferenceChangeListener(IPreferenceChangeListener themeChangeListener) {
 		// Observe change of Eclipse E4 Theme
-		IEclipsePreferences preferences = getPreferenceE4CSSTheme();
+		IEclipsePreferences preferences = PreferenceUtils.getE4PreferenceStore();
 		if (preferences != null) {
 			preferences.addPreferenceChangeListener(themeChangeListener);
 		}
@@ -157,7 +158,7 @@ public class ThemeManager extends AbstractThemeManager {
 	 */
 	public void removePreferenceChangeListener(IPreferenceChangeListener themeChangeListener) {
 		// Observe change of Eclipse E4 Theme
-		IEclipsePreferences preferences = getPreferenceE4CSSTheme();
+		IEclipsePreferences preferences = PreferenceUtils.getE4PreferenceStore();
 		if (preferences != null) {
 			preferences.removePreferenceChangeListener(themeChangeListener);
 		}

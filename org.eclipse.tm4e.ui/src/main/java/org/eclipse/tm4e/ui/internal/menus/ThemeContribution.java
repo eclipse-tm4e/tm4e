@@ -22,6 +22,7 @@ import org.eclipse.tm4e.ui.TMUIPlugin;
 import org.eclipse.tm4e.ui.text.TMPresentationReconciler;
 import org.eclipse.tm4e.ui.themes.ITheme;
 import org.eclipse.tm4e.ui.themes.IThemeAssociation;
+import org.eclipse.tm4e.ui.themes.IThemeBehaviour;
 import org.eclipse.tm4e.ui.themes.IThemeManager;
 import org.eclipse.tm4e.ui.themes.ThemeAssociation;
 import org.eclipse.ui.IEditorPart;
@@ -47,12 +48,13 @@ public class ThemeContribution extends CompoundContributionItem implements IWork
 
 	@Override
 	protected IContributionItem[] getContributionItems() {
-		List<IContributionItem> items = new ArrayList<IContributionItem>();
+		List<IContributionItem> items = new ArrayList<>();
 		if (handlerService != null) {
 			IEditorPart editorPart = getActivePart(handlerService.getCurrentState());
 			if (editorPart != null) {
 				IThemeManager manager = TMUIPlugin.getThemeManager();
-				boolean dark = manager.isDarkEclipseTheme();
+				IThemeBehaviour behaviour = TMUIPlugin.getThemeBehaviourManager().getThemeBehaviour();
+				boolean dark = behaviour.isDarkEclipseTheme();
 				ITheme[] themes = manager.getThemes();
 				if (themes != null) {
 					String scopeName = TMPresentationReconciler.getTMPresentationReconciler(editorPart).getGrammar()

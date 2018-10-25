@@ -17,10 +17,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-import org.eclipse.core.runtime.preferences.IEclipsePreferences;
-import org.eclipse.core.runtime.preferences.InstanceScope;
+import org.eclipse.tm4e.ui.TMUIPlugin;
 import org.eclipse.tm4e.ui.themes.ITheme;
 import org.eclipse.tm4e.ui.themes.IThemeAssociation;
+import org.eclipse.tm4e.ui.themes.IThemeBehaviour;
 import org.eclipse.tm4e.ui.themes.IThemeManager;
 import org.eclipse.tm4e.ui.themes.ThemeAssociation;
 
@@ -30,19 +30,14 @@ import org.eclipse.tm4e.ui.themes.ThemeAssociation;
  */
 public abstract class AbstractThemeManager implements IThemeManager {
 
-	// Theme for E4 CSS Engine
-	public static final String E4_THEME_ID = "themeid"; //$NON-NLS-1$
-
-	private static final String E4_CSS_THEME_PREFERENCE_ID = "org.eclipse.e4.ui.css.swt.theme"; //$NON-NLS-1$
-	private static final String E4_DARK = "org.eclipse.e4.ui.css.theme.e4_dark";
-	private static final String DEVSTYLE_DARK = "com.genuitec.eclipse.themes.dark";
-
+	private final IThemeBehaviour behaviour;
 	private final Map<String /* theme id */ , ITheme> themes;
 	private final ThemeAssociationRegistry themeAssociationRegistry;
 
 	public AbstractThemeManager() {
 		this.themes = new LinkedHashMap<>();
 		this.themeAssociationRegistry = new ThemeAssociationRegistry();
+		this.behaviour = TMUIPlugin.getThemeBehaviourManager().getThemeBehaviour();
 	}
 
 	@Override
@@ -68,7 +63,7 @@ public abstract class AbstractThemeManager implements IThemeManager {
 
 	@Override
 	public ITheme getDefaultTheme() {
-		boolean dark = isDarkEclipseTheme();
+		boolean dark = behaviour.isDarkEclipseTheme();
 		return getDefaultTheme(dark);
 	}
 
@@ -90,30 +85,6 @@ public abstract class AbstractThemeManager implements IThemeManager {
 	}
 
 	@Override
-	public String getPreferenceE4CSSThemeId() {
-		IEclipsePreferences preferences = getPreferenceE4CSSTheme();
-		return preferences != null ? preferences.get(E4_THEME_ID, null) : null;
-	}
-
-	protected boolean isDarkDevStyleTheme(String themeId) {
-		return themeId.contains(DEVSTYLE_DARK);
-	}
-
-	@Override
-	public boolean isDarkEclipseTheme() {
-		return isDarkEclipseTheme(getPreferenceE4CSSThemeId());
-	}
-
-	@Override
-	public boolean isDarkEclipseTheme(String eclipseThemeId) {
-		return eclipseThemeId.contains(E4_DARK) || isDarkDevStyleTheme(eclipseThemeId);
-	}
-
-	protected IEclipsePreferences getPreferenceE4CSSTheme() {
-		return InstanceScope.INSTANCE.getNode(E4_CSS_THEME_PREFERENCE_ID);
-	}
-
-	@Override
 	public ITheme getThemeForScope(String scopeName, boolean dark) {
 		IThemeAssociation association = themeAssociationRegistry.getThemeAssociationFor(scopeName, dark);
 		if (association != null) {
@@ -125,7 +96,7 @@ public abstract class AbstractThemeManager implements IThemeManager {
 
 	@Override
 	public ITheme getThemeForScope(String scopeName) {
-		return getThemeForScope(scopeName, isDarkEclipseTheme());
+		return getThemeForScope(scopeName, behaviour.isDarkEclipseTheme());
 	}
 
 	@Override

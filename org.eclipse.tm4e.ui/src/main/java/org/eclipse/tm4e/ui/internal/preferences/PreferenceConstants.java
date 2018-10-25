@@ -17,7 +17,9 @@ package org.eclipse.tm4e.ui.internal.preferences;
 public class PreferenceConstants {
 
 	public static final String THEMES = "org.eclipse.tm4e.ui.themes";
-	
+
 	public static final String THEME_ASSOCIATIONS = "org.eclipse.tm4e.ui.themeAssociations";
+
+	public static final String E4_THEME_ID = "themeid";
 
 }

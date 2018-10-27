@@ -1,5 +1,6 @@
 package org.eclipse.tm4e.ui.internal.themes;
 
+import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.tm4e.ui.TMUIPlugin;
@@ -44,19 +45,16 @@ public class ThemeBehaviourManager {
 	 * 
 	 * @param element
 	 *            configurationElement for extension point
-	 * @return behaviour from configuration or null if exception occured
+	 * @return behaviour from configuration or default behaviour if exception occured
 	 */
 	private IThemeBehaviour getBehaviour(IConfigurationElement element) {
-		IThemeBehaviour extendedBehaviour = null;
-		String className = element.getAttribute("class");
-		String bundleName = element.getContributor().getName();
 		try {
-			Class<?> clazz = Platform.getBundle(bundleName).loadClass(className);
-			extendedBehaviour = (IThemeBehaviour) clazz.newInstance();
-		} catch (ClassNotFoundException | InstantiationException | IllegalAccessException e1) {
+			return (IThemeBehaviour) element.createExecutableExtension("class");
+		} catch (CoreException ex) {
 			// ignore
 		}
 
-		return extendedBehaviour;
+		return null;
+
 	}
 }

@@ -45,7 +45,7 @@ public class ThemeBehaviourManager {
 	 * 
 	 * @param element
 	 *            configurationElement for extension point
-	 * @return behaviour from configuration or default behaviour if exception occured
+	 * @return behaviour from configuration or null if exception occured
 	 */
 	private IThemeBehaviour getBehaviour(IConfigurationElement element) {
 		try {

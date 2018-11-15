@@ -15,7 +15,6 @@ import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.tm4e.ui.TMUIPlugin;
-import org.eclipse.tm4e.ui.internal.preferences.PreferenceConstants;
 import org.eclipse.ui.IEditorDescriptor;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.PartInitException;
@@ -30,8 +29,9 @@ import org.junit.Test;
 
 public class TMEditorColorTest implements ThemeIdConstants {
 
-	private IThemeManager manager;
+	private static final String EDITOR_CURRENTLINE_HIGHLIGHT = "currentLineColor";
 
+	private IThemeManager manager;
 	private IEditorDescriptor editorDescriptor;
 	private File f;
 	private IEditorPart editor;
@@ -74,7 +74,7 @@ public class TMEditorColorTest implements ThemeIdConstants {
 		assertNull("System default selection foreground should be null", theme.getEditorSelectionForeground());
 
 		Color lineHighlight = ColorManager.getInstance()
-				.getPreferenceEditorColor(PreferenceConstants.EDITOR_CURRENTLINE_HIGHLIGHT);
+				.getPreferenceEditorColor(EDITOR_CURRENTLINE_HIGHLIGHT);
 		assertNotNull("Highlight shouldn't be a null", theme.getEditorCurrentLineHighlight());
 		assertNotEquals("Default Line highlight should be from TM theme", lineHighlight,
 				theme.getEditorCurrentLineHighlight());
@@ -110,7 +110,7 @@ public class TMEditorColorTest implements ThemeIdConstants {
 		assertNull("Selection foreground should be System default (null)", theme.getEditorSelectionForeground());
 
 		Color lineHighlight = ColorManager.getInstance()
-				.getPreferenceEditorColor(PreferenceConstants.EDITOR_CURRENTLINE_HIGHLIGHT);
+				.getPreferenceEditorColor(EDITOR_CURRENTLINE_HIGHLIGHT);
 		assertNotNull("Highlight shouldn't be a null", lineHighlight);
 		assertEquals("Line highlight should be from preferences (because of user defined background)", lineHighlight,
 				theme.getEditorCurrentLineHighlight());

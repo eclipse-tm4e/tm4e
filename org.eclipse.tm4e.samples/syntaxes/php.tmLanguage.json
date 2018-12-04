@@ -794,7 +794,7 @@
 							},
 							"patterns": [
 								{
-									"comment": "Escaped from the regexp – there can also be 2 backslashes (since 1 will escape the first)",
+									"comment": "Escaped from the regexp ï¿½ there can also be 2 backslashes (since 1 will escape the first)",
 									"match": "(\\\\){1,2}[.$^\\[\\]{}]",
 									"name": "constant.character.escape.regex.php"
 								},
@@ -1783,7 +1783,7 @@
 			"name": "string.regexp.double-quoted.php",
 			"patterns": [
 				{
-					"comment": "Escaped from the regexp – there can also be 2 backslashes (since 1 will escape the first)",
+					"comment": "Escaped from the regexp ï¿½ there can also be 2 backslashes (since 1 will escape the first)",
 					"match": "(\\\\){1,2}[.$^\\[\\]{}]",
 					"name": "constant.character.escape.regex.php"
 				},
@@ -2014,7 +2014,7 @@
 					"name": "punctuation.definition.string.begin.php"
 				}
 			},
-			"comment": "This contentName is just to allow the usage of “select scope” to select the string contents first, then the string with quotes",
+			"comment": "This contentName is just to allow the usage of ï¿½select scopeï¿½ to select the string contents first, then the string with quotes",
 			"contentName": "meta.string-contents.quoted.double.php",
 			"end": "\"",
 			"endCaptures": {

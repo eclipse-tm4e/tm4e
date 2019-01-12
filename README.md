@@ -41,6 +41,7 @@ Here are some projects that use tm4e:
  * [LiClipseText](http://www.liclipse.com/text/) enables Eclipse to be used as a general-purpose text editor, providing support for several languages out of the box.
  * [typescript.java](https://github.com/angelozerr/typescript.java) TypeScript IDE for Eclipse with JSDT & tsserver.
  * [EditorConfig for Eclipse](https://github.com/angelozerr/ec4e) EditorConfig for Eclipse with GenericEditor.
+ * [Phaser Editor 2D](https://phasereditor2d.com) An IDE for the creation of HTML5 games.
  
 ## Get support and contribute
 

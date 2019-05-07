@@ -51,4 +51,4 @@ Here are some projects that use tm4e:
 * **Git**: This `eclipse/tm4e` repository is the reference repository to contribute to `tm4e`
 * **Build and CI**: build can be performed with a simple `mvn clean verify`, continuous integration and deployment is performed by CI jobs at https://hudson.eclipse.org/tm4e
 * **Developers mailing-list**: Contributors are also expected to subscribe the [tm4e-dev mailing-list](https://dev.eclipse.org/mailman/listinfo/tm4e-dev).
-* **Becoming a committer**: as usual with Eclipse.org projects, anyone who's made significant contributions and who 
+* **Becoming a committer**: as usual with Eclipse.org projects, anyone who's made significant contributions and who's upheld quality standards alongside good judgement and open-mindedness.

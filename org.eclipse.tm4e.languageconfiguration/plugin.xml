@@ -151,7 +151,7 @@
         point="org.eclipse.ui.menus">
      <menuContribution
            allPopups="true"
-       locationURI="popup:org.eclipse.ui.genericeditor.source.menu?after=additions">
+       locationURI="popup:org.eclipse.ui.genericeditor.source.menu?after=commentGroup">
        <command
              commandId="org.eclipse.tm4e.languageconfiguration.togglelinecommentcommand"
              style="push">

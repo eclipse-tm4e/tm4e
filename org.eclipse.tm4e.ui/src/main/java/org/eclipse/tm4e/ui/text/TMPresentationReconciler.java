@@ -294,7 +294,7 @@ public class TMPresentationReconciler implements IPresentationReconciler {
 				if (range == null) {
 					return;
 				}
-				range.length += diff;
+				range.length = Math.max(0, range.length + diff);
 				viewer.getTextWidget().setStyleRange(range);
 				return;
 			}

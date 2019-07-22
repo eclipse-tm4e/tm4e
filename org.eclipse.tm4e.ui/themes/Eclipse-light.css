@@ -3,12 +3,13 @@
 .string.regexp { color: #2A00FF; }
 /* .constant.numeric { color: rgba(211, 54, 130, 1); } */
 .variable { color: #6A3E3E; }
-.variable.language { color: #6A3E3E; }
+.variable.language { font-weight: bold; color: #7F0055; }
 .variable.other { color: #6A3E3E; }
 .keyword { font-weight: bold; color: #7F0055; }
-/*.storage { font-weight: bold; color: rgba(7, 54, 66, 1); }*/
-/* .entity.name.class { color: rgba(38, 139, 210, 1); } */
-/*.entity.name.type.class { color: rgba(38, 139, 210, 1); }
+.keyword.operator { font-weight: normal; }
+.storage { font-weight: bold; color: #7F0055; }
+/* .entity.name.class { color: rgba(38, 139, 210, 1); }
+.entity.name.type.class { color: rgba(38, 139, 210, 1); }
 .entity.name.function { color: rgba(38, 139, 210, 1); }*/
 .punctuation.definition.variable { color: rgba(133, 153, 0, 1); }
 .punctuation.section.embedded.begin { color: rgba(211, 1, 2, 1); }
@@ -16,7 +17,7 @@
 .meta.preprocessor { color: #646464; }
 .support.function.construct { color: rgba(211, 1, 2, 1); }
 /*.keyword.other.new { color: rgba(211, 1, 2, 1); } */
-/*.constant.language { color: #6A3E3E; }*/
+.constant.language { font-weight: bold; color: #7F0055; }
 .constant.character { color: #6A3E3E; }
 /*.constant.other { color: #6A3E3E; }*/
 .entity.other.inherited-class {  }
@@ -27,9 +28,9 @@
 .entity.other.attribute-name { color: rgba(147, 161, 161, 1); }
 /*.support.function { color: rgba(38, 139, 210, 1); }*/
 .punctuation.separator.continuation { color: rgba(211, 1, 2, 1); }
-.support.constant {  }
-.support.type { color: rgba(133, 153, 0, 1); }
-.support.class { color: rgba(133, 153, 0, 1); }
+.support.constant { font-weight: bold; color: #7F0055;  }
+/*.support.type { color: rgba(133, 153, 0, 1); }
+.support.class { color: rgba(133, 153, 0, 1); }*/
 .support.type.exception { color: rgba(203, 75, 22, 1); }
 .support.other.variable {  }
 .invalid {  }

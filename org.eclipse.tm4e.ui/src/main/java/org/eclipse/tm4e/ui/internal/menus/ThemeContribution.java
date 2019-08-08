@@ -55,9 +55,9 @@ public class ThemeContribution extends CompoundContributionItem implements IWork
 				IThemeManager manager = TMUIPlugin.getThemeManager();
 				boolean dark = manager.isDarkEclipseTheme();
 				ITheme[] themes = manager.getThemes();
-				if (themes != null) {
-					String scopeName = TMPresentationReconciler.getTMPresentationReconciler(editorPart).getGrammar()
-							.getScopeName();
+				TMPresentationReconciler presentationReconciler = TMPresentationReconciler.getTMPresentationReconciler(editorPart);
+				if (themes != null && presentationReconciler != null) {
+					String scopeName = presentationReconciler.getGrammar().getScopeName();
 					ITheme selectedTheme = manager.getThemeForScope(scopeName, dark);
 					for (ITheme theme : themes) {
 						IAction action = createAction(scopeName, theme, dark);

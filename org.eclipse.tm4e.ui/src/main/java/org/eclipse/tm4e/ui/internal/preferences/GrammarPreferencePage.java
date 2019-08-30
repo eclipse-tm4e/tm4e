@@ -13,9 +13,6 @@
 package org.eclipse.tm4e.ui.internal.preferences;
 
 import java.util.Arrays;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.stream.Collectors;
 
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.layout.TableColumnLayout;
@@ -198,7 +195,7 @@ public class GrammarPreferencePage extends PreferencePage implements IWorkbenchP
 		TableColumnLayout columnLayout = new TableColumnLayout();
 		tableComposite.setLayout(columnLayout);
 		Table table = new Table(tableComposite,
-				SWT.BORDER | SWT.MULTI | SWT.FULL_SELECTION | SWT.H_SCROLL | SWT.V_SCROLL);
+				SWT.BORDER | SWT.MULTI | SWT.FULL_SELECTION | SWT.H_SCROLL | SWT.V_SCROLL | SWT.SINGLE);
 
 		table.setHeaderVisible(true);
 		table.setLinesVisible(true);
@@ -244,7 +241,7 @@ public class GrammarPreferencePage extends PreferencePage implements IWorkbenchP
 				}
 				IGrammarDefinition definition = (IGrammarDefinition) (selection).getFirstElement();
 				// Update button
-				grammarRemoveButton.setEnabled(definition.getPluginId() != null);
+				grammarRemoveButton.setEnabled(definition.getPluginId() == null);
 				themeAssociationsWidget.getNewButton().setEnabled(false);
 				themeAssociationsWidget.getRemoveButton().setEnabled(false);
 				// Select grammar
@@ -276,7 +273,7 @@ public class GrammarPreferencePage extends PreferencePage implements IWorkbenchP
 
 			private IThemeAssociation fillThemeTab(IGrammarDefinition definition) {
 				IThemeAssociation selectedAssociation = null;
-				IStructuredSelection oldSelection = (IStructuredSelection) themeAssociationsWidget.getSelection();
+				IStructuredSelection oldSelection = themeAssociationsWidget.getSelection();
 				// Load the theme associations for the given grammar
 				IThemeAssociation[] themeAssociations = themeAssociationsWidget.setGrammarDefinition(definition);
 				// Try to keep selection
@@ -362,13 +359,9 @@ public class GrammarPreferencePage extends PreferencePage implements IWorkbenchP
 			}
 
 			private void remove() {
-				Collection<IGrammarDefinition> definitions = getSelectedUserGrammarDefinitions();
-				if (!definitions.isEmpty()) {
-					for (IGrammarDefinition definition : definitions) {
-						grammarRegistryManager.unregisterGrammarDefinition(definition);
-					}
-					grammarViewer.refresh();
-				}
+			    IGrammarDefinition definition = (IGrammarDefinition) ((IStructuredSelection) grammarViewer.getSelection()).getFirstElement();
+			    grammarRegistryManager.unregisterGrammarDefinition(definition);
+			    grammarViewer.refresh();
 			}
 		});
 	}
@@ -564,20 +557,5 @@ public class GrammarPreferencePage extends PreferencePage implements IWorkbenchP
 			return false;
 		}
 		return super.performOk();
-	}
-
-	/**
-	 * Returns list of selected grammar definitions which was created by the user.
-	 * 
-	 * @return list of selected grammar definitions which was created by the user.
-	 */
-	private Collection<IGrammarDefinition> getSelectedUserGrammarDefinitions() {
-		IStructuredSelection selection = grammarViewer.getStructuredSelection();
-		if (selection.isEmpty()) {
-			return Collections.emptyList();
-		}
-		return ((Collection<IGrammarDefinition>) selection.toList()).stream()
-				.filter(definition -> definition.getPluginId() == null).collect(Collectors.toList());
-
 	}
 }

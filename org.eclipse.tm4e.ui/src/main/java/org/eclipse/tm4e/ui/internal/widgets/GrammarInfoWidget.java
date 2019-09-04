@@ -1,5 +1,5 @@
 /**
- *  Copyright (c) 2015-2017 Angelo ZERR.
+ *  Copyright (c) 2015-2019 Angelo ZERR.
  * This program and the accompanying materials are made
  * available under the terms of the Eclipse Public License 2.0
  * which is available at https://www.eclipse.org/legal/epl-2.0/
@@ -8,6 +8,7 @@
  *
  *  Contributors:
  *  Angelo Zerr <angelo.zerr@gmail.com> - initial API and implementation
+ *  Pierre-Yves B. - Issue #221 NullPointerException when retrieving fileTypes
  */
 package org.eclipse.tm4e.ui.internal.widgets;
 
@@ -82,8 +83,7 @@ public class GrammarInfoWidget extends Composite {
 			String scope = grammar.getScopeName();
 			scopeNameText.setText(scope != null ? scope : "");
 			Collection<String> fileTypes = grammar.getFileTypes();
-			String types = fileTypes != null ? fileTypes.stream().map(Object::toString).collect(Collectors.joining(","))
-					: "";
+			String types = fileTypes.stream().map(Object::toString).collect(Collectors.joining(","));
 			fileTypesText.setText(types);
 		}
 	}

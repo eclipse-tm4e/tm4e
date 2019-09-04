@@ -1,5 +1,5 @@
 /**
- *  Copyright (c) 2015-2017 Angelo ZERR.
+ *  Copyright (c) 2015-2019 Angelo ZERR.
  * This program and the accompanying materials are made
  * available under the terms of the Eclipse Public License 2.0
  * which is available at https://www.eclipse.org/legal/epl-2.0/
@@ -8,6 +8,7 @@
  *
  *  Contributors:
  *  Angelo Zerr <angelo.zerr@gmail.com> - initial API and implementation
+ *  Pierre-Yves B. - Issue #221 NullPointerException when retrieving fileTypes
  */
 package org.eclipse.tm4e.core.internal.grammar.parser;
 
@@ -242,12 +243,15 @@ public class Raw extends HashMap<String, Object> implements IRawRepository, IRaw
 	public Collection<String> getFileTypes() {
 		if(fileTypes==null) {
 			List<String> list=new ArrayList<>();
-			for(Object o: (Collection<?>) super.get("fileTypes")) {
-				String str=o.toString();
-				// #202
-				if(str.startsWith("."))
-					str=str.substring(1);
-				list.add(str);
+			Collection<?> unparsedFileTypes = (Collection<?>) super.get("fileTypes");
+			if (unparsedFileTypes != null) {
+				for(Object o: unparsedFileTypes) {
+					String str=o.toString();
+					// #202
+					if(str.startsWith("."))
+						str=str.substring(1);
+					list.add(str);
+				}
 			}
 			fileTypes=list;
 		}

@@ -1,5 +1,5 @@
 /**
- *  Copyright (c) 2015-2017 Angelo ZERR.
+ *  Copyright (c) 2015-2019 Angelo ZERR.
  * This program and the accompanying materials are made
  * available under the terms of the Eclipse Public License 2.0
  * which is available at https://www.eclipse.org/legal/epl-2.0/
@@ -8,6 +8,7 @@
  *
  *  Contributors:
  *  Angelo Zerr <angelo.zerr@gmail.com> - initial API and implementation
+ *  Pierre-Yves B. - Issue #220 Switch to theme only works once for open editor
  */
 package org.eclipse.tm4e.ui.text;
 
@@ -105,7 +106,6 @@ public class TMPresentationReconciler implements IPresentationReconciler {
 	private boolean forcedGrammar;
 
 	private ITokenProvider tokenProvider;
-	private boolean forcedTheme;
 
 	private final TextAttribute fDefaultTextAttribute;
 
@@ -165,10 +165,6 @@ public class TMPresentationReconciler implements IPresentationReconciler {
 				return;
 			}
 			if (grammar == null) {
-				return;
-			}
-			if (forcedTheme) {
-				// The theme was forced, don't update it.
 				return;
 			}
 			// Select the well TextMate theme from the given E4 theme id.
@@ -441,7 +437,6 @@ public class TMPresentationReconciler implements IPresentationReconciler {
 
 	public void setTheme(final ITokenProvider newTheme) {
 		final ITokenProvider oldTheme = this.tokenProvider;
-		this.forcedTheme = true;
 		if (!Objects.equals(oldTheme, newTheme) && grammar != null) {
 			this.tokenProvider = newTheme;
 			applyThemeEditor();

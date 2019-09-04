@@ -101,6 +101,9 @@ public abstract class AbstractGrammarRegistryManager extends Registry implements
 	public IGrammar getGrammarForFileType(String fileType) {
 		// TODO: cache grammar by file types
 		IGrammarDefinition[] definitions = getDefinitions();
+		// #202
+		if(fileType.startsWith("."))
+			fileType=fileType.substring(1);
 		for (IGrammarDefinition definition : definitions) {
 			// Not very optimized because it forces the load of the whole
 			// grammar.
@@ -122,6 +125,7 @@ public abstract class AbstractGrammarRegistryManager extends Registry implements
 	 * 
 	 * @return
 	 */
+	@Override
 	public IGrammarDefinition[] getDefinitions() {
 		Collection<IGrammarDefinition> pluginDefinitions = pluginCache.getDefinitions();
 		Collection<IGrammarDefinition> userDefinitions = userCache.getDefinitions();
@@ -173,6 +177,7 @@ public abstract class AbstractGrammarRegistryManager extends Registry implements
 	 * @return list of scope names to inject for the given
 	 *         <code>scopeName</code> and null otheriwse.
 	 */
+	@Override
 	public Collection<String> getInjections(String scopeName) {
 		return pluginCache.getInjections(scopeName);
 	}
@@ -198,6 +203,7 @@ public abstract class AbstractGrammarRegistryManager extends Registry implements
 		return pluginCache.getScopeNameForContentType(contentTypeId);
 	}
 
+	@Override
 	public String[] getContentTypesForScope(String scopeName) {
 		return pluginCache.getContentTypesForScope(scopeName);
 	}

@@ -11,6 +11,7 @@
  */
 package org.eclipse.tm4e.core.internal.grammar.parser;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -28,6 +29,7 @@ import org.eclipse.tm4e.core.internal.utils.CloneUtils;
  *
  */
 public class Raw extends HashMap<String, Object> implements IRawRepository, IRawRule, IRawGrammar, IRawCaptures {
+	private List<String> fileTypes;
 
 	@Override
 	public IRawRule getProp(String name) {
@@ -238,7 +240,18 @@ public class Raw extends HashMap<String, Object> implements IRawRepository, IRaw
 
 	@Override
 	public Collection<String> getFileTypes() {
-		return (Collection<String>) super.get("fileTypes");
+		if(fileTypes==null) {
+			List<String> list=new ArrayList<>();
+			for(Object o: (Collection<?>) super.get("fileTypes")) {
+				String str=o.toString();
+				// #202
+				if(str.startsWith("."))
+					str=str.substring(1);
+				list.add(str);
+			}
+			fileTypes=list;
+		}
+		return fileTypes;
 	}
 
 	@Override

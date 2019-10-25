@@ -26,3 +26,4 @@ Export-Package: org.eclipse.tm4e.core,
  org.eclipse.tm4e.core.registry,
  org.eclipse.tm4e.core.theme,
  org.eclipse.tm4e.core.theme.css
+Bundle-ActivationPolicy: lazy

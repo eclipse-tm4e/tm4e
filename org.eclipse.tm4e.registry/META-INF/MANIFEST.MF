@@ -12,3 +12,4 @@ Require-Bundle: org.eclipse.tm4e.core,
 Export-Package: org.eclipse.tm4e.registry
 Bundle-Activator: org.eclipse.tm4e.registry.TMEclipseRegistryPlugin
 Bundle-Localization: plugin
+Bundle-ActivationPolicy: lazy

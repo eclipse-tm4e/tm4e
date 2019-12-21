@@ -115,7 +115,7 @@ public class Registry {
 					// callback(new Error('Unknown location for grammar <' +
 					// initialScopeName + '>'), null);
 					// return;
-					throw new TMException("Unknown location for grammar <" + initialScopeName + ">");
+					throw new TMException("Unknown location for grammar <" + initialScopeName + ">", e);
 				}
 			}
 		}

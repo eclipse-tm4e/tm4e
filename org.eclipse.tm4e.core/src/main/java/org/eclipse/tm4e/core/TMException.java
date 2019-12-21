@@ -22,4 +22,8 @@ public class TMException extends RuntimeException {
 	public TMException(String message) {
 		super(message);
 	}
+
+	public TMException(String message, Throwable cause) {
+		super(message, cause);
+	}
 }

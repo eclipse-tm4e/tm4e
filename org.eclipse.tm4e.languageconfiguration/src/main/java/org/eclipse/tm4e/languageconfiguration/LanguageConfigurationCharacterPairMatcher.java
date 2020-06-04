@@ -109,6 +109,7 @@ public class LanguageConfigurationCharacterPairMatcher
 			// initizalize a DefaultCharacterPairMatcher by using character pairs of the
 			// language configuration.
 			StringBuilder chars = new StringBuilder();
+			this.document = document;
 			IContentType[] contentTypes = findContentTypes(document);
 			if (contentTypes != null) {
 				LanguageConfigurationRegistryManager registry = LanguageConfigurationRegistryManager.getInstance();
@@ -131,8 +132,9 @@ public class LanguageConfigurationCharacterPairMatcher
 	private IContentType[] findContentTypes(IDocument document) {
 		try {
 			ContentTypeInfo info = ContentTypeHelper.findContentTypes(document);
-			this.document = document;
-			return info.getContentTypes();
+			if(info != null) {
+				return info.getContentTypes();
+			}
 		} catch (CoreException e) {
 			e.printStackTrace();
 		}

@@ -62,7 +62,7 @@ public class Tokenizer implements ITokenizationSupport {
 		// state
 		// );
 		// }
-		TMState freshState = state.clone();
+		TMState freshState = state != null ? state.clone() : getInitialState();
 		ITokenizeLineResult textMateResult = grammar.tokenizeLine(line, freshState.getRuleStack());
 		freshState.setRuleStack(textMateResult.getRuleStack());
 

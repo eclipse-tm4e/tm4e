@@ -87,7 +87,7 @@ public class ThemePreferencePage extends PreferencePage implements IWorkbenchPre
 
 	/**
 	 * Returns the grammar registry manager.
-	 * 
+	 *
 	 * @return the grammar registry manager.
 	 */
 	public IGrammarRegistryManager getGrammarRegistryManager() {
@@ -96,7 +96,7 @@ public class ThemePreferencePage extends PreferencePage implements IWorkbenchPre
 
 	/**
 	 * Set the grammar registry manager.
-	 * 
+	 *
 	 * @param grammarRegistryManager
 	 */
 	public void setGrammarRegistryManager(IGrammarRegistryManager grammarRegistryManager) {
@@ -105,7 +105,7 @@ public class ThemePreferencePage extends PreferencePage implements IWorkbenchPre
 
 	/**
 	 * Returns the theme manager.
-	 * 
+	 *
 	 * @return the theme manager.
 	 */
 	public IThemeManager getThemeManager() {
@@ -114,7 +114,7 @@ public class ThemePreferencePage extends PreferencePage implements IWorkbenchPre
 
 	/**
 	 * Set the theme manager.
-	 * 
+	 *
 	 * @param themeManager
 	 */
 	public void setThemeManager(IThemeManager themeManager) {
@@ -159,7 +159,7 @@ public class ThemePreferencePage extends PreferencePage implements IWorkbenchPre
 
 	/**
 	 * Create the theme list content.
-	 * 
+	 *
 	 * @param parent
 	 */
 	private void createThemesContent(Composite parent) {
@@ -213,8 +213,10 @@ public class ThemePreferencePage extends PreferencePage implements IWorkbenchPre
 			public void selectionChanged(SelectionChangedEvent e) {
 				// Fill Theme details
 				ITheme theme = ((ITheme) ((IStructuredSelection) themeViewer.getSelection()).getFirstElement());
-				darkThemeButton.setSelection(theme.isDark());
-				defaultThemeButton.setSelection(theme.isDefault());
+				if (theme != null) {
+					darkThemeButton.setSelection(theme.isDark());
+					defaultThemeButton.setSelection(theme.isDefault());
+				}
 				preview();
 			}
 		});
@@ -255,7 +257,7 @@ public class ThemePreferencePage extends PreferencePage implements IWorkbenchPre
 
 	/**
 	 * Create theme detail content.
-	 * 
+	 *
 	 * @param parent
 	 */
 	private void createThemeDetailContent(Composite ancestor) {
@@ -282,7 +284,7 @@ public class ThemePreferencePage extends PreferencePage implements IWorkbenchPre
 
 	/**
 	 * Create theme associations content.
-	 * 
+	 *
 	 * @param parent
 	 */
 	private void createPreviewContent(Composite ancestor) {

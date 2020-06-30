@@ -69,7 +69,7 @@
            contextId="org.eclipse.ui.textEditorScope"
            schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
            platform="carbon"
-           sequence="M1+/">
+           sequence="M1+M4+/">
      </key>
      <key
            commandId="org.eclipse.tm4e.languageconfiguration.removeblockcommentcommand"
@@ -82,7 +82,7 @@
            contextId="org.eclipse.ui.textEditorScope"
            schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
            platform="carbon"
-           sequence="M1+\">
+           sequence="M1+M4+\">
      </key>
      <key
            contextId="org.eclipse.ui.textEditorScope"

@@ -7,7 +7,7 @@
 	<packaging>pom</packaging>
 
 	<prerequisites>
-		<maven>3.6.2</maven>
+		<maven>3.6.3</maven>
 	</prerequisites>
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>

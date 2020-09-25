@@ -19,10 +19,6 @@ import org.eclipse.tm4e.core.internal.grammar.ScopeListElement;
 import org.eclipse.tm4e.core.internal.grammar.ScopeMetadata;
 import org.eclipse.tm4e.core.internal.grammar.StackElementMetadata;
 import org.eclipse.tm4e.core.internal.theme.reader.ThemeReader;
-import org.eclipse.tm4e.core.theme.ColorMap;
-import org.eclipse.tm4e.core.theme.FontStyle;
-import org.eclipse.tm4e.core.theme.Theme;
-import org.eclipse.tm4e.core.theme.ThemeTrieElementRule;
 import org.junit.Assert;
 import org.junit.Test;
 

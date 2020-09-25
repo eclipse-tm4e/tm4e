@@ -16,9 +16,6 @@ import java.util.Arrays;
 import java.util.List;
 
 import org.eclipse.tm4e.core.internal.theme.reader.ThemeReader;
-import org.eclipse.tm4e.core.theme.FontStyle;
-import org.eclipse.tm4e.core.theme.ParsedThemeRule;
-import org.eclipse.tm4e.core.theme.Theme;
 import org.junit.Assert;
 import org.junit.Test;
 

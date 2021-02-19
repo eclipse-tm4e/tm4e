@@ -7,19 +7,19 @@
 <repository location="https://download.eclipse.org/cbi/updates/license/2.0.2.v20181016-2210/"/>
 </location>
 <location includeAllPlatforms="false" includeConfigurePhase="true" includeMode="planner" includeSource="true" type="InstallableUnit">
-<unit id="com.google.gson" version="2.8.2.v20180104-1110"/>
+<unit id="com.google.gson" version="2.8.6.v20201231-1626"/>
 <unit id="org.jcodings" version="1.0.18.v20170306-1742"/>
 <unit id="org.joni" version="2.1.11.v20170306-1742"/>
 <unit id="org.apache.batik.css" version="1.13.0.v20200622-2037"/>
-<repository location="https://download.eclipse.org/tools/orbit/downloads/latest-R/"/>
+<repository location="https://download.eclipse.org/tools/orbit/downloads/latest-S/"/>
 </location>
 <location includeAllPlatforms="false" includeConfigurePhase="true" includeMode="planner" includeSource="true" type="InstallableUnit">
-<unit id="org.eclipse.platform.feature.group" version="4.17.0.v20200902-1800"/>
-<unit id="org.eclipse.ui.tests.harness" version="1.7.0.v20200807-1055"/>
-<unit id="org.eclipse.jdt.annotation" version="2.2.600.v20200408-1511"/>
-<unit id="org.junit" version="4.13.0.v20200204-1500"/>
-<unit id="org.eclipse.ui.trace" version="1.1.800.v20200106-1301"/>
-<repository location="https://download.eclipse.org/eclipse/updates/4.17/"/>
+<unit id="org.eclipse.platform.feature.group" version="0.0.0"/>
+<unit id="org.eclipse.ui.tests.harness" version="0.0.0"/>
+<unit id="org.eclipse.jdt.annotation" version="0.0.0"/>
+<unit id="org.junit" version="0.0.0"/>
+<unit id="org.eclipse.ui.trace" version="0.0.0"/>
+<repository location="https://download.eclipse.org/eclipse/updates/4.18/"/>
 </location>
 </locations>
 	<targetJRE path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-11"/>

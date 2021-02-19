@@ -24,3 +24,4 @@ Require-Bundle: org.eclipse.jface.text,
 Bundle-Activator: org.eclipse.tm4e.languageconfiguration.internal.LanguageConfigurationPlugin
 Export-Package: org.eclipse.tm4e.languageconfiguration
 Bundle-ActivationPolicy: lazy
+Automatic-Module-Name: org.eclipse.tm4e.languageconfiguration

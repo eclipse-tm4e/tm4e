@@ -27,3 +27,4 @@ Export-Package: org.eclipse.tm4e.core,
  org.eclipse.tm4e.core.theme,
  org.eclipse.tm4e.core.theme.css
 Bundle-ActivationPolicy: lazy
+Automatic-Module-Name: org.eclipse.tm4e.core

@@ -12,7 +12,7 @@ Require-Bundle: org.eclipse.jface.text,
  org.eclipse.tm4e.core,
  org.eclipse.tm4e.ui,
  org.eclipse.ui.genericeditor;bundle-version="1.0.0";resolution:=optional
-Bundle-RequiredExecutionEnvironment: JavaSE-1.8
+Bundle-RequiredExecutionEnvironment: JavaSE-11
 Bundle-ActivationPolicy: lazy
 Automatic-Module-Name: org.eclipse.tm4e.samples
 

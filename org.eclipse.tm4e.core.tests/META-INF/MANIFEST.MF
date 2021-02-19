@@ -13,6 +13,6 @@ Require-Bundle: org.apache.batik.css;bundle-version="1.7.0";resolution:=optional
 Import-Package: org.junit,org.junit.runner,org.junit.runners,junit.framework,
  org.w3c.css.sac;resolution:=optional,
  org.w3c.css.sac.helpers;resolution:=optional
-Bundle-RequiredExecutionEnvironment: JavaSE-1.8
+Bundle-RequiredExecutionEnvironment: JavaSE-11
 Bundle-ActivationPolicy: lazy
 Automatic-Module-Name: org.eclipse.tm4e.core.tests

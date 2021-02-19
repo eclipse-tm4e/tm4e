@@ -58,6 +58,6 @@ public class TMEclipseRegistryPlugin implements BundleActivator {
 	 */
 	public static boolean isDebugOptionEnabled(String option) {
 		String enabled = Platform.getDebugOption(option);
-		return enabled != null && new Boolean(enabled).booleanValue();
+		return enabled != null && Boolean.parseBoolean(enabled);
 	}
 }

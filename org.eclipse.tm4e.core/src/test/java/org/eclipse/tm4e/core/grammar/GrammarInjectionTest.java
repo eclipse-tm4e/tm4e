@@ -19,8 +19,8 @@ import java.util.Collection;
 import org.eclipse.tm4e.core.Data;
 import org.eclipse.tm4e.core.registry.IRegistryOptions;
 import org.eclipse.tm4e.core.registry.Registry;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 /**
  * Test for grammar tokenizer.
@@ -79,7 +79,7 @@ public class GrammarInjectionTest {
 			String s = "Token from " + token.getStartIndex() + " to " + token.getEndIndex() + " with scopes "
 					+ token.getScopes();
 			System.err.println(s);
-			Assert.assertEquals(EXPECTED_TOKENS[i], s);
+			Assertions.assertEquals(EXPECTED_TOKENS[i], s);
 		}
 	}
 }

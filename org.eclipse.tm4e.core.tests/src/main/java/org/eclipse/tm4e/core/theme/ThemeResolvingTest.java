@@ -11,6 +11,9 @@
  */
 package org.eclipse.tm4e.core.theme;
 
+import static org.junit.jupiter.api.Assertions.assertArrayEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 import java.io.ByteArrayInputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -21,8 +24,7 @@ import java.util.Map;
 
 import org.eclipse.tm4e.core.internal.theme.reader.ThemeReader;
 import org.eclipse.tm4e.core.internal.utils.CompareUtils;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 /**
  * 
@@ -37,7 +39,7 @@ public class ThemeResolvingTest {
 		actual.sort(CompareUtils::strcmp);
 
 		List<String> expected = Arrays.asList("", "a", "ab", "bar", "z", "zu");
-		Assert.assertArrayEquals(expected.toArray(), actual.toArray());
+		assertArrayEquals(expected.toArray(), actual.toArray());
 	}
 
 	@Test
@@ -67,7 +69,7 @@ public class ThemeResolvingTest {
 		int _B = colorMap.getId("#ffffff");
 		Theme expected = new Theme(colorMap, new ThemeTrieElementRule(0, null, FontStyle.None, _A, _B),
 				new ThemeTrieElement(new ThemeTrieElementRule(0, null, FontStyle.NotSet, _NOT_SET, _NOT_SET)));
-		Assert.assertEquals(actual, expected);
+		assertEquals(actual, expected);
 	}
 
 	@Test
@@ -80,7 +82,7 @@ public class ThemeResolvingTest {
 		int _B = colorMap.getId("#ffffff");
 		Theme expected = new Theme(colorMap, new ThemeTrieElementRule(0, null, FontStyle.None, _A, _B),
 				new ThemeTrieElement(new ThemeTrieElementRule(0, null, FontStyle.NotSet, _NOT_SET, _NOT_SET)));
-		Assert.assertEquals(actual, expected);
+		assertEquals(actual, expected);
 	}
 
 	@Test
@@ -93,7 +95,7 @@ public class ThemeResolvingTest {
 		int _B = colorMap.getId("#ffffff");
 		Theme expected = new Theme(colorMap, new ThemeTrieElementRule(0, null, FontStyle.None, _A, _B),
 				new ThemeTrieElement(new ThemeTrieElementRule(0, null, FontStyle.NotSet, _NOT_SET, _NOT_SET)));
-		Assert.assertEquals(actual, expected);
+		assertEquals(actual, expected);
 	}
 
 	@Test
@@ -106,7 +108,7 @@ public class ThemeResolvingTest {
 		int _B = colorMap.getId("#ffffff");
 		Theme expected = new Theme(colorMap, new ThemeTrieElementRule(0, null, FontStyle.Bold, _A, _B),
 				new ThemeTrieElement(new ThemeTrieElementRule(0, null, FontStyle.NotSet, _NOT_SET, _NOT_SET)));
-		Assert.assertEquals(actual, expected);
+		assertEquals(actual, expected);
 	}
 
 	@Test
@@ -119,7 +121,7 @@ public class ThemeResolvingTest {
 		int _B = colorMap.getId("#ffffff");
 		Theme expected = new Theme(colorMap, new ThemeTrieElementRule(0, null, FontStyle.None, _A, _B),
 				new ThemeTrieElement(new ThemeTrieElementRule(0, null, FontStyle.NotSet, _NOT_SET, _NOT_SET)));
-		Assert.assertEquals(actual, expected);
+		assertEquals(actual, expected);
 	}
 
 	@Test
@@ -134,7 +136,7 @@ public class ThemeResolvingTest {
 		int _B = colorMap.getId("#ff0000");
 		Theme expected = new Theme(colorMap, new ThemeTrieElementRule(0, null, FontStyle.Bold, _A, _B),
 				new ThemeTrieElement(new ThemeTrieElementRule(0, null, FontStyle.NotSet, _NOT_SET, _NOT_SET)));
-		Assert.assertEquals(actual, expected);
+		assertEquals(actual, expected);
 	}
 
 	@Test
@@ -149,7 +151,7 @@ public class ThemeResolvingTest {
 		int _B = colorMap.getId("#ff0000");
 		Theme expected = new Theme(colorMap, new ThemeTrieElementRule(0, null, FontStyle.Bold, _A, _B),
 				new ThemeTrieElement(new ThemeTrieElementRule(0, null, FontStyle.NotSet, _NOT_SET, _NOT_SET)));
-		Assert.assertEquals(actual, expected);
+		assertEquals(actual, expected);
 	}
 
 	@Test
@@ -169,7 +171,7 @@ public class ThemeResolvingTest {
 		Theme expected = new Theme(colorMap, new ThemeTrieElementRule(0, null, FontStyle.None, _A, _B),
 				new ThemeTrieElement(new ThemeTrieElementRule(0, null, FontStyle.NotSet, _NOT_SET, _NOT_SET),
 						Collections.emptyList(), map));
-		Assert.assertEquals(actual, expected);
+		assertEquals(actual, expected);
 	}
 
 	@Test
@@ -190,7 +192,7 @@ public class ThemeResolvingTest {
 		Theme expected = new Theme(colorMap, new ThemeTrieElementRule(0, null, FontStyle.None, _A, _B),
 				new ThemeTrieElement(new ThemeTrieElementRule(0, null, FontStyle.NotSet, _NOT_SET, _NOT_SET),
 						Collections.emptyList(), map));
-		Assert.assertEquals(actual, expected);
+		assertEquals(actual, expected);
 	}
 
 	@Test
@@ -215,7 +217,7 @@ public class ThemeResolvingTest {
 		Theme expected = new Theme(colorMap, new ThemeTrieElementRule(0, null, FontStyle.None, _A, _B),
 				new ThemeTrieElement(new ThemeTrieElementRule(0, null, FontStyle.NotSet, _NOT_SET, _NOT_SET),
 						Collections.emptyList(), map1));
-		Assert.assertEquals(actual, expected);
+		assertEquals(actual, expected);
 	}
 
 	@Test
@@ -264,7 +266,7 @@ public class ThemeResolvingTest {
 		Theme expected = new Theme(colorMap, new ThemeTrieElementRule(0, null, FontStyle.None, _A, _B),
 				new ThemeTrieElement(new ThemeTrieElementRule(0, null, FontStyle.NotSet, _NOT_SET, _NOT_SET),
 						Collections.emptyList(), mapRoot));
-		Assert.assertEquals(actual, expected);
+		assertEquals(actual, expected);
 	}
 
 	@Test
@@ -297,7 +299,7 @@ public class ThemeResolvingTest {
 		Theme expected = new Theme(colorMap, new ThemeTrieElementRule(0, null, FontStyle.None, _A, _B),
 				new ThemeTrieElement(new ThemeTrieElementRule(0, null, FontStyle.NotSet, _NOT_SET, _NOT_SET),
 						Collections.emptyList(), mapRoot));
-		Assert.assertEquals(actual, expected);
+		assertEquals(actual, expected);
 	}
 	
 	@Test
@@ -353,7 +355,7 @@ public class ThemeResolvingTest {
 			new ParsedThemeRule("variable.parameter.function.coffee", null, 5, FontStyle.Italic, "#F9D423", null)
 		);
 
-		Assert.assertArrayEquals(expected.toArray(), actual.toArray());
+		assertArrayEquals(expected.toArray(), actual.toArray());
 	}
 	
 	@Test
@@ -390,11 +392,11 @@ public class ThemeResolvingTest {
 				new ParsedThemeRule("punctuation.definition", Arrays.asList("meta.at-rule.if.scss"), 1, FontStyle.NotSet, "#CC7832", null)
 		);
 
-		Assert.assertArrayEquals(expected.toArray(), actual.toArray());
+		assertArrayEquals(expected.toArray(), actual.toArray());
 	}
 	
 	private void assertStrArrCmp(String testCase, List<String> a, List<String> b, int expected) {
-		Assert.assertEquals(testCase, expected, CompareUtils.strArrCmp(a, b));
+		assertEquals(expected, CompareUtils.strArrCmp(a, b), testCase);
 	}
 	
 	private List<ParsedThemeRule> parseTheme(String theme) throws Exception {

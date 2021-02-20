@@ -11,6 +11,8 @@
  */
 package org.eclipse.tm4e.core.grammar.internal;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
@@ -25,14 +27,8 @@ import org.eclipse.tm4e.core.grammar.ITokenizeLineResult;
 import org.eclipse.tm4e.core.grammar.StackElement;
 import org.eclipse.tm4e.core.registry.IRegistryOptions;
 import org.eclipse.tm4e.core.registry.Registry;
-import org.junit.Assert;
-import org.junit.runner.Describable;
-import org.junit.runner.Description;
 
-import junit.framework.Test;
-import junit.framework.TestResult;
-
-public class RawTestImpl implements Test, Describable {
+public class RawTestImpl {
 
 	private String desc;
 	private List<String> grammars;
@@ -66,24 +62,7 @@ public class RawTestImpl implements Test, Describable {
 		return lines;
 	}
 
-	@Override
-	public void run(TestResult result) {
-		try {
-			result.startTest(this);
-			executeTest(this, testLocation);
-		} catch (Throwable e) {
-			result.addError(this, e);
-		} finally {
-			result.endTest(this);
-		}
-	}
-
-	@Override
-	public int countTestCases() {
-		return 1;
-	}
-
-	private static void executeTest(RawTestImpl test, File testLocation) throws Exception {
+	public void executeTest() throws Exception {
 		IRegistryOptions locator = new IRegistryOptions() {
 
 			@Override
@@ -98,18 +77,18 @@ public class RawTestImpl implements Test, Describable {
 
 			@Override
 			public Collection<String> getInjections(String scopeName) {
-				if (scopeName.equals(test.getGrammarScopeName())) {
-					return test.getGrammarInjections();
+				if (scopeName.equals(getGrammarScopeName())) {
+					return getGrammarInjections();
 				}
 				return null;
 			}
 		};
 
 		Registry registry = new Registry(locator);
-		IGrammar grammar = getGrammar(test, registry, testLocation.getParentFile());
+		IGrammar grammar = getGrammar(registry, testLocation.getParentFile());
 
-		if (test.getGrammarScopeName() != null) {
-			grammar = registry.grammarForScopeName(test.getGrammarScopeName());
+		if (getGrammarScopeName() != null) {
+			grammar = registry.grammarForScopeName(getGrammarScopeName());
 		}
 
 		if (grammar == null) {
@@ -117,16 +96,16 @@ public class RawTestImpl implements Test, Describable {
 		}
 
 		StackElement prevState = null;
-		for (RawTestLine testLine : test.getLines()) {
+		for (RawTestLine testLine : getLines()) {
 			prevState = assertLineTokenization(grammar, testLine, prevState);
 		}
 	}
 
-	private static IGrammar getGrammar(RawTestImpl test, Registry registry, File testLocation) throws Exception {
+	private IGrammar getGrammar(Registry registry, File testLocation) throws Exception {
 		IGrammar grammar = null;
-		for (String grammarPath : test.getGrammars()) {
+		for (String grammarPath : getGrammars()) {
 			IGrammar tmpGrammar = registry.loadGrammarFromPathSync(new File(testLocation, grammarPath));
-			if (grammarPath.equals(test.getGrammarPath())) {
+			if (grammarPath.equals(getGrammarPath())) {
 				grammar = tmpGrammar;
 			}
 		}
@@ -152,15 +131,13 @@ public class RawTestImpl implements Test, Describable {
 
 	private static void deepEqual(List<RawToken> actualTokens, List<RawToken> expextedTokens, String message) {
 		// compare collection size
-		Assert.assertEquals(message + " (collection size problem)", expextedTokens.size(), actualTokens.size());
+		assertEquals(expextedTokens.size(), actualTokens.size(), message + " (collection size problem)");
 		// compare item
 		for (int i = 0; i < expextedTokens.size(); i++) {
 			RawToken expected = expextedTokens.get(i);
 			RawToken actual = actualTokens.get(i);
-			Assert.assertEquals(message + " (value of item '" + i + "' problem)", expected.getValue(),
-					actual.getValue());
-			Assert.assertEquals(message + " (tokens of item '" + i + "' problem)", expected.getScopes(),
-					actual.getScopes());
+			assertEquals(expected.getValue(), actual.getValue(), message + " (value of item '" + i + "' problem)");
+			assertEquals(expected.getScopes(), actual.getScopes(), message + " (tokens of item '" + i + "' problem)");
 		}
 
 	}
@@ -180,8 +157,4 @@ public class RawTestImpl implements Test, Describable {
 		this.testLocation = testLocation;
 	}
 
-	@Override
-	public Description getDescription() {
-		return Description.createSuiteDescription(desc);
-	}
 }

@@ -11,6 +11,8 @@
  */
 package org.eclipse.tm4e.ui.text.typescript;
 
+import static org.junit.jupiter.api.Assertions.*;
+
 import java.util.List;
 
 import org.eclipse.tm4e.core.grammar.IGrammar;
@@ -19,23 +21,22 @@ import org.eclipse.tm4e.ui.text.ICommand;
 import org.eclipse.tm4e.ui.text.TMEditor;
 import org.eclipse.tm4e.ui.themes.ITokenProvider;
 import org.eclipse.tm4e.ui.themes.css.CSSTokenProvider;
-import org.junit.Assert;
-import org.junit.Ignore;
-import org.junit.Test;
+import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.Test;
 
 public class TMPresentationReconcilerTypeScriptTest {
 
-	@Ignore ("Remove this annotation when org.eclipse.swt.SWTError: No more handles [gtk_init_check() failed] will be fixed")
+	@Disabled ("Remove this annotation when org.eclipse.swt.SWTError: No more handles [gtk_init_check() failed] will be fixed")
 	@Test
 	public void colorizeTypescript() throws Exception {
 
 		TMEditor editor = new TMEditor(getGrammar(), getTokenProvider(), "let a = '';\nlet b = 10;\nlet c = true;");
 		List<ICommand> commands = editor.execute();
 
-		Assert.assertEquals(1, commands.size());
+		assertEquals(1, commands.size());
 		ICommand command = commands.get(0);
 
-		Assert.assertEquals(
+		assertEquals(
 				"["
 				+ "StyleRange {0, 3, fontStyle=bold, foreground=Color {7, 54, 66, 255}}, "
 				+ "StyleRange {3, 1, fontStyle=normal}, "
@@ -65,7 +66,7 @@ public class TMPresentationReconcilerTypeScriptTest {
 				command.getStyleRanges());
 	}
 
-	@Ignore ("Remove this annotation when org.eclipse.swt.SWTError: No more handles [gtk_init_check() failed] will be fixed")
+	@Disabled ("Remove this annotation when org.eclipse.swt.SWTError: No more handles [gtk_init_check() failed] will be fixed")
 	@Test
 	public void colorizeTypescriptWithInvalidate1() throws Exception {
 
@@ -75,7 +76,7 @@ public class TMPresentationReconcilerTypeScriptTest {
 
 		// document.set("let a = '';\nlet b = 10;\nlet c = true;");
 		ICommand command0 = commands.get(0);
-		Assert.assertEquals(
+		assertEquals(
 				"["
 				+ "StyleRange {0, 3, fontStyle=bold, foreground=Color {7, 54, 66, 255}}, "
 				+ "StyleRange {3, 1, fontStyle=normal}, "
@@ -106,7 +107,7 @@ public class TMPresentationReconcilerTypeScriptTest {
 
 		// viewer.invalidateTextPresentation(0, 3);
 		ICommand command1 = commands.get(1);
-		Assert.assertEquals(
+		assertEquals(
 				"["
 				+ "StyleRange {0, 3, fontStyle=bold, foreground=Color {7, 54, 66, 255}}"
 				+ "]",
@@ -114,7 +115,7 @@ public class TMPresentationReconcilerTypeScriptTest {
 
 	}
 
-	@Ignore
+	@Disabled
 	@Test
 	public void colorizeTypescriptWithInvalidate2() throws Exception {
 
@@ -124,7 +125,7 @@ public class TMPresentationReconcilerTypeScriptTest {
 
 		// document.set("let a = '';\nlet b = 10;\nlet c = true;");
 		ICommand command0 = commands.get(0);
-		Assert.assertEquals(
+		assertEquals(
 				"["
 				+ "StyleRange {0, 3, fontStyle=bold, foreground=Color {7, 54, 66, 255}}, "
 				+ "StyleRange {3, 1, fontStyle=normal}, "
@@ -155,7 +156,7 @@ public class TMPresentationReconcilerTypeScriptTest {
 
 		// viewer.invalidateTextPresentation(0, 2);
 		ICommand command1 = commands.get(1);
-		Assert.assertEquals(
+		assertEquals(
 				"["
 				+ "StyleRange {0, 2, fontStyle=bold, foreground=Color {7, 54, 66, 255}}"
 				+ "]",
@@ -163,7 +164,7 @@ public class TMPresentationReconcilerTypeScriptTest {
 
 	}
 
-	@Ignore ("Remove this annotation when org.eclipse.swt.SWTError: No more handles [gtk_init_check() failed] will be fixed")
+	@Disabled ("Remove this annotation when org.eclipse.swt.SWTError: No more handles [gtk_init_check() failed] will be fixed")
 	@Test
 	public void colorizeTypescriptWithInvalidate3() throws Exception {
 
@@ -173,7 +174,7 @@ public class TMPresentationReconcilerTypeScriptTest {
 
 		// document.set("let a = '';\nlet b = 10;\nlet c = true;");
 		ICommand command0 = commands.get(0);
-		Assert.assertEquals(
+		assertEquals(
 				"["
 				+ "StyleRange {0, 3, fontStyle=bold, foreground=Color {7, 54, 66, 255}}, "
 				+ "StyleRange {3, 1, fontStyle=normal}, "
@@ -204,7 +205,7 @@ public class TMPresentationReconcilerTypeScriptTest {
 
 		// viewer.invalidateTextPresentation(1, 2);
 		ICommand command1 = commands.get(1);
-		Assert.assertEquals(
+		assertEquals(
 				"["
 				+ "StyleRange {1, 2, fontStyle=bold, foreground=Color {7, 54, 66, 255}}"
 				+ "]",
@@ -212,7 +213,7 @@ public class TMPresentationReconcilerTypeScriptTest {
 
 	}
 
-	@Ignore
+	@Disabled
 	@Test
 	public void colorizeTypescriptWithInvalidate4() throws Exception {
 
@@ -222,7 +223,7 @@ public class TMPresentationReconcilerTypeScriptTest {
 
 		// document.set("let a = '';\nlet b = 10;\nlet c = true;");
 		ICommand command0 = commands.get(0);
-		Assert.assertEquals(
+		assertEquals(
 				"["
 				+ "StyleRange {0, 3, fontStyle=bold, foreground=Color {7, 54, 66, 255}}, "
 				+ "StyleRange {3, 1, fontStyle=normal}, "
@@ -253,7 +254,7 @@ public class TMPresentationReconcilerTypeScriptTest {
 
 		// viewer.invalidateTextPresentation(1, 1);
 		ICommand command1 = commands.get(1);
-		Assert.assertEquals(
+		assertEquals(
 				"["
 				+ "StyleRange {1, 1, fontStyle=bold, foreground=Color {7, 54, 66, 255}}"
 				+ "]",
@@ -261,7 +262,7 @@ public class TMPresentationReconcilerTypeScriptTest {
 
 	}
 
-	@Ignore
+	@Disabled
 	@Test
 	public void colorizeTypescriptWithInvalidate8() throws Exception {
 
@@ -271,7 +272,7 @@ public class TMPresentationReconcilerTypeScriptTest {
 
 		// document.set("let a = '';\nlet b = 10;\nlet c = true;");
 		ICommand command0 = commands.get(0);
-		Assert.assertEquals(
+		assertEquals(
 				"["
 				+ "StyleRange {0, 3, fontStyle=bold, foreground=Color {7, 54, 66, 255}}, "
 				+ "StyleRange {3, 1, fontStyle=normal}, "
@@ -302,7 +303,7 @@ public class TMPresentationReconcilerTypeScriptTest {
 
 		// viewer.invalidateTextPresentation(1, 8);
 		ICommand command1 = commands.get(1);
-		Assert.assertEquals(
+		assertEquals(
 				"["
 				+ "StyleRange {1, 2, fontStyle=bold, foreground=Color {7, 54, 66, 255}}"
 				+ "]",
@@ -310,7 +311,7 @@ public class TMPresentationReconcilerTypeScriptTest {
 
 	}
 
-	@Ignore ("Remove this annotation when org.eclipse.swt.SWTError: No more handles [gtk_init_check() failed] will be fixed")
+	@Disabled ("Remove this annotation when org.eclipse.swt.SWTError: No more handles [gtk_init_check() failed] will be fixed")
 	@Test
 	public void colorizeTypescriptWithInvalidateAndSeveralLines() throws Exception {
 
@@ -319,10 +320,10 @@ public class TMPresentationReconcilerTypeScriptTest {
 
 		List<ICommand> commands = editor.execute();
 
-		Assert.assertEquals(2, commands.size());
+		assertEquals(2, commands.size());
 
 		for (ICommand command : commands) {
-			Assert.assertEquals(
+			assertEquals(
 					"["
 					+ "StyleRange {0, 3, fontStyle=normal, foreground=Color {38, 139, 210, 255}}, "
 					+ "StyleRange {3, 2, fontStyle=normal}, "

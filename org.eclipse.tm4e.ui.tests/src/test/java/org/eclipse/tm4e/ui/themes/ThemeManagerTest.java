@@ -11,9 +11,10 @@
  */
 package org.eclipse.tm4e.ui.themes;
 
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+import static org.junit.jupiter.api.Assertions.*;
+
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 /**
  * Test for theme manager.	
@@ -23,7 +24,7 @@ public class ThemeManagerTest implements ThemeIdConstants {
 
 	private IThemeManager manager;
 	
-	@Before
+	@BeforeEach
 	public void init() {
 		manager = new MockThemeManager();
 		
@@ -39,32 +40,32 @@ public class ThemeManagerTest implements ThemeIdConstants {
 	public void themes() {
 		// All themes
 		ITheme[] themes = manager.getThemes();
-		Assert.assertNotNull(themes);
-		Assert.assertEquals(4, themes.length);
+		assertNotNull(themes);
+		assertEquals(4, themes.length);
 	}
 
 	@Test
 	public void defaultThemeAssociation() {
 		// Default theme
 		ITheme theme = manager.getDefaultTheme();
-		Assert.assertNotNull(theme);
-		Assert.assertEquals(SolarizedLight, theme.getId());
+		assertNotNull(theme);
+		assertEquals(SolarizedLight, theme.getId());
 	}
 
 	@Test
 	public void darkThemes() {
 		// All themes for Dark E4 CSS Theme
 		ITheme[] darkThemes = manager.getThemes(true);
-		Assert.assertNotNull(darkThemes);
-		Assert.assertEquals(2, darkThemes.length);
-		Assert.assertEquals(Dark, darkThemes[0].getId());
-		Assert.assertEquals(Monokai, darkThemes[1].getId());
+		assertNotNull(darkThemes);
+		assertEquals(2, darkThemes.length);
+		assertEquals(Dark, darkThemes[0].getId());
+		assertEquals(Monokai, darkThemes[1].getId());
 		
 		// All themes for Other E4 CSS Theme
 		ITheme[] otherThemes = manager.getThemes(false);
-		Assert.assertNotNull(otherThemes);
-		Assert.assertEquals(2, otherThemes.length);
-		Assert.assertEquals(SolarizedLight, otherThemes[0].getId());
-		Assert.assertEquals(Light, otherThemes[1].getId());
+		assertNotNull(otherThemes);
+		assertEquals(2, otherThemes.length);
+		assertEquals(SolarizedLight, otherThemes[0].getId());
+		assertEquals(Light, otherThemes[1].getId());
 	}
 }

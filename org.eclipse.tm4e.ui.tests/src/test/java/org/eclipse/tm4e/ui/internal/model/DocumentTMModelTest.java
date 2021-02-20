@@ -13,7 +13,7 @@ package org.eclipse.tm4e.ui.internal.model;
 
 import org.eclipse.jface.text.Document;
 import org.eclipse.tm4e.core.registry.Registry;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 public class DocumentTMModelTest {
 

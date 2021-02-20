@@ -11,6 +11,9 @@
  */
 package org.eclipse.tm4e.core.theme;
 
+import static org.junit.jupiter.api.Assertions.assertArrayEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 import java.io.ByteArrayInputStream;
 import java.util.Arrays;
 import java.util.List;
@@ -19,8 +22,7 @@ import org.eclipse.tm4e.core.internal.grammar.ScopeListElement;
 import org.eclipse.tm4e.core.internal.grammar.ScopeMetadata;
 import org.eclipse.tm4e.core.internal.grammar.StackElementMetadata;
 import org.eclipse.tm4e.core.internal.theme.reader.ThemeReader;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 /**
  * 
@@ -49,7 +51,7 @@ public class ThemeMatchingTest {
 
 		List<ThemeTrieElementRule> actual = theme.match("punctuation.definition.string.begin.html");
 
-		Assert.assertArrayEquals(
+		assertArrayEquals(
 				new ThemeTrieElementRule[] { new ThemeTrieElementRule(5, null, FontStyle.NotSet, _D, _NOT_SET),
 						new ThemeTrieElementRule(3, Arrays.asList("meta.tag"), FontStyle.NotSet, _C, _NOT_SET) },
 				actual.toArray());
@@ -77,7 +79,7 @@ public class ThemeMatchingTest {
 		
 		List<ThemeTrieElementRule> actual = theme.match("a.b");
 
-		Assert.assertArrayEquals(new ThemeTrieElementRule[] {
+		assertArrayEquals(new ThemeTrieElementRule[] {
 				new ThemeTrieElementRule(2, Arrays.asList("d"), FontStyle.NotSet, _E, _NOT_SET),
 				new ThemeTrieElementRule(1, Arrays.asList("c"), FontStyle.NotSet, _D, _NOT_SET),
 				new ThemeTrieElementRule(1, null, FontStyle.NotSet, _C, _NOT_SET) }, actual.toArray());
@@ -100,7 +102,7 @@ public class ThemeMatchingTest {
 		int r = ScopeListElement.mergeMetadata(0, parent, new ScopeMetadata("entity.name.tag.structure.any.html", 0, 0,
 				theme.match("entity.name.tag.structure.any.html")));
 		String color = theme.getColor(StackElementMetadata.getForeground(r));
-		Assert.assertEquals("#300000", color);
+		assertEquals("#300000", color);
 	}
 
 	@Test
@@ -247,14 +249,12 @@ public class ThemeMatchingTest {
 			new ScopeMetadata("string.quoted.double.json", 0, 0, theme.match("string.quoted.double.json"))
 		);
 		String color = theme.getColor(StackElementMetadata.getForeground(r));
-		Assert.assertEquals("#FF410D", color);
+		assertEquals("#FF410D", color);
 	}
 	
 	private void assertMatch(Theme theme, String scopeName, ThemeTrieElementRule[] expected) {
 		List<ThemeTrieElementRule> actual = theme.match(scopeName);
-		Assert.assertArrayEquals("when matching <<" + scopeName + ">>", 
-				expected,
-				actual.toArray());		
+		assertArrayEquals(expected, actual.toArray(), "when matching <<" + scopeName + ">>");
 	}
 
 	private void assertSimpleMatch(Theme theme, String scopeName, int scopeDepth, int fontStyle, int foreground, int background) {

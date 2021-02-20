@@ -11,13 +11,14 @@
  */
 package org.eclipse.tm4e.core.theme;
 
+import static org.junit.jupiter.api.Assertions.assertArrayEquals;
+
 import java.io.ByteArrayInputStream;
 import java.util.Arrays;
 import java.util.List;
 
 import org.eclipse.tm4e.core.internal.theme.reader.ThemeReader;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 /**
  * 
@@ -59,9 +60,7 @@ public class ThemeParsingTest {
 				new ParsedThemeRule("constant.numeric.dec", null, 8, FontStyle.None, "#0000ff", null),
 				new ParsedThemeRule("foo", null, 9, FontStyle.None, "#CFA", null), };
 
-		Assert.assertArrayEquals(
-				expected,
-				actual.toArray());
+		assertArrayEquals(expected, actual.toArray());
 	}	
 	
 	private List<ParsedThemeRule> parseTheme(String theme) throws Exception {

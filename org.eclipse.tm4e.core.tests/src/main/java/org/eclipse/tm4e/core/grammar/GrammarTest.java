@@ -14,8 +14,8 @@ package org.eclipse.tm4e.core.grammar;
 import org.eclipse.tm4e.core.internal.grammar.StackElementMetadata;
 import org.eclipse.tm4e.core.internal.grammar.StandardTokenType;
 import org.eclipse.tm4e.core.theme.FontStyle;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 /**
  * {@link StackElementMetadata} tests same than vscode-textmate.
@@ -112,6 +112,6 @@ public class GrammarTest {
 				"background: " + background + ",\n" +			
 			"}";
 		
-		Assert.assertEquals("equals for " + StackElementMetadata.toBinaryStr(metadata), expected, actual);
+		Assertions.assertEquals(expected, actual, "equals for " + StackElementMetadata.toBinaryStr(metadata));
 	}
 }

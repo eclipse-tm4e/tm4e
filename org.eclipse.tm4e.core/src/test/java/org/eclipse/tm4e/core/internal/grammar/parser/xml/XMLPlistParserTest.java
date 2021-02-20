@@ -14,7 +14,7 @@ package org.eclipse.tm4e.core.internal.grammar.parser.xml;
 import org.eclipse.tm4e.core.internal.grammar.reader.GrammarReader;
 import org.eclipse.tm4e.core.internal.grammar.reader.IGrammarParser;
 import org.eclipse.tm4e.core.internal.types.IRawGrammar;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 public class XMLPlistParserTest {
 

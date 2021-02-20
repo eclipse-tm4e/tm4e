@@ -11,6 +11,8 @@
  */
 package org.eclipse.tm4e.languageconfiguration.tests;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 import java.io.ByteArrayInputStream;
 
 import org.eclipse.core.resources.IFile;
@@ -21,13 +23,12 @@ import org.eclipse.swt.widgets.Control;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.ide.IDE;
 import org.eclipse.ui.texteditor.ITextEditor;
-import org.junit.After;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.Test;
 
 public class TestAutoClosing {
 
-	@After
+	@AfterEach
 	public void tearDown() throws Exception {
 		PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().closeAllEditors(false);
 		for (IProject p : ResourcesPlugin.getWorkspace().getRoot().getProjects()) {
@@ -47,39 +48,39 @@ public class TestAutoClosing {
 		// insert closing
 		text.setText("");
 		text.replaceTextRange(0, 0, "(");
-		Assert.assertEquals("()", text.getText());
-		Assert.assertEquals(1, text.getCaretOffset());
+		assertEquals("()", text.getText());
+		assertEquals(1, text.getCaretOffset());
 		// nested insert closing
 		text.setText("foo(String::from)");
 		text.replaceTextRange(16, 0, "(");
-		Assert.assertEquals("foo(String::from())", text.getText());
-		Assert.assertEquals(17, text.getCaretOffset());
+		assertEquals("foo(String::from())", text.getText());
+		assertEquals(17, text.getCaretOffset());
 		// ignore already opened
 		text.setText("()");
 		text.replaceTextRange(0, 0, "(");
-		Assert.assertEquals("()", text.getText());
-		Assert.assertEquals(1, text.getCaretOffset());
+		assertEquals("()", text.getText());
+		assertEquals(1, text.getCaretOffset());
 		// ignore already closed
 		text.setText("()");
 		text.replaceTextRange(1, 0, ")");
-		Assert.assertEquals("()", text.getText());
-		Assert.assertEquals(2, text.getCaretOffset());
+		assertEquals("()", text.getText());
+		assertEquals(2, text.getCaretOffset());
 		//
 		text.setText("()");
 		text.replaceTextRange(2, 0, ")");
-		Assert.assertEquals("())", text.getText());
+		assertEquals("())", text.getText());
 		//
 		text.setText("");
 		text.replaceTextRange(0, 0, "\"");
-		Assert.assertEquals("\"\"", text.getText());
-		Assert.assertEquals(1, text.getCaretOffset());
+		assertEquals("\"\"", text.getText());
+		assertEquals(1, text.getCaretOffset());
 		// continued
 		text.replaceTextRange(1, 0, "\"");
-		Assert.assertEquals("\"\"", text.getText());
-		Assert.assertEquals(2, text.getCaretOffset());
+		assertEquals("\"\"", text.getText());
+		assertEquals(2, text.getCaretOffset());
 		// continued
 		text.replaceTextRange(2, 0, "\"");
-		Assert.assertEquals("\"\"\"\"", text.getText());
-		Assert.assertEquals(3, text.getCaretOffset());
+		assertEquals("\"\"\"\"", text.getText());
+		assertEquals(3, text.getCaretOffset());
 	}
 }

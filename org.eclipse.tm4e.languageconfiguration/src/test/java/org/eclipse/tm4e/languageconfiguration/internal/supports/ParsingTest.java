@@ -9,12 +9,12 @@
 **********************************************************************/
 package org.eclipse.tm4e.languageconfiguration.internal.supports;
 
-import static org.junit.Assert.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import java.io.InputStreamReader;
 
 import org.eclipse.tm4e.languageconfiguration.internal.LanguageConfiguration;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 public class ParsingTest {
 

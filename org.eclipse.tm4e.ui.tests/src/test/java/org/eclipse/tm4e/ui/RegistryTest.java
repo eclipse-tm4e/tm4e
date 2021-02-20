@@ -15,8 +15,8 @@ import org.eclipse.core.runtime.Platform;
 import org.eclipse.core.runtime.content.IContentType;
 import org.eclipse.tm4e.core.grammar.IGrammar;
 import org.eclipse.tm4e.registry.TMEclipseRegistryPlugin;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 public class RegistryTest {
 
@@ -24,6 +24,6 @@ public class RegistryTest {
 	public void testGrammarRegistered() {
 		IContentType contentType = Platform.getContentTypeManager().getContentType("org.eclipse.tm4e.ui.tests.testContentType");
 		IGrammar grammar = TMEclipseRegistryPlugin.getGrammarRegistryManager().getGrammarFor(new IContentType[] { contentType });
-		Assert.assertNotNull(grammar);
+		Assertions.assertNotNull(grammar);
 	}
 }

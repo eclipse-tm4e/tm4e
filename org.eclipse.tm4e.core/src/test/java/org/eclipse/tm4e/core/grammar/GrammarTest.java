@@ -13,8 +13,8 @@ package org.eclipse.tm4e.core.grammar;
 
 import org.eclipse.tm4e.core.Data;
 import org.eclipse.tm4e.core.registry.Registry;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 /**
  * Test for grammar tokenizer.
@@ -67,7 +67,7 @@ public class GrammarTest {
 			IToken token = lineTokens.getTokens()[i];
 			String s = "Token from " + token.getStartIndex() + " to " + token.getEndIndex() + " with scopes "
 					+ token.getScopes();
-			Assert.assertEquals(EXPECTED_TOKENS[i], s);
+			Assertions.assertEquals(EXPECTED_TOKENS[i], s);
 		}
 	}
 
@@ -88,7 +88,7 @@ public class GrammarTest {
 				IToken token = lineTokens.getTokens()[i];
 				String s = "Token from " + token.getStartIndex() + " to " + token.getEndIndex() + " with scopes "
 						+ token.getScopes();
-				Assert.assertEquals(EXPECTED_MULTI_LINE_TOKENS[i + j], s);
+				Assertions.assertEquals(EXPECTED_MULTI_LINE_TOKENS[i + j], s);
 			}
 			j = i;
 		}

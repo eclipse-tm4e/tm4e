@@ -18,7 +18,7 @@ import java.util.List;
 
 import org.eclipse.tm4e.core.Data;
 import org.eclipse.tm4e.core.registry.Registry;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 /**
  * Test for grammar tokenizer.

@@ -11,6 +11,9 @@
  */
 package org.eclipse.tm4e.ui;
 
+import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assumptions.assumeTrue;
+
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -28,11 +31,9 @@ import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.ide.IDE;
 import org.eclipse.ui.tests.harness.util.DisplayHelper;
-import org.junit.After;
-import org.junit.Assert;
-import org.junit.Assume;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 public class TMinGenericEditorTest {
 
@@ -51,14 +52,14 @@ public class TMinGenericEditorTest {
 		return res;
 	}
 
-	@Before
+	@BeforeEach
 	public void checkHasGenericEditor() {
 		editorDescriptor = PlatformUI.getWorkbench().getEditorRegistry().findEditor("org.eclipse.ui.genericeditor.GenericEditor");
-		Assume.assumeNotNull(editorDescriptor);
-		Assert.assertTrue("TM4E threads still running", getTM4EThreads().isEmpty());
+		assumeTrue(editorDescriptor!=null);
+		assertTrue(getTM4EThreads().isEmpty(), "TM4E threads still running");
 	}
 
-	@After
+	@AfterEach
 	public void tearDown() {
 		final IEditorPart currentEditor = editor;
 		if (currentEditor != null) {
@@ -85,7 +86,7 @@ public class TMinGenericEditorTest {
 		editor = IDE.openEditor(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage(),
 				f.toURI(), editorDescriptor.getId(), true);
 		StyledText text = (StyledText)editor.getAdapter(Control.class);
-		Assert.assertTrue(new DisplayHelper() {
+		assertTrue(new DisplayHelper() {
 			@Override
 			protected boolean condition() {
 				return text.getStyleRanges().length > 1;
@@ -103,7 +104,7 @@ public class TMinGenericEditorTest {
 		editor = IDE.openEditor(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage(),
 				f.toURI(), editorDescriptor.getId(), true);
 		StyledText text = (StyledText)editor.getAdapter(Control.class);
-		Assert.assertTrue(new DisplayHelper() {
+		assertTrue(new DisplayHelper() {
 			@Override
 			protected boolean condition() {
 				return text.getStyleRanges().length > 1;
@@ -111,11 +112,11 @@ public class TMinGenericEditorTest {
 		}.waitForCondition(text.getDisplay(), 3000));
 		int initialNumberOfRanges = text.getStyleRanges().length;
 		text.setText("let a = '';\nlet b = 10;\nlet c = true;");
-		Assert.assertTrue("More styles should have been added", new DisplayHelper() {
+		assertTrue(new DisplayHelper() {
 			@Override protected boolean condition() {
 				return text.getStyleRanges().length > initialNumberOfRanges + 3;
 			}
-		}.waitForCondition(text.getDisplay(), 300000));
+		}.waitForCondition(text.getDisplay(), 300000), "More styles should have been added");
 	}
 
 	@Test
@@ -123,7 +124,7 @@ public class TMinGenericEditorTest {
 		testTMHighlightInGenericEditor();
 		editor.getEditorSite().getPage().closeEditor(editor, false);
 		Thread.sleep(500); // give time to dispose
-		Assert.assertEquals(Collections.emptySet(), getTM4EThreads());
+		assertEquals(Collections.emptySet(), getTM4EThreads());
 	}
 
 }

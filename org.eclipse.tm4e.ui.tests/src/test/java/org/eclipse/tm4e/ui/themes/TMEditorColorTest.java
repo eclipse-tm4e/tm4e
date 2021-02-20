@@ -11,10 +11,8 @@
  */
 package org.eclipse.tm4e.ui.themes;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
+import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assumptions.assumeTrue;
 
 import java.io.File;
 import java.io.IOException;
@@ -33,10 +31,9 @@ import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.ide.IDE;
 import org.eclipse.ui.preferences.ScopedPreferenceStore;
 import org.eclipse.ui.texteditor.AbstractTextEditor;
-import org.junit.After;
-import org.junit.Assume;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 public class TMEditorColorTest implements ThemeIdConstants {
 
@@ -47,18 +44,18 @@ public class TMEditorColorTest implements ThemeIdConstants {
 	private File f;
 	private IEditorPart editor;
 
-	@Before
+	@BeforeEach
 	public void init() {
 
 		editorDescriptor = PlatformUI.getWorkbench().getEditorRegistry()
 				.findEditor("org.eclipse.ui.genericeditor.GenericEditor");
-		Assume.assumeNotNull(editorDescriptor);
+		assumeTrue(editorDescriptor != null);
 
 		manager = TMUIPlugin.getThemeManager();
 
 	}
 
-	@After
+	@AfterEach
 	public void tearDown() {
 		manager = null;
 		editor.getEditorSite().getPage().closeEditor(editor, false);
@@ -78,17 +75,16 @@ public class TMEditorColorTest implements ThemeIdConstants {
 
 		String themeId = manager.getDefaultTheme().getId();
 		ITheme theme = manager.getThemeById(themeId);
-		assertEquals("Default light theme isn't set", themeId, SolarizedLight);
-		assertEquals("Background colors isn't equals", theme.getEditorBackground(), styledText.getBackground());
-		assertEquals("Foreground colors isn't equals", theme.getEditorForeground(), styledText.getForeground());
-		assertNull("System default selection background should be null", theme.getEditorSelectionBackground());
-		assertNull("System default selection foreground should be null", theme.getEditorSelectionForeground());
+		assertEquals(themeId, SolarizedLight, "Default light theme isn't set");
+		assertEquals(theme.getEditorBackground(), styledText.getBackground(), "Background colors isn't equals");
+		assertEquals(theme.getEditorForeground(), styledText.getForeground(), "Foreground colors isn't equals");
+		assertNull(theme.getEditorSelectionBackground(), "System default selection background should be null");
+		assertNull(theme.getEditorSelectionForeground(), "System default selection foreground should be null");
 
-		Color lineHighlight = ColorManager.getInstance()
-				.getPreferenceEditorColor(EDITOR_CURRENTLINE_HIGHLIGHT);
-		assertNotNull("Highlight shouldn't be a null", theme.getEditorCurrentLineHighlight());
-		assertNotEquals("Default Line highlight should be from TM theme", lineHighlight,
-				theme.getEditorCurrentLineHighlight());
+		Color lineHighlight = ColorManager.getInstance().getPreferenceEditorColor(EDITOR_CURRENTLINE_HIGHLIGHT);
+		assertNotNull(theme.getEditorCurrentLineHighlight(), "Highlight shouldn't be a null");
+		assertNotEquals(lineHighlight, theme.getEditorCurrentLineHighlight(),
+				"Default Line highlight should be from TM theme");
 
 	}
 
@@ -112,19 +108,18 @@ public class TMEditorColorTest implements ThemeIdConstants {
 
 		String themeId = manager.getDefaultTheme().getId();
 		ITheme theme = manager.getThemeById(themeId);
-		assertEquals("Default light theme isn't set", themeId, SolarizedLight);
+		assertEquals(themeId, SolarizedLight, "Default light theme isn't set");
 
-		assertEquals("Background color should be user defined", styledText.getBackground(), testColor);
-		assertEquals("Foreground colors should be ", theme.getEditorForeground(), styledText.getForeground());
-		assertEquals("Selection background color should be user defined", theme.getEditorSelectionBackground(),
-				testColor);
-		assertNull("Selection foreground should be System default (null)", theme.getEditorSelectionForeground());
+		assertEquals(styledText.getBackground(), testColor, "Background color should be user defined");
+		assertEquals(theme.getEditorForeground(), styledText.getForeground(), "Foreground colors should be ");
+		assertEquals(theme.getEditorSelectionBackground(), testColor,
+				"Selection background color should be user defined");
+		assertNull(theme.getEditorSelectionForeground(), "Selection foreground should be System default (null)");
 
-		Color lineHighlight = ColorManager.getInstance()
-				.getPreferenceEditorColor(EDITOR_CURRENTLINE_HIGHLIGHT);
-		assertNotNull("Highlight shouldn't be a null", lineHighlight);
-		assertEquals("Line highlight should be from preferences (because of user defined background)", lineHighlight,
-				theme.getEditorCurrentLineHighlight());
+		Color lineHighlight = ColorManager.getInstance().getPreferenceEditorColor(EDITOR_CURRENTLINE_HIGHLIGHT);
+		assertNotNull(lineHighlight, "Highlight shouldn't be a null");
+		assertEquals(lineHighlight, theme.getEditorCurrentLineHighlight(),
+				"Line highlight should be from preferences (because of user defined background)");
 	}
 
 }

@@ -11,11 +11,14 @@
  */
 package org.eclipse.tm4e.languageconfiguration.internal.supports;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
+
 import java.util.Arrays;
 
 import org.eclipse.tm4e.languageconfiguration.internal.supports.EnterAction.IndentAction;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 /**
  * {@link OnEnterSupport} tests.
@@ -56,9 +59,9 @@ public class OnEnterSupportTest {
 		public void testIndentAction(String beforeText, String afterText, IndentAction expected) {
 			EnterAction actual = super.onEnter("", beforeText, afterText);
 			if (expected == IndentAction.None) {
-				Assert.assertNull(actual);
+				assertNull(actual);
 			} else {
-				Assert.assertEquals(expected, actual.getIndentAction());
+				assertEquals(expected, actual.getIndentAction());
 			}
 		}
 	}
@@ -132,16 +135,15 @@ public class OnEnterSupportTest {
 				String expectedAppendText, int removeText) {
 			EnterAction actual = super.onEnter("", beforeText, afterText);
 			if (expectedIndentAction == null) {
-				Assert.assertNull("isNull:" + beforeText, actual);
+				assertNull(actual, "isNull:" + beforeText);
 			} else {
-				Assert.assertNotNull("isNotNull:" + beforeText, actual);
-				Assert.assertEquals("indentAction:" + beforeText, expectedIndentAction, actual.getIndentAction());
+				assertNotNull(actual, "isNotNull:" + beforeText);
+				assertEquals(expectedIndentAction, actual.getIndentAction(), "indentAction:" + beforeText);
 				if (expectedAppendText != null) {
-					Assert.assertEquals("appendText:" + beforeText, expectedAppendText, actual.getAppendText());
+					assertEquals(expectedAppendText, actual.getAppendText(), "appendText:" + beforeText);
 				}
 				if (removeText != 0) {
-					Assert.assertEquals("removeText:" + beforeText, (Integer) removeText,
-							(Integer) actual.getRemoveText());
+					assertEquals(removeText, actual.getRemoveText(), "removeText:" + beforeText);
 				}
 			}
 		}

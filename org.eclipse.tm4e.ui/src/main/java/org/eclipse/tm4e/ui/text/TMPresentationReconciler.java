@@ -9,6 +9,7 @@
  *  Contributors:
  *  Angelo Zerr <angelo.zerr@gmail.com> - initial API and implementation
  *  Pierre-Yves B. - Issue #220 Switch to theme only works once for open editor
+ *  IBM Corporation Gerald Mitchell <gerald.mitchell@ibm.com> - bug fix
  */
 package org.eclipse.tm4e.ui.text;
 
@@ -755,14 +756,22 @@ public class TMPresentationReconciler implements IPresentationReconciler {
 			Field field = SourceViewer.class.getDeclaredField("fPresentationReconciler");
 			if (field != null) {
 				field.setAccessible(true);
-				IPresentationReconciler presentationReconciler = (IPresentationReconciler) field.get(textViewer);
+				Object presentationReconciler =  field.get(textViewer);
+				//field is IPresentationRecounciler, looking for TMPresentationReconciler implementation
 				return presentationReconciler instanceof TMPresentationReconciler
 						? (TMPresentationReconciler) presentationReconciler
 						: null;
 			}
-		} catch (Exception e) {
+		} catch (SecurityException | NoSuchFieldException e) {
+			// if SourceViewer class no longer has fPresentationReconciler or changes access level
 			TMUIPlugin.getDefault().getLog().log(new Status(IStatus.ERROR, TMUIPlugin.PLUGIN_ID, e.getMessage(), e));
-		}
+		} catch (IllegalArgumentException | IllegalAccessException | NullPointerException | ExceptionInInitializerError iae) {
+			//This should not be logged as an error. This is an expected possible outcome of field.get(textViewer).
+			//The method assumes ITextViewer is actually ISourceViewer, and specifically the SourceViewer implementation
+			// that was available at the current build.  This code also works with any implementation that follows the
+			// internal structure if also an ITextViewer.
+			//If these assumptions are false, the method should return null. Logging causes repeat noise.
+		} 
 		return null;
 	}
 

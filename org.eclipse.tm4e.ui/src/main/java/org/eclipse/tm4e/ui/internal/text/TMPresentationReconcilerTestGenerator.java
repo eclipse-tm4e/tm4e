@@ -18,7 +18,6 @@ import org.eclipse.jface.text.ITextListener;
 import org.eclipse.jface.text.ITextViewer;
 import org.eclipse.jface.text.TextEvent;
 import org.eclipse.jface.text.TextPresentation;
-import org.eclipse.swt.custom.StyleRange;
 import org.eclipse.tm4e.ui.text.ITMPresentationReconcilerListener;
 
 public class TMPresentationReconcilerTestGenerator
@@ -155,17 +154,6 @@ public class TMPresentationReconcilerTestGenerator
 		
 	}
 
-	private String toString(StyleRange[] ranges) {
-		if (ranges == null) {
-			return "";
-		}
-		StringBuilder s = new StringBuilder();
-		for (StyleRange range : ranges) {
-			s.append(range);
-		}
-		return s.toString();
-	}
-
 	@Override
 	public void colorize(TextPresentation presentation, Throwable e) {
 //		Command command = commands.get(commands.size() - 1);
@@ -185,10 +173,6 @@ public class TMPresentationReconcilerTestGenerator
 
 	private void write(String s) {
 		write(s, false);
-	}
-
-	private void write(int i) {
-		write(String.valueOf(i), false);
 	}
 
 	@Override

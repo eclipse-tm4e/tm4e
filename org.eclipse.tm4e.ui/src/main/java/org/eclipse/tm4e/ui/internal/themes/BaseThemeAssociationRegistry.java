@@ -51,26 +51,6 @@ public class BaseThemeAssociationRegistry {
 		allAssociations.clear();
 	}
 
-	private void register(IThemeAssociation association, String eclipseThemeId) {
-		List<IThemeAssociation> associations = eclipseThemeIds.get(eclipseThemeId);
-		if (associations == null) {
-			associations = new ArrayList<>();
-			eclipseThemeIds.put(eclipseThemeId, associations);
-		}
-		/*if (association.isDefault()) {
-			// remove the default from the list
-			for (IThemeAssociation a : associations) {
-				if (a.isDefault()) {
-					a.setDefault(false);
-				}
-			}
-		}*/
-		
-		if (!associations.contains(association)) {
-			associations.add(association);
-		}
-	}
-
 	public void unregister(IThemeAssociation association) {
 		//String eclipseThemeId = association.getEclipseThemeId();
 		/*if (association.isDefault()) {

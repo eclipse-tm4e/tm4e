@@ -24,10 +24,10 @@ import org.junit.jupiter.api.Test;
  * Test for grammar tokenizer.
  *
  */
-public class GrammarTest2 {
+class GrammarTest2 {
 
 	@Test
-	public void tokenizeLines() throws Exception {
+	void tokenizeLines() throws Exception {
 		Registry registry = new Registry();
 		String path = "JavaScript.tmLanguage";
 		IGrammar grammar = registry.loadGrammarFromPathSync(path, Data.class.getResourceAsStream(path));
@@ -36,19 +36,13 @@ public class GrammarTest2 {
 		int i = 0;
 
 		List<String> lines = new ArrayList<>();
-		BufferedReader reader = null;
-		try {
-			reader = new BufferedReader(new InputStreamReader(Data.class.getResourceAsStream("raytracer.ts")));
+		try (BufferedReader reader = new BufferedReader(new InputStreamReader(Data.class.getResourceAsStream("raytracer.ts")));){
 			String line = null;
 			while ((line = reader.readLine()) != null) {
 				lines.add(line);
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
-		} finally {
-			if (reader != null) {
-				reader.close();
-			}
 		}
 
 		int t = 0;

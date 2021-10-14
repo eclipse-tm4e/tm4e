@@ -29,10 +29,10 @@ import org.junit.jupiter.api.Test;
  * @see https://github.com/Microsoft/vscode-textmate/blob/master/src/tests/themes.test.ts
  *
  */
-public class ThemeMatchingTest {
+class ThemeMatchingTest {
 
 	@Test
-	public void testGivesHigherPriorityToDeeperMatches() throws Exception {
+	void testGivesHigherPriorityToDeeperMatches() throws Exception {
 		Theme theme = loadTheme("{" + 
 			"\"settings\": ["+
 						"{ \"settings\": { \"foreground\": \"#100000\", \"background\": \"#200000\" } },"+
@@ -58,7 +58,7 @@ public class ThemeMatchingTest {
 	}
 
 	@Test
-	public void testGivesHigherPriorityToParentMatches1() throws Exception {
+	void testGivesHigherPriorityToParentMatches1() throws Exception {
 		Theme theme = loadTheme("{" + 
 			"\"settings\": ["+
 						"{ \"settings\": { \"foreground\": \"#100000\", \"background\": \"#200000\" } },"+
@@ -86,7 +86,7 @@ public class ThemeMatchingTest {
 	}
 	
 	@Test
-	public void testGivesHigherPriorityToParentMatches2() throws Exception {
+	void testGivesHigherPriorityToParentMatches2() throws Exception {
 		Theme theme = loadTheme("{" + 
 			"\"settings\": ["+
 						"{ \"settings\": { \"foreground\": \"#100000\", \"background\": \"#200000\" } },"+
@@ -106,7 +106,7 @@ public class ThemeMatchingTest {
 	}
 
 	@Test
-	public void testCanMatch() throws Exception {
+	void testCanMatch() throws Exception {
 		Theme theme = loadTheme("{" + 
 			"\"settings\": ["+
 				"{ \"settings\": { \"foreground\": \"#F8F8F2\", \"background\": \"#272822\" } },"+
@@ -192,7 +192,7 @@ public class ThemeMatchingTest {
 	}	
 	
 	@Test
-	public void testMicrosoft_vscode_23460() throws Exception {
+	void testMicrosoft_vscode_23460() throws Exception {
 		Theme theme = loadTheme("{" + 
 			"\"settings\": ["+
 				"{" + 

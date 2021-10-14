@@ -160,7 +160,6 @@
          point="org.eclipse.ui.editors">
       <editor
             name="HTML Editor"
-            icon="icons/html.png"
             class="org.eclipse.tm4e.samples.html.HTMLEditor"
             id="org.eclipse.tm4e.samples.html.HTMLEditor">
             <contentTypeBinding
@@ -204,7 +203,6 @@
          point="org.eclipse.ui.editors">
       <editor
             name="Freemarker Editor"
-            icon="icons/freemarker.png"
             class="org.eclipse.tm4e.samples.freemarker.FreemarkerEditor"
             id="org.eclipse.tm4e.samples.freemarker.FreemarkerEditor">
             <contentTypeBinding
@@ -249,7 +247,6 @@
          point="org.eclipse.ui.editors">
       <editor
             name="PHP Editor"
-            icon="icons/php.png"
             class="org.eclipse.tm4e.samples.php.PHPEditor"
             id="org.eclipse.tm4e.samples.php.PHPEditor">
             <contentTypeBinding

@@ -100,34 +100,20 @@ public class ContentTypeHelper {
 			if (buffer.isDirty()) {
 				// Buffer is dirty (content of the filesystem is not synch with
 				// the editor content), use IDocument content.
-				InputStream input = null;
-				try {
-					input = new DocumentInputStream(buffer.getDocument());
+				try (InputStream input = new DocumentInputStream(buffer.getDocument())){
 					IContentType[] contentTypes = Platform.getContentTypeManager().findContentTypesFor(input, fileName);
 					if (contentTypes != null) {
 						return new ContentTypeInfo(fileName, contentTypes);
-					}
-				} finally {
-					try {
-						if (input != null)
-							input.close();
-					} catch (IOException x) {
 					}
 				}
 			}
 
 			// Buffer is synchronized with filesystem content
-			InputStream contents = null;
-			try {
-				contents = getContents(buffer);
+			try (InputStream contents = getContents(buffer)){
 				return new ContentTypeInfo(fileName,
 						Platform.getContentTypeManager().findContentTypesFor(contents, fileName));
 			} catch (Throwable e) {
 				return null;
-			} finally {
-				if (contents != null) {
-					contents.close();
-				}
 			}
 		} catch (IOException x) {
 			x.printStackTrace();

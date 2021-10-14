@@ -23,7 +23,6 @@ import org.eclipse.tm4e.ui.text.ITMPresentationReconcilerListener;
 
 public class StyleRangesCollector implements ITMPresentationReconcilerListener {
 
-	private ITextViewer viewer;
 	private IDocument document;
 	private Command command;
 	private Integer waitForToLineNumber;
@@ -39,13 +38,11 @@ public class StyleRangesCollector implements ITMPresentationReconcilerListener {
 
 	@Override
 	public void install(ITextViewer viewer, IDocument document) {
-		this.viewer = viewer;
 		this.document = document;
 	}
 
 	@Override
 	public void uninstall() {
-		this.viewer = null;
 		this.document = null;
 	}
 

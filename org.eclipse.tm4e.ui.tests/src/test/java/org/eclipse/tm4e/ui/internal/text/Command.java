@@ -17,7 +17,6 @@ public abstract class Command implements ICommand {
 
 	private final String name;
 	private String styleRanges;
-	private Integer line;
 	private boolean done;
 
 	public Command(String name) {

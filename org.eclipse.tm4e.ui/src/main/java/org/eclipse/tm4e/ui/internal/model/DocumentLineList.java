@@ -66,7 +66,6 @@ public class DocumentLineList extends AbstractLineList {
 
 		@Override
 		public void documentChanged(DocumentEvent event) {
-			IDocument document = event.getDocument();
 			try {
 				int startLine = DocumentHelper.getStartLine(event);
 				if (!DocumentHelper.isRemove(event)) {

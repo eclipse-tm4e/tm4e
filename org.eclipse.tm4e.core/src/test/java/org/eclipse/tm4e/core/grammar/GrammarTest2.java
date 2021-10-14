@@ -34,7 +34,6 @@ public class GrammarTest2 {
 
 		StackElement ruleStack = null;
 		int i = 0;
-		int j = 0;
 
 		List<String> lines = new ArrayList<>();
 		BufferedReader reader = null;
@@ -70,7 +69,6 @@ public class GrammarTest2 {
 				System.err.println(s);
 				// Assert.assertEquals(EXPECTED_MULTI_LINE_TOKENS[i + j], s);
 			}
-			j = i;
 		}
 		System.out.println(System.currentTimeMillis() - start - t);
 	}

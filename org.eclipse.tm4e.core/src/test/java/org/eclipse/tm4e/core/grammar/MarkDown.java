@@ -51,9 +51,9 @@ public class MarkDown {
 			ITokenizeLineResult lineTokens = grammar.tokenizeLine(line, ruleStack);			
 			ruleStack = lineTokens.getRuleStack();
 			for (i = 0; i < lineTokens.getTokens().length; i++) {
-				IToken token = lineTokens.getTokens()[i];
-				String s = "Token from " + token.getStartIndex() + " to " + token.getEndIndex() + " with scopes "
-						+ token.getScopes();
+//				IToken token = lineTokens.getTokens()[i];
+//				String s = "Token from " + token.getStartIndex() + " to " + token.getEndIndex() + " with scopes "
+//						+ token.getScopes();
 				//System.err.println(s);
 				// Assert.assertEquals(EXPECTED_MULTI_LINE_TOKENS[i + j], s);
 			}

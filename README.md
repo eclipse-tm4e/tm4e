@@ -35,16 +35,16 @@ Here a sample with TypeScript:
 Here are some projects that use tm4e:
 
 * Eclipse IDE languages and frameworks integrations
- ** [Eclipse Corrosion](https://github.com/eclipse/corrosion) Rust development tools in Eclipse IDE.
- ** [Eclipse aCute](https://github.com/eclipse/aCute) C# edition in Eclipse IDE.
- ** [Eclipse Wild Web Developer](https://github.com/eclipse/wildwebdeveloper) a simple and productive Web Development Tools in the Eclipse IDE.
- ** [Eclipse ShellWax](https://github.com/eclipse/shellwax) is a rich Bash script editor in the Eclipse IDE.
- ** [LiClipseText](http://www.liclipse.com/text/) enables Eclipse to be used as a general-purpose text editor, providing support for several languages out of the box.
- ** [typescript.java](https://github.com/angelozerr/typescript.java) (Deprecated) TypeScript IDE for Eclipse with JSDT & tsserver.
- ** [EditorConfig for Eclipse](https://github.com/angelozerr/ec4e) EditorConfig for Eclipse with GenericEditor.
- ** [Phaser Editor 2D](https://phasereditor2d.com) An IDE for the creation of HTML5 games.
- ** [Solargraph](https://github.com/PyvesB/eclipse-solargraph) Ruby edition in Eclipse IDE.
- ** [Dartboard](https://github.com/eclipse/dartboard) Dart language support in the Eclipse IDE.
+	* [Eclipse Corrosion](https://github.com/eclipse/corrosion) Rust development tools in Eclipse IDE.
+	* [Eclipse aCute](https://github.com/eclipse/aCute) C# edition in Eclipse IDE.
+	* [Eclipse Wild Web Developer](https://github.com/eclipse/wildwebdeveloper) a simple and productive Web Development Tools in the Eclipse IDE.
+	* [Eclipse ShellWax](https://github.com/eclipse/shellwax) is a rich Bash script editor in the Eclipse IDE.
+	* [LiClipseText](http://www.liclipse.com/text/) enables Eclipse to be used as a general-purpose text editor, providing support for several languages out of the box.
+	* [typescript.java](https://github.com/angelozerr/typescript.java) (Deprecated) TypeScript IDE for Eclipse with JSDT & tsserver.
+	* [EditorConfig for Eclipse](https://github.com/angelozerr/ec4e) EditorConfig for Eclipse with GenericEditor.
+	* [Phaser Editor 2D](https://phasereditor2d.com) An IDE for the creation of HTML5 games.
+	* [Solargraph](https://github.com/PyvesB/eclipse-solargraph) Ruby edition in Eclipse IDE.
+	* [Dartboard](https://github.com/eclipse/dartboard) Dart language support in the Eclipse IDE.
 * [Apache NetBeans](https://github.com/apache/netbeans) is a multi-language IDE written in Java and uses TM4E core parts to support syntax highlighting based on TextMate grammars
  
 ## 👷 Get support and contribute

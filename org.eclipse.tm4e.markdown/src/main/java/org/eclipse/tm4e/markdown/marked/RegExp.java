@@ -68,6 +68,6 @@ public class RegExp {
 
 	public static final RegExp noop() {
 		return new RegExp(null);
-	};
+	}
 
 }

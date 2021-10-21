@@ -23,6 +23,7 @@ import org.eclipse.core.resources.IStorage;
 import org.eclipse.core.resources.IWorkspaceRoot;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.ListenerList;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.core.runtime.content.IContentType;
@@ -97,6 +98,11 @@ public class ContentTypeHelper {
 	private static ContentTypeInfo getContentTypes(ITextFileBuffer buffer) throws CoreException {
 		try {
 			String fileName = buffer.getFileStore().getName();
+			IContentType bufferContentType = buffer.getContentType();
+			if (bufferContentType != null) {
+				IContentType[] contentTypes = {bufferContentType};
+				return new ContentTypeInfo(fileName, contentTypes);
+			}
 			if (buffer.isDirty()) {
 				// Buffer is dirty (content of the filesystem is not synch with
 				// the editor content), use IDocument content.
@@ -129,10 +135,13 @@ public class ContentTypeHelper {
 	 * @throws CoreException
 	 */
 	private static InputStream getContents(ITextFileBuffer buffer) throws CoreException {
-		IWorkspaceRoot workspaceRoot = ResourcesPlugin.getWorkspace().getRoot();
-		IFile file = workspaceRoot.getFile(buffer.getLocation());
-		if (file.exists() && buffer.isSynchronized()) {
-			return file.getContents();
+		IPath path = buffer.getLocation();
+		if (path != null) {
+			IWorkspaceRoot workspaceRoot = ResourcesPlugin.getWorkspace().getRoot();
+			IFile file = workspaceRoot.getFile(path);
+			if (file.exists() && buffer.isSynchronized()) {
+				return file.getContents();
+			}
 		}
 		return buffer.getFileStore().openInputStream(EFS.NONE, null);
 	}

@@ -13,6 +13,9 @@ package org.eclipse.tm4e.ui.utils;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.LinkedHashSet;
 
 import org.eclipse.core.filebuffers.FileBuffers;
 import org.eclipse.core.filebuffers.ITextFileBuffer;
@@ -98,26 +101,27 @@ public class ContentTypeHelper {
 	private static ContentTypeInfo getContentTypes(ITextFileBuffer buffer) throws CoreException {
 		try {
 			String fileName = buffer.getFileStore().getName();
+			Collection<IContentType> contentTypes = new LinkedHashSet<>();
 			IContentType bufferContentType = buffer.getContentType();
 			if (bufferContentType != null) {
-				IContentType[] contentTypes = {bufferContentType};
-				return new ContentTypeInfo(fileName, contentTypes);
+				contentTypes.add(bufferContentType);
 			}
 			if (buffer.isDirty()) {
 				// Buffer is dirty (content of the filesystem is not synch with
 				// the editor content), use IDocument content.
 				try (InputStream input = new DocumentInputStream(buffer.getDocument())){
-					IContentType[] contentTypes = Platform.getContentTypeManager().findContentTypesFor(input, fileName);
-					if (contentTypes != null) {
-						return new ContentTypeInfo(fileName, contentTypes);
+					IContentType[] contentTypesForInput = Platform.getContentTypeManager().findContentTypesFor(input, fileName);
+					if (contentTypesForInput != null) {
+						contentTypes.addAll(Arrays.asList(contentTypesForInput));
+						return new ContentTypeInfo(fileName, contentTypes.toArray(IContentType[]::new));
 					}
 				}
 			}
 
 			// Buffer is synchronized with filesystem content
 			try (InputStream contents = getContents(buffer)){
-				return new ContentTypeInfo(fileName,
-						Platform.getContentTypeManager().findContentTypesFor(contents, fileName));
+				contentTypes.addAll(Arrays.asList(Platform.getContentTypeManager().findContentTypesFor(contents, fileName)));
+				return new ContentTypeInfo(fileName, contentTypes.toArray(IContentType[]::new));
 			} catch (Throwable e) {
 				return null;
 			}

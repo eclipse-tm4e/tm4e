@@ -12,6 +12,7 @@
 package org.eclipse.tm4e.registry;
 
 import java.util.Collection;
+import java.util.List;
 
 import org.eclipse.core.runtime.content.IContentType;
 import org.eclipse.tm4e.core.grammar.IGrammar;
@@ -60,13 +61,10 @@ public interface IGrammarRegistryManager {
 	// --------------- TextMate grammar queries methods.
 
 	/**
-	 * Returns the {@link IGrammar} for the given content types and null
-	 * otherwise.
-	 * 
-	 * @param contentTypes
-	 *            the content type.
-	 * @return the {@link IGrammar} for the given content type and null
-	 *         otherwise.
+	 * @param contentTypes the content types to lookup for grammar association.
+	 * @return the first {@link IGrammar} that applies to given content-types, or
+	 * <code>null</code> if no content-type has a grammar associated. Grammars associated
+	 * with parent content-types will be returned if applicable.
 	 */
 	IGrammar getGrammarFor(IContentType[] contentTypes);
 
@@ -96,7 +94,7 @@ public interface IGrammarRegistryManager {
 	 * @return the list of content types bound with the given scope name and
 	 *         null otherwise.
 	 */
-	String[] getContentTypesForScope(String scopeName);
+	List<IContentType> getContentTypesForScope(String scopeName);
 	
 	Collection<String> getInjections(String scopeName);
 }

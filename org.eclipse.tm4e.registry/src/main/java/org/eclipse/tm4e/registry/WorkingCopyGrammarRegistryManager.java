@@ -15,6 +15,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+import org.eclipse.core.runtime.content.IContentType;
 import org.eclipse.tm4e.registry.internal.AbstractGrammarRegistryManager;
 import org.osgi.service.prefs.BackingStoreException;
 
@@ -42,12 +43,7 @@ public class WorkingCopyGrammarRegistryManager extends AbstractGrammarRegistryMa
 			super.registerGrammarDefinition(definition);
 			// Copy binding scope/content types
 			String scopeName = definition.getScopeName();
-			String[] contentTypes = manager.getContentTypesForScope(scopeName);
-			if (contentTypes != null) {
-				for (String contentTypeId : contentTypes) {
-					super.registerContentTypeBinding(contentTypeId, scopeName);
-				}
-			}
+			manager.getContentTypesForScope(scopeName).forEach(contentType -> super.registerContentTypeBinding(contentType, scopeName));
 			// Copy injection
 			Collection<String> injections = manager.getInjections(scopeName);
 			if (injections != null) {

@@ -13,6 +13,7 @@ package org.eclipse.tm4e.registry.internal;
 
 import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.Platform;
+import org.eclipse.core.runtime.content.IContentType;
 import org.eclipse.core.runtime.preferences.IEclipsePreferences;
 import org.eclipse.core.runtime.preferences.InstanceScope;
 import org.eclipse.tm4e.registry.GrammarDefinition;
@@ -73,8 +74,13 @@ public class GrammarRegistryManager extends AbstractGrammarRegistryManager {
 				super.registerInjection(scopeName, injectTo);
 			} else if (XMLConstants.SCOPE_NAME_CONTENT_TYPE_BINDING_ELT.equals(extensionName)) {
 				String contentTypeId = ce.getAttribute(XMLConstants.CONTENT_TYPE_ID_ATTR);
-				String scopeName = ce.getAttribute(XMLConstants.SCOPE_NAME_ATTR);
-				super.registerContentTypeBinding(contentTypeId, scopeName);
+				IContentType contentType = Platform.getContentTypeManager().getContentType(contentTypeId);
+				if (contentType == null) {
+					Platform.getLog(getClass()).warn("No content-type found with id='" + contentTypeId + "', ignoring TM4E association.");
+				} else {
+					String scopeName = ce.getAttribute(XMLConstants.SCOPE_NAME_ATTR);
+					super.registerContentTypeBinding(contentType, scopeName);
+				}
 			}
 		}
 	}

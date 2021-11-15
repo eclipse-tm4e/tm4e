@@ -16,6 +16,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 import org.eclipse.core.runtime.content.IContentType;
 import org.eclipse.tm4e.core.grammar.IGrammar;
@@ -77,7 +78,7 @@ public abstract class AbstractGrammarRegistryManager extends Registry implements
 		}
 		// Find grammar by content type
 		for (IContentType contentType : contentTypes) {
-			String scopeName = getScopeNameForContentType(contentType.getId());
+			String scopeName = getScopeNameForContentType(contentType);
 			if (scopeName != null) {
 				IGrammar grammar = getGrammarForScope(scopeName);
 				if (grammar != null) {
@@ -191,22 +192,28 @@ public abstract class AbstractGrammarRegistryManager extends Registry implements
 	}
 
 	/**
-	 * Returns scope name bound with the given content type and null otherwise.
-	 *
-	 * @param contentTypeId
-	 * @return scope name bound with the given content type and null otherwise.
+	 * @param contentType
+	 * @return scope name bound with the given content type (or its base type) and
+	 *         <code>null</code> otherwise.
 	 */
-	public String getScopeNameForContentType(String contentTypeId) {
-		return pluginCache.getScopeNameForContentType(contentTypeId);
+	public String getScopeNameForContentType(IContentType contentType) {
+		while (contentType != null) {
+			String scopeName = pluginCache.getScopeNameForContentType(contentType);
+			if (scopeName != null) {
+				return scopeName;
+			}
+			contentType = contentType.getBaseType();
+		}
+		return null;
 	}
 
 	@Override
-	public String[] getContentTypesForScope(String scopeName) {
+	public List<IContentType> getContentTypesForScope(String scopeName) {
 		return pluginCache.getContentTypesForScope(scopeName);
 	}
 
-	public void registerContentTypeBinding(String contentTypeId, String scopeName) {
-		pluginCache.registerContentTypeBinding(contentTypeId, scopeName);
+	public void registerContentTypeBinding(IContentType contentType, String scopeName) {
+		pluginCache.registerContentTypeBinding(contentType, scopeName);
 	}
 
 	@Override

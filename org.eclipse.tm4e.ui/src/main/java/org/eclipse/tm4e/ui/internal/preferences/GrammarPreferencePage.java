@@ -267,8 +267,7 @@ public class GrammarPreferencePage extends PreferencePage implements IWorkbenchP
 
 			private void fillContentTypeTab(String scopeName) {
 				// Load the content type binding for the given grammar
-				String[] contentTypes = grammarRegistryManager.getContentTypesForScope(scopeName);
-				contentTypesWidget.setInput(contentTypes);
+				contentTypesWidget.setInput(grammarRegistryManager.getContentTypesForScope(scopeName));
 			}
 
 			private IThemeAssociation fillThemeTab(IGrammarDefinition definition) {

@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2015-2017 Angelo ZERR.
+ * Copyright (c) 2015-2021 Angelo ZERR.
  * This program and the accompanying materials are made
  * available under the terms of the Eclipse Public License 2.0
  * which is available at https://www.eclipse.org/legal/epl-2.0/
@@ -23,6 +23,13 @@ public class RegistryTest {
 	@Test
 	public void testGrammarRegistered() {
 		IContentType contentType = Platform.getContentTypeManager().getContentType("org.eclipse.tm4e.ui.tests.testContentType");
+		IGrammar grammar = TMEclipseRegistryPlugin.getGrammarRegistryManager().getGrammarFor(new IContentType[] { contentType });
+		Assertions.assertNotNull(grammar);
+	}
+
+	@Test
+	public void testThemeAppliesToSubtypes() {
+		IContentType contentType = Platform.getContentTypeManager().getContentType("org.eclipse.tm4e.ui.tests.testContentType.child");
 		IGrammar grammar = TMEclipseRegistryPlugin.getGrammarRegistryManager().getGrammarFor(new IContentType[] { contentType });
 		Assertions.assertNotNull(grammar);
 	}

@@ -14,9 +14,12 @@ package org.eclipse.tm4e.registry.internal;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.stream.Collectors;
 
+import org.eclipse.core.runtime.content.IContentType;
 import org.eclipse.tm4e.registry.IGrammarDefinition;
 
 /**
@@ -27,7 +30,7 @@ public class GrammarCache {
 
 	private final Map<String /* Scope name */, IGrammarDefinition> definitions;
 	private final Map<String /* Scope name */, Collection<String>> injections;
-	private final Map<String /* IContentType Id */ , String /* Scope name */> scopeNameBindings;
+	private final Map<IContentType , String /* Scope name */> scopeNameBindings;
 
 	public GrammarCache() {
 		this.definitions = new HashMap<>();
@@ -101,23 +104,23 @@ public class GrammarCache {
 	/**
 	 * Returns scope name bound with the given content type and null otherwise.
 	 * 
-	 * @param contentTypeId
+	 * @param contentType	
 	 * @return scope name bound with the given content type and null otherwise.
 	 */
-	public String getScopeNameForContentType(String contentTypeId) {
-		return scopeNameBindings.get(contentTypeId);
+	public String getScopeNameForContentType(IContentType contentType) {
+		return scopeNameBindings.get(contentType);
 	}
 
-	public String[] getContentTypesForScope(String scopeName) {
+	public List<IContentType> getContentTypesForScope(String scopeName) {
 		if (scopeName == null) {
-			return null;
+			return List.of();
 		}
 		return scopeNameBindings.entrySet().stream().filter(map -> scopeName.equals(map.getValue()))
-				.map(map -> map.getKey()).collect(Collectors.toList()).toArray(new String[0]);
+				.map(Entry::getKey).collect(Collectors.toList());
 	}
 
-	public void registerContentTypeBinding(String contentTypeId, String scopeName) {
-		scopeNameBindings.put(contentTypeId, scopeName);
+	public void registerContentTypeBinding(IContentType contentType, String scopeName) {
+		scopeNameBindings.put(contentType, scopeName);
 	}
 
 }

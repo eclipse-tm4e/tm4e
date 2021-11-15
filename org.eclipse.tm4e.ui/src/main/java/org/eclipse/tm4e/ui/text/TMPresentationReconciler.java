@@ -229,7 +229,7 @@ public class TMPresentationReconciler implements IPresentationReconciler {
 				if (localGrammar != null) {
 					String scopeName = localGrammar.getScopeName();
 					if (tokenProvider == null) {
-						tokenProvider = TMUIPlugin.getThemeManager().getThemeForScope(scopeName);
+						tokenProvider = TMUIPlugin.getThemeManager().getThemeForScope(scopeName, viewer.getTextWidget().getBackground().getRGB());
 					}
 					if (tokenProvider != null) {
 						applyThemeEditor();
@@ -448,15 +448,6 @@ public class TMPresentationReconciler implements IPresentationReconciler {
 				TMUIPlugin.getDefault().getLog().log(new Status(IStatus.ERROR, TMUIPlugin.PLUGIN_ID, e.getMessage(), e));
 			}
 		}
-	}
-
-	/**
-	 * Force the TextMate theme id to use for the editor.
-	 *
-	 * @param themeId
-	 */
-	public void setThemeId(String themeId) {
-		setTheme(TMUIPlugin.getThemeManager().getThemeById(themeId));
 	}
 
 	@Override

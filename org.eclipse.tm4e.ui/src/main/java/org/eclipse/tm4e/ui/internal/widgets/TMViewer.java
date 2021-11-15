@@ -67,7 +67,7 @@ public class TMViewer extends SourceViewer {
 	}
 
 	public void setTheme(ITheme theme) {
-		reconciler.setThemeId(theme.getId());
+		reconciler.setTheme(theme);
 		StyledText styledText = getTextWidget();
 		styledText.setForeground(null);
 		styledText.setBackground(null);

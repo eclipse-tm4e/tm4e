@@ -18,9 +18,12 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import org.eclipse.swt.graphics.RGB;
+import org.eclipse.swt.graphics.RGBA;
 import org.eclipse.tm4e.ui.themes.ITheme;
 import org.eclipse.tm4e.ui.themes.IThemeAssociation;
 import org.eclipse.tm4e.ui.themes.IThemeManager;
+import org.eclipse.tm4e.ui.themes.ITokenProvider;
 import org.eclipse.tm4e.ui.themes.ThemeAssociation;
 import org.eclipse.tm4e.ui.utils.PreferenceUtils;
 
@@ -137,6 +140,11 @@ public abstract class AbstractThemeManager implements IThemeManager {
 	public IThemeAssociation[] getAllThemeAssociations() {
 		List<IThemeAssociation> associations = themeAssociationRegistry.getThemeAssociations();
 		return associations.toArray(new IThemeAssociation[associations.size()]);
+	}
+
+	@Override
+	public ITokenProvider getThemeForScope(String scopeName, RGB background) {
+		return getThemeForScope(scopeName, 0.299 * background.red + 0.587 * background.green + 0.114 * background.blue < 128);
 	}
 
 }

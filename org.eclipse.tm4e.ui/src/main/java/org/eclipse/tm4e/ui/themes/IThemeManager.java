@@ -11,6 +11,7 @@
  */
 package org.eclipse.tm4e.ui.themes;
 
+import org.eclipse.swt.graphics.RGB;
 import org.osgi.service.prefs.BackingStoreException;
 
 /**
@@ -131,4 +132,12 @@ public interface IThemeManager {
 	boolean isDarkEclipseTheme();
 
 	boolean isDarkEclipseTheme(String eclipseThemeId);
+
+	/**
+	 * 
+	 * @param scopeName
+	 * @param background
+	 * @return the theme that will fit best for the defined background color
+	 */
+	ITokenProvider getThemeForScope(String scopeName, RGB background);
 }

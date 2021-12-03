@@ -27,7 +27,7 @@ public class StyleRangesCollector implements ITMPresentationReconcilerListener {
 	private Command command;
 	private Integer waitForToLineNumber;
 	private boolean isFinished;
-	
+
 	private StringBuilder currentRanges;
 
 	private Object lock = new Object();
@@ -61,7 +61,7 @@ public class StyleRangesCollector implements ITMPresentationReconcilerListener {
 				e.printStackTrace();
 			}
 		}
-		((Command) command).setStyleRanges("[" + currentRanges.toString() + "]");
+		command.setStyleRanges("[" + currentRanges.toString() + "]");
 		synchronized (lock) {
 			lock.notifyAll();
 		}

@@ -258,7 +258,6 @@ public class LanguageConfigurationPreferencePage extends PreferencePage implemen
 	 *
 	 * @return list of selected definitions which was created by the user.
 	 */
-	@SuppressWarnings("unchecked")
 	private Collection<ILanguageConfigurationDefinition> getSelectedUserDefinitions() {
 		IStructuredSelection selection = definitionViewer.getStructuredSelection();
 		if (selection.isEmpty()) {

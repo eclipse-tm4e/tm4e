@@ -19,6 +19,7 @@ import java.lang.reflect.Field;
  */
 public class ClassHelper {
 
+	@SuppressWarnings("unchecked")
 	public static <T> T getFieldValue(Object object, String name, Class clazz) {
 		Field f = getDeclaredField(clazz, name);
 		if (f != null) {

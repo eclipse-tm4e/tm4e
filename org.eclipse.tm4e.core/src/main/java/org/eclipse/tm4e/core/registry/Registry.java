@@ -98,8 +98,7 @@ public class Registry {
 				continue;
 			}
 
-			try {
-				InputStream in = this.locator.getInputStream(scopeName);
+			try (InputStream in = this.locator.getInputStream(scopeName)) {
 				IRawGrammar grammar = GrammarReader.readGrammarSync(filePath, in);
 				Collection<String> injections = this.locator.getInjections(scopeName);
 

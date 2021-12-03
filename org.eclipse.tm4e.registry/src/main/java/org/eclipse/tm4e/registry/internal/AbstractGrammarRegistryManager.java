@@ -58,7 +58,7 @@ public abstract class AbstractGrammarRegistryManager extends Registry implements
 			IGrammarDefinition info = registry.getDefinition(scopeName);
 			return info != null ? info.getInputStream() : null;
 		}
-	};
+	}
 
 	public AbstractGrammarRegistryManager() {
 		this(new EclipseRegistryOptions());

@@ -105,7 +105,7 @@ public class OnigString {
 	private void computeOffsets() {
 		if (this.utf8_value.length != this.string.length()) {
 			charsPosFromBytePos = new int[this.utf8_value.length];
-			int bytesLen = 0;;
+			int bytesLen = 0;
 			int charsLen = 0;
 			int length = this.utf8_value.length;
 			for (int i = 0; i < length;) {

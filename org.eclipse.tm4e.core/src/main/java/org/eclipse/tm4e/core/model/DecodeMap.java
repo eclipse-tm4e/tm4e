@@ -25,7 +25,7 @@ class DecodeMap {
 	Map<String /* scope */, int[] /* ids */ > scopeToTokenIds;
 	Map<String /* token */, Integer /* id */ > tokenToTokenId;
 	Map<Integer /* id */, String /* id */ > tokenIdToToken;
-	TMTokenDecodeData prevToken;;
+	TMTokenDecodeData prevToken;
 
 	public DecodeMap() {
 		this.lastAssignedId = 0;

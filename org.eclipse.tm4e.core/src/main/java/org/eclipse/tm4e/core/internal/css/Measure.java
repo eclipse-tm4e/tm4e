@@ -4,7 +4,7 @@
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
- * 
+ *
  * Contributors:
  *      IBM Corporation - initial API and implementation
  *******************************************************************************/
@@ -26,11 +26,12 @@ public class Measure extends CSSValueImpl {
 
 	/**
 	 * Return a float representation of the receiver's value.
-	 * 
+	 *
 	 * @param valueType
 	 *            a short representing the value type, see
 	 *            {@link CSSValue#getCssValueType()}
 	 */
+	@Override
 	public float getFloatValue(short valueType) throws DOMException {
 		// If it's actually a SAC_INTEGER return the integer value, callers tend
 		// to expect and cast
@@ -48,7 +49,7 @@ public class Measure extends CSSValueImpl {
 
 	/**
 	 * Return an int representation of the receiver's value.
-	 * 
+	 *
 	 * @param valueType
 	 *            a short representing the value type, see
 	 *            {@link CSSValue#getCssValueType()}
@@ -57,11 +58,7 @@ public class Measure extends CSSValueImpl {
 		return value.getIntegerValue();
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.w3c.dom.css.CSSPrimitiveValue#getStringValue()
-	 */
+	@Override
 	public String getStringValue() throws DOMException {
 		short lexicalUnit = value.getLexicalUnitType();
 		if ((lexicalUnit == LexicalUnit.SAC_IDENT) || (lexicalUnit == LexicalUnit.SAC_STRING_VALUE)
@@ -71,11 +68,7 @@ public class Measure extends CSSValueImpl {
 		throw new UnsupportedOperationException("NOT YET IMPLEMENTED");
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.w3c.dom.css.CSSPrimitiveValue#getPrimitiveType()
-	 */
+	@Override
 	public short getPrimitiveType() {
 		switch (value.getLexicalUnitType()) {
 		case LexicalUnit.SAC_IDENT:
@@ -112,11 +105,7 @@ public class Measure extends CSSValueImpl {
 				"NOT YET IMPLEMENTED - LexicalUnit type: " + value.getLexicalUnitType());
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.w3c.dom.css.CSSValue#getCssText()
-	 */
+	@Override
 	public String getCssText() {
 		// TODO: All LexicalUnit.SAC_OPERATOR_* except for COMMA left undone for
 		// now as it's not even clear whether they should be treated as measures

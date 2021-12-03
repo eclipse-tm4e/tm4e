@@ -21,7 +21,7 @@ public class RGBColorImpl extends CSSValueImpl implements RGBColor {
 	private CSSPrimitiveValue red;
 	private CSSPrimitiveValue green;
 	private CSSPrimitiveValue blue;
-	
+
 	public RGBColorImpl(LexicalUnit lexicalUnit) {
 		LexicalUnit nextUnit = lexicalUnit.getParameters();
 		red = new Measure(nextUnit);
@@ -31,50 +31,32 @@ public class RGBColorImpl extends CSSValueImpl implements RGBColor {
 		blue = new Measure(nextUnit);
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * @see org.w3c.dom.css.RGBColor#getRed()
-	 */
+	@Override
 	public CSSPrimitiveValue getRed() {
 		return red;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * @see org.w3c.dom.css.RGBColor#getGreen()
-	 */
+	@Override
 	public CSSPrimitiveValue getGreen() {
 		return green;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * @see org.w3c.dom.css.RGBColor#getBlue()
-	 */
+	@Override
 	public CSSPrimitiveValue getBlue() {
 		return blue;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * @see org.w3c.dom.css.CSSValue#getRGBColorValue()
-	 */
+	@Override
 	public RGBColor getRGBColorValue() throws DOMException {
 		return this;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * @see org.w3c.dom.css.CSSValue#getPrimitiveType()
-	 */
+	@Override
 	public short getPrimitiveType() {
 		return CSS_RGBCOLOR;
 	}
-	
-	/*
-	 * (non-Javadoc)
-	 * @see org.w3c.dom.css.CSSValue#getCssText()
-	 */
+
+	@Override
 	public String getCssText() {
 		return "rgb(" + red.getCssText() + ", " + green.getCssText() + ", "
 				+ blue.getCssText() + ")";

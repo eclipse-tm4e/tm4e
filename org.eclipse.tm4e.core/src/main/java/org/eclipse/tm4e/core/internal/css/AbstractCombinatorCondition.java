@@ -37,6 +37,7 @@ public abstract class AbstractCombinatorCondition implements CombinatorCondition
 		return secondCondition;
 	}
 
+	@Override
 	public int getSpecificity() {
 		return ((ExtendedCondition) getFirstCondition()).getSpecificity()
 				+ ((ExtendedCondition) getSecondCondition()).getSpecificity();

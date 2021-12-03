@@ -84,7 +84,7 @@ import org.eclipse.ui.IEditorPart;
  *
  * <ul>
  * <li>a TextMate grammar {@link IGrammar} used to initialize the TextMate model
- * {@link ITMDocumentModel}.</li>
+ * {@link TMDocumentModel}.</li>
  * <li>a token provider {@link ITokenProvider} to retrieve the {@link IToken}
  * from a TextMate token type .</li>
  * </ul>
@@ -762,7 +762,7 @@ public class TMPresentationReconciler implements IPresentationReconciler {
 			// that was available at the current build.  This code also works with any implementation that follows the
 			// internal structure if also an ITextViewer.
 			//If these assumptions are false, the method should return null. Logging causes repeat noise.
-		} 
+		}
 		return null;
 	}
 

@@ -48,8 +48,8 @@ public class Theme extends TMResource implements ITheme {
 
 	/**
 	 * Constructor for extension point.
-	 * 
-	 * @param element
+	 *
+	 * @param id
 	 */
 	public Theme(String id, String path, String name, boolean dark, boolean isDefault) {
 		super(path);

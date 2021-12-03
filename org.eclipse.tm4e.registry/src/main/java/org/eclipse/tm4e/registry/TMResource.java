@@ -40,7 +40,7 @@ public class TMResource implements ITMResource {
 	/**
 	 * Constructor for extension point.
 	 *
-	 * @param element
+	 * @param path
 	 */
 	public TMResource(String path) {
 		this.path = path;

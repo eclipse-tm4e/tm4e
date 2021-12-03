@@ -30,8 +30,8 @@ public class Snippet extends TMResource implements ISnippet {
 
 	/**
 	 * Constructor for extension point.
-	 * 
-	 * @param element
+	 *
+	 * @param scopeName
 	 */
 	public Snippet(String scopeName, String path, String name) {
 		super(path);

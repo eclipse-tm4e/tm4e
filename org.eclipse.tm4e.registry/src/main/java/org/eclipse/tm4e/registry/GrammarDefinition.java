@@ -16,7 +16,7 @@ import org.eclipse.core.runtime.IConfigurationElement;
 /**
  * Grammar definition defined by the "org.eclipse.tm4e.registry.grammars"
  * extension point. Here a sample to register TypeScript TextMate grammar.
- * 
+ *
  * <pre>
  * <extension
          point="org.eclipse.tm4e.registry.grammars">
@@ -41,8 +41,8 @@ public class GrammarDefinition extends TMResource implements IGrammarDefinition 
 
 	/**
 	 * Constructor for extension point.
-	 * 
-	 * @param element
+	 *
+	 * @param scopeName
 	 */
 	public GrammarDefinition(String scopeName, String path) {
 		super(path);

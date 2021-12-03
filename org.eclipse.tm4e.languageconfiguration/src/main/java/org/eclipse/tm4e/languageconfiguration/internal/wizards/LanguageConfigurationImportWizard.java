@@ -46,7 +46,7 @@ public class LanguageConfigurationImportWizard extends Wizard implements IImport
 	/**
 	 * Set registry to use to add the created grammar definitions.
 	 *
-	 * @param grammarRegistryManager
+	 * @param registryManager
 	 */
 	public void setRegistryManager(ILanguageConfigurationRegistryManager registryManager) {
 		this.registryManager = registryManager;

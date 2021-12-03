@@ -59,10 +59,10 @@ public class ThemeAssociation implements IThemeAssociation {
 
 	/**
 	 * Constructor to register theme associations for a given scope name.
-	 * 
+	 *
 	 * @param themeId
-	 * @param eclipseThemeId
 	 * @param scopeName
+	 * @param whenDark
 	 */
 	public ThemeAssociation(String themeId, String scopeName, boolean whenDark) {
 		this.themeId = themeId;

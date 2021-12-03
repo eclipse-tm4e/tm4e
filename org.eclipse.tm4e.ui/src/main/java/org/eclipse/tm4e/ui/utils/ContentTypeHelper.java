@@ -44,7 +44,7 @@ public class ContentTypeHelper {
 
 	/**
 	 * Find the content types from the given {@link IDocument} and null otherwise.
-	 * 
+	 *
 	 * @param document
 	 * @return the content types from the given {@link IDocument} and null
 	 *         otherwise.
@@ -62,7 +62,7 @@ public class ContentTypeHelper {
 
 	/**
 	 * Find the content type with the given contentTypeId
-	 * 
+	 *
 	 * @param contentTypeId
 	 * @return matching content type or null
 	 */
@@ -76,7 +76,7 @@ public class ContentTypeHelper {
 	/**
 	 * Find the content types from the given {@link IDocument} by using
 	 * {@link ITextFileBufferManager} and null otherwise.
-	 * 
+	 *
 	 * @param document
 	 * @return the content types from the given {@link IDocument} by using
 	 *         {@link ITextFileBufferManager} and null otherwise.
@@ -93,7 +93,7 @@ public class ContentTypeHelper {
 
 	/**
 	 * Returns the content types from the given {@link ITextFileBuffer}.
-	 * 
+	 *
 	 * @param buffer
 	 * @return the content types from the given {@link ITextFileBuffer}.
 	 * @throws CoreException
@@ -133,7 +133,7 @@ public class ContentTypeHelper {
 
 	/**
 	 * Returns the content of the given buffer.
-	 * 
+	 *
 	 * @param buffer
 	 * @return the content of the given buffer.
 	 * @throws CoreException
@@ -155,7 +155,7 @@ public class ContentTypeHelper {
 	/**
 	 * Find the content types from the given {@link IDocument} by using
 	 * {@link IEditorInput} and null otherwise.
-	 * 
+	 *
 	 * @param document
 	 * @return the content types from the given {@link IDocument} by using
 	 *         {@link IEditorInput} and null otherwise.
@@ -189,7 +189,7 @@ public class ContentTypeHelper {
 
 	/**
 	 * Returns the {@link IEditorInput} from the given document and null otherwise.
-	 * 
+	 *
 	 * @param document
 	 * @return the {@link IEditorInput} from the given document and null otherwise.
 	 */
@@ -205,7 +205,7 @@ public class ContentTypeHelper {
 			// ISorageEditorInput, see StorageDocumentProvider)
 
 			// get list of IDocumentListener
-			ListenerList listeners = ClassHelper.getFieldValue(document, "fDocumentListeners");
+			ListenerList<?> listeners = ClassHelper.getFieldValue(document, "fDocumentListeners");
 			if (listeners != null) {
 				// Get AbstractDocumentProvider#ElementInfo
 				Object[] l = listeners.getListeners();

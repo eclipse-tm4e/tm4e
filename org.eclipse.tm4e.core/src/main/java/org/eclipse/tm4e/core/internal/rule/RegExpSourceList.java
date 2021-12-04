@@ -29,7 +29,7 @@ import org.eclipse.tm4e.core.internal.oniguruma.OnigScanner;
  */
 public class RegExpSourceList {
 
-	private class RegExpSourceListAnchorCache {
+	private static class RegExpSourceListAnchorCache {
 
 		public ICompiledRule A0_G0;
 		public ICompiledRule A0_G1;

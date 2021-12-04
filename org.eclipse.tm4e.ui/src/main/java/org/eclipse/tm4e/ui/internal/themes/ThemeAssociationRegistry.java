@@ -27,7 +27,7 @@ public class ThemeAssociationRegistry {
 
 	private final Map<String, EclipseThemeAssociation> scopes;
 
-	private class EclipseThemeAssociation {
+	private static class EclipseThemeAssociation {
 
 		private IThemeAssociation light;
 		private IThemeAssociation dark;

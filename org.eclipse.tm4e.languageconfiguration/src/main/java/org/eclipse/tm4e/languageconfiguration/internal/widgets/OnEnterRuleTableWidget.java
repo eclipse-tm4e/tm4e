@@ -72,7 +72,7 @@ public class OnEnterRuleTableWidget extends TableViewer {
 		return gc.stringExtent(string).x + 10;
 	}
 
-	protected class OnEnterRuleContentProvider implements IStructuredContentProvider {
+	protected static class OnEnterRuleContentProvider implements IStructuredContentProvider {
 
 		private List<OnEnterRule> onEnterRulesList;
 
@@ -97,7 +97,7 @@ public class OnEnterRuleTableWidget extends TableViewer {
 		}
 	}
 
-	protected class OnEnterRuleLabelProvider extends LabelProvider implements ITableLabelProvider {
+	protected static class OnEnterRuleLabelProvider extends LabelProvider implements ITableLabelProvider {
 
 		@Override
 		public Image getColumnImage(Object element, int columnIndex) {

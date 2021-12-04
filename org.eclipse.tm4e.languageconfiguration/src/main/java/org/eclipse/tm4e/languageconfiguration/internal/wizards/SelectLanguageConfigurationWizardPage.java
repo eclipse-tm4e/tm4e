@@ -208,7 +208,7 @@ public class SelectLanguageConfigurationWizardPage extends WizardPage implements
 				.setText(((IContentType) event.getStructuredSelection().getFirstElement()).toString()));
 	}
 
-	private class ContentTypesLabelProvider extends LabelProvider {
+	private static class ContentTypesLabelProvider extends LabelProvider {
 		@Override
 		public String getText(Object element) {
 			IContentType contentType = (IContentType) element;
@@ -216,7 +216,7 @@ public class SelectLanguageConfigurationWizardPage extends WizardPage implements
 		}
 	}
 
-	private class ContentTypesContentProvider implements ITreeContentProvider {
+	private static class ContentTypesContentProvider implements ITreeContentProvider {
 
 		private IContentTypeManager manager = Platform.getContentTypeManager();
 

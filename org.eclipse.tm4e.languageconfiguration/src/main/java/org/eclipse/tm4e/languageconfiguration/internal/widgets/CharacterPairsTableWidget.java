@@ -56,7 +56,7 @@ public class CharacterPairsTableWidget extends TableViewer {
 		return gc.stringExtent(string).x + 10;
 	}
 
-	protected class CharacterPairContentProvider implements IStructuredContentProvider {
+	protected static class CharacterPairContentProvider implements IStructuredContentProvider {
 
 		private List<CharacterPair> characterPairList;
 
@@ -81,7 +81,7 @@ public class CharacterPairsTableWidget extends TableViewer {
 		}
 	}
 
-	protected class CharacterPairLabelProvider extends LabelProvider implements ITableLabelProvider {
+	protected static class CharacterPairLabelProvider extends LabelProvider implements ITableLabelProvider {
 
 		@Override
 		public Image getColumnImage(Object element, int columnIndex) {

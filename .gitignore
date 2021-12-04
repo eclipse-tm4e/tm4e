@@ -1,4 +1,18 @@
-.settings
+# Eclipse
 /bin
-/.project
-target
+/*/bin
+**/.settings/*
+!**/.settings/org.eclipse.core.resoures.prefs
+!**/.settings/org.eclipse.jdt.core.prefs
+!**/.settings/org.eclipse.pde.core.prefs
+
+# Maven
+/target
+/*/target
+
+# OSX
+.DS_Store
+
+# Vim
+*.swo
+*.swp

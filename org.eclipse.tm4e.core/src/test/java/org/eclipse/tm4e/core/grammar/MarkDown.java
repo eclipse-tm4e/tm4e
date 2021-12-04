@@ -27,19 +27,13 @@ public class MarkDown {
 		IGrammar grammar = registry.loadGrammarFromPathSync(path, Data.class.getResourceAsStream(path));
 		
 		List<String> lines = new ArrayList<>();
-		BufferedReader reader = null;
-		try {
-			reader = new BufferedReader(new InputStreamReader(Data.class.getResourceAsStream("test.md.txt")));
+		try (BufferedReader reader = new BufferedReader(new InputStreamReader(Data.class.getResourceAsStream("test.md.txt")))) {
 			String line = null;
 			while ((line = reader.readLine()) != null) {
 				lines.add(line);
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
-		} finally {
-			if (reader != null) {
-				reader.close();
-			}
 		}
 
 		

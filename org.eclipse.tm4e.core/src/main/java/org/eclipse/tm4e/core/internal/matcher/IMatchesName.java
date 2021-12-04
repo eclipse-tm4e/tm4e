@@ -22,7 +22,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 public interface IMatchesName<T> {
 
-	public static final IMatchesName<List<String>> NAME_MATCHER = new IMatchesName<List<String>>() {
+	IMatchesName<List<String>> NAME_MATCHER = new IMatchesName<List<String>>() {
 
 		@Override
 		public boolean match(Collection<String> identifers, List<String> scopes) {

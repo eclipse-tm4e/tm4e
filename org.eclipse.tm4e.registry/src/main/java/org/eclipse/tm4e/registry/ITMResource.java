@@ -33,5 +33,5 @@ public interface ITMResource extends ITMDefinition {
 	 * @return the stream of the TextMate resource.
 	 * @throws IOException
 	 */
-	public InputStream getInputStream() throws IOException;
+	InputStream getInputStream() throws IOException;
 }

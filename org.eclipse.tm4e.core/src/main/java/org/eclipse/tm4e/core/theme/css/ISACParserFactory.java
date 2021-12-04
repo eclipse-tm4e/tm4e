@@ -23,7 +23,7 @@ public interface ISACParserFactory {
 	 * this method search teh SAC Parser class name to instanciate into System
 	 * property with key org.w3c.css.sac.parser.
 	 */
-	public Parser makeParser() throws ClassNotFoundException,
+	Parser makeParser() throws ClassNotFoundException,
 			IllegalAccessException, InstantiationException,
 			NullPointerException, ClassCastException;
 
@@ -39,7 +39,7 @@ public interface ISACParserFactory {
 	 * @throws NullPointerException
 	 * @throws ClassCastException
 	 */
-	public abstract Parser makeParser(String name)
+	Parser makeParser(String name)
 			throws ClassNotFoundException, IllegalAccessException,
 			InstantiationException, NullPointerException, ClassCastException;
 }

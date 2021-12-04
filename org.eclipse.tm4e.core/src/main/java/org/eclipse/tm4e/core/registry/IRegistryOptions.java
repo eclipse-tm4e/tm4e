@@ -24,7 +24,7 @@ import org.eclipse.tm4e.core.theme.IRawTheme;
 
 public interface IRegistryOptions {
 
-	public static final IRegistryOptions DEFAULT_LOCATOR = new IRegistryOptions() {
+	IRegistryOptions DEFAULT_LOCATOR = new IRegistryOptions() {
 
 		@Override
 		public String getFilePath(String scopeName) {

@@ -36,7 +36,7 @@ public interface ILanguageConfiguration {
 	 * @return the language's brackets. This configuration implicitly affects
 	 *         pressing Enter around these brackets.
 	 */
-	public List<CharacterPair> getBrackets();
+	List<CharacterPair> getBrackets();
 
 	/**
 	 * Returns the language's auto closing pairs. The 'close' character is
@@ -47,14 +47,14 @@ public interface ILanguageConfiguration {
 	 *         autautomatically inserted with the 'open' character is typed. If not
 	 *         set, the configured brackets will be used.
 	 */
-	public List<AutoClosingPairConditional> getAutoClosingPairs();
+	List<AutoClosingPairConditional> getAutoClosingPairs();
 
 	/**
 	 * Returns the language's rules to be evaluated when pressing Enter.
 	 *
 	 * @return the language's rules to be evaluated when pressing Enter.
 	 */
-	public List<OnEnterRule> getOnEnterRules();
+	List<OnEnterRule> getOnEnterRules();
 
 	/**
 	 * Returns the language's surrounding pairs. When the 'open' character is typed
@@ -66,7 +66,7 @@ public interface ILanguageConfiguration {
 	 *         close characters. If not set, the autoclosing pairs settings will be
 	 *         used.
 	 */
-	public List<CharacterPair> getSurroundingPairs();
+	List<CharacterPair> getSurroundingPairs();
 
 	/**
 	 * Returns the language's folding rules.

@@ -17,9 +17,9 @@ package org.eclipse.tm4e.ui.themes;
  */
 public interface ThemeIdConstants {
 
-	public static final String Light = "org.eclipse.tm4e.ui.themes.Light";
-	public static final String Monokai = "org.eclipse.tm4e.ui.themes.Monokai";
-	public static final String SolarizedLight = "org.eclipse.tm4e.ui.themes.SolarizedLight";
-	public static final String Dark = "org.eclipse.tm4e.ui.themes.Dark";
+	String Light = "org.eclipse.tm4e.ui.themes.Light";
+	String Monokai = "org.eclipse.tm4e.ui.themes.Monokai";
+	String SolarizedLight = "org.eclipse.tm4e.ui.themes.SolarizedLight";
+	String Dark = "org.eclipse.tm4e.ui.themes.Dark";
 
 }

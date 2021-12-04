@@ -58,7 +58,7 @@ import org.eclipse.ui.dialogs.ResourceSelectionDialog;
 public class SelectLanguageConfigurationWizardPage extends WizardPage implements Listener {
 	private static final String PAGE_NAME = SelectLanguageConfigurationWizardPage.class.getName();
 
-	protected static final String[] TEXTMATE_EXTENSIONS = new String[] { "*language-configuration.json" }; //$NON-NLS-1$
+	protected static final String[] TEXTMATE_EXTENSIONS = { "*language-configuration.json" }; //$NON-NLS-1$
 
 	private Button browseFileSystemButton;
 	private Button browseWorkspaceButton;

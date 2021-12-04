@@ -45,7 +45,7 @@ public class SelectGrammarWizardPage extends AbstractWizardPage {
 
 	private static final String PAGE_NAME = SelectGrammarWizardPage.class.getName();
 
-	protected static final String[] TEXTMATE_EXTENSIONS = new String[] {"*.tmLanguage","*.json"};
+	protected static final String[] TEXTMATE_EXTENSIONS = {"*.tmLanguage","*.json"};
 
 	private Button browseFileSystemButton;
 	private Button browseWorkspaceButton;

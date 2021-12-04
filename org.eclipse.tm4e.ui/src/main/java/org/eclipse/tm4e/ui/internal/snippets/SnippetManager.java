@@ -24,7 +24,7 @@ import org.eclipse.tm4e.ui.snippets.ISnippetManager;
 
 public class SnippetManager implements ISnippetManager {
 
-	private static final ISnippet[] EMPTY_SNIPPETS = new ISnippet[0];
+	private static final ISnippet[] EMPTY_SNIPPETS = {};
 
 	private static final String SNIPPET_ELT = "snippet";
 

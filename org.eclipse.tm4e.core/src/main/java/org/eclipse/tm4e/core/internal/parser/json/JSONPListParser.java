@@ -29,7 +29,7 @@ public class JSONPListParser<T> {
 	}
 
 	public T parse(InputStream contents) throws Exception {
-		PList<T> pList = new PList<T>(theme);
+		PList<T> pList = new PList<>(theme);
 		JsonReader reader = new JsonReader(new InputStreamReader(contents, StandardCharsets.UTF_8));
 		// reader.setLenient(true);
 		boolean parsing = true;

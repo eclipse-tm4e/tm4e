@@ -391,7 +391,7 @@ class LineTokenizer {
 		}
 
 		int len = Math.min(captures.size(), captureIndices.length);
-		List<LocalStackElement> localStack = new ArrayList<LocalStackElement>();
+		List<LocalStackElement> localStack = new ArrayList<>();
 		int maxEnd = captureIndices[0].getEnd();
 		IOnigCaptureIndex captureIndex;
 

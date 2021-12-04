@@ -48,7 +48,7 @@ public class ThemeContribution extends CompoundContributionItem implements IWork
 
 	@Override
 	protected IContributionItem[] getContributionItems() {
-		List<IContributionItem> items = new ArrayList<IContributionItem>();
+		List<IContributionItem> items = new ArrayList<>();
 		if (handlerService != null) {
 			IEditorPart editorPart = getActivePart(handlerService.getCurrentState());
 			if (editorPart != null) {

@@ -44,7 +44,7 @@ public class RegExpSourceList {
 	private final RegExpSourceListAnchorCache _anchorCache;
 
 	public RegExpSourceList() {
-		this._items = new ArrayList<RegExpSource>();
+		this._items = new ArrayList<>();
 		this._hasAnchors = false;
 		this._cached = null;
 		this._anchorCache = new RegExpSourceListAnchorCache();
@@ -80,7 +80,7 @@ public class RegExpSourceList {
 	public ICompiledRule compile(IRuleRegistry grammar, boolean allowA, boolean allowG) {
 		if (!this._hasAnchors) {
 			if (this._cached == null) {
-				List<String> regexps = new ArrayList<String>();
+				List<String> regexps = new ArrayList<>();
 				for (RegExpSource regExpSource : _items) {
 					regexps.add(regExpSource.getSource());
 				}
@@ -122,7 +122,7 @@ public class RegExpSourceList {
 	}
 
 	private ICompiledRule _resolveAnchors(boolean allowA, boolean allowG) {
-		List<String> regexps = new ArrayList<String>();
+		List<String> regexps = new ArrayList<>();
 		for (RegExpSource regExpSource : _items) {
 			regexps.add(regExpSource.resolveAnchors(allowA, allowG));
 		}
@@ -134,7 +134,7 @@ public class RegExpSourceList {
 	}
 
 	private Integer[] getRules() {
-		Collection<Integer> ruleIds = new ArrayList<Integer>();
+		Collection<Integer> ruleIds = new ArrayList<>();
 		for (RegExpSource item : this._items) {
 			ruleIds.add(item.getRuleId());
 		}

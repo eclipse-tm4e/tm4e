@@ -219,7 +219,7 @@ public class ToggleLineCommentHandler extends AbstractHandler {
 		int endLineNumber = selection.getEndLine();
 		String oldText = document.get();
 		int deletedChars = 0;
-		Boolean isStartBeforeComment = false;
+		boolean isStartBeforeComment = false;
 
 		while (lineNumber <= endLineNumber) {
 			int commentOffset = oldText.indexOf(comment, document.getLineOffset(lineNumber) + deletedChars);

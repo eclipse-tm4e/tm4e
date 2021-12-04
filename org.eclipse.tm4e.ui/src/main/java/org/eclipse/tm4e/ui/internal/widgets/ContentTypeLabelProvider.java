@@ -34,12 +34,19 @@ public class ContentTypeLabelProvider extends LabelProvider implements ITableLab
 
 	@Override
 	public String getColumnText(Object element, int columnIndex) {
-		String contentTypeId = (String) element;
 		switch (columnIndex) {
 		case 0:
-			IContentType contentType = Platform.getContentTypeManager().getContentType(contentTypeId);
-			if (contentType == null) {
-				return contentTypeId;
+			IContentType contentType = null;
+			if(element instanceof IContentType) {
+				contentType = (IContentType) element;
+			} else if(element instanceof String) {
+				String contentTypeId = (String) element;
+				contentType = Platform.getContentTypeManager().getContentType(contentTypeId);
+				if (contentType == null) {
+					return contentTypeId;
+				}
+			} else {
+				return ""; //$NON-NLS-1$
 			}
 			return contentType.getName() + " (" + contentType.getId() + ")";
 		default:

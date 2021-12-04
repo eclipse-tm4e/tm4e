@@ -3,7 +3,7 @@ Bundle-ManifestVersion: 2
 Bundle-Name: %pluginName
 Bundle-Vendor: %providerName
 Bundle-SymbolicName: org.eclipse.tm4e.registry;singleton:=true
-Bundle-Version: 0.5.0.qualifier
+Bundle-Version: 0.5.1.qualifier
 Bundle-RequiredExecutionEnvironment: JavaSE-11
 Require-Bundle: org.eclipse.tm4e.core,
  org.eclipse.core.runtime,

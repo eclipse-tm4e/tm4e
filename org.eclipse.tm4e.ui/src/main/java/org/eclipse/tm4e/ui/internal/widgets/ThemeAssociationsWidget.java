@@ -55,7 +55,7 @@ public class ThemeAssociationsWidget extends TableAndButtonsWidget {
 		editButton = new Button(parent, SWT.PUSH);
 		editButton.setText(TMUIMessages.Button_edit);
 		editButton.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-		editButton.addListener(SWT.Selection, (e) -> {
+		editButton.addListener(SWT.Selection, e -> {
 			// Open the wizard to create association between theme and grammar.
 			CreateThemeAssociationWizard wizard = new CreateThemeAssociationWizard(false);
 			wizard.setInitialDefinition(definition);
@@ -73,7 +73,7 @@ public class ThemeAssociationsWidget extends TableAndButtonsWidget {
 		removeButton = new Button(parent, SWT.PUSH);
 		removeButton.setText(TMUIMessages.Button_remove);
 		removeButton.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-		removeButton.addListener(SWT.Selection, (e) -> {
+		removeButton.addListener(SWT.Selection, e -> {
 
 			if (MessageDialog.openConfirm(getShell(), TMUIMessages.ThemeAssociationsWidget_remove_dialog_title,
 					TMUIMessages.ThemeAssociationsWidget_remove_dialog_message)) {

@@ -11,7 +11,6 @@
  */
 package org.eclipse.tm4e.registry.internal.preferences;
 
-import java.lang.reflect.Type;
 import java.util.Collection;
 
 import org.eclipse.tm4e.registry.GrammarDefinition;
@@ -31,12 +30,8 @@ public class PreferenceHelper {
 
 	static {
 		DEFAULT_GSON = new GsonBuilder()
-				.registerTypeAdapter(IGrammarDefinition.class, new InstanceCreator<GrammarDefinition>() {
-					@Override
-					public GrammarDefinition createInstance(Type type) {
-						return new GrammarDefinition();
-					}
-				}).create();
+				.registerTypeAdapter(IGrammarDefinition.class, (InstanceCreator<GrammarDefinition>) type -> new GrammarDefinition())
+				.create();
 	}
 
 	public static IGrammarDefinition[] loadGrammars(String json) {

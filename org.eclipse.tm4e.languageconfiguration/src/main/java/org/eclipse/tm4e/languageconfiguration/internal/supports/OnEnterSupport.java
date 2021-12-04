@@ -35,9 +35,7 @@ public class OnEnterSupport {
 
 	public OnEnterSupport(List<CharacterPair> brackets, List<OnEnterRule> regExpRules) {
 		this.brackets = (brackets != null ? brackets : DEFAULT_BRACKETS).stream().filter(el -> el != null)
-				.map((bracket -> {
-					return new ProcessedBracketPair(bracket.getKey(), bracket.getValue());
-				})).collect(Collectors.toList());
+				.map((bracket -> new ProcessedBracketPair(bracket.getKey(), bracket.getValue()))).collect(Collectors.toList());
 
 		this.regExpRules = regExpRules != null ? regExpRules : Collections.emptyList();
 	}

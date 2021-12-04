@@ -11,7 +11,6 @@
  */
 package org.eclipse.tm4e.ui.internal.preferences;
 
-import java.lang.reflect.Type;
 import java.util.Collection;
 
 import org.eclipse.tm4e.ui.themes.IThemeAssociation;
@@ -30,12 +29,7 @@ public class PreferenceHelper {
 	private static final Gson DEFAULT_GSON;
 
 	static {
-		DEFAULT_GSON = new GsonBuilder().registerTypeAdapter(IThemeAssociation.class, new InstanceCreator<ThemeAssociation>() {
-			@Override
-			public ThemeAssociation createInstance(Type type) {
-				return new ThemeAssociation();
-			}
-		}).create();
+		DEFAULT_GSON = new GsonBuilder().registerTypeAdapter(IThemeAssociation.class, (InstanceCreator<ThemeAssociation>) type -> new ThemeAssociation()).create();
 	}
 
 	public static IThemeAssociation[] loadThemeAssociations(String json) {

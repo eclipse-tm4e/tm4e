@@ -79,9 +79,8 @@ public abstract class AbstractThemeManager implements IThemeManager {
 	@Override
 	public ITheme[] getThemes(boolean dark) {
 		Collection<ITheme> themes = this.themes.values();
-		return themes.stream().filter(theme -> {
-			return theme.isDark() == dark;
-		}).collect(Collectors.toList()).toArray(new ITheme[0]);
+		return themes.stream().filter(theme -> (theme.isDark() == dark))
+		   .collect(Collectors.toList()).toArray(new ITheme[0]);
 	}
 
 	@Override

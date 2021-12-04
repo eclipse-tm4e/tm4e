@@ -31,7 +31,7 @@ import org.eclipse.tm4e.ui.themes.ColorManager;
 
 public class CSSTokenProvider extends AbstractTokenProvider {
 
-	private Map<IStyle, IToken> tokenMaps;
+	private final Map<IStyle, IToken> tokenMaps;
 	private CSSParser parser;
 
 	public CSSTokenProvider(InputStream in) {

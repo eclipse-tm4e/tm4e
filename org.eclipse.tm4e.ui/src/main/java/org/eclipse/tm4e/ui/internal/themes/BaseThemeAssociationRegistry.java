@@ -28,7 +28,7 @@ public class BaseThemeAssociationRegistry {
 
 	private IThemeAssociation defaultAssociation;
 	private final Map<String /* E4 Theme id */, List<IThemeAssociation>> eclipseThemeIds;
-	private List<IThemeAssociation> allAssociations;
+	private final List<IThemeAssociation> allAssociations;
 
 	public BaseThemeAssociationRegistry() {
 		eclipseThemeIds = new HashMap<>();

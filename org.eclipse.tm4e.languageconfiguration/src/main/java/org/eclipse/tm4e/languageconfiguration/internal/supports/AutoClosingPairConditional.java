@@ -16,7 +16,7 @@ import java.util.List;
 @SuppressWarnings("serial")
 public class AutoClosingPairConditional extends CharacterPair {
 
-	private List<String> notIn;
+	private final List<String> notIn;
 
 	public AutoClosingPairConditional(String open, String close, List<String> notIn) {
 		super(open, close);

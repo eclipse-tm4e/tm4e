@@ -22,10 +22,10 @@ import org.eclipse.tm4e.core.internal.oniguruma.IOnigCaptureIndex;
 
 public class BeginWhileRule extends Rule {
 
-	private RegExpSource begin;
+	private final RegExpSource begin;
 	public final List<CaptureRule> beginCaptures;
 	public final List<CaptureRule> whileCaptures;
-	private RegExpSource _while;
+	private final RegExpSource _while;
 	public final boolean whileHasBackReferences;
 	public final boolean hasMissingPatterns;
 	public final Integer[] patterns;

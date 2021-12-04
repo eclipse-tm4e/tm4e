@@ -36,7 +36,7 @@ class LineTokens {
 	private final List<IToken> tokens;
 
 
-	private boolean emitBinaryTokens;
+	private final boolean emitBinaryTokens;
 
 	/**
 	 * used only if `_emitBinaryTokens` is true.

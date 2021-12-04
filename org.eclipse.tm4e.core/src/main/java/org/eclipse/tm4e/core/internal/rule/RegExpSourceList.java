@@ -38,7 +38,7 @@ public class RegExpSourceList {
 
 	}
 
-	private List<RegExpSource> _items;
+	private final List<RegExpSource> _items;
 	private boolean _hasAnchors;
 	private ICompiledRule _cached;
 	private final RegExpSourceListAnchorCache _anchorCache;

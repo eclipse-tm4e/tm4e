@@ -37,7 +37,7 @@ public class GrammarReader {
 
 	public static final IGrammarParser XML_PARSER = new IGrammarParser() {
 
-		private XMLPListParser<IRawGrammar> parser = new XMLPListParser<>(false);
+		private final XMLPListParser<IRawGrammar> parser = new XMLPListParser<>(false);
 
 		@Override
 		public IRawGrammar parse(InputStream contents) throws Exception {
@@ -47,7 +47,7 @@ public class GrammarReader {
 
 	public static final IGrammarParser JSON_PARSER = new IGrammarParser() {
 
-		private JSONPListParser<IRawGrammar> parser = new JSONPListParser<>(false);
+		private final JSONPListParser<IRawGrammar> parser = new JSONPListParser<>(false);
 
 		@Override
 		public IRawGrammar parse(InputStream contents) throws Exception {

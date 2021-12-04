@@ -23,11 +23,11 @@ public abstract class Rule {
 
 	public final int id;
 
-	private boolean nameIsCapturing;
-	private String name;
+	private final boolean nameIsCapturing;
+	private final String name;
 
-	private boolean contentNameIsCapturing;
-	private String contentName;
+	private final boolean contentNameIsCapturing;
+	private final String contentName;
 
 	public Rule(int id, String name, String contentName) {
 		this.id = id;

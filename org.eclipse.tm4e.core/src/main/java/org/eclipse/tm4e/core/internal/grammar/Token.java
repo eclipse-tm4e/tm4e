@@ -24,9 +24,9 @@ class Token implements IToken {
 
 	private int startIndex;
 
-	private int endIndex;
+	private final int endIndex;
 
-	private List<String> scopes;
+	private final List<String> scopes;
 
 	public Token(int startIndex, int endIndex, List<String> scopes) {
 		this.startIndex = startIndex;

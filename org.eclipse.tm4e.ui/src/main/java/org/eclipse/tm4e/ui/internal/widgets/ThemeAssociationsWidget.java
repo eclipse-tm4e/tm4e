@@ -36,7 +36,7 @@ import org.eclipse.tm4e.ui.themes.IThemeManager;
  */
 public class ThemeAssociationsWidget extends TableAndButtonsWidget {
 
-	private IThemeManager themeManager;
+	private final IThemeManager themeManager;
 
 	private Button editButton;
 	private Button removeButton;

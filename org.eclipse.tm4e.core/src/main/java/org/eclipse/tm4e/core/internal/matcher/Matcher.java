@@ -164,7 +164,7 @@ public class Matcher<T> implements Predicate<T> {
 
 		private static final Pattern REGEXP = Pattern.compile("([LR]:|[\\w\\.:]+|[\\,\\|\\-\\(\\)])");
 
-		private java.util.regex.Matcher regex;
+		private final java.util.regex.Matcher regex;
 
 		public Tokenizer(String input) {
 			this.regex = REGEXP.matcher(input);

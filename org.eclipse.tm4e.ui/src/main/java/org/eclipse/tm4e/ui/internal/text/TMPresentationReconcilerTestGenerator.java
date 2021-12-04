@@ -26,7 +26,7 @@ public class TMPresentationReconcilerTestGenerator
 	private ITextViewer viewer;
 	private IDocument document;
 
-	private StringBuilder code = new StringBuilder();
+	private final StringBuilder code = new StringBuilder();
 
 	/*private List<Command> commands;
 

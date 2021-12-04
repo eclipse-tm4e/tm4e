@@ -34,7 +34,7 @@ import org.eclipse.tm4e.ui.utils.ContentTypeHelper;
  */
 public class LanguageConfigurationDefinition extends TMResource implements ILanguageConfigurationDefinition {
 
-	private IContentType contentType;
+	private final IContentType contentType;
 	private boolean onEnterEnabled = true;
 	private boolean bracketAutoClosingEnabled = true;
 	private boolean matchingPairsEnabled = true;

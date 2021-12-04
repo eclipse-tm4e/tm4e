@@ -22,8 +22,8 @@ import org.eclipse.tm4e.core.internal.types.IRawGrammar;
 
 public class SyncGrammarReader {
 
-	private InputStream in;
-	private IGrammarParser parser;
+	private final InputStream in;
+	private final IGrammarParser parser;
 
 	SyncGrammarReader(InputStream in, IGrammarParser parser) {
 		this.in = in;

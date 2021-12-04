@@ -20,7 +20,7 @@ import java.util.List;
 
 public class MatchRule extends Rule {
 
-	private RegExpSource match;
+	private final RegExpSource match;
 	public final List<CaptureRule> captures;
 	private RegExpSourceList cachedCompiledPatterns;
 

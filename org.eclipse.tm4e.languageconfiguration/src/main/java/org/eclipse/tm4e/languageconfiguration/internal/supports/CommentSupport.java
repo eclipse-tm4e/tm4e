@@ -16,7 +16,7 @@ import org.eclipse.jface.text.IDocument;
 
 public class CommentSupport {
 
-	private Comments comments;
+	private final Comments comments;
 
 	public CommentSupport(Comments comments) {
 		this.comments = comments;

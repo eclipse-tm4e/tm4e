@@ -44,7 +44,7 @@ public class TMModel implements ITMModel {
 	private TokenizerThread fThread;
 
 	private final IModelLines lines;
-	private PriorityBlockingQueue<Integer> invalidLines = new PriorityBlockingQueue<>();
+	private final PriorityBlockingQueue<Integer> invalidLines = new PriorityBlockingQueue<>();
 
 	public TMModel(IModelLines lines) {
 		this.listeners = new ArrayList<>();
@@ -64,7 +64,7 @@ public class TMModel implements ITMModel {
 	 *
 	 */
 	static class TokenizerThread extends Thread {
-		private TMModel model;
+		private final TMModel model;
 		private TMState lastState;
 
 		/**

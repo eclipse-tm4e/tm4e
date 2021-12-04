@@ -21,7 +21,7 @@ import org.eclipse.jface.text.IDocument;
  */
 public class DocumentInputStream extends InputStream {
 	
-	private IDocument fDocument;
+	private final IDocument fDocument;
 	private int fCurrPos;
 	
 	public DocumentInputStream(IDocument document) {

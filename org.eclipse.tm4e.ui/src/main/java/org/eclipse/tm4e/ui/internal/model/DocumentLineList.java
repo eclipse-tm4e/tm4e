@@ -31,7 +31,7 @@ import org.eclipse.tm4e.ui.TMUIPlugin;
 public class DocumentLineList extends AbstractLineList {
 
 	private final IDocument document;
-	private InternalListener listener;
+	private final InternalListener listener;
 
 	public DocumentLineList(IDocument document) {
 		this.document = document;

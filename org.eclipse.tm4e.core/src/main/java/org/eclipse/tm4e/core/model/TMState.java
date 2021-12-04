@@ -22,7 +22,7 @@ import org.eclipse.tm4e.core.grammar.StackElement;
 
 public class TMState {
 
-	private TMState parentEmbedderState;
+	private final TMState parentEmbedderState;
 	private StackElement ruleStack;
 
 	public TMState(TMState parentEmbedderState, StackElement ruleStatck) {

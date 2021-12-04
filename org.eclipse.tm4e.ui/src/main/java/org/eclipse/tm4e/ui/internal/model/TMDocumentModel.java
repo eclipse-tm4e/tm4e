@@ -16,7 +16,7 @@ import org.eclipse.tm4e.core.model.TMModel;
 
 public class TMDocumentModel extends TMModel {
 
-	private IDocument document;
+	private final IDocument document;
 
 	public TMDocumentModel(IDocument document) {
 		super(new DocumentLineList(document));

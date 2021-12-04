@@ -36,9 +36,9 @@ public class RegExpSource {
 	private static final Pattern REGEXP_CHARACTERS = Pattern
 			.compile("[\\-\\\\\\{\\}\\*\\+\\?\\|\\^\\$\\.\\,\\[\\]\\(\\)\\#\\s]");
 
-	private int ruleId;
+	private final int ruleId;
 	private boolean _hasAnchor;
-	private boolean _hasBackReferences;
+	private final boolean _hasBackReferences;
 	private IRegExpSourceAnchorCache anchorCache;
 	private String source;
 

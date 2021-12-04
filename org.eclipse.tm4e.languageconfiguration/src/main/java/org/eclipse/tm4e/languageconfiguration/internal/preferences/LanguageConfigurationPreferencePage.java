@@ -63,7 +63,7 @@ public class LanguageConfigurationPreferencePage extends PreferencePage implemen
 
 	public final static String PAGE_ID = "org.eclipse.tm4e.languageconfiguration.preferences.LanguageConfigurationPreferencePage"; //$NON-NLS-1$
 
-	private ILanguageConfigurationRegistryManager manager;
+	private final ILanguageConfigurationRegistryManager manager;
 
 	private TableViewer definitionViewer;
 

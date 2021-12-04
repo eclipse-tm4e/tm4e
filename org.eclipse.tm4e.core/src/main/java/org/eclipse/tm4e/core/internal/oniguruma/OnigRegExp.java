@@ -39,7 +39,7 @@ public class OnigRegExp {
 	private OnigString lastSearchString;
 	private int lastSearchPosition;
 	private OnigResult lastSearchResult;
-	private Regex regex;
+	private final Regex regex;
 
 	public OnigRegExp(String source) {
 		lastSearchString = null;

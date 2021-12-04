@@ -22,7 +22,7 @@ import java.util.stream.Collectors;
 public class CharacterPairSupport {
 
 	private List<CharacterPair> autoClosingPairs;
-	private List<CharacterPair> surroundingPairs;
+	private final List<CharacterPair> surroundingPairs;
 
 	public CharacterPairSupport(List<CharacterPair> brackets, List<AutoClosingPairConditional> autoClosingPairs,
 			List<CharacterPair> surroundingPairs) {

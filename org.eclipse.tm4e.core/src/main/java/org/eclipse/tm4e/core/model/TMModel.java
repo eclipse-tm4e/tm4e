@@ -92,7 +92,7 @@ public class TMModel implements ITMModel {
 					Integer toProcess = model.invalidLines.take();
 					if (model.lines.get(toProcess).isInvalid) {
 						try {
-							this.revalidateTokensNow(toProcess.intValue(), null);
+							this.revalidateTokensNow(toProcess, null);
 						} catch (Exception t) {
 							LOGGER.severe(t.getMessage());
 							if (toProcess < model.lines.getNumberOfLines()) {

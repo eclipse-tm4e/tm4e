@@ -59,7 +59,7 @@ public class RegexSource {
 			index = Integer.parseInt(match.substring(2, doublePointIndex));
 			command = match.substring(doublePointIndex + 2, match.length() - 1);
 		} else {
-			index = Integer.parseInt(match.substring(1, match.length()));
+			index = Integer.parseInt(match.substring(1));
 		}
 		IOnigCaptureIndex capture = captureIndices.length > index ? captureIndices[index] : null;
 		if (capture != null) {

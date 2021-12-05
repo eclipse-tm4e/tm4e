@@ -1,0 +1,45 @@
+# based on https://github.com/alexkaratarakis/gitattributes/
+
+# Handle line endings automatically for files detected as text
+# and leave all files detected as binary untouched.
+* text=auto
+
+#
+# The above will handle all files NOT found below
+#
+# These files are text and should be normalized (Convert crlf => lf)
+*.gitattributes text
+.gitignore      text
+*.bash          text eol=lf
+*.bat           text eol=crlf
+*.cmd           text eol=crlf
+*.css           text diff=css
+*.exsd          text
+*.htm           text diff=html
+*.html          text diff=html
+*.ini           text
+*.md            text diff=markdown
+*.java          text diff=java
+*.js            text
+*.json          text
+*.properties    text
+*.sh            text
+*.tmLanguage    text
+*.ts            text
+*.txt           text
+*.xsd           text
+*.xml           text
+*.yaml          text
+*.yml           text
+MANIFEST.MF     text
+Dockerfile      text eol=lf
+Jenkinsfile     text
+LICENSE         text
+
+# These files are binary and should be left untouched
+# (binary is a macro for -text -diff)
+*.gif           binary
+*.ico           binary
+*.jpeg          binary
+*.jpg           binary
+*.png           binary

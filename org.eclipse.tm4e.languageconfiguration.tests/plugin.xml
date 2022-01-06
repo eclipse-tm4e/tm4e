@@ -10,12 +10,23 @@
             name="Test Language Configuration content-type"
             priority="normal">
       </content-type>
+      <content-type
+            base-type="org.eclipse.core.runtime.text"
+            file-extensions="noLineComment"
+            id="org.eclipse.tm4e.languageconfiguration.tests.content-type.noLineComment"
+            name="Test Language Configuration content-type no line comment"
+            priority="normal">
+      </content-type>
    </extension>
    <extension
          point="org.eclipse.tm4e.languageconfiguration.languageConfigurations">
       <languageConfiguration
             contentTypeId="org.eclipse.tm4e.languageconfiguration.tests.content-type1"
             path="language-configurations/language-configuration.json">
+      </languageConfiguration>
+      <languageConfiguration
+            contentTypeId="org.eclipse.tm4e.languageconfiguration.tests.content-type.noLineComment"
+            path="language-configurations/language-configuration-no-linecomment.json">
       </languageConfiguration>
    </extension>
    <extension

@@ -12,6 +12,7 @@
 package org.eclipse.tm4e.languageconfiguration;
 
 import org.eclipse.core.expressions.PropertyTester;
+import org.eclipse.core.runtime.Adapters;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.content.IContentType;
 import org.eclipse.jface.text.IDocument;
@@ -26,10 +27,10 @@ public class HasLanguageConfigurationPropertyTester extends PropertyTester {
 
 	@Override
 	public boolean test(Object receiver, String property, Object[] args, Object expectedValue) {
-		if (!(receiver instanceof ITextEditor)) {
+		ITextEditor editor = Adapters.adapt(receiver, ITextEditor.class);
+		if (editor == null) {
 			return false;
 		}
-		ITextEditor editor = (ITextEditor) receiver;
 
 		IEditorInput input = editor.getEditorInput();
 		IDocumentProvider docProvider = editor.getDocumentProvider();

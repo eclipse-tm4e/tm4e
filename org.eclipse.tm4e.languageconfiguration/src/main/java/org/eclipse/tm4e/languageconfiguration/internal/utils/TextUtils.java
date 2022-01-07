@@ -30,7 +30,7 @@ public class TextUtils {
 	 * @return true if text of the command is an enter and false otherwise.
 	 */
 	public static boolean isEnter(IDocument d, DocumentCommand c) {
-		return (c.length == 0 && c.text != null && TextUtilities.endsWith(d.getLegalLineDelimiters(), c.text) != -1);
+		return (c.length == 0 && c.text != null && TextUtilities.equals(d.getLegalLineDelimiters(), c.text) != -1);
 	}
 
 	public static String normalizeIndentation(String str, int tabSize, boolean insertSpaces) {

@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2015-2017 Angelo ZERR.
+ * Copyright (c) 2015, 2021 Angelo ZERR and others.
  * This program and the accompanying materials are made
  * available under the terms of the Eclipse Public License 2.0
  * which is available at https://www.eclipse.org/legal/epl-2.0/
@@ -35,7 +35,7 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-public class TMinGenericEditorTest {
+class TMinGenericEditorTest {
 
 	private IEditorDescriptor editorDescriptor;
 	private File f;
@@ -77,11 +77,11 @@ public class TMinGenericEditorTest {
 	}
 
 	@Test
-	public void testTMHighlightInGenericEditor() throws IOException, PartInitException {
+	void testTMHighlightInGenericEditor() throws IOException, PartInitException {
 		f = File.createTempFile("test" + System.currentTimeMillis(), ".ts");
-		FileOutputStream fileOutputStream = new FileOutputStream(f);
-		fileOutputStream.write("let a = '';\nlet b = 10;\nlet c = true;".getBytes());
-		fileOutputStream.close();
+		try (FileOutputStream fileOutputStream = new FileOutputStream(f)) {
+			fileOutputStream.write("let a = '';\nlet b = 10;\nlet c = true;".getBytes());
+		}
 		f.deleteOnExit();
 		editor = IDE.openEditor(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage(),
 				f.toURI(), editorDescriptor.getId(), true);
@@ -95,11 +95,11 @@ public class TMinGenericEditorTest {
 	}
 
 	@Test
-	public void testTMHighlightInGenericEditorEdit() throws IOException, PartInitException {
+	void testTMHighlightInGenericEditorEdit() throws IOException, PartInitException {
 		f = File.createTempFile("test" + System.currentTimeMillis(), ".ts");
-		FileOutputStream fileOutputStream = new FileOutputStream(f);
-		fileOutputStream.write("let a = '';".getBytes());
-		fileOutputStream.close();
+		try (FileOutputStream fileOutputStream = new FileOutputStream(f)) {
+			fileOutputStream.write("let a = '';".getBytes());
+		}
 		f.deleteOnExit();
 		editor = IDE.openEditor(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage(),
 				f.toURI(), editorDescriptor.getId(), true);
@@ -120,7 +120,7 @@ public class TMinGenericEditorTest {
 	}
 
 	@Test
-	public void testReconcilierStartsAndDisposeThread() throws Exception {
+	void testReconcilierStartsAndDisposeThread() throws Exception {
 		testTMHighlightInGenericEditor();
 		editor.getEditorSite().getPage().closeEditor(editor, false);
 		Thread.sleep(500); // give time to dispose

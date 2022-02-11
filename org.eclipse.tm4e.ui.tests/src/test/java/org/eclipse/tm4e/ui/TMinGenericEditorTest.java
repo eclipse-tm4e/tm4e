@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2015, 2021 Angelo ZERR and others.
+ * Copyright (c) 2015, 2022 Angelo ZERR and others.
  * This program and the accompanying materials are made
  * available under the terms of the Eclipse Public License 2.0
  * which is available at https://www.eclipse.org/legal/epl-2.0/
@@ -11,13 +11,12 @@
  */
 package org.eclipse.tm4e.ui;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assumptions.assumeTrue;
 
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -124,7 +123,7 @@ class TMinGenericEditorTest {
 		testTMHighlightInGenericEditor();
 		editor.getEditorSite().getPage().closeEditor(editor, false);
 		Thread.sleep(500); // give time to dispose
-		assertEquals(Collections.emptySet(), getTM4EThreads());
+		assertTrue(getTM4EThreads().isEmpty());
 	}
 
 }

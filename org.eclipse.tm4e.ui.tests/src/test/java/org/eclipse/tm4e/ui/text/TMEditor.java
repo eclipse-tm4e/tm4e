@@ -14,7 +14,6 @@ package org.eclipse.tm4e.ui.text;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.eclipse.jface.text.BadLocationException;
 import org.eclipse.jface.text.Document;
 import org.eclipse.jface.text.TextViewer;
 import org.eclipse.swt.SWT;
@@ -66,7 +65,7 @@ public class TMEditor {
 		collector.setCommand(command);
 	}
 
-	public void replace(int pos, int length, String text) throws BadLocationException {
+	public void replace(int pos, int length, String text) {
 		commands.add(new DocumentReplaceCommand(pos, length, text, document));
 	}
 

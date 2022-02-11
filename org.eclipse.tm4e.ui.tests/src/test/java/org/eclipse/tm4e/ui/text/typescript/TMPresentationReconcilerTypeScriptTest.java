@@ -28,7 +28,7 @@ public class TMPresentationReconcilerTypeScriptTest {
 
 	@Disabled ("Remove this annotation when org.eclipse.swt.SWTError: No more handles [gtk_init_check() failed] will be fixed")
 	@Test
-	public void colorizeTypescript() throws Exception {
+	void colorizeTypescript() throws Exception {
 
 		TMEditor editor = new TMEditor(getGrammar(), getTokenProvider(), "let a = '';\nlet b = 10;\nlet c = true;");
 		List<ICommand> commands = editor.execute();
@@ -68,7 +68,7 @@ public class TMPresentationReconcilerTypeScriptTest {
 
 	@Disabled ("Remove this annotation when org.eclipse.swt.SWTError: No more handles [gtk_init_check() failed] will be fixed")
 	@Test
-	public void colorizeTypescriptWithInvalidate1() throws Exception {
+	void colorizeTypescriptWithInvalidate1() throws Exception {
 
 		TMEditor editor = new TMEditor(getGrammar(), getTokenProvider(), "let a = '';\nlet b = 10;\nlet c = true;");
 		editor.invalidateTextPresentation(0, 3);
@@ -117,7 +117,7 @@ public class TMPresentationReconcilerTypeScriptTest {
 
 	@Disabled
 	@Test
-	public void colorizeTypescriptWithInvalidate2() throws Exception {
+	void colorizeTypescriptWithInvalidate2() throws Exception {
 
 		TMEditor editor = new TMEditor(getGrammar(), getTokenProvider(), "let a = '';\nlet b = 10;\nlet c = true;");
 		editor.invalidateTextPresentation(0, 2);
@@ -166,7 +166,7 @@ public class TMPresentationReconcilerTypeScriptTest {
 
 	@Disabled ("Remove this annotation when org.eclipse.swt.SWTError: No more handles [gtk_init_check() failed] will be fixed")
 	@Test
-	public void colorizeTypescriptWithInvalidate3() throws Exception {
+	void colorizeTypescriptWithInvalidate3() throws Exception {
 
 		TMEditor editor = new TMEditor(getGrammar(), getTokenProvider(), "let a = '';\nlet b = 10;\nlet c = true;");
 		editor.invalidateTextPresentation(1, 2);
@@ -215,7 +215,7 @@ public class TMPresentationReconcilerTypeScriptTest {
 
 	@Disabled
 	@Test
-	public void colorizeTypescriptWithInvalidate4() throws Exception {
+	void colorizeTypescriptWithInvalidate4() throws Exception {
 
 		TMEditor editor = new TMEditor(getGrammar(), getTokenProvider(), "let a = '';\nlet b = 10;\nlet c = true;");
 		editor.invalidateTextPresentation(1, 1);
@@ -264,7 +264,7 @@ public class TMPresentationReconcilerTypeScriptTest {
 
 	@Disabled
 	@Test
-	public void colorizeTypescriptWithInvalidate8() throws Exception {
+	void colorizeTypescriptWithInvalidate8() throws Exception {
 
 		TMEditor editor = new TMEditor(getGrammar(), getTokenProvider(), "let a = '';\nlet b = 10;\nlet c = true;");
 		editor.invalidateTextPresentation(1, 8);
@@ -313,7 +313,7 @@ public class TMPresentationReconcilerTypeScriptTest {
 
 	@Disabled ("Remove this annotation when org.eclipse.swt.SWTError: No more handles [gtk_init_check() failed] will be fixed")
 	@Test
-	public void colorizeTypescriptWithInvalidateAndSeveralLines() throws Exception {
+	void colorizeTypescriptWithInvalidateAndSeveralLines() throws Exception {
 
 		TMEditor editor = new TMEditor(getGrammar(), getTokenProvider(), "a\r\n\r\nb");
 		editor.invalidateTextPresentation(0, 6);

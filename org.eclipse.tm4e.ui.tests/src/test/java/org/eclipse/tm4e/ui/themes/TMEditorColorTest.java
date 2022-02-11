@@ -35,7 +35,7 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-public class TMEditorColorTest implements ThemeIdConstants {
+class TMEditorColorTest implements ThemeIdConstants {
 
 	private static final String EDITOR_CURRENTLINE_HIGHLIGHT = "currentLineColor";
 
@@ -65,7 +65,7 @@ public class TMEditorColorTest implements ThemeIdConstants {
 	}
 
 	@Test
-	public void systemDefaultEditorColorTest() throws IOException, PartInitException {
+	void systemDefaultEditorColorTest() throws IOException, PartInitException {
 		f = File.createTempFile("test" + System.currentTimeMillis(), ".ts");
 
 		editor = IDE.openEditor(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage(), f.toURI(),
@@ -75,7 +75,7 @@ public class TMEditorColorTest implements ThemeIdConstants {
 
 		String themeId = manager.getDefaultTheme().getId();
 		ITheme theme = manager.getThemeById(themeId);
-		assertEquals(themeId, SolarizedLight, "Default light theme isn't set");
+		assertEquals(SolarizedLight, themeId, "Default light theme isn't set");
 		assertEquals(theme.getEditorBackground(), styledText.getBackground(), "Background colors isn't equals");
 		assertEquals(theme.getEditorForeground(), styledText.getForeground(), "Foreground colors isn't equals");
 		assertNull(theme.getEditorSelectionBackground(), "System default selection background should be null");
@@ -89,7 +89,7 @@ public class TMEditorColorTest implements ThemeIdConstants {
 	}
 
 	@Test
-	public void userDefinedEditorColorTest() throws Exception {
+	void userDefinedEditorColorTest() throws Exception {
 		String testColorVal = "255,128,0";
 		Color testColor = new Color(Display.getCurrent(), 255, 128, 0);
 		IPreferenceStore prefs = new ScopedPreferenceStore(InstanceScope.INSTANCE, "org.eclipse.ui.editors");
@@ -108,7 +108,7 @@ public class TMEditorColorTest implements ThemeIdConstants {
 
 		String themeId = manager.getDefaultTheme().getId();
 		ITheme theme = manager.getThemeById(themeId);
-		assertEquals(themeId, SolarizedLight, "Default light theme isn't set");
+		assertEquals(SolarizedLight, themeId, "Default light theme isn't set");
 
 		assertEquals(styledText.getBackground(), testColor, "Background color should be user defined");
 		assertEquals(theme.getEditorForeground(), styledText.getForeground(), "Foreground colors should be ");

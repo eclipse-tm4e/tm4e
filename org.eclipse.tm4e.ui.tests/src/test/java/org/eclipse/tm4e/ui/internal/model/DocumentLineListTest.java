@@ -17,10 +17,10 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import org.eclipse.jface.text.Document;
 import org.junit.jupiter.api.Test;
 
-public class DocumentLineListTest {
+class DocumentLineListTest {
 
 	@Test
-	public void testMultiLineChange() {
+	void testMultiLineChange() {
 		Document document = new Document();
 		DocumentLineList lineList = new DocumentLineList(document);
 

@@ -18,17 +18,17 @@ import org.eclipse.tm4e.registry.TMEclipseRegistryPlugin;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-public class RegistryTest {
+class RegistryTest {
 
 	@Test
-	public void testGrammarRegistered() {
+	void testGrammarRegistered() {
 		IContentType contentType = Platform.getContentTypeManager().getContentType("org.eclipse.tm4e.ui.tests.testContentType");
 		IGrammar grammar = TMEclipseRegistryPlugin.getGrammarRegistryManager().getGrammarFor(new IContentType[] { contentType });
 		Assertions.assertNotNull(grammar);
 	}
 
 	@Test
-	public void testThemeAppliesToSubtypes() {
+	void testThemeAppliesToSubtypes() {
 		IContentType contentType = Platform.getContentTypeManager().getContentType("org.eclipse.tm4e.ui.tests.testContentType.child");
 		IGrammar grammar = TMEclipseRegistryPlugin.getGrammarRegistryManager().getGrammarFor(new IContentType[] { contentType });
 		Assertions.assertNotNull(grammar);

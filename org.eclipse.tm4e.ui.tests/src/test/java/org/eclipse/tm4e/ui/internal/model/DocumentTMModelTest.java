@@ -15,10 +15,10 @@ import org.eclipse.jface.text.Document;
 import org.eclipse.tm4e.core.registry.Registry;
 import org.junit.jupiter.api.Test;
 
-public class DocumentTMModelTest {
+class DocumentTMModelTest {
 
 	@Test
-	public void testMultiLineChange() throws Exception {
+	void testMultiLineChange() throws Exception {
 		Document document = new Document();
 		TMDocumentModel model = new TMDocumentModel(document);
 		try {

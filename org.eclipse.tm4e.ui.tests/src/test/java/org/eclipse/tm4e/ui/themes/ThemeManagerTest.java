@@ -20,7 +20,7 @@ import org.junit.jupiter.api.Test;
  * Test for theme manager.	
  *
  */
-public class ThemeManagerTest implements ThemeIdConstants {
+class ThemeManagerTest implements ThemeIdConstants {
 
 	private IThemeManager manager;
 	
@@ -37,7 +37,7 @@ public class ThemeManagerTest implements ThemeIdConstants {
 		
 	
 	@Test
-	public void themes() {
+	void themes() {
 		// All themes
 		ITheme[] themes = manager.getThemes();
 		assertNotNull(themes);
@@ -45,7 +45,7 @@ public class ThemeManagerTest implements ThemeIdConstants {
 	}
 
 	@Test
-	public void defaultThemeAssociation() {
+	void defaultThemeAssociation() {
 		// Default theme
 		ITheme theme = manager.getDefaultTheme();
 		assertNotNull(theme);
@@ -53,7 +53,7 @@ public class ThemeManagerTest implements ThemeIdConstants {
 	}
 
 	@Test
-	public void darkThemes() {
+	void darkThemes() {
 		// All themes for Dark E4 CSS Theme
 		ITheme[] darkThemes = manager.getThemes(true);
 		assertNotNull(darkThemes);

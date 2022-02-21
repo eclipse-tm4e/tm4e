@@ -13,12 +13,11 @@ package org.eclipse.tm4e.core.internal.css;
 
 import org.w3c.dom.DOMException;
 import org.w3c.dom.css.CSSPrimitiveValue;
-import org.w3c.dom.css.CSSValue;
 import org.w3c.dom.css.Counter;
 import org.w3c.dom.css.RGBColor;
 import org.w3c.dom.css.Rect;
 
-public abstract class CSSValueImpl implements CSSPrimitiveValue, CSSValue {
+public abstract class CSSValueImpl implements CSSPrimitiveValue {
 
 	// W3C CSSValue API methods
 

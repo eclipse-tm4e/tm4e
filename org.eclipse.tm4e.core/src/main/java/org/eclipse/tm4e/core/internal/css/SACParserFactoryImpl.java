@@ -10,6 +10,7 @@
  *******************************************************************************/
 package org.eclipse.tm4e.core.internal.css;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -47,7 +48,11 @@ public class SACParserFactoryImpl extends SACParserFactory {
 		String classNameParser = parsers.get(name);
 		if (classNameParser != null) {
 			Class<?> classParser = super.getClass().getClassLoader().loadClass(classNameParser);
-			return (Parser) classParser.newInstance();
+			try {
+				return (Parser) classParser.getDeclaredConstructor().newInstance();
+			} catch (InvocationTargetException|NoSuchMethodException ex) {
+				throw (InstantiationException)((new InstantiationException()).initCause(ex));
+			}
 		}
 		throw new IllegalAccessException("SAC parser with name=" + name
 				+ " was not registered into SAC parser factory.");

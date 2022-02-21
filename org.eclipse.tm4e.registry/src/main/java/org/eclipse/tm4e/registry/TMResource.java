@@ -79,8 +79,7 @@ public class TMResource implements ITMResource {
 	}
 
 	protected String getResourceContent() {
-		try {
-			InputStream in = this.getInputStream();
+		try (InputStream in = this.getInputStream()) {
 			if (in == null) {
 				return null;
 			}

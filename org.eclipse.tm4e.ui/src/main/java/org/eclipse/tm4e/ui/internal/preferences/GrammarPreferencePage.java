@@ -301,7 +301,9 @@ public class GrammarPreferencePage extends PreferencePage implements IWorkbenchP
 
 				// Snippet
 				ISnippet[] snippets = snippetManager.getSnippets(scopeName);
-				if (snippets != null && snippets.length > 0) {
+				if (snippets == null || snippets.length == 0) {
+					previewViewer.setText("");
+				} else {
 					// TODO: manage list of snippet for the given scope.
 					previewViewer.setText(snippets[0].getContent());
 				}

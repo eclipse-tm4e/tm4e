@@ -41,7 +41,7 @@ public class GrammarSuiteTest {
 
 	private static final File REPO_ROOT = new File("src/test/resources");
 
-	// TODO: fix thoses tests:
+	// TODO: fix those tests:
 	// It seems that problem comes from with encoding. OnigString should support UTF-16 like https://github.com/atom/node-oniguruma/blob/master/src/onig-string.cc 
 	private static final List<String> IGNORE_TESTS = List.of("TEST #24", "TEST #66");
 

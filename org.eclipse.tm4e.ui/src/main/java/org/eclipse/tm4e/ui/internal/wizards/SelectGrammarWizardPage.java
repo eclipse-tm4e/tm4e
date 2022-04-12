@@ -13,6 +13,7 @@ package org.eclipse.tm4e.ui.internal.wizards;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.InputStream;
 
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
@@ -135,8 +136,8 @@ public class SelectGrammarWizardPage extends AbstractWizardPage {
 		}
 		File f = new File(path);
 		Registry registry = new Registry();
-		try {
-			IGrammar grammar = registry.loadGrammarFromPathSync(f.getName(), new FileInputStream(f));
+		try(InputStream is = new FileInputStream(f)) {
+			IGrammar grammar = registry.loadGrammarFromPathSync(f.getName(), is);
 			if (grammar == null || grammar.getScopeName() == null) {
 				return new Status(IStatus.ERROR, TMUIPlugin.PLUGIN_ID,
 						TMUIMessages.SelectGrammarWizardPage_file_error_invalid);

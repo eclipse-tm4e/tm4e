@@ -1,13 +1,13 @@
 /**
- *  Copyright (c) 2015-2017 Angelo ZERR.
+ * Copyright (c) 2015-2017 Angelo ZERR.
  * This program and the accompanying materials are made
  * available under the terms of the Eclipse Public License 2.0
  * which is available at https://www.eclipse.org/legal/epl-2.0/
  *
  * SPDX-License-Identifier: EPL-2.0
  *
- *  Contributors:
- *  Angelo Zerr <angelo.zerr@gmail.com> - initial API and implementation
+ * Contributors:
+ * Angelo Zerr <angelo.zerr@gmail.com> - initial API and implementation
  */
 package org.eclipse.tm4e.ui.utils;
 
@@ -109,7 +109,7 @@ public class ContentTypeHelper {
 			if (buffer.isDirty()) {
 				// Buffer is dirty (content of the filesystem is not synch with
 				// the editor content), use IDocument content.
-				try (InputStream input = new DocumentInputStream(buffer.getDocument())){
+				try (InputStream input = new DocumentInputStream(buffer.getDocument())) {
 					IContentType[] contentTypesForInput = Platform.getContentTypeManager().findContentTypesFor(input, fileName);
 					if (contentTypesForInput != null) {
 						contentTypes.addAll(Arrays.asList(contentTypesForInput));
@@ -119,7 +119,7 @@ public class ContentTypeHelper {
 			}
 
 			// Buffer is synchronized with filesystem content
-			try (InputStream contents = getContents(buffer)){
+			try (InputStream contents = getContents(buffer)) {
 				contentTypes.addAll(Arrays.asList(Platform.getContentTypeManager().findContentTypesFor(contents, fileName)));
 				return new ContentTypeInfo(fileName, contentTypes.toArray(IContentType[]::new));
 			} catch (Throwable e) {
@@ -164,21 +164,15 @@ public class ContentTypeHelper {
 		IEditorInput editorInput = getEditorInput(document);
 		if (editorInput != null) {
 			if (editorInput instanceof IStorageEditorInput) {
-				InputStream input = null;
 				try {
 					IStorage storage = ((IStorageEditorInput) editorInput).getStorage();
 					String fileName = storage.getName();
-					input = storage.getContents();
-					return new ContentTypeInfo(fileName,
-							Platform.getContentTypeManager().findContentTypesFor(input, fileName));
+					try (InputStream input = storage.getContents()) {
+						return new ContentTypeInfo(fileName,
+								Platform.getContentTypeManager().findContentTypesFor(input, fileName));
+					}
 				} catch (Exception e) {
 					return null;
-				} finally {
-					try {
-						if (input != null)
-							input.close();
-					} catch (IOException x) {
-					}
 				}
 			} else {
 				// TODO: manage other type of IEditorInput

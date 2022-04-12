@@ -1,5 +1,5 @@
 /**
- *  Copyright (c) 2015-2017 Angelo ZERR.
+ * Copyright (c) 2015-2017 Angelo ZERR.
  * This program and the accompanying materials are made
  * available under the terms of the Eclipse Public License 2.0
  * which is available at https://www.eclipse.org/legal/epl-2.0/
@@ -11,8 +11,8 @@
  * Initial license: MIT
  *
  * Contributors:
- *  - Microsoft Corporation: Initial code, written in TypeScript, licensed under MIT license
- *  - Angelo Zerr <angelo.zerr@gmail.com> - translation and adaptation to Java
+ * - Microsoft Corporation: Initial code, written in TypeScript, licensed under MIT license
+ * - Angelo Zerr <angelo.zerr@gmail.com> - translation and adaptation to Java
  */
 package org.eclipse.tm4e.core.registry;
 
@@ -122,7 +122,9 @@ public class Registry {
 	}
 
 	public IGrammar loadGrammarFromPathSync(File file) throws Exception {
-		return loadGrammarFromPathSync(file.getPath(), new FileInputStream(file));
+		try (InputStream is = new FileInputStream(file)) {
+			return loadGrammarFromPathSync(file.getPath(), is);
+		}
 	}
 
 	public IGrammar loadGrammarFromPathSync(String path, InputStream in) throws Exception {

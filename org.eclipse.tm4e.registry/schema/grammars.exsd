@@ -6,7 +6,7 @@
          <meta.schema plugin="org.eclipse.tm4e.registry" id="grammars" name="TextMate grammars"/>
       </appinfo>
       <documentation>
-         Extension point to register TextMate grammars *.tmLanguage, *.json (VSCode format).
+         Extension point to register TextMate grammars *.tmLanguage, *.json (VSCode format), *.YAML-tmLanguage, *.yaml, *.yml.
       </documentation>
    </annotation>
 

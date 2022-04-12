@@ -127,8 +127,7 @@ public class Theme extends TMResource implements ITheme {
 
 	private ITokenProvider getTokenProvider() {
 		if (tokenProvider == null) {
-			try {
-				InputStream in = super.getInputStream();
+			try(InputStream in = super.getInputStream()) {
 				if (in == null) {
 					return null;
 				}

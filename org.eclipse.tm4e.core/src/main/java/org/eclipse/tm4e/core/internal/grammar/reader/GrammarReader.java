@@ -1,5 +1,5 @@
 /**
- *  Copyright (c) 2015-2017 Angelo ZERR.
+ * Copyright (c) 2015-2017 Angelo ZERR.
  * This program and the accompanying materials are made
  * available under the terms of the Eclipse Public License 2.0
  * which is available at https://www.eclipse.org/legal/epl-2.0/
@@ -11,8 +11,8 @@
  * Initial license: MIT
  *
  * Contributors:
- *  - Microsoft Corporation: Initial code, written in TypeScript, licensed under MIT license
- *  - Angelo Zerr <angelo.zerr@gmail.com> - translation and adaptation to Java
+ * - Microsoft Corporation: Initial code, written in TypeScript, licensed under MIT license
+ * - Angelo Zerr <angelo.zerr@gmail.com> - translation and adaptation to Java
  */
 package org.eclipse.tm4e.core.internal.grammar.reader;
 
@@ -20,6 +20,7 @@ import java.io.InputStream;
 
 import org.eclipse.tm4e.core.internal.parser.json.JSONPListParser;
 import org.eclipse.tm4e.core.internal.parser.xml.XMLPListParser;
+import org.eclipse.tm4e.core.internal.parser.yaml.YamlPListParser;
 import org.eclipse.tm4e.core.internal.types.IRawGrammar;
 
 /**
@@ -55,15 +56,36 @@ public class GrammarReader {
 		}
 	};
 
+	public static final IGrammarParser YAML_PARSER = new IGrammarParser() {
+
+		private final YamlPListParser<IRawGrammar> parser = new YamlPListParser<>(false);
+
+		@Override
+		public IRawGrammar parse(InputStream contents) throws Exception {
+			return parser.parse(contents);
+		}
+	};
+
 	public static IRawGrammar readGrammarSync(String filePath, InputStream in) throws Exception {
 		SyncGrammarReader reader = new SyncGrammarReader(in, getGrammarParser(filePath));
 		return reader.load();
 	}
 
 	private static IGrammarParser getGrammarParser(String filePath) {
-		if (filePath.endsWith(".json")) {
+		String extension = filePath.substring(filePath.lastIndexOf('.') + 1).trim().toLowerCase();
+
+		switch (extension) {
+
+		case "json":
 			return JSON_PARSER;
+
+		case "yaml":
+		case "yaml-tmlanguage":
+		case "yml":
+			return YAML_PARSER;
+
+		default:
+			return XML_PARSER;
 		}
-		return XML_PARSER;
 	}
 }

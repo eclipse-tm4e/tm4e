@@ -45,7 +45,7 @@ public class SelectGrammarWizardPage extends AbstractWizardPage {
 
 	private static final String PAGE_NAME = SelectGrammarWizardPage.class.getName();
 
-	protected static final String[] TEXTMATE_EXTENSIONS = {"*.tmLanguage","*.json"};
+	protected static final String[] TEXTMATE_EXTENSIONS = {"*.tmLanguage","*.json","*.YAML-tmLanguage","*.yaml","*.yml"};
 
 	private Button browseFileSystemButton;
 	private Button browseWorkspaceButton;
@@ -104,7 +104,7 @@ public class SelectGrammarWizardPage extends AbstractWizardPage {
 				// TODO
 			}
 		});
-		
+
 		grammarInfoWidget = new GrammarInfoWidget(parent, SWT.NONE);
 		GridData data = new GridData(GridData.FILL_HORIZONTAL);
 		data.horizontalSpan = 2;

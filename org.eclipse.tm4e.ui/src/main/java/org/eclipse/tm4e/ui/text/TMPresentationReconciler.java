@@ -111,7 +111,7 @@ public class TMPresentationReconciler implements IPresentationReconciler {
 
 	private IPreferenceChangeListener themeChangeListener;
 
-	private List<ITMPresentationReconcilerListener> listeners;
+	private final List<ITMPresentationReconcilerListener> listeners = new ArrayList<>();
 
 	private boolean initializeViewerColors;
 
@@ -133,7 +133,6 @@ public class TMPresentationReconciler implements IPresentationReconciler {
 		this.defaultToken = new Token(null);
 		this.internalListener = new InternalListener();
 		this.fDefaultTextAttribute = new TextAttribute(null);
-		listeners = null;
 		if (TMEclipseRegistryPlugin.isDebugOptionEnabled("org.eclipse.tm4e.ui/debug/log/GenerateTest")) {
 			addTMPresentationReconcilerListener(new TMPresentationReconcilerTestGenerator());
 		}
@@ -178,9 +177,6 @@ public class TMPresentationReconciler implements IPresentationReconciler {
 	class InternalListener implements ITextInputListener, IModelTokensChangedListener, ITextListener {
 
 		private void fireInstall(ITextViewer viewer, IDocument document) {
-			if (listeners == null) {
-				return;
-			}
 			synchronized (listeners) {
 				for (ITMPresentationReconcilerListener listener : listeners) {
 					listener.install(viewer, document);
@@ -189,9 +185,6 @@ public class TMPresentationReconciler implements IPresentationReconciler {
 		}
 
 		private void fireUninstall() {
-			if (listeners == null) {
-				return;
-			}
 			synchronized (listeners) {
 				for (ITMPresentationReconcilerListener listener : listeners) {
 					listener.uninstall();
@@ -680,9 +673,6 @@ public class TMPresentationReconciler implements IPresentationReconciler {
 	 *            the TextMate presentation reconciler listener to add.
 	 */
 	public void addTMPresentationReconcilerListener(ITMPresentationReconcilerListener listener) {
-		if (listeners == null) {
-			listeners = new ArrayList<>();
-		}
 		synchronized (listeners) {
 			if (!listeners.contains(listener)) {
 				listeners.add(listener);
@@ -697,9 +687,6 @@ public class TMPresentationReconciler implements IPresentationReconciler {
 	 *            the TextMate presentation reconciler listener to remove.
 	 */
 	public void removeTMPresentationReconcilerListener(ITMPresentationReconcilerListener listener) {
-		if (listeners == null) {
-			return;
-		}
 		synchronized (listeners) {
 			listeners.remove(listener);
 		}
@@ -712,9 +699,6 @@ public class TMPresentationReconciler implements IPresentationReconciler {
 	 * @param error
 	 */
 	private void fireColorize(TextPresentation presentation, Throwable error) {
-		if (listeners == null) {
-			return;
-		}
 		synchronized (listeners) {
 			for (ITMPresentationReconcilerListener listener : listeners) {
 				listener.colorize(presentation, error);
@@ -726,7 +710,8 @@ public class TMPresentationReconciler implements IPresentationReconciler {
 		if (editorPart == null) {
 			return null;
 		}
-		@Nullable ITextOperationTarget target = editorPart.getAdapter(ITextOperationTarget.class);
+		@Nullable
+		ITextOperationTarget target = editorPart.getAdapter(ITextOperationTarget.class);
 		if (target instanceof ITextViewer) {
 			ITextViewer textViewer = ((ITextViewer) target);
 			return TMPresentationReconciler.getTMPresentationReconciler(textViewer);
@@ -747,7 +732,7 @@ public class TMPresentationReconciler implements IPresentationReconciler {
 			Field field = SourceViewer.class.getDeclaredField("fPresentationReconciler");
 			if (field != null) {
 				field.setAccessible(true);
-				Object presentationReconciler =  field.get(textViewer);
+				Object presentationReconciler = field.get(textViewer);
 				//field is IPresentationRecounciler, looking for TMPresentationReconciler implementation
 				return presentationReconciler instanceof TMPresentationReconciler
 						? (TMPresentationReconciler) presentationReconciler

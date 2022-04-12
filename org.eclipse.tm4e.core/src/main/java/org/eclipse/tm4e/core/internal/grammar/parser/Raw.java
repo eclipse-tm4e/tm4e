@@ -302,4 +302,28 @@ public class Raw extends HashMap<String, Object> implements IRawRepository, IRaw
 		return CloneUtils.clone(this);
 	}
 
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (!super.equals(obj))
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Raw other = (Raw) obj;
+		if (fileTypes == null) {
+			if (other.fileTypes != null)
+				return false;
+		} else if (!fileTypes.equals(other.fileTypes))
+			return false;
+		return true;
+	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = super.hashCode();
+		result = prime * result + ((fileTypes == null) ? 0 : fileTypes.hashCode());
+		return result;
+	}
 }

@@ -10,18 +10,17 @@
  * Contributors:
  * Sebastian Thomschke - initial implementation
  */
-package org.eclipse.tm4e.core.internal.grammar.parser;
+package org.eclipse.tm4e.core.internal.grammar.reader;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.io.InputStream;
 
 import org.eclipse.tm4e.core.Data;
-import org.eclipse.tm4e.core.internal.grammar.reader.GrammarReader;
 import org.eclipse.tm4e.core.internal.types.IRawGrammar;
 import org.junit.jupiter.api.Test;
 
-public class PlistFormatsTest {
+public class GrammarReaderTest {
 
 	private IRawGrammar loadGrammar(String path) throws Exception {
 		try (InputStream is = Data.class.getResourceAsStream(path)) {
@@ -29,13 +28,20 @@ public class PlistFormatsTest {
 		}
 	}
 
+	/**
+	 * Loads the same TextMate grammar in different formats and checks
+	 * loading them results in equal IRawGrammar objects.
+	 */
 	@Test
-	public void testPlistFormats() throws Exception {
+	public void testLoadDifferentPlistFormats() throws Exception {
 		IRawGrammar grammarFromXML = loadGrammar("JavaScript.tmLanguage");
 		IRawGrammar grammarFromJSON = loadGrammar("JavaScript.tmLanguage.json");
 		IRawGrammar grammarFromYAML = loadGrammar("JavaScript.tmLanguage.yaml");
 
+		assertNotNull(grammarFromXML);
+		assertFalse(grammarFromXML.getFileTypes().isEmpty());
+
 		assertEquals(grammarFromXML, grammarFromJSON);
-		assertEquals(grammarFromXML, grammarFromYAML);
+		assertEquals(grammarFromJSON, grammarFromYAML);
 	}
 }

@@ -1,13 +1,13 @@
 /**
- *  Copyright (c) 2015-2017 Angelo ZERR.
+ * Copyright (c) 2015-2017 Angelo ZERR.
  * This program and the accompanying materials are made
  * available under the terms of the Eclipse Public License 2.0
  * which is available at https://www.eclipse.org/legal/epl-2.0/
  *
  * SPDX-License-Identifier: EPL-2.0
  *
- *  Contributors:
- *  Angelo Zerr <angelo.zerr@gmail.com> - initial API and implementation
+ * Contributors:
+ * Angelo Zerr <angelo.zerr@gmail.com> - initial API and implementation
  */
 package org.eclipse.tm4e.core.grammar;
 
@@ -41,7 +41,6 @@ public class GrammarInjectionTest {
 			"Token from 39 to 40 with scopes [source.ts, meta.decorator.ts, meta.object-literal.ts, punctuation.definition.block.ts]",
 			"Token from 40 to 41 with scopes [source.ts, meta.decorator.ts, meta.brace.round.ts]" };
 
-
 	@Test
 	public void angular2TokenizeLine() throws Exception {
 		Registry registry = new Registry(new IRegistryOptions() {
@@ -58,16 +57,19 @@ public class GrammarInjectionTest {
 
 			@Override
 			public String getFilePath(String scopeName) {
-				if ("source.js".equals(scopeName)) {
-					return "JavaScript.tmLanguage.json";
-				} else if ("text.html.basic".equals(scopeName)) {
-					return "html.json";
-				} else if ("source.ts".equals(scopeName)) {
-					return "TypeScript.tmLanguage.json";
-				} else if ("template.ng".equals(scopeName)) {
-					return "template.ng.json";
-				} else if ("styles.ng".equals(scopeName)) {
-					return "styles.ng.json";
+				if (scopeName != null) {
+					switch (scopeName) {
+					case "source.js":
+						return "JavaScript.tmLanguage.json";
+					case "text.html.basic":
+						return "html.json";
+					case "source.ts":
+						return "TypeScript.tmLanguage.json";
+					case "template.ng":
+						return "template.ng.json";
+					case "styles.ng":
+						return "styles.ng.json";
+					}
 				}
 				return null;
 			}

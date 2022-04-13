@@ -1,13 +1,13 @@
 /**
- *  Copyright (c) 2015-2017 Angelo ZERR.
+ * Copyright (c) 2015-2017 Angelo ZERR.
  * This program and the accompanying materials are made
  * available under the terms of the Eclipse Public License 2.0
  * which is available at https://www.eclipse.org/legal/epl-2.0/
  *
  * SPDX-License-Identifier: EPL-2.0
  *
- *  Contributors:
- *  Angelo Zerr <angelo.zerr@gmail.com> - initial API and implementation
+ * Contributors:
+ * Angelo Zerr <angelo.zerr@gmail.com> - initial API and implementation
  */
 package org.eclipse.tm4e.registry.internal;
 
@@ -66,21 +66,28 @@ public class GrammarRegistryManager extends AbstractGrammarRegistryManager {
 				.getConfigurationElementsFor(TMEclipseRegistryPlugin.PLUGIN_ID, EXTENSION_GRAMMARS);
 		for (IConfigurationElement ce : cf) {
 			String extensionName = ce.getName();
-			if (XMLConstants.GRAMMAR_ELT.equals(extensionName)) {
+			switch (extensionName) {
+			case XMLConstants.GRAMMAR_ELT:
 				super.registerGrammarDefinition(new GrammarDefinition(ce));
-			} else if (XMLConstants.INJECTION_ELT.equals(extensionName)) {
+				break;
+			case XMLConstants.INJECTION_ELT: {
 				String scopeName = ce.getAttribute(XMLConstants.SCOPE_NAME_ATTR);
 				String injectTo = ce.getAttribute(XMLConstants.INJECT_TO_ATTR);
 				super.registerInjection(scopeName, injectTo);
-			} else if (XMLConstants.SCOPE_NAME_CONTENT_TYPE_BINDING_ELT.equals(extensionName)) {
+				break;
+			}
+			case XMLConstants.SCOPE_NAME_CONTENT_TYPE_BINDING_ELT: {
 				String contentTypeId = ce.getAttribute(XMLConstants.CONTENT_TYPE_ID_ATTR);
 				IContentType contentType = Platform.getContentTypeManager().getContentType(contentTypeId);
 				if (contentType == null) {
-					Platform.getLog(getClass()).warn("No content-type found with id='" + contentTypeId + "', ignoring TM4E association.");
+					Platform.getLog(getClass())
+							.warn("No content-type found with id='" + contentTypeId + "', ignoring TM4E association.");
 				} else {
 					String scopeName = ce.getAttribute(XMLConstants.SCOPE_NAME_ATTR);
 					super.registerContentTypeBinding(contentType, scopeName);
 				}
+				break;
+			}
 			}
 		}
 	}

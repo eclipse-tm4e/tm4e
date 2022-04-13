@@ -1,16 +1,15 @@
 /**
- *  Copyright (c) 2015, 2021 Angelo ZERR and others.
+ * Copyright (c) 2015, 2021 Angelo ZERR and others.
  * This program and the accompanying materials are made
  * available under the terms of the Eclipse Public License 2.0
  * which is available at https://www.eclipse.org/legal/epl-2.0/
  *
  * SPDX-License-Identifier: EPL-2.0
  *
- *  Contributors:
- *  Angelo Zerr <angelo.zerr@gmail.com> - initial API and implementation
+ * Contributors:
+ * Angelo Zerr <angelo.zerr@gmail.com> - initial API and implementation
  */
 package org.eclipse.tm4e.ui.internal.themes;
-
 
 import java.util.Arrays;
 import java.util.stream.Collectors;
@@ -82,10 +81,13 @@ public class ThemeManager extends AbstractThemeManager {
 				EXTENSION_THEMES);
 		for (IConfigurationElement ce : cf) {
 			String name = ce.getName();
-			if (THEME_ELT.equals(name)) {
+			switch (name) {
+			case THEME_ELT:
 				super.registerTheme(new Theme(ce));
-			} else if (THEME_ASSOCIATION_ELT.equals(name)) {
+				break;
+			case THEME_ASSOCIATION_ELT:
 				super.registerThemeAssociation(new ThemeAssociation(ce));
+				break;
 			}
 		}
 	}
@@ -120,15 +122,15 @@ public class ThemeManager extends AbstractThemeManager {
 		// Save Themes in the
 		// "${workspace_loc}/metadata/.plugins/org.eclipse.core.runtime/.settings/org.eclipse.tm4e.ui.prefs"
 		prefs.put(PreferenceConstants.THEMES, Arrays.stream(getThemes()) //
-			.filter(t -> t.getPluginId() == null) //
-			.map(theme -> {
-				JsonObject json = new JsonObject();
-				json.addProperty("id", theme.getId());
-				json.addProperty("path", theme.getPath());
-				json.addProperty("dark", theme.isDark());
-				return json;
+				.filter(t -> t.getPluginId() == null) //
+				.map(theme -> {
+					JsonObject json = new JsonObject();
+					json.addProperty("id", theme.getId());
+					json.addProperty("path", theme.getPath());
+					json.addProperty("dark", theme.isDark());
+					return json;
 			}).collect(JsonArray::new, (JsonArray array, JsonObject object) -> array.add(object), (r,r1) -> {})
-			.toString());
+				.toString());
 
 		// Save Theme associations in the
 		// "${workspace_loc}/metadata/.plugins/org.eclipse.core.runtime/.settings/org.eclipse.tm4e.ui.prefs"
@@ -143,7 +145,7 @@ public class ThemeManager extends AbstractThemeManager {
 	/**
 	 * Add preference change listener to observe changed of Eclipse E4 Theme and
 	 * TextMate theme association with grammar.
-	 * 
+	 *
 	 * @param themeChangeListener
 	 */
 	public void addPreferenceChangeListener(IPreferenceChangeListener themeChangeListener) {
@@ -162,7 +164,7 @@ public class ThemeManager extends AbstractThemeManager {
 	/**
 	 * Remove preference change listener to observe changed of Eclipse E4 Theme and
 	 * TextMate theme association with grammar.
-	 * 
+	 *
 	 * @param themeChangeListener
 	 */
 	public void removePreferenceChangeListener(IPreferenceChangeListener themeChangeListener) {

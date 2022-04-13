@@ -53,7 +53,7 @@ public class ColorManager {
 
 	/**
 	 * Get the color from preferences store using a token.
-	 * 
+	 *
 	 * @param tokenId
 	 *            name of the token
 	 * @return Color matching token
@@ -64,7 +64,7 @@ public class ColorManager {
 
 	/**
 	 * The method verifies that a color is defined in a preferences store using a token.
-	 * 
+	 *
 	 * @param tokenId
 	 *            name of the token
 	 * @return color is user defined or not
@@ -72,16 +72,15 @@ public class ColorManager {
 	public boolean isColorUserDefined(String tokenId) {
 		String systemDefaultToken = getSystemDefaultToken(tokenId);
 
-		return systemDefaultToken != ""
-				? !PreferenceUtils.getEditorsPreferenceStore().getBoolean(systemDefaultToken, true)
-				: true; // if system default token doesn't exists
+		return "".equals(systemDefaultToken) || // returns true if system default token doesn't exists
+				!PreferenceUtils.getEditorsPreferenceStore().getBoolean(systemDefaultToken, true);
 	}
 
 	/**
 	 * Get high priority color in text editors.
 	 * See Issue #176
 	 * Priority: User defined > TM defined > Eclipse color
-	 * 
+	 *
 	 * @param themeColor
 	 *            color defined in TM theme
 	 * @param tokenId
@@ -100,7 +99,7 @@ public class ColorManager {
 
 	/**
 	 * Returns a token for the system default value of the given token.
-	 * 
+	 *
 	 * @param tokenId
 	 *            name of the token
 	 * @return system default token or empty string if doesn't exist
@@ -122,7 +121,7 @@ public class ColorManager {
 
 	/**
 	 * Convert String to RGB.
-	 * 
+	 *
 	 * @param value
 	 *            string value of rgb
 	 * @return RGB value

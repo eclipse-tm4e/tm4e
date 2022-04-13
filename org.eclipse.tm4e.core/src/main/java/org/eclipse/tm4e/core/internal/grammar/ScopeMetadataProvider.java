@@ -164,14 +164,15 @@ public void onDidChangeTheme() {
 			return StandardTokenType.Other;
 		}
 		String group = m.group();
-		if (COMMENT_TOKEN_TYPE.equals(group)) {
+		switch (group) {
+		case COMMENT_TOKEN_TYPE:
 			return StandardTokenType.Comment;
-		} else if (STRING_TOKEN_TYPE.equals(group)) {
+		case STRING_TOKEN_TYPE:
 			return StandardTokenType.String;
-		}
-		if (REGEX_TOKEN_TYPE.equals(group)) {
+		case REGEX_TOKEN_TYPE:
 			return StandardTokenType.RegEx;
+		default:
+			throw new TMException("Unexpected match for standard token type: " + group);
 		}
-		throw new TMException("Unexpected match for standard token type!");
 	}
 }

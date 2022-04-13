@@ -1,13 +1,13 @@
 /**
- *  Copyright (c) 2015-2017 Angelo ZERR.
+ * Copyright (c) 2015-2017 Angelo ZERR.
  * This program and the accompanying materials are made
  * available under the terms of the Eclipse Public License 2.0
  * which is available at https://www.eclipse.org/legal/epl-2.0/
  *
  * SPDX-License-Identifier: EPL-2.0
  *
- *  Contributors:
- *  Angelo Zerr <angelo.zerr@gmail.com> - initial API and implementation
+ * Contributors:
+ * Angelo Zerr <angelo.zerr@gmail.com> - initial API and implementation
  */
 package org.eclipse.tm4e.core.internal.css;
 
@@ -89,17 +89,21 @@ public class CSSDocumentHandler implements DocumentHandler {
 
 	@Override
 	public void property(String name, LexicalUnit value, boolean arg2) throws CSSException {
-		if (currentStyle != null) {
-			if ("color".equals(name)) {
+		if (currentStyle != null && name != null) {
+			switch (name) {
+			case "color":
 				currentStyle.setColor(createRGB(value));
-			} else if ("background-color".equals(name)) {
+				break;
+			case "background-color":
 				currentStyle.setBackgroundColor(createRGB(value));
-			} else if ("font-weight".equals(name)) {
+				break;
+			case "font-weight":
 				currentStyle.setBold(value.getStringValue().toUpperCase().contains("BOLD"));
-			} else if ("font-style".equals(name)) {
+				break;
+			case "font-style":
 				currentStyle.setItalic(value.getStringValue().toUpperCase().contains("ITALIC"));
-			}
-			if ("text-decoration".equals(name)) {
+				break;
+			case "text-decoration":
 				String decoration = value.getStringValue().toUpperCase();
 				if (decoration.contains("UNDERLINE")) {
 					currentStyle.setUnderline(true);
@@ -107,6 +111,7 @@ public class CSSDocumentHandler implements DocumentHandler {
 				if (decoration.contains("LINE-THROUGH")) {
 					currentStyle.setStrikeThrough(true);
 				}
+				break;
 			}
 		}
 	}

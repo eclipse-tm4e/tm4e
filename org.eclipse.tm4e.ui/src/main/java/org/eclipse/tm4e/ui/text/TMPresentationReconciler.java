@@ -1,15 +1,15 @@
 /**
- *  Copyright (c) 2015-2019 Angelo ZERR.
+ * Copyright (c) 2015-2019 Angelo ZERR.
  * This program and the accompanying materials are made
  * available under the terms of the Eclipse Public License 2.0
  * which is available at https://www.eclipse.org/legal/epl-2.0/
  *
  * SPDX-License-Identifier: EPL-2.0
  *
- *  Contributors:
- *  Angelo Zerr <angelo.zerr@gmail.com> - initial API and implementation
- *  Pierre-Yves B. - Issue #220 Switch to theme only works once for open editor
- *  IBM Corporation Gerald Mitchell <gerald.mitchell@ibm.com> - bug fix
+ * Contributors:
+ * Angelo Zerr <angelo.zerr@gmail.com> - initial API and implementation
+ * Pierre-Yves B. - Issue #220 Switch to theme only works once for open editor
+ * IBM Corporation Gerald Mitchell <gerald.mitchell@ibm.com> - bug fix
  */
 package org.eclipse.tm4e.ui.text;
 
@@ -149,10 +149,13 @@ public class TMPresentationReconciler implements IPresentationReconciler {
 		@Override
 		public void preferenceChange(PreferenceChangeEvent event) {
 			IThemeManager themeManager = TMUIPlugin.getThemeManager();
-			if (PreferenceConstants.E4_THEME_ID.equals(event.getKey())) {
+			switch (event.getKey()) {
+			case PreferenceConstants.E4_THEME_ID:
 				preferenceThemeChange((String) event.getNewValue(), themeManager);
-			} else if (PreferenceConstants.THEME_ASSOCIATIONS.equals(event.getKey())) {
+				break;
+			case PreferenceConstants.THEME_ASSOCIATIONS:
 				preferenceThemeChange(PreferenceUtils.getE4PreferenceCSSThemeId(), themeManager);
+				break;
 			}
 		}
 
@@ -367,14 +370,14 @@ public class TMPresentationReconciler implements IPresentationReconciler {
 				return;
 			}
 			ITMModel model = event.model;
-			if (! (model instanceof TMDocumentModel)) {
+			if (!(model instanceof TMDocumentModel)) {
 				return;
 			}
 			TMDocumentModel docModel = (TMDocumentModel) model;
 			for (Range range : event.ranges) {
 				try {
 					int length = document.getLineOffset(range.toLineNumber - 1) + document.getLineLength(range.toLineNumber - 1) - document.getLineOffset(range.fromLineNumber - 1);
-					IRegion region = new Region(document.getLineOffset(range.fromLineNumber -1), length);
+					IRegion region = new Region(document.getLineOffset(range.fromLineNumber - 1), length);
 					TMPresentationReconciler.this.colorize(region, docModel);
 				} catch (BadLocationException ex) {
 					TMUIPlugin.getDefault().getLog().log(new Status(IStatus.ERROR, TMUIPlugin.PLUGIN_ID, ex.getMessage(), ex));
@@ -431,7 +434,7 @@ public class TMPresentationReconciler implements IPresentationReconciler {
 			applyThemeEditor();
 			IDocument document = viewer.getDocument();
 			ITMModel model = getTMModelManager().connect(document);
-			if (! (model instanceof TMDocumentModel)) {
+			if (!(model instanceof TMDocumentModel)) {
 				return;
 			}
 			TMDocumentModel docModel = (TMDocumentModel) model;
@@ -483,7 +486,7 @@ public class TMPresentationReconciler implements IPresentationReconciler {
 		return TMUIPlugin.getTMModelManager();
 	}
 
-	void colorize(@NonNull IRegion damage, @NonNull TMDocumentModel model) throws BadLocationException{
+	void colorize(@NonNull IRegion damage, @NonNull TMDocumentModel model) throws BadLocationException {
 		IDocument document = model.getDocument();
 		final int fromLineNumber = document.getLineOfOffset(damage.getOffset());
 		final int toLineNumber = document.getLineOfOffset(damage.getOffset() + damage.getLength());

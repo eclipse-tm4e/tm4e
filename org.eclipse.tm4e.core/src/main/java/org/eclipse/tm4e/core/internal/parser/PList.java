@@ -1,13 +1,13 @@
 /**
- *  Copyright (c) 2015-2017 Angelo ZERR.
+ * Copyright (c) 2015-2017 Angelo ZERR.
  * This program and the accompanying materials are made
  * available under the terms of the Eclipse Public License 2.0
  * which is available at https://www.eclipse.org/legal/epl-2.0/
  *
  * SPDX-License-Identifier: EPL-2.0
  *
- *  Contributors:
- *  Angelo Zerr <angelo.zerr@gmail.com> - initial API and implementation
+ * Contributors:
+ * Angelo Zerr <angelo.zerr@gmail.com> - initial API and implementation
  */
 package org.eclipse.tm4e.core.internal.parser;
 
@@ -36,15 +36,20 @@ public class PList<T> extends DefaultHandler {
 
 	@Override
 	public void startElement(String uri, String localName, String qName, Attributes attributes) throws SAXException {
-		if ("dict".equals(localName)) {
+		switch (localName) {
+		case "dict":
 			this.currObject = create(currObject, false);
-		} else if ("array".equals(localName)) {
+			break;
+		case "array":
 			this.currObject = create(currObject, true);
-		} else if ("key".equals(localName)) {
+			break;
+		case "key":
 			if (currObject != null) {
 				currObject.setLastKey(null);
 			}
+			break;
 		}
+
 		this.text = new StringBuilder("");
 		super.startElement(uri, localName, qName, attributes);
 	}
@@ -65,48 +70,60 @@ public class PList<T> extends DefaultHandler {
 	private void endElement(String tagName) {
 		Object value = null;
 		String text = this.text.toString();
-		if ("key".equals(tagName)) {
+
+		switch (tagName) {
+		case "key":
 			if (currObject == null || currObject.isValueAsArray()) {
 				errors.add("key can only be used inside an open dict element");
 				return;
 			}
 			currObject.setLastKey(text);
 			return;
-		} else if ("dict".equals(tagName) || "array".equals(tagName)) {
+		case "dict":
+		case "array":
 			if (currObject == null) {
 				errors.add(tagName + " closing tag found, without opening tag");
 				return;
 			}
 			value = currObject.getValue();
 			currObject = currObject.parent;
-		} else if ("string".equals(tagName) || "data".equals(tagName)) {
+			break;
+		case "string":
+		case "data":
 			value = text;
-		} else if ("date".equals(tagName)) {
+			break;
+		case "date":
 			// TODO : parse date
-		} else if ("integer".equals(tagName)) {
+			break;
+		case "integer":
 			try {
 				value = Integer.parseInt(text);
 			} catch (NumberFormatException e) {
 				errors.add(text + " is not a integer");
 				return;
 			}
-		} else if ("real".equals(tagName)) {
+			break;
+		case "real":
 			try {
 				value = Float.parseFloat(text);
 			} catch (NumberFormatException e) {
 				errors.add(text + " is not a float");
 				return;
 			}
-		} else if ("true".equals(tagName)) {
+			break;
+		case "true":
 			value = true;
-		} else if ("false".equals(tagName)) {
+			break;
+		case "false":
 			value = false;
-		} else if ("plist".equals(tagName)) {
+			break;
+		case "plist":
 			return;
-		} else {
+		default:
 			errors.add("Invalid tag name: " + tagName);
 			return;
 		}
+
 		if (currObject == null) {
 			result = (T) value;
 		} else if (currObject.isValueAsArray()) {

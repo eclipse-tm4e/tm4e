@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2015-2019 Angelo ZERR.
+ * Copyright (c) 2015-2022 Angelo ZERR.
  * This program and the accompanying materials are made
  * available under the terms of the Eclipse Public License 2.0
  * which is available at https://www.eclipse.org/legal/epl-2.0/
@@ -302,6 +302,18 @@ public class TMPresentationReconciler implements IPresentationReconciler {
 				if (model == null) {
 					return;
 				}
+
+				// It's possible that there are two or more SourceViewers opened for the same document,
+				// so when one of them is closed the existing TMModel is also "closed" and its TokenizerThread 
+				// is interrupted and terminated.
+				// In this case, in order to let the others Source Viewers to continue working  a new 
+				// TMModel object is to be created for the document, so it should be initialized
+				// with the existing grammar as well as new ModelTokenListener is to be added
+				if (TMPresentationReconciler.this.grammar != null) {
+					model.setGrammar(TMPresentationReconciler.this.grammar);
+					model.addModelTokensChangedListener(this);
+				}
+
 				try {
 					TMPresentationReconciler.this.colorize(region, (TMDocumentModel) model);
 				} catch (BadLocationException e1) {

@@ -35,7 +35,6 @@ class LineTokens {
 	 */
 	private final List<IToken> tokens;
 
-
 	private final boolean emitBinaryTokens;
 
 	/**
@@ -84,10 +83,11 @@ class LineTokens {
 
 		List<String> scopes = scopesList.generateScopes();
 
-		if (this.lineText != null) {
-			LOGGER.info("  token: |" + this.lineText.substring(this.lastTokenEndIndex >= 0 ? this.lastTokenEndIndex : 0, endIndex).replaceAll("\n", "\\n") + '|');
+		if (LOGGER.isLoggable(Level.FINEST) && this.lineText != null) {
+			LOGGER.finest("  token: |"
+					+ this.lineText.substring(this.lastTokenEndIndex >= 0 ? this.lastTokenEndIndex : 0, endIndex).replaceAll("\n", "\\n") + '|');
 			for (String scope : scopes) {
-				LOGGER.info("      * " + scope);
+				LOGGER.finest("      * " + scope);
 			}
 		}
 		this.tokens.add(new Token(this.lastTokenEndIndex >= 0 ? this.lastTokenEndIndex : 0, endIndex, scopes));

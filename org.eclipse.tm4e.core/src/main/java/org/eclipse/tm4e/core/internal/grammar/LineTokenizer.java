@@ -18,6 +18,7 @@ package org.eclipse.tm4e.core.internal.grammar;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.eclipse.tm4e.core.grammar.GrammarHelper;
@@ -104,7 +105,9 @@ class LineTokenizer {
 	}
 
 	private void scanNext() {
-		LOGGER.finest("@@scanNext: |" + lineText.string.replaceAll("\n", "\\n").substring(linePos) + '|');
+		if (LOGGER.isLoggable(Level.FINEST)) {
+			LOGGER.finest("@@scanNext: |" + lineText.string.replaceAll("\n", "\\n").substring(linePos) + '|');
+		}
 
 		IMatchResult r = matchRuleOrInjections(grammar, lineText, isFirstLine, linePos, stack, anchorPosition);
 

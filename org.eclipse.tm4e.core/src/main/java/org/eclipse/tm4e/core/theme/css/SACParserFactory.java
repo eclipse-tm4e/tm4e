@@ -10,8 +10,9 @@
  *******************************************************************************/
 package org.eclipse.tm4e.core.theme.css;
 
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import static java.lang.System.Logger.Level.*;
+
+import java.lang.System.Logger;
 
 import org.eclipse.tm4e.core.internal.css.SACParserFactoryImpl;
 import org.w3c.css.sac.Parser;
@@ -22,7 +23,7 @@ import org.w3c.css.sac.helpers.ParserFactory;
  */
 public abstract class SACParserFactory extends ParserFactory implements ISACParserFactory {
 
-	private static final Logger LOGGER = Logger.getLogger(SACParserFactory.class.getName());
+	private static final Logger LOGGER = System.getLogger(SACParserFactory.class.getName());
 
 	private String preferredParserName;
 
@@ -39,8 +40,8 @@ public abstract class SACParserFactory extends ParserFactory implements ISACPars
 			if (preferredParserName != null) {
 				return makeParser(preferredParserName);
 			}
-		} catch (Throwable e) {
-			LOGGER.log(Level.SEVERE, e.getMessage(), e);
+		} catch (Throwable ex) {
+			LOGGER.log(ERROR, ex.getMessage(), ex);
 		}
 		return super.makeParser();
 	}

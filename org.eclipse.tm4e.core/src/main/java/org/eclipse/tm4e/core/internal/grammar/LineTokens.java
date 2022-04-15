@@ -1,5 +1,5 @@
 /**
- *  Copyright (c) 2015-2022 Angelo ZERR.
+ * Copyright (c) 2015-2022 Angelo ZERR.
  * This program and the accompanying materials are made
  * available under the terms of the Eclipse Public License 2.0
  * which is available at https://www.eclipse.org/legal/epl-2.0/
@@ -11,22 +11,23 @@
  * Initial license: MIT
  *
  * Contributors:
- *  - Microsoft Corporation: Initial code, written in TypeScript, licensed under MIT license
- *  - Angelo Zerr <angelo.zerr@gmail.com> - translation and adaptation to Java
+ * - Microsoft Corporation: Initial code, written in TypeScript, licensed under MIT license
+ * - Angelo Zerr <angelo.zerr@gmail.com> - translation and adaptation to Java
  */
 package org.eclipse.tm4e.core.internal.grammar;
 
+import static java.lang.System.Logger.Level.*;
+
+import java.lang.System.Logger;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import org.eclipse.tm4e.core.grammar.IToken;
 import org.eclipse.tm4e.core.grammar.StackElement;
 
 class LineTokens {
 
-	private static final Logger LOGGER = Logger.getLogger(LineTokens.class.getName());
+	private static final Logger LOGGER = System.getLogger(LineTokens.class.getName());
 
 	private final String lineText;
 
@@ -34,7 +35,6 @@ class LineTokens {
 	 * used only if `_emitBinaryTokens` is false.
 	 */
 	private final List<IToken> tokens;
-
 
 	private final boolean emitBinaryTokens;
 
@@ -47,7 +47,7 @@ class LineTokens {
 
 	LineTokens(boolean emitBinaryTokens, String lineText) {
 		this.emitBinaryTokens = emitBinaryTokens;
-		this.lineText = LOGGER.isLoggable(Level.FINEST) ? lineText : null; // store line only if it's logged
+		this.lineText = LOGGER.isLoggable(TRACE) ? lineText : null; // store line only if it's logged
 		if (this.emitBinaryTokens) {
 			this.tokens = null;
 			this.binaryTokens = new ArrayList<>();
@@ -84,10 +84,13 @@ class LineTokens {
 
 		List<String> scopes = scopesList.generateScopes();
 
-		if (this.lineText != null) {
-			LOGGER.info("  token: |" + this.lineText.substring(this.lastTokenEndIndex >= 0 ? this.lastTokenEndIndex : 0, endIndex).replaceAll("\n", "\\n") + '|');
+		if (this.lineText != null && LOGGER.isLoggable(TRACE)) {
+			LOGGER.log(TRACE,
+					"  token: |" + this.lineText
+							.substring(this.lastTokenEndIndex >= 0 ? this.lastTokenEndIndex : 0, endIndex)
+							.replaceAll("\n", "\\n") + '|');
 			for (String scope : scopes) {
-				LOGGER.info("      * " + scope);
+				LOGGER.log(TRACE, "      * " + scope);
 			}
 		}
 		this.tokens.add(new Token(this.lastTokenEndIndex >= 0 ? this.lastTokenEndIndex : 0, endIndex, scopes));

@@ -11,13 +11,15 @@
  */
 package org.eclipse.tm4e.core.model;
 
+import static java.lang.System.Logger.Level.*;
+
+import java.lang.System.Logger;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 import java.util.concurrent.PriorityBlockingQueue;
 import java.util.function.Consumer;
-import java.util.logging.Logger;
 
 import org.eclipse.tm4e.core.grammar.IGrammar;
 
@@ -27,7 +29,7 @@ import org.eclipse.tm4e.core.grammar.IGrammar;
  */
 public class TMModel implements ITMModel {
 
-	private static final Logger LOGGER = Logger.getLogger(TMModel.class.getName());
+	private static final Logger LOGGER = System.getLogger(TMModel.class.getName());
 
 	/**
 	 * The TextMate grammar to use to parse for each lines of the document the
@@ -93,8 +95,8 @@ public class TMModel implements ITMModel {
 					if (model.lines.get(toProcess).isInvalid) {
 						try {
 							this.revalidateTokensNow(toProcess, null);
-						} catch (Exception t) {
-							LOGGER.severe(t.getMessage());
+						} catch (Exception ex) {
+							LOGGER.log(ERROR, ex.getMessage());
 							if (toProcess < model.lines.getNumberOfLines()) {
 								model.invalidateLine(toProcess);
 							}
@@ -141,8 +143,8 @@ public class TMModel implements ITMModel {
 					// Compute how many characters will be tokenized for this line
 					try {
 						currentCharsToTokenize = model.lines.getLineLength(lineIndex);
-					} catch (Exception e) {
-						LOGGER.severe(e.getMessage());
+					} catch (Exception ex) {
+						LOGGER.log(ERROR, ex.getMessage());
 					}
 
 					if (tokenizedChars > 0) {
@@ -186,8 +188,8 @@ public class TMModel implements ITMModel {
 					text = model.lines.getLineText(lineIndex);
 					// Tokenize only the first X characters
 					r = model.tokenizer.tokenize(text, modeLine.getState(), 0, stopLineTokenizationAfter);
-				} catch (Exception e) {
-					LOGGER.severe(e.getMessage());
+				} catch (Exception ex) {
+					LOGGER.log(ERROR, ex.getMessage());
 				}
 
 				if (r != null && r.tokens != null && !r.tokens.isEmpty()) {

@@ -11,12 +11,13 @@
  */
 package org.eclipse.tm4e.core.model;
 
+import static java.lang.System.Logger.Level.*;
+
+import java.lang.System.Logger;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.function.Consumer;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  * Abstract class for Model lines used by the TextMate model. Implementation
@@ -30,7 +31,7 @@ import java.util.logging.Logger;
  */
 public abstract class AbstractLineList implements IModelLines {
 
-	private static final Logger LOGGER = Logger.getLogger(AbstractLineList.class.getName());
+	private static final Logger LOGGER = System.getLogger(AbstractLineList.class.getName());
 
 	private final List<ModelLine> list = Collections.synchronizedList(new ArrayList<>());
 
@@ -61,8 +62,8 @@ public abstract class AbstractLineList implements IModelLines {
 	public void updateLine(int line) {
 		try {
 			// this.list.get(line).text = this.lineToTextResolver.apply(line);
-		} catch (Exception e) {
-			LOGGER.log(Level.SEVERE, e.getMessage(), e);
+		} catch (Exception ex) {
+			LOGGER.log(ERROR, ex.getMessage(), ex);
 		}
 	}
 

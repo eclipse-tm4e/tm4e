@@ -12,7 +12,6 @@
 package org.eclipse.tm4e.core.internal.grammar;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
@@ -20,7 +19,11 @@ import java.util.Objects;
 import org.eclipse.tm4e.core.theme.FontStyle;
 import org.eclipse.tm4e.core.theme.ThemeTrieElementRule;
 
+import com.google.common.base.Splitter;
+
 public class ScopeListElement {
+
+	private static final Splitter BY_SPACE_SPLITTER = Splitter.on(' ');
 
 	public final ScopeListElement parent;
 	public final String scope;
@@ -115,7 +118,7 @@ public class ScopeListElement {
 				background);
 	}
 
-	private static ScopeListElement push(ScopeListElement target, Grammar grammar, List<String> scopes) {
+	private static ScopeListElement push(ScopeListElement target, Grammar grammar, Iterable<String> scopes) {
 		for (String scope : scopes) {
 			ScopeMetadata rawMetadata = grammar.getMetadataForScope(scope);
 			int metadata = ScopeListElement.mergeMetadata(target.metadata, target, rawMetadata);
@@ -128,13 +131,7 @@ public class ScopeListElement {
 		if (scope == null) {
 			return this;
 		}
-		if (scope.indexOf(' ') >= 0) {
-			// there are multiple scopes to push
-			return ScopeListElement.push(this, grammar, Arrays.asList(scope.split(" ")));// scope.split(/
-																							// /g));
-		}
-		// there is a single scope to push
-		return ScopeListElement.push(this, grammar, Arrays.asList(scope));
+		return ScopeListElement.push(this, grammar, BY_SPACE_SPLITTER.split(scope));
 	}
 
 	private static List<String> generateScopes(ScopeListElement scopesList) {

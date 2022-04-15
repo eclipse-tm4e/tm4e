@@ -1,13 +1,13 @@
 /**
- *  Copyright (c) 2015-2017 Angelo ZERR.
+ * Copyright (c) 2015-2017 Angelo ZERR.
  * This program and the accompanying materials are made
  * available under the terms of the Eclipse Public License 2.0
  * which is available at https://www.eclipse.org/legal/epl-2.0/
  *
  * SPDX-License-Identifier: EPL-2.0
  *
- *  Contributors:
- *  Angelo Zerr <angelo.zerr@gmail.com> - initial API and implementation
+ * Contributors:
+ * Angelo Zerr <angelo.zerr@gmail.com> - initial API and implementation
  */
 package org.eclipse.tm4e.ui.themes.css;
 
@@ -29,7 +29,11 @@ import org.eclipse.tm4e.ui.TMUIPlugin;
 import org.eclipse.tm4e.ui.themes.AbstractTokenProvider;
 import org.eclipse.tm4e.ui.themes.ColorManager;
 
+import com.google.common.base.Splitter;
+
 public class CSSTokenProvider extends AbstractTokenProvider {
+
+	private static final Splitter BY_DOT_SPLITTER = Splitter.on('.');
 
 	private final Map<IStyle, IToken> tokenMaps;
 	private CSSParser parser;
@@ -68,7 +72,7 @@ public class CSSTokenProvider extends AbstractTokenProvider {
 		if (type == null) {
 			return null;
 		}
-		IStyle style = parser.getBestStyle(type.split("[.]"));
+		IStyle style = parser.getBestStyle(BY_DOT_SPLITTER.splitToStream(type).toArray(String[]::new));
 		if (style != null) {
 			IToken t = tokenMaps.get(style);
 			if (t != null) {
@@ -113,7 +117,7 @@ public class CSSTokenProvider extends AbstractTokenProvider {
 		}
 		return null;
 	}
-	
+
 	@Override
 	public Color getEditorCurrentLineHighlight() {
 		IStyle style = parser.getBestStyle("editor", "lineHighlight");

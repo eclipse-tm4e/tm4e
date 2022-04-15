@@ -1,13 +1,13 @@
 /**
- *  Copyright (c) 2015-2017 Angelo ZERR.
+ * Copyright (c) 2015-2017 Angelo ZERR.
  * This program and the accompanying materials are made
  * available under the terms of the Eclipse Public License 2.0
  * which is available at https://www.eclipse.org/legal/epl-2.0/
  *
  * SPDX-License-Identifier: EPL-2.0
  *
- *  Contributors:
- *  Angelo Zerr <angelo.zerr@gmail.com> - initial API and implementation
+ * Contributors:
+ * Angelo Zerr <angelo.zerr@gmail.com> - initial API and implementation
  */
 package org.eclipse.tm4e.ui.themes;
 
@@ -21,7 +21,11 @@ import org.eclipse.tm4e.core.theme.RGB;
 import org.eclipse.tm4e.ui.utils.PreferenceUtils;
 import org.eclipse.ui.texteditor.AbstractTextEditor;
 
+import com.google.common.base.Splitter;
+
 public class ColorManager {
+
+	private static final Splitter BY_COMMA_SPLITTER = Splitter.on(',');
 
 	private static final ColorManager INSTANCE = new ColorManager();
 
@@ -55,7 +59,7 @@ public class ColorManager {
 	 * Get the color from preferences store using a token.
 	 *
 	 * @param tokenId
-	 *            name of the token
+	 *        name of the token
 	 * @return Color matching token
 	 */
 	public Color getPreferenceEditorColor(String tokenId) {
@@ -66,7 +70,7 @@ public class ColorManager {
 	 * The method verifies that a color is defined in a preferences store using a token.
 	 *
 	 * @param tokenId
-	 *            name of the token
+	 *        name of the token
 	 * @return color is user defined or not
 	 */
 	public boolean isColorUserDefined(String tokenId) {
@@ -82,9 +86,9 @@ public class ColorManager {
 	 * Priority: User defined > TM defined > Eclipse color
 	 *
 	 * @param themeColor
-	 *            color defined in TM theme
+	 *        color defined in TM theme
 	 * @param tokenId
-	 *            name of the token for preferences store
+	 *        name of the token for preferences store
 	 * @return Highest priority color
 	 */
 	public Color getPriorityColor(Color themeColor, String tokenId) {
@@ -101,7 +105,7 @@ public class ColorManager {
 	 * Returns a token for the system default value of the given token.
 	 *
 	 * @param tokenId
-	 *            name of the token
+	 *        name of the token
 	 * @return system default token or empty string if doesn't exist
 	 */
 	private String getSystemDefaultToken(String tokenId) {
@@ -123,14 +127,14 @@ public class ColorManager {
 	 * Convert String to RGB.
 	 *
 	 * @param value
-	 *            string value of rgb
+	 *        string value of rgb
 	 * @return RGB value
 	 */
 	private RGB stringToRGB(String value) {
-		String[] rgbValues = value.split(",");
+		String[] rgbValues = BY_COMMA_SPLITTER.splitToStream(value).toArray(String[]::new);
 		return rgbValues.length == 3
-				? new RGB(Integer.parseInt(rgbValues[0]), Integer.parseInt(rgbValues[1]), Integer.parseInt(rgbValues[2]))
-				: new RGB(255, 255, 255);
+			? new RGB(Integer.parseInt(rgbValues[0]), Integer.parseInt(rgbValues[1]), Integer.parseInt(rgbValues[2]))
+			: new RGB(255, 255, 255);
 	}
 
 }

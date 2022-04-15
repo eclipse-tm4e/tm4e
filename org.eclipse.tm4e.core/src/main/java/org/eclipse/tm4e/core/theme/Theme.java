@@ -24,11 +24,17 @@ import java.util.regex.Pattern;
 
 import org.eclipse.tm4e.core.internal.utils.CompareUtils;
 
+import com.google.common.base.Splitter;
+import com.google.common.collect.Lists;
+
 /**
  * TextMate theme.
  *
  */
 public class Theme {
+
+	private static final Splitter BY_COMMA_SPLITTER = Splitter.on(',');
+	private static final Splitter BY_SPACE_SPLITTER = Splitter.on(' ');
 
 	private static final Pattern rrggbb = Pattern.compile("^#[0-9a-f]{6}", Pattern.CASE_INSENSITIVE);
 	private static final Pattern rrggbbaa = Pattern.compile("^#[0-9a-f]{8}", Pattern.CASE_INSENSITIVE);
@@ -61,7 +67,7 @@ public class Theme {
 			}
 
 			Object settingScope = entry.getScope();
-			List<String> scopes = new ArrayList<>();
+			List<String> scopes;
 			if (settingScope instanceof String) {
 				String scope = (String) settingScope;
 
@@ -71,11 +77,11 @@ public class Theme {
 				// remove trailing commans
 				scope = scope.replaceAll("[,]+$", "");
 
-				scopes = Arrays.asList(scope.split(","));
+				scopes = BY_COMMA_SPLITTER.splitToList(scope);
 			} else if (settingScope instanceof List) {
 				scopes = (List<String>) settingScope;
 			} else {
-				scopes.add("");
+				scopes = Arrays.asList("");
 			}
 
 			int fontStyle = FontStyle.NotSet;
@@ -83,7 +89,7 @@ public class Theme {
 			if (settingsFontStyle instanceof String) {
 				fontStyle = FontStyle.None;
 
-				String[] segments = ((String) settingsFontStyle).split(" ");
+				Iterable<String> segments = BY_SPACE_SPLITTER.split((String) settingsFontStyle);
 				for (String segment : segments) {
 					switch (segment) {
 					case "italic":
@@ -113,16 +119,13 @@ public class Theme {
 			for (int j = 0, lenJ = scopes.size(); j < lenJ; j++) {
 				String _scope = scopes.get(j).trim();
 
-				List<String> segments = Arrays.asList(_scope.split(" "));
+				List<String> segments = BY_SPACE_SPLITTER.splitToList(_scope);
 
 				String scope = segments.get(segments.size() - 1);
 				List<String> parentScopes = null;
 				if (segments.size() > 1) {
-					parentScopes = segments.subList(0, segments.size() - 1);// slice(0,
-																			// segments.length
-																			// -
-																			// 1);
-					Collections.reverse(parentScopes); // parentScopes.reverse();
+					parentScopes = segments.subList(0, segments.size() - 1);
+					parentScopes = Lists.reverse(parentScopes);
 				}
 
 				ParsedThemeRule t = new ParsedThemeRule(scope, parentScopes, i, fontStyle, foreground, background);

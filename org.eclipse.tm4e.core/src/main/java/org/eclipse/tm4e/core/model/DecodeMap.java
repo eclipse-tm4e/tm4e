@@ -19,7 +19,11 @@ package org.eclipse.tm4e.core.model;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
+import com.google.common.base.Splitter;
+
 class DecodeMap {
+
+	private static final Splitter BY_DOT_SPLITTER = Splitter.on('.');
 
 	int lastAssignedId;
 	Map<String /* scope */, int[] /* ids */ > scopeToTokenIds;
@@ -40,7 +44,7 @@ class DecodeMap {
 		if (tokens != null) {
 			return tokens;
 		}
-		String[] tmpTokens = scope.split("[.]");
+		String[] tmpTokens = BY_DOT_SPLITTER.splitToStream(scope).toArray(String[]::new);
 
 		tokens = new int[tmpTokens.length];
 		for (int i = 0; i < tmpTokens.length; i++) {

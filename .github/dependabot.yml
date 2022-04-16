@@ -1,7 +1,20 @@
+# https://help.github.com/github/administering-a-repository/configuration-options-for-dependency-updates
 version: 2
 updates:
+- package-ecosystem: github-actions
+  directory: /
+  schedule:
+    interval: daily
+  commit-message:
+    prefix: fix
+    prefix-development: chore
+    include: scope
 - package-ecosystem: maven
   directory: "/"
   schedule:
     interval: daily
+  commit-message:
+    prefix: fix
+    prefix-development: chore
+    include: scope
   open-pull-requests-limit: 10

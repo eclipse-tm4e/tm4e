@@ -74,20 +74,4 @@ public abstract class SACParserFactory extends ParserFactory implements ISACPars
 		// SAXParserFactory.
 		return new SACParserFactoryImpl();
 	}
-
-	/**
-	 * Return instance of SAC Parser registered into the factory with name
-	 * <code>name</code>.
-	 *
-	 * @param name
-	 * @return
-	 * @throws ClassNotFoundException
-	 * @throws IllegalAccessException
-	 * @throws InstantiationException
-	 * @throws NullPointerException
-	 * @throws ClassCastException
-	 */
-	@Override
-	public abstract Parser makeParser(String name) throws ClassNotFoundException, IllegalAccessException,
-			InstantiationException, NullPointerException, ClassCastException;
 }

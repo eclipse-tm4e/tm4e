@@ -21,6 +21,7 @@ package org.eclipse.tm4e.core.internal.oniguruma;
 
 import java.nio.charset.StandardCharsets;
 
+import org.eclipse.tm4e.core.TMException;
 import org.jcodings.specific.UTF8Encoding;
 import org.joni.Matcher;
 import org.joni.Option;
@@ -28,6 +29,7 @@ import org.joni.Regex;
 import org.joni.Region;
 import org.joni.Syntax;
 import org.joni.WarnCallback;
+import org.joni.exception.SyntaxException;
 
 /**
  *
@@ -46,8 +48,12 @@ public class OnigRegExp {
 		lastSearchPosition = -1;
 		lastSearchResult = null;
 		byte[] pattern = source.getBytes(StandardCharsets.UTF_8);
-		this.regex = new Regex(pattern, 0, pattern.length, Option.CAPTURE_GROUP, UTF8Encoding.INSTANCE, Syntax.DEFAULT,
-				WarnCallback.DEFAULT);
+		try {
+			this.regex = new Regex(pattern, 0, pattern.length, Option.CAPTURE_GROUP, UTF8Encoding.INSTANCE,
+					Syntax.DEFAULT, WarnCallback.DEFAULT);
+		} catch (SyntaxException ex) {
+			throw new TMException("Parsing regex pattern \"" + source + "\" failed with " + ex, ex);
+		}
 	}
 
 	public OnigResult search(OnigString str, int position) {

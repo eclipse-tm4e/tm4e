@@ -66,6 +66,8 @@ public class OnEnterRuleTableWidget extends TableViewer {
 		column5.setText(LanguageConfigurationMessages.OnEnterRuleTableWidget_removeText);
 		minWidth = computeMinimumColumnWidth(gc, LanguageConfigurationMessages.OnEnterRuleTableWidget_removeText);
 		columnLayout.setColumnData(column5, new ColumnWeightData(1, minWidth, true));
+
+		gc.dispose();
 	}
 
 	protected int computeMinimumColumnWidth(GC gc, String string) {

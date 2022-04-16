@@ -26,6 +26,7 @@ public class AutoClosingPairConditionalTableWidget extends CharacterPairsTableWi
 	public AutoClosingPairConditionalTableWidget(Table table) {
 		super(table);
 		setLabelProvider(new AutoClosingPairConditionalLabelProvider());
+
 		GC gc = new GC(table.getShell());
 		gc.setFont(JFaceResources.getDialogFont());
 		TableColumnLayout columnLayout = new TableColumnLayout();
@@ -35,6 +36,8 @@ public class AutoClosingPairConditionalTableWidget extends CharacterPairsTableWi
 		int minWidth = computeMinimumColumnWidth(gc,
 				LanguageConfigurationMessages.AutoClosingPairConditionalTableWidget_notIn);
 		columnLayout.setColumnData(column2, new ColumnWeightData(2, minWidth, true));
+
+		gc.dispose();
 	}
 
 	protected class AutoClosingPairConditionalLabelProvider extends CharacterPairLabelProvider {

@@ -50,6 +50,8 @@ public class CharacterPairsTableWidget extends TableViewer {
 		column2.setText(LanguageConfigurationMessages.CharacterPairsTableWidget_end);
 		minWidth = computeMinimumColumnWidth(gc, LanguageConfigurationMessages.CharacterPairsTableWidget_end);
 		columnLayout.setColumnData(column2, new ColumnWeightData(2, minWidth, true));
+
+		gc.dispose();
 	}
 
 	protected int computeMinimumColumnWidth(GC gc, String string) {

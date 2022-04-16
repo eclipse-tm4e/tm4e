@@ -69,9 +69,8 @@ public class OnigString {
 		if (last < posInChars) {
 			if (last == posInChars - 1) {
 				return charsLenInBytes.length;
-			} else {
-				throw new ArrayIndexOutOfBoundsException(posInChars);
 			}
+			throw new ArrayIndexOutOfBoundsException(posInChars);
 		}
 
 		int index = Arrays.binarySearch(charsLenInBytes, posInChars);

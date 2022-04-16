@@ -218,16 +218,13 @@ public class RegExpSource {
 		if (allowA) {
 			if (allowG) {
 				return this.anchorCache.A1_G1;
-			} else {
-				return this.anchorCache.A1_G0;
 			}
-		} else {
-			if (allowG) {
-				return this.anchorCache.A0_G1;
-			} else {
-				return this.anchorCache.A0_G0;
-			}
+			return this.anchorCache.A1_G0;
 		}
+		if (allowG) {
+			return this.anchorCache.A0_G1;
+		}
+		return this.anchorCache.A0_G0;
 	}
 
 	public boolean hasAnchor() {

@@ -70,13 +70,12 @@ public class RegexSource {
 			}
 			if ("downcase".equals(command)) {
 				return result.toLowerCase();
-			} else if ("upcase".equals(command)) {
-				return result.toUpperCase();
-			} else {
-				return result;
 			}
-		} else {
-			return match;
+			if ("upcase".equals(command)) {
+				return result.toUpperCase();
+			}
+			return result;
 		}
+		return match;
 	}
 }

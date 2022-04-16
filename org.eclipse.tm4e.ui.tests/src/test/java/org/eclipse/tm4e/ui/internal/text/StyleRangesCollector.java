@@ -54,9 +54,8 @@ public class StyleRangesCollector implements ITMPresentationReconcilerListener {
 			try {
 				if (waitForToLineNumber != document.getLineOfOffset(offset)) {
 					return;
-				} else {
-					waitForToLineNumber = null;
 				}
+				waitForToLineNumber = null;
 			} catch (BadLocationException e) {
 				e.printStackTrace();
 			}

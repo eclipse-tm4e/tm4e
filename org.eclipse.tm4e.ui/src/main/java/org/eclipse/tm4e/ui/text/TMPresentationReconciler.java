@@ -304,9 +304,9 @@ public class TMPresentationReconciler implements IPresentationReconciler {
 				}
 
 				// It's possible that there are two or more SourceViewers opened for the same document,
-				// so when one of them is closed the existing TMModel is also "closed" and its TokenizerThread 
+				// so when one of them is closed the existing TMModel is also "closed" and its TokenizerThread
 				// is interrupted and terminated.
-				// In this case, in order to let the others Source Viewers to continue working  a new 
+				// In this case, in order to let the others Source Viewers to continue working  a new
 				// TMModel object is to be created for the document, so it should be initialized
 				// with the existing grammar as well as new ModelTokenListener is to be added
 				if (TMPresentationReconciler.this.grammar != null) {
@@ -537,11 +537,9 @@ public class TMPresentationReconciler implements IPresentationReconciler {
 						// The token is before the damage region
 						if (nextToken != null) {
 							if (isBeforeRegion(nextToken, startLineOffset, damage)) {
-								// ignore it
-								continue;
-							} else {
-								tokenStartIndex = damage.getOffset() - startLineOffset;
+								continue; // ignore it
 							}
+							tokenStartIndex = damage.getOffset() - startLineOffset;
 						} else {
 							tokenStartIndex = damage.getOffset() - startLineOffset;
 							IToken token = toToken(currentToken);

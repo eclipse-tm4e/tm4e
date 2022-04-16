@@ -41,9 +41,8 @@ public class OnigResult {
 		int bytes = region.beg[index];
 		if (bytes > 0) {
 			return bytes;
-		} else {
-			return 0;
 		}
+		return 0;
 	}
 
 	public int count() {
@@ -54,9 +53,7 @@ public class OnigResult {
 		int bytes = region.end[index] - region.beg[index];
 		if (bytes > 0) {
 			return bytes;
-		} else {
-			return 0;
 		}
+		return 0;
 	}
-
 }

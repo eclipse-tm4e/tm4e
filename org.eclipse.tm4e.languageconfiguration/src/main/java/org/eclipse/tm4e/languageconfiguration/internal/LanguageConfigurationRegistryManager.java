@@ -186,16 +186,16 @@ public class LanguageConfigurationRegistryManager extends AbstractLanguageConfig
 
 			if (enterResult == null) {
 				return null;
-			} else {
-				// Here we add `\t` to appendText first because enterAction is leveraging
-				// appendText and removeText to change indentation.
-				if (enterResult.getAppendText() == null) {
-					if ((enterResult.getIndentAction() == IndentAction.Indent)
-							|| (enterResult.getIndentAction() == IndentAction.IndentOutdent)) {
-						enterResult.setAppendText("\t"); //$NON-NLS-1$
-					} else {
-						enterResult.setAppendText(""); //$NON-NLS-1$
-					}
+			}
+
+			// Here we add `\t` to appendText first because enterAction is leveraging
+			// appendText and removeText to change indentation.
+			if (enterResult.getAppendText() == null) {
+				if ((enterResult.getIndentAction() == IndentAction.Indent)
+						|| (enterResult.getIndentAction() == IndentAction.IndentOutdent)) {
+					enterResult.setAppendText("\t"); //$NON-NLS-1$
+				} else {
+					enterResult.setAppendText(""); //$NON-NLS-1$
 				}
 			}
 

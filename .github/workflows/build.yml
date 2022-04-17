@@ -41,7 +41,7 @@ jobs:
       run: sudo apt-get install -o Acquire::Retries=3 --no-install-recommends -y xvfb
 
     - name: "Cache: Local Maven Repository"
-      uses: actions/cache@v2
+      uses: actions/cache@v3
       with:
         path: |
           ~/.m2/repository

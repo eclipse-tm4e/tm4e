@@ -119,9 +119,9 @@ public class RawTestImpl {
 
 		List<RawToken> expectedTokens = testCase.getTokens();
 		// // TODO@Alex: fix tests instead of working around
-		if (testCase.getLine().length() > 0) {
+		if (!testCase.getLine().isEmpty()) {
 			// Remove empty tokens...
-			expectedTokens = testCase.getTokens().stream().filter(token -> token.getValue().length() > 0)
+			expectedTokens = testCase.getTokens().stream().filter(token -> !token.getValue().isEmpty())
 					.collect(Collectors.toList());
 		}
 		deepEqual(actualTokens, expectedTokens, "Tokenizing line '" + testCase.getLine() + "'");

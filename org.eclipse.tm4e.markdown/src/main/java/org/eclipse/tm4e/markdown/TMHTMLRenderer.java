@@ -89,7 +89,7 @@ public class TMHTMLRenderer extends HTMLRenderer {
 
 			String className = "token";
 			String safeType = token.type.replaceAll("[^a-z0-9\\-]", " ");
-			if (safeType.length() > 0) {
+			if (!safeType.isEmpty()) {
 				className += ' ' + safeType;
 			}
 

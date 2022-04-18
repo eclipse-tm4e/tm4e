@@ -91,7 +91,7 @@ public class SelectGrammarWizardPage extends AbstractWizardPage {
 				dialog.setFilterExtensions(TEXTMATE_EXTENSIONS);
 				dialog.setFilterPath(grammarFileText.getText());
 				String result = dialog.open();
-				if (result != null && result.length() > 0) {
+				if (result != null && !result.isEmpty()) {
 					grammarFileText.setText(result);
 				}
 			}
@@ -130,7 +130,7 @@ public class SelectGrammarWizardPage extends AbstractWizardPage {
 	protected IStatus validatePage(Event event) {
 		grammarInfoWidget.refresh(null);
 		String path = grammarFileText.getText();
-		if (path.length() == 0) {
+		if (path.isEmpty()) {
 			return new Status(IStatus.ERROR, TMUIPlugin.PLUGIN_ID,
 					TMUIMessages.SelectGrammarWizardPage_file_error_required);
 		}

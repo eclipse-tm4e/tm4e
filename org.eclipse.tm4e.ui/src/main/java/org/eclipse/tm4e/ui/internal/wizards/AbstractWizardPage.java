@@ -91,7 +91,7 @@ public abstract class AbstractWizardPage extends WizardPage implements Listener 
 			page.setErrorMessage(null);
 			break;
 		default:
-			if (message != null && message.length() == 0) {
+			if (message != null && message.isEmpty()) {
 				message = null;
 			}
 			page.setMessage(null);

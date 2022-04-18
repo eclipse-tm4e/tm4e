@@ -138,7 +138,7 @@ public class Theme {
 	}
 
 	private static boolean isValidHexColor(String hex) {
-		if (hex == null || hex.length() < 1) {
+		if (hex == null || hex.isEmpty()) {
 			return false;
 		}
 
@@ -190,7 +190,7 @@ public class Theme {
 		int defaultFontStyle = FontStyle.None;
 		String defaultForeground = "#000000";
 		String defaultBackground = "#ffffff";
-		while (parsedThemeRules.size() >= 1 && "".equals(parsedThemeRules.get(0).scope)) {
+		while (!parsedThemeRules.isEmpty() && "".equals(parsedThemeRules.get(0).scope)) {
 			ParsedThemeRule incomingDefaults = parsedThemeRules.remove(0); // shift();
 			if (incomingDefaults.fontStyle != FontStyle.NotSet) {
 				defaultFontStyle = incomingDefaults.fontStyle;

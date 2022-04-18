@@ -32,7 +32,7 @@ public class Helpers {
 	}
 
 	public static boolean isEmpty(String s) {
-		return s == null || s.length() < 1;
+		return s == null || s.isEmpty();
 	}
 
 }

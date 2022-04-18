@@ -33,7 +33,7 @@ public class DocumentHelper {
 	}
 
 	public static boolean isRemove(DocumentEvent event) {
-		return event.getText() == null || event.getText().length() == 0;
+		return event.getText() == null || event.getText().isEmpty();
 	}
 
 	public static boolean isInsert(DocumentEvent event) {

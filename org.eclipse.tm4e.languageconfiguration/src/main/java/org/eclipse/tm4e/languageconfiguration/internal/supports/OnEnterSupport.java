@@ -55,7 +55,7 @@ public class OnEnterSupport {
 		}
 
 		// (2): Special indent-outdent
-		if (beforeEnterText.length() > 0 && afterEnterText.length() > 0) {
+		if (!beforeEnterText.isEmpty() && !afterEnterText.isEmpty()) {
 			for (ProcessedBracketPair bracket : brackets) {
 				if (bracket.matchOpen(beforeEnterText) && bracket.matchClose(afterEnterText)) {
 					return new EnterAction(IndentAction.IndentOutdent);
@@ -64,7 +64,7 @@ public class OnEnterSupport {
 		}
 
 		// (3): Open bracket based logic
-		if (beforeEnterText.length() > 0) {
+		if (!beforeEnterText.isEmpty()) {
 			for (ProcessedBracketPair bracket : brackets) {
 				if (bracket.matchOpen(beforeEnterText)) {
 					return new EnterAction(IndentAction.Indent);

@@ -65,7 +65,7 @@ public class RegexSource {
 		if (capture != null) {
 			String result = captureSource.substring(capture.getStart(), capture.getEnd());
 			// Remove leading dots that would make the selector invalid
-			while (result.length() > 0 && result.charAt(0) == '.') {
+			while (!result.isEmpty() && result.charAt(0) == '.') {
 				result = result.substring(1);
 			}
 			if ("downcase".equals(command)) {

@@ -68,7 +68,7 @@ public class TMResource implements ITMResource {
 
 	@Override
 	public InputStream getInputStream() throws IOException {
-		if (path == null || path.length() < 0) {
+		if (path == null || path.isEmpty()) {
 			return null;
 		}
 		if (pluginId != null) {

@@ -123,7 +123,7 @@ public class SelectLanguageConfigurationWizardPage extends WizardPage implements
 			page.setErrorMessage(null);
 			break;
 		default:
-			if (message != null && message.length() == 0) {
+			if (message != null && message.isEmpty()) {
 				message = null;
 			}
 			page.setMessage(null);
@@ -163,7 +163,7 @@ public class SelectLanguageConfigurationWizardPage extends WizardPage implements
 				dialog.setFilterExtensions(TEXTMATE_EXTENSIONS);
 				dialog.setFilterPath(fileText.getText());
 				String result = dialog.open();
-				if (result != null && result.length() > 0) {
+				if (result != null && !result.isEmpty()) {
 					fileText.setText(result);
 				}
 			}

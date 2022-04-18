@@ -23,13 +23,13 @@ import org.eclipse.tm4e.core.internal.oniguruma.IOnigCaptureIndex;
 public class BeginEndRule extends Rule {
 
 	private final RegExpSource begin;
-	public List<CaptureRule> beginCaptures;
+	public final List<CaptureRule> beginCaptures;
 	private final RegExpSource end;
-	public boolean endHasBackReferences;
-	public List<CaptureRule> endCaptures;
-	public boolean applyEndPatternLast;
+	public final boolean endHasBackReferences;
+	public final List<CaptureRule> endCaptures;
+	public final boolean applyEndPatternLast;
 	public final boolean hasMissingPatterns;
-	public Integer[] patterns;
+	public final Integer[] patterns;
 	private RegExpSourceList cachedCompiledPatterns;
 
 	public BeginEndRule(int id, String name, String contentName, String begin, List<CaptureRule> beginCaptures,

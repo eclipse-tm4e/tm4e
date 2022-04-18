@@ -20,9 +20,9 @@ public class Parser {
 
 	private Tokens tokens;
 	private Token token;
-	private Options options;
+	private final Options options;
 	private InlineLexer inline;
-	private IRenderer renderer;
+	private final IRenderer renderer;
 
 	public Parser(Options options, IRenderer renderer) {
 		this.tokens = new Tokens();

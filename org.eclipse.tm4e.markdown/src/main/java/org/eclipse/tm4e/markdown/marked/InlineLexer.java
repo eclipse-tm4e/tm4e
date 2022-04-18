@@ -23,14 +23,13 @@ import java.util.regex.Matcher;
 
 public class InlineLexer {
 
-	private Options options;
-	private InlineRules rules;
+	private final Options options;
+	private final InlineRules rules;
 	private final IRenderer renderer;
 
 	public InlineLexer(Object links, Options options, IRenderer renderer) {
 		this.options = options != null ? options : Options.DEFAULTS;
 		// this.links = links;
-		this.rules = InlineRules.normal;
 		this.renderer = renderer != null ? renderer : new HTMLRenderer();
 		// this.renderer = this.options.renderer || new Renderer;
 		// this.renderer.options = this.options;
@@ -48,6 +47,8 @@ public class InlineLexer {
 			}
 		} else if (this.options.isPedantic()) {
 			this.rules = InlineRules.pedantic;
+		} else {
+			this.rules = InlineRules.normal;
 		}
 	}
 

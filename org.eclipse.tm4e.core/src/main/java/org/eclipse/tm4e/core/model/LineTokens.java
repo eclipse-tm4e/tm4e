@@ -20,7 +20,7 @@ import java.util.List;
 
 public class LineTokens {
 
-	List<TMToken> tokens;
+	final List<TMToken> tokens;
 	int actualStopOffset;
 	TMState endState;
 

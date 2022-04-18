@@ -22,14 +22,13 @@ import java.util.regex.Matcher;
 
 public class Lexer {
 
-	private BlockRules rules;
+	private final BlockRules rules;
 	private final Tokens tokens;
 	private final Options options;
 
 	public Lexer(Options options) {
 		this.tokens = new Tokens();
 		this.options = options != null ? options : Options.DEFAULTS;
-		this.rules = BlockRules.normal;
 
 		if (this.options.isGfm()) {
 			if (this.options.isTables()) {
@@ -37,6 +36,8 @@ public class Lexer {
 			} else {
 				this.rules = BlockRules.gfm;
 			}
+		} else {
+			this.rules = BlockRules.normal;
 		}
 	}
 

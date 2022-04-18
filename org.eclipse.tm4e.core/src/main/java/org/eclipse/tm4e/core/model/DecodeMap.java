@@ -26,9 +26,9 @@ class DecodeMap {
 	private static final Splitter BY_DOT_SPLITTER = Splitter.on('.');
 
 	int lastAssignedId;
-	Map<String /* scope */, int[] /* ids */ > scopeToTokenIds;
-	Map<String /* token */, Integer /* id */ > tokenToTokenId;
-	Map<Integer /* id */, String /* id */ > tokenIdToToken;
+	final Map<String /* scope */, int[] /* ids */ > scopeToTokenIds;
+	final Map<String /* token */, Integer /* id */ > tokenToTokenId;
+	final Map<Integer /* id */, String /* id */ > tokenIdToToken;
 	TMTokenDecodeData prevToken;
 
 	public DecodeMap() {

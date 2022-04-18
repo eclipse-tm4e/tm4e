@@ -88,7 +88,7 @@ class LineTokens {
 			LOGGER.log(TRACE,
 					"  token: |" + this.lineText
 							.substring(this.lastTokenEndIndex >= 0 ? this.lastTokenEndIndex : 0, endIndex)
-							.replaceAll("\n", "\\n") + '|');
+							.replace("\n", "\\n") + '|');
 			for (String scope : scopes) {
 				LOGGER.log(TRACE, "      * " + scope);
 			}

@@ -25,10 +25,10 @@ public class Helpers {
 	public static String escape(String html, boolean encode) {
 		return html
 			    .replaceAll(!encode ? "&(?!#?\\w+;)" : "&", "&amp;")
-			    .replaceAll("<", "&lt;")
-			    .replaceAll(">", "&gt;")
-			    .replaceAll("\"", "&quot;")
-			    .replaceAll("'", "&#39;");
+			    .replace("<", "&lt;")
+			    .replace(">", "&gt;")
+			    .replace("\"", "&quot;")
+			    .replace("'", "&#39;");
 	}
 
 	public static boolean isEmpty(String s) {

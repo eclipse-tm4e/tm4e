@@ -15,6 +15,7 @@
 		<sonar.jacoco.reportPath>../target/jacoco.exec</sonar.jacoco.reportPath>
 		<tycho.scmUrl>scm:git:https://github.com/eclipse/tm4e.git</tycho.scmUrl>
 		<cbi.jarsigner.skip>true</cbi.jarsigner.skip>
+		<jgit.dirtyWorkingTree>error</jgit.dirtyWorkingTree>
 	</properties>
 	<organization>
 		<name>Eclipse TM4E project</name>
@@ -181,6 +182,7 @@
 					</sourceReferences>
 					<timestampProvider>jgit</timestampProvider>
 					<jgit.ignore>pom.xml</jgit.ignore>
+					<jgit.dirtyWorkingTree>${jgit.dirtyWorkingTree}</jgit.dirtyWorkingTree>
 				</configuration>
 			</plugin>
 			<plugin>

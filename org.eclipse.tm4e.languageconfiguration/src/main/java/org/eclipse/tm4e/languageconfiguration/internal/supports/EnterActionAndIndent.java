@@ -22,7 +22,6 @@ public class EnterActionAndIndent {
 	 * @param indentation
 	 */
 	public EnterActionAndIndent(EnterAction enterAction, String indentation) {
-		super();
 		this.enterAction = enterAction;
 		this.indentation = indentation;
 	}

@@ -43,7 +43,6 @@ public class Theme extends TMResource implements ITheme {
 	 * Constructor for user preferences (loaded from Json with Gson).
 	 */
 	public Theme() {
-		super();
 	}
 
 	/**

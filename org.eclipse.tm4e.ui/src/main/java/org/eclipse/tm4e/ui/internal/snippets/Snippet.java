@@ -25,7 +25,6 @@ public class Snippet extends TMResource implements ISnippet {
 	 * Constructor for user preferences (loaded from Json with Gson).
 	 */
 	public Snippet() {
-		super();
 	}
 
 	/**

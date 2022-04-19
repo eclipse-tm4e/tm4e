@@ -82,11 +82,10 @@ public class ThemePreferencePage extends PreferencePage implements IWorkbenchPre
 	private Button darkThemeButton;
 
 	private Button defaultThemeButton;
-	
+
 	private ITheme selectedTheme;
 
 	public ThemePreferencePage() {
-		super();
 		setDescription(TMUIMessages.ThemePreferencePage_description);
 		this.grammarRegistryManager = TMEclipseRegistryPlugin.getGrammarRegistryManager();
 		this.themeManager = TMUIPlugin.getThemeManager();

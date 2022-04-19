@@ -72,7 +72,6 @@ public class LanguageConfigurationPreferencePage extends PreferencePage implemen
 	private LanguageConfigurationPreferencesWidget infoWidget;
 
 	public LanguageConfigurationPreferencePage() {
-		super();
 		setDescription(LanguageConfigurationMessages.LanguageConfigurationPreferencePage_description);
 		manager = new WorkingCopyLanguageConfigurationRegistryManager(
 				LanguageConfigurationRegistryManager.getInstance());

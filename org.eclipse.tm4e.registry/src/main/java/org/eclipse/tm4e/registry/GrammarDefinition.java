@@ -36,7 +36,6 @@ public class GrammarDefinition extends TMResource implements IGrammarDefinition 
 	 * Constructor for user preferences (loaded from Json with Gson).
 	 */
 	public GrammarDefinition() {
-		super();
 	}
 
 	/**

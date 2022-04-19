@@ -96,7 +96,6 @@ public class GrammarPreferencePage extends PreferencePage implements IWorkbenchP
 	private TMViewer previewViewer;
 
 	public GrammarPreferencePage() {
-		super();
 		setDescription(TMUIMessages.GrammarPreferencePage_description);
 		setGrammarRegistryManager(
 				new WorkingCopyGrammarRegistryManager(TMEclipseRegistryPlugin.getGrammarRegistryManager()));
@@ -106,7 +105,7 @@ public class GrammarPreferencePage extends PreferencePage implements IWorkbenchP
 
 	/**
 	 * Returns the grammar registry manager.
-	 * 
+	 *
 	 * @return the grammar registry manager.
 	 */
 	public IGrammarRegistryManager getGrammarRegistryManager() {
@@ -115,7 +114,7 @@ public class GrammarPreferencePage extends PreferencePage implements IWorkbenchP
 
 	/**
 	 * Set the grammar registry manager.
-	 * 
+	 *
 	 * @param grammarRegistryManager
 	 */
 	public void setGrammarRegistryManager(IGrammarRegistryManager grammarRegistryManager) {
@@ -124,7 +123,7 @@ public class GrammarPreferencePage extends PreferencePage implements IWorkbenchP
 
 	/**
 	 * Returns the theme manager.
-	 * 
+	 *
 	 * @return the theme manager.
 	 */
 	public IThemeManager getThemeManager() {
@@ -133,7 +132,7 @@ public class GrammarPreferencePage extends PreferencePage implements IWorkbenchP
 
 	/**
 	 * Set the theme manager.
-	 * 
+	 *
 	 * @param themeManager
 	 */
 	public void setThemeManager(IThemeManager themeManager) {
@@ -182,7 +181,7 @@ public class GrammarPreferencePage extends PreferencePage implements IWorkbenchP
 
 	/**
 	 * Create grammar list content.
-	 * 
+	 *
 	 * @param parent
 	 */
 	private void createGrammarListContent(Composite parent) {
@@ -370,7 +369,7 @@ public class GrammarPreferencePage extends PreferencePage implements IWorkbenchP
 	/**
 	 * Create detail grammar content which is filled when a grammar is selected in
 	 * the grammar list.
-	 * 
+	 *
 	 * @param parent
 	 */
 	private void createGrammarDetailContent(Composite parent) {
@@ -388,7 +387,7 @@ public class GrammarPreferencePage extends PreferencePage implements IWorkbenchP
 
 	/**
 	 * Create "General" tab
-	 * 
+	 *
 	 * @param folder
 	 */
 	private void createGeneralTab(TabFolder folder) {
@@ -408,7 +407,7 @@ public class GrammarPreferencePage extends PreferencePage implements IWorkbenchP
 
 	/**
 	 * Create "Content type" tab
-	 * 
+	 *
 	 * @param folder
 	 */
 	private void createContentTypeTab(TabFolder folder) {
@@ -427,7 +426,7 @@ public class GrammarPreferencePage extends PreferencePage implements IWorkbenchP
 
 	/**
 	 * Create "Theme" tab
-	 * 
+	 *
 	 * @param folder
 	 */
 	private void createThemeTab(TabFolder folder) {
@@ -474,7 +473,7 @@ public class GrammarPreferencePage extends PreferencePage implements IWorkbenchP
 
 	/**
 	 * Create "Injection" tab
-	 * 
+	 *
 	 * @param folder
 	 */
 	private void createInjectionTab(TabFolder folder) {

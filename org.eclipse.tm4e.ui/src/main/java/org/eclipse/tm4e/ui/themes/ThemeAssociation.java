@@ -54,7 +54,6 @@ public class ThemeAssociation implements IThemeAssociation {
 	 * Constructor for user preferences (loaded from Json with Gson).
 	 */
 	public ThemeAssociation() {
-		super();
 	}
 
 	/**

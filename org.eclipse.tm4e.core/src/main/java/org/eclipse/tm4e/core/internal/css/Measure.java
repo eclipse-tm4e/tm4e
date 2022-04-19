@@ -20,7 +20,6 @@ public class Measure extends CSSValueImpl {
 	LexicalUnit value;
 
 	public Measure(LexicalUnit value) {
-		super();
 		this.value = value;
 	}
 

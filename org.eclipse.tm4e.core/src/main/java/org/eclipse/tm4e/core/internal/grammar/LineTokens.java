@@ -25,7 +25,7 @@ import java.util.List;
 import org.eclipse.tm4e.core.grammar.IToken;
 import org.eclipse.tm4e.core.grammar.StackElement;
 
-class LineTokens {
+final class LineTokens {
 
 	private static final Logger LOGGER = System.getLogger(LineTokens.class.getName());
 
@@ -58,11 +58,11 @@ class LineTokens {
 		this.lastTokenEndIndex = 0;
 	}
 
-	public void produce(StackElement stack, int endIndex) {
+	void produce(StackElement stack, int endIndex) {
 		this.produceFromScopes(stack.contentNameScopesList, endIndex);
 	}
 
-	public void produceFromScopes(ScopeListElement scopesList, int endIndex) {
+	void produceFromScopes(ScopeListElement scopesList, int endIndex) {
 		if (this.lastTokenEndIndex >= endIndex) {
 			return;
 		}
@@ -98,7 +98,7 @@ class LineTokens {
 		this.lastTokenEndIndex = endIndex;
 	}
 
-	public IToken[] getResult(StackElement stack, int lineLength) {
+	IToken[] getResult(StackElement stack, int lineLength) {
 		if (!this.tokens.isEmpty() && this.tokens.get(this.tokens.size() - 1).getStartIndex() == lineLength - 1) {
 			// pop produced token for newline
 			this.tokens.remove(this.tokens.size() - 1);
@@ -113,7 +113,7 @@ class LineTokens {
 		return this.tokens.toArray(new IToken[0]);
 	}
 
-	public int[] getBinaryResult(StackElement stack, int lineLength) {
+	int[] getBinaryResult(StackElement stack, int lineLength) {
 		if (!this.binaryTokens.isEmpty() && this.binaryTokens.get(this.binaryTokens.size() - 2) == lineLength - 1) {
 			// pop produced token for newline
 			this.binaryTokens.remove(this.binaryTokens.size() - 1);

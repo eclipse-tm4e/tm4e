@@ -23,7 +23,7 @@ import org.osgi.service.prefs.BackingStoreException;
  * Working copy of theme manager.
  *
  */
-public class WorkingCopyThemeManager extends AbstractThemeManager {
+public final class WorkingCopyThemeManager extends AbstractThemeManager {
 
 	private final IThemeManager manager;
 

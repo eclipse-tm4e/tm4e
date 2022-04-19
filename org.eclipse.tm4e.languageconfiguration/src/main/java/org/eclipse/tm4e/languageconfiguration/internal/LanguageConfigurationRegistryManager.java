@@ -37,7 +37,7 @@ import org.eclipse.tm4e.languageconfiguration.internal.supports.OnEnterSupport;
 import org.eclipse.tm4e.languageconfiguration.internal.utils.TextUtils;
 import org.osgi.service.prefs.BackingStoreException;
 
-public class LanguageConfigurationRegistryManager extends AbstractLanguageConfigurationRegistryManager {
+public final class LanguageConfigurationRegistryManager extends AbstractLanguageConfigurationRegistryManager {
 
 	private static final String EXTENSION_LANGUAGE_CONFIGURATIONS = "languageConfigurations"; //$NON-NLS-1$
 	private static final String LANGUAGE_CONFIGURATION_ELT = "languageConfiguration"; //$NON-NLS-1$

@@ -59,9 +59,9 @@ import org.osgi.service.prefs.BackingStoreException;
  * configuration It provides controls for adding, removing and changing language
  * configuration as well as enablement, default management.
  */
-public class LanguageConfigurationPreferencePage extends PreferencePage implements IWorkbenchPreferencePage {
+public final class LanguageConfigurationPreferencePage extends PreferencePage implements IWorkbenchPreferencePage {
 
-	public final static String PAGE_ID = "org.eclipse.tm4e.languageconfiguration.preferences.LanguageConfigurationPreferencePage"; //$NON-NLS-1$
+	final static String PAGE_ID = "org.eclipse.tm4e.languageconfiguration.preferences.LanguageConfigurationPreferencePage"; //$NON-NLS-1$
 
 	private final ILanguageConfigurationRegistryManager manager;
 

@@ -23,19 +23,20 @@ import org.eclipse.tm4e.ui.themes.IThemeAssociation;
 /**
  * Base Theme association registry.
  *
+ * TODO unused code
  */
-public class BaseThemeAssociationRegistry {
+final class BaseThemeAssociationRegistry {
 
 	private IThemeAssociation defaultAssociation;
 	private final Map<String /* E4 Theme id */, List<IThemeAssociation>> eclipseThemeIds;
 	private final List<IThemeAssociation> allAssociations;
 
-	public BaseThemeAssociationRegistry() {
+	BaseThemeAssociationRegistry() {
 		eclipseThemeIds = new HashMap<>();
 		this.allAssociations = new ArrayList<>();
 	}
 
-	public void register(IThemeAssociation association) {
+	void register(IThemeAssociation association) {
 		//String eclipseThemeId = association.getEclipseThemeId();
 		// when association is marked as default or scope name is defined,
 		// update the default association or association for a given E4 Theme.
@@ -51,7 +52,7 @@ public class BaseThemeAssociationRegistry {
 		allAssociations.clear();
 	}
 
-	public void unregister(IThemeAssociation association) {
+	void unregister(IThemeAssociation association) {
 		//String eclipseThemeId = association.getEclipseThemeId();
 		/*if (association.isDefault()) {
 			if (eclipseThemeId == null) {
@@ -70,7 +71,7 @@ public class BaseThemeAssociationRegistry {
 		allAssociations.clear();
 	}
 
-	public IThemeAssociation getThemeAssociationFor(String eclipseThemeId) {
+	IThemeAssociation getThemeAssociationFor(String eclipseThemeId) {
 		List<IThemeAssociation> associations = eclipseThemeIds.get(eclipseThemeId);
 		if (associations != null) {
 			if (associations.size() == 1) {
@@ -85,7 +86,7 @@ public class BaseThemeAssociationRegistry {
 		return null;
 	}
 
-	public IThemeAssociation[] getThemeAssociations(boolean isDefault) {
+	IThemeAssociation[] getThemeAssociations(boolean isDefault) {
 		/*if (isDefault) {
 			return getThemeAssociations().stream().filter(theme -> theme.isDefault()).collect(Collectors.toList())
 					.toArray(new IThemeAssociation[0]);
@@ -93,16 +94,16 @@ public class BaseThemeAssociationRegistry {
 		return getThemeAssociations().toArray(new IThemeAssociation[allAssociations.size()]);
 	}
 
-	public IThemeAssociation getDefaultAssociation() {
+	IThemeAssociation getDefaultAssociation() {
 		return defaultAssociation;
 	}
 
-	public IThemeAssociation[] getThemeAssociationsForTheme(String themeId) {
+	IThemeAssociation[] getThemeAssociationsForTheme(String themeId) {
 		return getThemeAssociations().stream().filter(themeAssociation -> themeId.equals(themeAssociation.getThemeId()))
 				.collect(Collectors.toList()).toArray(new IThemeAssociation[0]);
 	}
 
-	public boolean hasThemeAssociationsForTheme(String themeId, String eclipseThemeId) {
+	boolean hasThemeAssociationsForTheme(String themeId, String eclipseThemeId) {
 //		Collection<IThemeAssociation> associations = eclipseThemeIds.get(eclipseThemeId);
 //		if (associations != null) {
 //			for (IThemeAssociation themeAssociation : associations) {
@@ -124,7 +125,7 @@ public class BaseThemeAssociationRegistry {
 		return true;
 	}
 
-	public List<IThemeAssociation> getThemeAssociations() {
+	List<IThemeAssociation> getThemeAssociations() {
 		if (allAssociations.isEmpty()) {
 			if (defaultAssociation != null) {
 				allAssociations.add(defaultAssociation);

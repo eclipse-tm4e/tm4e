@@ -22,7 +22,7 @@ import org.w3c.css.sac.Parser;
  * SAC Parser factory implementation. By default, this SAC FActory support
  * Flute, SteadyState and Batik SAC Parser.
  */
-public class SACParserFactoryImpl extends SACParserFactory {
+public final class SACParserFactoryImpl extends SACParserFactory {
 
 	private static Map<String, String> parsers = new HashMap<>();
 
@@ -63,7 +63,7 @@ public class SACParserFactoryImpl extends SACParserFactory {
 	 *
 	 * @param parser
 	 */
-	public static void registerSACParser(String parser) {
+	private static void registerSACParser(String parser) {
 		registerSACParser(parser, parser);
 	}
 
@@ -74,7 +74,7 @@ public class SACParserFactoryImpl extends SACParserFactory {
 	 * @param name
 	 * @param classNameParser
 	 */
-	public static void registerSACParser(String name, String classNameParser) {
+	private static void registerSACParser(String name, String classNameParser) {
 		parsers.put(name, classNameParser);
 	}
 }

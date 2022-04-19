@@ -19,7 +19,7 @@ import org.eclipse.tm4e.registry.IGrammarRegistryManager;
  * A content provider for the template grammar page's table viewer.
  * 
  */
-public class GrammarDefinitionContentProvider implements IStructuredContentProvider {
+public final class GrammarDefinitionContentProvider implements IStructuredContentProvider {
 
 	private IGrammarRegistryManager registry;
 

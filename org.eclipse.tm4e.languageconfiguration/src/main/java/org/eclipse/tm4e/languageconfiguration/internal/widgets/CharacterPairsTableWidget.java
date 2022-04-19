@@ -30,9 +30,9 @@ import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.tm4e.languageconfiguration.internal.LanguageConfigurationMessages;
 import org.eclipse.tm4e.languageconfiguration.internal.supports.CharacterPair;
 
-public class CharacterPairsTableWidget extends TableViewer {
+class CharacterPairsTableWidget extends TableViewer {
 
-	public CharacterPairsTableWidget(Table table) {
+	CharacterPairsTableWidget(Table table) {
 		super(table);
 		setContentProvider(new CharacterPairContentProvider());
 		setLabelProvider(new CharacterPairLabelProvider());
@@ -58,7 +58,7 @@ public class CharacterPairsTableWidget extends TableViewer {
 		return gc.stringExtent(string).x + 10;
 	}
 
-	protected static class CharacterPairContentProvider implements IStructuredContentProvider {
+	private static final class CharacterPairContentProvider implements IStructuredContentProvider {
 
 		private List<CharacterPair> characterPairList;
 

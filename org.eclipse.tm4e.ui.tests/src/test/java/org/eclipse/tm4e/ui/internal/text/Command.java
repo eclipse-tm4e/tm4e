@@ -19,7 +19,7 @@ public abstract class Command implements ICommand {
 	private String styleRanges;
 	private boolean done;
 
-	public Command(String name) {
+	protected Command(String name) {
 		this.name = name;
 		this.done = false;
 	}
@@ -48,7 +48,7 @@ public abstract class Command implements ICommand {
 	protected abstract void doExecute();
 
 	protected abstract Integer getLineTo();
-	
+
 	public static String toText(String text) {
 		StringBuilder newText = new StringBuilder();
 		for (int i = 0; i < text.length(); i++) {

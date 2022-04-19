@@ -65,7 +65,7 @@ public class TMModel implements ITMModel {
 	 * {@link TMModel#addModelTokensChangedListener(IModelTokensChangedListener)}.
 	 *
 	 */
-	static class TokenizerThread extends Thread {
+	private static final class TokenizerThread extends Thread {
 		private final TMModel model;
 		private TMState lastState;
 

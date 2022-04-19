@@ -16,7 +16,7 @@ import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.tm4e.languageconfiguration.ILanguageConfigurationDefinition;
 
-public class LanguageConfigurationLabelProvider extends LabelProvider implements ITableLabelProvider {
+final class LanguageConfigurationLabelProvider extends LabelProvider implements ITableLabelProvider {
 
 	@Override
 	public Image getColumnImage(Object element, int columnIndex) {

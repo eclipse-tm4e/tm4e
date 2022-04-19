@@ -20,5 +20,4 @@ public interface IMatchInjectionsResult extends IMatchResult {
 
 	boolean isPriorityMatch();
 
-
 }

@@ -29,7 +29,7 @@ import org.eclipse.swt.widgets.Listener;
  * Abstract class for wizard page.
  *
  */
-public abstract class AbstractWizardPage extends WizardPage implements Listener {
+abstract class AbstractWizardPage extends WizardPage implements Listener {
 
 	protected AbstractWizardPage(String pageName) {
 		super(pageName);
@@ -67,7 +67,7 @@ public abstract class AbstractWizardPage extends WizardPage implements Listener 
 		statusChanged(status == null ? Status.OK_STATUS : status);
 	}
 
-	public void statusChanged(IStatus status) {
+	void statusChanged(IStatus status) {
 		setPageComplete(!status.matches(IStatus.ERROR));
 		applyToStatusLine(this, status);
 	}

@@ -72,9 +72,9 @@ import org.osgi.service.prefs.BackingStoreException;
  * provides controls for adding, removing and changing grammar as well as
  * enablement, default management.
  */
-public class GrammarPreferencePage extends PreferencePage implements IWorkbenchPreferencePage {
+public final class GrammarPreferencePage extends PreferencePage implements IWorkbenchPreferencePage {
 
-	public final static String PAGE_ID = "org.eclipse.tm4e.ui.preferences.GrammarPreferencePage";
+	static final String PAGE_ID = "org.eclipse.tm4e.ui.preferences.GrammarPreferencePage";
 
 	// Managers
 	private IGrammarRegistryManager grammarRegistryManager;
@@ -108,7 +108,7 @@ public class GrammarPreferencePage extends PreferencePage implements IWorkbenchP
 	 *
 	 * @return the grammar registry manager.
 	 */
-	public IGrammarRegistryManager getGrammarRegistryManager() {
+	IGrammarRegistryManager getGrammarRegistryManager() {
 		return grammarRegistryManager;
 	}
 
@@ -117,7 +117,7 @@ public class GrammarPreferencePage extends PreferencePage implements IWorkbenchP
 	 *
 	 * @param grammarRegistryManager
 	 */
-	public void setGrammarRegistryManager(IGrammarRegistryManager grammarRegistryManager) {
+	void setGrammarRegistryManager(IGrammarRegistryManager grammarRegistryManager) {
 		this.grammarRegistryManager = grammarRegistryManager;
 	}
 
@@ -126,7 +126,7 @@ public class GrammarPreferencePage extends PreferencePage implements IWorkbenchP
 	 *
 	 * @return the theme manager.
 	 */
-	public IThemeManager getThemeManager() {
+	IThemeManager getThemeManager() {
 		return themeManager;
 	}
 
@@ -135,15 +135,15 @@ public class GrammarPreferencePage extends PreferencePage implements IWorkbenchP
 	 *
 	 * @param themeManager
 	 */
-	public void setThemeManager(IThemeManager themeManager) {
+	void setThemeManager(IThemeManager themeManager) {
 		this.themeManager = themeManager;
 	}
 
-	public ISnippetManager getSnippetManager() {
+	ISnippetManager getSnippetManager() {
 		return snippetManager;
 	}
 
-	public void setSnippetManager(ISnippetManager snippetManager) {
+	void setSnippetManager(ISnippetManager snippetManager) {
 		this.snippetManager = snippetManager;
 	}
 
@@ -542,7 +542,7 @@ public class GrammarPreferencePage extends PreferencePage implements IWorkbenchP
 	 *            the parent control
 	 * @return a configured source viewer
 	 */
-	protected TMViewer createViewer(Composite parent) {
+	private TMViewer createViewer(Composite parent) {
 		return new TMViewer(parent, null, null, false, SWT.BORDER | SWT.V_SCROLL | SWT.H_SCROLL);
 	}
 

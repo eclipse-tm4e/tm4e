@@ -35,7 +35,7 @@ import com.google.gson.JsonObject;
  *
  * @see https://code.visualstudio.com/docs/extensionAPI/extension-points#_contributeslanguages
  */
-public class LanguageConfiguration implements ILanguageConfiguration {
+public final class LanguageConfiguration implements ILanguageConfiguration {
 
 	/**
 	 * Returns an instance of {@link LanguageConfiguration} loaded from the VSCode

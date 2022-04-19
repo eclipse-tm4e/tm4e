@@ -9,10 +9,7 @@
  *  Contributors:
  *  Angelo Zerr <angelo.zerr@gmail.com> - initial API and implementation
  */
-package org.eclipse.tm4e.core;
-
-import org.eclipse.tm4e.core.internal.oniguruma.IOnigNextMatchResult;
-import org.eclipse.tm4e.core.internal.oniguruma.OnigScanner;
+package org.eclipse.tm4e.core.internal.oniguruma;
 
 public class TestOngurama {
 

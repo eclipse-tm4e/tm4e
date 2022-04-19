@@ -42,11 +42,11 @@ import org.eclipse.tm4e.ui.internal.widgets.GrammarInfoWidget;
  * registry.
  *
  */
-public class SelectGrammarWizardPage extends AbstractWizardPage {
+final class SelectGrammarWizardPage extends AbstractWizardPage {
 
 	private static final String PAGE_NAME = SelectGrammarWizardPage.class.getName();
 
-	protected static final String[] TEXTMATE_EXTENSIONS = {"*.tmLanguage","*.json","*.YAML-tmLanguage","*.yaml","*.yml"};
+	private static final String[] TEXTMATE_EXTENSIONS = {"*.tmLanguage","*.json","*.YAML-tmLanguage","*.yaml","*.yml"};
 
 	private Button browseFileSystemButton;
 	private Button browseWorkspaceButton;
@@ -150,7 +150,7 @@ public class SelectGrammarWizardPage extends AbstractWizardPage {
 		return null;
 	}
 
-	public IGrammarDefinition getGrammarDefinition() {
+	IGrammarDefinition getGrammarDefinition() {
 		return new GrammarDefinition(grammarInfoWidget.getScopeNameText().getText(), grammarFileText.getText());
 	}
 

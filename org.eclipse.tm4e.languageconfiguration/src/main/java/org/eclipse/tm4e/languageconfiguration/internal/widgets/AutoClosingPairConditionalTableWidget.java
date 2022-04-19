@@ -21,9 +21,9 @@ import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.tm4e.languageconfiguration.internal.LanguageConfigurationMessages;
 import org.eclipse.tm4e.languageconfiguration.internal.supports.AutoClosingPairConditional;
 
-public class AutoClosingPairConditionalTableWidget extends CharacterPairsTableWidget {
+final class AutoClosingPairConditionalTableWidget extends CharacterPairsTableWidget {
 
-	public AutoClosingPairConditionalTableWidget(Table table) {
+	AutoClosingPairConditionalTableWidget(Table table) {
 		super(table);
 		setLabelProvider(new AutoClosingPairConditionalLabelProvider());
 
@@ -40,7 +40,7 @@ public class AutoClosingPairConditionalTableWidget extends CharacterPairsTableWi
 		gc.dispose();
 	}
 
-	protected class AutoClosingPairConditionalLabelProvider extends CharacterPairLabelProvider {
+	private static final class AutoClosingPairConditionalLabelProvider extends CharacterPairLabelProvider {
 
 		@Override
 		public String getColumnText(Object element, int columnIndex) {

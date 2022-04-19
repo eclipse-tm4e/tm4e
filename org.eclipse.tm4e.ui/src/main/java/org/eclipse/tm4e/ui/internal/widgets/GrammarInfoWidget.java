@@ -28,7 +28,7 @@ import org.eclipse.tm4e.ui.internal.TMUIMessages;
  * 
  * Widget which display grammar information like name, scope, and file types.
  */
-public class GrammarInfoWidget extends Composite {
+public final class GrammarInfoWidget extends Composite {
 
 	private Text nameText;
 	private Text scopeNameText;

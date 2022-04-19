@@ -17,7 +17,7 @@ import java.util.regex.Pattern;
  * Regex utilities.
  *
  */
-public class RegExpUtils {
+public final class RegExpUtils {
 
 	/**
 	 * Escapes regular expression characters in a given string

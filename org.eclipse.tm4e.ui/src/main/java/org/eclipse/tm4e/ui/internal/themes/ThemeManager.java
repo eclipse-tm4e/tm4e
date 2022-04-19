@@ -35,7 +35,7 @@ import com.google.gson.JsonObject;
 /**
  * Theme manager singleton.
  */
-public class ThemeManager extends AbstractThemeManager {
+public final class ThemeManager extends AbstractThemeManager {
 
 	// "themes" extension point
 	private static final String EXTENSION_THEMES = "themes"; //$NON-NLS-1$

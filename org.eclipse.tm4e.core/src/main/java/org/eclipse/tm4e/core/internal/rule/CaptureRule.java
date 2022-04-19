@@ -16,20 +16,22 @@
  */
 package org.eclipse.tm4e.core.internal.rule;
 
-public class CaptureRule extends Rule {
+public final class CaptureRule extends Rule {
 
 	public final Integer retokenizeCapturedWithRuleId;
 
-	public CaptureRule(int id, String name, String contentName, Integer retokenizeCapturedWithRuleId) {
+	CaptureRule(int id, String name, String contentName, Integer retokenizeCapturedWithRuleId) {
 		super(id, name, contentName);
 		this.retokenizeCapturedWithRuleId = retokenizeCapturedWithRuleId;
 	}
 
-	@Override public void collectPatternsRecursive(IRuleRegistry grammar, RegExpSourceList out, boolean isFirst) {
+	@Override
+	void collectPatternsRecursive(IRuleRegistry grammar, RegExpSourceList out, boolean isFirst) {
 		throw new UnsupportedOperationException();
 	}
 
-	@Override public ICompiledRule compile(IRuleRegistry grammar, String endRegexSource, boolean allowA, boolean allowG) {
+	@Override
+	public ICompiledRule compile(IRuleRegistry grammar, String endRegexSource, boolean allowA, boolean allowG) {
 		throw new UnsupportedOperationException();
 	}
 

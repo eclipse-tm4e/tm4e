@@ -28,12 +28,12 @@ import org.eclipse.tm4e.ui.TMUIPlugin;
  * TextMate model lines.
  *
  */
-public class DocumentLineList extends AbstractLineList {
+final class DocumentLineList extends AbstractLineList {
 
 	private final IDocument document;
 	private final InternalListener listener;
 
-	public DocumentLineList(IDocument document) {
+	DocumentLineList(IDocument document) {
 		this.document = document;
 		this.listener = new InternalListener();
 		document.addDocumentListener(listener);
@@ -42,7 +42,7 @@ public class DocumentLineList extends AbstractLineList {
 		}
 	}
 
-	private class InternalListener implements IDocumentListener {
+	private final class InternalListener implements IDocumentListener {
 
 		@Override
 		public void documentAboutToBeChanged(DocumentEvent event) {

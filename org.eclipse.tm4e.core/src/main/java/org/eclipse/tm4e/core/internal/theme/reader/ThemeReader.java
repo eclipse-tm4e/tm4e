@@ -26,7 +26,7 @@ import org.eclipse.tm4e.core.theme.IRawTheme;
  * TextMate Theme reader utilities.
  *
  */
-public class ThemeReader {
+public final class ThemeReader {
 
 	/**
 	 * Helper class, use methods statically
@@ -34,7 +34,7 @@ public class ThemeReader {
 	private ThemeReader() {
 	}
 
-	public static final IThemeParser XML_PARSER = new IThemeParser() {
+	private static final IThemeParser XML_PARSER = new IThemeParser() {
 
 		private final XMLPListParser<IRawTheme> parser = new XMLPListParser<>(true);
 
@@ -54,7 +54,7 @@ public class ThemeReader {
 		}
 	};
 
-	public static IRawTheme readThemeSync(String filePath, InputStream in) throws Exception {
+	private static IRawTheme readThemeSync(String filePath, InputStream in) throws Exception {
 		SyncThemeReader reader = new SyncThemeReader(in, getThemeParser(filePath));
 		return reader.load();
 	}

@@ -35,7 +35,7 @@ public abstract class AbstractThemeManager implements IThemeManager {
 	private final Map<String /* theme id */ , ITheme> themes;
 	private final ThemeAssociationRegistry themeAssociationRegistry;
 
-	public AbstractThemeManager() {
+	protected AbstractThemeManager() {
 		this.themes = new LinkedHashMap<>();
 		this.themeAssociationRegistry = new ThemeAssociationRegistry();
 	}
@@ -67,7 +67,7 @@ public abstract class AbstractThemeManager implements IThemeManager {
 		return getDefaultTheme(dark);
 	}
 
-	public ITheme getDefaultTheme(boolean dark) {
+	ITheme getDefaultTheme(boolean dark) {
 		for (ITheme theme : this.themes.values()) {
 			if (theme.isDark() == dark && theme.isDefault()) {
 				return theme;

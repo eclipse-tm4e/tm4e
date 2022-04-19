@@ -24,7 +24,7 @@ import org.osgi.service.prefs.BackingStoreException;
  * Wizard to import language configurations
  *
  */
-public class LanguageConfigurationImportWizard extends Wizard implements IImportWizard {
+public final class LanguageConfigurationImportWizard extends Wizard implements IImportWizard {
 
 	private SelectLanguageConfigurationWizardPage mainPage;
 
@@ -34,7 +34,7 @@ public class LanguageConfigurationImportWizard extends Wizard implements IImport
 
 	private final boolean save;
 
-	public LanguageConfigurationImportWizard() {
+	LanguageConfigurationImportWizard() {
 		this(true);
 	}
 

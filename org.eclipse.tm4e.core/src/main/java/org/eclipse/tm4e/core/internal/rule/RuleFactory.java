@@ -31,9 +31,9 @@ import org.eclipse.tm4e.core.internal.utils.CloneUtils;
  * @see https://github.com/Microsoft/vscode-textmate/blob/master/src/rule.ts
  *
  */
-public class RuleFactory {
+public final class RuleFactory {
 
-	public static CaptureRule createCaptureRule(IRuleFactoryHelper helper, final String name, final String contentName,
+	private static CaptureRule createCaptureRule(IRuleFactoryHelper helper, final String name, final String contentName,
 			final Integer retokenizeCapturedWithRuleId) {
 		return (CaptureRule) helper.registerRule(id -> new CaptureRule(id, name, contentName, retokenizeCapturedWithRuleId));
 	}

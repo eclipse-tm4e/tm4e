@@ -21,7 +21,7 @@ import org.w3c.css.sac.LangCondition;
 import org.w3c.css.sac.NegativeCondition;
 import org.w3c.css.sac.PositionalCondition;
 
-public class CSSConditionFactory implements ConditionFactory {
+public final class CSSConditionFactory implements ConditionFactory {
 
 	public static final ConditionFactory INSTANCE = new CSSConditionFactory();
 

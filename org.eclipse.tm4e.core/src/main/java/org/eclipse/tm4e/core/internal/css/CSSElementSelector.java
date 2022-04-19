@@ -11,9 +11,9 @@
  */
 package org.eclipse.tm4e.core.internal.css;
 
-public class CSSElementSelector extends AbstractElementSelector {
+final class CSSElementSelector extends AbstractElementSelector {
 
-	public CSSElementSelector(String uri, String name) {
+	CSSElementSelector(String uri, String name) {
 		super(uri, name);
 	}
 
@@ -28,10 +28,10 @@ public class CSSElementSelector extends AbstractElementSelector {
 	}
 
 	@Override
-	public int nbMatch(String... names) {		
+	public int nbMatch(String... names) {
 		return 0;
 	}
-	
+
 	@Override
 	public int nbClass() {
 		return 0;

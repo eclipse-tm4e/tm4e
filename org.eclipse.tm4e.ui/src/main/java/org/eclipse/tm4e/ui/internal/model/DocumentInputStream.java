@@ -19,24 +19,24 @@ import org.eclipse.jface.text.IDocument;
 /**
  * Input stream which reads from a document
  */
-public class DocumentInputStream extends InputStream {
-	
+public final class DocumentInputStream extends InputStream {
+
 	private final IDocument fDocument;
 	private int fCurrPos;
-	
+
 	public DocumentInputStream(IDocument document) {
 		fDocument= document;
 		fCurrPos= 0;
 	}
-	
+
 	public IDocument getDocument() {
 		return fDocument;
 	}
-		
+
 	/**
 	 * {@inheritDoc}
 	 */
-	 @Override
+	@Override
 	public int read() throws IOException {
 	 	try {
 		 	if (fCurrPos < fDocument.getLength()) {
@@ -46,5 +46,5 @@ public class DocumentInputStream extends InputStream {
 	 	}
 	 	return -1;
 	}
-	
+
 }

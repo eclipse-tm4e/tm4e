@@ -15,7 +15,7 @@ import org.eclipse.jface.viewers.IStructuredContentProvider;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.tm4e.languageconfiguration.ILanguageConfigurationRegistryManager;
 
-public class LanguageConfigurationContentProvider implements IStructuredContentProvider {
+final class LanguageConfigurationContentProvider implements IStructuredContentProvider {
 
 	private ILanguageConfigurationRegistryManager registry;
 

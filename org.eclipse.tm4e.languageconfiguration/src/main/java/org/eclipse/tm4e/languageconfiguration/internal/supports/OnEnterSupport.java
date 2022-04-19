@@ -74,23 +74,23 @@ public class OnEnterSupport {
 		return null;
 	}
 
-	private static class ProcessedBracketPair {
+	private static final class ProcessedBracketPair {
 
 		private static final Pattern B_REGEXP = Pattern.compile("\\B"); //$NON-NLS-1$
 
 		private final Pattern openRegExp;
 		private final Pattern closeRegExp;
 
-		public ProcessedBracketPair(String open, String close) {
+		private ProcessedBracketPair(String open, String close) {
 			openRegExp = createOpenBracketRegExp(open);
 			closeRegExp = createCloseBracketRegExp(close);
 		}
 
-		public boolean matchOpen(String beforeEnterText) {
+		private boolean matchOpen(String beforeEnterText) {
 			return openRegExp != null && openRegExp.matcher(beforeEnterText).find();
 		}
 
-		public boolean matchClose(String afterEnterText) {
+		private boolean matchClose(String afterEnterText) {
 			return closeRegExp != null && closeRegExp.matcher(afterEnterText).find();
 		}
 

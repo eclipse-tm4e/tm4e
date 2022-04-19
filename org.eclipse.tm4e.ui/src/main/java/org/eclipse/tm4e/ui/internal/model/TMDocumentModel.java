@@ -14,7 +14,7 @@ package org.eclipse.tm4e.ui.internal.model;
 import org.eclipse.jface.text.IDocument;
 import org.eclipse.tm4e.core.model.TMModel;
 
-public class TMDocumentModel extends TMModel {
+public final class TMDocumentModel extends TMModel {
 
 	private final IDocument document;
 

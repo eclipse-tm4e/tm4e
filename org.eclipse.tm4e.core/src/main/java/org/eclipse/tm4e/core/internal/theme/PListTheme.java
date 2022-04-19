@@ -15,7 +15,7 @@ import java.util.Map;
 
 import org.eclipse.tm4e.core.internal.parser.PListObject;
 
-public class PListTheme extends PListObject {
+public final class PListTheme extends PListObject {
 
 	public PListTheme(PListObject parent, boolean valueAsArray) {
 		super(parent, valueAsArray);

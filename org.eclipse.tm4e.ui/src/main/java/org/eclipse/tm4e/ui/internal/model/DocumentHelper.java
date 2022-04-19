@@ -21,26 +21,26 @@ import org.eclipse.jface.text.Region;
  * Utilities class for {@link IDocument}.
  *
  */
-public class DocumentHelper {
+final class DocumentHelper {
 
-	public static int getStartLine(DocumentEvent event) throws BadLocationException {
+	static int getStartLine(DocumentEvent event) throws BadLocationException {
 		return event.getDocument().getLineOfOffset(event.getOffset());
 	}
 
-	public static int getEndLine(DocumentEvent event, boolean documentAboutToBeChanged) throws BadLocationException {
+	static int getEndLine(DocumentEvent event, boolean documentAboutToBeChanged) throws BadLocationException {
 		int length = documentAboutToBeChanged ? event.getLength() : event.getText().length();
 		return event.getDocument().getLineOfOffset(event.getOffset() + length);
 	}
 
-	public static boolean isRemove(DocumentEvent event) {
+	static boolean isRemove(DocumentEvent event) {
 		return event.getText() == null || event.getText().isEmpty();
 	}
 
-	public static boolean isInsert(DocumentEvent event) {
+	static boolean isInsert(DocumentEvent event) {
 		return event.getLength() == 0 && event.getText() != null;
 	}
 
-	public static String getLineText(IDocument document, int line, boolean withLineDelimiter)
+	static String getLineText(IDocument document, int line, boolean withLineDelimiter)
 			throws BadLocationException {
 		int lo = document.getLineOffset(line);
 		int ll = document.getLineLength(line);
@@ -51,7 +51,7 @@ public class DocumentHelper {
 		return document.get(lo, ll);
 	}
 
-	public static IRegion getRegion(IDocument document, int fromLine, int toLine) throws BadLocationException {
+	private static IRegion getRegion(IDocument document, int fromLine, int toLine) throws BadLocationException {
 		int startOffset = document.getLineOffset(fromLine);
 		int endOffset = document.getLineOffset(toLine) + document.getLineLength(toLine);
 		return new Region(startOffset, endOffset - startOffset);

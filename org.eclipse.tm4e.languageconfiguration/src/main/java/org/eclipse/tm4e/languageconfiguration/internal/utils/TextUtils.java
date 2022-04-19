@@ -23,7 +23,7 @@ import org.eclipse.jface.text.TextUtilities;
 import org.eclipse.jface.text.TextViewer;
 import org.eclipse.tm4e.ui.utils.ClassHelper;
 
-public class TextUtils {
+public final class TextUtils {
 
 	/**
 	 * Returns true if text of the command is an enter and false otherwise.
@@ -94,7 +94,7 @@ public class TextUtils {
 	 * Returns first index of the string that is not whitespace. If string is empty
 	 * or contains only whitespaces, returns -1
 	 */
-	public static int firstNonWhitespaceIndex(String str) {
+	private static int firstNonWhitespaceIndex(String str) {
 		for (int i = 0, len = str.length(); i < len; i++) {
 			char c = str.charAt(i);
 			if (c != ' ' && c != '\t') {

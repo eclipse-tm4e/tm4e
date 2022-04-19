@@ -27,14 +27,14 @@ import org.eclipse.tm4e.core.internal.oniguruma.OnigScanner;
  * @see https://github.com/Microsoft/vscode-textmate/blob/master/src/rule.ts
  *
  */
-public class RegExpSourceList {
+final class RegExpSourceList {
 
-	private static class RegExpSourceListAnchorCache {
+	private static final class RegExpSourceListAnchorCache {
 
-		public ICompiledRule A0_G0;
-		public ICompiledRule A0_G1;
-		public ICompiledRule A1_G0;
-		public ICompiledRule A1_G1;
+		private ICompiledRule A0_G0;
+		private ICompiledRule A0_G1;
+		private ICompiledRule A1_G0;
+		private ICompiledRule A1_G1;
 
 	}
 
@@ -43,28 +43,28 @@ public class RegExpSourceList {
 	private ICompiledRule _cached;
 	private final RegExpSourceListAnchorCache _anchorCache;
 
-	public RegExpSourceList() {
+	RegExpSourceList() {
 		this._items = new ArrayList<>();
 		this._hasAnchors = false;
 		this._cached = null;
 		this._anchorCache = new RegExpSourceListAnchorCache();
 	}
 
-	public void push(RegExpSource item) {
+	void push(RegExpSource item) {
 		this._items.add(item);
 		this._hasAnchors = this._hasAnchors ? this._hasAnchors : item.hasAnchor();
 	}
 
-	public void unshift(RegExpSource item) {
+	void unshift(RegExpSource item) {
 		this._items.add(0, item);
 		this._hasAnchors = this._hasAnchors ? this._hasAnchors : item.hasAnchor();
 	}
 
-	public int length() {
+	int length() {
 		return this._items.size();
 	}
 
-	public void setSource(int index, String newSource) {
+	void setSource(int index, String newSource) {
 		RegExpSource r = this._items.get(index);
 		if (!r.getSource().equals(newSource)) {
 			// bust the cache
@@ -77,7 +77,7 @@ public class RegExpSourceList {
 		}
 	}
 
-	public ICompiledRule compile(IRuleRegistry grammar, boolean allowA, boolean allowG) {
+	ICompiledRule compile(IRuleRegistry grammar, boolean allowA, boolean allowG) {
 		if (!this._hasAnchors) {
 			if (this._cached == null) {
 				List<String> regexps = new ArrayList<>();

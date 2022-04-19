@@ -20,19 +20,19 @@ import java.util.List;
 
 import org.eclipse.tm4e.core.internal.oniguruma.IOnigCaptureIndex;
 
-public class BeginEndRule extends Rule {
+public final class BeginEndRule extends Rule {
 
 	private final RegExpSource begin;
 	public final List<CaptureRule> beginCaptures;
 	private final RegExpSource end;
 	public final boolean endHasBackReferences;
 	public final List<CaptureRule> endCaptures;
-	public final boolean applyEndPatternLast;
-	public final boolean hasMissingPatterns;
-	public final Integer[] patterns;
+	private final boolean applyEndPatternLast;
+	final boolean hasMissingPatterns;
+	final Integer[] patterns;
 	private RegExpSourceList cachedCompiledPatterns;
 
-	public BeginEndRule(int id, String name, String contentName, String begin, List<CaptureRule> beginCaptures,
+	BeginEndRule(int id, String name, String contentName, String begin, List<CaptureRule> beginCaptures,
 			String end, List<CaptureRule> endCaptures, boolean applyEndPatternLast, ICompilePatternsResult patterns) {
 		super(id, name, contentName);
 		this.begin = new RegExpSource(begin, this.id);
@@ -51,7 +51,7 @@ public class BeginEndRule extends Rule {
 	}
 
 	@Override
-	public void collectPatternsRecursive(IRuleRegistry grammar, RegExpSourceList out, boolean isFirst) {
+	void collectPatternsRecursive(IRuleRegistry grammar, RegExpSourceList out, boolean isFirst) {
 		if (isFirst) {
 			for (Integer pattern : this.patterns) {
 				Rule rule = grammar.getRule(pattern);

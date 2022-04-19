@@ -15,9 +15,9 @@ import org.w3c.css.sac.CombinatorCondition;
 import org.w3c.css.sac.Condition;
 
 public abstract class AbstractCombinatorCondition implements CombinatorCondition, ExtendedCondition {
-	protected Condition firstCondition;
 
-	protected Condition secondCondition;
+	private final Condition firstCondition;
+	private final Condition secondCondition;
 
 	/**
 	 * Creates a new CombinatorCondition object.

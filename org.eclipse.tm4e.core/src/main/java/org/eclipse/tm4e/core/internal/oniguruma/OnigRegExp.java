@@ -36,14 +36,14 @@ import org.joni.exception.SyntaxException;
  * @see https://github.com/atom/node-oniguruma/blob/master/src/onig-reg-exp.cc
  *
  */
-public class OnigRegExp {
+final class OnigRegExp {
 
 	private OnigString lastSearchString;
 	private int lastSearchPosition;
 	private OnigResult lastSearchResult;
 	private final Regex regex;
 
-	public OnigRegExp(String source) {
+	OnigRegExp(String source) {
 		lastSearchString = null;
 		lastSearchPosition = -1;
 		lastSearchResult = null;
@@ -56,7 +56,7 @@ public class OnigRegExp {
 		}
 	}
 
-	public OnigResult search(OnigString str, int position) {
+	OnigResult search(OnigString str, int position) {
 		if (lastSearchString == str && lastSearchPosition <= position &&
 			(lastSearchResult == null || lastSearchResult.locationAt(0) >= position)) {
 			return lastSearchResult;

@@ -44,12 +44,12 @@ public class LanguageConfigurationInfoWidget extends Composite {
 		createUI(this);
 	}
 
-	protected TabItem commentsTab;
+	private TabItem commentsTab;
 	private Text lineCommentText;
 	private Text blockCommentStartText;
 	private Text blockCommentEndText;
 
-	protected TabItem bracketsTab;
+	private TabItem bracketsTab;
 	private CharacterPairsTableWidget bracketsTable;
 
 	protected TabItem autoClosingPairsTab;
@@ -58,12 +58,12 @@ public class LanguageConfigurationInfoWidget extends Composite {
 	protected TabItem surroundingPairsTab;
 	private CharacterPairsTableWidget surroundingPairsTable;
 
-	protected TabItem foldingTab;
+	private TabItem foldingTab;
 	private Text offsideText;
 	private Text markersStartText;
 	private Text markersEndText;
 
-	protected TabItem wordPatternTab;
+	private TabItem wordPatternTab;
 	private Text wordPatternText;
 
 	protected TabItem onEnterRulesTab;
@@ -137,7 +137,7 @@ public class LanguageConfigurationInfoWidget extends Composite {
 		return list.stream().filter(el -> el != null).collect(Collectors.toList());
 	}
 
-	protected void createCommentsTab(TabFolder folder) {
+	private void createCommentsTab(TabFolder folder) {
 		commentsTab = createTab(folder, LanguageConfigurationMessages.LanguageConfigurationInfoWidget_comments);
 		Composite parent = (Composite) commentsTab.getControl();
 
@@ -149,7 +149,7 @@ public class LanguageConfigurationInfoWidget extends Composite {
 				LanguageConfigurationMessages.LanguageConfigurationInfoWidget_blockCommentsEnd);
 	}
 
-	protected void createBracketsTab(TabFolder folder) {
+	private void createBracketsTab(TabFolder folder) {
 		bracketsTab = createTab(folder, LanguageConfigurationMessages.LanguageConfigurationInfoWidget_brackets);
 		bracketsTable = new CharacterPairsTableWidget(createTable((Composite) bracketsTab.getControl()));
 	}
@@ -168,7 +168,7 @@ public class LanguageConfigurationInfoWidget extends Composite {
 				createTable((Composite) surroundingPairsTab.getControl()));
 	}
 
-	protected void createFoldingTab(TabFolder folder) {
+	private void createFoldingTab(TabFolder folder) {
 		foldingTab = createTab(folder, LanguageConfigurationMessages.LanguageConfigurationInfoWidget_folding_title);
 		Composite parent = (Composite) foldingTab.getControl();
 
@@ -179,7 +179,7 @@ public class LanguageConfigurationInfoWidget extends Composite {
 		markersEndText = createText(parent, LanguageConfigurationMessages.LanguageConfigurationInfoWidget_end);
 	}
 
-	protected void createWordPatternTab(TabFolder folder) {
+	private void createWordPatternTab(TabFolder folder) {
 		wordPatternTab = createTab(folder,
 				LanguageConfigurationMessages.LanguageConfigurationInfoWidget_wordPattern_title);
 		Composite parent = (Composite) wordPatternTab.getControl();
@@ -216,7 +216,7 @@ public class LanguageConfigurationInfoWidget extends Composite {
 		return tab;
 	}
 
-	protected Text createText(Composite parent, String s) {
+	private Text createText(Composite parent, String s) {
 		Label label = new Label(parent, SWT.NONE);
 		label.setText(s);
 

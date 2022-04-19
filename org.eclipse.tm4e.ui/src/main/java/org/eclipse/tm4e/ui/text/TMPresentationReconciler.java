@@ -144,7 +144,7 @@ public class TMPresentationReconciler implements IPresentationReconciler {
 	 * preferences changed or TextMate theme changed..
 	 *
 	 */
-	private class ThemeChangeListener implements IPreferenceChangeListener {
+	private final class ThemeChangeListener implements IPreferenceChangeListener {
 
 		@Override
 		public void preferenceChange(PreferenceChangeEvent event) {

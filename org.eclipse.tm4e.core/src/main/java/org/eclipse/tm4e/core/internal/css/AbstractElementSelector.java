@@ -18,12 +18,12 @@ public abstract class AbstractElementSelector implements ElementSelector, Extend
 	/**
 	 * The namespace URI.
 	 */
-	protected String namespaceURI;
+	private final String namespaceURI;
 
 	/**
 	 * The local name.
 	 */
-	protected String localName;
+	private final String localName;
 
 	/**
 	 * Creates a new ElementSelector object.

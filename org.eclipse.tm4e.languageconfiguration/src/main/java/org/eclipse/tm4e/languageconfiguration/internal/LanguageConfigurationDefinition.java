@@ -32,7 +32,7 @@ import org.eclipse.tm4e.ui.utils.ContentTypeHelper;
  * Language configuration definition.
  *
  */
-public class LanguageConfigurationDefinition extends TMResource implements ILanguageConfigurationDefinition {
+public final class LanguageConfigurationDefinition extends TMResource implements ILanguageConfigurationDefinition {
 
 	private final IContentType contentType;
 	private boolean onEnterEnabled = true;
@@ -70,7 +70,7 @@ public class LanguageConfigurationDefinition extends TMResource implements ILang
 	 *
 	 * @return the "character pair" support and null otherwise.
 	 */
-	public CharacterPairSupport getCharacterPair() {
+	CharacterPairSupport getCharacterPair() {
 		if (this.characterPair == null) {
 			ILanguageConfiguration conf = getLanguageConfiguration();
 			if (conf != null) {
@@ -86,7 +86,7 @@ public class LanguageConfigurationDefinition extends TMResource implements ILang
 	 *
 	 * @return the "on enter" support and null otherwise.
 	 */
-	public OnEnterSupport getOnEnter() {
+	OnEnterSupport getOnEnter() {
 		if (this.onEnter == null) {
 			ILanguageConfiguration conf = getLanguageConfiguration();
 			if (conf != null && (conf.getBrackets() != null || conf.getOnEnterRules() != null)) {
@@ -101,7 +101,7 @@ public class LanguageConfigurationDefinition extends TMResource implements ILang
 	 *
 	 * @return the "commment" support and null otherwise.
 	 */
-	public CommentSupport getCommentSupport() {
+	CommentSupport getCommentSupport() {
 		if (this.comment == null) {
 			ILanguageConfiguration conf = getLanguageConfiguration();
 			if (conf != null) {

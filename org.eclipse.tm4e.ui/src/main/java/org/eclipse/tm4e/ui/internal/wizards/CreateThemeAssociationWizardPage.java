@@ -38,7 +38,7 @@ import org.eclipse.tm4e.ui.themes.ThemeAssociation;
  * Wizard page to create association between grammar and theme.
  *
  */
-public class CreateThemeAssociationWizardPage extends AbstractWizardPage {
+final class CreateThemeAssociationWizardPage extends AbstractWizardPage {
 
 	private static final String PAGE_NAME = CreateThemeAssociationWizardPage.class.getName();
 
@@ -120,7 +120,7 @@ public class CreateThemeAssociationWizardPage extends AbstractWizardPage {
 		return null;
 	}
 
-	public IThemeAssociation getThemeAssociation() {
+	IThemeAssociation getThemeAssociation() {
 		String themeId = ((ITheme) themeViewer.getStructuredSelection().getFirstElement()).getId();
 		String scopeName = ((IGrammarDefinition) grammarViewer.getStructuredSelection().getFirstElement())
 				.getScopeName();

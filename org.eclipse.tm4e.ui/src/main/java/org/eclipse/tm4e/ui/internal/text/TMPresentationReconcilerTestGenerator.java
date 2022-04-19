@@ -20,7 +20,7 @@ import org.eclipse.jface.text.TextEvent;
 import org.eclipse.jface.text.TextPresentation;
 import org.eclipse.tm4e.ui.text.ITMPresentationReconcilerListener;
 
-public class TMPresentationReconcilerTestGenerator
+public final class TMPresentationReconcilerTestGenerator
 		implements ITMPresentationReconcilerListener, IDocumentListener, ITextListener {
 
 	private ITextViewer viewer;
@@ -30,12 +30,12 @@ public class TMPresentationReconcilerTestGenerator
 
 	/*private List<Command> commands;
 
-	private class Command {
+	private static final class Command {
 		final String command;
 		StyleRange[] ranges;
 		Throwable error;
 
-		public Command(String command) {
+		Command(String command) {
 			this.command = command;
 		}
 	}*/
@@ -93,7 +93,7 @@ public class TMPresentationReconcilerTestGenerator
 
 	}
 
-	public String toText(String text) {
+	private String toText(String text) {
 		StringBuilder newText = new StringBuilder();
 		for (int i = 0; i < text.length(); i++) {
 			char c = text.charAt(i);
@@ -120,7 +120,7 @@ public class TMPresentationReconcilerTestGenerator
 //		for (Command command : commands) {
 //			write(toString(command.ranges));
 //		}
-//		
+//
 		write("", true);
 		write("\t\twhile (!shell.isDisposed()) {", true);
 		write("\t\t}", true);
@@ -151,7 +151,7 @@ public class TMPresentationReconcilerTestGenerator
 		document.removeDocumentListener(this);
 		viewer.removeTextListener(this);
 		//commands.clear();
-		
+
 	}
 
 	@Override

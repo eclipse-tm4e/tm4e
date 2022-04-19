@@ -15,11 +15,11 @@ import org.w3c.css.sac.LexicalUnit;
 import org.w3c.dom.DOMException;
 import org.w3c.dom.css.CSSValue;
 
-public class Measure extends CSSValueImpl {
+final class Measure extends CSSValueImpl {
 
 	LexicalUnit value;
 
-	public Measure(LexicalUnit value) {
+	Measure(LexicalUnit value) {
 		this.value = value;
 	}
 
@@ -53,7 +53,7 @@ public class Measure extends CSSValueImpl {
 	 *            a short representing the value type, see
 	 *            {@link CSSValue#getCssValueType()}
 	 */
-	public int getIntegerValue(short valueType) throws DOMException {
+	private int getIntegerValue(short valueType) throws DOMException {
 		return value.getIntegerValue();
 	}
 

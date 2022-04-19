@@ -22,7 +22,7 @@ import org.eclipse.tm4e.ui.model.ITMModelManager;
  * TextMate model manager which connect/disconnect a TextModel model
  * {@link ITMModel} with an Eclipse {@link IDocument}.
  */
-public class TMModelManager implements ITMModelManager {
+public final class TMModelManager implements ITMModelManager {
 
 	private static final ITMModelManager INSTANCE = new TMModelManager();
 

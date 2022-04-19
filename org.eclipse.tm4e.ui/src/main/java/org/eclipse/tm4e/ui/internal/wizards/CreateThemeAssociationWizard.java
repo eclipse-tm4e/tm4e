@@ -20,9 +20,9 @@ import org.osgi.service.prefs.BackingStoreException;
 
 /**
  * Wizard to create association between grammar and theme.
- * 
+ *
  */
-public class CreateThemeAssociationWizard extends Wizard {
+public final class CreateThemeAssociationWizard extends Wizard {
 
 	private CreateThemeAssociationWizardPage mainPage;
 
@@ -36,7 +36,7 @@ public class CreateThemeAssociationWizard extends Wizard {
 
 	private IThemeAssociation initialAssociation;
 
-	public CreateThemeAssociationWizard() {
+	private CreateThemeAssociationWizard() {
 		this(true);
 	}
 
@@ -47,7 +47,7 @@ public class CreateThemeAssociationWizard extends Wizard {
 
 	/**
 	 * Set theme managerto use to add the created theme associations.
-	 * 
+	 *
 	 * @param themeManager
 	 */
 	public void setThemeManager(IThemeManager themeManager) {

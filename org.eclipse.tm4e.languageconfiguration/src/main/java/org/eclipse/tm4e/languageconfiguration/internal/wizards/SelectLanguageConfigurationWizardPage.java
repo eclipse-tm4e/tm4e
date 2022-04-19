@@ -55,10 +55,10 @@ import org.eclipse.tm4e.languageconfiguration.internal.widgets.LanguageConfigura
 import org.eclipse.tm4e.ui.utils.ContentTypeHelper;
 import org.eclipse.ui.dialogs.ResourceSelectionDialog;
 
-public class SelectLanguageConfigurationWizardPage extends WizardPage implements Listener {
+final class SelectLanguageConfigurationWizardPage extends WizardPage implements Listener {
 	private static final String PAGE_NAME = SelectLanguageConfigurationWizardPage.class.getName();
 
-	protected static final String[] TEXTMATE_EXTENSIONS = { "*language-configuration.json" }; //$NON-NLS-1$
+	private static final String[] TEXTMATE_EXTENSIONS = { "*language-configuration.json" }; //$NON-NLS-1$
 
 	private Button browseFileSystemButton;
 	private Button browseWorkspaceButton;
@@ -66,13 +66,9 @@ public class SelectLanguageConfigurationWizardPage extends WizardPage implements
 	private Text contentTypeText;
 	private LanguageConfigurationInfoWidget infoWidget;
 
-	private ILanguageConfigurationRegistryManager registryManager;
+	private final ILanguageConfigurationRegistryManager registryManager;
 
-	protected SelectLanguageConfigurationWizardPage(String pageName) {
-		super(pageName);
-	}
-
-	public SelectLanguageConfigurationWizardPage(ILanguageConfigurationRegistryManager registryManager) {
+	SelectLanguageConfigurationWizardPage(ILanguageConfigurationRegistryManager registryManager) {
 		super(PAGE_NAME);
 		this.registryManager = registryManager;
 		super.setTitle(LanguageConfigurationMessages.SelectLanguageConfigurationWizardPage_page_title);
@@ -102,7 +98,7 @@ public class SelectLanguageConfigurationWizardPage extends WizardPage implements
 		statusChanged(status == null ? Status.OK_STATUS : status);
 	}
 
-	public void statusChanged(IStatus status) {
+	private void statusChanged(IStatus status) {
 		setPageComplete(!status.matches(IStatus.ERROR));
 		applyToStatusLine(this, status);
 	}
@@ -132,7 +128,7 @@ public class SelectLanguageConfigurationWizardPage extends WizardPage implements
 		}
 	}
 
-	protected void createBody(Composite ancestor) {
+	private void createBody(Composite ancestor) {
 		Composite parent = new Composite(ancestor, SWT.NONE);
 		parent.setFont(parent.getFont());
 		parent.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
@@ -208,7 +204,7 @@ public class SelectLanguageConfigurationWizardPage extends WizardPage implements
 				.setText(((IContentType) event.getStructuredSelection().getFirstElement()).toString()));
 	}
 
-	private static class ContentTypesLabelProvider extends LabelProvider {
+	private static final class ContentTypesLabelProvider extends LabelProvider {
 		@Override
 		public String getText(Object element) {
 			IContentType contentType = (IContentType) element;
@@ -216,7 +212,7 @@ public class SelectLanguageConfigurationWizardPage extends WizardPage implements
 		}
 	}
 
-	private static class ContentTypesContentProvider implements ITreeContentProvider {
+	private static final class ContentTypesContentProvider implements ITreeContentProvider {
 
 		private IContentTypeManager manager = Platform.getContentTypeManager();
 
@@ -265,7 +261,7 @@ public class SelectLanguageConfigurationWizardPage extends WizardPage implements
 		return text;
 	}
 
-	protected IStatus validatePage(Event event) {
+	private IStatus validatePage(Event event) {
 		infoWidget.refresh(null);
 		String path = fileText.getText();
 		if (path.length() == 0) {
@@ -304,7 +300,7 @@ public class SelectLanguageConfigurationWizardPage extends WizardPage implements
 		return null;
 	}
 
-	public ILanguageConfigurationDefinition getDefinition() {
+	ILanguageConfigurationDefinition getDefinition() {
 		IPath p = new Path(fileText.getText());
 		if (!p.isAbsolute()) {
 			p = ResourcesPlugin.getWorkspace().getRoot().getFile(p).getLocation();

@@ -18,7 +18,7 @@ package org.eclipse.tm4e.core.internal.matcher;
 
 import java.util.function.Predicate;
 
-public class MatcherWithPriority<T> {
+public final class MatcherWithPriority<T> {
 
 	public final Predicate<T> matcher;
 	public final int priority;
@@ -27,7 +27,7 @@ public class MatcherWithPriority<T> {
 	 * @param matcher
 	 * @param priority
 	 */
-	public MatcherWithPriority(Predicate<T> matcher, int priority) {
+	MatcherWithPriority(Predicate<T> matcher, int priority) {
 		this.matcher = matcher;
 		this.priority = priority;
 	}

@@ -30,8 +30,8 @@ import org.eclipse.swt.widgets.Table;
 public abstract class TableAndButtonsWidget extends Composite {
 
 	private TableViewer viewer;
-	
-	public TableAndButtonsWidget(Composite parent, int style, String title) {
+
+	protected TableAndButtonsWidget(Composite parent, int style, String title) {
 		super(parent, style);
 		GridLayout layout = new GridLayout();
 		layout.marginHeight = 0;
@@ -51,7 +51,7 @@ public abstract class TableAndButtonsWidget extends Composite {
 		layout.marginRight = 0;
 		parent.setLayout(layout);
 		parent.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-		
+
 		// Title
 		createTitle(title, parent);
 
@@ -90,7 +90,7 @@ public abstract class TableAndButtonsWidget extends Composite {
 
 		viewer = new TableViewer(table);
 		table.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-		
+
 	}
 
 	public void setInput(Object input) {

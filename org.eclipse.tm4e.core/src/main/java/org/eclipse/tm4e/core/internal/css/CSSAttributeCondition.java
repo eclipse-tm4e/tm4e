@@ -11,24 +11,24 @@
  */
 package org.eclipse.tm4e.core.internal.css;
 
-public class CSSAttributeCondition extends AbstractAttributeCondition {
+class CSSAttributeCondition extends AbstractAttributeCondition {
 
 	/**
 	 * The attribute's local name.
 	 */
-	protected String localName;
+	private final String localName;
 
 	/**
 	 * The attribute's namespace URI.
 	 */
-	protected String namespaceURI;
+	private final String namespaceURI;
 
 	/**
 	 * Whether this condition applies to specified attributes.
 	 */
-	protected boolean specified;
+	private final boolean specified;
 
-	public CSSAttributeCondition(String localName, String namespaceURI, boolean specified, String value) {
+	protected CSSAttributeCondition(String localName, String namespaceURI, boolean specified, String value) {
 		super(value);
 		this.localName = localName;
 		this.namespaceURI = namespaceURI;
@@ -64,7 +64,7 @@ public class CSSAttributeCondition extends AbstractAttributeCondition {
 //		return e.getAttribute(getLocalName()).equals(val);
 		return 0;
 	}
-	
+
 	@Override
 	public int nbClass() {
 		return 0;

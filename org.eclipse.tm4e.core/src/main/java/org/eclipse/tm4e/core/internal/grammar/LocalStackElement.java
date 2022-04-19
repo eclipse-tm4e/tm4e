@@ -16,21 +16,21 @@
  */
 package org.eclipse.tm4e.core.internal.grammar;
 
-class LocalStackElement {
+final class LocalStackElement {
 
 	private final ScopeListElement scopes;
 	private final int endPos;
 
-	public LocalStackElement(ScopeListElement scopes, int endPos) {
+	LocalStackElement(ScopeListElement scopes, int endPos) {
 		this.scopes = scopes;
 		this.endPos = endPos;
 	}
 
-	public ScopeListElement getScopes() {
+	ScopeListElement getScopes() {
 		return scopes;
 	}
 
-	public int getEndPos() {
+	int getEndPos() {
 		return endPos;
 	}
 

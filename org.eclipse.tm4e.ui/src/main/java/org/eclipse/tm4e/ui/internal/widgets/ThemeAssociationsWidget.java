@@ -34,7 +34,7 @@ import org.eclipse.tm4e.ui.themes.IThemeManager;
  * buttons on the right.
  *
  */
-public class ThemeAssociationsWidget extends TableAndButtonsWidget {
+public final class ThemeAssociationsWidget extends TableAndButtonsWidget {
 
 	private final IThemeManager themeManager;
 

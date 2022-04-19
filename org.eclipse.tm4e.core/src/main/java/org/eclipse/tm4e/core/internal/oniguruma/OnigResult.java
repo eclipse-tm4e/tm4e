@@ -19,25 +19,25 @@ package org.eclipse.tm4e.core.internal.oniguruma;
 
 import org.joni.Region;
 
-public class OnigResult {
+final class OnigResult {
 
 	private int indexInScanner;
 	private final Region region;
 
-	public OnigResult(Region region, int indexInScanner) {
+	OnigResult(Region region, int indexInScanner) {
 		this.region = region;
 		this.indexInScanner = indexInScanner;
 	}
 
-	public int getIndex() {
+	int getIndex() {
 		return indexInScanner;
 	}
 
-	public void setIndex(int index) {
+	void setIndex(int index) {
 		this.indexInScanner = index;
 	}
 
-	public int locationAt(int index) {
+	int locationAt(int index) {
 		int bytes = region.beg[index];
 		if (bytes > 0) {
 			return bytes;
@@ -45,11 +45,11 @@ public class OnigResult {
 		return 0;
 	}
 
-	public int count() {
+	int count() {
 		return region.numRegs;
 	}
 
-	public int lengthAt(int index) {
+	int lengthAt(int index) {
 		int bytes = region.end[index] - region.beg[index];
 		if (bytes > 0) {
 			return bytes;

@@ -36,7 +36,7 @@ import org.eclipse.tm4e.core.theme.IThemeProvider;
 import org.eclipse.tm4e.core.theme.Theme;
 import org.eclipse.tm4e.core.theme.ThemeTrieElementRule;
 
-public class SyncRegistry implements IGrammarRepository, IThemeProvider {
+public final class SyncRegistry implements IGrammarRepository, IThemeProvider {
 
 	private final Map<String, IGrammar> grammars;
 	private final Map<String, IRawGrammar> rawGrammars;

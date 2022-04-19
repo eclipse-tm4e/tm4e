@@ -19,7 +19,7 @@ import org.eclipse.tm4e.registry.IGrammarDefinition;
 /**
  * Label provider for grammar definition.
  */
-public class GrammarDefinitionLabelProvider extends LabelProvider implements ITableLabelProvider {
+public final class GrammarDefinitionLabelProvider extends LabelProvider implements ITableLabelProvider {
 
 	@Override
 	public Image getColumnImage(Object element, int columnIndex) {

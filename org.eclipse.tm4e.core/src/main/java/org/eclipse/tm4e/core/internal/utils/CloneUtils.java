@@ -24,7 +24,7 @@ import org.eclipse.tm4e.core.internal.types.IRawRepository;
  * Clone utilities.
  *
  */
-public class CloneUtils {
+public final class CloneUtils {
 
 	/**
 	 * Helper class, use methods statically

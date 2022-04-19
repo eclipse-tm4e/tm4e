@@ -16,7 +16,6 @@
  *  - Fabio Zadrozny <fabiofz@gmail.com> - Convert uniqueId to Object (for identity compare)
  *  - Fabio Zadrozny <fabiofz@gmail.com> - Utilities to convert between utf-8 and utf-16
  */
-
 package org.eclipse.tm4e.core.internal.oniguruma;
 
 import java.nio.charset.StandardCharsets;
@@ -30,7 +29,7 @@ import org.jcodings.specific.UTF8Encoding;
  * @see https://github.com/atom/node-oniguruma/blob/master/src/onig-string.cc
  *
  */
-public class OnigString {
+public final class OnigString {
 
 	public final String string;
 	public final byte[] utf8_value;
@@ -38,13 +37,12 @@ public class OnigString {
 	private int[] charsPosFromBytePos;
 	private boolean computedOffsets;
 
-
 	public OnigString(String str) {
 		this.string = str;
 		this.utf8_value = str.getBytes(StandardCharsets.UTF_8);
 	}
 
-	public int convertUtf16OffsetToUtf8(int posInChars) {
+	int convertUtf16OffsetToUtf8(int posInChars) {
 		if(!computedOffsets) {
 			computeOffsets();
 		}
@@ -84,7 +82,7 @@ public class OnigString {
 		return index;
 	}
 
-	public int convertUtf8OffsetToUtf16(int posInBytes) {
+	int convertUtf8OffsetToUtf16(int posInBytes) {
 		if(!computedOffsets) {
 			computeOffsets();
 		}

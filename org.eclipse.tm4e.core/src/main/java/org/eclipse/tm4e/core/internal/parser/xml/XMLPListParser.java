@@ -21,7 +21,7 @@ import org.eclipse.tm4e.core.internal.parser.PList;
 import org.xml.sax.InputSource;
 import org.xml.sax.XMLReader;
 
-public class XMLPListParser<T> {
+public final class XMLPListParser<T> {
 
 	private final boolean theme;
 

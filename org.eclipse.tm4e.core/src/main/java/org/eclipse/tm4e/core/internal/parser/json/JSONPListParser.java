@@ -20,7 +20,7 @@ import org.eclipse.tm4e.core.internal.parser.PList;
 import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonToken;
 
-public class JSONPListParser<T> {
+public final class JSONPListParser<T> {
 
 	private final boolean theme;
 

@@ -20,19 +20,19 @@ import java.util.List;
 
 import org.eclipse.tm4e.core.internal.oniguruma.IOnigCaptureIndex;
 
-public class BeginWhileRule extends Rule {
+public final class BeginWhileRule extends Rule {
 
 	private final RegExpSource begin;
 	public final List<CaptureRule> beginCaptures;
 	public final List<CaptureRule> whileCaptures;
 	private final RegExpSource _while;
 	public final boolean whileHasBackReferences;
-	public final boolean hasMissingPatterns;
-	public final Integer[] patterns;
+	final boolean hasMissingPatterns;
+	final Integer[] patterns;
 	private RegExpSourceList cachedCompiledPatterns;
 	private RegExpSourceList cachedCompiledWhilePatterns;
 
-	public BeginWhileRule(/* $location:ILocation, */ int id, String name, String contentName, String begin,
+	BeginWhileRule(/* $location:ILocation, */ int id, String name, String contentName, String begin,
 			List<CaptureRule> beginCaptures, String _while, List<CaptureRule> whileCaptures,
 			ICompilePatternsResult patterns) {
 		super(/* $location, */id, name, contentName);
@@ -52,7 +52,7 @@ public class BeginWhileRule extends Rule {
 	}
 
 	@Override
-	public void collectPatternsRecursive(IRuleRegistry grammar, RegExpSourceList out, boolean isFirst) {
+	void collectPatternsRecursive(IRuleRegistry grammar, RegExpSourceList out, boolean isFirst) {
 		if (isFirst) {
 			Rule rule;
 			for (Integer pattern : patterns) {

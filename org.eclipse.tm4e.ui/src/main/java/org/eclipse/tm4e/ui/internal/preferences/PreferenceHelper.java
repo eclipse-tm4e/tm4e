@@ -24,7 +24,7 @@ import com.google.gson.InstanceCreator;
  * Helper class load, save theme preferences with Json format.
  *
  */
-public class PreferenceHelper {
+public final class PreferenceHelper {
 
 	private static final Gson DEFAULT_GSON;
 
@@ -35,7 +35,7 @@ public class PreferenceHelper {
 	public static IThemeAssociation[] loadThemeAssociations(String json) {
 		return DEFAULT_GSON.fromJson(json, ThemeAssociation[].class);
 	}
-	
+
 	public static String toJsonThemeAssociations(Collection<IThemeAssociation> themeAssociations) {
 		return DEFAULT_GSON.toJson(themeAssociations);
 	}

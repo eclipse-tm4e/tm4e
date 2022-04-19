@@ -20,7 +20,7 @@ import org.eclipse.swt.graphics.Image;
 /**
  * Label provider for {@link IContentType}.
  */
-public class ContentTypeLabelProvider extends LabelProvider implements ITableLabelProvider {
+public final class ContentTypeLabelProvider extends LabelProvider implements ITableLabelProvider {
 
 	@Override
 	public Image getColumnImage(Object element, int columnIndex) {

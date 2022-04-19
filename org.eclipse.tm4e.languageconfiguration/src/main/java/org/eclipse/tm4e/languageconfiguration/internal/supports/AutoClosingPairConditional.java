@@ -14,7 +14,7 @@ package org.eclipse.tm4e.languageconfiguration.internal.supports;
 import java.util.List;
 
 @SuppressWarnings("serial")
-public class AutoClosingPairConditional extends CharacterPair {
+public final class AutoClosingPairConditional extends CharacterPair {
 
 	private final List<String> notIn;
 

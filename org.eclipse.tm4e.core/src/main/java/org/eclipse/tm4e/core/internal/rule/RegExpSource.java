@@ -29,7 +29,7 @@ import org.eclipse.tm4e.core.internal.oniguruma.IOnigCaptureIndex;
  * @see https://github.com/Microsoft/vscode-textmate/blob/master/src/rule.ts
  *
  */
-public class RegExpSource {
+final class RegExpSource {
 
 	private static final Pattern HAS_BACK_REFERENCES = Pattern.compile("\\\\(\\d+)");
 	private static final Pattern BACK_REFERENCING_END = Pattern.compile("\\\\(\\d+)");
@@ -42,11 +42,11 @@ public class RegExpSource {
 	private IRegExpSourceAnchorCache anchorCache;
 	private String source;
 
-	public RegExpSource(String regExpSource, int ruleId) {
+	RegExpSource(String regExpSource, int ruleId) {
 		this(regExpSource, ruleId, true);
 	}
 
-	public RegExpSource(String regExpSource, int ruleId, boolean handleAnchors) {
+	private RegExpSource(String regExpSource, int ruleId, boolean handleAnchors) {
 		if (handleAnchors) {
 			this._handleAnchors(regExpSource);
 		} else {
@@ -66,11 +66,11 @@ public class RegExpSource {
 	}
 
 	@Override
-	public RegExpSource clone() {
+	protected RegExpSource clone() {
 		return new RegExpSource(this.source, this.ruleId, true);
 	}
 
-	public void setSource(String newSource) {
+	void setSource(String newSource) {
 		if (this.source.equals(newSource)) {
 			return;
 		}
@@ -122,7 +122,7 @@ public class RegExpSource {
 		}
 	}
 
-	public String resolveBackReferences(String lineText, IOnigCaptureIndex[] captureIndices) {
+	String resolveBackReferences(String lineText, IOnigCaptureIndex[] captureIndices) {
 		try {
 		List<String> capturedValues = Arrays.stream(captureIndices)
 				.map(capture -> lineText.substring(capture.getStart(), capture.getEnd())).collect(Collectors.toList());
@@ -210,7 +210,7 @@ public class RegExpSource {
 		);
 	}
 
-	public String resolveAnchors(boolean allowA, boolean allowG) {
+	String resolveAnchors(boolean allowA, boolean allowG) {
 		if (!this._hasAnchor) {
 			return this.source;
 		}
@@ -227,19 +227,19 @@ public class RegExpSource {
 		return this.anchorCache.A0_G0;
 	}
 
-	public boolean hasAnchor() {
+	boolean hasAnchor() {
 		return this._hasAnchor;
 	}
 
-	public String getSource() {
+	String getSource() {
 		return this.source;
 	}
 
-	public Integer getRuleId() {
+	Integer getRuleId() {
 		return this.ruleId;
 	}
 
-	public boolean hasBackReferences() {
+	boolean hasBackReferences() {
 		return this._hasBackReferences;
 	}
 

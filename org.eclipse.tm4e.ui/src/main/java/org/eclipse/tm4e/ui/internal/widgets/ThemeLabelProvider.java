@@ -19,7 +19,7 @@ import org.eclipse.tm4e.ui.themes.ITheme;
 /**
  * Label provider for TextMate theme.
  */
-public class ThemeLabelProvider extends LabelProvider implements ITableLabelProvider {
+public final class ThemeLabelProvider extends LabelProvider implements ITableLabelProvider {
 
 	@Override
 	public Image getColumnImage(Object element, int columnIndex) {

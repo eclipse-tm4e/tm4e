@@ -25,7 +25,7 @@ import org.w3c.css.sac.SelectorFactory;
 import org.w3c.css.sac.SiblingSelector;
 import org.w3c.css.sac.SimpleSelector;
 
-public class CSSSelectorFactory implements SelectorFactory {
+public final class CSSSelectorFactory implements SelectorFactory {
 
 	public static final SelectorFactory INSTANCE = new CSSSelectorFactory();
 

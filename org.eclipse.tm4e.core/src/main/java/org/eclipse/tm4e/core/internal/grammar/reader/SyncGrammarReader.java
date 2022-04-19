@@ -20,7 +20,7 @@ import java.io.InputStream;
 
 import org.eclipse.tm4e.core.internal.types.IRawGrammar;
 
-public class SyncGrammarReader {
+final class SyncGrammarReader {
 
 	private final InputStream in;
 	private final IGrammarParser parser;
@@ -30,7 +30,7 @@ public class SyncGrammarReader {
 		this.parser = parser;
 	}
 
-	public IRawGrammar load() throws Exception {
+	IRawGrammar load() throws Exception {
 		return this.parser.parse(in);
 	}
 }

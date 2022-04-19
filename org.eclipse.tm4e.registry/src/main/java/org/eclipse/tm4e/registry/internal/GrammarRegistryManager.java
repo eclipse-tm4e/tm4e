@@ -27,7 +27,7 @@ import org.osgi.service.prefs.BackingStoreException;
 /**
  * Grammar registry manager singleton.
  */
-public class GrammarRegistryManager extends AbstractGrammarRegistryManager {
+public final class GrammarRegistryManager extends AbstractGrammarRegistryManager {
 
 	private static final String EXTENSION_GRAMMARS = "grammars";
 

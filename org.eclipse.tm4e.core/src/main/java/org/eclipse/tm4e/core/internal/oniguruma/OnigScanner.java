@@ -17,7 +17,7 @@
 
 package org.eclipse.tm4e.core.internal.oniguruma;
 
-public class OnigScanner {
+public final class OnigScanner {
 
 	private final OnigSearcher searcher;
 
@@ -33,7 +33,7 @@ public class OnigScanner {
 		return null;
 	}
 
-	public IOnigNextMatchResult findNextMatchSync(String lin, int pos) {
+	IOnigNextMatchResult findNextMatchSync(String lin, int pos) {
 		return findNextMatchSync(new OnigString(lin), pos);
 	}
 

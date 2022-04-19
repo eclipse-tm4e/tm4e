@@ -23,38 +23,38 @@ import org.eclipse.tm4e.ui.themes.IThemeAssociation;
  * Theme association registry.
  *
  */
-public class ThemeAssociationRegistry {
+final class ThemeAssociationRegistry {
 
 	private final Map<String, EclipseThemeAssociation> scopes;
 
-	private static class EclipseThemeAssociation {
+	private static final class EclipseThemeAssociation {
 
 		private IThemeAssociation light;
 		private IThemeAssociation dark;
 
-		public IThemeAssociation getLight() {
+		IThemeAssociation getLight() {
 			return light;
 		}
 
-		public void setLight(IThemeAssociation light) {
+		void setLight(IThemeAssociation light) {
 			this.light = light;
 		}
 
-		public IThemeAssociation getDark() {
+		IThemeAssociation getDark() {
 			return dark;
 		}
 
-		public void setDark(IThemeAssociation dark) {
+		void setDark(IThemeAssociation dark) {
 			this.dark = dark;
 		}
 
 	}
 
-	public ThemeAssociationRegistry() {
+	ThemeAssociationRegistry() {
 		scopes = new HashMap<>();
 	}
 
-	public IThemeAssociation getThemeAssociationFor(String scopeName, boolean dark) {
+	IThemeAssociation getThemeAssociationFor(String scopeName, boolean dark) {
 		// From theme assiocations
 		IThemeAssociation userAssociation = null;
 		EclipseThemeAssociation registry = scopes.get(scopeName);
@@ -67,7 +67,7 @@ public class ThemeAssociationRegistry {
 		return null;
 	}
 
-	public void register(IThemeAssociation association) {
+	void register(IThemeAssociation association) {
 		String scopeName = association.getScopeName();
 		EclipseThemeAssociation registry = scopes.get(scopeName);
 		if (registry == null) {
@@ -82,7 +82,7 @@ public class ThemeAssociationRegistry {
 		}
 	}
 
-	public void unregister(IThemeAssociation association) {
+	void unregister(IThemeAssociation association) {
 		String scopeName = association.getScopeName();
 		EclipseThemeAssociation registry = scopes.get(scopeName);
 		if (registry != null) {
@@ -95,7 +95,7 @@ public class ThemeAssociationRegistry {
 		}
 	}
 
-	// public IThemeAssociation getThemeAssociationFor(String scopeName, String
+	// IThemeAssociation getThemeAssociationFor(String scopeName, String
 	// eclipseThemeId) {
 	// IThemeAssociation association = null;
 	// BaseThemeAssociationRegistry registry = scopes.get(scopeName);
@@ -111,7 +111,7 @@ public class ThemeAssociationRegistry {
 	// return association != null ? association : getDefaultAssociation();
 	// }
 
-	// public IThemeAssociation[] getThemeAssociationsForScope(String scopeName) {
+	// IThemeAssociation[] getThemeAssociationsForScope(String scopeName) {
 	// BaseThemeAssociationRegistry registry = scopes.get(scopeName);
 	// if (registry != null) {
 	// // Get the user associations (from preferences)
@@ -150,7 +150,7 @@ public class ThemeAssociationRegistry {
 	// }
 	//
 	// @Override
-	public List<IThemeAssociation> getThemeAssociations() {
+	List<IThemeAssociation> getThemeAssociations() {
 		List<IThemeAssociation> associations = new ArrayList<>();
 		Collection<EclipseThemeAssociation> eclipseAssociations = scopes.values();
 		for (EclipseThemeAssociation eclipseAssociation : eclipseAssociations) {

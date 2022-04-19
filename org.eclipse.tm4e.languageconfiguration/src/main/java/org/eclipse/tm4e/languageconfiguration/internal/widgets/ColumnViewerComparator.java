@@ -22,7 +22,7 @@ import org.eclipse.swt.SWT;
  * Viewer compoarator which sort a given column.
  *
  */
-public class ColumnViewerComparator extends ViewerComparator {
+public final class ColumnViewerComparator extends ViewerComparator {
 
 	private int fSortColumn;
 

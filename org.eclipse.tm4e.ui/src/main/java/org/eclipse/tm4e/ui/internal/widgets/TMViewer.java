@@ -29,7 +29,7 @@ import org.eclipse.tm4e.ui.themes.ITheme;
  * Simple TextMate Viewer.
  *
  */
-public class TMViewer extends SourceViewer {
+public final class TMViewer extends SourceViewer {
 
 	private TMPresentationReconciler reconciler;
 
@@ -50,7 +50,7 @@ public class TMViewer extends SourceViewer {
 		this.configure(configuration);
 	}
 
-	private class TMSourceViewerConfiguration extends SourceViewerConfiguration {
+	private final class TMSourceViewerConfiguration extends SourceViewerConfiguration {
 
 		@Override
 		public IPresentationReconciler getPresentationReconciler(ISourceViewer sourceViewer) {

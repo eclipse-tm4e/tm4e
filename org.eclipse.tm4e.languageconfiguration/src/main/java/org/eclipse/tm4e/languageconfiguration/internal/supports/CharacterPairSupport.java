@@ -19,7 +19,7 @@ import java.util.stream.Collectors;
  * The "character pair" support.
  *
  */
-public class CharacterPairSupport {
+public final class CharacterPairSupport {
 
 	private List<CharacterPair> autoClosingPairs;
 	private final List<CharacterPair> surroundingPairs;

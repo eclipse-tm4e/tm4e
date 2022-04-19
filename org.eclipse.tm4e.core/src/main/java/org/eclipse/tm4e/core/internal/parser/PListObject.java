@@ -17,13 +17,13 @@ import java.util.Map;
 
 public abstract class PListObject {
 
-	public final PListObject parent;
+	final PListObject parent;
 	private final List<Object> arrayValues;
 	private final Map<String, Object> mapValues;
 
 	private String lastKey;
 
-	public PListObject(PListObject parent, boolean valueAsArray) {
+	protected PListObject(PListObject parent, boolean valueAsArray) {
 		this.parent = parent;
 		if (valueAsArray) {
 			this.arrayValues = new ArrayList<>();
@@ -34,15 +34,15 @@ public abstract class PListObject {
 		}
 	}
 
-	public String getLastKey() {
+	String getLastKey() {
 		return lastKey;
 	}
 
-	public void setLastKey(String lastKey) {
+	void setLastKey(String lastKey) {
 		this.lastKey = lastKey;
 	}
 
-	public void addValue(Object value) {
+	void addValue(Object value) {
 		if (isValueAsArray()) {
 			arrayValues.add(value);
 		} else {
@@ -50,11 +50,11 @@ public abstract class PListObject {
 		}
 	}
 
-	public boolean isValueAsArray() {
+	boolean isValueAsArray() {
 		return arrayValues != null;
 	}
 
-	public Object getValue() {
+	Object getValue() {
 		if (isValueAsArray()) {
 			return arrayValues;
 		}

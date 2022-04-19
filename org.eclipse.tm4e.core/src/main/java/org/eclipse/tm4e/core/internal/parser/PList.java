@@ -20,7 +20,7 @@ import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
 
-public class PList<T> extends DefaultHandler {
+public final class PList<T> extends DefaultHandler {
 
 	private final boolean theme;
 	private final List<String> errors;
@@ -67,7 +67,7 @@ public class PList<T> extends DefaultHandler {
 		super.endElement(uri, localName, qName);
 	}
 
-	private void endElement(String tagName) {
+	public void endElement(String tagName) {
 		Object value = null;
 		String text = this.text.toString();
 

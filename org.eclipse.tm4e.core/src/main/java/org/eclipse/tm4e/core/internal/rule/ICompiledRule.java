@@ -18,12 +18,12 @@ package org.eclipse.tm4e.core.internal.rule;
 
 import org.eclipse.tm4e.core.internal.oniguruma.OnigScanner;
 
-public class ICompiledRule {
+public final class ICompiledRule {
 
 	public final OnigScanner scanner;
 	public final Integer[] rules;
 
-	public ICompiledRule(OnigScanner scanner, Integer[] rules) {
+	ICompiledRule(OnigScanner scanner, Integer[] rules) {
 		this.scanner = scanner;
 		this.rules = rules;
 	}

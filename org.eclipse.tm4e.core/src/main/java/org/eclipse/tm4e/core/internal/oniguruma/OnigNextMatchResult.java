@@ -16,13 +16,13 @@
  */
 package org.eclipse.tm4e.core.internal.oniguruma;
 
-class OnigNextMatchResult implements IOnigNextMatchResult {
+final class OnigNextMatchResult implements IOnigNextMatchResult {
 
 	private final int index;
 
 	private final IOnigCaptureIndex[] captureIndices;
 
-	public OnigNextMatchResult(OnigResult result, OnigString source) {
+	OnigNextMatchResult(OnigResult result, OnigString source) {
 		this.index = result.getIndex();
 		this.captureIndices = captureIndicesForMatch(result, source);
 	}
@@ -71,13 +71,13 @@ class OnigNextMatchResult implements IOnigNextMatchResult {
 		return captures;
 	}
 
-	private static class OnigCaptureIndex implements IOnigCaptureIndex {
+	private static final class OnigCaptureIndex implements IOnigCaptureIndex {
 
 		private final int index;
 		private final int start;
 		private final int end;
 
-		public OnigCaptureIndex(int index, int start, int end) {
+		private OnigCaptureIndex(int index, int start, int end) {
 			this.index = index;
 			this.start = start >= 0 ? start : 0;
 			this.end = end >= 0 ? end : 0;

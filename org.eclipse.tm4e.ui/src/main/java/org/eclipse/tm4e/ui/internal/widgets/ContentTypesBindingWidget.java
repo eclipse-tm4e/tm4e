@@ -20,7 +20,7 @@ import org.eclipse.tm4e.ui.internal.TMUIMessages;
  * buttons on the right.
  *
  */
-public class ContentTypesBindingWidget extends TableAndButtonsWidget {
+public final class ContentTypesBindingWidget extends TableAndButtonsWidget {
 
 	public ContentTypesBindingWidget(Composite parent, int style) {
 		super(parent, style, TMUIMessages.ContentTypesBindingWidget_description);

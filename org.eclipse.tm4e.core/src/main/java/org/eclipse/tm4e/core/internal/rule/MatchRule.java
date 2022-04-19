@@ -18,13 +18,13 @@ package org.eclipse.tm4e.core.internal.rule;
 
 import java.util.List;
 
-public class MatchRule extends Rule {
+public final class MatchRule extends Rule {
 
 	private final RegExpSource match;
 	public final List<CaptureRule> captures;
 	private RegExpSourceList cachedCompiledPatterns;
 
-	public MatchRule(int id, String name, String match, List<CaptureRule> captures) {
+	MatchRule(int id, String name, String match, List<CaptureRule> captures) {
 		super(id, name, null);
 		this.match = new RegExpSource(match, this.id);
 		this.captures = captures;
@@ -32,7 +32,7 @@ public class MatchRule extends Rule {
 	}
 
 	@Override
-	public void collectPatternsRecursive(IRuleRegistry grammar, RegExpSourceList out, boolean isFirst) {
+	void collectPatternsRecursive(IRuleRegistry grammar, RegExpSourceList out, boolean isFirst) {
 		out.push(this.match);
 	}
 

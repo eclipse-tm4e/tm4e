@@ -31,14 +31,14 @@ import org.eclipse.tm4e.registry.IGrammarRegistryManager;
  */
 public abstract class AbstractGrammarRegistryManager extends Registry implements IGrammarRegistryManager {
 
-	protected final GrammarCache pluginCache;
+	private final GrammarCache pluginCache;
 	protected final GrammarCache userCache;
 
-	private static class EclipseRegistryOptions implements IRegistryOptions {
+	private static final class EclipseRegistryOptions implements IRegistryOptions {
 
 		private AbstractGrammarRegistryManager registry;
 
-		public void setRegistry(AbstractGrammarRegistryManager registry) {
+		private void setRegistry(AbstractGrammarRegistryManager registry) {
 			this.registry = registry;
 		}
 
@@ -60,12 +60,12 @@ public abstract class AbstractGrammarRegistryManager extends Registry implements
 		}
 	}
 
-	public AbstractGrammarRegistryManager() {
+	protected AbstractGrammarRegistryManager() {
 		this(new EclipseRegistryOptions());
 		((EclipseRegistryOptions) getLocator()).setRegistry(this);
 	}
 
-	public AbstractGrammarRegistryManager(IRegistryOptions locator) {
+	protected AbstractGrammarRegistryManager(IRegistryOptions locator) {
 		super(locator);
 		this.pluginCache = new GrammarCache();
 		this.userCache = new GrammarCache();
@@ -140,7 +140,7 @@ public abstract class AbstractGrammarRegistryManager extends Registry implements
 	 * @return the loaded grammar from the given <code>scopeName</code> and null
 	 *         otherwise.
 	 */
-	public IGrammar getGrammar(String scopeName) {
+	private IGrammar getGrammar(String scopeName) {
 		if (scopeName == null) {
 			return null;
 		}
@@ -159,7 +159,7 @@ public abstract class AbstractGrammarRegistryManager extends Registry implements
 	 * @return the grammar definition from the given <code>scopeName</code> and
 	 *         null otherwise.
 	 */
-	public IGrammarDefinition getDefinition(String scopeName) {
+	private IGrammarDefinition getDefinition(String scopeName) {
 		IGrammarDefinition definition = userCache.getDefinition(scopeName);
 		if (definition != null) {
 			return definition;
@@ -187,7 +187,7 @@ public abstract class AbstractGrammarRegistryManager extends Registry implements
 	 * @param scopeName
 	 * @param injectTo
 	 */
-	public void registerInjection(String scopeName, String injectTo) {
+	protected void registerInjection(String scopeName, String injectTo) {
 		pluginCache.registerInjection(scopeName, injectTo);
 	}
 
@@ -196,7 +196,7 @@ public abstract class AbstractGrammarRegistryManager extends Registry implements
 	 * @return scope name bound with the given content type (or its base type) and
 	 *         <code>null</code> otherwise.
 	 */
-	public String getScopeNameForContentType(IContentType contentType) {
+	private String getScopeNameForContentType(IContentType contentType) {
 		while (contentType != null) {
 			String scopeName = pluginCache.getScopeNameForContentType(contentType);
 			if (scopeName != null) {
@@ -212,7 +212,7 @@ public abstract class AbstractGrammarRegistryManager extends Registry implements
 		return pluginCache.getContentTypesForScope(scopeName);
 	}
 
-	public void registerContentTypeBinding(IContentType contentType, String scopeName) {
+	protected void registerContentTypeBinding(IContentType contentType, String scopeName) {
 		pluginCache.registerContentTypeBinding(contentType, scopeName);
 	}
 

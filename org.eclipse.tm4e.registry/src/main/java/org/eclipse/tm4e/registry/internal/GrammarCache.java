@@ -26,13 +26,13 @@ import org.eclipse.tm4e.registry.IGrammarDefinition;
  * Grammar cache.
  *
  */
-public class GrammarCache {
+final class GrammarCache {
 
 	private final Map<String /* Scope name */, IGrammarDefinition> definitions;
 	private final Map<String /* Scope name */, Collection<String>> injections;
 	private final Map<IContentType , String /* Scope name */> scopeNameBindings;
 
-	public GrammarCache() {
+	GrammarCache() {
 		this.definitions = new HashMap<>();
 		this.injections = new HashMap<>();
 		this.scopeNameBindings = new HashMap<>();
@@ -40,59 +40,59 @@ public class GrammarCache {
 
 	/**
 	 * Register a grammar definition.
-	 * 
+	 *
 	 * @param definition
 	 *            the grammar definition to register.
 	 */
-	public void registerGrammarDefinition(IGrammarDefinition definition) {
+	void registerGrammarDefinition(IGrammarDefinition definition) {
 		definitions.put(definition.getScopeName(), definition);
 	}
 
-	public void unregisterGrammarDefinition(IGrammarDefinition definition) {
+	void unregisterGrammarDefinition(IGrammarDefinition definition) {
 		definitions.remove(definition.getScopeName());
 	}
 
 	/**
 	 * Returns the whole registered grammar definition.
-	 * 
+	 *
 	 * @return
 	 */
-	public Collection<IGrammarDefinition> getDefinitions() {
+	Collection<IGrammarDefinition> getDefinitions() {
 		return this.definitions.values();
 	}
 
 	/**
 	 * Returns the grammar definition from the given <code>scopeName</code> and
 	 * null otherwise.
-	 * 
+	 *
 	 * @param scopeName
 	 * @return the grammar definition from the given <code>scopeName</code> and
 	 *         null otherwise.
 	 */
-	public IGrammarDefinition getDefinition(String scopeName) {
+	IGrammarDefinition getDefinition(String scopeName) {
 		return definitions.get(scopeName);
 	}
 
 	/**
 	 * Returns list of scope names to inject for the given
 	 * <code>scopeName</code> and null otheriwse.
-	 * 
+	 *
 	 * @param scopeName
 	 * @return list of scope names to inject for the given
 	 *         <code>scopeName</code> and null otheriwse.
 	 */
-	public Collection<String> getInjections(String scopeName) {
+	Collection<String> getInjections(String scopeName) {
 		return injections.get(scopeName);
 	}
 
 	/**
 	 * Register the given <code>scopeName</code> to inject to the given scope
 	 * name <code>injectTo</code>.
-	 * 
+	 *
 	 * @param scopeName
 	 * @param injectTo
 	 */
-	public void registerInjection(String scopeName, String injectTo) {
+	void registerInjection(String scopeName, String injectTo) {
 		Collection<String> injections = getInjections(injectTo);
 		if (injections == null) {
 			injections = new ArrayList<>();
@@ -103,15 +103,15 @@ public class GrammarCache {
 
 	/**
 	 * Returns scope name bound with the given content type and null otherwise.
-	 * 
-	 * @param contentType	
+	 *
+	 * @param contentType
 	 * @return scope name bound with the given content type and null otherwise.
 	 */
-	public String getScopeNameForContentType(IContentType contentType) {
+	String getScopeNameForContentType(IContentType contentType) {
 		return scopeNameBindings.get(contentType);
 	}
 
-	public List<IContentType> getContentTypesForScope(String scopeName) {
+	List<IContentType> getContentTypesForScope(String scopeName) {
 		if (scopeName == null) {
 			return List.of();
 		}
@@ -119,7 +119,7 @@ public class GrammarCache {
 				.map(Entry::getKey).collect(Collectors.toList());
 	}
 
-	public void registerContentTypeBinding(IContentType contentType, String scopeName) {
+	void registerContentTypeBinding(IContentType contentType, String scopeName) {
 		scopeNameBindings.put(contentType, scopeName);
 	}
 

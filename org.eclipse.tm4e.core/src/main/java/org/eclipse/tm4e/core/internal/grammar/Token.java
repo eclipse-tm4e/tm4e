@@ -20,7 +20,7 @@ import java.util.List;
 
 import org.eclipse.tm4e.core.grammar.IToken;
 
-class Token implements IToken {
+final class Token implements IToken {
 
 	private int startIndex;
 
@@ -28,7 +28,7 @@ class Token implements IToken {
 
 	private final List<String> scopes;
 
-	public Token(int startIndex, int endIndex, List<String> scopes) {
+	Token(int startIndex, int endIndex, List<String> scopes) {
 		this.startIndex = startIndex;
 		this.endIndex = endIndex;
 		this.scopes = scopes;
@@ -53,7 +53,7 @@ class Token implements IToken {
 	public List<String> getScopes() {
 		return scopes;
 	}
-	
+
 	@Override
 	public String toString() {
 		StringBuilder s = new StringBuilder();

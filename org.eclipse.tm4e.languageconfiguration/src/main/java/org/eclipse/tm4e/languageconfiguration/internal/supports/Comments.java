@@ -11,7 +11,7 @@
  */
 package org.eclipse.tm4e.languageconfiguration.internal.supports;
 
-public class Comments {
+public final class Comments {
 
 	private final String lineComment;
 

@@ -22,7 +22,7 @@ import org.eclipse.tm4e.ui.TMUIPlugin;
 import org.eclipse.tm4e.ui.snippets.ISnippet;
 import org.eclipse.tm4e.ui.snippets.ISnippetManager;
 
-public class SnippetManager implements ISnippetManager {
+public final class SnippetManager implements ISnippetManager {
 
 	private static final ISnippet[] EMPTY_SNIPPETS = {};
 
@@ -52,7 +52,7 @@ public class SnippetManager implements ISnippetManager {
 
 	private final Map<String, Collection<ISnippet>> snippets;
 
-	public SnippetManager() {
+	SnippetManager() {
 		this.snippets = new HashMap<>();
 	}
 

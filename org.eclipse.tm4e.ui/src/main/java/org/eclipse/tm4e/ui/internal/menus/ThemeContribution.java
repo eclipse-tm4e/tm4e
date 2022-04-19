@@ -37,7 +37,7 @@ import org.osgi.service.prefs.BackingStoreException;
  * Contribute "Switch to theme" menu item with list of available themes.
  *
  */
-public class ThemeContribution extends CompoundContributionItem implements IWorkbenchContribution {
+public final class ThemeContribution extends CompoundContributionItem implements IWorkbenchContribution {
 
 	private IHandlerService handlerService;
 

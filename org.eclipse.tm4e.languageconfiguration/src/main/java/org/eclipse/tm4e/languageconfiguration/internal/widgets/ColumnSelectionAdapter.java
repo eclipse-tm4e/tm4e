@@ -21,7 +21,7 @@ import org.eclipse.swt.widgets.TableColumn;
  * Sort the selected column and refresh the viewer.
  *
  */
-public class ColumnSelectionAdapter extends SelectionAdapter {
+public final class ColumnSelectionAdapter extends SelectionAdapter {
 
 	private final TableColumn fTableColumn;
 	private final TableViewer tableViewer;

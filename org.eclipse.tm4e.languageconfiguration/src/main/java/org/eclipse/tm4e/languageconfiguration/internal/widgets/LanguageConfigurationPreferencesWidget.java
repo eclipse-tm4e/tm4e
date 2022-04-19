@@ -21,7 +21,7 @@ import org.eclipse.swt.widgets.TabFolder;
 import org.eclipse.tm4e.languageconfiguration.ILanguageConfigurationDefinition;
 import org.eclipse.tm4e.languageconfiguration.ILanguageConfigurationRegistryManager;
 
-public class LanguageConfigurationPreferencesWidget extends LanguageConfigurationInfoWidget {
+public final class LanguageConfigurationPreferencesWidget extends LanguageConfigurationInfoWidget {
 
 	private Button toggleOnEnterButton;
 	private Button toggleBracketAutoClosingButton;
@@ -70,11 +70,11 @@ public class LanguageConfigurationPreferencesWidget extends LanguageConfiguratio
 		}));
 	}
 
-	public boolean getToggleOnEnter() {
+	private boolean getToggleOnEnter() {
 		return toggleOnEnterButton.getSelection();
 	}
 
-	public void setToggleOnEnter(Boolean selection) {
+	private void setToggleOnEnter(Boolean selection) {
 		toggleOnEnterButton.setSelection(selection);
 	}
 
@@ -93,11 +93,11 @@ public class LanguageConfigurationPreferencesWidget extends LanguageConfiguratio
 		}));
 	}
 
-	public boolean getBracketAutoClosing() {
+	private boolean getBracketAutoClosing() {
 		return toggleBracketAutoClosingButton.getSelection();
 	}
 
-	public void setBracketAutoClosing(Boolean selection) {
+	private void setBracketAutoClosing(Boolean selection) {
 		toggleBracketAutoClosingButton.setSelection(selection);
 	}
 
@@ -116,11 +116,11 @@ public class LanguageConfigurationPreferencesWidget extends LanguageConfiguratio
 		}));
 	}
 
-	public boolean getMatchingPairs() {
+	private boolean getMatchingPairs() {
 		return toggleMatchingPairsButton.getSelection();
 	}
 
-	public void setMatchingPairs(Boolean selection) {
+	private void setMatchingPairs(Boolean selection) {
 		toggleMatchingPairsButton.setSelection(selection);
 	}
 

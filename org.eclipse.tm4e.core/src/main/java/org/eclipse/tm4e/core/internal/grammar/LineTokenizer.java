@@ -37,29 +37,29 @@ import org.eclipse.tm4e.core.internal.rule.ICompiledRule;
 import org.eclipse.tm4e.core.internal.rule.MatchRule;
 import org.eclipse.tm4e.core.internal.rule.Rule;
 
-class LineTokenizer {
+final class LineTokenizer {
 
 	private static final Logger LOGGER = System.getLogger(LineTokenizer.class.getName());
 
-	static class WhileStack {
+	private static final class WhileStack {
 
-		public final StackElement stack;
-		public final BeginWhileRule rule;
+		private final StackElement stack;
+		private final BeginWhileRule rule;
 
-		public WhileStack(StackElement stack, BeginWhileRule rule) {
+		private WhileStack(StackElement stack, BeginWhileRule rule) {
 			this.stack = stack;
 			this.rule = rule;
 		}
 	}
 
-	static class WhileCheckResult {
+	private static final class WhileCheckResult {
 
-		public final StackElement stack;
-		public final int linePos;
-		public final int anchorPosition;
-		public final boolean isFirstLine;
+		private final StackElement stack;
+		private final int linePos;
+		private final int anchorPosition;
+		private final boolean isFirstLine;
 
-		public WhileCheckResult(StackElement stack, int linePos, int anchorPosition, boolean isFirstLine) {
+		private WhileCheckResult(StackElement stack, int linePos, int anchorPosition, boolean isFirstLine) {
 			this.stack = stack;
 			this.linePos = linePos;
 			this.anchorPosition = anchorPosition;
@@ -77,7 +77,7 @@ class LineTokenizer {
 	private boolean stop;
 	private final int lineLength;
 
-	public LineTokenizer(Grammar grammar, OnigString lineText, boolean isFirstLine, int linePos, StackElement stack,
+	private LineTokenizer(Grammar grammar, OnigString lineText, boolean isFirstLine, int linePos, StackElement stack,
 			LineTokens lineTokens) {
 		this.grammar = grammar;
 		this.lineText = lineText;
@@ -88,7 +88,7 @@ class LineTokenizer {
 		this.lineTokens = lineTokens;
 	}
 
-	public StackElement scan() {
+	private StackElement scan() {
 		stop = false;
 
 		WhileCheckResult whileCheckResult = checkWhileConditions(grammar, lineText, isFirstLine, linePos, stack,
@@ -522,7 +522,7 @@ class LineTokenizer {
 		return new WhileCheckResult(stack, linePos, currentanchorPosition, isFirstLine);
 	}
 
-	public static StackElement tokenizeString(Grammar grammar, OnigString lineText, boolean isFirstLine, int linePos,
+	static StackElement tokenizeString(Grammar grammar, OnigString lineText, boolean isFirstLine, int linePos,
 			StackElement stack, LineTokens lineTokens) {
 		return new LineTokenizer(grammar, lineText, isFirstLine, linePos, stack, lineTokens).scan();
 	}

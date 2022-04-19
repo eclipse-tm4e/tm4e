@@ -17,7 +17,7 @@ import org.eclipse.osgi.util.NLS;
  * Helper class to get NLSed messages.
  *
  */
-public class LanguageConfigurationMessages extends NLS {
+public final class LanguageConfigurationMessages extends NLS {
 
 	private static final String BUNDLE_NAME = "org.eclipse.tm4e.languageconfiguration.internal.LanguageConfigurationMessages"; //$NON-NLS-1$
 

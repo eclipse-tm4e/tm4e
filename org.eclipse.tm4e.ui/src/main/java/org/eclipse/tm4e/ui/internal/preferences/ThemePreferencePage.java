@@ -64,9 +64,9 @@ import org.osgi.service.prefs.BackingStoreException;
  * provides controls for adding, removing and changing theme as well as
  * enablement, default management.
  */
-public class ThemePreferencePage extends PreferencePage implements IWorkbenchPreferencePage {
+public final class ThemePreferencePage extends PreferencePage implements IWorkbenchPreferencePage {
 
-	public final static String PAGE_ID = "org.eclipse.tm4e.ui.preferences.ThemePreferencePage";
+	static final String PAGE_ID = "org.eclipse.tm4e.ui.preferences.ThemePreferencePage";
 
 	// Theme content
 	private TableViewer themeViewer;
@@ -373,7 +373,7 @@ public class ThemePreferencePage extends PreferencePage implements IWorkbenchPre
 	 *            the parent control
 	 * @return a configured source viewer
 	 */
-	protected TMViewer createViewer(Composite parent) {
+	private TMViewer createViewer(Composite parent) {
 		return new TMViewer(parent, null, null, false, SWT.BORDER | SWT.V_SCROLL | SWT.H_SCROLL);
 	}
 

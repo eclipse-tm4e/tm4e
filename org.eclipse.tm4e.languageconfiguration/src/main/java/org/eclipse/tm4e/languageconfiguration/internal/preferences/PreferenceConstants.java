@@ -15,7 +15,7 @@ package org.eclipse.tm4e.languageconfiguration.internal.preferences;
  * Preferences constants for language configurations.
  *
  */
-public class PreferenceConstants {
+public final class PreferenceConstants {
 
 	public static final String LANGUAGE_CONFIGURATIONS = "org.eclipse.tm4e.languageConfigurations"; //$NON-NLS-1$
 

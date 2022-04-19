@@ -20,7 +20,7 @@ import org.eclipse.ui.IEditorPart;
  * {@link TMPresentationReconciler}.
  *
  */
-public class TMPropertyTester extends PropertyTester {
+public final class TMPropertyTester extends PropertyTester {
 
 	private static final String CAN_SUPPORT_TEXT_MATE = "canSupportTextMate";
 

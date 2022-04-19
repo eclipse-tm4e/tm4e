@@ -21,13 +21,13 @@ import org.eclipse.tm4e.core.theme.ThemeTrieElementRule;
 
 import com.google.common.base.Splitter;
 
-public class ScopeListElement {
+public final class ScopeListElement {
 
 	private static final Splitter BY_SPACE_SPLITTER = Splitter.on(' ');
 
-	public final ScopeListElement parent;
-	public final String scope;
-	public final int metadata;
+	private final ScopeListElement parent;
+	private final String scope;
+	final int metadata;
 
 	public ScopeListElement(ScopeListElement parent, String scope, int metadata) {
 		this.parent = parent;
@@ -59,7 +59,8 @@ public class ScopeListElement {
 		return ScopeListElement.equals(this, (ScopeListElement)other);
 	}
 
-	@Override public int hashCode() {
+	@Override
+	public int hashCode() {
 		return Objects.hash(scope, metadata, parent);
 	}
 
@@ -127,7 +128,7 @@ public class ScopeListElement {
 		return target;
 	}
 
-	public ScopeListElement push(Grammar grammar, String scope) {
+	ScopeListElement push(Grammar grammar, String scope) {
 		if (scope == null) {
 			return this;
 		}
@@ -144,7 +145,7 @@ public class ScopeListElement {
 		return result;
 	}
 
-	public List<String> generateScopes() {
+	List<String> generateScopes() {
 		return ScopeListElement.generateScopes(this);
 	}
 }

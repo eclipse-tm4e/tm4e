@@ -13,12 +13,12 @@ package org.eclipse.tm4e.core.internal.css;
 
 import org.w3c.css.sac.Condition;
 
-public class CSSAndCondition extends AbstractCombinatorCondition {
+final class CSSAndCondition extends AbstractCombinatorCondition {
 
 	/**
 	 * Creates a new CombinatorCondition object.
 	 */
-	public CSSAndCondition(Condition c1, Condition c2) {
+	CSSAndCondition(Condition c1, Condition c2) {
 		super(c1, c2);
 	}
 
@@ -32,8 +32,8 @@ public class CSSAndCondition extends AbstractCombinatorCondition {
 		return ((ExtendedCondition) getFirstCondition()).nbMatch(names)
 				+ ((ExtendedCondition) getSecondCondition()).nbMatch(names);
 	}
-	
-	 @Override
+
+	@Override
 	public int nbClass() {
 		 return ((ExtendedCondition) getFirstCondition()).nbClass()
 					+ ((ExtendedCondition) getSecondCondition()).nbClass();

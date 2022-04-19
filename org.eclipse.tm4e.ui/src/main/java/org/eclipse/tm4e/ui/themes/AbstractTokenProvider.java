@@ -14,6 +14,7 @@ package org.eclipse.tm4e.ui.themes;
 /**
  * Abstract class for {@link ITokenProvider}.
  *
+ * TODO remove?
  */
 public abstract class AbstractTokenProvider implements ITokenProvider {
 

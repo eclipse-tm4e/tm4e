@@ -24,7 +24,7 @@ import org.yaml.snakeyaml.Yaml;
 /**
  * Parses TextMate Grammar file in YAML format.
  */
-public class YamlPListParser<T> {
+public final class YamlPListParser<T> {
 
 	private final boolean theme;
 

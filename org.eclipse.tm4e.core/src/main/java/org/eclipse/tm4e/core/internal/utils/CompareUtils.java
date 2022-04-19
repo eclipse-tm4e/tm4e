@@ -2,7 +2,7 @@ package org.eclipse.tm4e.core.internal.utils;
 
 import java.util.List;
 
-public class CompareUtils {
+public final class CompareUtils {
 
 	public static int strcmp(String a, String b) {
 		if (a == null && b == null) {

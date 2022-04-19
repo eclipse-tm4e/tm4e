@@ -37,7 +37,7 @@ public abstract class AbstractLineList implements IModelLines {
 
 	private TMModel model;
 
-	public AbstractLineList() {
+	protected AbstractLineList() {
 	}
 
 	void setModel(TMModel model) {

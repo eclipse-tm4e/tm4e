@@ -21,7 +21,7 @@ import java.util.regex.Pattern;
 
 import org.eclipse.tm4e.core.internal.oniguruma.IOnigCaptureIndex;
 
-public class RegexSource {
+public final class RegexSource {
 
 	/**
 	 * Helper class, access members statically

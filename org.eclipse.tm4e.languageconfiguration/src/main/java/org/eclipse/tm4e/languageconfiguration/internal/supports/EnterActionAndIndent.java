@@ -11,7 +11,7 @@
  */
 package org.eclipse.tm4e.languageconfiguration.internal.supports;
 
-public class EnterActionAndIndent {
+public final class EnterActionAndIndent {
 
 	private final EnterAction enterAction;
 

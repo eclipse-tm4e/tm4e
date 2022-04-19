@@ -15,12 +15,12 @@ import java.util.List;
 
 import org.eclipse.tm4e.core.theme.ThemeTrieElementRule;
 
-public class ScopeMetadata {
+public final class ScopeMetadata {
 
-	public final String scopeName;
-	public final int languageId;
-	public final int tokenType;
-	public final List<ThemeTrieElementRule> themeData;
+	private final String scopeName;
+	final int languageId;
+	final int tokenType;
+	final List<ThemeTrieElementRule> themeData;
 
 	public ScopeMetadata(String scopeName, int languageId, int tokenType, List<ThemeTrieElementRule> themeData) {
 		this.scopeName = scopeName;

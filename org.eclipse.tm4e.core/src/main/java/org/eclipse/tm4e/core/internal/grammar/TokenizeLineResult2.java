@@ -20,16 +20,16 @@ import org.eclipse.tm4e.core.grammar.ITokenizeLineResult2;
 import org.eclipse.tm4e.core.grammar.StackElement;
 
 /**
- * 
+ *
  * Result of the line tokenization2 implementation.
  *
  */
-public class TokenizeLineResult2 implements ITokenizeLineResult2 {
+final class TokenizeLineResult2 implements ITokenizeLineResult2 {
 
 	private final int[] tokens;
 	private final StackElement ruleStack;
 
-	public TokenizeLineResult2(int[] tokens, StackElement ruleStack) {
+	TokenizeLineResult2(int[] tokens, StackElement ruleStack) {
 		this.tokens = tokens;
 		this.ruleStack = ruleStack;
 	}
@@ -43,5 +43,4 @@ public class TokenizeLineResult2 implements ITokenizeLineResult2 {
 	public StackElement getRuleStack() {
 		return ruleStack;
 	}
-
 }

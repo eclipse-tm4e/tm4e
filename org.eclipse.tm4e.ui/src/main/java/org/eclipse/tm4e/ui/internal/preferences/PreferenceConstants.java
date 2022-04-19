@@ -15,7 +15,7 @@ package org.eclipse.tm4e.ui.internal.preferences;
  * Preferences constants for theme.
  *
  */
-public class PreferenceConstants {
+public final class PreferenceConstants {
 
 	public static final String THEMES = "org.eclipse.tm4e.ui.themes";
 

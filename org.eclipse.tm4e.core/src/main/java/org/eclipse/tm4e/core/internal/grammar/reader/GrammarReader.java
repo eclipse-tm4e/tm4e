@@ -27,7 +27,7 @@ import org.eclipse.tm4e.core.internal.types.IRawGrammar;
  * TextMate Grammar reader utilities.
  *
  */
-public class GrammarReader {
+public final class GrammarReader {
 
 	/**
 	 * methods should be accessed statically

@@ -28,7 +28,7 @@ import com.google.gson.JsonSerializer;
  * Helper class load, save language configuration preferences with Json format.
  *
  */
-public class PreferenceHelper {
+public final class PreferenceHelper {
 
 	private static final Gson DEFAULT_GSON;
 

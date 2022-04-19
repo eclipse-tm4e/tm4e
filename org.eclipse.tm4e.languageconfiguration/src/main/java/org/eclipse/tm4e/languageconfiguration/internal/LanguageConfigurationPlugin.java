@@ -19,22 +19,24 @@ import org.osgi.framework.BundleContext;
  * language-configuration.json) Eclipse bundle.
  *
  */
-public class LanguageConfigurationPlugin extends AbstractUIPlugin {
+public final class LanguageConfigurationPlugin extends AbstractUIPlugin {
 
 	public static final String PLUGIN_ID = "org.eclipse.tm4e.languageconfiguration"; //$NON-NLS-1$
 
 	private static LanguageConfigurationPlugin INSTANCE = null;
 
-	public static LanguageConfigurationPlugin getInstance() {
+	static LanguageConfigurationPlugin getInstance() {
 		return INSTANCE;
 	}
 
-	@Override public void start(BundleContext context) throws Exception {
+	@Override
+	public void start(BundleContext context) throws Exception {
 		super.start(context);
 		INSTANCE = this;
 	}
 
-	@Override public void stop(BundleContext context) throws Exception {
+	@Override
+	public void stop(BundleContext context) throws Exception {
 		INSTANCE = null;
 		super.stop(context);
 	}

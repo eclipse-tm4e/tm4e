@@ -20,7 +20,7 @@ import java.io.InputStream;
 
 import org.eclipse.tm4e.core.theme.IRawTheme;
 
-public class SyncThemeReader {
+final class SyncThemeReader {
 
 	private final InputStream in;
 	private final IThemeParser parser;
@@ -30,7 +30,7 @@ public class SyncThemeReader {
 		this.parser = parser;
 	}
 
-	public IRawTheme load() throws Exception {
+	IRawTheme load() throws Exception {
 		return this.parser.parse(in);
 	}
 }

@@ -14,22 +14,21 @@
  *  - GitHub Inc.: Initial code, written in JavaScript, licensed under MIT license
  *  - Angelo Zerr <angelo.zerr@gmail.com> - translation and adaptation to Java
  */
-
 package org.eclipse.tm4e.core.internal.oniguruma;
 
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class OnigSearcher {
+final class OnigSearcher {
 
 	private final List<OnigRegExp> regExps;
 
-	public OnigSearcher(String[] regexps) {
+	OnigSearcher(String[] regexps) {
 		this.regExps = Arrays.stream(regexps).map(OnigRegExp::new).collect(Collectors.toList());
 	}
 
-	public OnigResult search(OnigString source, int charOffset) {
+	OnigResult search(OnigString source, int charOffset) {
 		int byteOffset = source.convertUtf16OffsetToUtf8(charOffset);
 
 		int bestLocation = 0;

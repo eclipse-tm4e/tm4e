@@ -19,7 +19,7 @@ import org.eclipse.tm4e.ui.themes.IThemeManager;
  * A content provider for the template theme page's table viewer.
  * 
  */
-public class ThemeContentProvider implements IStructuredContentProvider {
+public final class ThemeContentProvider implements IStructuredContentProvider {
 
 	private IThemeManager registry;
 

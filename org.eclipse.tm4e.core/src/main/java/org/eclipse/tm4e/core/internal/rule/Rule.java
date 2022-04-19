@@ -21,7 +21,7 @@ import org.eclipse.tm4e.core.internal.utils.RegexSource;
 
 public abstract class Rule {
 
-	public final int id;
+	final int id;
 
 	private final boolean nameIsCapturing;
 	private final String name;
@@ -29,7 +29,7 @@ public abstract class Rule {
 	private final boolean contentNameIsCapturing;
 	private final String contentName;
 
-	public Rule(int id, String name, String contentName) {
+	Rule(int id, String name, String contentName) {
 		this.id = id;
 		this.name = name;
 		this.nameIsCapturing = RegexSource.hasCaptures(this.name);
@@ -51,7 +51,7 @@ public abstract class Rule {
 		return RegexSource.replaceCaptures(this.contentName, lineText, captureIndices);
 	}
 
-	public abstract void collectPatternsRecursive(IRuleRegistry grammar, RegExpSourceList out, boolean isFirst);
+	abstract void collectPatternsRecursive(IRuleRegistry grammar, RegExpSourceList out, boolean isFirst);
 
 	public abstract ICompiledRule compile(IRuleRegistry grammar, String endRegexSource, boolean allowA, boolean allowG);
 

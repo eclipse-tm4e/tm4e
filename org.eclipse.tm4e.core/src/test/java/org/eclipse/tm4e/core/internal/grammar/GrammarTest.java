@@ -9,17 +9,15 @@
  *  Contributors:
  *  Angelo Zerr <angelo.zerr@gmail.com> - initial API and implementation
  */
-package org.eclipse.tm4e.core.grammar;
+package org.eclipse.tm4e.core.internal.grammar;
 
-import org.eclipse.tm4e.core.internal.grammar.StackElementMetadata;
-import org.eclipse.tm4e.core.internal.grammar.StandardTokenType;
 import org.eclipse.tm4e.core.theme.FontStyle;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 /**
  * {@link StackElementMetadata} tests same than vscode-textmate.
- * 
+ *
  * @see https://github.com/Microsoft/vscode-textmate/blob/master/src/tests/grammar.test.ts
  *
  */
@@ -94,24 +92,24 @@ public class GrammarTest {
 		int value = StackElementMetadata.set(0, maxLangId, maxTokenType, maxFontStyle, maxForeground, maxBackground);
 		assertEquals(value, maxLangId, maxTokenType, maxFontStyle, maxForeground, maxBackground);
 	}
-	
+
 	private static void assertEquals(int metadata, int languageId, int tokenType, int fontStyle, int foreground, int background) {
-		String actual = "{\n" + 
+		String actual = "{\n" +
 			"languageId: " + StackElementMetadata.getLanguageId(metadata) + ",\n" +
 			"tokenType: " + StackElementMetadata.getTokenType(metadata) + ",\n" +
 			"fontStyle: " + StackElementMetadata.getFontStyle(metadata) + ",\n" +
 			"foreground: " + StackElementMetadata.getForeground(metadata) + ",\n" +
-			"background: " + StackElementMetadata.getBackground(metadata) + ",\n" +			
+			"background: " + StackElementMetadata.getBackground(metadata) + ",\n" +
 		"}";
 
-		String expected = "{\n" + 
+		String expected = "{\n" +
 				"languageId: " + languageId + ",\n" +
 				"tokenType: " + tokenType + ",\n" +
 				"fontStyle: " + fontStyle + ",\n" +
 				"foreground: " + foreground + ",\n" +
-				"background: " + background + ",\n" +			
+				"background: " + background + ",\n" +
 			"}";
-		
+
 		Assertions.assertEquals(expected, actual, "equals for " + StackElementMetadata.toBinaryStr(metadata));
 	}
 }

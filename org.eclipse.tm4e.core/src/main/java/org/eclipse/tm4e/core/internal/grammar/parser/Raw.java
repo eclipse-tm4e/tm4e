@@ -29,32 +29,32 @@ import org.eclipse.tm4e.core.internal.utils.CloneUtils;
  * Raw
  *
  */
-public class Raw extends HashMap<String, Object> implements IRawRepository, IRawRule, IRawGrammar, IRawCaptures {
-	private static final String FIRST_LINE_MATCH = "firstLineMatch";
-	private static final String FILE_TYPES = "fileTypes";
-	private static final String SCOPE_NAME = "scopeName";
-	private static final String APPLY_END_PATTERN_LAST = "applyEndPatternLast";
-	private static final String REPOSITORY = "repository";
-	private static final String INJECTION_SELECTOR = "injectionSelector";
-	private static final String INJECTIONS = "injections";
-	private static final String PATTERNS = "patterns";
-	private static final String WHILE_CAPTURES = "whileCaptures";
-	private static final String END_CAPTURES = "endCaptures";
-	private static final String INCLUDE = "include";
-	private static final String WHILE = "while";
-	private static final String END = "end";
-	private static final String BEGIN = "begin";
-	private static final String CAPTURES = "captures";
-	private static final String MATCH = "match";
-	private static final String BEGIN_CAPTURES = "beginCaptures";
-	private static final String CONTENT_NAME = "contentName";
-	private static final String NAME = "name";
-	private static final String ID = "id";
-	private static final String DOLLAR_SELF = "$self";
-	private static final String DOLLAR_BASE = "$base";
-	private static final long serialVersionUID = -2306714541728887963L;
+public final class Raw extends HashMap<String, Object> implements IRawRepository, IRawRule, IRawGrammar, IRawCaptures {
+	public static final String FIRST_LINE_MATCH = "firstLineMatch";
+	public static final String FILE_TYPES = "fileTypes";
+	public static final String SCOPE_NAME = "scopeName";
+	public static final String APPLY_END_PATTERN_LAST = "applyEndPatternLast";
+	public static final String REPOSITORY = "repository";
+	public static final String INJECTION_SELECTOR = "injectionSelector";
+	public static final String INJECTIONS = "injections";
+	public static final String PATTERNS = "patterns";
+	public static final String WHILE_CAPTURES = "whileCaptures";
+	public static final String END_CAPTURES = "endCaptures";
+	public static final String INCLUDE = "include";
+	public static final String WHILE = "while";
+	public static final String END = "end";
+	public static final String BEGIN = "begin";
+	public static final String CAPTURES = "captures";
+	public static final String MATCH = "match";
+	public static final String BEGIN_CAPTURES = "beginCaptures";
+	public static final String CONTENT_NAME = "contentName";
+	public static final String NAME = "name";
+	public static final String ID = "id";
+	public static final String DOLLAR_SELF = "$self";
+	public static final String DOLLAR_BASE = "$base";
+	public static final long serialVersionUID = -2306714541728887963L;
 
-	private transient List<String> fileTypes;
+	public transient List<String> fileTypes;
 
 	@Override
 	public IRawRule getProp(String name) {
@@ -127,7 +127,7 @@ public class Raw extends HashMap<String, Object> implements IRawRepository, IRaw
 		return (IRawCaptures) super.get(CAPTURES);
 	}
 
-	private void updateCaptures(String name) {
+	public void updateCaptures(String name) {
 		Object captures = super.get(name);
 		if (captures instanceof List) {
 			Raw rawCaptures = new Raw();

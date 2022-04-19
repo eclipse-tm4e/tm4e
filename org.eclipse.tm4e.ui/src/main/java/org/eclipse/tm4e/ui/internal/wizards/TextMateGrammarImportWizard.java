@@ -24,7 +24,7 @@ import org.osgi.service.prefs.BackingStoreException;
  * Wizard to import TextMate grammar.
  *
  */
-public class TextMateGrammarImportWizard extends Wizard implements IImportWizard {
+public final class TextMateGrammarImportWizard extends Wizard implements IImportWizard {
 
 	private SelectGrammarWizardPage mainPage;
 

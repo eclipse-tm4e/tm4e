@@ -11,7 +11,7 @@
  */
 package org.eclipse.tm4e.core.internal.css;
 
-public interface ExtendedCondition {
+interface ExtendedCondition {
 
 	/**
 	 * Returns the specificity of this condition.

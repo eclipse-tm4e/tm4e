@@ -25,7 +25,7 @@ import org.eclipse.tm4e.core.TMException;
 import org.eclipse.tm4e.core.theme.IThemeProvider;
 import org.eclipse.tm4e.core.theme.ThemeTrieElementRule;
 
-public class ScopeMetadataProvider {
+final class ScopeMetadataProvider {
 
 	private static final ScopeMetadata _NULL_SCOPE_METADATA = new ScopeMetadata("", 0, StandardTokenType.Other, null);
 
@@ -41,7 +41,7 @@ public class ScopeMetadataProvider {
 	private final Map<String, Integer> embeddedLanguages;
 	private Pattern embeddedLanguagesRegex;
 
-	public ScopeMetadataProvider(int initialLanguage, IThemeProvider themeProvider,
+	ScopeMetadataProvider(int initialLanguage, IThemeProvider themeProvider,
 			Map<String, Integer> embeddedLanguages) {
 		this.initialLanguage = initialLanguage;
 		this.themeProvider = themeProvider;
@@ -84,17 +84,16 @@ public class ScopeMetadataProvider {
 		}
 	}
 
-public void onDidChangeTheme() {
-	this.cache.clear();
-	this.defaultMetaData = new ScopeMetadata(
-		"",
-		this.initialLanguage,
-		StandardTokenType.Other,
-		Arrays.asList(this.themeProvider.getDefaults())
-	);
-}
+	void onDidChangeTheme() {
+		this.cache.clear();
+		this.defaultMetaData = new ScopeMetadata(
+				"",
+				this.initialLanguage,
+				StandardTokenType.Other,
+				Arrays.asList(this.themeProvider.getDefaults()));
+	}
 
-	public ScopeMetadata getDefaultMetadata() {
+	ScopeMetadata getDefaultMetadata() {
 		return this.defaultMetaData;
 	}
 
@@ -103,10 +102,10 @@ public void onDidChangeTheme() {
 	 */
 	private static String escapeRegExpCharacters(String value) {
 		// TODO!!!
-		return value; //value.replace(/[\-\\\{\}\*\+\?\|\^\$\.\,\[\]\(\)\#\s]/g, '\\$&');
+		return value; // value.replace(/[\-\\\{\}\*\+\?\|\^\$\.\,\[\]\(\)\#\s]/g, '\\$&');
 	}
 
-	public ScopeMetadata getMetadataForScope(String scopeName) {
+	ScopeMetadata getMetadataForScope(String scopeName) {
 		if (scopeName == null) {
 			return ScopeMetadataProvider._NULL_SCOPE_METADATA;
 		}

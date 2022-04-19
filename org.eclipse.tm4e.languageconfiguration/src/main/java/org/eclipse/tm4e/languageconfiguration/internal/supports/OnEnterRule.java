@@ -18,7 +18,7 @@ import org.eclipse.tm4e.languageconfiguration.internal.utils.RegExpUtils;
 /**
  * Describes a rule to be evaluated when pressing Enter.
  */
-public class OnEnterRule {
+public final class OnEnterRule {
 
 	/**
 	 * This rule will only execute if the text before the cursor matches this

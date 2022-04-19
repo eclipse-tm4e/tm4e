@@ -15,7 +15,7 @@ import java.util.Map;
 
 import org.eclipse.tm4e.core.internal.parser.PListObject;
 
-public class PListGrammar extends PListObject {
+public final class PListGrammar extends PListObject {
 
 	public PListGrammar(PListObject parent, boolean valueAsArray) {
 		super(parent, valueAsArray);

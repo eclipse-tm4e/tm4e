@@ -19,7 +19,7 @@ import org.eclipse.tm4e.core.theme.FontStyle;
  * Metadata for {@link StackElement}.
  *
  */
-public class StackElementMetadata {
+public final class StackElementMetadata {
 
 	/**
 	 * Content should be referenced statically
@@ -27,7 +27,7 @@ public class StackElementMetadata {
 	private StackElementMetadata() {
 	}
 
-	public static String toBinaryStr(int metadata) {
+	static String toBinaryStr(int metadata) {
 		/*
 		 * let r = metadata.toString(2); while (r.length < 32) { r = '0' + r; }
 		 * return r;
@@ -36,15 +36,15 @@ public class StackElementMetadata {
 		return null;
 	}
 
-	public static int getLanguageId(int metadata) {
+	static int getLanguageId(int metadata) {
 		return (metadata & MetadataConsts.LANGUAGEID_MASK) >>> MetadataConsts.LANGUAGEID_OFFSET;
 	}
 
-	public static int getTokenType(int metadata) {
+	static int getTokenType(int metadata) {
 		return (metadata & MetadataConsts.TOKEN_TYPE_MASK) >>> MetadataConsts.TOKEN_TYPE_OFFSET;
 	}
 
-	public static int getFontStyle(int metadata) {
+	static int getFontStyle(int metadata) {
 		return (metadata & MetadataConsts.FONT_STYLE_MASK) >>> MetadataConsts.FONT_STYLE_OFFSET;
 	}
 
@@ -52,11 +52,11 @@ public class StackElementMetadata {
 		return (metadata & MetadataConsts.FOREGROUND_MASK) >>> MetadataConsts.FOREGROUND_OFFSET;
 	}
 
-	public static int getBackground(int metadata) {
+	static int getBackground(int metadata) {
 		return (metadata & MetadataConsts.BACKGROUND_MASK) >>> MetadataConsts.BACKGROUND_OFFSET;
 	}
 
-	public static int set(int metadata, int languageId, int tokenType, int fontStyle, int foreground, int background) {
+	static int set(int metadata, int languageId, int tokenType, int fontStyle, int foreground, int background) {
 		languageId = languageId == 0 ? StackElementMetadata.getLanguageId(metadata) : languageId;
 		tokenType = tokenType == StandardTokenType.Other ? StackElementMetadata.getTokenType(metadata) : tokenType;
 		fontStyle = fontStyle == FontStyle.NotSet ? StackElementMetadata.getFontStyle(metadata) : fontStyle;

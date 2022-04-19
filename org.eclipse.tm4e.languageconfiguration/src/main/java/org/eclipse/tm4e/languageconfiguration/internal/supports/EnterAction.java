@@ -14,7 +14,7 @@ package org.eclipse.tm4e.languageconfiguration.internal.supports;
 /**
  * Describes what to do when pressing Enter.
  */
-public class EnterAction {
+public final class EnterAction {
 
 	public enum IndentAction {
 		/**
@@ -67,7 +67,7 @@ public class EnterAction {
 	/**
 	 * @return the outdentCurrentLine
 	 */
-	public Boolean getOutdentCurrentLine() {
+	private Boolean getOutdentCurrentLine() {
 		return outdentCurrentLine;
 	}
 
@@ -76,7 +76,7 @@ public class EnterAction {
 	 *            the outdentCurrentLine to set
 	 * @return
 	 */
-	public EnterAction setOutdentCurrentLine(Boolean outdentCurrentLine) {
+	private EnterAction setOutdentCurrentLine(Boolean outdentCurrentLine) {
 		this.outdentCurrentLine = outdentCurrentLine;
 		return this;
 	}

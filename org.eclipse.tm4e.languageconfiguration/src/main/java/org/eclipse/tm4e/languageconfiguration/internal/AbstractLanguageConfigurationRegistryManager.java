@@ -25,7 +25,7 @@ public abstract class AbstractLanguageConfigurationRegistryManager implements IL
 	protected final Map<IContentType, ILanguageConfigurationDefinition> pluginDefinitions;
 	protected final Map<IContentType, ILanguageConfigurationDefinition> userDefinitions;
 
-	public AbstractLanguageConfigurationRegistryManager() {
+	protected AbstractLanguageConfigurationRegistryManager() {
 		pluginDefinitions = new HashMap<>();
 		userDefinitions = new HashMap<>();
 	}

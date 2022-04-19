@@ -24,7 +24,7 @@ import com.google.gson.InstanceCreator;
  * Helper class load, save grammar preferences with Json format.
  *
  */
-public class PreferenceHelper {
+public final class PreferenceHelper {
 
 	private static final Gson DEFAULT_GSON;
 
@@ -42,4 +42,6 @@ public class PreferenceHelper {
 		return DEFAULT_GSON.toJson(definitions);
 	}
 
+	private PreferenceHelper() {
+	}
 }

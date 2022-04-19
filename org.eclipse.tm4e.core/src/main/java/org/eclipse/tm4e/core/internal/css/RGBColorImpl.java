@@ -16,13 +16,13 @@ import org.w3c.dom.DOMException;
 import org.w3c.dom.css.CSSPrimitiveValue;
 import org.w3c.dom.css.RGBColor;
 
-public class RGBColorImpl extends CSSValueImpl implements RGBColor {
+final class RGBColorImpl extends CSSValueImpl implements RGBColor {
 
 	private final CSSPrimitiveValue red;
 	private final CSSPrimitiveValue green;
 	private final CSSPrimitiveValue blue;
 
-	public RGBColorImpl(LexicalUnit lexicalUnit) {
+	RGBColorImpl(LexicalUnit lexicalUnit) {
 		LexicalUnit nextUnit = lexicalUnit.getParameters();
 		red = new Measure(nextUnit);
 		nextUnit = nextUnit.getNextLexicalUnit().getNextLexicalUnit();

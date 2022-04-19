@@ -14,7 +14,7 @@ package org.eclipse.tm4e.languageconfiguration.internal.supports;
 import org.eclipse.jface.text.BadLocationException;
 import org.eclipse.jface.text.IDocument;
 
-public class CommentSupport {
+public final class CommentSupport {
 
 	private final Comments comments;
 
@@ -22,7 +22,7 @@ public class CommentSupport {
 		this.comments = comments;
 	}
 
-	public boolean isInComment(IDocument document, int offset) {
+	private boolean isInComment(IDocument document, int offset) {
 		try {
 			if (isInBlockComment(document.get(0, offset))) {
 				return true;

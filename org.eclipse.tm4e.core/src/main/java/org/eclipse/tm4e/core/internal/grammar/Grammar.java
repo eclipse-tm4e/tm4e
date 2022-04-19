@@ -52,7 +52,7 @@ import org.eclipse.tm4e.core.theme.ThemeTrieElementRule;
  * @see https://github.com/Microsoft/vscode-textmate/blob/master/src/grammar.ts
  *
  */
-public class Grammar implements IGrammar, IRuleFactoryHelper {
+public final class Grammar implements IGrammar, IRuleFactoryHelper {
 
 	private int rootId;
 	private int lastRuleId;
@@ -79,11 +79,11 @@ public class Grammar implements IGrammar, IRuleFactoryHelper {
 		this.scopeMetadataProvider.onDidChangeTheme();
 	}
 
-	public ScopeMetadata getMetadataForScope(String scope) {
+	ScopeMetadata getMetadataForScope(String scope) {
 		return this.scopeMetadataProvider.getMetadataForScope(scope);
 	}
 
-	public List<Injection> getInjections() {
+	List<Injection> getInjections() {
 		if (this.injections == null) {
 			this.injections = new ArrayList<>();
 			// add injections from the current grammar
@@ -144,7 +144,7 @@ public class Grammar implements IGrammar, IRuleFactoryHelper {
 		return this.ruleId2desc.get(patternId);
 	}
 
-	public IRawGrammar getExternalGrammar(String scopeName) {
+	private IRawGrammar getExternalGrammar(String scopeName) {
 		return getExternalGrammar(scopeName, null);
 	}
 

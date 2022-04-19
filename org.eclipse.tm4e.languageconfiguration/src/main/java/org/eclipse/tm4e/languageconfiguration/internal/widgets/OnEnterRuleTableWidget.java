@@ -31,9 +31,9 @@ import org.eclipse.tm4e.languageconfiguration.internal.LanguageConfigurationMess
 import org.eclipse.tm4e.languageconfiguration.internal.supports.EnterAction;
 import org.eclipse.tm4e.languageconfiguration.internal.supports.OnEnterRule;
 
-public class OnEnterRuleTableWidget extends TableViewer {
+final class OnEnterRuleTableWidget extends TableViewer {
 
-	public OnEnterRuleTableWidget(Table table) {
+	OnEnterRuleTableWidget(Table table) {
 		super(table);
 		setContentProvider(new OnEnterRuleContentProvider());
 		setLabelProvider(new OnEnterRuleLabelProvider());
@@ -70,11 +70,11 @@ public class OnEnterRuleTableWidget extends TableViewer {
 		gc.dispose();
 	}
 
-	protected int computeMinimumColumnWidth(GC gc, String string) {
+	private int computeMinimumColumnWidth(GC gc, String string) {
 		return gc.stringExtent(string).x + 10;
 	}
 
-	protected static class OnEnterRuleContentProvider implements IStructuredContentProvider {
+	private static final class OnEnterRuleContentProvider implements IStructuredContentProvider {
 
 		private List<OnEnterRule> onEnterRulesList;
 
@@ -99,7 +99,7 @@ public class OnEnterRuleTableWidget extends TableViewer {
 		}
 	}
 
-	protected static class OnEnterRuleLabelProvider extends LabelProvider implements ITableLabelProvider {
+	private static final class OnEnterRuleLabelProvider extends LabelProvider implements ITableLabelProvider {
 
 		@Override
 		public Image getColumnImage(Object element, int columnIndex) {

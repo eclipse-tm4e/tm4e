@@ -11,9 +11,9 @@
  */
 package org.eclipse.tm4e.core.internal.css;
 
-public class CSSClassCondition extends CSSAttributeCondition {
+final class CSSClassCondition extends CSSAttributeCondition {
 
-	public CSSClassCondition(String localName, String namespaceURI, String value) {
+	CSSClassCondition(String localName, String namespaceURI, String value) {
 		super(localName, namespaceURI, true, value);
 	}
 

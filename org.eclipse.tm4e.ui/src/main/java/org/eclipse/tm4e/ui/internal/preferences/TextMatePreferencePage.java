@@ -27,7 +27,7 @@ import org.eclipse.ui.preferences.IWorkbenchPreferenceContainer;
  * TextMate Global preferences page.
  *
  */
-public class TextMatePreferencePage extends PreferencePage implements IWorkbenchPreferencePage {
+public final class TextMatePreferencePage extends PreferencePage implements IWorkbenchPreferencePage {
 
 	public TextMatePreferencePage() {
 

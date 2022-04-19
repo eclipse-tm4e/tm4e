@@ -18,7 +18,7 @@ public abstract class AbstractAttributeCondition implements AttributeCondition, 
 	/**
 	 * The attribute value.
 	 */
-	protected String value;
+	private final String value;
 
 	/**
 	 * Creates a new AbstractAttributeCondition object.

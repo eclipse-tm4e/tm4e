@@ -81,10 +81,10 @@ public final class Matcher<T> implements Predicate<T> {
 		Predicate<T> matcher = parseConjunction();
 		while (matcher != null) {
 			matchers.add(matcher);
-			if (token.equals("|") || token.equals(",")) {
+			if ("|".equals(token) || ",".equals(token)) {
 				do {
 					token = tokenizer.next();
-				} while (token.equals("|") || token.equals(",")); // ignore subsequent
+				} while ("|".equals(token) || ",".equals(token)); // ignore subsequent
 				// commas
 			} else {
 				break;

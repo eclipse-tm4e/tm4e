@@ -50,13 +50,13 @@ public final class CharacterPairSupport {
 			return null;
 		}
 		for (CharacterPair autoClosingPair : autoClosingPairs) {
-			String openning = autoClosingPair.getKey();
-			if (!openning.endsWith(newCharacter)) {
+			String opening = autoClosingPair.getKey();
+			if (!opening.endsWith(newCharacter)) {
 				continue;
 			}
-			if (openning.length() > 1) {
+			if (opening.length() > 1) {
 				String offsetPrefix = text.substring(0, offset);
-				if (!offsetPrefix.endsWith(openning.substring(0, openning.length() - 1))) {
+				if (!offsetPrefix.endsWith(opening.substring(0, opening.length() - 1))) {
 					continue;
 				}
 			}

@@ -72,7 +72,7 @@ public class TMResource implements ITMResource {
 			return null;
 		}
 		if (pluginId != null) {
-			URL url = new URL(new StringBuilder(PLATFORM_PLUGIN).append(pluginId).append("/").append(path).toString());
+			URL url = new URL(PLATFORM_PLUGIN + pluginId + "/" + path);
 			return url.openStream();
 		}
 		return new FileInputStream(new File(path));

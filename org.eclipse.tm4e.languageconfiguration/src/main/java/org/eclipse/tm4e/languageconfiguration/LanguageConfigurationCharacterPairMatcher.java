@@ -97,7 +97,7 @@ public class LanguageConfigurationCharacterPairMatcher
 
 	/**
 	 * Returns the matcher from the document.
-	 * 
+	 *
 	 * @param document
 	 * @return
 	 */
@@ -108,7 +108,7 @@ public class LanguageConfigurationCharacterPairMatcher
 		if (matcher == null) {
 			// initizalize a DefaultCharacterPairMatcher by using character pairs of the
 			// language configuration.
-			StringBuilder chars = new StringBuilder();
+			final StringBuilder chars = new StringBuilder();
 			this.document = document;
 			IContentType[] contentTypes = findContentTypes(document);
 			if (contentTypes != null) {

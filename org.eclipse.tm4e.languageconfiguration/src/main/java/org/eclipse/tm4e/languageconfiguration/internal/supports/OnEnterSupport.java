@@ -95,7 +95,7 @@ public class OnEnterSupport {
 		}
 
 		private static Pattern createOpenBracketRegExp(String bracket) {
-			StringBuilder str = new StringBuilder(RegExpUtils.escapeRegExpCharacters(bracket));
+			final StringBuilder str = new StringBuilder(RegExpUtils.escapeRegExpCharacters(bracket));
 			String c = String.valueOf(str.charAt(0));
 			if (!B_REGEXP.matcher(c).find()) {
 				str.insert(0, "\\b"); //$NON-NLS-1$
@@ -105,7 +105,7 @@ public class OnEnterSupport {
 		}
 
 		private static Pattern createCloseBracketRegExp(String bracket) {
-			StringBuilder str = new StringBuilder(RegExpUtils.escapeRegExpCharacters(bracket));
+		   final StringBuilder str = new StringBuilder(RegExpUtils.escapeRegExpCharacters(bracket));
 			String c = String.valueOf(str.charAt(str.length() - 1));
 			if (!B_REGEXP.matcher(c).find()) {
 				str.append("\\b"); //$NON-NLS-1$

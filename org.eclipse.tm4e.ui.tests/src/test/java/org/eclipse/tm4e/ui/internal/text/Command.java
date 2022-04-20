@@ -50,7 +50,7 @@ public abstract class Command implements ICommand {
 	protected abstract Integer getLineTo();
 
 	public static String toText(String text) {
-		StringBuilder newText = new StringBuilder();
+		final StringBuilder newText = new StringBuilder();
 		for (int i = 0; i < text.length(); i++) {
 			char c = text.charAt(i);
 			switch (c) {

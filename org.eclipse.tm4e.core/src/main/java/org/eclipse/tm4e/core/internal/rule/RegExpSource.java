@@ -87,7 +87,7 @@ final class RegExpSource {
 			char ch;
 			char nextCh;
 			int lastPushedPos = 0;
-			StringBuilder output = new StringBuilder();
+			final StringBuilder output = new StringBuilder();
 
 			boolean hasAnchor = false;
 			for (int pos = 0; pos < len; pos++) {

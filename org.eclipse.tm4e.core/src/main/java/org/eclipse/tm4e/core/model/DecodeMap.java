@@ -63,7 +63,7 @@ class DecodeMap {
 	}
 
 	public String getToken(Map<Integer, Boolean> tokenMap) {
-		StringBuilder result = new StringBuilder();
+		final StringBuilder result = new StringBuilder();
 		boolean isFirst = true;
 		for (int i = 1; i <= this.lastAssignedId; i++) {
 			if (tokenMap.containsKey(i)) {

@@ -39,7 +39,7 @@ final class OnigNextMatchResult implements IOnigNextMatchResult {
 
 	@Override
 	public String toString() {
-		StringBuilder result = new StringBuilder();
+		final StringBuilder result = new StringBuilder();
 		result.append("{\n");
 		result.append("  \"index\": ");
 		result.append(getIndex());

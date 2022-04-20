@@ -55,7 +55,7 @@ public final class TextUtils {
 			}
 		}
 
-		StringBuilder result = new StringBuilder();
+		final StringBuilder result = new StringBuilder();
 		if (!insertSpaces) {
 			long tabsCnt = Math.round(Math.floor(spacesCnt / tabSize));
 			spacesCnt = spacesCnt % tabSize;

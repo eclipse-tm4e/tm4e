@@ -87,7 +87,7 @@ public class TMEditor {
 			for (ICommand command : commands) {
 				collector.executeCommand((Command) command);
 			}
-			shell.getDisplay().syncExec(() -> shell.dispose());
+			shell.getDisplay().syncExec(shell::dispose);
 		}).start();
 
 		Display display = shell.getDisplay();

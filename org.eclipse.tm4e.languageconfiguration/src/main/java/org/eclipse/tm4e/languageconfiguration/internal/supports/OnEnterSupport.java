@@ -1,19 +1,20 @@
 /**
- *  Copyright (c) 2015-2017 Angelo ZERR.
+ * Copyright (c) 2015-2017 Angelo ZERR.
  * This program and the accompanying materials are made
  * available under the terms of the Eclipse Public License 2.0
  * which is available at https://www.eclipse.org/legal/epl-2.0/
  *
  * SPDX-License-Identifier: EPL-2.0
  *
- *  Contributors:
- *  Angelo Zerr <angelo.zerr@gmail.com> - initial API and implementation
+ * Contributors:
+ * Angelo Zerr <angelo.zerr@gmail.com> - initial API and implementation
  */
 package org.eclipse.tm4e.languageconfiguration.internal.supports;
 
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
@@ -34,8 +35,8 @@ public class OnEnterSupport {
 	private final List<OnEnterRule> regExpRules;
 
 	public OnEnterSupport(List<CharacterPair> brackets, List<OnEnterRule> regExpRules) {
-		this.brackets = (brackets != null ? brackets : DEFAULT_BRACKETS).stream().filter(el -> el != null)
-				.map((bracket -> new ProcessedBracketPair(bracket.getKey(), bracket.getValue()))).collect(Collectors.toList());
+		this.brackets = (brackets != null ? brackets : DEFAULT_BRACKETS).stream().filter(Objects::nonNull)
+				.map(ProcessedBracketPair::new).collect(Collectors.toList());
 
 		this.regExpRules = regExpRules != null ? regExpRules : Collections.emptyList();
 	}
@@ -81,9 +82,9 @@ public class OnEnterSupport {
 		private final Pattern openRegExp;
 		private final Pattern closeRegExp;
 
-		private ProcessedBracketPair(String open, String close) {
-			openRegExp = createOpenBracketRegExp(open);
-			closeRegExp = createCloseBracketRegExp(close);
+		private ProcessedBracketPair(final CharacterPair charPair) {
+			openRegExp = createOpenBracketRegExp(charPair.getKey());
+			closeRegExp = createCloseBracketRegExp(charPair.getValue());
 		}
 
 		private boolean matchOpen(String beforeEnterText) {
@@ -105,7 +106,7 @@ public class OnEnterSupport {
 		}
 
 		private static Pattern createCloseBracketRegExp(String bracket) {
-		   final StringBuilder str = new StringBuilder(RegExpUtils.escapeRegExpCharacters(bracket));
+			final StringBuilder str = new StringBuilder(RegExpUtils.escapeRegExpCharacters(bracket));
 			String c = String.valueOf(str.charAt(str.length() - 1));
 			if (!B_REGEXP.matcher(c).find()) {
 				str.append("\\b"); //$NON-NLS-1$

@@ -272,7 +272,7 @@ public final class LanguageConfigurationRegistryManager extends AbstractLanguage
 		// Save grammar definitions in the
 		// "${workspace_loc}/metadata/.plugins/org.eclipse.core.runtime/.settings/org.eclipse.tm4e.languageconfiguration.prefs"
 		List<ILanguageConfigurationDefinition> definitions = new ArrayList<>();
-		userDefinitions.values().forEach(definition -> definitions.add(definition));
+		userDefinitions.values().forEach(definitions::add);
 		pluginDefinitions.values().forEach(definition -> {
 			if (!(definition.isBracketAutoClosingEnabled() && definition.isMatchingPairsEnabled()
 					&& definition.isOnEnterEnabled())) {

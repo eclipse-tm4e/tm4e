@@ -13,6 +13,7 @@ package org.eclipse.tm4e.languageconfiguration.internal.supports;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 /**
@@ -27,11 +28,11 @@ public final class CharacterPairSupport {
 	public CharacterPairSupport(List<CharacterPair> brackets, List<AutoClosingPairConditional> autoClosingPairs,
 			List<CharacterPair> surroundingPairs) {
 		if (autoClosingPairs != null) {
-			this.autoClosingPairs = autoClosingPairs.stream().filter(el -> el != null)
+			this.autoClosingPairs = autoClosingPairs.stream().filter(Objects::nonNull)
 					.map(el -> new AutoClosingPairConditional(el.getKey(), el.getValue(), el.getNotIn()))
 					.collect(Collectors.toList());
 		} else if (brackets != null) {
-			this.autoClosingPairs = brackets.stream().filter(el -> el != null)
+			this.autoClosingPairs = brackets.stream().filter(Objects::nonNull)
 					.map(el -> new AutoClosingPairConditional(el.getKey(), el.getValue(), null))
 					.collect(Collectors.toList());
 		} else {
@@ -39,7 +40,7 @@ public final class CharacterPairSupport {
 		}
 
 		this.surroundingPairs = surroundingPairs != null
-				? surroundingPairs.stream().filter(el -> el != null).collect(Collectors.toList())
+				? surroundingPairs.stream().filter(Objects::nonNull).collect(Collectors.toList())
 				: this.autoClosingPairs;
 	}
 

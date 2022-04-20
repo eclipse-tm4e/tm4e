@@ -29,8 +29,8 @@ public abstract class AbstractLanguageConfigurationRegistryManager implements IL
 	@Override
 	public ILanguageConfigurationDefinition[] getDefinitions() {
 		Set<ILanguageConfigurationDefinition> definitions = new HashSet<>();
-		userDefinitions.values().forEach(definition -> definitions.add(definition));
-		pluginDefinitions.values().forEach(definition -> definitions.add(definition));
+		userDefinitions.values().forEach(definitions::add);
+		pluginDefinitions.values().forEach(definitions::add);
 		return definitions.toArray(ILanguageConfigurationDefinition[]::new);
 	}
 

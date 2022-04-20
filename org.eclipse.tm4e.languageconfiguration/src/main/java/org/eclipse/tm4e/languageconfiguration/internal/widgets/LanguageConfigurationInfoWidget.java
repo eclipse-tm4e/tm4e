@@ -12,6 +12,7 @@
 package org.eclipse.tm4e.languageconfiguration.internal.widgets;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 import org.eclipse.jface.layout.TableColumnLayout;
@@ -134,7 +135,7 @@ public class LanguageConfigurationInfoWidget extends Composite {
 		if (list == null) {
 			return null;
 		}
-		return list.stream().filter(el -> el != null).collect(Collectors.toList());
+		return list.stream().filter(Objects::nonNull).collect(Collectors.toList());
 	}
 
 	private void createCommentsTab(TabFolder folder) {

@@ -70,7 +70,7 @@ public class Tokenizer implements ITokenizationSupport {
 		for (int tokenIndex = 0, len = textMateResult.getTokens().length; tokenIndex < len; tokenIndex++) {
 			IToken token = textMateResult.getTokens()[tokenIndex];
 			int tokenStartIndex = token.getStartIndex();
-			String tokenType = decodeTextMateToken(this.decodeMap, token.getScopes().toArray(new String[0]));
+			String tokenType = decodeTextMateToken(this.decodeMap, token.getScopes().toArray(String[]::new));
 
 			// do not push a new token if the type is exactly the same (also
 			// helps with ligatures)

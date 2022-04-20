@@ -80,7 +80,7 @@ final class OnEnterRuleTableWidget extends TableViewer {
 
 		@Override
 		public Object[] getElements(Object input) {
-			return onEnterRulesList.toArray(new OnEnterRule[onEnterRulesList.size()]);
+			return onEnterRulesList.toArray(OnEnterRule[]::new);
 		}
 
 		@SuppressWarnings("unchecked")

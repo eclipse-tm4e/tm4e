@@ -25,7 +25,7 @@ final class ICompilePatternsResult {
 
 	ICompilePatternsResult(Collection<Integer> patterns, boolean hasMissingPatterns) {
 		this.hasMissingPatterns = hasMissingPatterns;
-		this.patterns = patterns.toArray(new Integer[patterns.size()]);
+		this.patterns = patterns.toArray(Integer[]::new);
 	}
 
 }

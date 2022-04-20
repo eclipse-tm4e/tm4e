@@ -123,7 +123,7 @@ final class ThemeAssociationRegistry {
 	// userAssociations.add(defaultAssociation);
 	// }
 	// }*/
-	// return userAssociations.toArray(new IThemeAssociation[0]);
+	// return userAssociations.toArray(IThemeAssociation[]::new);
 	// }
 	// return getThemeAssociations(true);
 	// }

@@ -129,7 +129,7 @@ public abstract class AbstractGrammarRegistryManager extends Registry implements
 		Collection<IGrammarDefinition> userDefinitions = userCache.getDefinitions();
 		Collection<IGrammarDefinition> definitions = new ArrayList<>(pluginDefinitions);
 		definitions.addAll(userDefinitions);
-		return definitions.toArray(new IGrammarDefinition[definitions.size()]);
+		return definitions.toArray(IGrammarDefinition[]::new);
 	}
 
 	/**

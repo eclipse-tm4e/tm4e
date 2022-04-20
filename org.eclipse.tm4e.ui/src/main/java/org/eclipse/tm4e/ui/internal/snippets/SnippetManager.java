@@ -86,6 +86,6 @@ public final class SnippetManager implements ISnippetManager {
 	@Override
 	public ISnippet[] getSnippets(String scopeName) {
 		Collection<ISnippet> snippets = this.snippets.get(scopeName);
-		return snippets != null ? snippets.toArray(new ISnippet[snippets.size()]) : EMPTY_SNIPPETS;
+		return snippets != null ? snippets.toArray(ISnippet[]::new) : EMPTY_SNIPPETS;
 	}
 }

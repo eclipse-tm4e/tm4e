@@ -71,7 +71,7 @@ public final class ThemeContribution extends CompoundContributionItem implements
 
 			}
 		}
-		return items.toArray(new IContributionItem[items.size()]);
+		return items.toArray(IContributionItem[]::new);
 	}
 
 	private Action createAction(final String scopeName, final ITheme theme, boolean whenDark) {

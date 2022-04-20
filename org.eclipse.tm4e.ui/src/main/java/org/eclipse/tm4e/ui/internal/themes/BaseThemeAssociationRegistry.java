@@ -84,9 +84,9 @@ final class BaseThemeAssociationRegistry {
 	IThemeAssociation[] getThemeAssociations(boolean isDefault) {
 		/*if (isDefault) {
 			return getThemeAssociations().stream().filter(theme -> theme.isDefault()).collect(Collectors.toList())
-					.toArray(new IThemeAssociation[0]);
+					.toArray(IThemeAssociation[]::new);
 		}*/
-		return getThemeAssociations().toArray(new IThemeAssociation[allAssociations.size()]);
+		return getThemeAssociations().toArray(IThemeAssociation[]::new);
 	}
 
 	IThemeAssociation getDefaultAssociation() {
@@ -95,7 +95,7 @@ final class BaseThemeAssociationRegistry {
 
 	IThemeAssociation[] getThemeAssociationsForTheme(String themeId) {
 		return getThemeAssociations().stream().filter(themeAssociation -> themeId.equals(themeAssociation.getThemeId()))
-				.collect(Collectors.toList()).toArray(new IThemeAssociation[0]);
+				.collect(Collectors.toList()).toArray(IThemeAssociation[]::new);
 	}
 
 	boolean hasThemeAssociationsForTheme(String themeId, String eclipseThemeId) {

@@ -64,7 +64,7 @@ class CharacterPairsTableWidget extends TableViewer {
 
 		@Override
 		public Object[] getElements(Object input) {
-			return characterPairList.toArray(new CharacterPair[characterPairList.size()]);
+			return characterPairList.toArray(CharacterPair[]::new);
 		}
 
 		@SuppressWarnings("unchecked")

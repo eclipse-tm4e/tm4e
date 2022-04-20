@@ -109,7 +109,7 @@ final class LineTokens {
 			this.tokens.get(this.tokens.size() - 1).setStartIndex(0);
 		}
 
-		return this.tokens.toArray(new IToken[0]);
+		return this.tokens.toArray(IToken[]::new);
 	}
 
 	int[] getBinaryResult(StackElement stack, int lineLength) {

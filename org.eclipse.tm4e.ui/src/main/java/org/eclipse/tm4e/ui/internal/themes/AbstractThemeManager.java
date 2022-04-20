@@ -53,7 +53,7 @@ public abstract class AbstractThemeManager implements IThemeManager {
 	@Override
 	public ITheme[] getThemes() {
 		Collection<ITheme> themes = this.themes.values();
-		return themes.toArray(new ITheme[themes.size()]);
+		return themes.toArray(ITheme[]::new);
 	}
 
 	@Override
@@ -75,7 +75,7 @@ public abstract class AbstractThemeManager implements IThemeManager {
 	public ITheme[] getThemes(boolean dark) {
 		Collection<ITheme> themes = this.themes.values();
 		return themes.stream().filter(theme -> (theme.isDark() == dark))
-		   .collect(Collectors.toList()).toArray(new ITheme[0]);
+		   .collect(Collectors.toList()).toArray(ITheme[]::new);
 	}
 
 	@Override
@@ -116,7 +116,7 @@ public abstract class AbstractThemeManager implements IThemeManager {
 			dark = new ThemeAssociation(getDefaultTheme(true).getId(), scopeName, true);
 		}
 		associations.add(dark);
-		return associations.toArray(new IThemeAssociation[associations.size()]);
+		return associations.toArray(IThemeAssociation[]::new);
 	}
 
 	@Override
@@ -132,7 +132,7 @@ public abstract class AbstractThemeManager implements IThemeManager {
 	@Override
 	public IThemeAssociation[] getAllThemeAssociations() {
 		List<IThemeAssociation> associations = themeAssociationRegistry.getThemeAssociations();
-		return associations.toArray(new IThemeAssociation[associations.size()]);
+		return associations.toArray(IThemeAssociation[]::new);
 	}
 
 	@Override

@@ -31,7 +31,7 @@ public abstract class AbstractLanguageConfigurationRegistryManager implements IL
 		Set<ILanguageConfigurationDefinition> definitions = new HashSet<>();
 		userDefinitions.values().forEach(definition -> definitions.add(definition));
 		pluginDefinitions.values().forEach(definition -> definitions.add(definition));
-		return definitions.toArray(new ILanguageConfigurationDefinition[definitions.size()]);
+		return definitions.toArray(ILanguageConfigurationDefinition[]::new);
 	}
 
 	@Override

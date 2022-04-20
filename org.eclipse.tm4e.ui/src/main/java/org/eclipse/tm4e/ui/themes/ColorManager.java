@@ -23,7 +23,7 @@ import org.eclipse.ui.texteditor.AbstractTextEditor;
 
 import com.google.common.base.Splitter;
 
-public class ColorManager {
+public final class ColorManager {
 
 	private static final Splitter BY_COMMA_SPLITTER = Splitter.on(',');
 
@@ -33,10 +33,9 @@ public class ColorManager {
 		return INSTANCE;
 	}
 
-	private final Map<RGB, Color> fColorTable;
+	private final Map<RGB, Color> fColorTable = new HashMap<>(10);
 
 	private ColorManager() {
-		fColorTable = new HashMap<>(10);
 	}
 
 	public Color getColor(RGB rgb) {

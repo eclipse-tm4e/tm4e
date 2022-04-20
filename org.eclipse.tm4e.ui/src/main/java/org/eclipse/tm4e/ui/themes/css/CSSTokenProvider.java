@@ -35,11 +35,10 @@ public class CSSTokenProvider extends AbstractTokenProvider {
 
 	private static final Splitter BY_DOT_SPLITTER = Splitter.on('.');
 
-	private final Map<IStyle, IToken> tokenMaps;
+	private final Map<IStyle, IToken> tokenMaps = new HashMap<>();
 	private CSSParser parser;
 
 	public CSSTokenProvider(InputStream in) {
-		tokenMaps = new HashMap<>();
 		try {
 			parser = new CSSParser(in);
 			for (IStyle style : parser.getStyles()) {

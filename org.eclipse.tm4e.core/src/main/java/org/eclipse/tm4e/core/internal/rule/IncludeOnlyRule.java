@@ -26,7 +26,6 @@ final class IncludeOnlyRule extends Rule {
 		super(id, name, contentName);
 		this.patterns = patterns.patterns;
 		this.hasMissingPatterns = patterns.hasMissingPatterns;
-		this.cachedCompiledPatterns = null;
 	}
 
 	@Override

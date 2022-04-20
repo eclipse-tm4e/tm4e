@@ -19,13 +19,8 @@ import java.util.Set;
 
 public class ColorMap {
 
-	private int lastColorId;
-	private final Map<String /* color */, Integer /* ID color */ > color2id;
-
-	public ColorMap() {
-		this.lastColorId = 0;
-		this.color2id = new HashMap<>();
-	}
+	private int lastColorId = 0;
+	private final Map<String /* color */, Integer /* ID color */ > color2id = new HashMap<>();
 
 	public int getId(String color) {
 		if (color == null) {

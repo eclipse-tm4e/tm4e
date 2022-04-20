@@ -54,10 +54,10 @@ import org.eclipse.tm4e.core.theme.ThemeTrieElementRule;
  */
 public final class Grammar implements IGrammar, IRuleFactoryHelper {
 
-	private int rootId;
-	private int lastRuleId;
-	private final Map<Integer, Rule> ruleId2desc;
-	private final Map<String, IRawGrammar> includedGrammars;
+	private int rootId = -1;
+	private int lastRuleId = 0;
+	private final Map<Integer, Rule> ruleId2desc = new HashMap<>();
+	private final Map<String, IRawGrammar> includedGrammars = new HashMap<>();
 	private final IGrammarRepository grammarRepository;
 	private final IRawGrammar grammar;
 	private List<Injection> injections;
@@ -66,13 +66,8 @@ public final class Grammar implements IGrammar, IRuleFactoryHelper {
 	public Grammar(IRawGrammar grammar, int initialLanguage, Map<String, Integer> embeddedLanguages,
 			IGrammarRepository grammarRepository, IThemeProvider themeProvider) {
 		this.scopeMetadataProvider = new ScopeMetadataProvider(initialLanguage, themeProvider, embeddedLanguages);
-		this.rootId = -1;
-		this.lastRuleId = 0;
-		this.includedGrammars = new HashMap<>();
 		this.grammarRepository = grammarRepository;
 		this.grammar = initGrammar(grammar, null);
-		this.ruleId2desc = new HashMap<>();
-		this.injections = null;
 	}
 
 	public void onDidChangeTheme() {

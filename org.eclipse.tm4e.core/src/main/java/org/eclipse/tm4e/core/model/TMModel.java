@@ -38,7 +38,7 @@ public class TMModel implements ITMModel {
 	private IGrammar grammar;
 
 	/** Listener when TextMate model tokens changed **/
-	private final List<IModelTokensChangedListener> listeners;
+	private final List<IModelTokensChangedListener> listeners = new ArrayList<>();
 
 	Tokenizer tokenizer;
 
@@ -49,7 +49,6 @@ public class TMModel implements ITMModel {
 	private final PriorityBlockingQueue<Integer> invalidLines = new PriorityBlockingQueue<>();
 
 	public TMModel(IModelLines lines) {
-		this.listeners = new ArrayList<>();
 		this.lines = lines;
 		((AbstractLineList)lines).setModel(this);
 		lines.forEach(ModelLine::resetTokenizationState);

@@ -28,13 +28,8 @@ import org.eclipse.tm4e.ui.themes.IThemeAssociation;
 final class BaseThemeAssociationRegistry {
 
 	private IThemeAssociation defaultAssociation;
-	private final Map<String /* E4 Theme id */, List<IThemeAssociation>> eclipseThemeIds;
-	private final List<IThemeAssociation> allAssociations;
-
-	BaseThemeAssociationRegistry() {
-		eclipseThemeIds = new HashMap<>();
-		this.allAssociations = new ArrayList<>();
-	}
+	private final Map<String /* E4 Theme id */, List<IThemeAssociation>> eclipseThemeIds = new HashMap<>();
+	private final List<IThemeAssociation> allAssociations = new ArrayList<>();
 
 	void register(IThemeAssociation association) {
 		//String eclipseThemeId = association.getEclipseThemeId();

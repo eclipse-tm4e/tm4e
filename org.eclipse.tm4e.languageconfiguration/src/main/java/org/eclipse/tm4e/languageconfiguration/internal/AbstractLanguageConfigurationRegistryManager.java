@@ -22,13 +22,9 @@ import org.eclipse.tm4e.languageconfiguration.ILanguageConfigurationDefinition;
 import org.eclipse.tm4e.languageconfiguration.ILanguageConfigurationRegistryManager;
 
 public abstract class AbstractLanguageConfigurationRegistryManager implements ILanguageConfigurationRegistryManager {
-	protected final Map<IContentType, ILanguageConfigurationDefinition> pluginDefinitions;
-	protected final Map<IContentType, ILanguageConfigurationDefinition> userDefinitions;
 
-	protected AbstractLanguageConfigurationRegistryManager() {
-		pluginDefinitions = new HashMap<>();
-		userDefinitions = new HashMap<>();
-	}
+	protected final Map<IContentType, ILanguageConfigurationDefinition> pluginDefinitions = new HashMap<>();
+	protected final Map<IContentType, ILanguageConfigurationDefinition> userDefinitions = new HashMap<>();
 
 	@Override
 	public ILanguageConfigurationDefinition[] getDefinitions() {

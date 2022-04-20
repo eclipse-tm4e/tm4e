@@ -39,14 +39,11 @@ import org.joni.exception.SyntaxException;
 final class OnigRegExp {
 
 	private OnigString lastSearchString;
-	private int lastSearchPosition;
+	private int lastSearchPosition = -1;
 	private OnigResult lastSearchResult;
 	private final Regex regex;
 
 	OnigRegExp(String source) {
-		lastSearchString = null;
-		lastSearchPosition = -1;
-		lastSearchResult = null;
 		byte[] pattern = source.getBytes(StandardCharsets.UTF_8);
 		try {
 			this.regex = new Regex(pattern, 0, pattern.length, Option.CAPTURE_GROUP, UTF8Encoding.INSTANCE,

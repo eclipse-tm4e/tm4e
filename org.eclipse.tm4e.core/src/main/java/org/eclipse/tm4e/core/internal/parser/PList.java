@@ -23,15 +23,13 @@ import org.xml.sax.helpers.DefaultHandler;
 public final class PList<T> extends DefaultHandler {
 
 	private final boolean theme;
-	private final List<String> errors;
+	private final List<String> errors = new ArrayList<>();
 	private PListObject currObject;
 	private T result;
 	private StringBuilder text;
 
 	public PList(boolean theme) {
 		this.theme = theme;
-		this.errors = new ArrayList<>();
-		this.currObject = null;
 	}
 
 	@Override

@@ -6,9 +6,11 @@
  * http://www.eclipse.org/legal/epl-v10.html
  *
  * Contributors:
- *     IBM Corporation - initial API and implementation
- *     Nicolaj Hoess <nicohoess@gmail.com> - Editor templates pref page: Allow to sort by column - https://bugs.eclipse.org/203722
- *     Angelo Zerr <angelo.zerr@gmail.com> - Adapt org.eclipse.ui.texteditor.templates.TemplatePreferencePage for TextMate grammar
+ * IBM Corporation - initial API and implementation
+ * Nicolaj Hoess <nicohoess@gmail.com> - Editor templates pref page: Allow to sort by column -
+ * https://bugs.eclipse.org/203722
+ * Angelo Zerr <angelo.zerr@gmail.com> - Adapt org.eclipse.ui.texteditor.templates.TemplatePreferencePage for TextMate
+ * grammar
  *******************************************************************************/
 package org.eclipse.tm4e.ui.internal.preferences;
 
@@ -77,9 +79,10 @@ public final class GrammarPreferencePage extends PreferencePage implements IWork
 	static final String PAGE_ID = "org.eclipse.tm4e.ui.preferences.GrammarPreferencePage";
 
 	// Managers
-	private IGrammarRegistryManager grammarRegistryManager;
-	private IThemeManager themeManager;
-	private ISnippetManager snippetManager;
+	private IGrammarRegistryManager grammarRegistryManager = new WorkingCopyGrammarRegistryManager(
+			TMEclipseRegistryPlugin.getGrammarRegistryManager());
+	private IThemeManager themeManager = new WorkingCopyThemeManager(TMUIPlugin.getThemeManager());
+	private ISnippetManager snippetManager = TMUIPlugin.getSnippetManager();
 
 	// Grammar list
 	private TableViewer grammarViewer;
@@ -97,10 +100,6 @@ public final class GrammarPreferencePage extends PreferencePage implements IWork
 
 	public GrammarPreferencePage() {
 		setDescription(TMUIMessages.GrammarPreferencePage_description);
-		setGrammarRegistryManager(
-				new WorkingCopyGrammarRegistryManager(TMEclipseRegistryPlugin.getGrammarRegistryManager()));
-		setThemeManager(new WorkingCopyThemeManager(TMUIPlugin.getThemeManager()));
-		setSnippetManager(TMUIPlugin.getSnippetManager());
 	}
 
 	/**
@@ -359,9 +358,10 @@ public final class GrammarPreferencePage extends PreferencePage implements IWork
 			}
 
 			private void remove() {
-			    IGrammarDefinition definition = (IGrammarDefinition) ((IStructuredSelection) grammarViewer.getSelection()).getFirstElement();
-			    grammarRegistryManager.unregisterGrammarDefinition(definition);
-			    grammarViewer.refresh();
+				IGrammarDefinition definition = (IGrammarDefinition) ((IStructuredSelection) grammarViewer
+						.getSelection()).getFirstElement();
+				grammarRegistryManager.unregisterGrammarDefinition(definition);
+				grammarViewer.refresh();
 			}
 		});
 	}
@@ -491,7 +491,7 @@ public final class GrammarPreferencePage extends PreferencePage implements IWork
 
 	private int computeMinimumColumnWidth(GC gc, String string) {
 		return gc.stringExtent(string).x + 10; // pad 10 to accommodate table
-												// header trimmings
+												 // header trimmings
 	}
 
 	private void updateButtons() {
@@ -539,7 +539,8 @@ public final class GrammarPreferencePage extends PreferencePage implements IWork
 	 * source viewer featuring e.g. syntax coloring.
 	 *
 	 * @param parent
-	 *            the parent control
+	 *        the parent control
+	 *
 	 * @return a configured source viewer
 	 */
 	private TMViewer createViewer(Composite parent) {

@@ -76,8 +76,8 @@ public final class ThemePreferencePage extends PreferencePage implements IWorkbe
 	private ComboViewer grammarViewer;
 	private TMViewer previewViewer;
 
-	private final IGrammarRegistryManager grammarRegistryManager;
-	private final IThemeManager themeManager;
+	private final IGrammarRegistryManager grammarRegistryManager = TMEclipseRegistryPlugin.getGrammarRegistryManager();
+	private final IThemeManager themeManager = TMUIPlugin.getThemeManager();
 
 	private Button darkThemeButton;
 
@@ -87,8 +87,6 @@ public final class ThemePreferencePage extends PreferencePage implements IWorkbe
 
 	public ThemePreferencePage() {
 		setDescription(TMUIMessages.ThemePreferencePage_description);
-		this.grammarRegistryManager = TMEclipseRegistryPlugin.getGrammarRegistryManager();
-		this.themeManager = TMUIPlugin.getThemeManager();
 	}
 
 	@Override

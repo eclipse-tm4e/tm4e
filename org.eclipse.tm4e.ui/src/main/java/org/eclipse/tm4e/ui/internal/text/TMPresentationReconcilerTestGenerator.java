@@ -28,7 +28,7 @@ public final class TMPresentationReconcilerTestGenerator
 
 	private final StringBuilder code = new StringBuilder();
 
-	/*private List<Command> commands;
+	/*private List<Command> commands = new ArrayList<>();
 
 	private static final class Command {
 		final String command;
@@ -39,10 +39,6 @@ public final class TMPresentationReconcilerTestGenerator
 			this.command = command;
 		}
 	}*/
-
-	public TMPresentationReconcilerTestGenerator() {
-		//this.commands = new ArrayList<>();
-	}
 
 	@Override
 	public void install(ITextViewer viewer, IDocument document) {

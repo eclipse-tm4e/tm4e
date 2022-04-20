@@ -1,5 +1,5 @@
 /**
- *  Copyright (c) 2015-2017 Angelo ZERR.
+ * Copyright (c) 2015-2017 Angelo ZERR.
  * This program and the accompanying materials are made
  * available under the terms of the Eclipse Public License 2.0
  * which is available at https://www.eclipse.org/legal/epl-2.0/
@@ -11,8 +11,8 @@
  * Initial license: MIT
  *
  * Contributors:
- *  - Microsoft Corporation: Initial code, written in TypeScript, licensed under MIT license
- *  - Angelo Zerr <angelo.zerr@gmail.com> - translation and adaptation to Java
+ * - Microsoft Corporation: Initial code, written in TypeScript, licensed under MIT license
+ * - Angelo Zerr <angelo.zerr@gmail.com> - translation and adaptation to Java
  */
 package org.eclipse.tm4e.core.model;
 
@@ -23,21 +23,15 @@ import com.google.common.base.Splitter;
 
 class DecodeMap {
 
+	private static final String[] EMPTY_STRING_ARRAY = new String[0];
 	private static final Splitter BY_DOT_SPLITTER = Splitter.on('.');
 
-	int lastAssignedId;
-	final Map<String /* scope */, int[] /* ids */ > scopeToTokenIds;
-	final Map<String /* token */, Integer /* id */ > tokenToTokenId;
-	final Map<Integer /* id */, String /* id */ > tokenIdToToken;
-	TMTokenDecodeData prevToken;
-
-	public DecodeMap() {
-		this.lastAssignedId = 0;
-		this.scopeToTokenIds = new LinkedHashMap<>();
-		this.tokenToTokenId = new LinkedHashMap<>();
-		this.tokenIdToToken = new LinkedHashMap<>();
-		this.prevToken = new TMTokenDecodeData(new String[0], new LinkedHashMap<Integer, Map<Integer, Boolean>>());
-	}
+	int lastAssignedId = 0;
+	final Map<String /* scope */, int[] /* ids */ > scopeToTokenIds = new LinkedHashMap<>();
+	final Map<String /* token */, Integer /* id */ > tokenToTokenId = new LinkedHashMap<>();
+	final Map<Integer /* id */, String /* id */ > tokenIdToToken = new LinkedHashMap<>();
+	TMTokenDecodeData prevToken = new TMTokenDecodeData(EMPTY_STRING_ARRAY,
+			new LinkedHashMap<>());
 
 	public int[] getTokenIds(String scope) {
 		int[] tokens = this.scopeToTokenIds.get(scope);

@@ -50,10 +50,9 @@ public final class SnippetManager implements ISnippetManager {
 		return manager;
 	}
 
-	private final Map<String, Collection<ISnippet>> snippets;
+	private final Map<String, Collection<ISnippet>> snippets = new HashMap<>();
 
-	SnippetManager() {
-		this.snippets = new HashMap<>();
+	private SnippetManager() {
 	}
 
 	private void load() {

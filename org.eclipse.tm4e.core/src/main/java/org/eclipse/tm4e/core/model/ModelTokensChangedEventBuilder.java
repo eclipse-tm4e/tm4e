@@ -22,11 +22,10 @@ import java.util.List;
 class ModelTokensChangedEventBuilder {
 
 	private final ITMModel model;
-	private final List<Range> ranges;
+	private final List<Range> ranges = new ArrayList<>();
 
 	public ModelTokensChangedEventBuilder(ITMModel model) {
 		this.model = model;
-		this.ranges = new ArrayList<>();
 	}
 
 	public void registerChangedTokens(int lineNumber) {

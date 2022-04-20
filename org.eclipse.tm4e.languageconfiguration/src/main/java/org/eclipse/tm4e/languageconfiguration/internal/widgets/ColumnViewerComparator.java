@@ -24,14 +24,8 @@ import org.eclipse.swt.SWT;
  */
 public final class ColumnViewerComparator extends ViewerComparator {
 
-	private int fSortColumn;
-
-	private int fSortOrder; // 1 = asc, -1 = desc
-
-	public ColumnViewerComparator() {
-		fSortColumn = 0;
-		fSortOrder = 1;
-	}
+	private int fSortColumn = 0;
+	private int fSortOrder = 1; // 1 = asc, -1 = desc
 
 	/**
 	 * Returns the {@linkplain SWT} style constant for the sort direction.

@@ -28,7 +28,6 @@ public final class MatchRule extends Rule {
 		super(id, name, null);
 		this.match = new RegExpSource(match, this.id);
 		this.captures = captures;
-		this.cachedCompiledPatterns = null;
 	}
 
 	@Override

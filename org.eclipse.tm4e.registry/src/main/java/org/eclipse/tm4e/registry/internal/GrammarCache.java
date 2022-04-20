@@ -28,15 +28,9 @@ import org.eclipse.tm4e.registry.IGrammarDefinition;
  */
 final class GrammarCache {
 
-	private final Map<String /* Scope name */, IGrammarDefinition> definitions;
-	private final Map<String /* Scope name */, Collection<String>> injections;
-	private final Map<IContentType , String /* Scope name */> scopeNameBindings;
-
-	GrammarCache() {
-		this.definitions = new HashMap<>();
-		this.injections = new HashMap<>();
-		this.scopeNameBindings = new HashMap<>();
-	}
+	private final Map<String /* Scope name */, IGrammarDefinition> definitions = new HashMap<>();
+	private final Map<String /* Scope name */, Collection<String>> injections = new HashMap<>();
+	private final Map<IContentType , String /* Scope name */> scopeNameBindings = new HashMap<>();
 
 	/**
 	 * Register a grammar definition.

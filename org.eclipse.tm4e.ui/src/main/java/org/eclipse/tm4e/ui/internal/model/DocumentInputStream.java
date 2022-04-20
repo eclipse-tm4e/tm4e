@@ -22,20 +22,16 @@ import org.eclipse.jface.text.IDocument;
 public final class DocumentInputStream extends InputStream {
 
 	private final IDocument fDocument;
-	private int fCurrPos;
+	private int fCurrPos = 0;
 
 	public DocumentInputStream(IDocument document) {
 		fDocument= document;
-		fCurrPos= 0;
 	}
 
 	public IDocument getDocument() {
 		return fDocument;
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
 	public int read() throws IOException {
 	 	try {
@@ -43,6 +39,7 @@ public final class DocumentInputStream extends InputStream {
 		 	 	return fDocument.getChar(fCurrPos++);
 		 	}
 	 	} catch (BadLocationException e) {
+	 		// ignore
 	 	}
 	 	return -1;
 	}

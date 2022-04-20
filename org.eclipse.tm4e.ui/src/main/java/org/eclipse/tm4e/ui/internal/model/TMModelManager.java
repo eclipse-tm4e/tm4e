@@ -30,10 +30,9 @@ public final class TMModelManager implements ITMModelManager {
 		return INSTANCE;
 	}
 
-	private final Map<IDocument, ITMModel> models;
+	private final Map<IDocument, ITMModel> models = new HashMap<>();
 
 	private TMModelManager() {
-		models = new HashMap<>();
 	}
 
 	@Override

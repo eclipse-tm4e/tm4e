@@ -36,20 +36,18 @@ final class ScopeMetadataProvider {
 
 	private final int initialLanguage;
 	private final IThemeProvider themeProvider;
-	private final Map<String, ScopeMetadata> cache;
+	private final Map<String, ScopeMetadata> cache = new HashMap<>();
 	private ScopeMetadata defaultMetaData;
-	private final Map<String, Integer> embeddedLanguages;
+	private final Map<String, Integer> embeddedLanguages = new HashMap<>();
 	private Pattern embeddedLanguagesRegex;
 
 	ScopeMetadataProvider(int initialLanguage, IThemeProvider themeProvider,
 			Map<String, Integer> embeddedLanguages) {
 		this.initialLanguage = initialLanguage;
 		this.themeProvider = themeProvider;
-		this.cache = new HashMap<>();
 		this.onDidChangeTheme();
 
 		// embeddedLanguages handling
-		this.embeddedLanguages = new HashMap<>();
 		if (embeddedLanguages != null) {
 			// If embeddedLanguages are configured, fill in
 			// `this._embeddedLanguages`

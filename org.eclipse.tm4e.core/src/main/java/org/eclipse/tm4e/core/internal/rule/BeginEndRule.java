@@ -43,7 +43,6 @@ public final class BeginEndRule extends Rule {
 		this.applyEndPatternLast = applyEndPatternLast;
 		this.patterns = patterns.patterns;
 		this.hasMissingPatterns = patterns.hasMissingPatterns;
-		this.cachedCompiledPatterns = null;
 	}
 
 	public String getEndWithResolvedBackReferences(String lineText, IOnigCaptureIndex[] captureIndices) {

@@ -44,7 +44,7 @@ public class Theme {
 	private final ColorMap colorMap;
 	private final ThemeTrieElement root;
 	private final ThemeTrieElementRule defaults;
-	private final Map<String /* scopeName */, List<ThemeTrieElementRule>> cache;
+	private final Map<String /* scopeName */, List<ThemeTrieElementRule>> cache = new HashMap<>();
 
 	public static Theme createFromRawTheme(IRawTheme source) {
 		return createFromParsedTheme(parseTheme(source));
@@ -220,7 +220,6 @@ public class Theme {
 		this.colorMap = colorMap;
 		this.root = root;
 		this.defaults = defaults;
-		this.cache = new HashMap<>();
 	}
 
 	public Set<String> getColorMap() {

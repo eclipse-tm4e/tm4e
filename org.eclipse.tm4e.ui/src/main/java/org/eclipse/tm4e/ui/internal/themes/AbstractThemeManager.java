@@ -32,13 +32,8 @@ import org.eclipse.tm4e.ui.utils.PreferenceUtils;
  */
 public abstract class AbstractThemeManager implements IThemeManager {
 
-	private final Map<String /* theme id */ , ITheme> themes;
-	private final ThemeAssociationRegistry themeAssociationRegistry;
-
-	protected AbstractThemeManager() {
-		this.themes = new LinkedHashMap<>();
-		this.themeAssociationRegistry = new ThemeAssociationRegistry();
-	}
+	private final Map<String /* theme id */ , ITheme> themes = new LinkedHashMap<>();
+	private final ThemeAssociationRegistry themeAssociationRegistry = new ThemeAssociationRegistry();
 
 	@Override
 	public void registerTheme(ITheme theme) {

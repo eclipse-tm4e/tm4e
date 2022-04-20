@@ -29,10 +29,6 @@ import org.eclipse.ui.preferences.IWorkbenchPreferenceContainer;
  */
 public final class TextMatePreferencePage extends PreferencePage implements IWorkbenchPreferencePage {
 
-	public TextMatePreferencePage() {
-
-	}
-
 	@Override
 	protected Control createContents(Composite parent) {
 		Composite composite = new Composite(parent, SWT.NONE);

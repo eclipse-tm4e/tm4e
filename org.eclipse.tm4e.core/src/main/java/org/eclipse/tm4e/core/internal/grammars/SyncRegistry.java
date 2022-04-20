@@ -38,16 +38,13 @@ import org.eclipse.tm4e.core.theme.ThemeTrieElementRule;
 
 public final class SyncRegistry implements IGrammarRepository, IThemeProvider {
 
-	private final Map<String, IGrammar> grammars;
-	private final Map<String, IRawGrammar> rawGrammars;
-	private final Map<String, Collection<String>> injectionGrammars;
+	private final Map<String, IGrammar> grammars = new HashMap<>();
+	private final Map<String, IRawGrammar> rawGrammars = new HashMap<>();
+	private final Map<String, Collection<String>> injectionGrammars = new HashMap<>();
 	private Theme theme;
 
 	public SyncRegistry(Theme theme) {
 		this.theme = theme;
-		this.grammars = new HashMap<>();
-		this.rawGrammars = new HashMap<>();
-		this.injectionGrammars = new HashMap<>();
 	}
 
 	public void setTheme(Theme theme) {

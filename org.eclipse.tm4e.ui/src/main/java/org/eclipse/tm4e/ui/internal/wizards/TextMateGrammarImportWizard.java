@@ -30,22 +30,17 @@ public final class TextMateGrammarImportWizard extends Wizard implements IImport
 
 	private IGrammarDefinition createdDefinition;
 
-	private IGrammarRegistryManager grammarRegistryManager;
+	private IGrammarRegistryManager grammarRegistryManager = TMEclipseRegistryPlugin.getGrammarRegistryManager();
 
 	private final boolean save;
 
-	public TextMateGrammarImportWizard() {
-		this(true);
-	}
-
 	public TextMateGrammarImportWizard(boolean save) {
 		this.save = save;
-		setGrammarRegistryManager(TMEclipseRegistryPlugin.getGrammarRegistryManager());
 	}
 
 	/**
 	 * Set grammar registry to use to add the created grammar definitions.
-	 * 
+	 *
 	 * @param grammarRegistryManager
 	 */
 	public void setGrammarRegistryManager(IGrammarRegistryManager grammarRegistryManager) {

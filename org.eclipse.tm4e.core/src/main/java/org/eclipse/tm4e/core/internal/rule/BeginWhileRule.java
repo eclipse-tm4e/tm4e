@@ -43,8 +43,6 @@ public final class BeginWhileRule extends Rule {
 		this.whileHasBackReferences = this._while.hasBackReferences();
 		this.patterns = patterns.patterns;
 		this.hasMissingPatterns = patterns.hasMissingPatterns;
-		this.cachedCompiledPatterns = null;
-		this.cachedCompiledWhilePatterns = null;
 	}
 
 	public String getWhileWithResolvedBackReferences(String lineText, IOnigCaptureIndex[] captureIndices) {

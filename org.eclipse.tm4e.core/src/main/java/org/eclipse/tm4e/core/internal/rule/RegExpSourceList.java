@@ -38,15 +38,12 @@ final class RegExpSourceList {
 
 	}
 
-	private final List<RegExpSource> _items;
+	private final List<RegExpSource> _items = new ArrayList<>();
 	private boolean _hasAnchors;
 	private ICompiledRule _cached;
 	private final RegExpSourceListAnchorCache _anchorCache;
 
 	RegExpSourceList() {
-		this._items = new ArrayList<>();
-		this._hasAnchors = false;
-		this._cached = null;
 		this._anchorCache = new RegExpSourceListAnchorCache();
 	}
 

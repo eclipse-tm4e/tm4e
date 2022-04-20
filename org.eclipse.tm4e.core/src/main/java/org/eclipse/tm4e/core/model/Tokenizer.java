@@ -28,11 +28,10 @@ import org.eclipse.tm4e.core.grammar.ITokenizeLineResult;
 public class Tokenizer implements ITokenizationSupport {
 
 	private final IGrammar grammar;
-	private final DecodeMap decodeMap;
+	private final DecodeMap decodeMap = new DecodeMap();
 
 	public Tokenizer(IGrammar grammar) {
 		this.grammar = grammar;
-		this.decodeMap = new DecodeMap();
 	}
 
 	@Override

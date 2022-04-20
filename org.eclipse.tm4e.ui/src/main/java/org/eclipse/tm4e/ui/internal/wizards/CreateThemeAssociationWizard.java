@@ -28,7 +28,7 @@ public final class CreateThemeAssociationWizard extends Wizard {
 
 	private IThemeAssociation createdThemeAssociation;
 
-	private IThemeManager themeManager;
+	private IThemeManager themeManager = TMUIPlugin.getThemeManager();
 
 	private final boolean save;
 
@@ -36,17 +36,12 @@ public final class CreateThemeAssociationWizard extends Wizard {
 
 	private IThemeAssociation initialAssociation;
 
-	private CreateThemeAssociationWizard() {
-		this(true);
-	}
-
 	public CreateThemeAssociationWizard(boolean save) {
 		this.save = save;
-		setThemeManager(TMUIPlugin.getThemeManager());
 	}
 
 	/**
-	 * Set theme managerto use to add the created theme associations.
+	 * Set theme manager to use to add the created theme associations.
 	 *
 	 * @param themeManager
 	 */
@@ -86,7 +81,5 @@ public final class CreateThemeAssociationWizard extends Wizard {
 
 	public void setInitialAssociation(IThemeAssociation association) {
 		this.initialAssociation = association;
-
 	}
-
 }

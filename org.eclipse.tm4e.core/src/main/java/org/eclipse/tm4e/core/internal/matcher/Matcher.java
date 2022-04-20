@@ -40,13 +40,12 @@ public final class Matcher<T> implements Predicate<T> {
 		return new Matcher<>(selector, matchesName).results;
 	}
 
-	private final List<MatcherWithPriority<T>> results;
+	private final List<MatcherWithPriority<T>> results = new ArrayList<>();
 	private final Tokenizer tokenizer;
 	private final IMatchesName<T> matchesName;
 	private String token;
 
 	private Matcher(String expression, IMatchesName<T> matchesName) {
-		this.results = new ArrayList<>();
 		this.tokenizer = new Tokenizer(expression);
 		this.matchesName = matchesName;
 

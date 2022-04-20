@@ -34,10 +34,6 @@ public final class LanguageConfigurationImportWizard extends Wizard implements I
 
 	private final boolean save;
 
-	LanguageConfigurationImportWizard() {
-		this(true);
-	}
-
 	public LanguageConfigurationImportWizard(boolean save) {
 		this.save = save;
 		setRegistryManager(LanguageConfigurationRegistryManager.getInstance());

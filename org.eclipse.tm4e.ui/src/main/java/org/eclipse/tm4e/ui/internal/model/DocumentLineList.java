@@ -31,11 +31,10 @@ import org.eclipse.tm4e.ui.TMUIPlugin;
 final class DocumentLineList extends AbstractLineList {
 
 	private final IDocument document;
-	private final InternalListener listener;
+	private final InternalListener listener = new InternalListener();
 
 	DocumentLineList(IDocument document) {
 		this.document = document;
-		this.listener = new InternalListener();
 		document.addDocumentListener(listener);
 		for (int i = 0; i < document.getNumberOfLines(); i++) {
 			addLine(i);

@@ -43,7 +43,7 @@ final class LineTokens {
 	 */
 	private final List<Integer> binaryTokens;
 
-	private int lastTokenEndIndex;
+	private int lastTokenEndIndex = 0;
 
 	LineTokens(boolean emitBinaryTokens, String lineText) {
 		this.emitBinaryTokens = emitBinaryTokens;
@@ -55,7 +55,6 @@ final class LineTokens {
 			this.tokens = new ArrayList<>();
 			this.binaryTokens = null;
 		}
-		this.lastTokenEndIndex = 0;
 	}
 
 	void produce(StackElement stack, int endIndex) {

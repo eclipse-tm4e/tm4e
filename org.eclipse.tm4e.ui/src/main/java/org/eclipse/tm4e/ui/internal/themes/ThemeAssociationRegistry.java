@@ -25,7 +25,7 @@ import org.eclipse.tm4e.ui.themes.IThemeAssociation;
  */
 final class ThemeAssociationRegistry {
 
-	private final Map<String, EclipseThemeAssociation> scopes;
+	private final Map<String, EclipseThemeAssociation> scopes = new HashMap<>();
 
 	private static final class EclipseThemeAssociation {
 
@@ -50,9 +50,6 @@ final class ThemeAssociationRegistry {
 
 	}
 
-	ThemeAssociationRegistry() {
-		scopes = new HashMap<>();
-	}
 
 	IThemeAssociation getThemeAssociationFor(String scopeName, boolean dark) {
 		// From theme assiocations

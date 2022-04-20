@@ -1,14 +1,14 @@
 /**
- *  Copyright (c) 2015-2018 Angelo ZERR and others.
+ * Copyright (c) 2015-2018 Angelo ZERR and others.
  * This program and the accompanying materials are made
  * available under the terms of the Eclipse Public License 2.0
  * which is available at https://www.eclipse.org/legal/epl-2.0/
  *
  * SPDX-License-Identifier: EPL-2.0
  *
- *  Contributors:
- *  Angelo Zerr <angelo.zerr@gmail.com> - initial API and implementation
- *  Lucas Bullen (Red Hat Inc.) - configuration viewing and editing
+ * Contributors:
+ * Angelo Zerr <angelo.zerr@gmail.com> - initial API and implementation
+ * Lucas Bullen (Red Hat Inc.) - configuration viewing and editing
  */
 package org.eclipse.tm4e.languageconfiguration.internal.preferences;
 
@@ -63,7 +63,8 @@ public final class LanguageConfigurationPreferencePage extends PreferencePage im
 
 	final static String PAGE_ID = "org.eclipse.tm4e.languageconfiguration.preferences.LanguageConfigurationPreferencePage"; //$NON-NLS-1$
 
-	private final ILanguageConfigurationRegistryManager manager;
+	private final ILanguageConfigurationRegistryManager manager = new WorkingCopyLanguageConfigurationRegistryManager(
+			LanguageConfigurationRegistryManager.getInstance());
 
 	private TableViewer definitionViewer;
 
@@ -73,8 +74,6 @@ public final class LanguageConfigurationPreferencePage extends PreferencePage im
 
 	public LanguageConfigurationPreferencePage() {
 		setDescription(LanguageConfigurationMessages.LanguageConfigurationPreferencePage_description);
-		manager = new WorkingCopyLanguageConfigurationRegistryManager(
-				LanguageConfigurationRegistryManager.getInstance());
 	}
 
 	@Override

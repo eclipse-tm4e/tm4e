@@ -58,8 +58,12 @@ public class ThemeTrieElement {
 			int bParentScopesLen = bParentScopes == null ? 0 : bParentScopes.size();
 			if (aParentScopesLen == bParentScopesLen) {
 				for (int i = 0; i < aParentScopesLen; i++) {
-					int aLen = aParentScopes.get(i).length();
-					int bLen = bParentScopes.get(i).length();
+					@SuppressWarnings("null")
+					String aScope = aParentScopes.get(i);
+					@SuppressWarnings("null")
+					String bScope = bParentScopes.get(i);
+					int aLen = aScope.length();
+					int bLen = bScope.length();
 					if (aLen != bLen) {
 						return bLen - aLen;
 					}

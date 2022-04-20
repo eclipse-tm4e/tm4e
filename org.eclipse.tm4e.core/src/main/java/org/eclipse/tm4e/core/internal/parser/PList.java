@@ -50,7 +50,7 @@ public final class PList<T> extends DefaultHandler {
 			break;
 		}
 
-		this.text = new StringBuilder("");
+		this.text = new StringBuilder();
 		super.startElement(uri, localName, qName, attributes);
 	}
 

@@ -87,7 +87,7 @@ final class OnEnterRuleTableWidget extends TableViewer {
 		@Override
 		public void inputChanged(Viewer viewer, Object oldInput, Object newInput) {
 			if (newInput == null) {
-				onEnterRulesList = Collections.EMPTY_LIST;
+				onEnterRulesList = Collections.emptyList();
 			} else {
 				onEnterRulesList = (List<OnEnterRule>) newInput;
 			}

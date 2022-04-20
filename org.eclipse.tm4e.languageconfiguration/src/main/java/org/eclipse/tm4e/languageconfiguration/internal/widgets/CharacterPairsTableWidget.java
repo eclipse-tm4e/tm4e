@@ -71,7 +71,7 @@ class CharacterPairsTableWidget extends TableViewer {
 		@Override
 		public void inputChanged(Viewer viewer, Object oldInput, Object newInput) {
 			if (newInput == null) {
-				characterPairList = Collections.EMPTY_LIST;
+				characterPairList = Collections.emptyList();
 			} else {
 				characterPairList = (List<CharacterPair>) newInput;
 			}

@@ -18,7 +18,7 @@ import java.util.Map;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.tm4e.core.theme.RGB;
-import org.eclipse.tm4e.ui.utils.PreferenceUtils;
+import org.eclipse.tm4e.ui.internal.utils.PreferenceUtils;
 import org.eclipse.ui.texteditor.AbstractTextEditor;
 
 import com.google.common.base.Splitter;

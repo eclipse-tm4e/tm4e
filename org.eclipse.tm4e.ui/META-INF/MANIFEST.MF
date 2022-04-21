@@ -24,11 +24,11 @@ Bundle-RequiredExecutionEnvironment: JavaSE-11
 Export-Package: org.eclipse.tm4e.ui,
  org.eclipse.tm4e.ui.internal.model;x-friends:="org.eclipse.tm4e.ui.tests",
  org.eclipse.tm4e.ui.internal.themes;x-friends:="org.eclipse.tm4e.ui.tests",
+ org.eclipse.tm4e.ui.internal.utils;x-friends:="org.eclipse.tm4e.ui.tests",
  org.eclipse.tm4e.ui.model,
  org.eclipse.tm4e.ui.text,
  org.eclipse.tm4e.ui.themes,
- org.eclipse.tm4e.ui.themes.css,
- org.eclipse.tm4e.ui.utils
+ org.eclipse.tm4e.ui.themes.css
 Bundle-Activator: org.eclipse.tm4e.ui.TMUIPlugin
 Bundle-ActivationPolicy: lazy
 Import-Package: org.eclipse.core.filebuffers

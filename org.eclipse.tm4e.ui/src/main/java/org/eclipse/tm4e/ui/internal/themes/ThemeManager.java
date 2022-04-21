@@ -22,10 +22,10 @@ import org.eclipse.core.runtime.preferences.InstanceScope;
 import org.eclipse.tm4e.ui.TMUIPlugin;
 import org.eclipse.tm4e.ui.internal.preferences.PreferenceConstants;
 import org.eclipse.tm4e.ui.internal.preferences.PreferenceHelper;
+import org.eclipse.tm4e.ui.internal.utils.PreferenceUtils;
 import org.eclipse.tm4e.ui.themes.IThemeAssociation;
 import org.eclipse.tm4e.ui.themes.Theme;
 import org.eclipse.tm4e.ui.themes.ThemeAssociation;
-import org.eclipse.tm4e.ui.utils.PreferenceUtils;
 import org.osgi.service.prefs.BackingStoreException;
 
 import com.google.gson.Gson;

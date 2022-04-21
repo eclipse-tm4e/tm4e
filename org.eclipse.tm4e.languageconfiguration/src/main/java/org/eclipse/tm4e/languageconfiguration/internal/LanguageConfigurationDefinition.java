@@ -26,7 +26,7 @@ import org.eclipse.tm4e.languageconfiguration.internal.supports.CommentSupport;
 import org.eclipse.tm4e.languageconfiguration.internal.supports.OnEnterSupport;
 import org.eclipse.tm4e.registry.TMResource;
 import org.eclipse.tm4e.registry.XMLConstants;
-import org.eclipse.tm4e.ui.utils.ContentTypeHelper;
+import org.eclipse.tm4e.ui.internal.utils.ContentTypeHelper;
 
 /**
  * Language configuration definition.

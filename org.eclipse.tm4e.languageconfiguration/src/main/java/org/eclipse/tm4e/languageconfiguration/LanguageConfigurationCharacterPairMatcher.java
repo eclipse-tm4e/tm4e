@@ -22,8 +22,8 @@ import org.eclipse.jface.text.source.ICharacterPairMatcher;
 import org.eclipse.jface.text.source.ICharacterPairMatcherExtension;
 import org.eclipse.tm4e.languageconfiguration.internal.LanguageConfigurationRegistryManager;
 import org.eclipse.tm4e.languageconfiguration.internal.supports.CharacterPair;
-import org.eclipse.tm4e.ui.utils.ContentTypeHelper;
-import org.eclipse.tm4e.ui.utils.ContentTypeInfo;
+import org.eclipse.tm4e.ui.internal.utils.ContentTypeHelper;
+import org.eclipse.tm4e.ui.internal.utils.ContentTypeInfo;
 
 /**
  * Support of matching bracket with language configuration.

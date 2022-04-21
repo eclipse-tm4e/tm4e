@@ -9,7 +9,7 @@
  *  Contributors:
  *  Angelo Zerr <angelo.zerr@gmail.com> - initial API and implementation
  */
-package org.eclipse.tm4e.ui.utils;
+package org.eclipse.tm4e.ui.internal.utils;
 
 import java.lang.reflect.Field;
 

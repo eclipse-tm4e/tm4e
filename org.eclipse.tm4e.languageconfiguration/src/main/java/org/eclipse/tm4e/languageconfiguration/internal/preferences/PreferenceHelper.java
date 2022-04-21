@@ -15,7 +15,7 @@ import java.util.Collection;
 
 import org.eclipse.tm4e.languageconfiguration.ILanguageConfigurationDefinition;
 import org.eclipse.tm4e.languageconfiguration.internal.LanguageConfigurationDefinition;
-import org.eclipse.tm4e.ui.utils.ContentTypeHelper;
+import org.eclipse.tm4e.ui.internal.utils.ContentTypeHelper;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;

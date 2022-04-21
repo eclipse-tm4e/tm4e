@@ -52,7 +52,7 @@ import org.eclipse.tm4e.languageconfiguration.internal.LanguageConfigurationDefi
 import org.eclipse.tm4e.languageconfiguration.internal.LanguageConfigurationMessages;
 import org.eclipse.tm4e.languageconfiguration.internal.LanguageConfigurationPlugin;
 import org.eclipse.tm4e.languageconfiguration.internal.widgets.LanguageConfigurationInfoWidget;
-import org.eclipse.tm4e.ui.utils.ContentTypeHelper;
+import org.eclipse.tm4e.ui.internal.utils.ContentTypeHelper;
 import org.eclipse.ui.dialogs.ResourceSelectionDialog;
 
 final class SelectLanguageConfigurationWizardPage extends WizardPage implements Listener {

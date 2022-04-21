@@ -34,8 +34,8 @@ import org.eclipse.tm4e.languageconfiguration.internal.LanguageConfigurationRegi
 import org.eclipse.tm4e.languageconfiguration.internal.supports.CharacterPair;
 import org.eclipse.tm4e.languageconfiguration.internal.supports.CommentSupport;
 import org.eclipse.tm4e.languageconfiguration.internal.utils.TextUtils;
-import org.eclipse.tm4e.ui.utils.ContentTypeHelper;
-import org.eclipse.tm4e.ui.utils.ContentTypeInfo;
+import org.eclipse.tm4e.ui.internal.utils.ContentTypeHelper;
+import org.eclipse.tm4e.ui.internal.utils.ContentTypeInfo;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.handlers.HandlerUtil;

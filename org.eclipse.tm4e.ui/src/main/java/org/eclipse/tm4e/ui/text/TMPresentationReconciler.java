@@ -69,14 +69,14 @@ import org.eclipse.tm4e.ui.internal.model.TMDocumentModel;
 import org.eclipse.tm4e.ui.internal.preferences.PreferenceConstants;
 import org.eclipse.tm4e.ui.internal.text.TMPresentationReconcilerTestGenerator;
 import org.eclipse.tm4e.ui.internal.themes.ThemeManager;
+import org.eclipse.tm4e.ui.internal.utils.ClassHelper;
+import org.eclipse.tm4e.ui.internal.utils.ContentTypeHelper;
+import org.eclipse.tm4e.ui.internal.utils.ContentTypeInfo;
+import org.eclipse.tm4e.ui.internal.utils.PreferenceUtils;
 import org.eclipse.tm4e.ui.model.ITMModelManager;
 import org.eclipse.tm4e.ui.themes.ITheme;
 import org.eclipse.tm4e.ui.themes.IThemeManager;
 import org.eclipse.tm4e.ui.themes.ITokenProvider;
-import org.eclipse.tm4e.ui.utils.ClassHelper;
-import org.eclipse.tm4e.ui.utils.ContentTypeHelper;
-import org.eclipse.tm4e.ui.utils.ContentTypeInfo;
-import org.eclipse.tm4e.ui.utils.PreferenceUtils;
 import org.eclipse.ui.IEditorPart;
 
 /**

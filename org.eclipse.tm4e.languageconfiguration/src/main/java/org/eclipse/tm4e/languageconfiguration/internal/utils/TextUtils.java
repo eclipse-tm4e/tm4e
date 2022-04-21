@@ -21,7 +21,7 @@ import org.eclipse.jface.text.ITextViewer;
 import org.eclipse.jface.text.TabsToSpacesConverter;
 import org.eclipse.jface.text.TextUtilities;
 import org.eclipse.jface.text.TextViewer;
-import org.eclipse.tm4e.ui.utils.ClassHelper;
+import org.eclipse.tm4e.ui.internal.utils.ClassHelper;
 
 public final class TextUtils {
 

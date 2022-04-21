@@ -19,12 +19,12 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 import org.eclipse.swt.graphics.RGB;
+import org.eclipse.tm4e.ui.internal.utils.PreferenceUtils;
 import org.eclipse.tm4e.ui.themes.ITheme;
 import org.eclipse.tm4e.ui.themes.IThemeAssociation;
 import org.eclipse.tm4e.ui.themes.IThemeManager;
 import org.eclipse.tm4e.ui.themes.ITokenProvider;
 import org.eclipse.tm4e.ui.themes.ThemeAssociation;
-import org.eclipse.tm4e.ui.utils.PreferenceUtils;
 
 /**
  * TextMate theme manager implementation.

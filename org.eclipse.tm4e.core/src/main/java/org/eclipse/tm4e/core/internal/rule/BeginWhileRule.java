@@ -65,7 +65,7 @@ public final class BeginWhileRule extends Rule {
 	@Override
 	public CompiledRule compile(IRuleRegistry grammar, String endRegexSource, boolean allowA, boolean allowG) {
 		this.precompile(grammar);
-		return this.cachedCompiledPatterns.compile(grammar, allowA, allowG);
+		return this.cachedCompiledPatterns.compile(allowA, allowG);
 	}
 
 	private void precompile(IRuleRegistry grammar) {
@@ -75,12 +75,12 @@ public final class BeginWhileRule extends Rule {
 		}
 	}
 
-	public CompiledRule compileWhile(IRuleRegistry grammar, String endRegexSource, boolean allowA, boolean allowG) {
+	public CompiledRule compileWhile(String endRegexSource, boolean allowA, boolean allowG) {
 		this.precompileWhile();
 		if (this._while.hasBackReferences()) {
 			this.cachedCompiledWhilePatterns.setSource(0, endRegexSource);
 		}
-		return this.cachedCompiledWhilePatterns.compile(grammar, allowA, allowG);
+		return this.cachedCompiledWhilePatterns.compile(allowA, allowG);
 	}
 
 	private void precompileWhile() {

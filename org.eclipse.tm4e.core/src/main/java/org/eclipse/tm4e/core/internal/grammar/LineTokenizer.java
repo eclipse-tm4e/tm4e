@@ -487,7 +487,7 @@ final class LineTokenizer {
 		}
 		for (int i = whileRules.size() - 1; i >= 0; i--) {
 			WhileStack whileRule = whileRules.get(i);
-			CompiledRule ruleScanner = whileRule.rule.compileWhile(grammar, whileRule.stack.endRule, isFirstLine,
+			CompiledRule ruleScanner = whileRule.rule.compileWhile(whileRule.stack.endRule, isFirstLine,
 					currentanchorPosition == linePos);
 			OnigNextMatchResult r = ruleScanner.scanner.findNextMatchSync(lineText, linePos);
 			// if (IN_DEBUG_MODE) {

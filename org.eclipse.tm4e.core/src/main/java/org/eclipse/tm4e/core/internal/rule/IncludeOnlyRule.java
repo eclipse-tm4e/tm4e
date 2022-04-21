@@ -42,7 +42,7 @@ final class IncludeOnlyRule extends Rule {
 			this.cachedCompiledPatterns = new RegExpSourceList();
 			this.collectPatternsRecursive(grammar, this.cachedCompiledPatterns, true);
 		}
-		return this.cachedCompiledPatterns.compile(grammar, allowA, allowG);
+		return this.cachedCompiledPatterns.compile(allowA, allowG);
 	}
 
 }

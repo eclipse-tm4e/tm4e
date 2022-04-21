@@ -71,7 +71,7 @@ public final class BeginEndRule extends Rule {
 				precompiled.setSource(0, endRegexSource);
 			}
 		}
-		return this.cachedCompiledPatterns.compile(grammar, allowA, allowG);
+		return this.cachedCompiledPatterns.compile(allowA, allowG);
 	}
 
 	private RegExpSourceList precompile(IRuleRegistry grammar) {

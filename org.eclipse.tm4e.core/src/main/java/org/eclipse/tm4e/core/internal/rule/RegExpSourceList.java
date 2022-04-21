@@ -75,7 +75,7 @@ final class RegExpSourceList {
 		}
 	}
 
-	CompiledRule compile(IRuleRegistry grammar, boolean allowA, boolean allowG) {
+	CompiledRule compile(boolean allowA, boolean allowG) {
 		if (!this._hasAnchors) {
 			if (this._cached == null) {
 				List<String> regexps = new ArrayList<>();

@@ -8,7 +8,6 @@
  * Contributors:
  *      IBM Corporation - initial API and implementation
  *******************************************************************************/
-
 package org.eclipse.tm4e.core.internal.css;
 
 import org.w3c.css.sac.LexicalUnit;
@@ -17,7 +16,7 @@ import org.w3c.dom.css.CSSValue;
 
 final class Measure extends CSSValueImpl {
 
-	LexicalUnit value;
+	private final LexicalUnit value;
 
 	Measure(LexicalUnit value) {
 		this.value = value;

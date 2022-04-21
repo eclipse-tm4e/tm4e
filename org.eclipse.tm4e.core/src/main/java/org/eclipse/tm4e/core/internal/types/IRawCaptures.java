@@ -16,7 +16,7 @@
  */
 package org.eclipse.tm4e.core.internal.types;
 
-public interface IRawCaptures extends IBaseRaw {
+public interface IRawCaptures extends Iterable<String> {
 
 	IRawRule getCapture(String captureId);
 

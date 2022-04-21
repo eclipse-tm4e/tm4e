@@ -21,6 +21,8 @@ import java.util.Map;
 
 public interface IRawGrammar {
 
+	IRawGrammar clone();
+
 	IRawRepository getRepository();
 
 	String getScopeName();

@@ -60,7 +60,7 @@ public final class Grammar implements IGrammar, IRuleFactoryHelper {
 	private final Map<Integer, Rule> ruleId2desc = new HashMap<>();
 	private final Map<String, IRawGrammar> includedGrammars = new HashMap<>();
 	private final IGrammarRepository grammarRepository;
-	private final IRawGrammar grammar;
+	private final IRawGrammar rawGrammar;
 	private List<Injection> injections;
 	private final ScopeMetadataProvider scopeMetadataProvider;
 
@@ -68,7 +68,7 @@ public final class Grammar implements IGrammar, IRuleFactoryHelper {
 			IGrammarRepository grammarRepository, IThemeProvider themeProvider) {
 		this.scopeMetadataProvider = new ScopeMetadataProvider(initialLanguage, themeProvider, embeddedLanguages);
 		this.grammarRepository = grammarRepository;
-		this.grammar = initGrammar(grammar, null);
+		this.rawGrammar = initGrammar(grammar, null);
 	}
 
 	public void onDidChangeTheme() {
@@ -83,19 +83,19 @@ public final class Grammar implements IGrammar, IRuleFactoryHelper {
 		if (this.injections == null) {
 			this.injections = new ArrayList<>();
 			// add injections from the current grammar
-			Map<String, IRawRule> rawInjections = this.grammar.getInjections();
+			Map<String, IRawRule> rawInjections = this.rawGrammar.getInjections();
 			if (rawInjections != null) {
 				for (Entry<String, IRawRule> injection : rawInjections.entrySet()) {
 					String expression = injection.getKey();
 					IRawRule rule = injection.getValue();
-					collectInjections(this.injections, expression, rule, this, this.grammar);
+					collectInjections(this.injections, expression, rule, this, this.rawGrammar);
 				}
 			}
 
 			// add injection grammars contributed for the current scope
 			if (this.grammarRepository != null) {
 				Collection<String> injectionScopeNames = this.grammarRepository
-						.injections(this.grammar.getScopeName());
+						.injections(this.rawGrammar.getScopeName());
 				if (injectionScopeNames != null) {
 					injectionScopeNames.forEach(injectionScopeName -> {
 						IRawGrammar injectionGrammar = this.getExternalGrammar(injectionScopeName);
@@ -160,7 +160,7 @@ public final class Grammar implements IGrammar, IRuleFactoryHelper {
 	}
 
 	private IRawGrammar initGrammar(IRawGrammar grammar, IRawRule base) {
-		grammar = clone(grammar);
+		grammar = grammar.clone();
 		if (grammar.getRepository() == null) {
 			((Raw) grammar).setRepository(new Raw());
 		}
@@ -174,10 +174,6 @@ public final class Grammar implements IGrammar, IRuleFactoryHelper {
 			grammar.getRepository().setBase(grammar.getRepository().getSelf());
 		}
 		return grammar;
-	}
-
-	private IRawGrammar clone(IRawGrammar grammar) {
-		return (IRawGrammar) ((Raw) grammar).clone();
 	}
 
 	@Override
@@ -203,8 +199,8 @@ public final class Grammar implements IGrammar, IRuleFactoryHelper {
 	@SuppressWarnings("unchecked")
 	private <T> T tokenize(String lineText, StackElement prevState, boolean emitBinaryTokens) {
 		if (this.rootId == -1) {
-			this.rootId = RuleFactory.getCompiledRuleId(this.grammar.getRepository().getSelf(), this,
-					this.grammar.getRepository());
+			this.rootId = RuleFactory.getCompiledRuleId(this.rawGrammar.getRepository().getSelf(), this,
+					this.rawGrammar.getRepository());
 		}
 
 		boolean isFirstLine;
@@ -246,17 +242,17 @@ public final class Grammar implements IGrammar, IRuleFactoryHelper {
 
 	@Override
 	public String getName() {
-		return grammar.getName();
+		return rawGrammar.getName();
 	}
 
 	@Override
 	public String getScopeName() {
-		return grammar.getScopeName();
+		return rawGrammar.getScopeName();
 	}
 
 	@Override
 	public Collection<String> getFileTypes() {
-		return grammar.getFileTypes();
+		return rawGrammar.getFileTypes();
 	}
 
 }

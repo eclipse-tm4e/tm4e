@@ -18,12 +18,12 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import org.eclipse.tm4e.core.internal.types.IRawCaptures;
 import org.eclipse.tm4e.core.internal.types.IRawGrammar;
 import org.eclipse.tm4e.core.internal.types.IRawRepository;
 import org.eclipse.tm4e.core.internal.types.IRawRule;
-import org.eclipse.tm4e.core.internal.utils.CloneUtils;
 
 /**
  * Raw
@@ -299,8 +299,23 @@ public final class Raw extends HashMap<String, Object> implements IRawRepository
 	}
 
 	@Override
-	public Object clone() {
-		return CloneUtils.clone(this);
+	public Raw clone() {
+		return (Raw) clone(this);
+	}
+
+	private Object clone(final Object value) {
+		if (value instanceof Raw) {
+		   final Raw rowToClone = (Raw) value;
+		   final Raw raw = new Raw();
+			for (final Entry<String, Object> entry : rowToClone.entrySet()) {
+				raw.put(entry.getKey(), clone(entry.getValue()));
+			}
+			return raw;
+		}
+		if (value instanceof List) {
+			return ((List<?>) value).stream().map(this::clone).collect(Collectors.toList());
+		}
+		return value;
 	}
 
 	@Override

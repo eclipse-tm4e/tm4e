@@ -16,9 +16,26 @@
  */
 package org.eclipse.tm4e.core.internal.types;
 
+import java.util.Map;
+import java.util.Set;
+import java.util.Map.Entry;
+
+import org.eclipse.tm4e.core.internal.grammar.parser.Raw;
+
 public interface IRawRepository {
 
-	// IRawRule getRule(String name);
+	static IRawRepository merge(IRawRepository... sources) {
+	   final Raw merged = new Raw();
+		for (final IRawRepository source : sources) {
+		   final Set<Entry<String, Object>> entries = source.entrySet();
+			for (final Entry<String, Object> entry : entries) {
+				merged.put(entry.getKey(), entry.getValue());
+			}
+		}
+		return merged;
+	}
+
+	Set<Map.Entry<String, Object>> entrySet();
 
 	IRawRule getProp(String name);
 
@@ -29,5 +46,4 @@ public interface IRawRepository {
 	void setSelf(IRawRule raw);
 
 	void setBase(IRawRule base);
-
 }

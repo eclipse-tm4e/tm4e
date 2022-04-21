@@ -24,7 +24,6 @@ import org.eclipse.tm4e.core.internal.types.IRawCaptures;
 import org.eclipse.tm4e.core.internal.types.IRawGrammar;
 import org.eclipse.tm4e.core.internal.types.IRawRepository;
 import org.eclipse.tm4e.core.internal.types.IRawRule;
-import org.eclipse.tm4e.core.internal.utils.CloneUtils;
 
 /**
  *
@@ -54,7 +53,7 @@ public final class RuleFactory {
 				if (desc.getBegin() == null) {
 					IRawRepository r = repository;
 					if (desc.getRepository() != null) {
-						r = CloneUtils.mergeObjects(repository, desc.getRepository());
+						r = IRawRepository.merge(repository, desc.getRepository());
 					}
 					return new IncludeOnlyRule(desc.getId(), desc.getName(), desc.getContentName(),
 							RuleFactory._compilePatterns(desc.getPatterns(), helper, r));

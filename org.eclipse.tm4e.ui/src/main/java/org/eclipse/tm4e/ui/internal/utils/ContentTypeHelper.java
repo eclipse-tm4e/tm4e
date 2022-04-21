@@ -40,7 +40,7 @@ import org.eclipse.ui.IStorageEditorInput;
  * {@link IContentType} utilities.
  *
  */
-public class ContentTypeHelper {
+public final class ContentTypeHelper {
 
 	/**
 	 * Find the content types from the given {@link IDocument} and null otherwise.

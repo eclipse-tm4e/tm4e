@@ -17,7 +17,7 @@ import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.tm4e.ui.TMUIPlugin;
 import org.eclipse.tm4e.ui.internal.preferences.PreferenceConstants;
 
-public class PreferenceUtils {
+public final class PreferenceUtils {
 
 	private static final String E4_CSS_PREFERENCE_NAME = "org.eclipse.e4.ui.css.swt.theme"; //$NON-NLS-1$
 	private static final String EDITORS_PREFERENCE_NAME = "org.eclipse.ui.editors"; //$NON-NLS-1$
@@ -27,7 +27,7 @@ public class PreferenceUtils {
 
 	/**
 	 * Get e4 preferences store
-	 * 
+	 *
 	 * @return preferences store
 	 */
 	public static IEclipsePreferences getE4PreferenceStore() {
@@ -36,7 +36,7 @@ public class PreferenceUtils {
 
 	/**
 	 * Get Id of the current eclipse theme
-	 * 
+	 *
 	 * @return themeIf of the current eclipse theme
 	 */
 	public static String getE4PreferenceCSSThemeId() {
@@ -46,7 +46,7 @@ public class PreferenceUtils {
 
 	/**
 	 * Get editors preferences store
-	 * 
+	 *
 	 * @return preferences store
 	 */
 	public static IEclipsePreferences getEditorsPreferenceStore() {
@@ -55,7 +55,7 @@ public class PreferenceUtils {
 
 	/**
 	 * Get TM4E preferences store
-	 * 
+	 *
 	 * @return preferences store
 	 */
 	public static IPreferenceStore getTM4EPreferencesStore() {

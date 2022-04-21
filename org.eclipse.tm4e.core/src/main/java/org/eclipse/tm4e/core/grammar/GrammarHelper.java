@@ -23,7 +23,7 @@ import org.eclipse.tm4e.core.internal.oniguruma.OnigString;
 import org.eclipse.tm4e.core.internal.types.IRawGrammar;
 import org.eclipse.tm4e.core.theme.IThemeProvider;
 
-public class GrammarHelper {
+public final class GrammarHelper {
 
 	private GrammarHelper() {
 		// methods should be accessed statically

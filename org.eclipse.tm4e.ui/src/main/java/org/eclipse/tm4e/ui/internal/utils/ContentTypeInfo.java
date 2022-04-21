@@ -14,11 +14,11 @@ package org.eclipse.tm4e.ui.internal.utils;
 import org.eclipse.core.runtime.content.IContentType;
 
 /**
- * 
+ *
  * @author azerr
  *
  */
-public class ContentTypeInfo {
+public final class ContentTypeInfo {
 
 	private final String fileName;
 	private final IContentType[] contentTypes;

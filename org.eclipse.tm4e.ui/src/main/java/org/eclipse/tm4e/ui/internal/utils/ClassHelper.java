@@ -17,7 +17,7 @@ import java.lang.reflect.Field;
  * Class Reflection utilities.
  *
  */
-public class ClassHelper {
+public final class ClassHelper {
 
 	@SuppressWarnings("unchecked")
 	public static <T> T getFieldValue(Object object, String name, Class<?> clazz) {

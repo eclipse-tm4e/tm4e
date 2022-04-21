@@ -19,7 +19,7 @@ package org.eclipse.tm4e.core.internal.utils;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import org.eclipse.tm4e.core.internal.oniguruma.IOnigCaptureIndex;
+import org.eclipse.tm4e.core.internal.oniguruma.OnigCaptureIndex;
 
 public final class RegexSource {
 
@@ -39,7 +39,7 @@ public final class RegexSource {
 		return CAPTURING_REGEX_SOURCE.matcher(regexSource).find();
 	}
 
-	public static String replaceCaptures(String regexSource, String captureSource, IOnigCaptureIndex[] captureIndices) {
+	public static String replaceCaptures(String regexSource, String captureSource, OnigCaptureIndex[] captureIndices) {
 		Matcher m = CAPTURING_REGEX_SOURCE.matcher(regexSource);
 		final StringBuilder result = new StringBuilder();
 		while (m.find()) {
@@ -51,7 +51,7 @@ public final class RegexSource {
 		return result.toString();
 	}
 
-	private static String getReplacement(String match, String captureSource, IOnigCaptureIndex[] captureIndices) {
+	private static String getReplacement(String match, String captureSource, OnigCaptureIndex[] captureIndices) {
 		int index = -1;
 		String command = null;
 		int doublePointIndex = match.indexOf(':');
@@ -61,7 +61,7 @@ public final class RegexSource {
 		} else {
 			index = Integer.parseInt(match.substring(1));
 		}
-		IOnigCaptureIndex capture = captureIndices.length > index ? captureIndices[index] : null;
+		OnigCaptureIndex capture = captureIndices.length > index ? captureIndices[index] : null;
 		if (capture != null) {
 			String result = captureSource.substring(capture.getStart(), capture.getEnd());
 			// Remove leading dots that would make the selector invalid

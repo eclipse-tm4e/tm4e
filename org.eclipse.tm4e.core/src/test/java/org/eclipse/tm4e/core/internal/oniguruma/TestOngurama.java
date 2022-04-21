@@ -16,7 +16,7 @@ public class TestOngurama {
 	public static void main(String[] args) {
 
 		OnigScanner scanner = new OnigScanner(new String[] { "c", "a(b)?" });
-		IOnigNextMatchResult result = scanner.findNextMatchSync("abc", 0);
+		OnigNextMatchResult result = scanner.findNextMatchSync("abc", 0);
 		System.err.println(result);
 
 		scanner = new OnigScanner(new String[] { "a([b-d])c" });

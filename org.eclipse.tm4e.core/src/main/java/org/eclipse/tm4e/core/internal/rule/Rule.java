@@ -16,7 +16,7 @@
  */
 package org.eclipse.tm4e.core.internal.rule;
 
-import org.eclipse.tm4e.core.internal.oniguruma.IOnigCaptureIndex;
+import org.eclipse.tm4e.core.internal.oniguruma.OnigCaptureIndex;
 import org.eclipse.tm4e.core.internal.utils.RegexSource;
 
 public abstract class Rule {
@@ -37,14 +37,14 @@ public abstract class Rule {
 		this.contentNameIsCapturing = RegexSource.hasCaptures(this.contentName);
 	}
 
-	public String getName(String lineText, IOnigCaptureIndex[] captureIndices) {
+	public String getName(String lineText, OnigCaptureIndex[] captureIndices) {
 		if (!this.nameIsCapturing) {
 			return this.name;
 		}
 		return RegexSource.replaceCaptures(this.name, lineText, captureIndices);
 	}
 
-	public String getContentName(String lineText, IOnigCaptureIndex[] captureIndices) {
+	public String getContentName(String lineText, OnigCaptureIndex[] captureIndices) {
 		if (!this.contentNameIsCapturing) {
 			return this.contentName;
 		}

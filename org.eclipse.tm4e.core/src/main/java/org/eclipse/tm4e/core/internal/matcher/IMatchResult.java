@@ -16,11 +16,11 @@
  */
 package org.eclipse.tm4e.core.internal.matcher;
 
-import org.eclipse.tm4e.core.internal.oniguruma.IOnigCaptureIndex;
+import org.eclipse.tm4e.core.internal.oniguruma.OnigCaptureIndex;
 
 public interface IMatchResult {
 
-	IOnigCaptureIndex[] getCaptureIndices();
+	OnigCaptureIndex[] getCaptureIndices();
 
 	int getMatchedRuleId();
 

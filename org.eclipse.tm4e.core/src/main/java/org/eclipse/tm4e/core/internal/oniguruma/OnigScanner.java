@@ -25,7 +25,7 @@ public final class OnigScanner {
 		this.searcher = new OnigSearcher(regexps);
 	}
 
-	public IOnigNextMatchResult findNextMatchSync(OnigString source, int charOffset) {
+	public OnigNextMatchResult findNextMatchSync(OnigString source, int charOffset) {
 		OnigResult bestResult = searcher.search(source, charOffset);
 		if (bestResult != null) {
 			return new OnigNextMatchResult(bestResult, source);
@@ -33,7 +33,7 @@ public final class OnigScanner {
 		return null;
 	}
 
-	IOnigNextMatchResult findNextMatchSync(String lin, int pos) {
+	OnigNextMatchResult findNextMatchSync(String lin, int pos) {
 		return findNextMatchSync(new OnigString(lin), pos);
 	}
 

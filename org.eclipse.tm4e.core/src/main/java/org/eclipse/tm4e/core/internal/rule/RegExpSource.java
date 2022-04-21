@@ -22,7 +22,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
-import org.eclipse.tm4e.core.internal.oniguruma.IOnigCaptureIndex;
+import org.eclipse.tm4e.core.internal.oniguruma.OnigCaptureIndex;
 
 /**
  *
@@ -123,7 +123,7 @@ final class RegExpSource {
 		}
 	}
 
-	String resolveBackReferences(String lineText, IOnigCaptureIndex[] captureIndices) {
+	String resolveBackReferences(String lineText, OnigCaptureIndex[] captureIndices) {
 		try {
 		List<String> capturedValues = Arrays.stream(captureIndices)
 				.map(capture -> lineText.substring(capture.getStart(), capture.getEnd())).collect(Collectors.toList());

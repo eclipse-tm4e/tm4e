@@ -18,7 +18,7 @@ package org.eclipse.tm4e.core.internal.rule;
 
 import java.util.List;
 
-import org.eclipse.tm4e.core.internal.oniguruma.IOnigCaptureIndex;
+import org.eclipse.tm4e.core.internal.oniguruma.OnigCaptureIndex;
 
 public final class BeginEndRule extends Rule {
 
@@ -45,7 +45,7 @@ public final class BeginEndRule extends Rule {
 		this.hasMissingPatterns = patterns.hasMissingPatterns;
 	}
 
-	public String getEndWithResolvedBackReferences(String lineText, IOnigCaptureIndex[] captureIndices) {
+	public String getEndWithResolvedBackReferences(String lineText, OnigCaptureIndex[] captureIndices) {
 		return this.end.resolveBackReferences(lineText, captureIndices);
 	}
 

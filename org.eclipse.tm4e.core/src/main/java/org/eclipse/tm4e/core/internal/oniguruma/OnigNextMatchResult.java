@@ -16,24 +16,22 @@
  */
 package org.eclipse.tm4e.core.internal.oniguruma;
 
-final class OnigNextMatchResult implements IOnigNextMatchResult {
+public final class OnigNextMatchResult {
 
 	private final int index;
 
-	private final IOnigCaptureIndex[] captureIndices;
+	private final OnigCaptureIndex[] captureIndices;
 
 	OnigNextMatchResult(OnigResult result, OnigString source) {
 		this.index = result.getIndex();
 		this.captureIndices = captureIndicesForMatch(result, source);
 	}
 
-	@Override
 	public int getIndex() {
 		return index;
 	}
 
-	@Override
-	public IOnigCaptureIndex[] getCaptureIndices() {
+	public OnigCaptureIndex[] getCaptureIndices() {
 		return captureIndices;
 	}
 
@@ -45,7 +43,7 @@ final class OnigNextMatchResult implements IOnigNextMatchResult {
 		result.append(",\n");
 		result.append("  \"captureIndices\": [\n");
 		int i = 0;
-		for (IOnigCaptureIndex captureIndex : getCaptureIndices()) {
+		for (OnigCaptureIndex captureIndex : getCaptureIndices()) {
 			if (i > 0) {
 				result.append(",\n");
 			}
@@ -59,9 +57,9 @@ final class OnigNextMatchResult implements IOnigNextMatchResult {
 		return result.toString();
 	}
 
-	private static IOnigCaptureIndex[] captureIndicesForMatch(OnigResult result, OnigString source) {
+	private static OnigCaptureIndex[] captureIndicesForMatch(OnigResult result, OnigString source) {
 		int resultCount = result.count();
-		IOnigCaptureIndex[] captures = new IOnigCaptureIndex[resultCount];
+		OnigCaptureIndex[] captures = new OnigCaptureIndex[resultCount];
 		for (int index = 0; index < resultCount; index++) {
 			int captureStart = source.convertUtf8OffsetToUtf16(result.locationAt(index));
 			int captureEnd = source.convertUtf8OffsetToUtf16(result.locationAt(index) + result.lengthAt(index));
@@ -69,48 +67,4 @@ final class OnigNextMatchResult implements IOnigNextMatchResult {
 		}
 		return captures;
 	}
-
-	private static final class OnigCaptureIndex implements IOnigCaptureIndex {
-
-		private final int index;
-		private final int start;
-		private final int end;
-
-		private OnigCaptureIndex(int index, int start, int end) {
-			this.index = index;
-			this.start = start >= 0 ? start : 0;
-			this.end = end >= 0 ? end : 0;
-		}
-
-		@Override
-		public int getIndex() {
-			return index;
-		}
-
-		@Override
-		public int getStart() {
-			return start;
-		}
-
-		@Override
-		public int getEnd() {
-			return end;
-		}
-
-		@Override
-		public int getLength() {
-			return end - start;
-		}
-
-		@Override
-		public String toString() {
-			return "{" +
-					"\"index\": " + index +
-					", \"start\": " + start +
-					", \"end\": " + end +
-					", \"length\": " + getLength() +
-					"}";
-		}
-	}
-
 }

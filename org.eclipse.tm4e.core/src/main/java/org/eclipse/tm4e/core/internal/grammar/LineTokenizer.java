@@ -27,8 +27,8 @@ import org.eclipse.tm4e.core.grammar.Injection;
 import org.eclipse.tm4e.core.grammar.StackElement;
 import org.eclipse.tm4e.core.internal.matcher.IMatchInjectionsResult;
 import org.eclipse.tm4e.core.internal.matcher.IMatchResult;
-import org.eclipse.tm4e.core.internal.oniguruma.IOnigCaptureIndex;
-import org.eclipse.tm4e.core.internal.oniguruma.IOnigNextMatchResult;
+import org.eclipse.tm4e.core.internal.oniguruma.OnigCaptureIndex;
+import org.eclipse.tm4e.core.internal.oniguruma.OnigNextMatchResult;
 import org.eclipse.tm4e.core.internal.oniguruma.OnigString;
 import org.eclipse.tm4e.core.internal.rule.BeginEndRule;
 import org.eclipse.tm4e.core.internal.rule.BeginWhileRule;
@@ -118,7 +118,7 @@ final class LineTokenizer {
 			return;
 		}
 
-		IOnigCaptureIndex[] captureIndices = r.getCaptureIndices();
+		OnigCaptureIndex[] captureIndices = r.getCaptureIndices();
 		int matchedRuleId = r.getMatchedRuleId();
 
 		boolean hasAdvanced = (captureIndices != null && captureIndices.length > 0)
@@ -265,7 +265,7 @@ final class LineTokenizer {
 			StackElement stack, int anchorPosition) {
 		Rule rule = stack.getRule(grammar);
 		final CompiledRule ruleScanner = rule.compile(grammar, stack.endRule, isFirstLine, linePos == anchorPosition);
-		final IOnigNextMatchResult r = ruleScanner.scanner.findNextMatchSync(lineText, linePos);
+		final OnigNextMatchResult r = ruleScanner.scanner.findNextMatchSync(lineText, linePos);
 
 		if (r != null) {
 			return new IMatchResult() {
@@ -276,7 +276,7 @@ final class LineTokenizer {
 				}
 
 				@Override
-				public IOnigCaptureIndex[] getCaptureIndices() {
+				public OnigCaptureIndex[] getCaptureIndices() {
 					return r.getCaptureIndices();
 				}
 			};
@@ -325,7 +325,7 @@ final class LineTokenizer {
 			boolean isFirstLine, int linePos, StackElement stack, int anchorPosition) {
 		// The lower the better
 		int bestMatchRating = Integer.MAX_VALUE;
-		IOnigCaptureIndex[] bestMatchCaptureIndices = null;
+		OnigCaptureIndex[] bestMatchCaptureIndices = null;
 		int bestMatchRuleId = -1;
 		int bestMatchResultPriority = 0;
 
@@ -339,7 +339,7 @@ final class LineTokenizer {
 
 			CompiledRule ruleScanner = grammar.getRule(injection.ruleId).compile(grammar, null, isFirstLine,
 					linePos == anchorPosition);
-			IOnigNextMatchResult matchResult = ruleScanner.scanner.findNextMatchSync(lineText, linePos);
+			OnigNextMatchResult matchResult = ruleScanner.scanner.findNextMatchSync(lineText, linePos);
 
 			if (matchResult == null) {
 				continue;
@@ -366,7 +366,7 @@ final class LineTokenizer {
 
 		if (bestMatchCaptureIndices != null) {
 			final int matchedRuleId = bestMatchRuleId;
-			final IOnigCaptureIndex[] matchCaptureIndices = bestMatchCaptureIndices;
+			final OnigCaptureIndex[] matchCaptureIndices = bestMatchCaptureIndices;
 			final boolean matchResultPriority = bestMatchResultPriority == -1;
 			return new IMatchInjectionsResult() {
 
@@ -376,7 +376,7 @@ final class LineTokenizer {
 				}
 
 				@Override
-				public IOnigCaptureIndex[] getCaptureIndices() {
+				public OnigCaptureIndex[] getCaptureIndices() {
 					return matchCaptureIndices;
 				}
 
@@ -391,7 +391,7 @@ final class LineTokenizer {
 	}
 
 	private void handleCaptures(Grammar grammar, OnigString lineText, boolean isFirstLine, StackElement stack,
-			LineTokens lineTokens, List<CaptureRule> captures, IOnigCaptureIndex[] captureIndices) {
+			LineTokens lineTokens, List<CaptureRule> captures, OnigCaptureIndex[] captureIndices) {
 		if (captures.isEmpty()) {
 			return;
 		}
@@ -399,7 +399,7 @@ final class LineTokenizer {
 		int len = Math.min(captures.size(), captureIndices.length);
 		List<LocalStackElement> localStack = new ArrayList<>();
 		int maxEnd = captureIndices[0].getEnd();
-		IOnigCaptureIndex captureIndex;
+		OnigCaptureIndex captureIndex;
 
 		for (int i = 0; i < len; i++) {
 			CaptureRule captureRule = captures.get(i);
@@ -489,7 +489,7 @@ final class LineTokenizer {
 			WhileStack whileRule = whileRules.get(i);
 			CompiledRule ruleScanner = whileRule.rule.compileWhile(grammar, whileRule.stack.endRule, isFirstLine,
 					currentanchorPosition == linePos);
-			IOnigNextMatchResult r = ruleScanner.scanner.findNextMatchSync(lineText, linePos);
+			OnigNextMatchResult r = ruleScanner.scanner.findNextMatchSync(lineText, linePos);
 			// if (IN_DEBUG_MODE) {
 			// console.log(' scanning for while rule');
 			// console.log(debugCompiledRuleToString(ruleScanner));

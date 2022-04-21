@@ -121,9 +121,8 @@ final class LineTokenizer {
 		OnigCaptureIndex[] captureIndices = r.getCaptureIndices();
 		int matchedRuleId = r.getMatchedRuleId();
 
-		boolean hasAdvanced = (captureIndices != null && captureIndices.length > 0)
-				? (captureIndices[0].getEnd() > linePos)
-				: false;
+		final boolean hasAdvanced = captureIndices != null && captureIndices.length > 0
+				&& captureIndices[0].getEnd() > linePos;
 
 		if (matchedRuleId == -1) {
 			// We matched the `end` for this rule => pop it

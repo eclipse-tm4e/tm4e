@@ -313,7 +313,7 @@ public final class Raw extends HashMap<String, Object> implements IRawRepository
 	@Override
 	@SuppressWarnings("unlikely-arg-type")
 	public void putAll(Map<? extends String, ? extends Object> m) {
-		if (m != null && m.containsKey(FILE_TYPES))
+		if (m.containsKey(FILE_TYPES))
 			fileTypes = null;
 		super.putAll(m);
 	}

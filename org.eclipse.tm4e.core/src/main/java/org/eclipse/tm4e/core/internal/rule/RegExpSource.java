@@ -128,7 +128,7 @@ final class RegExpSource {
 		List<String> capturedValues = Arrays.stream(captureIndices)
 				.map(capture -> lineText.substring(capture.getStart(), capture.getEnd())).collect(Collectors.toList());
 		Matcher m = BACK_REFERENCING_END.matcher(this.source);
-		StringBuffer sb = new StringBuffer();
+		final StringBuilder sb = new StringBuilder();
 		while (m.find()) {
 			String g1 = m.group();
 			int index = Integer.parseInt(g1.substring(1));
@@ -147,7 +147,7 @@ final class RegExpSource {
 
 	private String escapeRegExpCharacters(String value) {
 		Matcher m = REGEXP_CHARACTERS.matcher(value);
-		StringBuffer sb = new StringBuffer();
+		final StringBuilder sb = new StringBuilder();
 		while (m.find()) {
 			m.appendReplacement(sb, "\\\\\\\\" + m.group());
 		}

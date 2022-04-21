@@ -41,7 +41,7 @@ public final class RegexSource {
 
 	public static String replaceCaptures(String regexSource, String captureSource, IOnigCaptureIndex[] captureIndices) {
 		Matcher m = CAPTURING_REGEX_SOURCE.matcher(regexSource);
-		StringBuffer result = new StringBuffer();
+		final StringBuilder result = new StringBuilder();
 		while (m.find()) {
 			String match = m.group();
 			String replacement = getReplacement(match, captureSource, captureIndices);

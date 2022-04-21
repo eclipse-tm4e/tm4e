@@ -1,5 +1,5 @@
 /**
- *  Copyright (c) 2015-2017 Angelo ZERR.
+ * Copyright (c) 2015-2017 Angelo ZERR.
  * This program and the accompanying materials are made
  * available under the terms of the Eclipse Public License 2.0
  * which is available at https://www.eclipse.org/legal/epl-2.0/
@@ -11,10 +11,10 @@
  * Initial license: MIT
  *
  * Contributors:
- *  - GitHub Inc.: Initial code, written in JavaScript, licensed under MIT license
- *  - Angelo Zerr <angelo.zerr@gmail.com> - translation and adaptation to Java
- *  - Fabio Zadrozny <fabiofz@gmail.com> - Convert uniqueId to Object (for identity compare)
- *  - Fabio Zadrozny <fabiofz@gmail.com> - Utilities to convert between utf-8 and utf-16
+ * - GitHub Inc.: Initial code, written in JavaScript, licensed under MIT license
+ * - Angelo Zerr <angelo.zerr@gmail.com> - translation and adaptation to Java
+ * - Fabio Zadrozny <fabiofz@gmail.com> - Convert uniqueId to Object (for identity compare)
+ * - Fabio Zadrozny <fabiofz@gmail.com> - Utilities to convert between utf-8 and utf-16
  */
 package org.eclipse.tm4e.core.internal.oniguruma;
 
@@ -26,7 +26,8 @@ import org.jcodings.specific.UTF8Encoding;
 /**
  * Oniguruma string.
  *
- * @see https://github.com/atom/node-oniguruma/blob/master/src/onig-string.cc
+ * @see <a href="https://github.com/atom/node-oniguruma/blob/master/src/onig-string.cc">
+ *      github.com/atom/node-oniguruma/blob/master/src/onig-string.cc</a>
  *
  */
 public final class OnigString {
@@ -43,7 +44,7 @@ public final class OnigString {
 	}
 
 	int convertUtf16OffsetToUtf8(int posInChars) {
-		if(!computedOffsets) {
+		if (!computedOffsets) {
 			computeOffsets();
 		}
 		if (charsPosFromBytePos == null) {
@@ -83,7 +84,7 @@ public final class OnigString {
 	}
 
 	int convertUtf8OffsetToUtf16(int posInBytes) {
-		if(!computedOffsets) {
+		if (!computedOffsets) {
 			computeOffsets();
 		}
 		if (charsPosFromBytePos == null) {
@@ -114,8 +115,8 @@ public final class OnigString {
 				i += codeLen;
 				charsLen += 1;
 			}
-			if(bytesLen != this.utf8_value.length) {
-				throw new AssertionError(bytesLen + " != "+this.utf8_value.length);
+			if (bytesLen != this.utf8_value.length) {
+				throw new AssertionError(bytesLen + " != " + this.utf8_value.length);
 			}
 		}
 		computedOffsets = true;

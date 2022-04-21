@@ -24,7 +24,8 @@ import org.eclipse.tm4e.core.internal.oniguruma.OnigScanner;
 
 /**
  *
- * @see https://github.com/Microsoft/vscode-textmate/blob/master/src/rule.ts
+ * @see <a href="https://github.com/Microsoft/vscode-textmate/blob/master/src/rule.ts">
+ *      github.com/Microsoft/vscode-textmate/blob/master/src/rule.ts</a>
  *
  */
 final class RegExpSourceList {

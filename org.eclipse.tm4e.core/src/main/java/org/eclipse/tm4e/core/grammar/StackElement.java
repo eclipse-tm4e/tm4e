@@ -27,7 +27,8 @@ import org.eclipse.tm4e.core.internal.rule.Rule;
 /**
  * Represents a "pushed" state on the stack (as a linked list element).
  *
- * @see https://github.com/Microsoft/vscode-textmate/blob/master/src/grammar.ts
+ * @see <a href="https://github.com/Microsoft/vscode-textmate/blob/master/src/grammar.ts">
+ *      github.com/Microsoft/vscode-textmate/blob/master/src/grammar.ts</a>
  *
  */
 public class StackElement {

@@ -25,7 +25,8 @@ import java.util.regex.Pattern;
 /**
  * Matcher utilities.
  *
- * @see https://github.com/Microsoft/vscode-textmate/blob/master/src/matcher.ts
+ * @see <a href="https://github.com/Microsoft/vscode-textmate/blob/master/src/matcher.ts">
+ *      github.com/Microsoft/vscode-textmate/blob/master/src/matcher.ts</a>
  *
  */
 public final class Matcher<T> implements Predicate<T> {

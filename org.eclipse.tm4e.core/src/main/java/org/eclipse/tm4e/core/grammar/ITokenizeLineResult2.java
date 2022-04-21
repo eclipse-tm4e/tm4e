@@ -19,7 +19,8 @@ package org.eclipse.tm4e.core.grammar;
 /**
  * Result of the line tokenization2 API.
  *
- * @see https://github.com/Microsoft/vscode-textmate/blob/master/src/main.ts
+ * @see <a href="https://github.com/Microsoft/vscode-textmate/blob/master/src/main.ts">
+ *      github.com/Microsoft/vscode-textmate/blob/master/src/main.ts</a>
  */
 public interface ITokenizeLineResult2 {
 
@@ -32,7 +33,7 @@ public interface ITokenizeLineResult2 {
 
 	/**
 	 * Returns the `prevState` to be passed on to the next line tokenization.
-	 * 
+	 *
 	 * @return the `prevState` to be passed on to the next line tokenization.
 	 */
 	StackElement getRuleStack();

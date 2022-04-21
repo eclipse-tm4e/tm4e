@@ -36,7 +36,8 @@ import org.eclipse.tm4e.core.theme.Theme;
 /**
  * The registry that will hold all grammars.
  *
- * @see https://github.com/Microsoft/vscode-textmate/blob/master/src/main.ts
+ * @see <a href="https://github.com/Microsoft/vscode-textmate/blob/master/src/main.ts">
+ *      github.com/Microsoft/vscode-textmate/blob/master/src/main.ts</a>
  *
  */
 public class Registry {

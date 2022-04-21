@@ -1,13 +1,13 @@
 /**
- *  Copyright (c) 2015-2017 Angelo ZERR.
+ * Copyright (c) 2015-2017 Angelo ZERR.
  * This program and the accompanying materials are made
  * available under the terms of the Eclipse Public License 2.0
  * which is available at https://www.eclipse.org/legal/epl-2.0/
  *
  * SPDX-License-Identifier: EPL-2.0
  *
- *  Contributors:
- *  Angelo Zerr <angelo.zerr@gmail.com> - initial API and implementation
+ * Contributors:
+ * Angelo Zerr <angelo.zerr@gmail.com> - initial API and implementation
  */
 package org.eclipse.tm4e.core.theme;
 
@@ -21,15 +21,16 @@ import org.eclipse.tm4e.core.internal.theme.reader.ThemeReader;
 import org.junit.jupiter.api.Test;
 
 /**
- * 
- * @see https://github.com/Microsoft/vscode-textmate/blob/master/src/tests/themes.test.ts
+ *
+ * @see <a href="https://github.com/Microsoft/vscode-textmate/blob/master/src/tests/themes.test.ts">
+ *      github.com/Microsoft/vscode-textmate/blob/master/src/tests/themes.test.ts</a>
  *
  */
 public class ThemeParsingTest {
 
 	@Test
 	public void testCanParse() throws Exception {
-		List<ParsedThemeRule> actual = parseTheme("{" + 
+		List<ParsedThemeRule> actual = parseTheme("{" +
 			"\"settings\": [" +
 				"{ \"settings\": { \"foreground\": \"#F8F8F2\", \"background\": \"#272822\" } }," +
 				"{ \"scope\": \"source, something\", \"settings\": { \"background\": \"#100000\" } }," +
@@ -61,8 +62,8 @@ public class ThemeParsingTest {
 				new ParsedThemeRule("foo", null, 9, FontStyle.None, "#CFA", null), };
 
 		assertArrayEquals(expected, actual.toArray());
-	}	
-	
+	}
+
 	private List<ParsedThemeRule> parseTheme(String theme) throws Exception {
 		return Theme.parseTheme(ThemeReader.JSON_PARSER.parse(new ByteArrayInputStream(theme.getBytes())));
 	}

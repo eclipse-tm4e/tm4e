@@ -1,13 +1,13 @@
 /**
- *  Copyright (c) 2015-2017 Angelo ZERR.
+ * Copyright (c) 2015-2017 Angelo ZERR.
  * This program and the accompanying materials are made
  * available under the terms of the Eclipse Public License 2.0
  * which is available at https://www.eclipse.org/legal/epl-2.0/
  *
  * SPDX-License-Identifier: EPL-2.0
  *
- *  Contributors:
- *  Angelo Zerr <angelo.zerr@gmail.com> - initial API and implementation
+ * Contributors:
+ * Angelo Zerr <angelo.zerr@gmail.com> - initial API and implementation
  */
 package org.eclipse.tm4e.core.theme;
 
@@ -25,8 +25,9 @@ import org.eclipse.tm4e.core.internal.theme.reader.ThemeReader;
 import org.junit.jupiter.api.Test;
 
 /**
- * 
- * @see https://github.com/Microsoft/vscode-textmate/blob/master/src/tests/themes.test.ts
+ *
+ * @see <a href="https://github.com/Microsoft/vscode-textmate/blob/master/src/tests/themes.test.ts">
+ *      github.com/Microsoft/vscode-textmate/blob/master/src/tests/themes.test.ts</a>
  *
  */
 class ThemeMatchingTest {
@@ -76,7 +77,7 @@ class ThemeMatchingTest {
 		int _C = colorMap.getId("#500000");
 		int _D = colorMap.getId("#300000");
 		int _E = colorMap.getId("#400000");
-		
+
 		List<ThemeTrieElementRule> actual = theme.match("a.b");
 
 		assertArrayEquals(new ThemeTrieElementRule[] {
@@ -84,7 +85,7 @@ class ThemeMatchingTest {
 				new ThemeTrieElementRule(1, Arrays.asList("c"), FontStyle.NotSet, _D, _NOT_SET),
 				new ThemeTrieElementRule(1, null, FontStyle.NotSet, _C, _NOT_SET) }, actual.toArray());
 	}
-	
+
 	@Test
 	void testGivesHigherPriorityToParentMatches2() throws Exception {
 		Theme theme = loadTheme("{" + 
@@ -107,7 +108,7 @@ class ThemeMatchingTest {
 
 	@Test
 	void testCanMatch() throws Exception {
-		Theme theme = loadTheme("{" + 
+		Theme theme = loadTheme("{" +
 			"\"settings\": ["+
 				"{ \"settings\": { \"foreground\": \"#F8F8F2\", \"background\": \"#272822\" } },"+
 				"{ \"scope\": \"source, something\", \"settings\": { \"background\": \"#100000\" } },"+
@@ -132,7 +133,7 @@ class ThemeMatchingTest {
 		int _F = colorMap.getId("#500000");
 		int _G = colorMap.getId("#100000");
 		int _H = colorMap.getId("#600000");
-		
+
 		// matches defaults
 		assertNoMatch(theme, "");
 		assertNoMatch(theme, "bazz");
@@ -189,8 +190,8 @@ class ThemeMatchingTest {
 				new ThemeTrieElementRule[] { new ThemeTrieElementRule(1, Arrays.asList("selector", "source.css"),
 						FontStyle.Bold, _NOT_SET, _C),
 						new ThemeTrieElementRule(1, null, FontStyle.NotSet, _NOT_SET, _C) });
-	}	
-	
+	}
+
 	@Test
 	void testMicrosoft_vscode_23460() throws Exception {
 		Theme theme = loadTheme("{" + 
@@ -228,7 +229,6 @@ class ThemeMatchingTest {
 		int _C = colorMap.getId("#FF410D");
 		int _D = colorMap.getId("#ffffff");
 
-
 		// string.quoted.double.json
 		// meta.structure.dictionary.value.json
 		// meta.structure.dictionary.json
@@ -251,7 +251,7 @@ class ThemeMatchingTest {
 		String color = theme.getColor(StackElementMetadata.getForeground(r));
 		assertEquals("#FF410D", color);
 	}
-	
+
 	private void assertMatch(Theme theme, String scopeName, ThemeTrieElementRule[] expected) {
 		List<ThemeTrieElementRule> actual = theme.match(scopeName);
 		assertArrayEquals(expected, actual.toArray(), "when matching <<" + scopeName + ">>");
@@ -268,7 +268,7 @@ class ThemeMatchingTest {
 			new ThemeTrieElementRule(0, null, FontStyle.NotSet, 0, 0 /*_NOT_SET, _NOT_SET*/)
 		});
 	}
-	
+
 	private Theme loadTheme(String theme) throws Exception {
 		return Theme.createFromRawTheme(ThemeReader.JSON_PARSER.parse(new ByteArrayInputStream(theme.getBytes())));
 	}

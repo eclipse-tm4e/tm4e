@@ -1,21 +1,21 @@
 /**
- *  Copyright (c) 2015-2017 Angelo ZERR.
+ * Copyright (c) 2015-2017 Angelo ZERR.
  * This program and the accompanying materials are made
  * available under the terms of the Eclipse Public License 2.0
  * which is available at https://www.eclipse.org/legal/epl-2.0/
  *
  * SPDX-License-Identifier: EPL-2.0
  *
- *  Contributors:
- *  Angelo Zerr <angelo.zerr@gmail.com> - initial API and implementation
+ * Contributors:
+ * Angelo Zerr <angelo.zerr@gmail.com> - initial API and implementation
  */
 package org.eclipse.tm4e.core.theme;
 
 /**
  * Font style definitions.
  *
- * @see https://github.com/Microsoft/vscode-textmate/blob/master/src/theme.ts
- *
+ * @see <a href="https://github.com/Microsoft/vscode-textmate/blob/master/src/theme.ts">
+ *      github.com/Microsoft/vscode-textmate/blob/master/src/theme.ts</a>
  */
 public class FontStyle {
 

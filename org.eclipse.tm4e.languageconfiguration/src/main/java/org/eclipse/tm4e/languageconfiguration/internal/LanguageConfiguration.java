@@ -33,7 +33,8 @@ import com.google.gson.JsonObject;
 /**
  * VSCode language-configuration.json
  *
- * @see https://code.visualstudio.com/docs/extensionAPI/extension-points#_contributeslanguages
+ * @see <a href="https://code.visualstudio.com/docs/extensionAPI/extension-points#_contributeslanguages">
+ *      code.visualstudio.com/docs/extensionAPI/extension-points#_contributeslanguages</a>
  */
 public final class LanguageConfiguration implements ILanguageConfiguration {
 
@@ -42,6 +43,7 @@ public final class LanguageConfiguration implements ILanguageConfiguration {
 	 * language-configuration.json file reader.
 	 *
 	 * @param reader
+	 *
 	 * @return an instance of {@link LanguageConfiguration} loaded from the VSCode
 	 *         language-configuration.json file reader.
 	 */

@@ -34,7 +34,7 @@ public final class BeginWhileRule extends Rule {
 
 	BeginWhileRule(/* $location:ILocation, */ int id, String name, String contentName, String begin,
 			List<CaptureRule> beginCaptures, String _while, List<CaptureRule> whileCaptures,
-			ICompilePatternsResult patterns) {
+			CompilePatternsResult patterns) {
 		super(/* $location, */id, name, contentName);
 		this.begin = new RegExpSource(begin, this.id);
 		this.beginCaptures = beginCaptures;
@@ -63,7 +63,7 @@ public final class BeginWhileRule extends Rule {
 	}
 
 	@Override
-	public ICompiledRule compile(IRuleRegistry grammar, String endRegexSource, boolean allowA, boolean allowG) {
+	public CompiledRule compile(IRuleRegistry grammar, String endRegexSource, boolean allowA, boolean allowG) {
 		this.precompile(grammar);
 		return this.cachedCompiledPatterns.compile(grammar, allowA, allowG);
 	}
@@ -75,7 +75,7 @@ public final class BeginWhileRule extends Rule {
 		}
 	}
 
-	public ICompiledRule compileWhile(IRuleRegistry grammar, String endRegexSource, boolean allowA, boolean allowG) {
+	public CompiledRule compileWhile(IRuleRegistry grammar, String endRegexSource, boolean allowA, boolean allowG) {
 		this.precompileWhile();
 		if (this._while.hasBackReferences()) {
 			this.cachedCompiledWhilePatterns.setSource(0, endRegexSource);

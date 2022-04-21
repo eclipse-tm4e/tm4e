@@ -31,7 +31,7 @@ public final class CaptureRule extends Rule {
 	}
 
 	@Override
-	public ICompiledRule compile(IRuleRegistry grammar, String endRegexSource, boolean allowA, boolean allowG) {
+	public CompiledRule compile(IRuleRegistry grammar, String endRegexSource, boolean allowA, boolean allowG) {
 		throw new UnsupportedOperationException();
 	}
 

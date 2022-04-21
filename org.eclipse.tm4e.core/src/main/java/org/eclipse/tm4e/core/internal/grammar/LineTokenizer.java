@@ -33,7 +33,7 @@ import org.eclipse.tm4e.core.internal.oniguruma.OnigString;
 import org.eclipse.tm4e.core.internal.rule.BeginEndRule;
 import org.eclipse.tm4e.core.internal.rule.BeginWhileRule;
 import org.eclipse.tm4e.core.internal.rule.CaptureRule;
-import org.eclipse.tm4e.core.internal.rule.ICompiledRule;
+import org.eclipse.tm4e.core.internal.rule.CompiledRule;
 import org.eclipse.tm4e.core.internal.rule.MatchRule;
 import org.eclipse.tm4e.core.internal.rule.Rule;
 
@@ -264,7 +264,7 @@ final class LineTokenizer {
 	private IMatchResult matchRule(Grammar grammar, OnigString lineText, boolean isFirstLine, final int linePos,
 			StackElement stack, int anchorPosition) {
 		Rule rule = stack.getRule(grammar);
-		final ICompiledRule ruleScanner = rule.compile(grammar, stack.endRule, isFirstLine, linePos == anchorPosition);
+		final CompiledRule ruleScanner = rule.compile(grammar, stack.endRule, isFirstLine, linePos == anchorPosition);
 		final IOnigNextMatchResult r = ruleScanner.scanner.findNextMatchSync(lineText, linePos);
 
 		if (r != null) {
@@ -337,7 +337,7 @@ final class LineTokenizer {
 				continue;
 			}
 
-			ICompiledRule ruleScanner = grammar.getRule(injection.ruleId).compile(grammar, null, isFirstLine,
+			CompiledRule ruleScanner = grammar.getRule(injection.ruleId).compile(grammar, null, isFirstLine,
 					linePos == anchorPosition);
 			IOnigNextMatchResult matchResult = ruleScanner.scanner.findNextMatchSync(lineText, linePos);
 
@@ -487,7 +487,7 @@ final class LineTokenizer {
 		}
 		for (int i = whileRules.size() - 1; i >= 0; i--) {
 			WhileStack whileRule = whileRules.get(i);
-			ICompiledRule ruleScanner = whileRule.rule.compileWhile(grammar, whileRule.stack.endRule, isFirstLine,
+			CompiledRule ruleScanner = whileRule.rule.compileWhile(grammar, whileRule.stack.endRule, isFirstLine,
 					currentanchorPosition == linePos);
 			IOnigNextMatchResult r = ruleScanner.scanner.findNextMatchSync(lineText, linePos);
 			// if (IN_DEBUG_MODE) {

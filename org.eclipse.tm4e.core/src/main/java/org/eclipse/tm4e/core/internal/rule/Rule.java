@@ -53,6 +53,6 @@ public abstract class Rule {
 
 	abstract void collectPatternsRecursive(IRuleRegistry grammar, RegExpSourceList out, boolean isFirst);
 
-	public abstract ICompiledRule compile(IRuleRegistry grammar, String endRegexSource, boolean allowA, boolean allowG);
+	public abstract CompiledRule compile(IRuleRegistry grammar, String endRegexSource, boolean allowA, boolean allowG);
 
 }

@@ -33,7 +33,7 @@ public final class BeginEndRule extends Rule {
 	private RegExpSourceList cachedCompiledPatterns;
 
 	BeginEndRule(int id, String name, String contentName, String begin, List<CaptureRule> beginCaptures,
-			String end, List<CaptureRule> endCaptures, boolean applyEndPatternLast, ICompilePatternsResult patterns) {
+			String end, List<CaptureRule> endCaptures, boolean applyEndPatternLast, CompilePatternsResult patterns) {
 		super(id, name, contentName);
 		this.begin = new RegExpSource(begin, this.id);
 		this.beginCaptures = beginCaptures;
@@ -62,7 +62,7 @@ public final class BeginEndRule extends Rule {
 	}
 
 	@Override
-	public ICompiledRule compile(IRuleRegistry grammar, String endRegexSource, boolean allowA, boolean allowG) {
+	public CompiledRule compile(IRuleRegistry grammar, String endRegexSource, boolean allowA, boolean allowG) {
 		RegExpSourceList precompiled = this.precompile(grammar);
 		if (this.end.hasBackReferences()) {
 			if (this.applyEndPatternLast) {

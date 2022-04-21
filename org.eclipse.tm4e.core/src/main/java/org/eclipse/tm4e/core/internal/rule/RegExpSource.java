@@ -40,7 +40,7 @@ final class RegExpSource {
 	private final int ruleId;
 	private boolean _hasAnchor;
 	private final boolean _hasBackReferences;
-	private IRegExpSourceAnchorCache anchorCache;
+	private RegExpSourceAnchorCache anchorCache;
 	private String source;
 
 	RegExpSource(String regExpSource, int ruleId) {
@@ -155,7 +155,7 @@ final class RegExpSource {
 		return sb.toString();
 	}
 
-	private IRegExpSourceAnchorCache _buildAnchorCache() {
+	private RegExpSourceAnchorCache _buildAnchorCache() {
 
 		// Collection<String> A0_G0_result=new ArrayList<Character>();
 		// Collection<String> A0_G1_result=new ArrayList<String>();
@@ -202,7 +202,7 @@ final class RegExpSource {
 			}
 		}
 
-		return new IRegExpSourceAnchorCache(A0_G0_result.toString(), A0_G1_result.toString(), A1_G0_result.toString(),
+		return new RegExpSourceAnchorCache(A0_G0_result.toString(), A0_G1_result.toString(), A1_G0_result.toString(),
 				A1_G1_result.toString()
 		// StringUtils.join(A0_G0_result, ""),
 		// StringUtils.join(A0_G1_result, ""),

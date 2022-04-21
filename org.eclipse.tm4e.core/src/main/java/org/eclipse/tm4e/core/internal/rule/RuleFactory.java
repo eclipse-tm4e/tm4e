@@ -138,7 +138,7 @@ public final class RuleFactory {
 		}
 	}
 
-	private static ICompilePatternsResult _compilePatterns(Collection<IRawRule> patterns, IRuleFactoryHelper helper,
+	private static CompilePatternsResult _compilePatterns(Collection<IRawRule> patterns, IRuleFactoryHelper helper,
 			IRawRepository repository) {
 		Collection<Integer> r = new ArrayList<>();
 		int patternId;
@@ -237,7 +237,7 @@ public final class RuleFactory {
 			}
 		}
 
-		return new ICompilePatternsResult(r, ((patterns != null ? patterns.size() : 0) != r.size()));
+		return new CompilePatternsResult(r, ((patterns != null ? patterns.size() : 0) != r.size()));
 	}
 
 }

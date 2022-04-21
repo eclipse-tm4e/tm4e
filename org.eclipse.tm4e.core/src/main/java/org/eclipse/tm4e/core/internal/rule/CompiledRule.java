@@ -16,16 +16,15 @@
  */
 package org.eclipse.tm4e.core.internal.rule;
 
-import java.util.Collection;
+import org.eclipse.tm4e.core.internal.oniguruma.OnigScanner;
 
-final class ICompilePatternsResult {
+public final class CompiledRule {
 
-	final Integer[] patterns;
-	final boolean hasMissingPatterns;
+	public final OnigScanner scanner;
+	public final Integer[] rules;
 
-	ICompilePatternsResult(Collection<Integer> patterns, boolean hasMissingPatterns) {
-		this.hasMissingPatterns = hasMissingPatterns;
-		this.patterns = patterns.toArray(Integer[]::new);
+	CompiledRule(OnigScanner scanner, Integer[] rules) {
+		this.scanner = scanner;
+		this.rules = rules;
 	}
-
 }

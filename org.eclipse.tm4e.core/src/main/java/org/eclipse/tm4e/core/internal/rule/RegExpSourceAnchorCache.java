@@ -16,14 +16,14 @@
  */
 package org.eclipse.tm4e.core.internal.rule;
 
-final class IRegExpSourceAnchorCache {
+final class RegExpSourceAnchorCache {
 
 	final String A0_G0;
 	final String A0_G1;
 	final String A1_G0;
 	final String A1_G1;
 
-	IRegExpSourceAnchorCache(String A0_G0, String A0_G1, String A1_G0, String A1_G1) {
+	RegExpSourceAnchorCache(String A0_G0, String A0_G1, String A1_G0, String A1_G1) {
 		this.A0_G0 = A0_G0;
 		this.A0_G1 = A0_G1;
 		this.A1_G0 = A1_G0;

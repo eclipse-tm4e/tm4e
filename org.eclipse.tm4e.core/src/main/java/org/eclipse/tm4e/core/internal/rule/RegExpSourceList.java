@@ -32,16 +32,16 @@ final class RegExpSourceList {
 
 	private static final class RegExpSourceListAnchorCache {
 
-		private ICompiledRule A0_G0;
-		private ICompiledRule A0_G1;
-		private ICompiledRule A1_G0;
-		private ICompiledRule A1_G1;
+		private CompiledRule A0_G0;
+		private CompiledRule A0_G1;
+		private CompiledRule A1_G0;
+		private CompiledRule A1_G1;
 
 	}
 
 	private final List<RegExpSource> _items = new ArrayList<>();
 	private boolean _hasAnchors;
-	private ICompiledRule _cached;
+	private CompiledRule _cached;
 	private final RegExpSourceListAnchorCache _anchorCache;
 
 	RegExpSourceList() {
@@ -75,14 +75,14 @@ final class RegExpSourceList {
 		}
 	}
 
-	ICompiledRule compile(IRuleRegistry grammar, boolean allowA, boolean allowG) {
+	CompiledRule compile(IRuleRegistry grammar, boolean allowA, boolean allowG) {
 		if (!this._hasAnchors) {
 			if (this._cached == null) {
 				List<String> regexps = new ArrayList<>();
 				for (RegExpSource regExpSource : _items) {
 					regexps.add(regExpSource.getSource());
 				}
-				this._cached = new ICompiledRule(createOnigScanner(regexps.toArray(String[]::new)), getRules());
+				this._cached = new CompiledRule(createOnigScanner(regexps.toArray(String[]::new)), getRules());
 			}
 			return this._cached;
 		}
@@ -117,12 +117,12 @@ final class RegExpSourceList {
 		return this._anchorCache.A0_G0;
 	}
 
-	private ICompiledRule _resolveAnchors(boolean allowA, boolean allowG) {
+	private CompiledRule _resolveAnchors(boolean allowA, boolean allowG) {
 		List<String> regexps = new ArrayList<>();
 		for (RegExpSource regExpSource : _items) {
 			regexps.add(regExpSource.resolveAnchors(allowA, allowG));
 		}
-		return new ICompiledRule(createOnigScanner(regexps.toArray(String[]::new)), getRules());
+		return new CompiledRule(createOnigScanner(regexps.toArray(String[]::new)), getRules());
 	}
 
 	private OnigScanner createOnigScanner(String[] regexps) {

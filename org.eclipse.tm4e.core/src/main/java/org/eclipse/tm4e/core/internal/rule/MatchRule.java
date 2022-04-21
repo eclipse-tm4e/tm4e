@@ -36,7 +36,7 @@ public final class MatchRule extends Rule {
 	}
 
 	@Override
-	public ICompiledRule compile(IRuleRegistry grammar, String endRegexSource, boolean allowA, boolean allowG) {
+	public CompiledRule compile(IRuleRegistry grammar, String endRegexSource, boolean allowA, boolean allowG) {
 		if (this.cachedCompiledPatterns == null) {
 			this.cachedCompiledPatterns = new RegExpSourceList();
 			this.collectPatternsRecursive(grammar, this.cachedCompiledPatterns, true);

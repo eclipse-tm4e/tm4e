@@ -28,12 +28,8 @@ import org.w3c.dom.css.RGBColor;
 
 public final class CSSDocumentHandler implements DocumentHandler {
 
-	private final List<IStyle> list;
+	private final List<IStyle> list = new ArrayList<>();
 	private CSSStyle currentStyle;
-
-	public CSSDocumentHandler() {
-		list = new ArrayList<>();
-	}
 
 	@Override
 	public void comment(String arg0) throws CSSException {
@@ -53,7 +49,6 @@ public final class CSSDocumentHandler implements DocumentHandler {
 	@Override
 	public void endMedia(SACMediaList arg0) throws CSSException {
 		// TODO Auto-generated method stub
-
 	}
 
 	@Override

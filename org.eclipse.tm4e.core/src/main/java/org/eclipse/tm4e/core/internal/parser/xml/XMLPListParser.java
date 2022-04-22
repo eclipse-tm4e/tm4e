@@ -12,13 +12,16 @@
 package org.eclipse.tm4e.core.internal.parser.xml;
 
 import java.io.ByteArrayInputStream;
+import java.io.IOException;
 import java.io.InputStream;
 
+import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
 
 import org.eclipse.tm4e.core.internal.parser.PList;
 import org.xml.sax.InputSource;
+import org.xml.sax.SAXException;
 import org.xml.sax.XMLReader;
 
 public final class XMLPListParser<T> {
@@ -29,7 +32,7 @@ public final class XMLPListParser<T> {
 		this.theme = theme;
 	}
 
-	public T parse(InputStream contents) throws Exception {
+	public T parse(InputStream contents) throws IOException, ParserConfigurationException, SAXException {
 		SAXParserFactory spf = SAXParserFactory.newInstance();
 		spf.setNamespaceAware(true);
 		SAXParser saxParser = spf.newSAXParser();

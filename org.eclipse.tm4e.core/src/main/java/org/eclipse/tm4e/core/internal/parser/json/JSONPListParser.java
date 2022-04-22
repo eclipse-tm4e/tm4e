@@ -11,11 +11,13 @@
  */
 package org.eclipse.tm4e.core.internal.parser.json;
 
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 
 import org.eclipse.tm4e.core.internal.parser.PList;
+import org.xml.sax.SAXException;
 
 import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonToken;
@@ -28,7 +30,7 @@ public final class JSONPListParser<T> {
 		this.theme = theme;
 	}
 
-	public T parse(InputStream contents) throws Exception {
+	public T parse(InputStream contents) throws IOException, SAXException {
 		PList<T> pList = new PList<>(theme);
 		try (JsonReader reader = new JsonReader(new InputStreamReader(contents, StandardCharsets.UTF_8))) {
 			// reader.setLenient(true);

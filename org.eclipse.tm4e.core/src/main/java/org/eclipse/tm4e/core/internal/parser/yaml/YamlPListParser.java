@@ -20,6 +20,7 @@ import java.util.Map.Entry;
 import org.eclipse.tm4e.core.internal.parser.PList;
 import org.xml.sax.SAXException;
 import org.yaml.snakeyaml.Yaml;
+import org.yaml.snakeyaml.error.YAMLException;
 
 /**
  * Parses TextMate Grammar file in YAML format.
@@ -75,7 +76,7 @@ public final class YamlPListParser<T> {
 		pList.endElement(null, "string", null);
 	}
 
-	public T parse(InputStream contents) throws Exception {
+	public T parse(InputStream contents) throws SAXException, YAMLException {
 		PList<T> pList = new PList<>(theme);
 		addMapToPList(pList, new Yaml().loadAs(contents, Map.class));
 		return pList.getResult();

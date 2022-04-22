@@ -93,14 +93,14 @@ final class Measure extends CSSValueImpl {
 		case LexicalUnit.SAC_DIMENSION:
 			return CSS_DIMENSION;
 		case LexicalUnit.SAC_OPERATOR_COMMA:
-			return CSS_CUSTOM; // TODO don't think this is right, see bug
-								// #278139
+			return CSS_CUSTOM; // TODO don't think this is right, see bug #278139
 		case LexicalUnit.SAC_INHERIT:
 			return CSS_INHERIT;
+		default:
+			// TODO Auto-generated method stub
+			throw new UnsupportedOperationException(
+					"NOT YET IMPLEMENTED - LexicalUnit type: " + value.getLexicalUnitType());
 		}
-		// TODO Auto-generated method stub
-		throw new UnsupportedOperationException(
-				"NOT YET IMPLEMENTED - LexicalUnit type: " + value.getLexicalUnitType());
 	}
 
 	@Override

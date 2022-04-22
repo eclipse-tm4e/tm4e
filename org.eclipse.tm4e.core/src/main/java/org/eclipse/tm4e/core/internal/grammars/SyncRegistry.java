@@ -111,8 +111,7 @@ public final class SyncRegistry implements IGrammarRepository, IThemeProvider {
 	}
 
 	private static void collectIncludedScopes(Collection<String> result, IRawGrammar grammar) {
-		if (grammar
-				.getPatterns() != null /* && Array.isArray(grammar.patterns) */) {
+		if (grammar.getPatterns() != null /* && Array.isArray(grammar.patterns) */) {
 			extractIncludedScopesInPatterns(result, grammar.getPatterns());
 		}
 

@@ -36,7 +36,7 @@ import org.eclipse.tm4e.core.theme.ThemeTrieElementRule;
 
 public final class SyncRegistry implements IGrammarRepository, IThemeProvider {
 
-	private final Map<String, IGrammar> grammars = new HashMap<>();
+	private final Map<String, Grammar> grammars = new HashMap<>();
 	private final Map<String, IRawGrammar> rawGrammars = new HashMap<>();
 	private final Map<String, Collection<String>> injectionGrammars = new HashMap<>();
 	private Theme theme;
@@ -47,7 +47,7 @@ public final class SyncRegistry implements IGrammarRepository, IThemeProvider {
 
 	public void setTheme(Theme theme) {
 		this.theme = theme;
-		this.grammars.values().forEach(grammar -> ((Grammar) grammar).onDidChangeTheme());
+		this.grammars.values().forEach(Grammar::onDidChangeTheme);
 	}
 
 	public Set<String> getColorMap() {

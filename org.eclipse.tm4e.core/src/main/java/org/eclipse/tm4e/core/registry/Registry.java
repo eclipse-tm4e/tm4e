@@ -70,11 +70,6 @@ public class Registry {
 	}
 
 	public IGrammar loadGrammar(String initialScopeName) {
-		return _loadGrammar(initialScopeName);
-	}
-
-	private IGrammar _loadGrammar(String initialScopeName) {
-
 		List<String> remainingScopeNames = new ArrayList<>();
 		remainingScopeNames.add(initialScopeName);
 

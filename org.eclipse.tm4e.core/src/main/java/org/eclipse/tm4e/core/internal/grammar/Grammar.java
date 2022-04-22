@@ -26,14 +26,13 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.function.IntFunction;
 
-import org.eclipse.tm4e.core.grammar.GrammarHelper;
 import org.eclipse.tm4e.core.grammar.IGrammar;
-import org.eclipse.tm4e.core.grammar.IGrammarRepository;
 import org.eclipse.tm4e.core.grammar.ITokenizeLineResult;
 import org.eclipse.tm4e.core.grammar.ITokenizeLineResult2;
 import org.eclipse.tm4e.core.grammar.Injection;
 import org.eclipse.tm4e.core.grammar.StackElement;
 import org.eclipse.tm4e.core.internal.grammar.parser.Raw;
+import org.eclipse.tm4e.core.internal.grammars.IGrammarRepository;
 import org.eclipse.tm4e.core.internal.matcher.Matcher;
 import org.eclipse.tm4e.core.internal.matcher.MatcherWithPriority;
 import org.eclipse.tm4e.core.internal.oniguruma.OnigString;
@@ -228,7 +227,7 @@ public final class Grammar implements IGrammar, IRuleFactoryHelper {
 			// Only add \n if the passed lineText didn't have it.
 			lineText += '\n';
 		}
-		OnigString onigLineText = GrammarHelper.createOnigString(lineText);
+		OnigString onigLineText = new OnigString(lineText);
 		int lineLength = lineText.length();
 		LineTokens lineTokens = new LineTokens(emitBinaryTokens, lineText);
 		StackElement nextState = LineTokenizer.tokenizeString(this, onigLineText, isFirstLine, 0, prevState,

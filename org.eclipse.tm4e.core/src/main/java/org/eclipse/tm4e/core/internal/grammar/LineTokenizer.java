@@ -22,7 +22,6 @@ import java.lang.System.Logger;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.eclipse.tm4e.core.grammar.GrammarHelper;
 import org.eclipse.tm4e.core.grammar.Injection;
 import org.eclipse.tm4e.core.grammar.StackElement;
 import org.eclipse.tm4e.core.internal.matcher.IMatchInjectionsResult;
@@ -445,7 +444,7 @@ final class LineTokenizer {
 				StackElement stackClone = stack.push(captureRule.retokenizeCapturedWithRuleId, captureIndex.getStart(),
 						null, nameScopesList, contentNameScopesList);
 				tokenizeString(grammar,
-						GrammarHelper.createOnigString(lineText.string.substring(0, captureIndex.getEnd())),
+						new OnigString(lineText.string.substring(0, captureIndex.getEnd())),
 						(isFirstLine && captureIndex.getStart() == 0), captureIndex.getStart(), stackClone, lineTokens);
 				continue;
 			}

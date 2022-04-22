@@ -1,5 +1,5 @@
 /**
- *  Copyright (c) 2015-2017 Angelo ZERR.
+ * Copyright (c) 2015-2017 Angelo ZERR.
  * This program and the accompanying materials are made
  * available under the terms of the Eclipse Public License 2.0
  * which is available at https://www.eclipse.org/legal/epl-2.0/
@@ -11,8 +11,8 @@
  * Initial license: MIT
  *
  * Contributors:
- *  - Microsoft Corporation: Initial code, written in TypeScript, licensed under MIT license
- *  - Angelo Zerr <angelo.zerr@gmail.com> - translation and adaptation to Java
+ * - Microsoft Corporation: Initial code, written in TypeScript, licensed under MIT license
+ * - Angelo Zerr <angelo.zerr@gmail.com> - translation and adaptation to Java
  */
 package org.eclipse.tm4e.core.internal.grammars;
 
@@ -24,9 +24,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 
-import org.eclipse.tm4e.core.grammar.GrammarHelper;
 import org.eclipse.tm4e.core.grammar.IGrammar;
-import org.eclipse.tm4e.core.grammar.IGrammarRepository;
 import org.eclipse.tm4e.core.internal.grammar.Grammar;
 import org.eclipse.tm4e.core.internal.grammar.parser.Raw;
 import org.eclipse.tm4e.core.internal.types.IRawGrammar;
@@ -107,8 +105,7 @@ public final class SyncRegistry implements IGrammarRepository, IThemeProvider {
 			if (rawGrammar == null) {
 				return null;
 			}
-			this.grammars.put(scopeName,
-					GrammarHelper.createGrammar(rawGrammar, initialLanguage, embeddedLanguages, this, this));
+			this.grammars.put(scopeName, new Grammar(rawGrammar, initialLanguage, embeddedLanguages, this, this));
 		}
 		return this.grammars.get(scopeName);
 	}
@@ -175,7 +172,7 @@ public final class SyncRegistry implements IGrammarRepository, IThemeProvider {
 		if (!(repository instanceof Raw)) {
 			return;
 		}
-		Raw rawRepository = (Raw)repository;
+		Raw rawRepository = (Raw) repository;
 		for (Entry<String, Object> entry : rawRepository.entrySet()) {
 			IRawRule rule = (IRawRule) entry.getValue();
 			if (rule.getPatterns() != null) {

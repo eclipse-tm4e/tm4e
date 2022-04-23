@@ -90,7 +90,7 @@ public class TMModel implements ITMModel {
 
 			do {
 				try {
-					Integer toProcess = model.invalidLines.take();
+					final int toProcess = model.invalidLines.take().intValue();
 					if (model.lines.get(toProcess).isInvalid) {
 						try {
 							this.revalidateTokensNow(toProcess, null);
@@ -114,9 +114,11 @@ public class TMModel implements ITMModel {
 		 */
 		private void revalidateTokensNow(int startLine, Integer toLineIndexOrNull) {
 			model.buildEventWithCallback(eventBuilder -> {
-				Integer toLineIndex = toLineIndexOrNull;
-				if (toLineIndex == null || toLineIndex >= model.lines.getNumberOfLines()) {
+				final int toLineIndex;
+				if (toLineIndexOrNull == null || toLineIndexOrNull >= model.lines.getNumberOfLines()) {
 					toLineIndex = model.lines.getNumberOfLines() - 1;
+				} else {
+					toLineIndex = toLineIndexOrNull;
 				}
 
 				long tokenizedChars = 0;

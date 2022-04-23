@@ -11,14 +11,12 @@
  */
 package org.eclipse.tm4e.ui;
 
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.junit.jupiter.api.Assumptions.assumeTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.stream.Collectors;
 
 import org.eclipse.swt.custom.StyledText;
 import org.eclipse.swt.widgets.Control;
@@ -40,22 +38,35 @@ class TMinGenericEditorTest {
 	private File f;
 	private IEditorPart editor;
 
-	private Set<Thread> getTM4EThreads() {
-		Set<Thread> threads = Thread.getAllStackTraces().keySet();
-		Set<Thread> res = new HashSet<>();
-		for (Thread thread : threads) {
-			if (thread.getClass().getName().contains("tm4e")) {
-				res.add(thread);
-			}
-		}
-		return res;
+	@BeforeEach
+	public void checkHasGenericEditor() {
+		editorDescriptor = PlatformUI.getWorkbench().getEditorRegistry()
+				.findEditor("org.eclipse.ui.genericeditor.GenericEditor");
+		assertNotNull(editorDescriptor);
 	}
 
 	@BeforeEach
-	public void checkHasGenericEditor() {
-		editorDescriptor = PlatformUI.getWorkbench().getEditorRegistry().findEditor("org.eclipse.ui.genericeditor.GenericEditor");
-		assumeTrue(editorDescriptor!=null);
-		assertTrue(getTM4EThreads().isEmpty(), "TM4E threads still running");
+	public void checkNoTM4EThreadsRunning() throws InterruptedException {
+		var tm4eThreads = Thread.getAllStackTraces();
+		tm4eThreads.entrySet().removeIf(e -> !e.getKey().getClass().getName().startsWith("org.eclipse.tm4e"));
+
+		if (!tm4eThreads.isEmpty()) {
+			Thread.sleep(5_000); // give threads time to finish
+		}
+
+		tm4eThreads = Thread.getAllStackTraces();
+		tm4eThreads.entrySet().removeIf(e -> !e.getKey().getClass().getName().startsWith("org.eclipse.tm4e"));
+
+		if (!tm4eThreads.isEmpty()) {
+			// print the stacktrace of one of the hung threads
+			final var tm4eThread = tm4eThreads.entrySet().iterator().next();
+			final var ex = new IllegalStateException("Thread " + tm4eThread.getKey() + " is still busy");
+			ex.setStackTrace(tm4eThread.getValue());
+			ex.printStackTrace(System.out);
+
+			fail("TM4E threads still running:\n" + tm4eThreads.keySet().stream()
+					.map(t -> " - " + t + " " + t.getClass().getName()).collect(Collectors.joining("\n")));
+		}
 	}
 
 	@AfterEach
@@ -84,7 +95,7 @@ class TMinGenericEditorTest {
 		f.deleteOnExit();
 		editor = IDE.openEditor(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage(),
 				f.toURI(), editorDescriptor.getId(), true);
-		StyledText text = (StyledText)editor.getAdapter(Control.class);
+		StyledText text = (StyledText) editor.getAdapter(Control.class);
 		assertTrue(new DisplayHelper() {
 			@Override
 			protected boolean condition() {
@@ -102,7 +113,7 @@ class TMinGenericEditorTest {
 		f.deleteOnExit();
 		editor = IDE.openEditor(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage(),
 				f.toURI(), editorDescriptor.getId(), true);
-		StyledText text = (StyledText)editor.getAdapter(Control.class);
+		StyledText text = (StyledText) editor.getAdapter(Control.class);
 		assertTrue(new DisplayHelper() {
 			@Override
 			protected boolean condition() {
@@ -112,7 +123,8 @@ class TMinGenericEditorTest {
 		int initialNumberOfRanges = text.getStyleRanges().length;
 		text.setText("let a = '';\nlet b = 10;\nlet c = true;");
 		assertTrue(new DisplayHelper() {
-			@Override protected boolean condition() {
+			@Override
+			protected boolean condition() {
 				return text.getStyleRanges().length > initialNumberOfRanges + 3;
 			}
 		}.waitForCondition(text.getDisplay(), 300000), "More styles should have been added");
@@ -122,8 +134,6 @@ class TMinGenericEditorTest {
 	void testReconcilierStartsAndDisposeThread() throws Exception {
 		testTMHighlightInGenericEditor();
 		editor.getEditorSite().getPage().closeEditor(editor, false);
-		Thread.sleep(500); // give time to dispose
-		assertTrue(getTM4EThreads().isEmpty());
+		checkNoTM4EThreadsRunning();
 	}
-
 }

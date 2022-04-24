@@ -1,23 +1,24 @@
 /**
- *  Copyright (c) 2015-2017 Angelo ZERR.
+ * Copyright (c) 2015-2017 Angelo ZERR.
  * This program and the accompanying materials are made
  * available under the terms of the Eclipse Public License 2.0
  * which is available at https://www.eclipse.org/legal/epl-2.0/
  *
  * SPDX-License-Identifier: EPL-2.0
  *
- *  Contributors:
- *  Angelo Zerr <angelo.zerr@gmail.com> - initial API and implementation
+ * Contributors:
+ * Angelo Zerr <angelo.zerr@gmail.com> - initial API and implementation
  */
 package org.eclipse.tm4e.core.model;
 
 import static java.lang.System.Logger.Level.*;
 
 import java.lang.System.Logger;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
+import java.util.Set;
+import java.util.concurrent.CopyOnWriteArraySet;
 import java.util.concurrent.PriorityBlockingQueue;
 import java.util.function.Consumer;
 
@@ -38,19 +39,19 @@ public class TMModel implements ITMModel {
 	private IGrammar grammar;
 
 	/** Listener when TextMate model tokens changed **/
-	private final List<IModelTokensChangedListener> listeners = new ArrayList<>();
+	private final Set<IModelTokensChangedListener> listeners = new CopyOnWriteArraySet<>();
 
 	Tokenizer tokenizer;
 
 	/** The background thread. */
-	private TokenizerThread fThread;
+	private volatile TokenizerThread fThread;
 
 	private final IModelLines lines;
 	private final PriorityBlockingQueue<Integer> invalidLines = new PriorityBlockingQueue<>();
 
 	public TMModel(IModelLines lines) {
 		this.lines = lines;
-		((AbstractLineList)lines).setModel(this);
+		((AbstractLineList) lines).setModel(this);
 		lines.forEach(ModelLine::resetTokenizationState);
 		invalidateLine(0);
 	}
@@ -60,22 +61,19 @@ public class TMModel implements ITMModel {
 	 * runs tokenizing in background on the lines found in {@link TMModel#lines}.
 	 * The {@link TMModel#lines} are expected to be accessed through {@link TMModel#getLines()}
 	 * and manipulated by the UI part to inform of needs to (re)tokenize area, then the {@link TokenizerThread}
-	 * processes them and emits events through the model. UI elements are supposed to subscribe and react to the events with
-	 * {@link TMModel#addModelTokensChangedListener(IModelTokensChangedListener)}.
-	 *
+	 * processes them and emits events through the model. UI elements are supposed to subscribe and react to the events
+	 * with {@link TMModel#addModelTokensChangedListener(IModelTokensChangedListener)}.
 	 */
 	private static final class TokenizerThread extends Thread {
 		private final TMModel model;
 		private TMState lastState;
 
 		/**
-		 * Creates a new background thread. The thread runs with minimal
-		 * priority.
+		 * Creates a new background thread. The thread runs with minimal priority.
 		 *
-		 * @param name
-		 *            the thread's name
+		 * @param name the thread's name
 		 */
-		public TokenizerThread(String name, TMModel model) {
+		TokenizerThread(String name, TMModel model) {
 			super(name);
 			this.model = model;
 			setPriority(Thread.MIN_PRIORITY);
@@ -84,11 +82,7 @@ public class TMModel implements ITMModel {
 
 		@Override
 		public void run() {
-			if (isInterrupted()) {
-				return;
-			}
-
-			do {
+			while (!isInterrupted() && model.fThread == this) {
 				try {
 					final int toProcess = model.invalidLines.take().intValue();
 					if (model.lines.get(toProcess).isInvalid) {
@@ -104,7 +98,7 @@ public class TMModel implements ITMModel {
 				} catch (InterruptedException e) {
 					interrupt();
 				}
-			} while (!isInterrupted() && model.fThread != null);
+			}
 		}
 
 		/**
@@ -113,7 +107,7 @@ public class TMModel implements ITMModel {
 		 * @param toLineIndexOrNull 0-based
 		 */
 		private void revalidateTokensNow(int startLine, Integer toLineIndexOrNull) {
-			model.buildEventWithCallback(eventBuilder -> {
+			model.buildAndEmitEvent(eventBuilder -> {
 				final int toLineIndex;
 				if (toLineIndexOrNull == null || toLineIndexOrNull >= model.lines.getNumberOfLines()) {
 					toLineIndex = model.lines.getNumberOfLines() - 1;
@@ -171,12 +165,12 @@ public class TMModel implements ITMModel {
 		 * @param startIndex 0-based
 		 * @param endLineIndex 0-based
 		 * @param emitEvents
+		 *
 		 * @return the first line index (0-based) that was NOT processed by this operation
 		 */
 		private int updateTokensInRange(ModelTokensChangedEventBuilder eventBuilder, int startIndex, int endLineIndex) {
-			int stopLineTokenizationAfter = 1000000000; // 1 billion, if a line is
-														// so long, you have other
-														// trouble :).
+			int stopLineTokenizationAfter = 1_000_000_000; // 1 billion, if a line is so long, you have other trouble :)
+
 			// Validate all states up to and including endLineIndex
 			int nextInvalidLineIndex = startIndex;
 			int lineIndex = startIndex;
@@ -256,21 +250,21 @@ public class TMModel implements ITMModel {
 	}
 
 	@Override
-	public void addModelTokensChangedListener(IModelTokensChangedListener listener) {
-		if (this.fThread == null || this.fThread.isInterrupted()) {
-			this.fThread = new TokenizerThread(getClass().getName(), this);
+	public synchronized void addModelTokensChangedListener(IModelTokensChangedListener listener) {
+		listeners.add(listener);
+
+		if (fThread == null || fThread.isInterrupted()) {
+			fThread = new TokenizerThread(getClass().getName(), this);
 		}
-		if (!this.fThread.isAlive()) {
-			this.fThread.start();
-		}
-		if (!listeners.contains(listener)) {
-			listeners.add(listener);
+		if (!fThread.isAlive()) {
+			fThread.start();
 		}
 	}
 
 	@Override
-	public void removeModelTokensChangedListener(IModelTokensChangedListener listener) {
+	public synchronized void removeModelTokensChangedListener(IModelTokensChangedListener listener) {
 		listeners.remove(listener);
+
 		if (listeners.isEmpty()) {
 			// no need to keep tokenizing if no-one cares
 			stop();
@@ -286,22 +280,22 @@ public class TMModel implements ITMModel {
 	/**
 	 * Interrupt the thread.
 	 */
-	private void stop() {
+	private synchronized void stop() {
 		if (fThread == null) {
 			return;
 		}
-		this.fThread.interrupt();
-		this.fThread = null;
+		fThread.interrupt();
+		fThread = null;
 	}
 
-	private void buildEventWithCallback(Consumer<ModelTokensChangedEventBuilder> callback) {
-		ModelTokensChangedEventBuilder eventBuilder = new ModelTokensChangedEventBuilder(this);
+	private void buildAndEmitEvent(final Consumer<ModelTokensChangedEventBuilder> callback) {
+		final ModelTokensChangedEventBuilder eventBuilder = new ModelTokensChangedEventBuilder(this);
 
 		callback.accept(eventBuilder);
 
-		ModelTokensChangedEvent e = eventBuilder.build();
-		if (e != null) {
-			this.emit(e);
+		final ModelTokensChangedEvent event = eventBuilder.build();
+		if (event != null) {
+			emit(event);
 		}
 	}
 
@@ -312,10 +306,12 @@ public class TMModel implements ITMModel {
 	}
 
 	@Override
-	public void forceTokenization(int lineNumber) {
-		this.buildEventWithCallback(eventBuilder ->
-			this.fThread.updateTokensInRange(eventBuilder, lineNumber, lineNumber)
-		);
+	public void forceTokenization(final int lineNumber) {
+		final var tokenizerThread = this.fThread;
+		if (tokenizerThread == null) {
+			return;
+		}
+		buildAndEmitEvent(eventBuilder -> tokenizerThread.updateTokensInRange(eventBuilder, lineNumber, lineNumber));
 	}
 
 	@Override
@@ -335,5 +331,4 @@ public class TMModel implements ITMModel {
 	public IModelLines getLines() {
 		return this.lines;
 	}
-
 }

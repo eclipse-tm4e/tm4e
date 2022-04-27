@@ -14,7 +14,6 @@
  *  - GitHub Inc.: Initial code, written in JavaScript, licensed under MIT license
  *  - Angelo Zerr <angelo.zerr@gmail.com> - translation and adaptation to Java
  */
-
 package org.eclipse.tm4e.core.internal.oniguruma;
 
 import org.joni.Region;
@@ -24,7 +23,7 @@ final class OnigResult {
 	private int indexInScanner;
 	private final Region region;
 
-	OnigResult(Region region, int indexInScanner) {
+	OnigResult(final Region region, final int indexInScanner) {
 		this.region = region;
 		this.indexInScanner = indexInScanner;
 	}
@@ -33,12 +32,12 @@ final class OnigResult {
 		return indexInScanner;
 	}
 
-	void setIndex(int index) {
-		this.indexInScanner = index;
+	void setIndex(final int index) {
+		indexInScanner = index;
 	}
 
-	int locationAt(int index) {
-		int bytes = region.beg[index];
+	int locationAt(final int index) {
+		final int bytes = region.beg[index];
 		if (bytes > 0) {
 			return bytes;
 		}
@@ -49,8 +48,8 @@ final class OnigResult {
 		return region.numRegs;
 	}
 
-	int lengthAt(int index) {
-		int bytes = region.end[index] - region.beg[index];
+	int lengthAt(final int index) {
+		final int bytes = region.end[index] - region.beg[index];
 		if (bytes > 0) {
 			return bytes;
 		}

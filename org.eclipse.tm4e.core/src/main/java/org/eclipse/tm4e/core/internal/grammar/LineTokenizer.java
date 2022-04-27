@@ -74,13 +74,11 @@ final class LineTokenizer {
 	private final LineTokens lineTokens;
 	private int anchorPosition = -1;
 	private boolean stop;
-	private final int lineLength;
 
 	private LineTokenizer(Grammar grammar, OnigString lineText, boolean isFirstLine, int linePos, StackElement stack,
 			LineTokens lineTokens) {
 		this.grammar = grammar;
 		this.lineText = lineText;
-		this.lineLength = lineText.utf8_value.length;
 		this.isFirstLine = isFirstLine;
 		this.linePos = linePos;
 		this.stack = stack;
@@ -112,7 +110,7 @@ final class LineTokenizer {
 		if (r == null) {
 			LOGGER.log(TRACE, " no more matches.");
 			// No match
-			lineTokens.produce(stack, lineLength);
+			lineTokens.produce(stack, lineText.bytesCount);
 			stop = true;
 			return;
 		}
@@ -150,7 +148,7 @@ final class LineTokenizer {
 				// intent was to continue in this state
 				stack = popped;
 
-				lineTokens.produce(stack, lineLength);
+				lineTokens.produce(stack, lineText.bytesCount);
 				stop = true;
 				return;
 			}
@@ -193,7 +191,7 @@ final class LineTokenizer {
 					LOGGER.log(INFO,
 							"[2] - Grammar is in an endless loop - Grammar pushed the same rule without advancing");
 					stack = stack.pop();
-					lineTokens.produce(stack, lineLength);
+					lineTokens.produce(stack, lineText.bytesCount);
 					stop = true;
 					return;
 				}
@@ -222,7 +220,7 @@ final class LineTokenizer {
 					LOGGER.log(INFO,
 							"[3] - Grammar is in an endless loop - Grammar pushed the same rule without advancing");
 					stack = stack.pop();
-					lineTokens.produce(stack, lineLength);
+					lineTokens.produce(stack, lineText.bytesCount);
 					stop = true;
 					return;
 				}
@@ -245,7 +243,7 @@ final class LineTokenizer {
 					LOGGER.log(INFO,
 							"[4] - Grammar is in an endless loop - Grammar is not advancing, nor is it pushing/popping");
 					stack = stack.safePop();
-					lineTokens.produce(stack, lineLength);
+					lineTokens.produce(stack, lineText.bytesCount);
 					stop = true;
 					return;
 				}
@@ -444,7 +442,7 @@ final class LineTokenizer {
 				StackElement stackClone = stack.push(captureRule.retokenizeCapturedWithRuleId, captureIndex.getStart(),
 						null, nameScopesList, contentNameScopesList);
 				tokenizeString(grammar,
-						new OnigString(lineText.string.substring(0, captureIndex.getEnd())),
+						OnigString.of(lineText.string.substring(0, captureIndex.getEnd())),
 						(isFirstLine && captureIndex.getStart() == 0), captureIndex.getStart(), stackClone, lineTokens);
 				continue;
 			}
@@ -500,7 +498,7 @@ final class LineTokenizer {
 					stack = whileRule.stack.pop();
 					break;
 				}
-				if (r.getCaptureIndices() != null && r.getCaptureIndices().length > 0) {
+				if (r.getCaptureIndices().length > 0) {
 					lineTokens.produce(whileRule.stack, r.getCaptureIndices()[0].getStart());
 					handleCaptures(grammar, lineText, isFirstLine, whileRule.stack, lineTokens,
 							whileRule.rule.whileCaptures, r.getCaptureIndices());

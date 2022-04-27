@@ -1,5 +1,5 @@
 /**
- *  Copyright (c) 2015-2017 Angelo ZERR.
+ * Copyright (c) 2015-2017 Angelo ZERR.
  * This program and the accompanying materials are made
  * available under the terms of the Eclipse Public License 2.0
  * which is available at https://www.eclipse.org/legal/epl-2.0/
@@ -11,34 +11,37 @@
  * Initial license: MIT
  *
  * Contributors:
- *  - GitHub Inc.: Initial code, written in JavaScript, licensed under MIT license
- *  - Angelo Zerr <angelo.zerr@gmail.com> - translation and adaptation to Java
+ * - GitHub Inc.: Initial code, written in JavaScript, licensed under MIT license
+ * - Angelo Zerr <angelo.zerr@gmail.com> - translation and adaptation to Java
  */
 package org.eclipse.tm4e.core.internal.oniguruma;
 
-import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
+
+import org.eclipse.jdt.annotation.Nullable;
 
 final class OnigSearcher {
 
 	private final List<OnigRegExp> regExps;
 
-	OnigSearcher(String[] regexps) {
-		this.regExps = Arrays.stream(regexps).map(OnigRegExp::new).collect(Collectors.toList());
+	OnigSearcher(final Collection<String> regExps) {
+		this.regExps = regExps.stream().map(OnigRegExp::new).collect(Collectors.toList());
 	}
 
-	OnigResult search(OnigString source, int charOffset) {
-		int byteOffset = source.convertUtf16OffsetToUtf8(charOffset);
+	@Nullable
+	OnigResult search(final OnigString source, final int charOffset) {
+		final int byteOffset = source.getByteIndexOfChar(charOffset);
 
 		int bestLocation = 0;
 		OnigResult bestResult = null;
 		int index = 0;
 
-		for (OnigRegExp regExp : regExps) {
-			OnigResult result = regExp.search(source, byteOffset);
+		for (final OnigRegExp regExp : regExps) {
+			final OnigResult result = regExp.search(source, byteOffset);
 			if (result != null && result.count() > 0) {
-				int location = result.locationAt(0);
+				final int location = result.locationAt(0);
 
 				if (bestResult == null || location < bestLocation) {
 					bestLocation = location;
@@ -54,5 +57,4 @@ final class OnigSearcher {
 		}
 		return bestResult;
 	}
-
 }

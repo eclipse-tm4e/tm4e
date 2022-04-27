@@ -21,6 +21,7 @@ package org.eclipse.tm4e.core.internal.oniguruma;
 import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 
+import org.eclipse.jdt.annotation.Nullable;
 import org.jcodings.specific.UTF8Encoding;
 
 /**
@@ -30,95 +31,153 @@ import org.jcodings.specific.UTF8Encoding;
  *      github.com/atom/node-oniguruma/blob/master/src/onig-string.cc</a>
  *
  */
-public final class OnigString {
+public abstract class OnigString {
+
+	/**
+	 * Represents a string that contains multi-byte characters
+	 */
+	static final class MultiByteString extends OnigString {
+
+		/**
+		 * For each byte holds the index of the char to which the byte belongs.
+		 * E.g. in case of <code>byteToCharOffsets[100] == 60 && byteToCharOffsets[101] == 60</code>,
+		 * the bytes at indexes 100 and 101 both belong to the same multi-byte character at index 60.
+		 */
+		private int @Nullable [] byteToCharOffsets;
+		private final int lastCharIndex;
+
+		private MultiByteString(final String str, final byte[] bytesUTF8) {
+			super(str, bytesUTF8);
+			lastCharIndex = str.length() - 1;
+		}
+
+		@Override
+		int getByteIndexOfChar(final int charIndex) {
+			if (charIndex == lastCharIndex + 1) {
+				// One off can happen when finding the end of a regexp (it's the right boundary).
+				return lastCharIndex + 1;
+			}
+
+			if (charIndex < 0 || charIndex > lastCharIndex) {
+				throwOutOfBoundsException("Char", charIndex, 0, lastCharIndex);
+			}
+			if (charIndex == 0) {
+				return 0;
+			}
+
+			final int[] byteToCharOffsets = getByteToCharOffsets();
+			int byteIndex = Arrays.binarySearch(byteToCharOffsets, charIndex);
+			while (byteIndex > 0 && byteToCharOffsets[byteIndex - 1] == charIndex) {
+				byteIndex--;
+			}
+			return byteIndex;
+		}
+
+		private int[] getByteToCharOffsets() {
+			int[] offsets = byteToCharOffsets;
+			if (offsets == null) {
+				offsets = new int[bytesCount];
+				int charIndex = 0;
+				int byteIndex = 0;
+				final int maxByteIndex = bytesCount - 1;
+				while (byteIndex <= maxByteIndex) {
+					final int charLenInBytes = UTF8Encoding.INSTANCE.length(bytesUTF8, byteIndex, bytesCount);
+					// same as "Arrays.fill(offsets, byteIndex, byteIndex + charLenInBytes, charIndex)" but faster
+					for (int l = byteIndex + charLenInBytes; byteIndex < l; byteIndex++) {
+						offsets[byteIndex] = charIndex;
+					}
+					charIndex++;
+				}
+				byteToCharOffsets = offsets;
+			}
+			return offsets;
+		}
+
+		@Override
+		int getCharIndexOfByte(final int byteIndex) {
+			if (byteIndex == bytesCount) {
+				// One off can happen when finding the end of a regexp (it's the right boundary).
+				return lastCharIndex + 1;
+			}
+
+			if (byteIndex < 0 || byteIndex >= bytesCount) {
+				throwOutOfBoundsException("Byte", byteIndex, 0, bytesCount - 1);
+			}
+			if (byteIndex == 0) {
+				return 0;
+			}
+
+			return getByteToCharOffsets()[byteIndex];
+		}
+	}
+
+	/**
+	 * Represents a string is only composed of single-byte characters
+	 */
+	static final class SingleByteString extends OnigString {
+
+		private SingleByteString(final String str, final byte[] bytesUTF8) {
+			super(str, bytesUTF8);
+		}
+
+		@Override
+		int getByteIndexOfChar(final int charIndex) {
+			if (charIndex == bytesCount) {
+				// One off can happen when finding the end of a regexp (it's the right boundary).
+				return charIndex;
+			}
+
+			if (charIndex < 0 || charIndex >= bytesCount) {
+				throwOutOfBoundsException("Char", charIndex, 0, bytesCount - 1);
+			}
+			return charIndex;
+		}
+
+		@Override
+		int getCharIndexOfByte(final int byteIndex) {
+			if (byteIndex == bytesCount) {
+				// One off can happen when finding the end of a regexp (it's the right boundary).
+				return byteIndex;
+			}
+
+			if (byteIndex < 0 || byteIndex >= bytesCount) {
+				throwOutOfBoundsException("Byte", byteIndex, 0, bytesCount - 1);
+			}
+			return byteIndex;
+		}
+	}
+
+	public static OnigString of(final String str) {
+		final byte[] bytesUtf8 = str.getBytes(StandardCharsets.UTF_8);
+		if (bytesUtf8.length == str.length()) {
+			return new SingleByteString(str, bytesUtf8);
+		}
+		return new MultiByteString(str, bytesUtf8);
+	}
 
 	public final String string;
-	public final byte[] utf8_value;
 
-	private int[] charsPosFromBytePos;
-	private boolean computedOffsets;
+	public final int bytesCount;
+	final byte[] bytesUTF8;
 
-	public OnigString(String str) {
-		this.string = str;
-		this.utf8_value = str.getBytes(StandardCharsets.UTF_8);
+	private OnigString(final String str, final byte[] bytesUTF8) {
+		string = str;
+		this.bytesUTF8 = bytesUTF8;
+		bytesCount = bytesUTF8.length;
 	}
 
-	int convertUtf16OffsetToUtf8(int posInChars) {
-		if (!computedOffsets) {
-			computeOffsets();
-		}
-		if (charsPosFromBytePos == null) {
-			// Same conditions as code below, but taking into account that the
-			// bytes and chars len are the same.
-			if (posInChars < 0 || this.utf8_value.length == 0 || posInChars > this.utf8_value.length) {
-				throw new ArrayIndexOutOfBoundsException(posInChars);
-			}
-			return posInChars;
-		}
-
-		int[] charsLenInBytes = charsPosFromBytePos;
-		if (posInChars < 0 || charsLenInBytes.length == 0) {
-			throw new ArrayIndexOutOfBoundsException(posInChars);
-		}
-		if (posInChars == 0) {
-			return 0;
-		}
-
-		int last = charsLenInBytes[charsLenInBytes.length - 1];
-		if (last < posInChars) {
-			if (last == posInChars - 1) {
-				return charsLenInBytes.length;
-			}
-			throw new ArrayIndexOutOfBoundsException(posInChars);
-		}
-
-		int index = Arrays.binarySearch(charsLenInBytes, posInChars);
-		while (index > 0) {
-			if (charsLenInBytes[index - 1] == posInChars) {
-				index--;
-			} else {
-				break;
-			}
-		}
-		return index;
+	protected final String throwOutOfBoundsException(final String indexName, final int index, final int minIndex,
+			final int maxIndex) {
+		throw new ArrayIndexOutOfBoundsException(
+				indexName + " index " + index + " is out of range " + minIndex + ".." + maxIndex + " of " + this);
 	}
 
-	int convertUtf8OffsetToUtf16(int posInBytes) {
-		if (!computedOffsets) {
-			computeOffsets();
-		}
-		if (charsPosFromBytePos == null) {
-			return posInBytes;
-		}
-		if (posInBytes < 0) {
-			return posInBytes;
-		}
-		if (posInBytes >= charsPosFromBytePos.length) {
-			//One off can happen when finding the end of a regexp (it's the right boundary).
-			return charsPosFromBytePos[posInBytes - 1] + 1;
-		}
-		return charsPosFromBytePos[posInBytes];
-	}
+	abstract int getByteIndexOfChar(int charIndex);
 
-	private void computeOffsets() {
-		if (this.utf8_value.length != this.string.length()) {
-			charsPosFromBytePos = new int[this.utf8_value.length];
-			int bytesLen = 0;
-			int charsLen = 0;
-			int length = this.utf8_value.length;
-			for (int i = 0; i < length;) {
-				int codeLen = UTF8Encoding.INSTANCE.length(this.utf8_value, i, length);
-				for (int i1 = 0; i1 < codeLen; i1++) {
-					charsPosFromBytePos[bytesLen + i1] = charsLen;
-				}
-				bytesLen += codeLen;
-				i += codeLen;
-				charsLen += 1;
-			}
-			if (bytesLen != this.utf8_value.length) {
-				throw new AssertionError(bytesLen + " != " + this.utf8_value.length);
-			}
-		}
-		computedOffsets = true;
+	abstract int getCharIndexOfByte(int byteIndex);
+
+	@Override
+	public String toString() {
+		return getClass().getSimpleName() + "[string=\"" + string + "\"]";
 	}
 }

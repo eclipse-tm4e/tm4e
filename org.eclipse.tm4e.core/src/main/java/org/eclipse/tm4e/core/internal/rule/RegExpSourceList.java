@@ -82,7 +82,7 @@ final class RegExpSourceList {
 				for (RegExpSource regExpSource : _items) {
 					regexps.add(regExpSource.getSource());
 				}
-				this._cached = new CompiledRule(createOnigScanner(regexps.toArray(String[]::new)), getRules());
+				this._cached = new CompiledRule(new OnigScanner(regexps), getRules());
 			}
 			return this._cached;
 		}
@@ -122,12 +122,9 @@ final class RegExpSourceList {
 		for (RegExpSource regExpSource : _items) {
 			regexps.add(regExpSource.resolveAnchors(allowA, allowG));
 		}
-		return new CompiledRule(createOnigScanner(regexps.toArray(String[]::new)), getRules());
+		return new CompiledRule(new OnigScanner(regexps), getRules());
 	}
 
-	private OnigScanner createOnigScanner(String[] regexps) {
-		return new OnigScanner(regexps);
-	}
 
 	private Integer[] getRules() {
 		Collection<Integer> ruleIds = new ArrayList<>();

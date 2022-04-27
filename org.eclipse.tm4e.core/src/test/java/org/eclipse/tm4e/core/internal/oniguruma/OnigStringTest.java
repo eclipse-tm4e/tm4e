@@ -4,52 +4,131 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import org.junit.jupiter.api.Test;
 
-public class OnigStringTest {
+class OnigStringTest {
 
-	@Test
-	public void testUtf8Utf16Conversions() {
-		OnigString onigString = new OnigString("áé");
-		assertEquals(onigString.utf8_value.length, 4);
-		assertEquals(onigString.string.length(), 2);
-		assertEquals(onigString.convertUtf8OffsetToUtf16(0), 0);
+	private OnigString verifyBasics(final String string, final Class<? extends OnigString> expectedType) {
+		final OnigString onigString = OnigString.of(string);
+		assertInstanceOf(expectedType, onigString);
+		assertEquals(string, onigString.string);
+		assertTrue(onigString.toString().contains(string));
+
+		assertEquals(onigString.bytesCount, onigString.bytesUTF8.length);
+
+		/*
+		 * getByteIndexOfChar tests
+		 */
+		assertThrows(ArrayIndexOutOfBoundsException.class, () -> onigString.getByteIndexOfChar(-1));
+		assertEquals(0, onigString.getByteIndexOfChar(0));
+		if (!string.isEmpty())
+			onigString.getByteIndexOfChar(string.length() - 1); // does not throws exception, because in range
+		onigString.getByteIndexOfChar(string.length()); // does not throws exception, because of internal workaround
+		assertThrows(ArrayIndexOutOfBoundsException.class, () -> onigString.getByteIndexOfChar(string.length() + 1));
+
+		/*
+		 * getCharIndexOfByte tests
+		 */
+		assertThrows(ArrayIndexOutOfBoundsException.class, () -> onigString.getCharIndexOfByte(-1));
+		assertEquals(0, onigString.getCharIndexOfByte(0));
+		if (!string.isEmpty()) {
+			// does not throws exception, because in range
+			assertEquals(string.length() - 1, onigString.getCharIndexOfByte(onigString.bytesCount - 1));
+		}
+		// does not throws exception, because of internal workaround
+		assertEquals(string.length(), onigString.getCharIndexOfByte(onigString.bytesCount));
+
+		assertThrows(ArrayIndexOutOfBoundsException.class,
+				() -> onigString.getCharIndexOfByte(onigString.bytesCount + 1));
+
+		return onigString;
 	}
 
 	@Test
-	public void testUtf8Utf16Conversions2() {
+	void testEmptyStrings() {
+		String string = "";
+		OnigString onigString = verifyBasics(string, OnigString.SingleByteString.class);
 
-        String string = "myááçóúôõaab";
-        OnigString utf8WithCharLen = new OnigString(string);
+		assertEquals(0, onigString.bytesCount);
+	}
 
-        assertEquals(0, utf8WithCharLen.convertUtf16OffsetToUtf8(0));
-        assertEquals(1, utf8WithCharLen.convertUtf16OffsetToUtf8(1));
-        assertEquals(2, utf8WithCharLen.convertUtf16OffsetToUtf8(2));
-        assertEquals(4, utf8WithCharLen.convertUtf16OffsetToUtf8(3));
-        assertEquals(6, utf8WithCharLen.convertUtf16OffsetToUtf8(4));
-        assertEquals(8, utf8WithCharLen.convertUtf16OffsetToUtf8(5));
-        assertEquals(10, utf8WithCharLen.convertUtf16OffsetToUtf8(6));
-        assertEquals(12, utf8WithCharLen.convertUtf16OffsetToUtf8(7));
-        try {
-            utf8WithCharLen.convertUtf16OffsetToUtf8(55);
-            fail("Expected error");
-        } catch (ArrayIndexOutOfBoundsException e) {
-        }
+	@Test
+	void testSingleBytesStrings() {
+		String string = "ab";
+		OnigString onigString = verifyBasics(string, OnigString.SingleByteString.class);
 
-        assertEquals(0, utf8WithCharLen.convertUtf8OffsetToUtf16(0));
-        assertEquals(1, utf8WithCharLen.convertUtf8OffsetToUtf16(1));
-        assertEquals(2, utf8WithCharLen.convertUtf8OffsetToUtf16(2));
-        assertEquals(2, utf8WithCharLen.convertUtf8OffsetToUtf16(3));
-        assertEquals(3, utf8WithCharLen.convertUtf8OffsetToUtf16(4));
-        assertEquals(3, utf8WithCharLen.convertUtf8OffsetToUtf16(5));
-        assertEquals(4, utf8WithCharLen.convertUtf8OffsetToUtf16(6));
-        assertEquals(4, utf8WithCharLen.convertUtf8OffsetToUtf16(7));
-        assertEquals(5, utf8WithCharLen.convertUtf8OffsetToUtf16(8));
-        assertEquals(6, utf8WithCharLen.convertUtf8OffsetToUtf16(10));
-        assertEquals(7, utf8WithCharLen.convertUtf8OffsetToUtf16(12));
-        try {
-            utf8WithCharLen.convertUtf8OffsetToUtf16(55);
-            fail("Expected error");
-        } catch (ArrayIndexOutOfBoundsException e) {
-        }
+		assertEquals(2, onigString.bytesCount);
 
+		/*
+		 * getByteIndexOfChar tests
+		 */
+		assertEquals(1, onigString.getByteIndexOfChar(1));
+		assertEquals(string.length() - 1, onigString.getByteIndexOfChar(string.length() - 1));
+
+		/*
+		 * getCharIndexOfByte tests
+		 */
+		assertEquals(1, onigString.getCharIndexOfByte(1)); // b
+		assertEquals(2, onigString.getCharIndexOfByte(2)); // does not throws exception, because of internal workaround
+		assertThrows(ArrayIndexOutOfBoundsException.class, () -> onigString.getCharIndexOfByte(3));
+	}
+
+	@Test
+	void testMultiByteString() {
+		String string = "áé";
+		OnigString onigString = verifyBasics(string, OnigString.MultiByteString.class);
+
+		assertEquals(4, onigString.bytesCount);
+
+		/*
+		 * getByteIndexOfChar tests
+		 */
+		assertEquals(2, onigString.getByteIndexOfChar(1));
+
+		/*
+		 * getCharIndexOfByte tests
+		 */
+		assertEquals(0, onigString.getCharIndexOfByte(1)); // á
+		assertEquals(1, onigString.getCharIndexOfByte(2)); // é
+		assertEquals(1, onigString.getCharIndexOfByte(3)); // é
+		assertEquals(2, onigString.getCharIndexOfByte(4)); // this is an internal workaround
+		assertThrows(ArrayIndexOutOfBoundsException.class, () -> onigString.getCharIndexOfByte(5));
+
+	}
+
+	@Test
+	void testMixedMultiByteString() {
+		String string = "myááçóúôõaab";
+		OnigString onigString = verifyBasics(string, OnigString.MultiByteString.class);
+
+		assertEquals(19, onigString.bytesCount);
+
+		/*
+		 * getByteIndexOfChar tests
+		 */
+		assertEquals(1, onigString.getByteIndexOfChar(1));
+		assertEquals(2, onigString.getByteIndexOfChar(2));
+		assertEquals(4, onigString.getByteIndexOfChar(3));
+		assertEquals(6, onigString.getByteIndexOfChar(4));
+		assertEquals(8, onigString.getByteIndexOfChar(5));
+		assertEquals(10, onigString.getByteIndexOfChar(6));
+		assertEquals(12, onigString.getByteIndexOfChar(7));
+
+		/*
+		 * getCharIndexOfByte tests
+		 */
+		assertEquals(1, onigString.getCharIndexOfByte(1));
+		assertEquals(2, onigString.getCharIndexOfByte(2));
+		assertEquals(2, onigString.getCharIndexOfByte(3));
+		assertEquals(3, onigString.getCharIndexOfByte(4));
+		assertEquals(3, onigString.getCharIndexOfByte(5));
+		assertEquals(4, onigString.getCharIndexOfByte(6));
+		assertEquals(4, onigString.getCharIndexOfByte(7));
+		assertEquals(5, onigString.getCharIndexOfByte(8));
+		assertEquals(6, onigString.getCharIndexOfByte(10));
+		assertEquals(7, onigString.getCharIndexOfByte(12));
+		assertEquals(10, onigString.getCharIndexOfByte(17)); // a
+		assertEquals(11, onigString.getCharIndexOfByte(18)); // b
+
+		assertEquals(12, onigString.getCharIndexOfByte(19)); // this is an internal workaround
+		assertThrows(ArrayIndexOutOfBoundsException.class, () -> onigString.getCharIndexOfByte(20));
 	}
 }

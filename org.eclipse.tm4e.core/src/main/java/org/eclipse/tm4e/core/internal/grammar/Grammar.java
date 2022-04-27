@@ -227,7 +227,7 @@ public final class Grammar implements IGrammar, IRuleFactoryHelper {
 			// Only add \n if the passed lineText didn't have it.
 			lineText += '\n';
 		}
-		OnigString onigLineText = new OnigString(lineText);
+		OnigString onigLineText = OnigString.of(lineText);
 		int lineLength = lineText.length();
 		LineTokens lineTokens = new LineTokens(emitBinaryTokens, lineText);
 		StackElement nextState = LineTokenizer.tokenizeString(this, onigLineText, isFirstLine, 0, prevState,

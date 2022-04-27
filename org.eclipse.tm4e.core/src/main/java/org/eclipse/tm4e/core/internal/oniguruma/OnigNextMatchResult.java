@@ -16,34 +16,69 @@
  */
 package org.eclipse.tm4e.core.internal.oniguruma;
 
+import java.util.Arrays;
+
+import org.eclipse.jdt.annotation.Nullable;
+
 public final class OnigNextMatchResult {
 
 	private final int index;
-
 	private final OnigCaptureIndex[] captureIndices;
 
-	OnigNextMatchResult(OnigResult result, OnigString source) {
+	OnigNextMatchResult(final OnigResult result, final OnigString source) {
 		this.index = result.getIndex();
-		this.captureIndices = captureIndicesForMatch(result, source);
+		this.captureIndices = captureIndicesOfMatch(result, source);
 	}
 
-	public int getIndex() {
-		return index;
+	private OnigCaptureIndex[] captureIndicesOfMatch(final OnigResult result, final OnigString source) {
+		final int resultCount = result.count();
+		final var captures = new OnigCaptureIndex[resultCount];
+		for (int i = 0; i < resultCount; i++) {
+			final int loc = result.locationAt(i);
+			final int captureStart = source.getCharIndexOfByte(loc);
+			final int captureEnd = source.getCharIndexOfByte(loc + result.lengthAt(i));
+			captures[i] = new OnigCaptureIndex(i, captureStart, captureEnd);
+		}
+		return captures;
+	}
+
+	@Override
+	public boolean equals(@Nullable final Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null || getClass() != obj.getClass())
+			return false;
+		final var other = (OnigNextMatchResult) obj;
+		return index == other.index
+				&& Arrays.equals(captureIndices, other.captureIndices);
 	}
 
 	public OnigCaptureIndex[] getCaptureIndices() {
 		return captureIndices;
 	}
 
+	public int getIndex() {
+		return index;
+	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + index;
+		result = prime * result + Arrays.hashCode(captureIndices);
+		return result;
+	}
+
 	@Override
 	public String toString() {
-		final StringBuilder result = new StringBuilder("{\n");
+		final var result = new StringBuilder("{\n");
 		result.append("  \"index\": ");
 		result.append(getIndex());
 		result.append(",\n");
 		result.append("  \"captureIndices\": [\n");
 		int i = 0;
-		for (OnigCaptureIndex captureIndex : getCaptureIndices()) {
+		for (final OnigCaptureIndex captureIndex : getCaptureIndices()) {
 			if (i > 0) {
 				result.append(",\n");
 			}
@@ -55,16 +90,5 @@ public final class OnigNextMatchResult {
 		result.append("  ]\n");
 		result.append("}");
 		return result.toString();
-	}
-
-	private static OnigCaptureIndex[] captureIndicesForMatch(OnigResult result, OnigString source) {
-		int resultCount = result.count();
-		OnigCaptureIndex[] captures = new OnigCaptureIndex[resultCount];
-		for (int index = 0; index < resultCount; index++) {
-			int captureStart = source.convertUtf8OffsetToUtf16(result.locationAt(index));
-			int captureEnd = source.convertUtf8OffsetToUtf16(result.locationAt(index) + result.lengthAt(index));
-			captures[index] = new OnigCaptureIndex(index, captureStart, captureEnd);
-		}
-		return captures;
 	}
 }

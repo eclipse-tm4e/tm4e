@@ -1,5 +1,5 @@
 /**
- *  Copyright (c) 2015-2017 Angelo ZERR.
+ * Copyright (c) 2015-2017 Angelo ZERR.
  * This program and the accompanying materials are made
  * available under the terms of the Eclipse Public License 2.0
  * which is available at https://www.eclipse.org/legal/epl-2.0/
@@ -11,30 +11,35 @@
  * Initial license: MIT
  *
  * Contributors:
- *  - GitHub Inc.: Initial code, written in JavaScript, licensed under MIT license
- *  - Angelo Zerr <angelo.zerr@gmail.com> - translation and adaptation to Java
+ * - GitHub Inc.: Initial code, written in JavaScript, licensed under MIT license
+ * - Angelo Zerr <angelo.zerr@gmail.com> - translation and adaptation to Java
  */
-
 package org.eclipse.tm4e.core.internal.oniguruma;
+
+import java.util.Collection;
+
+import org.eclipse.jdt.annotation.Nullable;
 
 public final class OnigScanner {
 
 	private final OnigSearcher searcher;
 
-	public OnigScanner(String[] regexps) {
-		this.searcher = new OnigSearcher(regexps);
+	public OnigScanner(final Collection<String> regexps) {
+		searcher = new OnigSearcher(regexps);
 	}
 
-	public OnigNextMatchResult findNextMatchSync(OnigString source, int charOffset) {
-		OnigResult bestResult = searcher.search(source, charOffset);
+	@Nullable
+	public OnigNextMatchResult findNextMatchSync(final OnigString source, final int charOffset) {
+		final OnigResult bestResult = searcher.search(source, charOffset);
 		if (bestResult != null) {
 			return new OnigNextMatchResult(bestResult, source);
 		}
 		return null;
 	}
 
-	OnigNextMatchResult findNextMatchSync(String lin, int pos) {
-		return findNextMatchSync(new OnigString(lin), pos);
+	@Nullable
+	OnigNextMatchResult findNextMatchSync(final String lin, final int pos) {
+		return findNextMatchSync(OnigString.of(lin), pos);
 	}
 
 }

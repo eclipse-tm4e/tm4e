@@ -21,6 +21,7 @@ package org.eclipse.tm4e.core.internal.oniguruma;
 
 import java.nio.charset.StandardCharsets;
 
+import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.tm4e.core.TMException;
 import org.jcodings.specific.UTF8Encoding;
 import org.joni.Matcher;
@@ -38,38 +39,47 @@ import org.joni.exception.SyntaxException;
  */
 final class OnigRegExp {
 
+	@Nullable
 	private OnigString lastSearchString;
+
 	private int lastSearchPosition = -1;
+
+	@Nullable
 	private OnigResult lastSearchResult;
+
 	private final Regex regex;
 
-	OnigRegExp(String source) {
-		byte[] pattern = source.getBytes(StandardCharsets.UTF_8);
+	OnigRegExp(final String source) {
+		final byte[] pattern = source.getBytes(StandardCharsets.UTF_8);
 		try {
-			this.regex = new Regex(pattern, 0, pattern.length, Option.CAPTURE_GROUP, UTF8Encoding.INSTANCE,
-					Syntax.DEFAULT, WarnCallback.DEFAULT);
+			regex = new Regex(pattern, 0, pattern.length, Option.CAPTURE_GROUP, UTF8Encoding.INSTANCE, Syntax.DEFAULT,
+					WarnCallback.DEFAULT);
 		} catch (SyntaxException ex) {
 			throw new TMException("Parsing regex pattern \"" + source + "\" failed with " + ex, ex);
 		}
 	}
 
-	OnigResult search(OnigString str, int position) {
-		if (lastSearchString == str && lastSearchPosition <= position &&
-			(lastSearchResult == null || lastSearchResult.locationAt(0) >= position)) {
-			return lastSearchResult;
+	@Nullable
+	OnigResult search(final OnigString str, final int position) {
+		final OnigResult theLastSearchResult = lastSearchResult;
+		if (lastSearchString == str
+				&& lastSearchPosition <= position
+				&& (theLastSearchResult == null || theLastSearchResult.locationAt(0) >= position)) {
+			return theLastSearchResult;
 		}
 
 		lastSearchString = str;
 		lastSearchPosition = position;
-		lastSearchResult = search(str.utf8_value, position, str.utf8_value.length);
+		lastSearchResult = search(str.bytesUTF8, position, str.bytesCount);
 		return lastSearchResult;
 	}
 
-	private OnigResult search(byte[] data, int position, int end) {
-		Matcher matcher = regex.matcher(data);
-		int status = matcher.search(position, end, Option.DEFAULT);
+	@Nullable
+	private OnigResult search(final byte[] data, final int position, final int end) {
+		final Matcher matcher = regex.matcher(data);
+		final int status = matcher.search(position, end, Option.DEFAULT);
 		if (status != Matcher.FAILED) {
-			Region region = matcher.getEagerRegion();
+			final Region region = matcher.getEagerRegion();
 			return new OnigResult(region, -1);
 		}
 		return null;

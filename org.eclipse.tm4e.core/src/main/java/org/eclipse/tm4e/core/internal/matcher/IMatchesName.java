@@ -1,5 +1,5 @@
 /**
- *  Copyright (c) 2015-2017 Angelo ZERR.
+ * Copyright (c) 2015-2017 Angelo ZERR.
  * This program and the accompanying materials are made
  * available under the terms of the Eclipse Public License 2.0
  * which is available at https://www.eclipse.org/legal/epl-2.0/
@@ -11,30 +11,30 @@
  * Initial license: MIT
  *
  * Contributors:
- *  - Microsoft Corporation: Initial code, written in TypeScript, licensed under MIT license
- *  - Angelo Zerr <angelo.zerr@gmail.com> - translation and adaptation to Java
+ * - Microsoft Corporation: Initial code, written in TypeScript, licensed under MIT license
+ * - Angelo Zerr <angelo.zerr@gmail.com> - translation and adaptation to Java
  */
 package org.eclipse.tm4e.core.internal.matcher;
 
 import java.util.Collection;
 import java.util.List;
-import java.util.concurrent.atomic.AtomicInteger;
+
+import org.eclipse.jdt.annotation.Nullable;
 
 interface IMatchesName<T> {
 
 	IMatchesName<List<String>> NAME_MATCHER = new IMatchesName<>() {
 
 		@Override
-		public boolean match(Collection<String> identifers, List<String> scopes) {
+		public boolean match(final Collection<String> identifers, final List<String> scopes) {
 			if (scopes.size() < identifers.size()) {
 				return false;
 			}
-			AtomicInteger lastIndex = new AtomicInteger();
-			// every
+			final int[] lastIndex = { 0 };
 			return identifers.stream().allMatch(identifier -> {
-				for (int i = lastIndex.get(); i < scopes.size(); i++) {
+				for (int i = lastIndex[0]; i < scopes.size(); i++) {
 					if (scopesAreMatching(scopes.get(i), identifier)) {
-						lastIndex.incrementAndGet();
+						lastIndex[0]++;
 						return true;
 					}
 				}
@@ -42,7 +42,7 @@ interface IMatchesName<T> {
 			});
 		}
 
-		private boolean scopesAreMatching(String thisScopeName, String scopeName) {
+		private boolean scopesAreMatching(@Nullable final String thisScopeName, final String scopeName) {
 			if (thisScopeName == null) {
 				return false;
 			}
@@ -50,12 +50,11 @@ interface IMatchesName<T> {
 				return true;
 			}
 			int len = scopeName.length();
-			return thisScopeName.length() > len && thisScopeName.substring(0, len).equals(scopeName)
+			return thisScopeName.length() > len
+					&& thisScopeName.substring(0, len).equals(scopeName)
 					&& thisScopeName.charAt(len) == '.';
 		}
-
 	};
 
 	boolean match(Collection<String> names, T scopes);
-
 }

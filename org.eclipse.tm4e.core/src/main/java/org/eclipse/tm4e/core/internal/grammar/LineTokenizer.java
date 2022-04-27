@@ -24,8 +24,6 @@ import java.util.List;
 
 import org.eclipse.tm4e.core.grammar.Injection;
 import org.eclipse.tm4e.core.grammar.StackElement;
-import org.eclipse.tm4e.core.internal.matcher.IMatchInjectionsResult;
-import org.eclipse.tm4e.core.internal.matcher.IMatchResult;
 import org.eclipse.tm4e.core.internal.oniguruma.OnigCaptureIndex;
 import org.eclipse.tm4e.core.internal.oniguruma.OnigNextMatchResult;
 import org.eclipse.tm4e.core.internal.oniguruma.OnigString;
@@ -39,6 +37,15 @@ import org.eclipse.tm4e.core.internal.rule.Rule;
 final class LineTokenizer {
 
 	private static final Logger LOGGER = System.getLogger(LineTokenizer.class.getName());
+
+	private interface IMatchResult {
+		OnigCaptureIndex[] getCaptureIndices();
+		int getMatchedRuleId();
+	}
+
+	private interface IMatchInjectionsResult extends IMatchResult {
+		boolean isPriorityMatch();
+	}
 
 	private static final class WhileStack {
 

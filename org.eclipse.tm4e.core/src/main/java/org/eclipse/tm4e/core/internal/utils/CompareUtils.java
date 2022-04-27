@@ -2,9 +2,11 @@ package org.eclipse.tm4e.core.internal.utils;
 
 import java.util.List;
 
+import org.eclipse.jdt.annotation.Nullable;
+
 public final class CompareUtils {
 
-	public static int strcmp(String a, String b) {
+	public static int strcmp(@Nullable final String a, @Nullable final String b) {
 		if (a == null && b == null) {
 			return 0;
 		}
@@ -14,23 +16,16 @@ public final class CompareUtils {
 		if (b == null) {
 			return 1;
 		}
-//		if (a < b) {
-//			return -1;
-//		}
-//		if (a > b) {
-//			return 1;
-//		}
-//		return 0;
 		int result = a.compareTo(b);
-		if (result < 0 ) {
+		if (result < 0) {
 			return -1;
-		}  else if (result > 0 ) {
+		} else if (result > 0) {
 			return 1;
-		} 
+		}
 		return 0;
 	}
 
-	public static int strArrCmp(List<String> a, List<String>  b) {
+	public static int strArrCmp(@Nullable final List<String> a, @Nullable final List<String> b) {
 		if (a == null && b == null) {
 			return 0;
 		}
@@ -53,5 +48,4 @@ public final class CompareUtils {
 		}
 		return len1 - len2;
 	}
-
 }

@@ -61,6 +61,15 @@ public class GrammarTest {
 	}
 
 	@Test
+	public void testCanOverwriteFontStyleWithStrikethrough() {
+		int value = StackElementMetadata.set(0, 1, StandardTokenType.RegEx, FontStyle.Strikethrough, 101, 102);
+		assertEquals(value, 1, StandardTokenType.RegEx, FontStyle.Strikethrough, 101, 102);
+
+		value = StackElementMetadata.set(value, 0, StandardTokenType.Other, FontStyle.None, 0, 0);
+		assertEquals(value, 1, StandardTokenType.RegEx, FontStyle.None, 101, 102);
+	}
+
+	@Test
 	public void testCanOverwriteForeground() {
 		int value = StackElementMetadata.set(0, 1, StandardTokenType.RegEx, FontStyle.Underline | FontStyle.Bold, 101,
 				102);

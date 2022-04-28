@@ -101,6 +101,9 @@ public class Theme {
 					case "underline":
 						fontStyle = fontStyle | FontStyle.Underline;
 						break;
+					case "strikethrough":
+						fontStyle = fontStyle | FontStyle.Strikethrough;
+						break;
 					}
 				}
 			}

@@ -80,7 +80,7 @@ public final class RegexSource {
 		}
 		final OnigCaptureIndex capture = captureIndices.length > index ? captureIndices[index] : null;
 		if (capture != null) {
-			String result = captureSource.substring(capture.getStart(), capture.getEnd());
+			String result = captureSource.substring(capture.start, capture.end);
 			// Remove leading dots that would make the selector invalid
 			while (!result.isEmpty() && result.charAt(0) == '.') {
 				result = result.substring(1);

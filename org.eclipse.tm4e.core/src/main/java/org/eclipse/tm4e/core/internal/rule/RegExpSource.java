@@ -107,7 +107,7 @@ final class RegExpSource {
 	String resolveBackReferences(final String lineText, final OnigCaptureIndex[] captureIndices) {
 		try {
 			final var capturedValues = Arrays.stream(captureIndices)
-					.map(capture -> lineText.substring(capture.getStart(), capture.getEnd()))
+					.map(capture -> lineText.substring(capture.start, capture.end))
 					.collect(Collectors.toList());
 			final var m = BACK_REFERENCING_END.matcher(this.source);
 			final var sb = new StringBuilder();

@@ -20,9 +20,9 @@ import org.eclipse.jdt.annotation.Nullable;
 
 public final class OnigCaptureIndex {
 
-	private final int index;
-	private final int start;
-	private final int end;
+	public final int index;
+	public final int start;
+	public final int end;
 
 	OnigCaptureIndex(final int index, int start, final int end) {
 		this.index = index;
@@ -42,20 +42,8 @@ public final class OnigCaptureIndex {
 				&& start == other.start;
 	}
 
-	public int getEnd() {
-		return end;
-	}
-
-	public int getIndex() {
-		return index;
-	}
-
 	public int getLength() {
 		return end - start;
-	}
-
-	public int getStart() {
-		return start;
 	}
 
 	@Override

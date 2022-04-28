@@ -22,6 +22,12 @@ import org.eclipse.tm4e.core.theme.ThemeTrieElementRule;
 
 import com.google.common.base.Splitter;
 
+/**
+ * @see <a href=
+ *      "https://github.com/microsoft/vscode-textmate/blob/9157c7f869219dbaf9a5a5607f099c00fe694a29/src/grammar.ts#L1209">
+ *      https://github.com/Microsoft/vscode-textmate/blob/main/src/grammar.ts</a>
+ *
+ */
 public final class ScopeListElement {
 
 	private static final Splitter BY_SPACE_SPLITTER = Splitter.on(' ');
@@ -31,54 +37,74 @@ public final class ScopeListElement {
 	private final String scope;
 	final int metadata;
 
-	public ScopeListElement(@Nullable ScopeListElement parent, String scope, int metadata) {
+	public ScopeListElement(@Nullable final ScopeListElement parent, final String scope, final int metadata) {
 		this.parent = parent;
 		this.scope = scope;
 		this.metadata = metadata;
 	}
 
-	private static boolean equals(@Nullable ScopeListElement a, @Nullable ScopeListElement b) {
+	private static boolean structuralEquals(@Nullable ScopeListElement a, @Nullable ScopeListElement b) {
+		do {
+			if (a == b) {
+				return true;
+			}
+
+			if (a == null && b == null) {
+				// End of list reached for both
+				return true;
+			}
+
+			if (a == null || b == null) {
+				// End of list reached only for one
+				return false;
+			}
+
+			if (a.scope != b.scope || a.metadata != b.metadata) {
+				return false;
+			}
+
+			// Go to previous pair
+			a = a.parent;
+			b = b.parent;
+		} while (true);
+	}
+
+	private static boolean equals(@Nullable final ScopeListElement a, @Nullable final ScopeListElement b) {
 		if (a == b) {
 			return true;
 		}
 		if (a == null || b == null) {
 			return false;
 		}
-		return Objects.equals(a.scope, b.scope) && a.metadata == b.metadata && equals(a.parent, b.parent);
+		return structuralEquals(a, b);
 	}
 
 	@Override
-	public boolean equals(@Nullable Object other) {
-		if (other == this) {
-			return true;
-		}
-		if (other == null) {
+	public boolean equals(@Nullable final Object other) {
+		if (other == null || other.getClass() != ScopeListElement.class) {
 			return false;
 		}
-		if (!(other instanceof ScopeListElement)) {
-			return false;
-		}
-		return ScopeListElement.equals(this, (ScopeListElement)other);
+		return equals(this, (ScopeListElement) other);
 	}
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(scope, metadata, parent);
+		return Objects.hash(parent, scope, metadata);
 	}
 
-	private static boolean matchesScope(String scope, String selector, String selectorWithDot) {
+	private static boolean matchesScope(final String scope, final String selector, final String selectorWithDot) {
 		return (selector.equals(scope) || scope.startsWith(selectorWithDot));
 	}
 
-	private static boolean matches(@Nullable ScopeListElement target, List<String> parentScopes) {
+	private static boolean matches(@Nullable ScopeListElement target, final List<String> parentScopes) {
 		if (parentScopes == null) {
 			return true;
 		}
 
-		int len = parentScopes.size();
+		final int len = parentScopes.size();
 		int index = 0;
 		String selector = parentScopes.get(index);
-		String selectorWithDot = selector + ".";
+		String selectorWithDot = selector + '.';
 
 		while (target != null) {
 			if (matchesScope(target.scope, selector, selectorWithDot)) {
@@ -95,7 +121,8 @@ public final class ScopeListElement {
 		return false;
 	}
 
-	public static int mergeMetadata(int metadata, @Nullable ScopeListElement scopesList, ScopeMetadata source) {
+	public static int mergeMetadata(final int metadata, @Nullable final ScopeListElement scopesList,
+			final ScopeMetadata source) {
 		if (source == null) {
 			return metadata;
 		}
@@ -106,7 +133,7 @@ public final class ScopeListElement {
 
 		if (source.themeData != null) {
 			// Find the first themeData that matches
-			for (ThemeTrieElementRule themeData : source.themeData) {
+			for (final ThemeTrieElementRule themeData : source.themeData) {
 				if (matches(scopesList, themeData.parentScopes)) {
 					fontStyle = themeData.fontStyle;
 					foreground = themeData.foreground;
@@ -120,24 +147,26 @@ public final class ScopeListElement {
 				background);
 	}
 
-	private static ScopeListElement push(ScopeListElement target, Grammar grammar, Iterable<String> scopes) {
-		for (String scope : scopes) {
-			ScopeMetadata rawMetadata = grammar.getMetadataForScope(scope);
-			int metadata = ScopeListElement.mergeMetadata(target.metadata, target, rawMetadata);
+	private static ScopeListElement push(ScopeListElement target, final Grammar grammar,
+			final Iterable<String> scopes) {
+		for (final String scope : scopes) {
+			final var rawMetadata = grammar.getMetadataForScope(scope);
+			final int metadata = ScopeListElement.mergeMetadata(target.metadata, target, rawMetadata);
 			target = new ScopeListElement(target, scope, metadata);
 		}
 		return target;
 	}
 
-	ScopeListElement push(Grammar grammar, @Nullable String scope) {
+	ScopeListElement push(final Grammar grammar, @Nullable final String scope) {
 		if (scope == null) {
 			return this;
 		}
+
 		return ScopeListElement.push(this, grammar, BY_SPACE_SPLITTER.split(scope));
 	}
 
-	private static List<String> generateScopes(ScopeListElement scopesList) {
-		List<String> result = new ArrayList<>();
+	private static List<String> generateScopes(@Nullable ScopeListElement scopesList) {
+		final var result = new ArrayList<String>();
 		while (scopesList != null) {
 			result.add(scopesList.scope);
 			scopesList = scopesList.parent;

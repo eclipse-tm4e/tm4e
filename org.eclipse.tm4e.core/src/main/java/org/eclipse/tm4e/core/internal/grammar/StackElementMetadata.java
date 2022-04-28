@@ -27,13 +27,10 @@ public final class StackElementMetadata {
 	private StackElementMetadata() {
 	}
 
-	static String toBinaryStr(int metadata) {
-		/*
-		 * let r = metadata.toString(2); while (r.length < 32) { r = '0' + r; }
-		 * return r;
-		 */
-		// TODO!!!
-		return null;
+	static String toBinaryStr(final int metadata) {
+		return new StringBuilder(Integer.toBinaryString(metadata))
+				.insert(0, "0".repeat(Integer.numberOfLeadingZeros(metadata)))
+				.toString();
 	}
 
 	static int getLanguageId(int metadata) {

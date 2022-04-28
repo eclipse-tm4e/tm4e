@@ -50,9 +50,9 @@ import org.eclipse.tm4e.core.theme.ThemeTrieElementRule;
 /**
  * TextMate grammar implementation.
  *
- * @see <a href="https://github.com/Microsoft/vscode-textmate/blob/master/src/grammar.ts">
+ * @see <a href=
+ *      "https://github.com/microsoft/vscode-textmate/blob/9157c7f869219dbaf9a5a5607f099c00fe694a29/src/grammar.ts#L459">
  *      github.com/Microsoft/vscode-textmate/blob/master/src/grammar.ts</a>
- *
  */
 public final class Grammar implements IGrammar, IRuleFactoryHelper {
 
@@ -198,7 +198,7 @@ public final class Grammar implements IGrammar, IRuleFactoryHelper {
 	}
 
 	@SuppressWarnings("unchecked")
-	private <T> T tokenize(String lineText, StackElement prevState, boolean emitBinaryTokens) {
+	private <T> T tokenize(String lineText, @Nullable StackElement prevState, boolean emitBinaryTokens) {
 		if (this.rootId == -1) {
 			this.rootId = RuleFactory.getCompiledRuleId(this.rawGrammar.getRepository().getSelf(), this,
 					this.rawGrammar.getRepository());
@@ -219,7 +219,7 @@ public final class Grammar implements IGrammar, IRuleFactoryHelper {
 
 			ScopeListElement scopeList = new ScopeListElement(null, rootScopeName, rootMetadata);
 
-			prevState = new StackElement(null, this.rootId, -1, null, scopeList, scopeList);
+			prevState = new StackElement(null, this.rootId, -1, -1, false, null, scopeList, scopeList);
 		} else {
 			isFirstLine = false;
 			prevState.reset();

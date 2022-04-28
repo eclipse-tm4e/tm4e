@@ -35,6 +35,11 @@ import org.eclipse.tm4e.core.internal.rule.CompiledRule;
 import org.eclipse.tm4e.core.internal.rule.MatchRule;
 import org.eclipse.tm4e.core.internal.rule.Rule;
 
+/**
+ * @see <a href=
+ *      "https://github.com/microsoft/vscode-textmate/blob/9157c7f869219dbaf9a5a5607f099c00fe694a29/src/grammar.ts#L1028">
+ *      github.com/Microsoft/vscode-textmate/blob/master/src/grammar.ts</a>
+ */
 final class LineTokenizer {
 
 	private static final Logger LOGGER = System.getLogger(LineTokenizer.class.getName());
@@ -145,8 +150,9 @@ final class LineTokenizer {
 			lineTokens.produce(stack, captureIndices[0].getEnd());
 
 			// pop
-			StackElement popped = stack;
+			final var popped = stack;
 			stack = stack.pop();
+			anchorPosition = popped.getAnchorPos();
 
 			if (!hasAdvanced && popped.getEnterPos() == linePos) {
 				// Grammar pushed & popped a rule without advancing
@@ -171,7 +177,8 @@ final class LineTokenizer {
 			// push it on the stack rule
 			String scopeName = rule.getName(lineText.string, captureIndices);
 			ScopeListElement nameScopesList = stack.contentNameScopesList.push(grammar, scopeName);
-			stack = stack.push(matchedRuleId, linePos, null, nameScopesList, nameScopesList);
+			stack = stack.push(matchedRuleId, linePos, anchorPosition,
+					captureIndices[0].getEnd() == lineText.bytesCount, null, nameScopesList, nameScopesList);
 
 			if (rule instanceof BeginEndRule) {
 				BeginEndRule pushedRule = (BeginEndRule) rule;
@@ -450,11 +457,11 @@ final class LineTokenizer {
 				ScopeListElement contentNameScopesList = nameScopesList.push(grammar, contentName);
 
 				// the capture requires additional matching
-				StackElement stackClone = stack.push(retokenizeCapturedWithRuleId, captureIndex.getStart(), null,
-						nameScopesList, contentNameScopesList);
-				tokenizeString(grammar,
-						OnigString.of(lineText.string.substring(0, captureIndex.getEnd())),
-						(isFirstLine && captureIndex.getStart() == 0), captureIndex.getStart(), stackClone, lineTokens);
+				StackElement stackClone = stack.push(retokenizeCapturedWithRuleId, captureIndex.getStart(), -1, false,
+						null, nameScopesList, contentNameScopesList);
+				final var onigSubStr = OnigString.of(lineText.string.substring(0, captureIndex.getEnd()));
+				tokenizeString(grammar, onigSubStr, (isFirstLine && captureIndex.getStart() == 0),
+						captureIndex.getStart(), stackClone, lineTokens);
 				continue;
 			}
 
@@ -485,7 +492,7 @@ final class LineTokenizer {
 	 */
 	private WhileCheckResult checkWhileConditions(Grammar grammar, OnigString lineText, boolean isFirstLine,
 			int linePos, StackElement stack, LineTokens lineTokens) {
-		int currentanchorPosition = -1;
+		int currentanchorPosition = stack.beginRuleCapturedEOL ? 0 : -1;
 		List<WhileStack> whileRules = new ArrayList<>();
 		for (StackElement node = stack; node != null; node = node.pop()) {
 			Rule nodeRule = node.getRule(grammar);

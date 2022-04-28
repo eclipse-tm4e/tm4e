@@ -36,7 +36,6 @@ import com.google.gson.reflect.TypeToken;
  *
  * @see <a href="https://github.com/Microsoft/vscode-textmate/blob/master/src/tests/tests.ts">
  *      github.com/Microsoft/vscode-textmate/blob/master/src/tests/tests.ts</a>
- *
  */
 public class GrammarSuiteTest {
 
@@ -45,7 +44,7 @@ public class GrammarSuiteTest {
 	// TODO: fix thoses tests:
 	// It seems that problem comes from with encoding. OnigString should support UTF-16 like
 	// https://github.com/atom/node-oniguruma/blob/master/src/onig-string.cc
-	private static final List<String> IGNORE_TESTS = List.of("TEST #24", "TEST #66", "Issue #82", "Issue #119");
+	private static final List<String> IGNORE_TESTS = List.of("TEST #24", "TEST #66");
 
 	@TestFactory
 	@DisplayName("Tokenization /first-mate/")

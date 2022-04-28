@@ -171,7 +171,14 @@ public class StackElement {
 		return new StackElement(this.parent, this.ruleId, this.enterPosition, endRule, this.nameScopesList, this.contentNameScopesList);
 	}
 
-	public boolean hasSameRuleAs(StackElement other) {
-		return this.ruleId == other.ruleId;
+	public boolean hasSameRuleAs(final StackElement other) {
+		var el = this;
+		while (el != null && el.enterPosition == other.enterPosition) {
+			if (el.ruleId == other.ruleId) {
+				return true;
+			}
+			el = el.parent;
+		}
+		return false;
 	}
 }

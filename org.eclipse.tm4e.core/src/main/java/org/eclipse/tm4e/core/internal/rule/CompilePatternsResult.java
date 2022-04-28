@@ -16,16 +16,19 @@
  */
 package org.eclipse.tm4e.core.internal.rule;
 
-import java.util.Collection;
-
+/**
+ * @see <a href=
+ *      "https://github.com/microsoft/vscode-textmate/blob/9157c7f869219dbaf9a5a5607f099c00fe694a29/src/rule.ts#L91">
+ *      github.com/Microsoft/vscode-textmate/blob/master/src/rule.ts</a>
+ */
 final class CompilePatternsResult {
 
-	final Integer[] patterns;
+	final int[] patterns;
 	final boolean hasMissingPatterns;
 
-	CompilePatternsResult(Collection<Integer> patterns, boolean hasMissingPatterns) {
+	CompilePatternsResult(int[] patterns, boolean hasMissingPatterns) {
 		this.hasMissingPatterns = hasMissingPatterns;
-		this.patterns = patterns.toArray(Integer[]::new);
+		this.patterns = patterns;
 	}
 
 }

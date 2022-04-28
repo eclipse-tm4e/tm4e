@@ -33,6 +33,19 @@ public final class RegexSource {
 	private static final Pattern CAPTURING_REGEX_SOURCE = Pattern
 			.compile("\\$(\\d+)|\\$\\{(\\d+):\\/(downcase|upcase)}");
 
+	private static final Pattern REGEXP_CHARACTERS = Pattern
+			.compile("[\\-\\\\\\{\\}\\*\\+\\?\\|\\^\\$\\.\\,\\[\\]\\(\\)\\#\\s]");
+
+	public static String escapeRegExpCharacters(final String value) {
+		final var m = REGEXP_CHARACTERS.matcher(value);
+		final var sb = new StringBuilder();
+		while (m.find()) {
+			m.appendReplacement(sb, "\\\\\\\\" + m.group());
+		}
+		m.appendTail(sb);
+		return sb.toString();
+	}
+
 	public static boolean hasCaptures(@Nullable final String regexSource) {
 		if (regexSource == null) {
 			return false;

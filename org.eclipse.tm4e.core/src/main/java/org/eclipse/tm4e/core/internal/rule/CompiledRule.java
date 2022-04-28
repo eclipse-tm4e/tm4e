@@ -18,12 +18,17 @@ package org.eclipse.tm4e.core.internal.rule;
 
 import org.eclipse.tm4e.core.internal.oniguruma.OnigScanner;
 
+/**
+ * @see <a href=
+ *      "https://github.com/microsoft/vscode-textmate/blob/9157c7f869219dbaf9a5a5607f099c00fe694a29/src/rule.ts#L24">
+ *      github.com/Microsoft/vscode-textmate/blob/master/src/rule.ts</a>
+ */
 public final class CompiledRule {
 
 	public final OnigScanner scanner;
-	public final Integer[] rules;
+	public final int[] rules;
 
-	CompiledRule(OnigScanner scanner, Integer[] rules) {
+	CompiledRule(OnigScanner scanner, int[] rules) {
 		this.scanner = scanner;
 		this.rules = rules;
 	}

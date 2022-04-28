@@ -26,6 +26,8 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.function.IntFunction;
 
+import org.eclipse.jdt.annotation.NonNull;
+import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.tm4e.core.grammar.IGrammar;
 import org.eclipse.tm4e.core.grammar.ITokenizeLineResult;
 import org.eclipse.tm4e.core.grammar.ITokenizeLineResult2;
@@ -127,9 +129,9 @@ public final class Grammar implements IGrammar, IRuleFactoryHelper {
 	}
 
 	@Override
-	public Rule registerRule(IntFunction<Rule> factory) {
+	public <T extends @NonNull Rule> T registerRule(IntFunction<T> factory) {
 		int id = (++this.lastRuleId);
-		Rule result = factory.apply(id);
+		T result = factory.apply(id);
 		this.ruleId2desc.put(id, result);
 		return result;
 	}
@@ -144,7 +146,7 @@ public final class Grammar implements IGrammar, IRuleFactoryHelper {
 	}
 
 	@Override
-	public IRawGrammar getExternalGrammar(String scopeName, IRawRepository repository) {
+	public IRawGrammar getExternalGrammar(String scopeName, @Nullable IRawRepository repository) {
 		if (this.includedGrammars.containsKey(scopeName)) {
 			return this.includedGrammars.get(scopeName);
 		} else if (this.grammarRepository != null) {

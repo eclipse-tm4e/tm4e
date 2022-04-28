@@ -18,10 +18,14 @@ package org.eclipse.tm4e.core.internal.rule;
 
 import java.util.function.IntFunction;
 
+/**
+ * @see <a href=
+ *      "https://github.com/microsoft/vscode-textmate/blob/9157c7f869219dbaf9a5a5607f099c00fe694a29/src/rule.ts#L12">
+ *      github.com/Microsoft/vscode-textmate/blob/master/src/rule.ts</a>
+ */
 public interface IRuleRegistry {
 
 	Rule getRule(int patternId);
 
-	Rule registerRule(IntFunction<Rule> factory);
-
+	<T extends Rule> T registerRule(IntFunction<T> factory);
 }

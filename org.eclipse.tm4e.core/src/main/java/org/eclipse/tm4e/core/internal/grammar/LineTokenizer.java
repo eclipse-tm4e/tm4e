@@ -22,6 +22,7 @@ import java.lang.System.Logger;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.tm4e.core.grammar.Injection;
 import org.eclipse.tm4e.core.grammar.StackElement;
 import org.eclipse.tm4e.core.internal.oniguruma.OnigCaptureIndex;
@@ -39,7 +40,9 @@ final class LineTokenizer {
 	private static final Logger LOGGER = System.getLogger(LineTokenizer.class.getName());
 
 	private interface IMatchResult {
-		OnigCaptureIndex[] getCaptureIndices();
+		@NonNull
+		OnigCaptureIndex @NonNull [] getCaptureIndices();
+
 		int getMatchedRuleId();
 	}
 
@@ -125,8 +128,7 @@ final class LineTokenizer {
 		OnigCaptureIndex[] captureIndices = r.getCaptureIndices();
 		int matchedRuleId = r.getMatchedRuleId();
 
-		final boolean hasAdvanced = captureIndices != null && captureIndices.length > 0
-				&& captureIndices[0].getEnd() > linePos;
+		final boolean hasAdvanced = captureIndices.length > 0 && captureIndices[0].getEnd() > linePos;
 
 		if (matchedRuleId == -1) {
 			// We matched the `end` for this rule => pop it
@@ -159,7 +161,7 @@ final class LineTokenizer {
 				stop = true;
 				return;
 			}
-		} else if (captureIndices != null && captureIndices.length > 0) {
+		} else if (captureIndices.length > 0) {
 			// We matched a rule!
 			Rule rule = grammar.getRule(matchedRuleId);
 
@@ -257,7 +259,7 @@ final class LineTokenizer {
 			}
 		}
 
-		if (captureIndices != null && captureIndices.length > 0 && captureIndices[0].getEnd() > linePos) {
+		if (captureIndices.length > 0 && captureIndices[0].getEnd() > linePos) {
 			// Advance stream
 			linePos = captureIndices[0].getEnd();
 			isFirstLine = false;
@@ -267,7 +269,7 @@ final class LineTokenizer {
 	private IMatchResult matchRule(Grammar grammar, OnigString lineText, boolean isFirstLine, final int linePos,
 			StackElement stack, int anchorPosition) {
 		Rule rule = stack.getRule(grammar);
-		final CompiledRule ruleScanner = rule.compile(grammar, stack.endRule, isFirstLine, linePos == anchorPosition);
+		final CompiledRule ruleScanner = rule.compileAG(grammar, stack.endRule, isFirstLine, linePos == anchorPosition);
 		final OnigNextMatchResult r = ruleScanner.scanner.findNextMatchSync(lineText, linePos);
 
 		if (r != null) {
@@ -340,7 +342,7 @@ final class LineTokenizer {
 				continue;
 			}
 
-			CompiledRule ruleScanner = grammar.getRule(injection.ruleId).compile(grammar, null, isFirstLine,
+			CompiledRule ruleScanner = grammar.getRule(injection.ruleId).compileAG(grammar, null, isFirstLine,
 					linePos == anchorPosition);
 			OnigNextMatchResult matchResult = ruleScanner.scanner.findNextMatchSync(lineText, linePos);
 
@@ -424,7 +426,8 @@ final class LineTokenizer {
 			}
 
 			// pop captures while needed
-			while (!localStack.isEmpty() && localStack.get(localStack.size() - 1).getEndPos() <= captureIndex.getStart()) {
+			while (!localStack.isEmpty()
+					&& localStack.get(localStack.size() - 1).getEndPos() <= captureIndex.getStart()) {
 				// pop!
 				lineTokens.produceFromScopes(localStack.get(localStack.size() - 1).getScopes(),
 						localStack.get(localStack.size() - 1).getEndPos());
@@ -438,7 +441,8 @@ final class LineTokenizer {
 				lineTokens.produce(stack, captureIndex.getStart());
 			}
 
-			if (captureRule.retokenizeCapturedWithRuleId != null) {
+			final var retokenizeCapturedWithRuleId = captureRule.retokenizeCapturedWithRuleId;
+			if (retokenizeCapturedWithRuleId != null) {
 				// the capture requires additional matching
 				String scopeName = captureRule.getName(lineText.string, captureIndices);
 				ScopeListElement nameScopesList = stack.contentNameScopesList.push(grammar, scopeName);
@@ -446,8 +450,8 @@ final class LineTokenizer {
 				ScopeListElement contentNameScopesList = nameScopesList.push(grammar, contentName);
 
 				// the capture requires additional matching
-				StackElement stackClone = stack.push(captureRule.retokenizeCapturedWithRuleId, captureIndex.getStart(),
-						null, nameScopesList, contentNameScopesList);
+				StackElement stackClone = stack.push(retokenizeCapturedWithRuleId, captureIndex.getStart(), null,
+						nameScopesList, contentNameScopesList);
 				tokenizeString(grammar,
 						OnigString.of(lineText.string.substring(0, captureIndex.getEnd())),
 						(isFirstLine && captureIndex.getStart() == 0), captureIndex.getStart(), stackClone, lineTokens);
@@ -458,8 +462,9 @@ final class LineTokenizer {
 			String captureRuleScopeName = captureRule.getName(lineText.string, captureIndices);
 			if (captureRuleScopeName != null) {
 				// push
-				ScopeListElement base = localStack.isEmpty() ? stack.contentNameScopesList :
-					localStack.get(localStack.size() - 1).getScopes();
+				ScopeListElement base = localStack.isEmpty()
+						? stack.contentNameScopesList
+						: localStack.get(localStack.size() - 1).getScopes();
 				ScopeListElement captureRuleScopesList = base.push(grammar, captureRuleScopeName);
 				localStack.add(new LocalStackElement(captureRuleScopesList, captureIndex.getEnd()));
 			}
@@ -490,7 +495,7 @@ final class LineTokenizer {
 		}
 		for (int i = whileRules.size() - 1; i >= 0; i--) {
 			WhileStack whileRule = whileRules.get(i);
-			CompiledRule ruleScanner = whileRule.rule.compileWhile(whileRule.stack.endRule, isFirstLine,
+			CompiledRule ruleScanner = whileRule.rule.compileWhileAG(whileRule.stack.endRule, isFirstLine,
 					currentanchorPosition == linePos);
 			OnigNextMatchResult r = ruleScanner.scanner.findNextMatchSync(lineText, linePos);
 			// if (IN_DEBUG_MODE) {
@@ -499,7 +504,7 @@ final class LineTokenizer {
 			// }
 
 			if (r != null) {
-				Integer matchedRuleId = ruleScanner.rules[r.getIndex()];
+				int matchedRuleId = ruleScanner.rules[r.getIndex()];
 				if (matchedRuleId != -2) {
 					// we shouldn't end up here
 					stack = whileRule.stack.pop();

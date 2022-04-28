@@ -18,6 +18,8 @@ package org.eclipse.tm4e.core.internal.types;
 
 import java.util.Collection;
 
+import org.eclipse.jdt.annotation.Nullable;
+
 public interface IRawRule {
 
 	Integer getId();
@@ -48,6 +50,7 @@ public interface IRawRule {
 
 	void setBegin(String begin);
 
+	@Nullable
 	IRawCaptures getBeginCaptures();
 
 	void setBeginCaptures(IRawCaptures beginCaptures);
@@ -57,7 +60,7 @@ public interface IRawRule {
 	void setEnd(String end);
 
 	String getWhile();
-	
+
 	IRawCaptures getEndCaptures();
 
 	void setEndCaptures(IRawCaptures endCaptures);

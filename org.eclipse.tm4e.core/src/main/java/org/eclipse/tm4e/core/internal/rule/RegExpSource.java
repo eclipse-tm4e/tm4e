@@ -17,162 +17,123 @@
 package org.eclipse.tm4e.core.internal.rule;
 
 import java.util.Arrays;
-import java.util.List;
-import java.util.regex.Matcher;
+import java.util.Objects;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
+import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.tm4e.core.internal.oniguruma.OnigCaptureIndex;
+import org.eclipse.tm4e.core.internal.utils.RegexSource;
 
 /**
- *
- * @see <a href="https://github.com/Microsoft/vscode-textmate/blob/master/src/rule.ts">
+ * @see <a href=
+ *      "https://github.com/microsoft/vscode-textmate/blob/9157c7f869219dbaf9a5a5607f099c00fe694a29/src/rule.ts#L129">
  *      github.com/Microsoft/vscode-textmate/blob/master/src/rule.ts</a>
- *
  */
 final class RegExpSource {
 
 	private static final Pattern HAS_BACK_REFERENCES = Pattern.compile("\\\\(\\d+)");
 	private static final Pattern BACK_REFERENCING_END = Pattern.compile("\\\\(\\d+)");
-	private static final Pattern REGEXP_CHARACTERS = Pattern
-			.compile("[\\-\\\\\\{\\}\\*\\+\\?\\|\\^\\$\\.\\,\\[\\]\\(\\)\\#\\s]");
 
-	private final int ruleId;
-	private boolean _hasAnchor;
-	private final boolean _hasBackReferences;
-	private RegExpSourceAnchorCache anchorCache;
 	private String source;
+	final int ruleId;
+	final boolean hasBackReferences;
 
-	RegExpSource(String regExpSource, int ruleId) {
+	private String @Nullable [][] anchorCache;
+
+	RegExpSource(final String regExpSource, final int ruleId) {
 		this(regExpSource, ruleId, true);
 	}
 
-	private RegExpSource(String regExpSource, int ruleId, boolean handleAnchors) {
-		if (handleAnchors) {
-			this._handleAnchors(regExpSource);
-		} else {
-			this.source = regExpSource;
-			this._hasAnchor = false;
-		}
-
-		if (this._hasAnchor) {
-			this.anchorCache = this._buildAnchorCache();
-		}
-
-		this.ruleId = ruleId;
-		this._hasBackReferences = HAS_BACK_REFERENCES.matcher(this.source).find();
-
-		// console.log('input: ' + regExpSource + ' => ' + this.source + ', ' +
-		// this.hasAnchor);
-	}
-
-	@Override
-	protected RegExpSource clone() {
-		return new RegExpSource(this.source, this.ruleId, true);
-	}
-
-	void setSource(String newSource) {
-		if (this.source.equals(newSource)) {
-			return;
-		}
-		this.source = newSource;
-
-		if (this._hasAnchor) {
-			this.anchorCache = this._buildAnchorCache();
-		}
-	}
-
-	private void _handleAnchors(String regExpSource) {
-		if (regExpSource != null) {
-			int len = regExpSource.length();
-			char ch;
-			char nextCh;
+	RegExpSource(final String regExpSource, final int ruleId, final boolean handleAnchors) {
+		if (handleAnchors && !regExpSource.isEmpty()) {
+			final int len = regExpSource.length();
 			int lastPushedPos = 0;
-			final StringBuilder output = new StringBuilder();
+			final var output = new StringBuilder();
 
-			boolean hasAnchor = false;
+			boolean hasAnchors = false;
 			for (int pos = 0; pos < len; pos++) {
-				ch = regExpSource.charAt(pos);
+				final char ch = regExpSource.charAt(pos);
 
 				if (ch == '\\') {
 					if (pos + 1 < len) {
-						nextCh = regExpSource.charAt(pos + 1);
+						final char nextCh = regExpSource.charAt(pos + 1);
 						if (nextCh == 'z') {
 							output.append(regExpSource.substring(lastPushedPos, pos));
 							output.append("$(?!\\n)(?<!\\n)");
 							lastPushedPos = pos + 2;
 						} else if (nextCh == 'A' || nextCh == 'G') {
-							hasAnchor = true;
+							hasAnchors = true;
 						}
 						pos++;
 					}
 				}
 			}
 
-			this._hasAnchor = hasAnchor;
 			if (lastPushedPos == 0) {
 				// No \z hit
-				this.source = regExpSource;
+				source = regExpSource;
 			} else {
 				output.append(regExpSource.substring(lastPushedPos, len));
-				this.source = output.toString(); // join('');
+				source = output.toString();
+			}
+			if (hasAnchors) {
+				anchorCache = buildAnchorCache();
 			}
 		} else {
-			this._hasAnchor = false;
 			this.source = regExpSource;
 		}
+
+		this.ruleId = ruleId;
+		this.hasBackReferences = HAS_BACK_REFERENCES.matcher(this.source).find();
 	}
 
-	String resolveBackReferences(String lineText, OnigCaptureIndex[] captureIndices) {
+	@Override
+	protected RegExpSource clone() {
+		return new RegExpSource(source, this.ruleId);
+	}
+
+	void setSource(final String newSource) {
+		if (Objects.equals(source, newSource)) {
+			return;
+		}
+		this.source = newSource;
+
+		if (hasAnchor()) {
+			this.anchorCache = buildAnchorCache();
+		}
+	}
+
+	String resolveBackReferences(final String lineText, final OnigCaptureIndex[] captureIndices) {
 		try {
-		List<String> capturedValues = Arrays.stream(captureIndices)
-				.map(capture -> lineText.substring(capture.getStart(), capture.getEnd())).collect(Collectors.toList());
-		Matcher m = BACK_REFERENCING_END.matcher(this.source);
-		final StringBuilder sb = new StringBuilder();
-		while (m.find()) {
-			String g1 = m.group();
-			int index = Integer.parseInt(g1.substring(1));
-			String replacement = escapeRegExpCharacters(capturedValues.size() > index ? capturedValues.get(index) : "");
-			m.appendReplacement(sb, replacement);
+			final var capturedValues = Arrays.stream(captureIndices)
+					.map(capture -> lineText.substring(capture.getStart(), capture.getEnd()))
+					.collect(Collectors.toList());
+			final var m = BACK_REFERENCING_END.matcher(this.source);
+			final var sb = new StringBuilder();
+			while (m.find()) {
+				final var g1 = m.group();
+				final var index = Integer.parseInt(g1.substring(1));
+				final var replacement = RegexSource.escapeRegExpCharacters(
+						capturedValues.size() > index ? capturedValues.get(index) : "");
+				m.appendReplacement(sb, replacement);
+			}
+			m.appendTail(sb);
+			return sb.toString();
+		} catch (RuntimeException ex) {
+			// ex.printStackTrace();
+			return lineText;
 		}
-		m.appendTail(sb);
-		return sb.toString();
-		}
-		catch(Throwable e) {
-			//e.printStackTrace();
-		}
-
-		return lineText;
 	}
 
-	private String escapeRegExpCharacters(String value) {
-		Matcher m = REGEXP_CHARACTERS.matcher(value);
-		final StringBuilder sb = new StringBuilder();
-		while (m.find()) {
-			m.appendReplacement(sb, "\\\\\\\\" + m.group());
-		}
-		m.appendTail(sb);
-		return sb.toString();
-	}
+	private String [][] buildAnchorCache() {
+		final var A0_G0_result = new StringBuilder();
+		final var A0_G1_result = new StringBuilder();
+		final var A1_G0_result = new StringBuilder();
+		final var A1_G1_result = new StringBuilder();
 
-	private RegExpSourceAnchorCache _buildAnchorCache() {
-
-		// Collection<String> A0_G0_result=new ArrayList<Character>();
-		// Collection<String> A0_G1_result=new ArrayList<String>();
-		// Collection<String> A1_G0_result=new ArrayList<String>();
-		// Collection<String> A1_G1_result=new ArrayList<String>();
-
-		StringBuilder A0_G0_result = new StringBuilder();
-		StringBuilder A0_G1_result = new StringBuilder();
-		StringBuilder A1_G0_result = new StringBuilder();
-		StringBuilder A1_G1_result = new StringBuilder();
-		int pos;
-		int len;
-		char ch;
-		char nextCh;
-
-		for (pos = 0, len = this.source.length(); pos < len; pos++) {
-			ch = this.source.charAt(pos);
+		for (int pos = 0, len = source.length(); pos < len; pos++) {
+			final char ch = source.charAt(pos);
 			A0_G0_result.append(ch);
 			A0_G1_result.append(ch);
 			A1_G0_result.append(ch);
@@ -180,7 +141,7 @@ final class RegExpSource {
 
 			if (ch == '\\') {
 				if (pos + 1 < len) {
-					nextCh = this.source.charAt(pos + 1);
+					final char nextCh = source.charAt(pos + 1);
 					if (nextCh == 'A') {
 						A0_G0_result.append('\uFFFF');
 						A0_G1_result.append('\uFFFF');
@@ -202,46 +163,26 @@ final class RegExpSource {
 			}
 		}
 
-		return new RegExpSourceAnchorCache(A0_G0_result.toString(), A0_G1_result.toString(), A1_G0_result.toString(),
-				A1_G1_result.toString()
-		// StringUtils.join(A0_G0_result, ""),
-		// StringUtils.join(A0_G1_result, ""),
-		// StringUtils.join(A1_G0_result, ""),
-		// StringUtils.join(A1_G1_result, "")
-		);
+		return new String[][] {
+				{ A0_G0_result.toString(), A0_G1_result.toString() },
+				{ A1_G0_result.toString(), A1_G1_result.toString() }
+		};
 	}
 
-	String resolveAnchors(boolean allowA, boolean allowG) {
-		if (!this._hasAnchor) {
+	String resolveAnchors(final boolean allowA, final boolean allowG) {
+		final var anchorCache = this.anchorCache;
+		if (anchorCache == null) {
 			return this.source;
 		}
 
-		if (allowA) {
-			if (allowG) {
-				return this.anchorCache.A1_G1;
-			}
-			return this.anchorCache.A1_G0;
-		}
-		if (allowG) {
-			return this.anchorCache.A0_G1;
-		}
-		return this.anchorCache.A0_G0;
+		return anchorCache[allowA ? 1 : 0][allowG ? 1 : 0];
 	}
 
 	boolean hasAnchor() {
-		return this._hasAnchor;
+		return anchorCache != null;
 	}
 
 	String getSource() {
 		return this.source;
 	}
-
-	Integer getRuleId() {
-		return this.ruleId;
-	}
-
-	boolean hasBackReferences() {
-		return this._hasBackReferences;
-	}
-
 }

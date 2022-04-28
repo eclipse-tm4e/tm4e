@@ -16,6 +16,11 @@
  */
 package org.eclipse.tm4e.core.internal.rule;
 
+/**
+ * @see <a href=
+ *      "https://github.com/microsoft/vscode-textmate/blob/9157c7f869219dbaf9a5a5607f099c00fe694a29/src/rule.ts#L21">
+ *      github.com/Microsoft/vscode-textmate/blob/master/src/rule.ts</a>
+ */
 public interface IRuleFactoryHelper extends IRuleRegistry, IGrammarRegistry {
 
 }

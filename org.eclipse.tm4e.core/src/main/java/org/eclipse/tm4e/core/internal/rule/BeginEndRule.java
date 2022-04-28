@@ -1,5 +1,5 @@
 /**
- *  Copyright (c) 2015-2017 Angelo ZERR.
+ * Copyright (c) 2015-2017 Angelo ZERR.
  * This program and the accompanying materials are made
  * available under the terms of the Eclipse Public License 2.0
  * which is available at https://www.eclipse.org/legal/epl-2.0/
@@ -11,34 +11,46 @@
  * Initial license: MIT
  *
  * Contributors:
- *  - Microsoft Corporation: Initial code, written in TypeScript, licensed under MIT license
- *  - Angelo Zerr <angelo.zerr@gmail.com> - translation and adaptation to Java
+ * - Microsoft Corporation: Initial code, written in TypeScript, licensed under MIT license
+ * - Angelo Zerr <angelo.zerr@gmail.com> - translation and adaptation to Java
  */
 package org.eclipse.tm4e.core.internal.rule;
 
 import java.util.List;
 
+import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.tm4e.core.internal.oniguruma.OnigCaptureIndex;
 
+/**
+ * @see <a href=
+ *      "https://github.com/microsoft/vscode-textmate/blob/9157c7f869219dbaf9a5a5607f099c00fe694a29/src/rule.ts#L504">
+ *      github.com/Microsoft/vscode-textmate/blob/master/src/rule.ts</a>
+ */
 public final class BeginEndRule extends Rule {
 
 	private final RegExpSource begin;
-	public final List<CaptureRule> beginCaptures;
+	public final List<@Nullable CaptureRule> beginCaptures;
+
 	private final RegExpSource end;
+	public final List<@Nullable CaptureRule> endCaptures;
 	public final boolean endHasBackReferences;
-	public final List<CaptureRule> endCaptures;
 	private final boolean applyEndPatternLast;
+
 	final boolean hasMissingPatterns;
-	final Integer[] patterns;
+	final int[] patterns;
+
+	@Nullable
 	private RegExpSourceList cachedCompiledPatterns;
 
-	BeginEndRule(int id, String name, String contentName, String begin, List<CaptureRule> beginCaptures,
-			String end, List<CaptureRule> endCaptures, boolean applyEndPatternLast, CompilePatternsResult patterns) {
+	BeginEndRule(int id, @Nullable String name, @Nullable String contentName, String begin,
+			List<@Nullable CaptureRule> beginCaptures, @Nullable String end, List<@Nullable CaptureRule> endCaptures,
+			boolean applyEndPatternLast,
+			CompilePatternsResult patterns) {
 		super(id, name, contentName);
 		this.begin = new RegExpSource(begin, this.id);
 		this.beginCaptures = beginCaptures;
-		this.end = new RegExpSource(end, -1);
-		this.endHasBackReferences = this.end.hasBackReferences();
+		this.end = new RegExpSource(end == null ? "\uFFFF" : end, -1);
+		this.endHasBackReferences = this.end.hasBackReferences;
 		this.endCaptures = endCaptures;
 		this.applyEndPatternLast = applyEndPatternLast;
 		this.patterns = patterns.patterns;
@@ -50,43 +62,51 @@ public final class BeginEndRule extends Rule {
 	}
 
 	@Override
-	void collectPatternsRecursive(IRuleRegistry grammar, RegExpSourceList out, boolean isFirst) {
+	public void collectPatternsRecursive(final IRuleRegistry grammar, final RegExpSourceList out,
+			final boolean isFirst) {
 		if (isFirst) {
-			for (Integer pattern : this.patterns) {
-				Rule rule = grammar.getRule(pattern);
+			for (final int pattern : this.patterns) {
+				final Rule rule = grammar.getRule(pattern);
 				rule.collectPatternsRecursive(grammar, out, false);
 			}
 		} else {
-			out.push(this.begin);
+			out.add(this.begin);
 		}
 	}
 
 	@Override
-	public CompiledRule compile(IRuleRegistry grammar, String endRegexSource, boolean allowA, boolean allowG) {
-		RegExpSourceList precompiled = this.precompile(grammar);
-		if (this.end.hasBackReferences()) {
-			if (this.applyEndPatternLast) {
-				precompiled.setSource(precompiled.length() - 1, endRegexSource);
-			} else {
-				precompiled.setSource(0, endRegexSource);
-			}
-		}
-		return this.cachedCompiledPatterns.compile(allowA, allowG);
+	public CompiledRule compile(IRuleRegistry grammar, @Nullable String endRegexSource) {
+		return getCachedCompiledPatterns(grammar, endRegexSource).compile();
 	}
 
-	private RegExpSourceList precompile(IRuleRegistry grammar) {
-		if (this.cachedCompiledPatterns == null) {
-			this.cachedCompiledPatterns = new RegExpSourceList();
-
-			this.collectPatternsRecursive(grammar, this.cachedCompiledPatterns, true);
-
-			if (this.applyEndPatternLast) {
-				this.cachedCompiledPatterns.push(this.end.hasBackReferences() ? this.end.clone() : this.end);
-			} else {
-				this.cachedCompiledPatterns.unshift(this.end.hasBackReferences() ? this.end.clone() : this.end);
-			}
-		}
-		return this.cachedCompiledPatterns;
+	@Override
+	public CompiledRule compileAG(final IRuleRegistry grammar, @Nullable final String endRegexSource,
+			final boolean allowA, final boolean allowG) {
+		return getCachedCompiledPatterns(grammar, endRegexSource).compileAG(allowA, allowG);
 	}
 
+	private RegExpSourceList getCachedCompiledPatterns(final IRuleRegistry grammar,
+			@Nullable final String endRegexSource) {
+		var cachedCompiledPatterns = this.cachedCompiledPatterns;
+		if (cachedCompiledPatterns == null) {
+			cachedCompiledPatterns = new RegExpSourceList();
+
+			collectPatternsRecursive(grammar, cachedCompiledPatterns, true);
+
+			if (this.applyEndPatternLast) {
+				cachedCompiledPatterns.add(this.endHasBackReferences ? this.end.clone() : this.end);
+			} else {
+				cachedCompiledPatterns.remove(this.endHasBackReferences ? this.end.clone() : this.end);
+			}
+			this.cachedCompiledPatterns = cachedCompiledPatterns;
+		}
+		if (this.endHasBackReferences && endRegexSource != null) {
+			if (this.applyEndPatternLast) {
+				cachedCompiledPatterns.setSource(cachedCompiledPatterns.length() - 1, endRegexSource);
+			} else {
+				cachedCompiledPatterns.setSource(0, endRegexSource);
+			}
+		}
+		return cachedCompiledPatterns;
+	}
 }

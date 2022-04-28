@@ -17,121 +17,96 @@
 package org.eclipse.tm4e.core.internal.rule;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
+import java.util.Objects;
+import java.util.stream.Collectors;
 
+import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.tm4e.core.internal.oniguruma.OnigScanner;
 
 /**
- *
- * @see <a href="https://github.com/Microsoft/vscode-textmate/blob/master/src/rule.ts">
+ * @see <a href=
+ *      "https://github.com/microsoft/vscode-textmate/blob/9157c7f869219dbaf9a5a5607f099c00fe694a29/src/rule.ts#L295">
  *      github.com/Microsoft/vscode-textmate/blob/master/src/rule.ts</a>
- *
  */
 final class RegExpSourceList {
 
-	private static final class RegExpSourceListAnchorCache {
+	private final List<RegExpSource> items = new ArrayList<>();
+	private boolean hasAnchors;
 
-		private CompiledRule A0_G0;
-		private CompiledRule A0_G1;
-		private CompiledRule A1_G0;
-		private CompiledRule A1_G1;
+	@Nullable
+	private CompiledRule cached;
+	private final CompiledRule[][] anchorCache = new CompiledRule[2][2];
 
+	private void disposeCache() {
+		cached = null;
+		anchorCache[0][0] = null;
+		anchorCache[0][1] = null;
+		anchorCache[1][0] = null;
+		anchorCache[1][1] = null;
 	}
 
-	private final List<RegExpSource> _items = new ArrayList<>();
-	private boolean _hasAnchors;
-	private CompiledRule _cached;
-	private final RegExpSourceListAnchorCache _anchorCache;
-
-	RegExpSourceList() {
-		this._anchorCache = new RegExpSourceListAnchorCache();
+	void add(final RegExpSource item) {
+		items.add(item);
+		if (!hasAnchors) {
+			hasAnchors = item.hasAnchor();
+		}
 	}
 
-	void push(RegExpSource item) {
-		this._items.add(item);
-		this._hasAnchors = this._hasAnchors ? this._hasAnchors : item.hasAnchor();
-	}
-
-	void unshift(RegExpSource item) {
-		this._items.add(0, item);
-		this._hasAnchors = this._hasAnchors ? this._hasAnchors : item.hasAnchor();
+	void remove(final RegExpSource item) {
+		items.add(0, item);
+		if (!hasAnchors) {
+			hasAnchors = item.hasAnchor();
+		}
 	}
 
 	int length() {
-		return this._items.size();
+		return items.size();
 	}
 
-	void setSource(int index, String newSource) {
-		RegExpSource r = this._items.get(index);
-		if (!r.getSource().equals(newSource)) {
-			// bust the cache
-			this._cached = null;
-			this._anchorCache.A0_G0 = null;
-			this._anchorCache.A0_G1 = null;
-			this._anchorCache.A1_G0 = null;
-			this._anchorCache.A1_G1 = null;
+	void setSource(final int index, final String newSource) {
+		final RegExpSource r = items.get(index);
+		if (!Objects.equals(r.getSource(), newSource)) {
+			disposeCache();
 			r.setSource(newSource);
 		}
 	}
 
-	CompiledRule compile(boolean allowA, boolean allowG) {
-		if (!this._hasAnchors) {
-			if (this._cached == null) {
-				List<String> regexps = new ArrayList<>();
-				for (RegExpSource regExpSource : _items) {
-					regexps.add(regExpSource.getSource());
-				}
-				this._cached = new CompiledRule(new OnigScanner(regexps), getRules());
-			}
-			return this._cached;
+	CompiledRule compile() {
+		var cached = this.cached;
+		if (cached == null) {
+			final List<String> regexps = items.stream().map(RegExpSource::getSource).collect(Collectors.toList());
+			cached = this.cached = new CompiledRule(new OnigScanner(regexps), getRules());
 		}
-
-		if (this._anchorCache.A0_G0 == null) {
-			this._anchorCache.A0_G0 = (allowA == false && allowG == false) ? this._resolveAnchors(allowA, allowG)
-					: null;
-		}
-		if (this._anchorCache.A0_G1 == null) {
-			this._anchorCache.A0_G1 = (allowA == false && allowG == true) ? this._resolveAnchors(allowA, allowG)
-					: null;
-		}
-		if (this._anchorCache.A1_G0 == null) {
-			this._anchorCache.A1_G0 = (allowA == true && allowG == false) ? this._resolveAnchors(allowA, allowG)
-					: null;
-		}
-		if (this._anchorCache.A1_G1 == null) {
-			this._anchorCache.A1_G1 = (allowA == true && allowG == true) ? this._resolveAnchors(allowA, allowG)
-					: null;
-		}
-
-		if (allowA) {
-			if (allowG) {
-				return this._anchorCache.A1_G1;
-			}
-			return this._anchorCache.A1_G0;
-		}
-
-		if (allowG) {
-			return this._anchorCache.A0_G1;
-		}
-		return this._anchorCache.A0_G0;
+		return cached;
 	}
 
-	private CompiledRule _resolveAnchors(boolean allowA, boolean allowG) {
-		List<String> regexps = new ArrayList<>();
-		for (RegExpSource regExpSource : _items) {
-			regexps.add(regExpSource.resolveAnchors(allowA, allowG));
+	CompiledRule compileAG(final boolean allowA, final boolean allowG) {
+		if (!hasAnchors) {
+			return compile();
 		}
+
+		final var indexA = allowA ? 1 : 0;
+		final var indexG = allowG ? 1 : 0;
+
+		var rule = anchorCache[indexA][indexG];
+		if (rule == null) {
+			rule = anchorCache[indexA][indexG] = resolveAnchors(allowA, allowG);
+		}
+		return rule;
+	}
+
+	private CompiledRule resolveAnchors(final boolean allowA, final boolean allowG) {
+		final List<String> regexps = items.stream().map(e -> e.resolveAnchors(allowA, allowG))
+				.collect(Collectors.toList());
 		return new CompiledRule(new OnigScanner(regexps), getRules());
 	}
 
-
-	private Integer[] getRules() {
-		Collection<Integer> ruleIds = new ArrayList<>();
-		for (RegExpSource item : this._items) {
-			ruleIds.add(item.getRuleId());
+	private int[] getRules() {
+		final var ruleIds = new int[items.size()];
+		for (int i = 0; i < ruleIds.length; i++) {
+			ruleIds[i] = items.get(i).ruleId;
 		}
-		return ruleIds.toArray(Integer[]::new);
+		return ruleIds;
 	}
-
 }

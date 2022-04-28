@@ -74,6 +74,7 @@ public class StackElement {
 	/**
 	 * The "pop" (end) condition for this state in case that it was dynamically generated through captured text.
 	 */
+	@Nullable
 	public final String endRule;
 
 	/**

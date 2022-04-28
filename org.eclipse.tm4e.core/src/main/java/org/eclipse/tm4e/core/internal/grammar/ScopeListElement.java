@@ -16,6 +16,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 
+import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.tm4e.core.theme.FontStyle;
 import org.eclipse.tm4e.core.theme.ThemeTrieElementRule;
 
@@ -25,17 +26,18 @@ public final class ScopeListElement {
 
 	private static final Splitter BY_SPACE_SPLITTER = Splitter.on(' ');
 
+	@Nullable
 	private final ScopeListElement parent;
 	private final String scope;
 	final int metadata;
 
-	public ScopeListElement(ScopeListElement parent, String scope, int metadata) {
+	public ScopeListElement(@Nullable ScopeListElement parent, String scope, int metadata) {
 		this.parent = parent;
 		this.scope = scope;
 		this.metadata = metadata;
 	}
 
-	private static boolean equals(ScopeListElement a, ScopeListElement b) {
+	private static boolean equals(@Nullable ScopeListElement a, @Nullable ScopeListElement b) {
 		if (a == b) {
 			return true;
 		}
@@ -46,7 +48,7 @@ public final class ScopeListElement {
 	}
 
 	@Override
-	public boolean equals(Object other) {
+	public boolean equals(@Nullable Object other) {
 		if (other == this) {
 			return true;
 		}
@@ -64,12 +66,11 @@ public final class ScopeListElement {
 		return Objects.hash(scope, metadata, parent);
 	}
 
-
 	private static boolean matchesScope(String scope, String selector, String selectorWithDot) {
 		return (selector.equals(scope) || scope.startsWith(selectorWithDot));
 	}
 
-	private static boolean matches(ScopeListElement target, List<String> parentScopes) {
+	private static boolean matches(@Nullable ScopeListElement target, List<String> parentScopes) {
 		if (parentScopes == null) {
 			return true;
 		}
@@ -94,7 +95,7 @@ public final class ScopeListElement {
 		return false;
 	}
 
-	public static int mergeMetadata(int metadata, ScopeListElement scopesList, ScopeMetadata source) {
+	public static int mergeMetadata(int metadata, @Nullable ScopeListElement scopesList, ScopeMetadata source) {
 		if (source == null) {
 			return metadata;
 		}
@@ -128,7 +129,7 @@ public final class ScopeListElement {
 		return target;
 	}
 
-	ScopeListElement push(Grammar grammar, String scope) {
+	ScopeListElement push(Grammar grammar, @Nullable String scope) {
 		if (scope == null) {
 			return this;
 		}

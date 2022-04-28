@@ -21,6 +21,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
+import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.tm4e.core.TMException;
 import org.eclipse.tm4e.core.theme.IThemeProvider;
 import org.eclipse.tm4e.core.theme.ThemeTrieElementRule;
@@ -42,7 +43,7 @@ final class ScopeMetadataProvider {
 	private Pattern embeddedLanguagesRegex;
 
 	ScopeMetadataProvider(int initialLanguage, IThemeProvider themeProvider,
-			Map<String, Integer> embeddedLanguages) {
+			@Nullable Map<String, Integer> embeddedLanguages) {
 		this.initialLanguage = initialLanguage;
 		this.themeProvider = themeProvider;
 		this.onDidChangeTheme();

@@ -65,8 +65,11 @@ public final class Grammar implements IGrammar, IRuleFactoryHelper {
 	private List<Injection> injections;
 	private final ScopeMetadataProvider scopeMetadataProvider;
 
-	public Grammar(IRawGrammar grammar, int initialLanguage, Map<String, Integer> embeddedLanguages,
-			IGrammarRepository grammarRepository, IThemeProvider themeProvider) {
+	public Grammar(IRawGrammar grammar,
+			int initialLanguage,
+			@Nullable Map<String, Integer> embeddedLanguages,
+			IGrammarRepository grammarRepository,
+			IThemeProvider themeProvider) {
 		this.scopeMetadataProvider = new ScopeMetadataProvider(initialLanguage, themeProvider, embeddedLanguages);
 		this.grammarRepository = grammarRepository;
 		this.rawGrammar = initGrammar(grammar, null);
@@ -183,7 +186,7 @@ public final class Grammar implements IGrammar, IRuleFactoryHelper {
 	}
 
 	@Override
-	public ITokenizeLineResult tokenizeLine(String lineText, StackElement prevState) {
+	public ITokenizeLineResult tokenizeLine(String lineText, @Nullable StackElement prevState) {
 		return tokenize(lineText, prevState, false);
 	}
 
@@ -193,7 +196,7 @@ public final class Grammar implements IGrammar, IRuleFactoryHelper {
 	}
 
 	@Override
-	public ITokenizeLineResult2 tokenizeLine2(String lineText, StackElement prevState) {
+	public ITokenizeLineResult2 tokenizeLine2(String lineText, @Nullable StackElement prevState) {
 		return tokenize(lineText, prevState, true);
 	}
 

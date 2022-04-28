@@ -20,8 +20,10 @@ import static java.lang.System.Logger.Level.*;
 
 import java.lang.System.Logger;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
+import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.tm4e.core.grammar.IToken;
 import org.eclipse.tm4e.core.grammar.StackElement;
 
@@ -29,6 +31,7 @@ final class LineTokens {
 
 	private static final Logger LOGGER = System.getLogger(LineTokens.class.getName());
 
+	@Nullable
 	private final String lineText;
 
 	/**
@@ -49,11 +52,11 @@ final class LineTokens {
 		this.emitBinaryTokens = emitBinaryTokens;
 		this.lineText = LOGGER.isLoggable(TRACE) ? lineText : null; // store line only if it's logged
 		if (this.emitBinaryTokens) {
-			this.tokens = null;
+			this.tokens = Collections.emptyList();
 			this.binaryTokens = new ArrayList<>();
 		} else {
 			this.tokens = new ArrayList<>();
-			this.binaryTokens = null;
+			this.binaryTokens = Collections.emptyList();
 		}
 	}
 

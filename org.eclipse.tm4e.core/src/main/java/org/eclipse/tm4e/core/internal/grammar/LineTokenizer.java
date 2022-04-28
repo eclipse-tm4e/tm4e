@@ -23,6 +23,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.jdt.annotation.NonNull;
+import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.tm4e.core.grammar.Injection;
 import org.eclipse.tm4e.core.grammar.StackElement;
 import org.eclipse.tm4e.core.internal.oniguruma.OnigCaptureIndex;
@@ -403,7 +404,7 @@ final class LineTokenizer {
 	}
 
 	private void handleCaptures(Grammar grammar, OnigString lineText, boolean isFirstLine, StackElement stack,
-			LineTokens lineTokens, List<CaptureRule> captures, OnigCaptureIndex[] captureIndices) {
+			LineTokens lineTokens, List<@Nullable CaptureRule> captures, OnigCaptureIndex[] captureIndices) {
 		if (captures.isEmpty()) {
 			return;
 		}

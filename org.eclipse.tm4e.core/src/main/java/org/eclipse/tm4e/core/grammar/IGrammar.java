@@ -18,6 +18,8 @@ package org.eclipse.tm4e.core.grammar;
 
 import java.util.Collection;
 
+import org.eclipse.jdt.annotation.Nullable;
+
 /**
  * TextMate grammar API.
  *
@@ -29,28 +31,28 @@ public interface IGrammar {
 
 	/**
 	 * Returns the name of the grammar.
-	 * 
+	 *
 	 * @return the name of the grammar.
 	 */
 	String getName();
 
 	/**
 	 * Returns the scope name of the grammar.
-	 * 
+	 *
 	 * @return the scope name of the grammar.
 	 */
 	String getScopeName();
 
 	/**
 	 * Returns the supported file types and null otherwise.
-	 * 
+	 *
 	 * @return the supported file types and null otherwise.
 	 */
 	Collection<String> getFileTypes();
 
 	/**
 	 * Tokenize `lineText`.
-	 * 
+	 *
 	 * @param lineText
 	 *            the line text to tokenize.
 	 * @return the result of the tokenization.
@@ -59,14 +61,14 @@ public interface IGrammar {
 
 	/**
 	 * Tokenize `lineText` using previous line state `prevState`.
-	 * 
+	 *
 	 * @param lineText
 	 *            the line text to tokenize.
 	 * @param prevState
 	 *            previous line state.
 	 * @return the result of the tokenization.
 	 */
-	ITokenizeLineResult tokenizeLine(String lineText, StackElement prevState);
+	ITokenizeLineResult tokenizeLine(String lineText, @Nullable StackElement prevState);
 
 	/**
 	 * Tokenize `lineText` using previous line state `prevState`.
@@ -79,7 +81,7 @@ public interface IGrammar {
 	 * e.g. for getting the languageId: `(metadata & MetadataConsts.LANGUAGEID_MASK) >>> MetadataConsts.LANGUAGEID_OFFSET`
 	 */
 	ITokenizeLineResult2 tokenizeLine2(String lineText);
-	
+
 	/**
 	 * Tokenize `lineText` using previous line state `prevState`.
 	 * The result contains the tokens in binary format, resolved with the following information:
@@ -90,6 +92,6 @@ public interface IGrammar {
 	 *  - background color
 	 * e.g. for getting the languageId: `(metadata & MetadataConsts.LANGUAGEID_MASK) >>> MetadataConsts.LANGUAGEID_OFFSET`
 	 */
-	ITokenizeLineResult2 tokenizeLine2(String lineText, StackElement prevState);
-	
+	ITokenizeLineResult2 tokenizeLine2(String lineText, @Nullable StackElement prevState);
+
 }

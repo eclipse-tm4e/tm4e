@@ -20,7 +20,8 @@ import java.util.Map;
 import java.util.Set;
 import java.util.Map.Entry;
 
-import org.eclipse.tm4e.core.internal.grammar.parser.Raw;
+import org.eclipse.jdt.annotation.Nullable;
+import org.eclipse.tm4e.core.internal.grammar.Raw;
 
 public interface IRawRepository {
 
@@ -35,7 +36,7 @@ public interface IRawRepository {
 		return merged;
 	}
 
-	Set<Map.Entry<String, Object>> entrySet();
+	Set<Map.Entry<@Nullable String, Object>> entrySet();
 
 	IRawRule getProp(String name);
 

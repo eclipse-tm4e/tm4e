@@ -25,7 +25,7 @@ import java.util.Collections;
 import java.util.List;
 
 import org.eclipse.jdt.annotation.Nullable;
-import org.eclipse.tm4e.core.internal.grammar.parser.Raw;
+import org.eclipse.tm4e.core.internal.grammar.Raw;
 import org.eclipse.tm4e.core.internal.types.IRawCaptures;
 import org.eclipse.tm4e.core.internal.types.IRawGrammar;
 import org.eclipse.tm4e.core.internal.types.IRawRepository;

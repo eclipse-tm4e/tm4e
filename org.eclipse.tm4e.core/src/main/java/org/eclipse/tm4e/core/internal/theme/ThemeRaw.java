@@ -14,11 +14,12 @@ package org.eclipse.tm4e.core.internal.theme;
 import java.util.Collection;
 import java.util.HashMap;
 
+import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.tm4e.core.theme.IRawTheme;
 import org.eclipse.tm4e.core.theme.IRawThemeSetting;
 import org.eclipse.tm4e.core.theme.IThemeSetting;
 
-final class ThemeRaw extends HashMap<String, Object> implements IRawTheme, IRawThemeSetting, IThemeSetting {
+public final class ThemeRaw extends HashMap<@Nullable String, Object> implements IRawTheme, IRawThemeSetting, IThemeSetting {
 
 	private static final long serialVersionUID = -3622927264735492387L;
 

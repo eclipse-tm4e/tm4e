@@ -10,14 +10,13 @@
  * Contributors:
  * Sebastian Thomschke - initial implementation
  */
-package org.eclipse.tm4e.core.internal.parser.yaml;
+package org.eclipse.tm4e.core.internal.parser;
 
 import java.io.InputStream;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import org.eclipse.tm4e.core.internal.parser.PList;
 import org.xml.sax.SAXException;
 import org.yaml.snakeyaml.Yaml;
 import org.yaml.snakeyaml.error.YAMLException;
@@ -25,19 +24,19 @@ import org.yaml.snakeyaml.error.YAMLException;
 /**
  * Parses TextMate Grammar file in YAML format.
  */
-public final class YamlPListParser<T> {
+public final class PListParserYAML<T> implements PListParser<T> {
 
-	private final boolean theme;
+	private final MapFactory mapFactory;
 
-	public YamlPListParser(boolean theme) {
-		this.theme = theme;
+	public PListParserYAML(final MapFactory mapFactory) {
+		this.mapFactory = mapFactory;
 	}
 
 	@SuppressWarnings("unchecked")
-	private void addListToPList(PList<T> pList, List<Object> list) throws SAXException {
+	private void addListToPList(final PListParserContentHandler<T> pList, final List<Object> list) throws SAXException {
 		pList.startElement(null, "array", null, null);
 
-		for (Object item : list) {
+		for (final Object item : list) {
 			if (item instanceof List) {
 				addListToPList(pList, (List<Object>) item);
 			} else if (item instanceof Map) {
@@ -51,10 +50,11 @@ public final class YamlPListParser<T> {
 	}
 
 	@SuppressWarnings("unchecked")
-	private void addMapToPList(PList<T> pList, Map<String, Object> map) throws SAXException {
+	private void addMapToPList(final PListParserContentHandler<T> pList, final Map<String, Object> map)
+			throws SAXException {
 		pList.startElement(null, "dict", null, null);
 
-		for (Entry<String, Object> entry : map.entrySet()) {
+		for (final Entry<String, Object> entry : map.entrySet()) {
 			pList.startElement(null, "key", null, null);
 			pList.characters(entry.getKey().toCharArray(), 0, entry.getKey().length());
 			pList.endElement(null, "key", null);
@@ -70,14 +70,15 @@ public final class YamlPListParser<T> {
 		pList.endElement(null, "dict", null);
 	}
 
-	private void addStringToPList(PList<T> pList, String value) throws SAXException {
+	private void addStringToPList(final PListParserContentHandler<T> pList, final String value) throws SAXException {
 		pList.startElement(null, "string", null, null);
 		pList.characters(value.toCharArray(), 0, value.length());
 		pList.endElement(null, "string", null);
 	}
 
-	public T parse(InputStream contents) throws SAXException, YAMLException {
-		PList<T> pList = new PList<>(theme);
+	@Override
+	public T parse(final InputStream contents) throws SAXException, YAMLException {
+		final var pList = new PListParserContentHandler<T>(mapFactory);
 		addMapToPList(pList, new Yaml().loadAs(contents, Map.class));
 		return pList.getResult();
 	}

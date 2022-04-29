@@ -9,31 +9,28 @@
  *  Contributors:
  *  Angelo Zerr <angelo.zerr@gmail.com> - initial API and implementation
  */
-package org.eclipse.tm4e.core.internal.css;
+package org.eclipse.tm4e.core.internal.theme.css;
 
-final class CSSElementSelector extends AbstractElementSelector {
+final class CSSClassCondition extends CSSAttributeCondition {
 
-	CSSElementSelector(String uri, String name) {
-		super(uri, name);
-	}
-
-	@Override
-	public short getSelectorType() {
-		return SAC_ELEMENT_NODE_SELECTOR;
-	}
-
-	@Override
-	public int getSpecificity() {
-		return (getLocalName() == null) ? 0 : 1;
+	CSSClassCondition(String localName, String namespaceURI, String value) {
+		super(localName, namespaceURI, true, value);
 	}
 
 	@Override
 	public int nbMatch(String... names) {
+		String value = getValue();
+		for (String name : names) {
+			if (name.equals(value)) {
+				return 1;
+			}
+		}
 		return 0;
 	}
 
 	@Override
 	public int nbClass() {
-		return 0;
+		return 1;
 	}
+
 }

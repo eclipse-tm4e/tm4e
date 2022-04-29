@@ -14,7 +14,7 @@ import static java.lang.System.Logger.Level.*;
 
 import java.lang.System.Logger;
 
-import org.eclipse.tm4e.core.internal.css.SACParserFactoryImpl;
+import org.eclipse.tm4e.core.internal.theme.css.SACParserFactoryImpl;
 import org.w3c.css.sac.Parser;
 import org.w3c.css.sac.helpers.ParserFactory;
 

@@ -8,7 +8,7 @@
  * Contributors:
  *      IBM Corporation - initial API and implementation
  *******************************************************************************/
-package org.eclipse.tm4e.core.internal.css;
+package org.eclipse.tm4e.core.internal.theme.css;
 
 import org.w3c.css.sac.LexicalUnit;
 import org.w3c.dom.DOMException;

@@ -16,10 +16,10 @@ import java.io.InputStream;
 import java.io.StringReader;
 import java.util.List;
 
-import org.eclipse.tm4e.core.internal.css.CSSConditionFactory;
-import org.eclipse.tm4e.core.internal.css.CSSDocumentHandler;
-import org.eclipse.tm4e.core.internal.css.CSSSelectorFactory;
-import org.eclipse.tm4e.core.internal.css.ExtendedSelector;
+import org.eclipse.tm4e.core.internal.theme.css.CSSConditionFactory;
+import org.eclipse.tm4e.core.internal.theme.css.CSSDocumentHandler;
+import org.eclipse.tm4e.core.internal.theme.css.CSSSelectorFactory;
+import org.eclipse.tm4e.core.internal.theme.css.ExtendedSelector;
 import org.eclipse.tm4e.core.theme.IStyle;
 import org.w3c.css.sac.CSSException;
 import org.w3c.css.sac.InputSource;

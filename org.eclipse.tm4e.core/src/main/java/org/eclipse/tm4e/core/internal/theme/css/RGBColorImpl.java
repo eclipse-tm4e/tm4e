@@ -9,7 +9,7 @@
  *     Angelo Zerr <angelo.zerr@gmail.com> - initial API and implementation
  *     IBM Corporation - ongoing development
  *******************************************************************************/
-package org.eclipse.tm4e.core.internal.css;
+package org.eclipse.tm4e.core.internal.theme.css;
 
 import org.w3c.css.sac.LexicalUnit;
 import org.w3c.dom.DOMException;

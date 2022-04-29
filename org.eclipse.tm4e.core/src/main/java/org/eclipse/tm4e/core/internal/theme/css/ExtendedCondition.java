@@ -9,18 +9,16 @@
  *  Contributors:
  *  Angelo Zerr <angelo.zerr@gmail.com> - initial API and implementation
  */
-package org.eclipse.tm4e.core.internal.css;
+package org.eclipse.tm4e.core.internal.theme.css;
 
-import org.w3c.css.sac.Selector;
-
-public interface ExtendedSelector extends Selector {
+interface ExtendedCondition {
 
 	/**
-	 * Returns the specificity of this selector.
+	 * Returns the specificity of this condition.
 	 */
 	int getSpecificity();
 
-	int nbMatch(String... names);
-	
 	int nbClass();
+
+	int nbMatch(String... names);
 }

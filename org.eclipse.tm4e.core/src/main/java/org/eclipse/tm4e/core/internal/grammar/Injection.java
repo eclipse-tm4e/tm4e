@@ -14,14 +14,14 @@
  *  - Microsoft Corporation: Initial code, written in TypeScript, licensed under MIT license
  *  - Angelo Zerr <angelo.zerr@gmail.com> - translation and adaptation to Java
  */
-package org.eclipse.tm4e.core.grammar;
+package org.eclipse.tm4e.core.internal.grammar;
 
 import java.util.List;
 import java.util.function.Predicate;
 
 import org.eclipse.tm4e.core.internal.types.IRawGrammar;
 
-public class Injection {
+class Injection {
 
 	private final Predicate<List<String>> matcher;
 	public final int priority; // -1 | 0 | 1; // 0 is the default. -1 for 'L' and 1 for 'R'

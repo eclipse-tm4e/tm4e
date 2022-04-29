@@ -31,7 +31,6 @@ import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.tm4e.core.grammar.IGrammar;
 import org.eclipse.tm4e.core.grammar.ITokenizeLineResult;
 import org.eclipse.tm4e.core.grammar.ITokenizeLineResult2;
-import org.eclipse.tm4e.core.grammar.Injection;
 import org.eclipse.tm4e.core.grammar.StackElement;
 import org.eclipse.tm4e.core.internal.matcher.Matcher;
 import org.eclipse.tm4e.core.internal.matcher.MatcherWithPriority;

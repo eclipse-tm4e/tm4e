@@ -24,7 +24,6 @@ import java.util.List;
 
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
-import org.eclipse.tm4e.core.grammar.Injection;
 import org.eclipse.tm4e.core.grammar.StackElement;
 import org.eclipse.tm4e.core.internal.oniguruma.OnigCaptureIndex;
 import org.eclipse.tm4e.core.internal.oniguruma.OnigNextMatchResult;

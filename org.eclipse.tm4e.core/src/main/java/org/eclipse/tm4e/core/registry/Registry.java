@@ -28,7 +28,7 @@ import java.util.Set;
 import org.eclipse.tm4e.core.TMException;
 import org.eclipse.tm4e.core.grammar.IGrammar;
 import org.eclipse.tm4e.core.internal.grammar.reader.GrammarReader;
-import org.eclipse.tm4e.core.internal.grammars.SyncRegistry;
+import org.eclipse.tm4e.core.internal.registry.SyncRegistry;
 import org.eclipse.tm4e.core.internal.types.IRawGrammar;
 import org.eclipse.tm4e.core.theme.IRawTheme;
 import org.eclipse.tm4e.core.theme.Theme;

@@ -14,7 +14,7 @@
  * - Microsoft Corporation: Initial code, written in TypeScript, licensed under MIT license
  * - Angelo Zerr <angelo.zerr@gmail.com> - translation and adaptation to Java
  */
-package org.eclipse.tm4e.core.internal.grammars;
+package org.eclipse.tm4e.core.internal.registry;
 
 import java.util.ArrayList;
 import java.util.Collection;

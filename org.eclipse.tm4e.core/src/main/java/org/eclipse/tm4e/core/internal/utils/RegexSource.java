@@ -33,16 +33,56 @@ public final class RegexSource {
 	private static final Pattern CAPTURING_REGEX_SOURCE = Pattern
 			.compile("\\$(\\d+)|\\$\\{(\\d+):\\/(downcase|upcase)}");
 
-	private static final Pattern REGEXP_CHARACTERS = Pattern
-			.compile("[\\-\\\\\\{\\}\\*\\+\\?\\|\\^\\$\\.\\,\\[\\]\\(\\)\\#\\s]");
-
+	/**
+	 * Escapes/prefixes RegEx meta characters with a backslash in the given string.
+	 *
+	 * It is a non-regex based faster alternative to the <a href=
+	 * "https://github.com/microsoft/vscode-textmate/blob/9157c7f869219dbaf9a5a5607f099c00fe694a29/src/rule.ts#L500">TypeScript
+	 * implementation</a>:
+	 *
+	 * <pre>
+	 * function escapeRegExpCharacters(value: string): string {
+	 *   return value.replace(/[\-\\\{\}\*\+\?\|\^\$\.\,\[\]\(\)\#\s]/g, '\\$&');
+	 * }
+	 * </pre>
+	 *
+	 * @return a string with the RegEx meta characters escaped
+	 */
 	public static String escapeRegExpCharacters(final String value) {
-		final var m = REGEXP_CHARACTERS.matcher(value);
-		final var sb = new StringBuilder();
-		while (m.find()) {
-			m.appendReplacement(sb, "\\\\\\\\" + m.group());
+		final int valueLen = value.length();
+		final var sb = new StringBuilder(valueLen);
+		for (int i = 0; i < valueLen; i++) {
+			final char ch = value.charAt(i);
+			switch (ch) {
+			case '-':
+			case '\\':
+			case '{':
+			case '}':
+			case '*':
+			case '+':
+			case '?':
+			case '|':
+			case '^':
+			case '$':
+			case '.':
+			case ',':
+			case '[':
+			case ']':
+			case '(':
+			case ')':
+			case '#':
+			/* escaping white space chars is actually not necessary:
+			case ' ':
+			case '\t':
+			case '\n':
+			case '\f':
+			case '\r':
+			case 0x0B: // vertical tab \v
+			*/
+				sb.append('\\');
+			}
+			sb.append(ch);
 		}
-		m.appendTail(sb);
 		return sb.toString();
 	}
 

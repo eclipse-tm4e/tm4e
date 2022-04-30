@@ -16,10 +16,10 @@
  */
 package org.eclipse.tm4e.core.internal.rule;
 
-import java.util.Arrays;
+import java.util.ArrayList;
 import java.util.Objects;
+import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import java.util.stream.Collectors;
 
 import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.tm4e.core.internal.oniguruma.OnigCaptureIndex;
@@ -104,35 +104,36 @@ final class RegExpSource {
 		}
 	}
 
+	@SuppressWarnings("null")
 	String resolveBackReferences(final String lineText, final OnigCaptureIndex[] captureIndices) {
-		try {
-			final var capturedValues = Arrays.stream(captureIndices)
-					.map(capture -> lineText.substring(capture.start, capture.end))
-					.collect(Collectors.toList());
-			final var m = BACK_REFERENCING_END.matcher(this.source);
-			final var sb = new StringBuilder();
-			while (m.find()) {
-				final var g1 = m.group();
-				final var index = Integer.parseInt(g1.substring(1));
-				final var replacement = RegexSource.escapeRegExpCharacters(
-						capturedValues.size() > index ? capturedValues.get(index) : "");
-				m.appendReplacement(sb, replacement);
-			}
-			m.appendTail(sb);
-			return sb.toString();
-		} catch (RuntimeException ex) {
-			// ex.printStackTrace();
-			return lineText;
+		final var capturedValues = new ArrayList<String>(captureIndices.length);
+		for (final var capture : captureIndices) {
+			capturedValues.add(lineText.substring(capture.start, capture.end));
 		}
+		return BACK_REFERENCING_END.matcher(this.source).replaceAll(match -> {
+			try {
+				final int index = Integer.parseInt(match.group(1));
+				if (index < captureIndices.length) {
+					final var replacement = RegexSource.escapeRegExpCharacters(capturedValues.get(index));
+					return Matcher.quoteReplacement(replacement); // see https://stackoverflow.com/a/70785772/5116073
+				}
+			} catch (NumberFormatException ex) {
+				// ignore
+			}
+			return "";
+		});
 	}
 
-	private String [][] buildAnchorCache() {
-		final var A0_G0_result = new StringBuilder();
-		final var A0_G1_result = new StringBuilder();
-		final var A1_G0_result = new StringBuilder();
-		final var A1_G1_result = new StringBuilder();
+	private String[][] buildAnchorCache() {
+		final var source = this.source;
+		final var sourceLen = source.length();
 
-		for (int pos = 0, len = source.length(); pos < len; pos++) {
+		final var A0_G0_result = new StringBuilder(sourceLen);
+		final var A0_G1_result = new StringBuilder(sourceLen);
+		final var A1_G0_result = new StringBuilder(sourceLen);
+		final var A1_G1_result = new StringBuilder(sourceLen);
+
+		for (int pos = 0, len = sourceLen; pos < len; pos++) {
 			final char ch = source.charAt(pos);
 			A0_G0_result.append(ch);
 			A0_G1_result.append(ch);

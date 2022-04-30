@@ -14,6 +14,6 @@ package org.eclipse.tm4e.core.model;
 @FunctionalInterface
 public interface IModelTokensChangedListener {
 
-	void modelTokensChanged(ModelTokensChangedEvent e);
+	void modelTokensChanged(ModelTokensChangedEvent event);
 
 }

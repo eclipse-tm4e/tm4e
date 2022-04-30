@@ -21,7 +21,7 @@ public class TMToken {
 	public final int startIndex;
 	public final String type;
 
-	public TMToken(int startIndex, String type) {
+	public TMToken(final int startIndex, final String type) {
 		this.startIndex = startIndex;
 		this.type = type;
 	}

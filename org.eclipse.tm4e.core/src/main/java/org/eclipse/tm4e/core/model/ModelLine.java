@@ -13,10 +13,16 @@ package org.eclipse.tm4e.core.model;
 
 import java.util.List;
 
+import org.eclipse.jdt.annotation.Nullable;
+
 public class ModelLine {
 
 	boolean isInvalid;
-	TMState state;
+
+	@Nullable
+	private TMState state;
+
+	@Nullable
 	List<TMToken> tokens;
 
 	public void resetTokenizationState() {
@@ -24,18 +30,20 @@ public class ModelLine {
 		this.tokens = null;
 	}
 
+	@Nullable
 	public TMState getState() {
 		return state;
 	}
 
-	public void setState(TMState state) {
+	public void setState(@Nullable final TMState state) {
 		this.state = state;
 	}
 
-	public void setTokens(List<TMToken> tokens) {
+	public void setTokens(@Nullable final List<TMToken> tokens) {
 		this.tokens = tokens;
 	}
 
+	@Nullable
 	public List<TMToken> getTokens() {
 		return tokens;
 	}

@@ -19,30 +19,32 @@ package org.eclipse.tm4e.core.model;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
+import org.eclipse.jdt.annotation.Nullable;
+
 import com.google.common.base.Splitter;
 
-class DecodeMap {
+final class DecodeMap {
 
 	private static final String[] EMPTY_STRING_ARRAY = new String[0];
 	private static final Splitter BY_DOT_SPLITTER = Splitter.on('.');
 
-	int lastAssignedId = 0;
-	final Map<String /* scope */, int[] /* ids */ > scopeToTokenIds = new LinkedHashMap<>();
-	final Map<String /* token */, Integer /* id */ > tokenToTokenId = new LinkedHashMap<>();
-	final Map<Integer /* id */, String /* id */ > tokenIdToToken = new LinkedHashMap<>();
+	private int lastAssignedId = 0;
+	private final Map<String /* scope */, int @Nullable[] /* ids */ > scopeToTokenIds = new LinkedHashMap<>();
+	private final Map<String /* token */, @Nullable Integer /* id */ > tokenToTokenId = new LinkedHashMap<>();
+	private final Map<Integer /* id */, String /* id */ > tokenIdToToken = new LinkedHashMap<>();
 	TMTokenDecodeData prevToken = new TMTokenDecodeData(EMPTY_STRING_ARRAY,
 			new LinkedHashMap<>());
 
-	public int[] getTokenIds(String scope) {
+	public int[] getTokenIds(final String scope) {
 		int[] tokens = this.scopeToTokenIds.get(scope);
 		if (tokens != null) {
 			return tokens;
 		}
-		String[] tmpTokens = BY_DOT_SPLITTER.splitToStream(scope).toArray(String[]::new);
+		final String[] tmpTokens = BY_DOT_SPLITTER.splitToStream(scope).toArray(String[]::new);
 
 		tokens = new int[tmpTokens.length];
 		for (int i = 0; i < tmpTokens.length; i++) {
-			String token = tmpTokens[i];
+			final String token = tmpTokens[i];
 			Integer tokenId = this.tokenToTokenId.get(token);
 			if (tokenId == null) {
 				tokenId = (++this.lastAssignedId);
@@ -56,7 +58,7 @@ class DecodeMap {
 		return tokens;
 	}
 
-	public String getToken(Map<Integer, Boolean> tokenMap) {
+	public String getToken(final Map<Integer, Boolean> tokenMap) {
 		final StringBuilder result = new StringBuilder();
 		boolean isFirst = true;
 		for (int i = 1; i <= this.lastAssignedId; i++) {

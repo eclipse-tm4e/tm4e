@@ -16,20 +16,23 @@
  */
 package org.eclipse.tm4e.core.model;
 
+import static org.eclipse.tm4e.core.internal.utils.MoreCollections.*;
 import java.util.ArrayList;
 import java.util.List;
 
-class ModelTokensChangedEventBuilder {
+import org.eclipse.jdt.annotation.Nullable;
+
+final class ModelTokensChangedEventBuilder {
 
 	private final ITMModel model;
 	private final List<Range> ranges = new ArrayList<>();
 
-	public ModelTokensChangedEventBuilder(ITMModel model) {
+	public ModelTokensChangedEventBuilder(final ITMModel model) {
 		this.model = model;
 	}
 
-	public void registerChangedTokens(int lineNumber) {
-		Range previousRange = ranges.isEmpty() ? null : ranges.get(ranges.size() - 1);
+	public void registerChangedTokens(final int lineNumber) {
+		final Range previousRange = findLastElement(ranges);
 
 		if (previousRange != null && previousRange.toLineNumber == lineNumber - 1) {
 			// extend previous range
@@ -40,6 +43,7 @@ class ModelTokensChangedEventBuilder {
 		}
 	}
 
+	@Nullable
 	public ModelTokensChangedEvent build() {
 		if (this.ranges.isEmpty()) {
 			return null;

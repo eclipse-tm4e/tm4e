@@ -11,6 +11,8 @@
  */
 package org.eclipse.tm4e.core.grammar;
 
+import static org.eclipse.tm4e.core.internal.utils.NullSafetyHelper.*;
+
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
@@ -30,7 +32,7 @@ class GrammarTest2 {
 	void tokenizeLines() throws Exception {
 		Registry registry = new Registry();
 		String path = "JavaScript.tmLanguage";
-		IGrammar grammar = registry.loadGrammarFromPathSync(path, Data.class.getResourceAsStream(path));
+		IGrammar grammar = castNonNull(registry.loadGrammarFromPathSync(path, Data.class.getResourceAsStream(path)));
 
 		StackElement ruleStack = null;
 		int i = 0;

@@ -11,6 +11,8 @@
  */
 package org.eclipse.tm4e.core.grammar;
 
+import static org.eclipse.tm4e.core.internal.utils.NullSafetyHelper.*;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Collection;
@@ -46,6 +48,7 @@ public class GrammarInjectionTest {
 	public void angular2TokenizeLine() throws Exception {
 		Registry registry = new Registry(new IRegistryOptions() {
 
+			@Nullable
 			@Override
 			public InputStream getInputStream(@Nullable String scopeName) throws IOException {
 				return Data.class.getResourceAsStream(getFilePath(scopeName));
@@ -78,7 +81,7 @@ public class GrammarInjectionTest {
 			}
 		});
 		IGrammar grammar = registry.loadGrammar("source.ts");
-		ITokenizeLineResult lineTokens = grammar.tokenizeLine("@Component({template:`<a href='' ></a>`})");
+		final var lineTokens = castNonNull(grammar).tokenizeLine("@Component({template:`<a href='' ></a>`})");
 		for (int i = 0; i < lineTokens.getTokens().length; i++) {
 			IToken token = lineTokens.getTokens()[i];
 			String s = "Token from " + token.getStartIndex() + " to " + token.getEndIndex() + " with scopes "

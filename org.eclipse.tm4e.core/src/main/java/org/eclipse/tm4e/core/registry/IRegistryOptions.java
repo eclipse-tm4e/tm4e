@@ -28,38 +28,42 @@ import org.eclipse.tm4e.core.theme.IRawTheme;
  * @see <a href=
  *      "https://github.com/microsoft/vscode-textmate/blob/9157c7f869219dbaf9a5a5607f099c00fe694a29/src/main.ts#L39">
  *      github.com/Microsoft/vscode-textmate/blob/master/src/main.ts</a>
- *
  */
 public interface IRegistryOptions {
 
 	IRegistryOptions DEFAULT_LOCATOR = new IRegistryOptions() {
 
+		@Nullable
 		@Override
-		public String getFilePath(String scopeName) {
+		public String getFilePath(final String scopeName) {
 			return null;
 		}
 
+		@Nullable
 		@Override
-		public InputStream getInputStream(String scopeName) {
+		public InputStream getInputStream(final String scopeName) {
 			return null;
 		}
 
+		@Nullable
 		@Override
-		public Collection<String> getInjections(String scopeName) {
+		public Collection<String> getInjections(final String scopeName) {
 			return null;
 		}
 
 	};
 
+	@Nullable
 	default IRawTheme getTheme() {
 		return null;
 	}
 
+	@Nullable
 	String getFilePath(String scopeName);
 
+	@Nullable
 	InputStream getInputStream(String scopeName) throws IOException;
 
 	@Nullable
 	Collection<@NonNull String> getInjections(String scopeName);
-
 }

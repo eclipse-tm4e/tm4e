@@ -11,6 +11,8 @@
  */
 package org.eclipse.tm4e.core.grammar;
 
+import static org.eclipse.tm4e.core.internal.utils.NullSafetyHelper.*;
+
 import org.eclipse.tm4e.core.Data;
 import org.eclipse.tm4e.core.registry.Registry;
 import org.junit.jupiter.api.Assertions;
@@ -62,7 +64,7 @@ public class GrammarTest {
 		Registry registry = new Registry();
 		String path = "JavaScript.tmLanguage";
 		IGrammar grammar = registry.loadGrammarFromPathSync(path, Data.class.getResourceAsStream(path));
-		ITokenizeLineResult lineTokens = grammar.tokenizeLine("function add(a,b) { return a+b; }");
+		ITokenizeLineResult lineTokens = castNonNull(grammar).tokenizeLine("function add(a,b) { return a+b; }");
 		for (int i = 0; i < lineTokens.getTokens().length; i++) {
 			IToken token = lineTokens.getTokens()[i];
 			String s = "Token from " + token.getStartIndex() + " to " + token.getEndIndex() + " with scopes "
@@ -82,7 +84,7 @@ public class GrammarTest {
 		int j = 0;
 		String[] lines = { "function add(a,b)", "{ return a+b; }" };
 		for (int l = 0; l < lines.length; l++) {
-			ITokenizeLineResult lineTokens = grammar.tokenizeLine(lines[l], ruleStack);
+			ITokenizeLineResult lineTokens = castNonNull(grammar).tokenizeLine(lines[l], ruleStack);
 			ruleStack = lineTokens.getRuleStack();
 			for (i = 0; i < lineTokens.getTokens().length; i++) {
 				IToken token = lineTokens.getTokens()[i];

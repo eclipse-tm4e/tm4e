@@ -11,6 +11,8 @@
  */
 package org.eclipse.tm4e.core.grammar;
 
+import static org.eclipse.tm4e.core.internal.utils.NullSafetyHelper.*;
+
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
@@ -24,8 +26,8 @@ public class MarkDown {
 	public static void main(String[] args) throws Exception {
 		Registry registry = new Registry();
 		String path = "Markdown.tmLanguage";
-		IGrammar grammar = registry.loadGrammarFromPathSync(path, Data.class.getResourceAsStream(path));
-		
+		IGrammar grammar = castNonNull(registry.loadGrammarFromPathSync(path, Data.class.getResourceAsStream(path)));
+
 		List<String> lines = new ArrayList<>();
 		try (BufferedReader reader = new BufferedReader(new InputStreamReader(Data.class.getResourceAsStream("test.md.txt")))) {
 			String line = null;
@@ -36,13 +38,13 @@ public class MarkDown {
 			e.printStackTrace();
 		}
 
-		
+
 		long start = System.currentTimeMillis();
-		
+
 		StackElement ruleStack = null;
 		int i = 0;
 		for (String line : lines) {
-			ITokenizeLineResult lineTokens = grammar.tokenizeLine(line, ruleStack);			
+			ITokenizeLineResult lineTokens = grammar.tokenizeLine(line, ruleStack);
 			ruleStack = lineTokens.getRuleStack();
 			for (i = 0; i < lineTokens.getTokens().length; i++) {
 //				IToken token = lineTokens.getTokens()[i];
@@ -51,10 +53,10 @@ public class MarkDown {
 				//System.err.println(s);
 				// Assert.assertEquals(EXPECTED_MULTI_LINE_TOKENS[i + j], s);
 			}
-		}	
+		}
 		System.err.println(System.currentTimeMillis() - start);
 	}
-	
+
 	static String convertStreamToString(java.io.InputStream is) {
 	    try (java.util.Scanner s = new java.util.Scanner(is).useDelimiter("\\A")) {
 	    	return s.hasNext() ? s.next() : "";

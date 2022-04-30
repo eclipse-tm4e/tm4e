@@ -20,21 +20,22 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.tm4e.core.TMException;
 import org.eclipse.tm4e.core.grammar.IGrammar;
 import org.eclipse.tm4e.core.internal.grammar.reader.GrammarReader;
 import org.eclipse.tm4e.core.internal.registry.SyncRegistry;
-import org.eclipse.tm4e.core.internal.types.IRawGrammar;
 import org.eclipse.tm4e.core.theme.IRawTheme;
 import org.eclipse.tm4e.core.theme.Theme;
 
 /**
  * The registry that will hold all grammars.
+ *
+ *	TODO outdated compared to upstream as of: https://github.com/microsoft/vscode-textmate/commit/b166b75fa72d2dd3efce0d68c98c2bd10adc1ef1
  *
  * @see <a href=
  *      "https://github.com/microsoft/vscode-textmate/blob/9157c7f869219dbaf9a5a5607f099c00fe694a29/src/main.ts#L77">
@@ -50,16 +51,15 @@ public class Registry {
 		this(IRegistryOptions.DEFAULT_LOCATOR);
 	}
 
-	public Registry(IRegistryOptions locator) {
+	public Registry(final IRegistryOptions locator) {
 		this.locator = locator;
 		this.syncRegistry = new SyncRegistry(Theme.createFromRawTheme(locator.getTheme()));
 	}
 
 	/**
-	 * Change the theme. Once called, no previous `ruleStack` should be used
-	 * anymore.
+	 * Change the theme. Once called, no previous `ruleStack` should be used anymore.
 	 */
-	public void setTheme(IRawTheme theme) {
+	public void setTheme(final IRawTheme theme) {
 		this.syncRegistry.setTheme(Theme.createFromRawTheme(theme));
 	}
 
@@ -70,45 +70,45 @@ public class Registry {
 		return this.syncRegistry.getColorMap();
 	}
 
-	public IGrammar loadGrammar(String initialScopeName) {
-		List<String> remainingScopeNames = new ArrayList<>();
+	@Nullable
+	public IGrammar loadGrammar(final String initialScopeName) {
+		final List<String> remainingScopeNames = new ArrayList<>();
 		remainingScopeNames.add(initialScopeName);
 
-		List<String> seenScopeNames = new ArrayList<>();
+		final List<String> seenScopeNames = new ArrayList<>();
 		seenScopeNames.add(initialScopeName);
 
 		while (!remainingScopeNames.isEmpty()) {
-			String scopeName = remainingScopeNames.remove(0); // shift();
+			final String scopeName = remainingScopeNames.remove(0);
 
 			if (this.syncRegistry.lookup(scopeName) != null) {
 				continue;
 			}
 
-			String filePath = this.locator.getFilePath(scopeName);
+			final String filePath = this.locator.getFilePath(scopeName);
 			if (filePath == null) {
 				if (scopeName.equals(initialScopeName)) {
 					throw new TMException("Unknown location for grammar <" + initialScopeName + ">");
-					// callback(new Error('Unknown location for grammar <' + initialScopeName + '>'), null);
-					// return;
 				}
 				continue;
 			}
 
 			try (InputStream in = this.locator.getInputStream(scopeName)) {
-				IRawGrammar grammar = GrammarReader.readGrammarSync(filePath, in);
-				Collection<String> injections = this.locator.getInjections(scopeName);
+				if (in == null) {
+					throw new TMException("Unknown location for grammar <" + initialScopeName + ">");
+				}
+				final var grammar = GrammarReader.readGrammarSync(filePath, in);
+				final var injections = this.locator.getInjections(scopeName);
 
-				Collection<String> deps = this.syncRegistry.addGrammar(grammar, injections);
-				for (String dep : deps) {
+				final var deps = this.syncRegistry.addGrammar(grammar, injections);
+				for (final String dep : deps) {
 					if (!seenScopeNames.contains(dep)) {
 						seenScopeNames.add(dep);
 						remainingScopeNames.add(dep);
 					}
 				}
-			} catch (Throwable e) {
+			} catch (final Exception e) {
 				if (scopeName.equals(initialScopeName)) {
-					// callback(new Error('Unknown location for grammar <' + initialScopeName + '>'), null);
-					// return;
 					throw new TMException("Unknown location for grammar <" + initialScopeName + ">", e);
 				}
 			}
@@ -116,38 +116,42 @@ public class Registry {
 		return this.grammarForScopeName(initialScopeName);
 	}
 
-	public IGrammar loadGrammarFromPathSync(File file) throws Exception {
+	@Nullable
+	public IGrammar loadGrammarFromPathSync(final File file) throws Exception {
 		try (InputStream is = new FileInputStream(file)) {
 			return loadGrammarFromPathSync(file.getPath(), is);
 		}
 	}
 
-	public IGrammar loadGrammarFromPathSync(String path, InputStream in) throws Exception {
+	@Nullable
+	public IGrammar loadGrammarFromPathSync(final String path, final InputStream in) throws Exception {
 		return loadGrammarFromPathSync(path, in, 0, null);
 	}
 
 	/**
 	 * Load the grammar at `path` synchronously.
-	 *
-	 * @throws Exception
 	 */
-	public IGrammar loadGrammarFromPathSync(String path, InputStream in, int initialLanguage,
-			Map<String, Integer> embeddedLanguages) throws Exception {
-		IRawGrammar rawGrammar = GrammarReader.readGrammarSync(path, in);
-		Collection<String> injections = this.locator.getInjections(rawGrammar.getScopeName());
+	@Nullable
+	public IGrammar loadGrammarFromPathSync(final String path, final InputStream in, final int initialLanguage,
+			@Nullable final Map<String, Integer> embeddedLanguages) throws Exception {
+		final var rawGrammar = GrammarReader.readGrammarSync(path, in);
+		final var injections = this.locator.getInjections(rawGrammar.getScopeName());
 		this.syncRegistry.addGrammar(rawGrammar, injections);
 		return this.grammarForScopeName(rawGrammar.getScopeName(), initialLanguage, embeddedLanguages);
 	}
 
-	public IGrammar grammarForScopeName(String scopeName) {
+	@Nullable
+	public IGrammar grammarForScopeName(final String scopeName) {
 		return grammarForScopeName(scopeName, 0, null);
 	}
 
 	/**
-	 * Get the grammar for `scopeName`. The grammar must first be created via
-	 * `loadGrammar` or `loadGrammarFromPathSync`.
+	 * Get the grammar for `scopeName`.
+	 * The grammar must first be created via `loadGrammar` or `loadGrammarFromPathSync`.
 	 */
-	public IGrammar grammarForScopeName(String scopeName, int initialLanguage, Map<String, Integer> embeddedLanguages) {
+	@Nullable
+	public IGrammar grammarForScopeName(final String scopeName, final int initialLanguage,
+			@Nullable final Map<String, Integer> embeddedLanguages) {
 		return this.syncRegistry.grammarForScopeName(scopeName, initialLanguage, embeddedLanguages);
 	}
 

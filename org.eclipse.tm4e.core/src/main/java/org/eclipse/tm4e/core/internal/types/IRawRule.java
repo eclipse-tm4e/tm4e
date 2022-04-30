@@ -1,5 +1,5 @@
 /**
- *  Copyright (c) 2015-2017 Angelo ZERR.
+ * Copyright (c) 2015-2017 Angelo ZERR.
  * This program and the accompanying materials are made
  * available under the terms of the Eclipse Public License 2.0
  * which is available at https://www.eclipse.org/legal/epl-2.0/
@@ -11,8 +11,8 @@
  * Initial license: MIT
  *
  * Contributors:
- *  - Microsoft Corporation: Initial code, written in TypeScript, licensed under MIT license
- *  - Angelo Zerr <angelo.zerr@gmail.com> - translation and adaptation to Java
+ * - Microsoft Corporation: Initial code, written in TypeScript, licensed under MIT license
+ * - Angelo Zerr <angelo.zerr@gmail.com> - translation and adaptation to Java
  */
 package org.eclipse.tm4e.core.internal.types;
 
@@ -22,58 +22,71 @@ import org.eclipse.jdt.annotation.Nullable;
 
 public interface IRawRule {
 
+	@Nullable
 	Integer getId();
 
-	void setId(Integer id);
+	void setId(@Nullable Integer id);
 
+	@Nullable
 	String getInclude();
 
-	void setInclude(String include);
+	void setInclude(@Nullable String include);
 
+	@Nullable
 	String getName();
 
-	void setName(String name);
+	void setName(@Nullable String name);
 
+	@Nullable
 	String getContentName();
 
-	void setContentName(String name);
+	void setContentName(@Nullable String name);
 
+	@Nullable
 	String getMatch();
 
-	void setMatch(String match);
+	void setMatch(@Nullable String match);
 
+	@Nullable
 	IRawCaptures getCaptures();
 
-	void setCaptures(IRawCaptures captures);
+	void setCaptures(@Nullable IRawCaptures captures);
 
+	@Nullable
 	String getBegin();
 
-	void setBegin(String begin);
+	void setBegin(@Nullable String begin);
 
 	@Nullable
 	IRawCaptures getBeginCaptures();
 
-	void setBeginCaptures(IRawCaptures beginCaptures);
+	void setBeginCaptures(@Nullable IRawCaptures beginCaptures);
 
+	@Nullable
 	String getEnd();
 
-	void setEnd(String end);
+	void setEnd(@Nullable String end);
 
+	@Nullable
 	String getWhile();
 
+	@Nullable
 	IRawCaptures getEndCaptures();
 
-	void setEndCaptures(IRawCaptures endCaptures);
+	void setEndCaptures(@Nullable IRawCaptures endCaptures);
 
+	@Nullable
 	IRawCaptures getWhileCaptures();
 
+	@Nullable
 	Collection<IRawRule> getPatterns();
 
-	void setPatterns(Collection<IRawRule> patterns);
+	void setPatterns(@Nullable Collection<IRawRule> patterns);
 
+	@Nullable
 	IRawRepository getRepository();
 
-	void setRepository(IRawRepository repository);
+	void setRepository(@Nullable IRawRepository repository);
 
 	boolean isApplyEndPatternLast();
 

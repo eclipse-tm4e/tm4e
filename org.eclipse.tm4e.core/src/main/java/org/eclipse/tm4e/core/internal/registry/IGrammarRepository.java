@@ -18,6 +18,7 @@ package org.eclipse.tm4e.core.internal.registry;
 
 import java.util.Collection;
 
+import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.tm4e.core.internal.types.IRawGrammar;
 
 /**
@@ -32,10 +33,12 @@ public interface IGrammarRepository {
 	/**
 	 * Lookup a raw grammar.
 	 */
+	@Nullable
 	IRawGrammar lookup(String scopeName);
 
 	/**
 	 * Returns the injections for the given grammar
 	 */
+	@Nullable
 	Collection<String> injections(String targetScope);
 }

@@ -96,33 +96,38 @@ public final class ScopeListElement {
 		return (selector.equals(scope) || scope.startsWith(selectorWithDot));
 	}
 
-	private static boolean matches(@Nullable ScopeListElement target, final List<String> parentScopes) {
-		if (parentScopes == null) {
+	/**
+	 * implementation differs from upstream in that it is prevents potential NPEs/IndexOutOfBoundExceptions
+	 */
+	private static boolean matches(@Nullable ScopeListElement target, @Nullable final List<String> parentScopes) {
+		if (parentScopes == null || parentScopes.isEmpty()) {
 			return true;
 		}
 
-		final int len = parentScopes.size();
-		int index = 0;
-		String selector = parentScopes.get(index);
-		String selectorWithDot = selector + '.';
-
-		while (target != null) {
-			if (matchesScope(target.scope, selector, selectorWithDot)) {
-				index++;
-				if (index == len) {
-					return true;
-				}
-				selector = parentScopes.get(index);
-				selectorWithDot = selector + '.';
-			}
-			target = target.parent;
+		if (target == null) {
+			return false;
 		}
 
-		return false;
+		parent_scopes_loop: for (final String selector : parentScopes) {
+			final String selectorWithDot = selector + '.';
+
+			while (target != null) {
+				if (matchesScope(target.scope, selector, selectorWithDot)) {
+					// match for current parent scope found, continue with checking next parent scope
+					continue parent_scopes_loop;
+				}
+				target = target.parent;
+			}
+			// no match for current parent scope found, early exit
+			return false;
+		}
+
+		// matches for all parent scopes found
+		return true;
 	}
 
 	public static int mergeMetadata(final int metadata, @Nullable final ScopeListElement scopesList,
-			final ScopeMetadata source) {
+			@Nullable final ScopeMetadata source) {
 		if (source == null) {
 			return metadata;
 		}

@@ -13,9 +13,12 @@ package org.eclipse.tm4e.core.theme;
 
 import java.util.List;
 
+import org.eclipse.jdt.annotation.NonNull;
+
 public interface IThemeProvider {
 
-	List<ThemeTrieElementRule> themeMatch(String scopeName);
+	@NonNull
+	List<ThemeTrieElementRule> themeMatch(@NonNull String scopeName);
 
 	ThemeTrieElementRule getDefaults();
 

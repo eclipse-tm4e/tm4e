@@ -18,7 +18,7 @@ import org.eclipse.jdt.annotation.Nullable;
 
 final class PListDict extends PListObject {
 
-	private final Map<@Nullable String, Object> values;
+	private final Map<@Nullable String, @Nullable Object> values;
 
 	PListDict(@Nullable final PListObject parent, final MapFactory mapFactory) {
 		super(parent);

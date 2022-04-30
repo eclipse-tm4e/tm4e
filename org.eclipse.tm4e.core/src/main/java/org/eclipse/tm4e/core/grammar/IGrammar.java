@@ -34,6 +34,7 @@ public interface IGrammar {
 	 *
 	 * @return the name of the grammar.
 	 */
+	@Nullable
 	String getName();
 
 	/**

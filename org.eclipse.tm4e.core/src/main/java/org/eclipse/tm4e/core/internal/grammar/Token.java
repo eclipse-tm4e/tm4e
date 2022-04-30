@@ -28,7 +28,7 @@ final class Token implements IToken {
 
 	private final List<String> scopes;
 
-	Token(int startIndex, int endIndex, List<String> scopes) {
+	Token(final int startIndex, final int endIndex, final List<String> scopes) {
 		this.startIndex = startIndex;
 		this.endIndex = endIndex;
 		this.scopes = scopes;
@@ -40,7 +40,7 @@ final class Token implements IToken {
 	}
 
 	@Override
-	public void setStartIndex(int startIndex) {
+	public void setStartIndex(final int startIndex) {
 		this.startIndex = startIndex;
 	}
 

@@ -42,7 +42,7 @@ public final class BeginWhileRule extends Rule {
 	@Nullable
 	private RegExpSourceList cachedCompiledWhilePatterns;
 
-	BeginWhileRule(/* $location:ILocation, */ int id, String name, String contentName, String begin,
+	BeginWhileRule(int id, @Nullable String name, @Nullable String contentName, String begin,
 			List<@Nullable CaptureRule> beginCaptures, String _while, List<@Nullable CaptureRule> whileCaptures,
 			CompilePatternsResult patterns) {
 		super(/* $location, */id, name, contentName);

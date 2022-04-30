@@ -19,5 +19,5 @@ import org.eclipse.jdt.annotation.Nullable;
 @FunctionalInterface
 public interface MapFactory {
 
-	Map<@Nullable String, Object> createMap();
+	Map<@Nullable String, @Nullable Object> createMap();
 }

@@ -13,9 +13,8 @@ package org.eclipse.tm4e.core.internal.grammar;
 
 /**
  * Standard TextMate token type.
- *
  */
-final class StandardTokenType {
+class StandardTokenType {
 
 	/**
 	 * Content should be accessed statically
@@ -27,5 +26,4 @@ final class StandardTokenType {
 	static final int Comment = 1;
 	static final int String = 2;
 	static final int RegEx = 3;
-
 }

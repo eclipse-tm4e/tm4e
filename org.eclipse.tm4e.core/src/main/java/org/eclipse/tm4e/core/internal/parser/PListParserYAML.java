@@ -12,6 +12,7 @@
  */
 package org.eclipse.tm4e.core.internal.parser;
 
+import static org.eclipse.tm4e.core.internal.utils.NullSafetyHelper.castNonNull;
 import java.io.InputStream;
 import java.util.List;
 import java.util.Map;
@@ -54,16 +55,16 @@ public final class PListParserYAML<T> implements PListParser<T> {
 			throws SAXException {
 		pList.startElement(null, "dict", null, null);
 
-		for (final Entry<String, Object> entry : map.entrySet()) {
+		for (final Entry< String, Object> entry : map.entrySet()) {
 			pList.startElement(null, "key", null, null);
-			pList.characters(entry.getKey().toCharArray(), 0, entry.getKey().length());
+			pList.characters(castNonNull(entry.getKey()).toCharArray(), 0, castNonNull(entry.getKey()).length());
 			pList.endElement(null, "key", null);
 			if (entry.getValue() instanceof List) {
 				addListToPList(pList, (List<Object>) entry.getValue());
 			} else if (entry.getValue() instanceof Map) {
 				addMapToPList(pList, (Map<String, Object>) entry.getValue());
 			} else {
-				addStringToPList(pList, entry.getValue().toString());
+				addStringToPList(pList, castNonNull(entry.getValue()).toString());
 			}
 		}
 

@@ -36,15 +36,15 @@ public final class GrammarReader {
 	private GrammarReader() {
 	}
 
-	private static final PListParser<IRawGrammar> XML_PARSER = new PListParserXML<>(Raw::new);
 	private static final PListParser<IRawGrammar> JSON_PARSER = new PListParserJSON<>(Raw::new);
+	private static final PListParser<IRawGrammar> XML_PARSER = new PListParserXML<>(Raw::new);
 	private static final PListParser<IRawGrammar> YAML_PARSER = new PListParserYAML<>(Raw::new);
 
-	public static IRawGrammar readGrammarSync(String filePath, InputStream in) throws Exception {
+	public static IRawGrammar readGrammarSync(final String filePath, final InputStream in) throws Exception {
 		return getGrammarParser(filePath).parse(in);
 	}
 
-	private static PListParser<IRawGrammar> getGrammarParser(String filePath) {
+	private static PListParser<IRawGrammar> getGrammarParser(final String filePath) {
 		String extension = filePath.substring(filePath.lastIndexOf('.') + 1).trim().toLowerCase();
 
 		switch (extension) {

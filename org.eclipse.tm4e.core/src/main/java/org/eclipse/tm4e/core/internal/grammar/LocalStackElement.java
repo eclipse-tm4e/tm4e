@@ -21,7 +21,7 @@ final class LocalStackElement {
 	final ScopeListElement scopes;
 	final int endPos;
 
-	LocalStackElement(ScopeListElement scopes, int endPos) {
+	LocalStackElement(final ScopeListElement scopes, final int endPos) {
 		this.scopes = scopes;
 		this.endPos = endPos;
 	}

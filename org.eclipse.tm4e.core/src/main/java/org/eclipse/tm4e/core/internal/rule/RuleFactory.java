@@ -16,6 +16,8 @@
  */
 package org.eclipse.tm4e.core.internal.rule;
 
+import static org.eclipse.tm4e.core.internal.utils.NullSafetyHelper.*;
+
 import static java.lang.System.Logger.Level.*;
 
 import java.lang.System.Logger;
@@ -40,8 +42,8 @@ public final class RuleFactory {
 
 	private static final Logger LOGGER = System.getLogger(RuleFactory.class.getName());
 
-	private static CaptureRule createCaptureRule(final IRuleFactoryHelper helper, final String name,
-			final String contentName, @Nullable final Integer retokenizeCapturedWithRuleId) {
+	private static CaptureRule createCaptureRule(final IRuleFactoryHelper helper, @Nullable final String name,
+			@Nullable final String contentName, @Nullable final Integer retokenizeCapturedWithRuleId) {
 		return helper.registerRule(id -> new CaptureRule(id, name, contentName, retokenizeCapturedWithRuleId));
 	}
 
@@ -57,7 +59,8 @@ public final class RuleFactory {
 							compileCaptures(desc.getCaptures(), helper, repository));
 				}
 
-				if (desc.getBegin() == null) {
+				final var begin = desc.getBegin();
+				if (begin == null) {
 					final var repository1 = desc.getRepository() == null
 							? repository
 							: IRawRepository.merge(repository, desc.getRepository());
@@ -82,7 +85,7 @@ public final class RuleFactory {
 							ruleId,
 							desc.getName(),
 							desc.getContentName(),
-							desc.getBegin(), compileCaptures(
+							begin, compileCaptures(
 									desc.getBeginCaptures() != null ? desc.getBeginCaptures() : desc.getCaptures(),
 									helper, repository),
 							ruleWhile, compileCaptures(
@@ -96,7 +99,7 @@ public final class RuleFactory {
 						ruleId,
 						desc.getName(),
 						desc.getContentName(),
-						desc.getBegin(), compileCaptures(
+						begin, compileCaptures(
 								desc.getBeginCaptures() != null ? desc.getBeginCaptures() : desc.getCaptures(),
 								helper, repository),
 						desc.getEnd(), compileCaptures(
@@ -106,7 +109,7 @@ public final class RuleFactory {
 						compilePatterns(desc.getPatterns(), helper, repository));
 			});
 		}
-		return desc.getId();
+		return castNonNull(desc.getId());
 	}
 
 	private static List<@Nullable CaptureRule> compileCaptures(@Nullable final IRawCaptures captures,
@@ -160,7 +163,6 @@ public final class RuleFactory {
 		final var r = new ArrayList<Integer>();
 		for (final IRawRule pattern : patterns) {
 			int patternId = -1;
-
 			final var patternInclude = pattern.getInclude();
 			if (patternInclude == null) {
 				patternId = getCompiledRuleId(pattern, helper, repository);
@@ -174,10 +176,10 @@ public final class RuleFactory {
 						LOGGER.log(DEBUG, "CANNOT find rule for scopeName: %s, I am: %s",
 								patternInclude, repository.getBase().getName());
 					}
-				} else if (patternInclude.equals(Raw.DOLLAR_BASE) || patternInclude.equals(Raw.DOLLAR_SELF)) {
-					// Special include also found in `repository`
-					patternId = getCompiledRuleId(repository.getProp(patternInclude), helper,
-							repository);
+				} else if (patternInclude.equals(Raw.DOLLAR_BASE)) { // Special include also found in `repository`
+					patternId = getCompiledRuleId(repository.getBase(), helper, repository);
+				} else if (patternInclude.equals(Raw.DOLLAR_SELF)) { // Special include also found in `repository`
+					patternId = getCompiledRuleId(repository.getSelf(), helper, repository);
 				} else {
 					final String externalGrammarName;
 					final String externalGrammarInclude;
@@ -193,19 +195,17 @@ public final class RuleFactory {
 					// External include
 					final IRawGrammar externalGrammar = helper.getExternalGrammar(externalGrammarName, repository);
 					if (externalGrammar != null) {
+						final var externalGrammarRepo = externalGrammar.getRepositorySafe();
 						if (externalGrammarInclude != null) {
-							final IRawRule externalIncludedRule = externalGrammar.getRepository()
-									.getProp(externalGrammarInclude);
+							final IRawRule externalIncludedRule = externalGrammarRepo.getProp(externalGrammarInclude);
 							if (externalIncludedRule != null) {
-								patternId = getCompiledRuleId(externalIncludedRule, helper,
-										externalGrammar.getRepository());
+								patternId = getCompiledRuleId(externalIncludedRule, helper, externalGrammarRepo);
 							} else if (LOGGER.isLoggable(DEBUG)) {
 								LOGGER.log(DEBUG, "CANNOT find rule for scopeName: %s, I am: %s",
 										patternInclude, repository.getBase().getName());
 							}
 						} else {
-							patternId = getCompiledRuleId(externalGrammar.getRepository().getSelf(),
-									helper, externalGrammar.getRepository());
+							patternId = getCompiledRuleId(externalGrammarRepo.getSelf(), helper, externalGrammarRepo);
 						}
 					} else if (LOGGER.isLoggable(DEBUG)) {
 						LOGGER.log(DEBUG, "CANNOT find grammar for scopeName: %s, I am: %s",
@@ -215,7 +215,18 @@ public final class RuleFactory {
 			}
 
 			if (patternId != -1) {
-				final Rule rule = helper.getRule(patternId);
+				Rule rule;
+				try {
+					rule = helper.getRule(patternId);
+				} catch (IndexOutOfBoundsException ex) {
+					rule = null;
+					if (patternInclude != null) {
+						// TODO currently happens if an include rule references another not yet parsed rule
+					} else {
+						// should never happen
+						ex.printStackTrace();
+					}
+				}
 				boolean skipRule = false;
 
 				if (rule instanceof IncludeOnlyRule) {

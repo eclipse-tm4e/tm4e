@@ -13,16 +13,19 @@ package org.eclipse.tm4e.core.internal.grammar;
 
 import java.util.List;
 
+import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.tm4e.core.theme.ThemeTrieElementRule;
 
 public final class ScopeMetadata {
 
-	private final String scopeName;
+	final String scopeName;
 	final int languageId;
 	final int tokenType;
+
+	@Nullable
 	final List<ThemeTrieElementRule> themeData;
 
-	public ScopeMetadata(String scopeName, int languageId, int tokenType, List<ThemeTrieElementRule> themeData) {
+	public ScopeMetadata(final String scopeName, final int languageId, final int tokenType, @Nullable final List<ThemeTrieElementRule> themeData) {
 		this.scopeName = scopeName;
 		this.languageId = languageId;
 		this.tokenType = tokenType;

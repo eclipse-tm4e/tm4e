@@ -36,7 +36,8 @@ import org.eclipse.tm4e.core.theme.Theme;
 /**
  * The registry that will hold all grammars.
  *
- * @see <a href="https://github.com/Microsoft/vscode-textmate/blob/master/src/main.ts">
+ * @see <a href=
+ *      "https://github.com/microsoft/vscode-textmate/blob/9157c7f869219dbaf9a5a5607f099c00fe694a29/src/main.ts#L77">
  *      github.com/Microsoft/vscode-textmate/blob/master/src/main.ts</a>
  *
  */
@@ -87,8 +88,7 @@ public class Registry {
 			if (filePath == null) {
 				if (scopeName.equals(initialScopeName)) {
 					throw new TMException("Unknown location for grammar <" + initialScopeName + ">");
-					// callback(new Error('Unknown location for grammar <' +
-					// initialScopeName + '>'), null);
+					// callback(new Error('Unknown location for grammar <' + initialScopeName + '>'), null);
 					// return;
 				}
 				continue;
@@ -107,8 +107,7 @@ public class Registry {
 				}
 			} catch (Throwable e) {
 				if (scopeName.equals(initialScopeName)) {
-					// callback(new Error('Unknown location for grammar <' +
-					// initialScopeName + '>'), null);
+					// callback(new Error('Unknown location for grammar <' + initialScopeName + '>'), null);
 					// return;
 					throw new TMException("Unknown location for grammar <" + initialScopeName + ">", e);
 				}

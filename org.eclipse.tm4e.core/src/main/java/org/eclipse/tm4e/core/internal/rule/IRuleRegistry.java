@@ -25,6 +25,9 @@ import java.util.function.IntFunction;
  */
 public interface IRuleRegistry {
 
+	/**
+	 * @throws IndexOutOfBoundsException if no rule with the given id was found.
+	 */
 	Rule getRule(int patternId);
 
 	<T extends Rule> T registerRule(IntFunction<T> factory);

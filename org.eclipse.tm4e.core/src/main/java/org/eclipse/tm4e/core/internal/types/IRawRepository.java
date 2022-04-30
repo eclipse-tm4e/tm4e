@@ -1,5 +1,5 @@
 /**
- *  Copyright (c) 2015-2017 Angelo ZERR.
+ * Copyright (c) 2015-2017 Angelo ZERR.
  * This program and the accompanying materials are made
  * available under the terms of the Eclipse Public License 2.0
  * which is available at https://www.eclipse.org/legal/epl-2.0/
@@ -11,33 +11,36 @@
  * Initial license: MIT
  *
  * Contributors:
- *  - Microsoft Corporation: Initial code, written in TypeScript, licensed under MIT license
- *  - Angelo Zerr <angelo.zerr@gmail.com> - translation and adaptation to Java
+ * - Microsoft Corporation: Initial code, written in TypeScript, licensed under MIT license
+ * - Angelo Zerr <angelo.zerr@gmail.com> - translation and adaptation to Java
  */
 package org.eclipse.tm4e.core.internal.types;
 
 import java.util.Map;
-import java.util.Set;
 import java.util.Map.Entry;
+import java.util.Set;
 
 import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.tm4e.core.internal.grammar.Raw;
 
 public interface IRawRepository {
 
-	static IRawRepository merge(IRawRepository... sources) {
-	   final Raw merged = new Raw();
+	static IRawRepository merge(@Nullable IRawRepository... sources) {
+		final Raw merged = new Raw();
 		for (final IRawRepository source : sources) {
-		   final Set<Entry<String, Object>> entries = source.entrySet();
-			for (final Entry<String, Object> entry : entries) {
+			if (source == null)
+				continue;
+			final Set<Entry<@Nullable String, @Nullable Object>> entries = source.entrySet();
+			for (final Entry<@Nullable String, @Nullable Object> entry : entries) {
 				merged.put(entry.getKey(), entry.getValue());
 			}
 		}
 		return merged;
 	}
 
-	Set<Map.Entry<@Nullable String, Object>> entrySet();
+	Set<Map.Entry<@Nullable String, @Nullable Object /*TODO IRawRule*/>> entrySet();
 
+	@Nullable
 	IRawRule getProp(String name);
 
 	IRawRule getBase();

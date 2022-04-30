@@ -43,7 +43,6 @@ final class PListParserContentHandler<T> extends DefaultHandler {
 	public void startElement(@Nullable final String uri, @Nullable final String localName, @Nullable final String qName,
 			@Nullable final Attributes attributes) throws SAXException {
 		assert localName != null;
-
 		switch (localName) {
 		case "dict":
 			currObject = new PListDict(currObject, mapFactory);
@@ -66,7 +65,6 @@ final class PListParserContentHandler<T> extends DefaultHandler {
 	public void endElement(@Nullable final String uri, @Nullable final String localName, @Nullable final String qName)
 			throws SAXException {
 		assert localName != null;
-
 		endElement(localName);
 		super.endElement(uri, localName, qName);
 	}
@@ -138,7 +136,9 @@ final class PListParserContentHandler<T> extends DefaultHandler {
 		assert value != null;
 
 		if (currObject == null) {
-			result = (T) value;
+			@SuppressWarnings("unchecked")
+			final var t = (T) value;
+			result = t;
 		} else if (currObject instanceof PListDict) {
 			if (currObject.getLastKey() != null) {
 				currObject.addValue(value);

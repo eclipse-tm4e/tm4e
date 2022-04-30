@@ -12,6 +12,8 @@
  */
 package org.eclipse.tm4e.core.internal.grammar;
 
+import static org.eclipse.tm4e.core.internal.utils.NullSafetyHelper.*;
+
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -20,6 +22,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.tm4e.core.internal.types.IRawCaptures;
 import org.eclipse.tm4e.core.internal.types.IRawGrammar;
@@ -28,112 +31,132 @@ import org.eclipse.tm4e.core.internal.types.IRawRule;
 
 /**
  * Raw
- *
  */
-public final class Raw extends HashMap<@Nullable String, Object> implements IRawRepository, IRawRule, IRawGrammar, IRawCaptures {
-	public static final String FIRST_LINE_MATCH = "firstLineMatch";
-	public static final String FILE_TYPES = "fileTypes";
-	public static final String SCOPE_NAME = "scopeName";
-	public static final String APPLY_END_PATTERN_LAST = "applyEndPatternLast";
-	public static final String REPOSITORY = "repository";
-	public static final String INJECTION_SELECTOR = "injectionSelector";
-	public static final String INJECTIONS = "injections";
-	public static final String PATTERNS = "patterns";
-	public static final String WHILE_CAPTURES = "whileCaptures";
-	public static final String END_CAPTURES = "endCaptures";
-	public static final String INCLUDE = "include";
-	public static final String WHILE = "while";
-	public static final String END = "end";
-	public static final String BEGIN = "begin";
-	public static final String CAPTURES = "captures";
-	public static final String MATCH = "match";
-	public static final String BEGIN_CAPTURES = "beginCaptures";
-	public static final String CONTENT_NAME = "contentName";
-	public static final String NAME = "name";
-	public static final String ID = "id";
+public final class Raw extends HashMap<@Nullable String, @Nullable Object>
+		implements IRawRepository, IRawRule, IRawGrammar, IRawCaptures {
+
 	public static final String DOLLAR_SELF = "$self";
 	public static final String DOLLAR_BASE = "$base";
-	public static final long serialVersionUID = -2306714541728887963L;
 
-	public transient List<String> fileTypes;
+	private static final String APPLY_END_PATTERN_LAST = "applyEndPatternLast";
+	private static final String BEGIN = "begin";
+	private static final String BEGIN_CAPTURES = "beginCaptures";
+	private static final String CAPTURES = "captures";
+	private static final String CONTENT_NAME = "contentName";
+	private static final String END = "end";
+	private static final String END_CAPTURES = "endCaptures";
+	private static final String FILE_TYPES = "fileTypes";
+	private static final String FIRST_LINE_MATCH = "firstLineMatch";
+	private static final String ID = "id";
+	private static final String INCLUDE = "include";
+	private static final String INJECTIONS = "injections";
+	private static final String INJECTION_SELECTOR = "injectionSelector";
+	private static final String MATCH = "match";
+	private static final String NAME = "name";
+	private static final String PATTERNS = "patterns";
+	private static final String REPOSITORY = "repository";
+	private static final String SCOPE_NAME = "scopeName";
+	private static final String WHILE = "while";
+	private static final String WHILE_CAPTURES = "whileCaptures";
+
+	private static final long serialVersionUID = 1L;
+
+	@Nullable
+	private transient List<String> fileTypes;
+
+	private Object getSafe(@Nullable final Object key) {
+		@SuppressWarnings("unlikely-arg-type")
+		final
+		var obj = get(key);
+		if (obj == null) {
+			throw new IllegalArgumentException("Key '" + key + "' does not exit found");
+		}
+		return obj;
+	}
 
 	@Override
-	public IRawRule getProp(String name) {
-		return (IRawRule) super.get(name);
+	@Nullable
+	public IRawRule getProp(final String name) {
+		return (IRawRule) get(name);
 	}
 
 	@Override
 	public IRawRule getBase() {
-		return (IRawRule) super.get(DOLLAR_BASE);
+		return (IRawRule) getSafe(DOLLAR_BASE);
 	}
 
 	@Override
-	public void setBase(IRawRule base) {
+	public void setBase(final IRawRule base) {
 		super.put(DOLLAR_BASE, base);
 	}
 
 	@Override
 	public IRawRule getSelf() {
-		return (IRawRule) super.get(DOLLAR_SELF);
+		return (IRawRule) getSafe(DOLLAR_SELF);
 	}
 
 	@Override
-	public void setSelf(IRawRule self) {
+	public void setSelf(final IRawRule self) {
 		super.put(DOLLAR_SELF, self);
 	}
 
+	@Nullable
 	@Override
 	public Integer getId() {
-		return (Integer) super.get(ID);
+		return (Integer) get(ID);
 	}
 
 	@Override
-	public void setId(Integer id) {
+	public void setId(@Nullable final Integer id) {
 		super.put(ID, id);
 	}
 
+	@Nullable
 	@Override
 	public String getName() {
-		return (String) super.get(NAME);
+		return (String) get(NAME);
 	}
 
 	@Override
-	public void setName(String name) {
+	public void setName(@Nullable final String name) {
 		super.put(NAME, name);
 	}
 
+	@Nullable
 	@Override
 	public String getContentName() {
-		return (String) super.get(CONTENT_NAME);
+		return (String) get(CONTENT_NAME);
 	}
 
 	@Override
-	public void setContentName(String name) {
+	public void setContentName(@Nullable final String name) {
 		super.put(CONTENT_NAME, name);
 	}
 
+	@Nullable
 	@Override
 	public String getMatch() {
-		return (String) super.get(MATCH);
+		return (String) get(MATCH);
 	}
 
 	@Override
-	public void setMatch(String match) {
+	public void setMatch(@Nullable final String match) {
 		super.put(MATCH, match);
 	}
 
+	@Nullable
 	@Override
 	public IRawCaptures getCaptures() {
 		updateCaptures(CAPTURES);
-		return (IRawCaptures) super.get(CAPTURES);
+		return (IRawCaptures) get(CAPTURES);
 	}
 
-	public void updateCaptures(String name) {
-		Object captures = super.get(name);
+	public void updateCaptures(final String name) {
+		final Object captures = get(name);
 		if (captures instanceof List) {
-			Raw rawCaptures = new Raw();
+			final Raw rawCaptures = new Raw();
 			int i = 0;
-			for (Object capture : (List<?>) captures) {
+			for (final Object capture : (List<?>) captures) {
 				i++;
 				rawCaptures.put(i + "", capture);
 			}
@@ -142,106 +165,124 @@ public final class Raw extends HashMap<@Nullable String, Object> implements IRaw
 	}
 
 	@Override
-	public void setCaptures(IRawCaptures captures) {
+	public void setCaptures(@Nullable final IRawCaptures captures) {
 		super.put(CAPTURES, captures);
 	}
 
+	@Nullable
 	@Override
 	public String getBegin() {
-		return (String) super.get(BEGIN);
+		return (String) get(BEGIN);
 	}
 
 	@Override
-	public void setBegin(String begin) {
+	public void setBegin(@Nullable final String begin) {
 		super.put(BEGIN, begin);
 	}
 
+	@Nullable
 	@Override
 	public String getWhile() {
-		return (String) super.get(WHILE);
+		return (String) get(WHILE);
 	}
 
+	@Nullable
 	@Override
 	public String getInclude() {
-		return (String) super.get(INCLUDE);
+		return (String) get(INCLUDE);
 	}
 
 	@Override
-	public void setInclude(String include) {
+	public void setInclude(@Nullable final String include) {
 		super.put(INCLUDE, include);
 	}
 
+	@Nullable
 	@Override
 	public IRawCaptures getBeginCaptures() {
 		updateCaptures(BEGIN_CAPTURES);
-		return (IRawCaptures) super.get(BEGIN_CAPTURES);
+		return (IRawCaptures) get(BEGIN_CAPTURES);
 	}
 
 	@Override
-	public void setBeginCaptures(IRawCaptures beginCaptures) {
+	public void setBeginCaptures(@Nullable final IRawCaptures beginCaptures) {
 		super.put(BEGIN_CAPTURES, beginCaptures);
 	}
 
+	@Nullable
 	@Override
 	public String getEnd() {
-		return (String) super.get(END);
+		return (String) get(END);
 	}
 
 	@Override
-	public void setEnd(String end) {
+	public void setEnd(@Nullable final String end) {
 		super.put(END, end);
 	}
 
+	@Nullable
 	@Override
 	public IRawCaptures getEndCaptures() {
 		updateCaptures(END_CAPTURES);
-		return (IRawCaptures) super.get(END_CAPTURES);
+		return (IRawCaptures) get(END_CAPTURES);
 	}
 
 	@Override
-	public void setEndCaptures(IRawCaptures endCaptures) {
+	public void setEndCaptures(@Nullable final IRawCaptures endCaptures) {
 		super.put(END_CAPTURES, endCaptures);
 	}
 
+	@Nullable
 	@Override
 	public IRawCaptures getWhileCaptures() {
 		updateCaptures(WHILE_CAPTURES);
-		return (IRawCaptures) super.get(WHILE_CAPTURES);
+		return (IRawCaptures) get(WHILE_CAPTURES);
 	}
 
+	@Nullable
 	@Override
+	@SuppressWarnings("unchecked")
 	public Collection<IRawRule> getPatterns() {
-		return (Collection<IRawRule>) super.get(PATTERNS);
+		return (Collection<IRawRule>) get(PATTERNS);
 	}
 
 	@Override
-	public void setPatterns(Collection<IRawRule> patterns) {
+	public void setPatterns(final @Nullable Collection<IRawRule> patterns) {
 		super.put(PATTERNS, patterns);
 	}
 
+	@Nullable
 	@Override
+	@SuppressWarnings("unchecked")
 	public Map<String, IRawRule> getInjections() {
-		return (Map<String, IRawRule>) super.get(INJECTIONS);
+		return (Map<String, IRawRule>) get(INJECTIONS);
 	}
 
+	@Nullable
 	@Override
 	public String getInjectionSelector() {
-		return (String) super.get(INJECTION_SELECTOR);
+		return (String) get(INJECTION_SELECTOR);
 	}
 
+	@Nullable
 	@Override
 	public IRawRepository getRepository() {
-		return (IRawRepository) super.get(REPOSITORY);
+		return (IRawRepository) get(REPOSITORY);
 	}
 
 	@Override
-	public void setRepository(IRawRepository repository) {
+	public IRawRepository getRepositorySafe() {
+		return (IRawRepository) getSafe(REPOSITORY);
+	}
+
+	@Override
+	public void setRepository(@Nullable final IRawRepository repository) {
 		super.put(REPOSITORY, repository);
 	}
 
 	@Override
 	public boolean isApplyEndPatternLast() {
-		Object applyEndPatternLast = super.get(APPLY_END_PATTERN_LAST);
+		final Object applyEndPatternLast = get(APPLY_END_PATTERN_LAST);
 		if (applyEndPatternLast == null) {
 			return false;
 		}
@@ -255,60 +296,65 @@ public final class Raw extends HashMap<@Nullable String, Object> implements IRaw
 	}
 
 	@Override
-	public void setApplyEndPatternLast(boolean applyEndPatternLast) {
+	public void setApplyEndPatternLast(final boolean applyEndPatternLast) {
 		super.put(APPLY_END_PATTERN_LAST, applyEndPatternLast);
 	}
 
 	@Override
 	public String getScopeName() {
-		return (String) super.get(SCOPE_NAME);
+		return (String) getSafe(SCOPE_NAME);
 	}
 
 	@Override
 	public Collection<String> getFileTypes() {
-		if (fileTypes == null) {
-			List<String> list = new ArrayList<>();
-			Collection<?> unparsedFileTypes = (Collection<?>) super.get(FILE_TYPES);
+		List<String> result = fileTypes;
+		if (result == null) {
+			result = new ArrayList<>();
+			final Collection<@NonNull ?> unparsedFileTypes = (Collection<@NonNull ?>) get(FILE_TYPES);
 			if (unparsedFileTypes != null) {
-				for (Object o : unparsedFileTypes) {
+				for (final Object o : unparsedFileTypes) {
 					String str = o.toString();
 					// #202
 					if (str.startsWith(".")) {
 						str = str.substring(1);
 					}
-					list.add(str);
+					result.add(str);
 				}
 			}
-			fileTypes = list;
+			fileTypes = result;
 		}
-		return fileTypes;
+		return result;
 	}
 
 	@Override
+	@Nullable
 	public String getFirstLineMatch() {
-		return (String) super.get(FIRST_LINE_MATCH);
+		return (String) get(FIRST_LINE_MATCH);
 	}
 
 	@Override
-	public IRawRule getCapture(String captureId) {
-		return getProp(captureId);
+	public IRawRule getCapture(final String captureId) {
+		return (IRawRule) getSafe(captureId);
 	}
 
 	@Override
 	public Iterator<String> iterator() {
-		return super.keySet().iterator();
+		final Iterator<String> it = castNonNull(super.keySet().iterator());
+		return castNonNull(it);
 	}
 
 	@Override
 	public Raw clone() {
-		return (Raw) clone(this);
+		final var clone = (Raw) clone(this);
+		return castNonNull(clone);
 	}
 
-	private Object clone(final Object value) {
+	@Nullable
+	private Object clone(@Nullable final Object value) {
 		if (value instanceof Raw) {
-		   final Raw rowToClone = (Raw) value;
-		   final Raw raw = new Raw();
-			for (final Entry<String, Object> entry : rowToClone.entrySet()) {
+			final Raw rowToClone = (Raw) value;
+			final Raw raw = new Raw();
+			for (final var entry : rowToClone.entrySet()) {
 				raw.put(entry.getKey(), clone(entry.getValue()));
 			}
 			return raw;
@@ -319,17 +365,19 @@ public final class Raw extends HashMap<@Nullable String, Object> implements IRaw
 		return value;
 	}
 
+	@Nullable
 	@Override
-	public Object put(String key, Object value) {
+	public Object put(@Nullable final String key, @Nullable final Object value) {
 		if (FILE_TYPES.equals(key))
 			fileTypes = null;
+
 		return super.put(key, value);
 	}
 
 	@Override
 	@SuppressWarnings("unlikely-arg-type")
-	public void putAll(Map<? extends String, ? extends Object> m) {
-		if (m.containsKey(FILE_TYPES))
+	public void putAll(@Nullable final Map<? extends @Nullable String, ? extends @Nullable Object> m) {
+		if (m != null && m.containsKey(FILE_TYPES))
 			fileTypes = null;
 		super.putAll(m);
 	}

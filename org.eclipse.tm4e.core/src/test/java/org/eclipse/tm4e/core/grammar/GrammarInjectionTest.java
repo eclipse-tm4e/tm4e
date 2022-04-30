@@ -13,9 +13,10 @@ package org.eclipse.tm4e.core.grammar;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.Arrays;
 import java.util.Collection;
+import java.util.List;
 
+import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.tm4e.core.Data;
 import org.eclipse.tm4e.core.registry.IRegistryOptions;
 import org.eclipse.tm4e.core.registry.Registry;
@@ -46,17 +47,19 @@ public class GrammarInjectionTest {
 		Registry registry = new Registry(new IRegistryOptions() {
 
 			@Override
-			public InputStream getInputStream(String scopeName) throws IOException {
+			public InputStream getInputStream(@Nullable String scopeName) throws IOException {
 				return Data.class.getResourceAsStream(getFilePath(scopeName));
 			}
 
+			@Nullable
 			@Override
-			public Collection<String> getInjections(String scopeName) {
-				return Arrays.asList("template.ng", "styles.ng");
+			public Collection<String> getInjections(@Nullable String scopeName) {
+				return List.of("template.ng", "styles.ng");
 			}
 
+			@Nullable
 			@Override
-			public String getFilePath(String scopeName) {
+			public String getFilePath(@Nullable String scopeName) {
 				if (scopeName != null) {
 					switch (scopeName) {
 					case "source.js":

@@ -1,5 +1,5 @@
 /**
- *  Copyright (c) 2015-2017 Angelo ZERR.
+ * Copyright (c) 2015-2017 Angelo ZERR.
  * This program and the accompanying materials are made
  * available under the terms of the Eclipse Public License 2.0
  * which is available at https://www.eclipse.org/legal/epl-2.0/
@@ -11,8 +11,8 @@
  * Initial license: MIT
  *
  * Contributors:
- *  - Microsoft Corporation: Initial code, written in TypeScript, licensed under MIT license
- *  - Angelo Zerr <angelo.zerr@gmail.com> - translation and adaptation to Java
+ * - Microsoft Corporation: Initial code, written in TypeScript, licensed under MIT license
+ * - Angelo Zerr <angelo.zerr@gmail.com> - translation and adaptation to Java
  */
 package org.eclipse.tm4e.core.internal.grammar;
 
@@ -28,14 +28,14 @@ class Injection {
 	public final int ruleId;
 	public final IRawGrammar grammar;
 
-	public Injection(Predicate<List<String>> matcher, int ruleId, IRawGrammar grammar, int priority) {
+	public Injection(final Predicate<List<String>> matcher, final int ruleId, final IRawGrammar grammar, final int priority) {
 		this.matcher = matcher;
 		this.ruleId = ruleId;
 		this.grammar = grammar;
 		this.priority = priority;
 	}
 
-	public boolean match(List<String> states) {
+	public boolean match(final List<String> states) {
 		return matcher.test(states);
 	}
 }

@@ -16,6 +16,8 @@
  */
 package org.eclipse.tm4e.core.internal.grammar;
 
+import static org.eclipse.tm4e.core.internal.utils.NullSafetyHelper.*;
+
 import static java.lang.System.Logger.Level.*;
 
 import java.lang.System.Logger;
@@ -48,7 +50,7 @@ final class LineTokens {
 
 	private int lastTokenEndIndex = 0;
 
-	LineTokens(boolean emitBinaryTokens, String lineText) {
+	LineTokens(final boolean emitBinaryTokens, final String lineText) {
 		this.emitBinaryTokens = emitBinaryTokens;
 		this.lineText = LOGGER.isLoggable(TRACE) ? lineText : null; // store line only if it's logged
 		if (this.emitBinaryTokens) {
@@ -60,18 +62,18 @@ final class LineTokens {
 		}
 	}
 
-	void produce(StackElement stack, int endIndex) {
+	void produce(final StackElement stack, final int endIndex) {
 		this.produceFromScopes(stack.contentNameScopesList, endIndex);
 	}
 
-	void produceFromScopes(ScopeListElement scopesList, int endIndex) {
+	void produceFromScopes(final ScopeListElement scopesList, final int endIndex) {
 		if (this.lastTokenEndIndex >= endIndex) {
 			return;
 		}
 
 		if (this.emitBinaryTokens) {
-			int metadata = scopesList.metadata;
-			if (!this.binaryTokens.isEmpty() && this.binaryTokens.get(this.binaryTokens.size() - 1) == metadata) {
+			final int metadata = scopesList.metadata;
+			if (!this.binaryTokens.isEmpty() && getLastElement(this.binaryTokens) == metadata) {
 				// no need to push a token with the same metadata
 				this.lastTokenEndIndex = endIndex;
 				return;
@@ -84,14 +86,15 @@ final class LineTokens {
 			return;
 		}
 
-		List<String> scopes = scopesList.generateScopes();
+		final List<String> scopes = scopesList.generateScopes();
 
 		if (this.lineText != null && LOGGER.isLoggable(TRACE)) {
-			LOGGER.log(TRACE,
-					"  token: |" + this.lineText
+			LOGGER.log(TRACE, "  token: |" +
+					castNonNull(this.lineText)
 							.substring(this.lastTokenEndIndex >= 0 ? this.lastTokenEndIndex : 0, endIndex)
-							.replace("\n", "\\n") + '|');
-			for (String scope : scopes) {
+							.replace("\n", "\\n")
+					+ '|');
+			for (final String scope : scopes) {
 				LOGGER.log(TRACE, "      * " + scope);
 			}
 		}
@@ -100,8 +103,8 @@ final class LineTokens {
 		this.lastTokenEndIndex = endIndex;
 	}
 
-	IToken[] getResult(StackElement stack, int lineLength) {
-		if (!this.tokens.isEmpty() && this.tokens.get(this.tokens.size() - 1).getStartIndex() == lineLength - 1) {
+	IToken[] getResult(final StackElement stack, final int lineLength) {
+		if (!this.tokens.isEmpty() && getLastElement(this.tokens).getStartIndex() == lineLength - 1) {
 			// pop produced token for newline
 			this.tokens.remove(this.tokens.size() - 1);
 		}
@@ -109,30 +112,25 @@ final class LineTokens {
 		if (this.tokens.isEmpty()) {
 			this.lastTokenEndIndex = -1;
 			this.produce(stack, lineLength);
-			this.tokens.get(this.tokens.size() - 1).setStartIndex(0);
+			getLastElement(this.tokens).setStartIndex(0);
 		}
 
 		return this.tokens.toArray(IToken[]::new);
 	}
 
-	int[] getBinaryResult(StackElement stack, int lineLength) {
-		if (!this.binaryTokens.isEmpty() && this.binaryTokens.get(this.binaryTokens.size() - 2) == lineLength - 1) {
+	int[] getBinaryResult(final StackElement stack, final int lineLength) {
+		if (!this.binaryTokens.isEmpty() && this.binaryTokens.get(binaryTokens.size() - 2) == lineLength - 1) {
 			// pop produced token for newline
-			this.binaryTokens.remove(this.binaryTokens.size() - 1);
-			this.binaryTokens.remove(this.binaryTokens.size() - 1);
+			this.binaryTokens.remove(binaryTokens.size() - 1);
+			this.binaryTokens.remove(binaryTokens.size() - 1);
 		}
 
 		if (this.binaryTokens.isEmpty()) {
 			this.lastTokenEndIndex = -1;
 			this.produce(stack, lineLength);
-			this.binaryTokens.set(this.binaryTokens.size() - 2, 0);
+			this.binaryTokens.set(binaryTokens.size() - 2, 0);
 		}
 
-		int[] result = new int[this.binaryTokens.size()];
-		for (int i = 0, len = this.binaryTokens.size(); i < len; i++) {
-			result[i] = this.binaryTokens.get(i);
-		}
-
-		return result;
+		return binaryTokens.stream().mapToInt(Integer::intValue).toArray();
 	}
 }

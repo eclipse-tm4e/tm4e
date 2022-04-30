@@ -189,24 +189,22 @@ public class TMModel implements ITMModel {
 					// Tokenize only the first X characters
 					r = castNonNull(model.tokenizer).tokenize(text, modeLine.getState(), 0, stopLineTokenizationAfter);
 				} catch (final Exception ex) {
-					LOGGER.log(ERROR, ex.getMessage());
+					LOGGER.log(ERROR, ex.toString());
+					return nextInvalidLineIndex;
 				}
 
-				if (r != null && !r.tokens.isEmpty()) {
+				if (!r.tokens.isEmpty()) {
 					// Cannot have a stop offset before the last token
 					r.actualStopOffset = Math.max(r.actualStopOffset, getLastElement(r.tokens).startIndex + 1);
 				}
 
-				if (r != null && r.actualStopOffset < text.length()) {
+				if (r.actualStopOffset < text.length()) {
 					// Treat the rest of the line (if above limit) as one default token
 					r.tokens.add(new TMToken(r.actualStopOffset, ""));
 					// Use as end state the starting state
 					r.endState = modeLine.getState();
 				}
 
-				if (r == null) {
-					r = new LineTokens(List.of(new TMToken(0, "")), text.length(), modeLine.getState());
-				}
 				modeLine.setTokens(r.tokens);
 				eventBuilder.registerChangedTokens(lineIndex + 1);
 				modeLine.isInvalid = false;

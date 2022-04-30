@@ -16,6 +16,7 @@
  */
 package org.eclipse.tm4e.core.internal.grammar;
 
+import static org.eclipse.tm4e.core.internal.utils.MoreCollections.*;
 import static org.eclipse.tm4e.core.internal.utils.NullSafetyHelper.*;
 
 import static java.lang.System.Logger.Level.*;
@@ -447,7 +448,7 @@ final class LineTokenizer {
 			while (!localStack.isEmpty() && getLastElement(localStack).endPos <= captureIndex.start) {
 				// pop!
 				lineTokens.produceFromScopes(getLastElement(localStack).scopes, getLastElement(localStack).endPos);
-				localStack.remove(localStack.size() - 1);
+				removeLastElement(localStack);
 			}
 
 			if (!localStack.isEmpty()) {
@@ -488,7 +489,7 @@ final class LineTokenizer {
 		while (!localStack.isEmpty()) {
 			// pop!
 			lineTokens.produceFromScopes(getLastElement(localStack).scopes, getLastElement(localStack).endPos);
-			localStack.remove(localStack.size() - 1);
+			removeLastElement(localStack);
 		}
 	}
 

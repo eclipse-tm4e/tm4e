@@ -16,6 +16,7 @@
  */
 package org.eclipse.tm4e.core.internal.grammar;
 
+import static org.eclipse.tm4e.core.internal.utils.MoreCollections.*;
 import static org.eclipse.tm4e.core.internal.utils.NullSafetyHelper.*;
 
 import static java.lang.System.Logger.Level.*;
@@ -106,7 +107,7 @@ final class LineTokens {
 	IToken[] getResult(final StackElement stack, final int lineLength) {
 		if (!this.tokens.isEmpty() && getLastElement(this.tokens).getStartIndex() == lineLength - 1) {
 			// pop produced token for newline
-			this.tokens.remove(this.tokens.size() - 1);
+			removeLastElement(this.tokens);
 		}
 
 		if (this.tokens.isEmpty()) {
@@ -121,8 +122,8 @@ final class LineTokens {
 	int[] getBinaryResult(final StackElement stack, final int lineLength) {
 		if (!this.binaryTokens.isEmpty() && this.binaryTokens.get(binaryTokens.size() - 2) == lineLength - 1) {
 			// pop produced token for newline
-			this.binaryTokens.remove(binaryTokens.size() - 1);
-			this.binaryTokens.remove(binaryTokens.size() - 1);
+			removeLastElement(this.binaryTokens);
+			removeLastElement(this.binaryTokens);
 		}
 
 		if (this.binaryTokens.isEmpty()) {

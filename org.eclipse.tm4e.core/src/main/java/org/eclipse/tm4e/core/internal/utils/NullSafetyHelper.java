@@ -13,7 +13,6 @@
 package org.eclipse.tm4e.core.internal.utils;
 
 import java.util.Iterator;
-import java.util.List;
 
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
@@ -27,16 +26,6 @@ public final class NullSafetyHelper {
 
 	@NonNull
 	public static <T> T castNonNull(@Nullable T value) {
-		assert value != null;
-		return value;
-	}
-
-	/**
-	 * @param list a non-empty list with non-nullable elements
-	 */
-	@NonNull
-	public static <T> T getLastElement(List<T> list) {
-		final var value = list.get(list.size() - 1);
 		assert value != null;
 		return value;
 	}

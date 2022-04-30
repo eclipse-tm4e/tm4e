@@ -11,6 +11,7 @@
  */
 package org.eclipse.tm4e.core.theme;
 
+import static org.eclipse.tm4e.core.internal.utils.MoreCollections.*;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -124,7 +125,7 @@ public class Theme {
 
 				List<String> segments = BY_SPACE_SPLITTER.splitToList(_scope);
 
-				String scope = segments.get(segments.size() - 1);
+				String scope = getLastElement(segments);
 				List<String> parentScopes = null;
 				if (segments.size() > 1) {
 					parentScopes = segments.subList(0, segments.size() - 1);

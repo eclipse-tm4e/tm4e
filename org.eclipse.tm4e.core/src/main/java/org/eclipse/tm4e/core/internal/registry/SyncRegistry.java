@@ -27,6 +27,7 @@ import java.util.Set;
 
 import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.tm4e.core.grammar.IGrammar;
+import org.eclipse.tm4e.core.internal.grammar.BalancedBracketSelectors;
 import org.eclipse.tm4e.core.internal.grammar.Grammar;
 import org.eclipse.tm4e.core.internal.grammar.Raw;
 import org.eclipse.tm4e.core.internal.types.IRawGrammar;
@@ -112,14 +113,17 @@ public final class SyncRegistry implements IGrammarRepository, IThemeProvider {
 	 */
 	@Nullable
 	public IGrammar grammarForScopeName(final String scopeName, final int initialLanguage,
-			@Nullable final Map<String, Integer> embeddedLanguages) {
+			@Nullable final Map<String, Integer> embeddedLanguages,
+			@Nullable final Map<String, Integer> tokenTypes,
+			@Nullable BalancedBracketSelectors balancedBracketSelectors) {
 		if (!this.grammars.containsKey(scopeName)) {
 			final var rawGrammar = lookup(scopeName);
 			if (rawGrammar == null) {
 				return null;
 			}
 			this.grammars.put(scopeName,
-					new Grammar(scopeName, rawGrammar, initialLanguage, embeddedLanguages, this, this));
+					new Grammar(scopeName, rawGrammar, initialLanguage, embeddedLanguages, tokenTypes,
+							balancedBracketSelectors, this, this));
 		}
 		return this.grammars.get(scopeName);
 	}

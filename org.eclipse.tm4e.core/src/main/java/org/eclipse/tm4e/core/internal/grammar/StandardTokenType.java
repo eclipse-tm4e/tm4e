@@ -14,7 +14,7 @@ package org.eclipse.tm4e.core.internal.grammar;
 /**
  * Standard TextMate token type.
  */
-class StandardTokenType {
+final class StandardTokenType {
 
 	/**
 	 * Content should be accessed statically

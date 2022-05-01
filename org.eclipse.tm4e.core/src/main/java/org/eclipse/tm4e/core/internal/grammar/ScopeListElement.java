@@ -148,7 +148,7 @@ public final class ScopeListElement {
 			}
 		}
 
-		return StackElementMetadata.set(metadata, source.languageId, source.tokenType, fontStyle, foreground,
+		return StackElementMetadata.set(metadata, source.languageId, source.tokenType, null, fontStyle, foreground,
 				background);
 	}
 

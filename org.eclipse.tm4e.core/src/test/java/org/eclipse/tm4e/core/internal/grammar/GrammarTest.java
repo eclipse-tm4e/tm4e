@@ -11,7 +11,8 @@
  */
 package org.eclipse.tm4e.core.internal.grammar;
 
-import org.eclipse.tm4e.core.theme.FontStyle;
+import static org.eclipse.tm4e.core.theme.FontStyle.*;
+
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
@@ -25,68 +26,62 @@ public class GrammarTest {
 
 	@Test
 	public void testWorks() {
-		int value = StackElementMetadata.set(0, 1, StandardTokenType.RegEx, FontStyle.Underline | FontStyle.Bold, 101,
-				102);
-		assertEquals(value, 1, StandardTokenType.RegEx, FontStyle.Underline | FontStyle.Bold, 101, 102);
+		int value = StackElementMetadata.set(0, 1, StandardTokenType.RegEx, null, Underline | Bold, 101, 102);
+		assertEquals(value, 1, StandardTokenType.RegEx, Underline | Bold, 101, 102);
 	}
 
 	@Test
 	public void testCanOverwriteLanguageId() {
-		int value = StackElementMetadata.set(0, 1, StandardTokenType.RegEx, FontStyle.Underline | FontStyle.Bold, 101,
-				102);
-		assertEquals(value, 1, StandardTokenType.RegEx, FontStyle.Underline | FontStyle.Bold, 101, 102);
+		int value = StackElementMetadata.set(0, 1, StandardTokenType.RegEx, null, Underline | Bold, 101, 102);
+		assertEquals(value, 1, StandardTokenType.RegEx, Underline | Bold, 101, 102);
 
-		value = StackElementMetadata.set(value, 2, StandardTokenType.Other, FontStyle.NotSet, 0, 0);
-		assertEquals(value, 2, StandardTokenType.RegEx, FontStyle.Underline | FontStyle.Bold, 101, 102);
+		value = StackElementMetadata.set(value, 2, StandardTokenType.Other, null, NotSet, 0, 0);
+		assertEquals(value, 2, StandardTokenType.RegEx, Underline | Bold, 101, 102);
 	}
 
 	@Test
 	public void testCanOverwriteTokenType() {
-		int value = StackElementMetadata.set(0, 1, StandardTokenType.RegEx, FontStyle.Underline | FontStyle.Bold, 101,
-				102);
-		assertEquals(value, 1, StandardTokenType.RegEx, FontStyle.Underline | FontStyle.Bold, 101, 102);
+		int value = StackElementMetadata.set(0, 1, StandardTokenType.RegEx, null, Underline | Bold, 101, 102);
+		assertEquals(value, 1, StandardTokenType.RegEx, Underline | Bold, 101, 102);
 
-		value = StackElementMetadata.set(value, 0, StandardTokenType.Comment, FontStyle.NotSet, 0, 0);
-		assertEquals(value, 1, StandardTokenType.Comment, FontStyle.Underline | FontStyle.Bold, 101, 102);
+		value = StackElementMetadata.set(value, 0, StandardTokenType.Comment, null, NotSet, 0, 0);
+		assertEquals(value, 1, StandardTokenType.Comment, Underline | Bold, 101, 102);
 	}
 
 	@Test
 	public void testCanOverwriteFontStyle() {
-		int value = StackElementMetadata.set(0, 1, StandardTokenType.RegEx, FontStyle.Underline | FontStyle.Bold, 101,
-				102);
-		assertEquals(value, 1, StandardTokenType.RegEx, FontStyle.Underline | FontStyle.Bold, 101, 102);
+		int value = StackElementMetadata.set(0, 1, StandardTokenType.RegEx, null, Underline | Bold, 101, 102);
+		assertEquals(value, 1, StandardTokenType.RegEx, Underline | Bold, 101, 102);
 
-		value = StackElementMetadata.set(value, 0, StandardTokenType.Other, FontStyle.None, 0, 0);
-		assertEquals(value, 1, StandardTokenType.RegEx, FontStyle.None, 101, 102);
+		value = StackElementMetadata.set(value, 0, StandardTokenType.Other, null, None, 0, 0);
+		assertEquals(value, 1, StandardTokenType.RegEx, None, 101, 102);
 	}
 
 	@Test
 	public void testCanOverwriteFontStyleWithStrikethrough() {
-		int value = StackElementMetadata.set(0, 1, StandardTokenType.RegEx, FontStyle.Strikethrough, 101, 102);
-		assertEquals(value, 1, StandardTokenType.RegEx, FontStyle.Strikethrough, 101, 102);
+		int value = StackElementMetadata.set(0, 1, StandardTokenType.RegEx, null, Strikethrough, 101, 102);
+		assertEquals(value, 1, StandardTokenType.RegEx, Strikethrough, 101, 102);
 
-		value = StackElementMetadata.set(value, 0, StandardTokenType.Other, FontStyle.None, 0, 0);
-		assertEquals(value, 1, StandardTokenType.RegEx, FontStyle.None, 101, 102);
+		value = StackElementMetadata.set(value, 0, StandardTokenType.Other, null, None, 0, 0);
+		assertEquals(value, 1, StandardTokenType.RegEx, None, 101, 102);
 	}
 
 	@Test
 	public void testCanOverwriteForeground() {
-		int value = StackElementMetadata.set(0, 1, StandardTokenType.RegEx, FontStyle.Underline | FontStyle.Bold, 101,
-				102);
-		assertEquals(value, 1, StandardTokenType.RegEx, FontStyle.Underline | FontStyle.Bold, 101, 102);
+		int value = StackElementMetadata.set(0, 1, StandardTokenType.RegEx, null, Underline | Bold, 101, 102);
+		assertEquals(value, 1, StandardTokenType.RegEx, Underline | Bold, 101, 102);
 
-		value = StackElementMetadata.set(value, 0, StandardTokenType.Other, FontStyle.NotSet, 5, 0);
-		assertEquals(value, 1, StandardTokenType.RegEx, FontStyle.Underline | FontStyle.Bold, 5, 102);
+		value = StackElementMetadata.set(value, 0, StandardTokenType.Other, null, NotSet, 5, 0);
+		assertEquals(value, 1, StandardTokenType.RegEx, Underline | Bold, 5, 102);
 	}
 
 	@Test
 	public void testCanOverwriteBackground() {
-		int value = StackElementMetadata.set(0, 1, StandardTokenType.RegEx, FontStyle.Underline | FontStyle.Bold, 101,
-				102);
-		assertEquals(value, 1, StandardTokenType.RegEx, FontStyle.Underline | FontStyle.Bold, 101, 102);
+		int value = StackElementMetadata.set(0, 1, StandardTokenType.RegEx, null, Underline | Bold, 101, 102);
+		assertEquals(value, 1, StandardTokenType.RegEx, Underline | Bold, 101, 102);
 
-		value = StackElementMetadata.set(value, 0, StandardTokenType.Other, FontStyle.NotSet, 0, 7);
-		assertEquals(value, 1, StandardTokenType.RegEx, FontStyle.Underline | FontStyle.Bold, 101, 7);
+		value = StackElementMetadata.set(value, 0, StandardTokenType.Other, null, NotSet, 0, 7);
+		assertEquals(value, 1, StandardTokenType.RegEx, Underline | Bold, 101, 7);
 	}
 
 	@Test
@@ -94,22 +89,24 @@ public class GrammarTest {
 		int maxLangId = 255;
 		int maxTokenType = StandardTokenType.Comment | StandardTokenType.Other | StandardTokenType.RegEx
 				| StandardTokenType.String;
-		int maxFontStyle = FontStyle.Bold | FontStyle.Italic | FontStyle.Underline;
+		int maxFontStyle = Bold | Italic | Underline;
 		int maxForeground = 511;
-		int maxBackground = 511;
+		int maxBackground = 254;
 
-		int value = StackElementMetadata.set(0, maxLangId, maxTokenType, maxFontStyle, maxForeground, maxBackground);
+		int value = StackElementMetadata.set(0, maxLangId, maxTokenType, null, maxFontStyle, maxForeground,
+				maxBackground);
 		assertEquals(value, maxLangId, maxTokenType, maxFontStyle, maxForeground, maxBackground);
 	}
 
-	private static void assertEquals(int metadata, int languageId, int tokenType, int fontStyle, int foreground, int background) {
+	private static void assertEquals(int metadata, int languageId, int tokenType, int fontStyle, int foreground,
+			int background) {
 		String actual = "{\n" +
-			"languageId: " + StackElementMetadata.getLanguageId(metadata) + ",\n" +
-			"tokenType: " + StackElementMetadata.getTokenType(metadata) + ",\n" +
-			"fontStyle: " + StackElementMetadata.getFontStyle(metadata) + ",\n" +
-			"foreground: " + StackElementMetadata.getForeground(metadata) + ",\n" +
-			"background: " + StackElementMetadata.getBackground(metadata) + ",\n" +
-		"}";
+				"languageId: " + StackElementMetadata.getLanguageId(metadata) + ",\n" +
+				"tokenType: " + StackElementMetadata.getTokenType(metadata) + ",\n" +
+				"fontStyle: " + StackElementMetadata.getFontStyle(metadata) + ",\n" +
+				"foreground: " + StackElementMetadata.getForeground(metadata) + ",\n" +
+				"background: " + StackElementMetadata.getBackground(metadata) + ",\n" +
+				"}";
 
 		String expected = "{\n" +
 				"languageId: " + languageId + ",\n" +
@@ -117,7 +114,7 @@ public class GrammarTest {
 				"fontStyle: " + fontStyle + ",\n" +
 				"foreground: " + foreground + ",\n" +
 				"background: " + background + ",\n" +
-			"}";
+				"}";
 
 		Assertions.assertEquals(expected, actual, "equals for " + StackElementMetadata.toBinaryStr(metadata));
 	}

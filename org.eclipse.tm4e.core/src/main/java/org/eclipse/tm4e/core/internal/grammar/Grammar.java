@@ -27,6 +27,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.function.IntFunction;
+import java.util.function.Predicate;
 
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
@@ -66,18 +67,43 @@ public final class Grammar implements IGrammar, IRuleFactoryHelper {
 	@Nullable
 	private List<Injection> injections;
 	private final ScopeMetadataProvider scopeMetadataProvider;
+	private final List<TokenTypeMatcher> tokenTypeMatchers = new ArrayList<>();
+
+	@Nullable
+	private final BalancedBracketSelectors balancedBracketSelectors;
 
 	public Grammar(
 			final String scopeName,
 			final IRawGrammar grammar,
 			final int initialLanguage,
 			@Nullable final Map<String, Integer> embeddedLanguages,
+			@Nullable Map<String, Integer> tokenTypes,
+			@Nullable BalancedBracketSelectors balancedBracketSelectors,
 			final IGrammarRepository grammarRepository,
 			final IThemeProvider themeProvider) {
 		this.scopeName = scopeName;
 		this.scopeMetadataProvider = new ScopeMetadataProvider(initialLanguage, themeProvider, embeddedLanguages);
+		this.balancedBracketSelectors = balancedBracketSelectors;
 		this.grammarRepository = grammarRepository;
 		this.grammar = initGrammar(grammar, null);
+
+		if (tokenTypes != null) {
+			for (final var selector : tokenTypes.keySet()) {
+				for (final var matcher : Matcher.createMatchers(selector)) {
+					tokenTypeMatchers.add(new TokenTypeMatcher() {
+						@Override
+						public int getType() {
+							return tokenTypes.get(selector);
+						}
+
+						@Override
+						public Predicate<List<String>> getMatcher() {
+							return matcher.matcher;
+						}
+					});
+				}
+			}
+		}
 	}
 
 	public void onDidChangeTheme() {
@@ -248,7 +274,7 @@ public final class Grammar implements IGrammar, IRuleFactoryHelper {
 			final var themeData = rawDefaultMetadata.themeData;
 			final var defaultTheme = themeData == null ? null : themeData.get(0);
 			final int defaultMetadata = StackElementMetadata.set(0, rawDefaultMetadata.languageId,
-					rawDefaultMetadata.tokenType, defaultTheme.fontStyle, defaultTheme.foreground,
+					rawDefaultMetadata.tokenType, null, defaultTheme.fontStyle, defaultTheme.foreground,
 					defaultTheme.background);
 
 			final var rootRule = castNonNull(this.getRule(this.rootId));
@@ -271,7 +297,7 @@ public final class Grammar implements IGrammar, IRuleFactoryHelper {
 		}
 		final var onigLineText = OnigString.of(lineText);
 		final int lineLength = lineText.length();
-		final var lineTokens = new LineTokens(emitBinaryTokens, lineText);
+		final var lineTokens = new LineTokens(emitBinaryTokens, lineText, tokenTypeMatchers, balancedBracketSelectors);
 		final var nextState = LineTokenizer.tokenizeString(this, onigLineText, isFirstLine, 0, prevState, lineTokens);
 
 		if (emitBinaryTokens) {

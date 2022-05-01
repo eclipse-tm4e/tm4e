@@ -23,13 +23,18 @@ package org.eclipse.tm4e.core.internal.grammar;
  * 1098 7654 3210 9876 5432 1098 7654 3210
  * - -------------------------------------------
  * xxxx xxxx xxxx xxxx xxxx xxxx xxxx xxxx
- * bbbb bbbb bfff ffff ffFF FFTT LLLL LLLL
+ * bbbb bbbb ffff ffff fFFF FBTT LLLL LLLL
  * - -------------------------------------------
  * - L = LanguageId (8 bits)
  * - T = StandardTokenType (2 bits)
+ * - B = Balanced bracket (1 bit)
  * - F = FontStyle (4 bits)
  * - f = foreground color (9 bits)
  * - b = background color (9 bits)
+ *
+ * @see <a href=
+ *      "https://github.com/microsoft/vscode-textmate/blob/master/src/metadata.ts">
+ *      github.com/Microsoft/vscode-textmate/blob/master/src/metadata.ts</a>
  */
 final class MetadataConsts {
 
@@ -41,13 +46,15 @@ final class MetadataConsts {
 
 	static final int LANGUAGEID_MASK = 0b00000000000000000000000011111111;
 	static final int TOKEN_TYPE_MASK = 0b00000000000000000000001100000000;
-	static final int FONT_STYLE_MASK = 0b00000000000000000011110000000000;
-	static final int FOREGROUND_MASK = 0b00000000011111111100000000000000;
-	static final int BACKGROUND_MASK = 0b11111111100000000000000000000000;
+	static final int BALANCED_BRACKETS_MASK = 0b00000000000000000000010000000000;
+	static final int FONT_STYLE_MASK = 0b00000000000000000111100000000000;
+	static final int FOREGROUND_MASK = 0b00000000111111111000000000000000;
+	static final int BACKGROUND_MASK = 0b11111111000000000000000000000000;
 
 	static final int LANGUAGEID_OFFSET = 0;
 	static final int TOKEN_TYPE_OFFSET = 8;
-	static final int FONT_STYLE_OFFSET = 10;
-	static final int FOREGROUND_OFFSET = 14;
-	static final int BACKGROUND_OFFSET = 23;
+	static final int BALANCED_BRACKETS_OFFSET = 10;
+	static final int FONT_STYLE_OFFSET = 11;
+	static final int FOREGROUND_OFFSET = 15;
+	static final int BACKGROUND_OFFSET = 24;
 }

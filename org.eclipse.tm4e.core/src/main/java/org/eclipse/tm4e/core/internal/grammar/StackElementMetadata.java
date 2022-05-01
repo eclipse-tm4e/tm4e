@@ -11,11 +11,16 @@
  */
 package org.eclipse.tm4e.core.internal.grammar;
 
+import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.tm4e.core.grammar.StackElement;
 import org.eclipse.tm4e.core.theme.FontStyle;
 
 /**
  * Metadata for {@link StackElement}.
+ *
+ * @see <a href=
+ *      "https://github.com/microsoft/vscode-textmate/blob/master/src/metadata.ts">
+ *      github.com/Microsoft/vscode-textmate/blob/master/src/metadata.ts</a>
  */
 public final class StackElementMetadata {
 
@@ -39,6 +44,10 @@ public final class StackElementMetadata {
 		return (metadata & MetadataConsts.TOKEN_TYPE_MASK) >>> MetadataConsts.TOKEN_TYPE_OFFSET;
 	}
 
+	static boolean containsBalancedBrackets(final int metadata) {
+		return (metadata & MetadataConsts.BALANCED_BRACKETS_MASK) != 0;
+	}
+
 	static int getFontStyle(final int metadata) {
 		return (metadata & MetadataConsts.FONT_STYLE_MASK) >>> MetadataConsts.FONT_STYLE_OFFSET;
 	}
@@ -51,17 +60,21 @@ public final class StackElementMetadata {
 		return (metadata & MetadataConsts.BACKGROUND_MASK) >>> MetadataConsts.BACKGROUND_OFFSET;
 	}
 
-	static int set(final int metadata, int languageId, int tokenType, int fontStyle, int foreground, int background) {
-		languageId = languageId == 0 ? StackElementMetadata.getLanguageId(metadata) : languageId;
-		tokenType = tokenType == StandardTokenType.Other ? StackElementMetadata.getTokenType(metadata) : tokenType;
-		fontStyle = fontStyle == FontStyle.NotSet ? StackElementMetadata.getFontStyle(metadata) : fontStyle;
-		foreground = foreground == 0 ? StackElementMetadata.getForeground(metadata) : foreground;
-		background = background == 0 ? StackElementMetadata.getBackground(metadata) : background;
-		return ((languageId << MetadataConsts.LANGUAGEID_OFFSET)
-				| (tokenType << MetadataConsts.TOKEN_TYPE_OFFSET)
-				| (fontStyle << MetadataConsts.FONT_STYLE_OFFSET)
-				| (foreground << MetadataConsts.FOREGROUND_OFFSET)
-				| (background << MetadataConsts.BACKGROUND_OFFSET)) >>> 0;
-	}
+	static int set(final int metadata, final int languageId, final int tokenType,
+			@Nullable Boolean containsBalancedBrackets, final int fontStyle, final int foreground, int background) {
+		final var _languageId = languageId == 0 ? getLanguageId(metadata) : languageId;
+		final var _tokenType = tokenType == StandardTokenType.Other ? getTokenType(metadata) : tokenType;
+		final var _containsBalancedBracketsBit = (containsBalancedBrackets == null ? containsBalancedBrackets(metadata)
+				: containsBalancedBrackets) ? 1 : 0;
+		final var _fontStyle = fontStyle == FontStyle.NotSet ? getFontStyle(metadata) : fontStyle;
+		final var _foreground = foreground == 0 ? getForeground(metadata) : foreground;
+		final var _background = background == 0 ? getBackground(metadata) : background;
 
+		return ((_languageId << MetadataConsts.LANGUAGEID_OFFSET)
+				| (_tokenType << MetadataConsts.TOKEN_TYPE_OFFSET)
+				| (_containsBalancedBracketsBit << MetadataConsts.BALANCED_BRACKETS_OFFSET)
+				| (_fontStyle << MetadataConsts.FONT_STYLE_OFFSET)
+				| (_foreground << MetadataConsts.FOREGROUND_OFFSET)
+				| (_background << MetadataConsts.BACKGROUND_OFFSET)) >>> 0;
+	}
 }

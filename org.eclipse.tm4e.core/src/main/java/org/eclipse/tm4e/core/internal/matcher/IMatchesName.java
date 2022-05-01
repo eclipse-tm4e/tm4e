@@ -21,7 +21,12 @@ import java.util.List;
 
 import org.eclipse.jdt.annotation.Nullable;
 
-interface IMatchesName<T> {
+/**
+ * @see <a href=
+ *      "https://github.com/microsoft/vscode-textmate/blob/9157c7f869219dbaf9a5a5607f099c00fe694a29/src/grammar.ts#L276">
+ *      github.com/Microsoft/vscode-textmate/blob/master/src/grammar.ts</a>
+ */
+public interface IMatchesName<T> {
 
 	IMatchesName<List<String>> NAME_MATCHER = new IMatchesName<>() {
 

@@ -29,29 +29,39 @@ import java.util.List;
 import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.tm4e.core.grammar.IToken;
 import org.eclipse.tm4e.core.grammar.StackElement;
+import org.eclipse.tm4e.core.theme.FontStyle;
 
 final class LineTokens {
 
 	private static final Logger LOGGER = System.getLogger(LineTokens.class.getName());
 
+	/**
+	 * defined only if `LOGGER.isLoggable(TRACE)`.
+	 */
 	@Nullable
 	private final String lineText;
 
 	/**
-	 * used only if `_emitBinaryTokens` is false.
+	 * used only if `emitBinaryTokens` is false.
 	 */
 	private final List<IToken> tokens;
 
 	private final boolean emitBinaryTokens;
 
 	/**
-	 * used only if `_emitBinaryTokens` is true.
+	 * used only if `emitBinaryTokens` is true.
 	 */
 	private final List<Integer> binaryTokens;
 
 	private int lastTokenEndIndex = 0;
 
-	LineTokens(final boolean emitBinaryTokens, final String lineText) {
+	private final List<TokenTypeMatcher> tokenTypeOverrides;
+
+	@Nullable
+	private final BalancedBracketSelectors balancedBracketSelectors;
+
+	LineTokens(final boolean emitBinaryTokens, final String lineText, List<TokenTypeMatcher> tokenTypeOverrides,
+			@Nullable BalancedBracketSelectors balancedBracketSelectors) {
 		this.emitBinaryTokens = emitBinaryTokens;
 		this.lineText = LOGGER.isLoggable(TRACE) ? lineText : null; // store line only if it's logged
 		if (this.emitBinaryTokens) {
@@ -61,6 +71,8 @@ final class LineTokens {
 			this.tokens = new ArrayList<>();
 			this.binaryTokens = Collections.emptyList();
 		}
+		this.tokenTypeOverrides = tokenTypeOverrides;
+		this.balancedBracketSelectors = balancedBracketSelectors;
 	}
 
 	void produce(final StackElement stack, final int endIndex) {
@@ -73,11 +85,61 @@ final class LineTokens {
 		}
 
 		if (this.emitBinaryTokens) {
-			final int metadata = scopesList.metadata;
+			int metadata = scopesList.metadata;
+			var containsBalancedBrackets = false;
+			final var balancedBracketSelectors = this.balancedBracketSelectors;
+			if (balancedBracketSelectors != null && balancedBracketSelectors.matchesAlways()) {
+				containsBalancedBrackets = true;
+			}
+
+			if (!tokenTypeOverrides.isEmpty() || (balancedBracketSelectors != null
+					&& !balancedBracketSelectors.matchesAlways() && !balancedBracketSelectors.matchesNever())) {
+				// Only generate scope array when required to improve performance
+				final var scopes = scopesList.generateScopes();
+				for (final var tokenType : tokenTypeOverrides) {
+					if (tokenType.getMatcher().test(scopes)) {
+						metadata = StackElementMetadata.set(
+								metadata,
+								0,
+								tokenType.getType(), // toOptionalTokenType(tokenType.type),
+								null,
+								FontStyle.NotSet,
+								0,
+								0);
+					}
+				}
+				if (balancedBracketSelectors != null) {
+					containsBalancedBrackets = balancedBracketSelectors.match(scopes);
+				}
+			}
+
+			if (containsBalancedBrackets) {
+				metadata = StackElementMetadata.set(
+						metadata,
+						0,
+						OptionalStandardTokenType.NotSet,
+						containsBalancedBrackets,
+						FontStyle.NotSet,
+						0,
+						0);
+			}
+
 			if (!this.binaryTokens.isEmpty() && getLastElement(this.binaryTokens) == metadata) {
 				// no need to push a token with the same metadata
 				this.lastTokenEndIndex = endIndex;
 				return;
+			}
+
+			if (LOGGER.isLoggable(TRACE)) {
+				final List<String> scopes = scopesList.generateScopes();
+				LOGGER.log(TRACE, "  token: |" +
+						castNonNull(this.lineText)
+								.substring(this.lastTokenEndIndex >= 0 ? this.lastTokenEndIndex : 0, endIndex)
+								.replace("\n", "\\n")
+						+ '|');
+				for (final String scope : scopes) {
+					LOGGER.log(TRACE, "      * " + scope);
+				}
 			}
 
 			this.binaryTokens.add(this.lastTokenEndIndex);
@@ -89,7 +151,7 @@ final class LineTokens {
 
 		final List<String> scopes = scopesList.generateScopes();
 
-		if (this.lineText != null && LOGGER.isLoggable(TRACE)) {
+		if (LOGGER.isLoggable(TRACE)) {
 			LOGGER.log(TRACE, "  token: |" +
 					castNonNull(this.lineText)
 							.substring(this.lastTokenEndIndex >= 0 ? this.lastTokenEndIndex : 0, endIndex)
@@ -99,7 +161,11 @@ final class LineTokens {
 				LOGGER.log(TRACE, "      * " + scope);
 			}
 		}
-		this.tokens.add(new Token(this.lastTokenEndIndex >= 0 ? this.lastTokenEndIndex : 0, endIndex, scopes));
+
+		this.tokens.add(new Token(
+				this.lastTokenEndIndex >= 0 ? this.lastTokenEndIndex : 0,
+				endIndex,
+				scopes));
 
 		this.lastTokenEndIndex = endIndex;
 	}

@@ -35,7 +35,8 @@ import org.eclipse.tm4e.core.theme.Theme;
 /**
  * The registry that will hold all grammars.
  *
- *	TODO outdated compared to upstream as of: https://github.com/microsoft/vscode-textmate/commit/b166b75fa72d2dd3efce0d68c98c2bd10adc1ef1
+ * TODO outdated compared to upstream as of:
+ * https://github.com/microsoft/vscode-textmate/commit/b166b75fa72d2dd3efce0d68c98c2bd10adc1ef1
  *
  * @see <a href=
  *      "https://github.com/microsoft/vscode-textmate/blob/9157c7f869219dbaf9a5a5607f099c00fe694a29/src/main.ts#L77">
@@ -152,7 +153,8 @@ public class Registry {
 	@Nullable
 	public IGrammar grammarForScopeName(final String scopeName, final int initialLanguage,
 			@Nullable final Map<String, Integer> embeddedLanguages) {
-		return this.syncRegistry.grammarForScopeName(scopeName, initialLanguage, embeddedLanguages);
+		return this.syncRegistry.grammarForScopeName(scopeName, initialLanguage, embeddedLanguages, /*TODO*/null,
+				/*TODO*/null);
 	}
 
 	public IRegistryOptions getLocator() {

@@ -46,8 +46,6 @@ public interface IRawGrammar {
 	@Nullable
 	String getInjectionSelector();
 
-	// injections?:{ [expression:string]: IRawRule };
-
 	Collection<String> getFileTypes();
 
 	@Nullable

@@ -60,6 +60,10 @@ public final class StackElementMetadata {
 		return (metadata & MetadataConsts.BACKGROUND_MASK) >>> MetadataConsts.BACKGROUND_OFFSET;
 	}
 
+	/**
+	 * Updates the fields in `metadata`.
+	 * A value of `0`, `NotSet` or `null` indicates that the corresponding field should be left as is.
+	 */
 	static int set(final int metadata, final int languageId, final /*OptionalStandardTokenType*/ int tokenType,
 			@Nullable Boolean containsBalancedBrackets, final int fontStyle, final int foreground, int background) {
 		final var _languageId = languageId == 0 ? getLanguageId(metadata) : languageId;

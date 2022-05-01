@@ -25,7 +25,7 @@ public interface IRawRule {
 	@Nullable
 	Integer getId();
 
-	void setId(@Nullable Integer id);
+	void setId(Integer id);
 
 	@Nullable
 	String getInclude();
@@ -35,7 +35,7 @@ public interface IRawRule {
 	@Nullable
 	String getName();
 
-	void setName(@Nullable String name);
+	void setName(String name);
 
 	@Nullable
 	String getContentName();

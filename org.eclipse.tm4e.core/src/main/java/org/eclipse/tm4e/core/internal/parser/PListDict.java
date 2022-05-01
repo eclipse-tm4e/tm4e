@@ -12,13 +12,15 @@
  */
 package org.eclipse.tm4e.core.internal.parser;
 
+import static org.eclipse.tm4e.core.internal.utils.NullSafetyHelper.*;
+
 import java.util.Map;
 
 import org.eclipse.jdt.annotation.Nullable;
 
 final class PListDict extends PListObject {
 
-	private final Map<@Nullable String, @Nullable Object> values;
+	private final Map<String, @Nullable Object> values;
 
 	PListDict(@Nullable final PListObject parent, final MapFactory mapFactory) {
 		super(parent);
@@ -27,7 +29,7 @@ final class PListDict extends PListObject {
 
 	@Override
 	void addValue(final Object value) {
-		values.put(getLastKey(), value);
+      values.put(castNonNull(getLastKey()), value);
 	}
 
 	@Override

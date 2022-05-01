@@ -19,7 +19,7 @@ import org.eclipse.tm4e.core.theme.IRawTheme;
 import org.eclipse.tm4e.core.theme.IRawThemeSetting;
 import org.eclipse.tm4e.core.theme.IThemeSetting;
 
-public final class ThemeRaw extends HashMap<@Nullable String, Object> implements IRawTheme, IRawThemeSetting, IThemeSetting {
+public final class ThemeRaw extends HashMap<String, @Nullable Object> implements IRawTheme, IRawThemeSetting, IThemeSetting {
 
 	private static final long serialVersionUID = -3622927264735492387L;
 

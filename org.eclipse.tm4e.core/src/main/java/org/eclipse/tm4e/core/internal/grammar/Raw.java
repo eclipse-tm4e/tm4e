@@ -20,9 +20,9 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
-import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.tm4e.core.internal.types.IRawCaptures;
 import org.eclipse.tm4e.core.internal.types.IRawGrammar;
@@ -32,11 +32,11 @@ import org.eclipse.tm4e.core.internal.types.IRawRule;
 /**
  * Raw
  */
-public final class Raw extends HashMap<@Nullable String, @Nullable Object>
+public final class Raw extends HashMap<String, @Nullable Object>
 		implements IRawRepository, IRawRule, IRawGrammar, IRawCaptures {
 
-	public static final String DOLLAR_SELF = "$self";
 	public static final String DOLLAR_BASE = "$base";
+	public static final String DOLLAR_SELF = "$self";
 
 	private static final String APPLY_END_PATTERN_LAST = "applyEndPatternLast";
 	private static final String BEGIN = "begin";
@@ -106,7 +106,7 @@ public final class Raw extends HashMap<@Nullable String, @Nullable Object>
 	}
 
 	@Override
-	public void setId(@Nullable final Integer id) {
+	public void setId(final Integer id) {
 		super.put(ID, id);
 	}
 
@@ -117,7 +117,7 @@ public final class Raw extends HashMap<@Nullable String, @Nullable Object>
 	}
 
 	@Override
-	public void setName(@Nullable final String name) {
+	public void setName(final String name) {
 		super.put(NAME, name);
 	}
 
@@ -274,10 +274,10 @@ public final class Raw extends HashMap<@Nullable String, @Nullable Object>
 		List<String> result = fileTypes;
 		if (result == null) {
 			result = new ArrayList<>();
-			final Collection<@NonNull ?> unparsedFileTypes = (Collection<@NonNull ?>) get(FILE_TYPES);
+			final Collection<?> unparsedFileTypes = (Collection<?>) get(FILE_TYPES);
 			if (unparsedFileTypes != null) {
 				for (final Object o : unparsedFileTypes) {
-					String str = o.toString();
+					String str = Objects.toString(o);
 					// #202
 					if (str.startsWith(".")) {
 						str = str.substring(1);
@@ -331,7 +331,7 @@ public final class Raw extends HashMap<@Nullable String, @Nullable Object>
 
 	@Nullable
 	@Override
-	public Object put(@Nullable final String key, @Nullable final Object value) {
+	public Object put(final String key, @Nullable final Object value) {
 		if (FILE_TYPES.equals(key))
 			fileTypes = null;
 
@@ -340,7 +340,7 @@ public final class Raw extends HashMap<@Nullable String, @Nullable Object>
 
 	@Override
 	@SuppressWarnings("unlikely-arg-type")
-	public void putAll(@Nullable final Map<? extends @Nullable String, ? extends @Nullable Object> m) {
+	public void putAll(@Nullable final Map<? extends String, ? extends @Nullable Object> m) {
 		if (m != null && m.containsKey(FILE_TYPES))
 			fileTypes = null;
 		super.putAll(m);

@@ -30,15 +30,15 @@ public interface IRawRepository {
 		for (final IRawRepository source : sources) {
 			if (source == null)
 				continue;
-			final Set<Entry<@Nullable String, @Nullable Object>> entries = source.entrySet();
-			for (final Entry<@Nullable String, @Nullable Object> entry : entries) {
+			final Set<Entry<String, @Nullable Object>> entries = source.entrySet();
+			for (final Entry<String, @Nullable Object> entry : entries) {
 				merged.put(entry.getKey(), entry.getValue());
 			}
 		}
 		return merged;
 	}
 
-	Set<Map.Entry<@Nullable String, @Nullable Object /*TODO IRawRule*/>> entrySet();
+	Set<Map.Entry<String, @Nullable Object /*TODO IRawRule*/>> entrySet();
 
 	@Nullable
 	IRawRule getProp(String name);

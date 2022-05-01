@@ -18,20 +18,8 @@ abstract class PListObject {
 	@Nullable
 	final PListObject parent;
 
-	@Nullable
-	private String lastKey;
-
 	PListObject(@Nullable final PListObject parent) {
 		this.parent = parent;
-	}
-
-	@Nullable
-	String getLastKey() {
-		return lastKey;
-	}
-
-	void setLastKey(@Nullable final String lastKey) {
-		this.lastKey = lastKey;
 	}
 
 	abstract void addValue(Object value);

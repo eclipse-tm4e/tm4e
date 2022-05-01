@@ -22,6 +22,9 @@ final class PListDict extends PListObject {
 
 	private final Map<String, @Nullable Object> values;
 
+	@Nullable
+	private String lastKey;
+
 	PListDict(@Nullable final PListObject parent, final MapFactory mapFactory) {
 		super(parent);
 		values = mapFactory.createMap();
@@ -29,11 +32,20 @@ final class PListDict extends PListObject {
 
 	@Override
 	void addValue(final Object value) {
-      values.put(castNonNull(getLastKey()), value);
+		values.put(castNonNull(lastKey), value);
+	}
+
+	@Nullable
+	String getLastKey() {
+		return lastKey;
 	}
 
 	@Override
 	Object getValue() {
 		return values;
+	}
+
+	void setLastKey(@Nullable final String lastKey) {
+		this.lastKey = lastKey;
 	}
 }

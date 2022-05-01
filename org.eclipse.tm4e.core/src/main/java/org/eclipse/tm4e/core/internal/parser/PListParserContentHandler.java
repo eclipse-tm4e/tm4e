@@ -51,8 +51,8 @@ final class PListParserContentHandler<T> extends DefaultHandler {
 			currObject = new PListArray(currObject);
 			break;
 		case "key":
-			if (currObject != null) {
-				currObject.setLastKey(null);
+			if (currObject instanceof PListDict) {
+				((PListDict) currObject).setLastKey(null);
 			}
 			break;
 		}
@@ -80,7 +80,7 @@ final class PListParserContentHandler<T> extends DefaultHandler {
 				errors.add("<key> tag can only be used inside an open <dict> element");
 				return;
 			}
-			currObject.setLastKey(text);
+			((PListDict) currObject).setLastKey(text);
 			return;
 		case "dict":
 		case "array":
@@ -140,7 +140,7 @@ final class PListParserContentHandler<T> extends DefaultHandler {
 			final var t = (T) value;
 			result = t;
 		} else if (currObject instanceof PListDict) {
-			if (currObject.getLastKey() != null) {
+			if (((PListDict) currObject).getLastKey() != null) {
 				currObject.addValue(value);
 			} else {
 				errors.add("Dictionary key missing for value " + value);

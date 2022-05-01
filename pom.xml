@@ -39,9 +39,11 @@
 		<module>org.eclipse.tm4e.ui.tests</module>
 		<module>org.eclipse.tm4e.languageconfiguration</module>
 		<module>org.eclipse.tm4e.languageconfiguration.tests</module>
+		<module>org.eclipse.tm4e.language_pack</module>
 		<module>org.eclipse.tm4e.markdown</module>
 		<module>org.eclipse.tm4e.samples</module>
 		<module>org.eclipse.tm4e.feature</module>
+		<module>org.eclipse.tm4e.language_pack.feature</module>
 		<module>org.eclipse.tm4e.repository</module>
 	</modules>
 	<build>

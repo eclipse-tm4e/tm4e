@@ -63,7 +63,7 @@ public final class BeginWhileRule extends Rule {
 	public void collectPatternsRecursive(IRuleRegistry grammar, RegExpSourceList out, boolean isFirst) {
 		if (isFirst) {
 			Rule rule;
-			for (Integer pattern : patterns) {
+			for (int pattern : patterns) {
 				rule = grammar.getRule(pattern);
 				rule.collectPatternsRecursive(grammar, out, false);
 			}

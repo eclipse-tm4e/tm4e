@@ -41,7 +41,7 @@ final class IncludeOnlyRule extends Rule {
 	@Override
 	public void collectPatternsRecursive(final IRuleRegistry grammar, final RegExpSourceList out,
 			final boolean isFirst) {
-		for (final Integer pattern : this.patterns) {
+		for (final int pattern : this.patterns) {
 			final Rule rule = grammar.getRule(pattern);
 			rule.collectPatternsRecursive(grammar, out, false);
 		}

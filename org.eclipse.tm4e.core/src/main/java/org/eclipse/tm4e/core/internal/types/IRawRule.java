@@ -40,22 +40,14 @@ public interface IRawRule {
 	@Nullable
 	String getContentName();
 
-	void setContentName(@Nullable String name);
-
 	@Nullable
 	String getMatch();
-
-	void setMatch(@Nullable String match);
 
 	@Nullable
 	IRawCaptures getCaptures();
 
-	void setCaptures(@Nullable IRawCaptures captures);
-
 	@Nullable
 	String getBegin();
-
-	void setBegin(@Nullable String begin);
 
 	@Nullable
 	IRawCaptures getBeginCaptures();
@@ -65,15 +57,11 @@ public interface IRawRule {
 	@Nullable
 	String getEnd();
 
-	void setEnd(@Nullable String end);
-
 	@Nullable
 	String getWhile();
 
 	@Nullable
 	IRawCaptures getEndCaptures();
-
-	void setEndCaptures(@Nullable IRawCaptures endCaptures);
 
 	@Nullable
 	IRawCaptures getWhileCaptures();
@@ -89,6 +77,4 @@ public interface IRawRule {
 	void setRepository(@Nullable IRawRepository repository);
 
 	boolean isApplyEndPatternLast();
-
-	void setApplyEndPatternLast(boolean applyEndPatternLast);
 }

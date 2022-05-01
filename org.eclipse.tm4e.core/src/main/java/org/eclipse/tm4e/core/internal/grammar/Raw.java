@@ -66,8 +66,7 @@ public final class Raw extends HashMap<@Nullable String, @Nullable Object>
 
 	private Object getSafe(@Nullable final Object key) {
 		@SuppressWarnings("unlikely-arg-type")
-		final
-		var obj = get(key);
+		final var obj = get(key);
 		if (obj == null) {
 			throw new IllegalArgumentException("Key '" + key + "' does not exit found");
 		}
@@ -128,20 +127,10 @@ public final class Raw extends HashMap<@Nullable String, @Nullable Object>
 		return (String) get(CONTENT_NAME);
 	}
 
-	@Override
-	public void setContentName(@Nullable final String name) {
-		super.put(CONTENT_NAME, name);
-	}
-
 	@Nullable
 	@Override
 	public String getMatch() {
 		return (String) get(MATCH);
-	}
-
-	@Override
-	public void setMatch(@Nullable final String match) {
-		super.put(MATCH, match);
 	}
 
 	@Nullable
@@ -164,20 +153,10 @@ public final class Raw extends HashMap<@Nullable String, @Nullable Object>
 		}
 	}
 
-	@Override
-	public void setCaptures(@Nullable final IRawCaptures captures) {
-		super.put(CAPTURES, captures);
-	}
-
 	@Nullable
 	@Override
 	public String getBegin() {
 		return (String) get(BEGIN);
-	}
-
-	@Override
-	public void setBegin(@Nullable final String begin) {
-		super.put(BEGIN, begin);
 	}
 
 	@Nullable
@@ -215,21 +194,11 @@ public final class Raw extends HashMap<@Nullable String, @Nullable Object>
 		return (String) get(END);
 	}
 
-	@Override
-	public void setEnd(@Nullable final String end) {
-		super.put(END, end);
-	}
-
 	@Nullable
 	@Override
 	public IRawCaptures getEndCaptures() {
 		updateCaptures(END_CAPTURES);
 		return (IRawCaptures) get(END_CAPTURES);
-	}
-
-	@Override
-	public void setEndCaptures(@Nullable final IRawCaptures endCaptures) {
-		super.put(END_CAPTURES, endCaptures);
 	}
 
 	@Nullable
@@ -293,11 +262,6 @@ public final class Raw extends HashMap<@Nullable String, @Nullable Object>
 			return ((Integer) applyEndPatternLast).equals(1);
 		}
 		return false;
-	}
-
-	@Override
-	public void setApplyEndPatternLast(final boolean applyEndPatternLast) {
-		super.put(APPLY_END_PATTERN_LAST, applyEndPatternLast);
 	}
 
 	@Override

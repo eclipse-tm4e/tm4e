@@ -309,7 +309,7 @@ public final class Grammar implements IGrammar, IRuleFactoryHelper {
 		final var onigLineText = OnigString.of(lineText);
 		final int lineLength = lineText.length();
 		final var lineTokens = new LineTokens(emitBinaryTokens, lineText, tokenTypeMatchers, balancedBracketSelectors);
-		final var nextState = LineTokenizer.tokenizeString(this, onigLineText, isFirstLine, 0, prevState, lineTokens);
+		final var nextState = LineTokenizer.tokenizeString(this, onigLineText, isFirstLine, 0, prevState, lineTokens, true);
 
 		if (emitBinaryTokens) {
 			return (T) new TokenizeLineResult2(lineTokens.getBinaryResult(nextState, lineLength), nextState);

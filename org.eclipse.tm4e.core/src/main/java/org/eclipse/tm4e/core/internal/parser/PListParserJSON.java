@@ -54,9 +54,8 @@ public final class PListParserJSON<T> implements PListParser<T> {
 					reader.endObject();
 					break;
 				case NAME:
-					final var lastName = reader.nextName();
 					pList.startElement(null, "key", null, null);
-					pList.characters(lastName.toCharArray(), 0, lastName.length());
+					pList.characters(reader.nextName());
 					pList.endElement(null, "key", null);
 					break;
 				case NULL:
@@ -69,9 +68,8 @@ public final class PListParserJSON<T> implements PListParser<T> {
 					reader.nextLong();
 					break;
 				case STRING:
-					final var value = reader.nextString();
 					pList.startElement(null, "string", null, null);
-					pList.characters(value.toCharArray(), 0, value.length());
+					pList.characters(reader.nextString());
 					pList.endElement(null, "string", null);
 					break;
 				case END_DOCUMENT:

@@ -58,34 +58,28 @@ final class PListParserContentHandler<T> extends DefaultHandler {
 		}
 
 		text.setLength(0);
-		super.startElement(uri, localName, qName, attributes);
 	}
 
 	@Override
 	public void endElement(@Nullable final String uri, @Nullable final String localName, @Nullable final String qName)
 			throws SAXException {
 		assert localName != null;
-		endElement(localName);
-		super.endElement(uri, localName, qName);
-	}
 
-	private void endElement(final String tagName) {
 		Object value = null;
-		final String text = this.text.toString();
 
 		var currObject = this.currObject;
-		switch (tagName) {
+		switch (localName) {
 		case "key":
 			if (!(currObject instanceof PListDict)) {
 				errors.add("<key> tag can only be used inside an open <dict> element");
 				return;
 			}
-			((PListDict) currObject).setLastKey(text);
+			((PListDict) currObject).setLastKey(text.toString());
 			return;
 		case "dict":
 		case "array":
 			if (currObject == null) {
-				errors.add("Closing </" + tagName + "> tag found, without opening tag");
+				errors.add("Closing </" + localName + "> tag found, without opening tag");
 				return;
 			}
 			value = currObject.getValue();
@@ -93,12 +87,12 @@ final class PListParserContentHandler<T> extends DefaultHandler {
 			break;
 		case "string":
 		case "data":
-			value = text;
+			value = text.toString();
 			break;
 		case "date":
 			// e.g. <date>2007-10-25T12:36:35Z</date>
 			try {
-				value = ZonedDateTime.parse(text);
+				value = ZonedDateTime.parse(text.toString());
 			} catch (final DateTimeParseException ex) {
 				errors.add("Failed to parse date '" + text + "'. " + ex);
 				return;
@@ -106,7 +100,7 @@ final class PListParserContentHandler<T> extends DefaultHandler {
 			break;
 		case "integer":
 			try {
-				value = Integer.parseInt(text);
+				value = Integer.parseInt(text.toString());
 			} catch (final NumberFormatException ex) {
 				errors.add("Failed to parse integer '" + text + "'. " + ex);
 				return;
@@ -114,26 +108,24 @@ final class PListParserContentHandler<T> extends DefaultHandler {
 			break;
 		case "real":
 			try {
-				value = Float.parseFloat(text);
+				value = Float.parseFloat(text.toString());
 			} catch (final NumberFormatException ex) {
 				errors.add("Failed to parse real as float '" + text + "'. " + ex);
 				return;
 			}
 			break;
 		case "true":
-			value = true;
+			value = Boolean.TRUE;
 			break;
 		case "false":
-			value = false;
+			value = Boolean.FALSE;
 			break;
 		case "plist":
 			return;
 		default:
-			errors.add("Invalid tag name: " + tagName);
+			errors.add("Invalid tag name: " + localName);
 			return;
 		}
-
-		assert value != null;
 
 		if (currObject == null) {
 			@SuppressWarnings("unchecked")
@@ -152,8 +144,11 @@ final class PListParserContentHandler<T> extends DefaultHandler {
 
 	@Override
 	public void characters(final char @Nullable [] ch, final int start, final int length) throws SAXException {
-		this.text.append(String.valueOf(ch, start, length));
-		super.characters(ch, start, length);
+		text.append(ch, start, length);
+	}
+
+	void characters(final String chars)  {
+		text.append(chars);
 	}
 
 	public T getResult() {

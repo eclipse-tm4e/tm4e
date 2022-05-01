@@ -55,9 +55,9 @@ public final class PListParserYAML<T> implements PListParser<T> {
 			throws SAXException {
 		pList.startElement(null, "dict", null, null);
 
-		for (final Entry< String, Object> entry : map.entrySet()) {
+		for (final Entry<String, Object> entry : map.entrySet()) {
 			pList.startElement(null, "key", null, null);
-			pList.characters(castNonNull(entry.getKey()).toCharArray(), 0, castNonNull(entry.getKey()).length());
+			pList.characters(entry.getKey());
 			pList.endElement(null, "key", null);
 			if (entry.getValue() instanceof List) {
 				addListToPList(pList, (List<Object>) entry.getValue());
@@ -73,7 +73,7 @@ public final class PListParserYAML<T> implements PListParser<T> {
 
 	private void addStringToPList(final PListParserContentHandler<T> pList, final String value) throws SAXException {
 		pList.startElement(null, "string", null, null);
-		pList.characters(value.toCharArray(), 0, value.length());
+		pList.characters(value);
 		pList.endElement(null, "string", null);
 	}
 

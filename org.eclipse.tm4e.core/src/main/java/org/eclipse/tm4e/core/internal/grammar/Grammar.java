@@ -19,6 +19,8 @@ package org.eclipse.tm4e.core.internal.grammar;
 
 import static org.eclipse.tm4e.core.internal.utils.NullSafetyHelper.*;
 
+import java.lang.System.Logger;
+import java.lang.System.Logger.Level;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -53,6 +55,8 @@ import org.eclipse.tm4e.core.theme.IThemeProvider;
  *      github.com/Microsoft/vscode-textmate/blob/master/src/grammar.ts</a>
  */
 public final class Grammar implements IGrammar, IRuleFactoryHelper {
+
+	private static final Logger LOGGER = System.getLogger(RuleFactory.class.getName());
 
 	private final String scopeName;
 
@@ -119,7 +123,7 @@ public final class Grammar implements IGrammar, IRuleFactoryHelper {
 		final int ruleId = RuleFactory.getCompiledRuleId(rule, ruleFactoryHelper, this.grammar.getRepositorySafe());
 
 		for (final var matcher : matchers) {
-			result.add(new Injection(matcher.matcher, ruleId, grammar, matcher.priority));
+			result.add(new Injection(selector, matcher.matcher, ruleId, grammar, matcher.priority));
 		}
 	}
 
@@ -186,6 +190,14 @@ public final class Grammar implements IGrammar, IRuleFactoryHelper {
 		var injections = this.injections;
 		if (injections == null) {
 			injections = this.injections = this.collectInjections();
+
+			if (LOGGER.isLoggable(Level.TRACE) && !injections.isEmpty()) {
+				LOGGER.log(Level.TRACE,
+						"Grammar " + scopeName + " contains the following injections:");
+				for (final var injection : injections) {
+					LOGGER.log(Level.TRACE, "  - " + injection.debugSelector);
+				}
+			}
 		}
 		return injections;
 	}

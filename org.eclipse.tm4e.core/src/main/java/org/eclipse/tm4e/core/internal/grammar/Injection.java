@@ -21,21 +21,24 @@ import java.util.List;
 import org.eclipse.tm4e.core.internal.matcher.Matcher;
 import org.eclipse.tm4e.core.internal.types.IRawGrammar;
 
-class Injection {
+final class Injection {
 
+	final String debugSelector;
 	private final Matcher<List<String>> matcher;
-	public final int priority; // -1 | 0 | 1; // 0 is the default. -1 for 'L' and 1 for 'R'
-	public final int ruleId;
-	public final IRawGrammar grammar;
+	final int priority; // -1 | 0 | 1; // 0 is the default. -1 for 'L' and 1 for 'R'
+	final int ruleId;
+	final IRawGrammar grammar;
 
-	public Injection(final Matcher<List<String>> matcher, final int ruleId, final IRawGrammar grammar, final int priority) {
+	Injection(final String debugSelector, final Matcher<List<String>> matcher, final int ruleId,
+			final IRawGrammar grammar, final int priority) {
+		this.debugSelector = debugSelector;
 		this.matcher = matcher;
 		this.ruleId = ruleId;
 		this.grammar = grammar;
 		this.priority = priority;
 	}
 
-	public boolean match(final List<String> states) {
+	boolean matches(final List<String> states) {
 		return matcher.matches(states);
 	}
 }

@@ -16,12 +16,12 @@
  */
 package org.eclipse.tm4e.core.internal.grammar;
 
+import static java.lang.System.Logger.Level.*;
 import static org.eclipse.tm4e.core.internal.utils.MoreCollections.*;
 import static org.eclipse.tm4e.core.internal.utils.NullSafetyHelper.*;
 
-import static java.lang.System.Logger.Level.*;
-
 import java.lang.System.Logger;
+import java.lang.System.Logger.Level;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -278,10 +278,10 @@ final class LineTokenizer {
 
 	@Nullable
 	private IMatchResult matchRule(final Grammar grammar, final OnigString lineText, final boolean isFirstLine,
-			final int linePos,
-			final StackElement stack, final int anchorPosition) {
+			final int linePos, final StackElement stack, final int anchorPosition) {
 		final Rule rule = stack.getRule(grammar);
 		final CompiledRule ruleScanner = rule.compileAG(grammar, stack.endRule, isFirstLine, linePos == anchorPosition);
+
 		final OnigNextMatchResult r = ruleScanner.scanner.findNextMatchSync(lineText, linePos);
 
 		if (r != null) {
@@ -354,7 +354,7 @@ final class LineTokenizer {
 		final List<String> scopes = stack.contentNameScopesList.generateScopes();
 
 		for (final Injection injection : injections) {
-			if (!injection.match(scopes)) {
+			if (!injection.matches(scopes)) {
 				// injection selector doesn't match stack
 				continue;
 			}
@@ -367,6 +367,10 @@ final class LineTokenizer {
 				continue;
 			}
 
+			if (LOGGER.isLoggable(Level.TRACE)) {
+				LOGGER.log(Level.TRACE, "  matched injection: " + injection.debugSelector);
+				LOGGER.log(Level.TRACE, debugCompiledRuleToString(ruleScanner));
+			}
 			final int matchRating = matchResult.getCaptureIndices()[0].start;
 
 			if (matchRating > bestMatchRating) {
@@ -508,15 +512,16 @@ final class LineTokenizer {
 				whileRules.add(new WhileStack(node, (BeginWhileRule) nodeRule));
 			}
 		}
+
 		for (int i = whileRules.size() - 1; i >= 0; i--) {
-			final var whileRule = castNonNull(whileRules.get(i));
+			final var whileRule = whileRules.get(i);
 			final var ruleScanner = whileRule.rule.compileWhileAG(whileRule.stack.endRule, isFirstLine,
 					currentanchorPosition == linePos);
 			final var r = ruleScanner.scanner.findNextMatchSync(lineText, linePos);
-			// if (IN_DEBUG_MODE) {
-			// console.log(' scanning for while rule');
-			// console.log(debugCompiledRuleToString(ruleScanner));
-			// }
+			if (LOGGER.isLoggable(TRACE)) {
+				LOGGER.log(TRACE, "  scanning for while rule");
+				LOGGER.log(TRACE, debugCompiledRuleToString(ruleScanner));
+			}
 
 			if (r != null) {
 				final int matchedRuleId = ruleScanner.rules[r.getIndex()];
@@ -548,5 +553,13 @@ final class LineTokenizer {
 	static StackElement tokenizeString(final Grammar grammar, final OnigString lineText, final boolean isFirstLine,
 			final int linePos, final StackElement stack, final LineTokens lineTokens) {
 		return new LineTokenizer(grammar, lineText, isFirstLine, linePos, stack, lineTokens).scan();
+	}
+
+	static String debugCompiledRuleToString(CompiledRule ruleScanner) {
+		final var r = new ArrayList<String>();
+		for (int i = 0, l = ruleScanner.rules.length; i < l; i++) {
+			r.add("   - " + ruleScanner.rules[i] + ": " + ruleScanner.debugRegExps.get(i));
+		}
+		return String.join(System.lineSeparator(), r);
 	}
 }

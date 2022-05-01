@@ -22,7 +22,6 @@ import java.util.Objects;
 import java.util.stream.Collectors;
 
 import org.eclipse.jdt.annotation.Nullable;
-import org.eclipse.tm4e.core.internal.oniguruma.OnigScanner;
 
 /**
  * @see <a href=
@@ -76,7 +75,7 @@ final class RegExpSourceList {
 		var cached = this.cached;
 		if (cached == null) {
 			final List<String> regexps = items.stream().map(RegExpSource::getSource).collect(Collectors.toList());
-			cached = this.cached = new CompiledRule(new OnigScanner(regexps), getRules());
+			cached = this.cached = new CompiledRule(regexps, getRules());
 		}
 		return cached;
 	}
@@ -99,7 +98,7 @@ final class RegExpSourceList {
 	private CompiledRule resolveAnchors(final boolean allowA, final boolean allowG) {
 		final List<String> regexps = items.stream().map(e -> e.resolveAnchors(allowA, allowG))
 				.collect(Collectors.toList());
-		return new CompiledRule(new OnigScanner(regexps), getRules());
+		return new CompiledRule(regexps, getRules());
 	}
 
 	private int[] getRules() {

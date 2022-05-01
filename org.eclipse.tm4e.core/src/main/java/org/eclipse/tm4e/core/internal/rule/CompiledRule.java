@@ -1,5 +1,5 @@
 /**
- *  Copyright (c) 2015-2017 Angelo ZERR.
+ * Copyright (c) 2015-2017 Angelo ZERR.
  * This program and the accompanying materials are made
  * available under the terms of the Eclipse Public License 2.0
  * which is available at https://www.eclipse.org/legal/epl-2.0/
@@ -11,10 +11,12 @@
  * Initial license: MIT
  *
  * Contributors:
- *  - Microsoft Corporation: Initial code, written in TypeScript, licensed under MIT license
- *  - Angelo Zerr <angelo.zerr@gmail.com> - translation and adaptation to Java
+ * - Microsoft Corporation: Initial code, written in TypeScript, licensed under MIT license
+ * - Angelo Zerr <angelo.zerr@gmail.com> - translation and adaptation to Java
  */
 package org.eclipse.tm4e.core.internal.rule;
+
+import java.util.List;
 
 import org.eclipse.tm4e.core.internal.oniguruma.OnigScanner;
 
@@ -25,11 +27,13 @@ import org.eclipse.tm4e.core.internal.oniguruma.OnigScanner;
  */
 public final class CompiledRule {
 
+	public final List<String> debugRegExps;
 	public final OnigScanner scanner;
 	public final int[] rules;
 
-	CompiledRule(OnigScanner scanner, int[] rules) {
-		this.scanner = scanner;
+	CompiledRule(List<String> regExps, int[] rules) {
+		this.debugRegExps = regExps;
 		this.rules = rules;
+		this.scanner = new OnigScanner(regExps);
 	}
 }

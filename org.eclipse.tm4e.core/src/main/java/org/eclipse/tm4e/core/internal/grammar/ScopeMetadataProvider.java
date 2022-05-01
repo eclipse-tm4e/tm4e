@@ -31,7 +31,7 @@ import org.eclipse.tm4e.core.theme.ThemeTrieElementRule;
  */
 final class ScopeMetadataProvider {
 
-	private static final ScopeMetadata NULL_SCOPE_METADATA = new ScopeMetadata("", 0, StandardTokenType.Other, null);
+	private static final ScopeMetadata NULL_SCOPE_METADATA = new ScopeMetadata("", 0, 0, null);
 
 	private static final Pattern STANDARD_TOKEN_TYPE_REGEXP = Pattern.compile("\\b(comment|string|regex)\\b");
 	private static final String COMMENT_TOKEN_TYPE = "comment";
@@ -57,7 +57,7 @@ final class ScopeMetadataProvider {
 		this.defaultMetaData = new ScopeMetadata(
 				"",
 				this.initialLanguage,
-				StandardTokenType.Other,
+				OptionalStandardTokenType.NotSet,
 				List.of(this.themeProvider.getDefaults()));
 
 		// embeddedLanguages handling
@@ -85,7 +85,7 @@ final class ScopeMetadataProvider {
 		this.defaultMetaData = new ScopeMetadata(
 				"",
 				this.initialLanguage,
-				StandardTokenType.Other,
+				OptionalStandardTokenType.NotSet,
 				List.of(this.themeProvider.getDefaults()));
 	}
 
@@ -138,21 +138,21 @@ final class ScopeMetadataProvider {
 		return embeddedLanguages.getOrDefault(m.group(1), 0);
 	}
 
-	private static int toStandardTokenType(final String tokenType) {
+	private static int /*OptionalStandardTokenType*/ toStandardTokenType(final String tokenType) {
 		final var m = STANDARD_TOKEN_TYPE_REGEXP.matcher(tokenType);
 		if (!m.find()) {
-			return StandardTokenType.Other;
+			return OptionalStandardTokenType.NotSet;
 		}
 		final String group = m.group(1);
 		switch (group) {
 		case COMMENT_TOKEN_TYPE:
-			return StandardTokenType.Comment;
+			return OptionalStandardTokenType.Comment;
 		case STRING_TOKEN_TYPE:
-			return StandardTokenType.String;
+			return OptionalStandardTokenType.String;
 		case REGEX_TOKEN_TYPE:
-			return StandardTokenType.RegEx;
+			return OptionalStandardTokenType.RegEx;
 		case META_EMBEDDED_TOKEN_TYPE:
-			return StandardTokenType.Other;
+			return OptionalStandardTokenType.Other;
 		default:
 			throw new TMException("Unexpected match for standard token type: " + group);
 		}

@@ -26,61 +26,61 @@ public class GrammarTest {
 
 	@Test
 	public void testWorks() {
-		int value = StackElementMetadata.set(0, 1, StandardTokenType.RegEx, null, Underline | Bold, 101, 102);
+		int value = StackElementMetadata.set(0, 1, OptionalStandardTokenType.RegEx, null, Underline | Bold, 101, 102);
 		assertEquals(value, 1, StandardTokenType.RegEx, Underline | Bold, 101, 102);
 	}
 
 	@Test
 	public void testCanOverwriteLanguageId() {
-		int value = StackElementMetadata.set(0, 1, StandardTokenType.RegEx, null, Underline | Bold, 101, 102);
+		int value = StackElementMetadata.set(0, 1, OptionalStandardTokenType.RegEx, null, Underline | Bold, 101, 102);
 		assertEquals(value, 1, StandardTokenType.RegEx, Underline | Bold, 101, 102);
 
-		value = StackElementMetadata.set(value, 2, StandardTokenType.Other, null, NotSet, 0, 0);
+		value = StackElementMetadata.set(value, 2, OptionalStandardTokenType.NotSet, null, NotSet, 0, 0);
 		assertEquals(value, 2, StandardTokenType.RegEx, Underline | Bold, 101, 102);
 	}
 
 	@Test
 	public void testCanOverwriteTokenType() {
-		int value = StackElementMetadata.set(0, 1, StandardTokenType.RegEx, null, Underline | Bold, 101, 102);
+		int value = StackElementMetadata.set(0, 1, OptionalStandardTokenType.RegEx, null, Underline | Bold, 101, 102);
 		assertEquals(value, 1, StandardTokenType.RegEx, Underline | Bold, 101, 102);
 
-		value = StackElementMetadata.set(value, 0, StandardTokenType.Comment, null, NotSet, 0, 0);
+		value = StackElementMetadata.set(value, 0, OptionalStandardTokenType.Comment, null, NotSet, 0, 0);
 		assertEquals(value, 1, StandardTokenType.Comment, Underline | Bold, 101, 102);
 	}
 
 	@Test
 	public void testCanOverwriteFontStyle() {
-		int value = StackElementMetadata.set(0, 1, StandardTokenType.RegEx, null, Underline | Bold, 101, 102);
+		int value = StackElementMetadata.set(0, 1, OptionalStandardTokenType.RegEx, null, Underline | Bold, 101, 102);
 		assertEquals(value, 1, StandardTokenType.RegEx, Underline | Bold, 101, 102);
 
-		value = StackElementMetadata.set(value, 0, StandardTokenType.Other, null, None, 0, 0);
+		value = StackElementMetadata.set(value, 0, OptionalStandardTokenType.NotSet, null, None, 0, 0);
 		assertEquals(value, 1, StandardTokenType.RegEx, None, 101, 102);
 	}
 
 	@Test
 	public void testCanOverwriteFontStyleWithStrikethrough() {
-		int value = StackElementMetadata.set(0, 1, StandardTokenType.RegEx, null, Strikethrough, 101, 102);
+		int value = StackElementMetadata.set(0, 1, OptionalStandardTokenType.RegEx, null, Strikethrough, 101, 102);
 		assertEquals(value, 1, StandardTokenType.RegEx, Strikethrough, 101, 102);
 
-		value = StackElementMetadata.set(value, 0, StandardTokenType.Other, null, None, 0, 0);
+		value = StackElementMetadata.set(value, 0, OptionalStandardTokenType.NotSet, null, None, 0, 0);
 		assertEquals(value, 1, StandardTokenType.RegEx, None, 101, 102);
 	}
 
 	@Test
 	public void testCanOverwriteForeground() {
-		int value = StackElementMetadata.set(0, 1, StandardTokenType.RegEx, null, Underline | Bold, 101, 102);
+		int value = StackElementMetadata.set(0, 1, OptionalStandardTokenType.RegEx, null, Underline | Bold, 101, 102);
 		assertEquals(value, 1, StandardTokenType.RegEx, Underline | Bold, 101, 102);
 
-		value = StackElementMetadata.set(value, 0, StandardTokenType.Other, null, NotSet, 5, 0);
+		value = StackElementMetadata.set(value, 0, OptionalStandardTokenType.NotSet, null, NotSet, 5, 0);
 		assertEquals(value, 1, StandardTokenType.RegEx, Underline | Bold, 5, 102);
 	}
 
 	@Test
 	public void testCanOverwriteBackground() {
-		int value = StackElementMetadata.set(0, 1, StandardTokenType.RegEx, null, Underline | Bold, 101, 102);
+		int value = StackElementMetadata.set(0, 1, OptionalStandardTokenType.RegEx, null, Underline | Bold, 101, 102);
 		assertEquals(value, 1, StandardTokenType.RegEx, Underline | Bold, 101, 102);
 
-		value = StackElementMetadata.set(value, 0, StandardTokenType.Other, null, NotSet, 0, 7);
+		value = StackElementMetadata.set(value, 0, OptionalStandardTokenType.NotSet, null, NotSet, 0, 7);
 		assertEquals(value, 1, StandardTokenType.RegEx, Underline | Bold, 101, 7);
 	}
 

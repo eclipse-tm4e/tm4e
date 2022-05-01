@@ -32,5 +32,9 @@ final class OptionalStandardTokenType {
 	static final int Comment = StandardTokenType.Comment;
 	static final int String =  StandardTokenType.String;
 	static final int RegEx =  StandardTokenType.RegEx;
+
+	/**
+	 * Indicates that no token type is set.
+	 */
 	static final int NotSet = 8;
 }

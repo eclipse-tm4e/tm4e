@@ -20,12 +20,14 @@ public final class ScopeMetadata {
 
 	final String scopeName;
 	final int languageId;
-	final int tokenType;
+	final int /*OptionalStandardTokenType*/ tokenType;
 
 	@Nullable
 	final List<ThemeTrieElementRule> themeData;
 
-	public ScopeMetadata(final String scopeName, final int languageId, final int tokenType, @Nullable final List<ThemeTrieElementRule> themeData) {
+	public ScopeMetadata(final String scopeName, final int languageId,
+			final int /*OptionalStandardTokenType*/ tokenType,
+			@Nullable final List<ThemeTrieElementRule> themeData) {
 		this.scopeName = scopeName;
 		this.languageId = languageId;
 		this.tokenType = tokenType;

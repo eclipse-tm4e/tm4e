@@ -60,10 +60,10 @@ public final class StackElementMetadata {
 		return (metadata & MetadataConsts.BACKGROUND_MASK) >>> MetadataConsts.BACKGROUND_OFFSET;
 	}
 
-	static int set(final int metadata, final int languageId, final int tokenType,
+	static int set(final int metadata, final int languageId, final /*OptionalStandardTokenType*/ int tokenType,
 			@Nullable Boolean containsBalancedBrackets, final int fontStyle, final int foreground, int background) {
 		final var _languageId = languageId == 0 ? getLanguageId(metadata) : languageId;
-		final var _tokenType = tokenType == StandardTokenType.Other ? getTokenType(metadata) : tokenType;
+		final var _tokenType = tokenType == OptionalStandardTokenType.NotSet ? getTokenType(metadata) : tokenType;
 		final var _containsBalancedBracketsBit = (containsBalancedBrackets == null ? containsBalancedBrackets(metadata)
 				: containsBalancedBrackets) ? 1 : 0;
 		final var _fontStyle = fontStyle == FontStyle.NotSet ? getFontStyle(metadata) : fontStyle;

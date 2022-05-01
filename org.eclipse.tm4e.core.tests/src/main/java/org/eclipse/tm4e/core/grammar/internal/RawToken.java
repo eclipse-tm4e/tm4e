@@ -54,4 +54,9 @@ public class RawToken {
 		result = prime * result + (value == null ? 0 : value.hashCode());
 		return result;
 	}
+
+	@Override
+	public String toString() {
+		return "RawToken{\n  value:" + value + "\n  scopes:" + scopes + "\n}";
+	}
 }

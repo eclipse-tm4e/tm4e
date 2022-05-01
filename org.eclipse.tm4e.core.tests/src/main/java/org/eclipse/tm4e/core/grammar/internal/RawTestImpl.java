@@ -1,34 +1,41 @@
 /**
- *  Copyright (c) 2015-2017 Angelo ZERR.
+ * Copyright (c) 2015-2017 Angelo ZERR.
  * This program and the accompanying materials are made
  * available under the terms of the Eclipse Public License 2.0
  * which is available at https://www.eclipse.org/legal/epl-2.0/
  *
  * SPDX-License-Identifier: EPL-2.0
  *
- *  Contributors:
- *  Angelo Zerr <angelo.zerr@gmail.com> - initial API and implementation
+ * Contributors:
+ * Angelo Zerr <angelo.zerr@gmail.com> - initial API and implementation
  */
 package org.eclipse.tm4e.core.grammar.internal;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static java.util.stream.Collectors.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import org.eclipse.tm4e.core.grammar.IGrammar;
-import org.eclipse.tm4e.core.grammar.IToken;
-import org.eclipse.tm4e.core.grammar.ITokenizeLineResult;
 import org.eclipse.tm4e.core.grammar.StackElement;
 import org.eclipse.tm4e.core.registry.IRegistryOptions;
 import org.eclipse.tm4e.core.registry.Registry;
 
+/**
+ * @see <a href="https://github.com/Microsoft/vscode-textmate/blob/master/src/tests/tokenization.tests.ts">
+ *      github.com/Microsoft/vscode-textmate/blob/master/src/tests/tokenization.tests.ts</a>
+ */
 public class RawTestImpl {
+
+	private static final class RawTestLine {
+		String line;
+		List<RawToken> tokens;
+	}
 
 	private String desc;
 	private List<String> grammars;
@@ -63,20 +70,20 @@ public class RawTestImpl {
 	}
 
 	public void executeTest() throws Exception {
-		IRegistryOptions locator = new IRegistryOptions() {
+		final var options = new IRegistryOptions() {
 
 			@Override
-			public String getFilePath(String scopeName) {
+			public String getFilePath(final String scopeName) {
 				return null;
 			}
 
 			@Override
-			public InputStream getInputStream(String scopeName) throws IOException {
+			public InputStream getInputStream(final String scopeName) throws IOException {
 				return null;
 			}
 
 			@Override
-			public Collection<String> getInjections(String scopeName) {
+			public Collection<String> getInjections(final String scopeName) {
 				if (scopeName.equals(getGrammarScopeName())) {
 					return getGrammarInjections();
 				}
@@ -84,27 +91,25 @@ public class RawTestImpl {
 			}
 		};
 
-		Registry registry = new Registry(locator);
+		final Registry registry = new Registry(options);
 		IGrammar grammar = getGrammar(registry, testLocation.getParentFile());
-
 		if (getGrammarScopeName() != null) {
 			grammar = registry.grammarForScopeName(getGrammarScopeName());
 		}
-
 		if (grammar == null) {
 			throw new Exception("I HAVE NO GRAMMAR FOR TEST");
 		}
 
 		StackElement prevState = null;
-		for (RawTestLine testLine : getLines()) {
+		for (final var testLine : lines) {
 			prevState = assertLineTokenization(grammar, testLine, prevState);
 		}
 	}
 
-	private IGrammar getGrammar(Registry registry, File testLocation) throws Exception {
+	private IGrammar getGrammar(final Registry registry, final File testLocation) throws Exception {
 		IGrammar grammar = null;
-		for (String grammarPath : getGrammars()) {
-			IGrammar tmpGrammar = registry.loadGrammarFromPathSync(new File(testLocation, grammarPath));
+		for (final String grammarPath : getGrammars()) {
+			final IGrammar tmpGrammar = registry.loadGrammarFromPathSync(new File(testLocation, grammarPath));
 			if (grammarPath.equals(getGrammarPath())) {
 				grammar = tmpGrammar;
 			}
@@ -112,49 +117,53 @@ public class RawTestImpl {
 		return grammar;
 	}
 
-	private static StackElement assertLineTokenization(IGrammar grammar, RawTestLine testCase, StackElement prevState) {
-		ITokenizeLineResult actual = grammar.tokenizeLine(testCase.getLine(), prevState);
+	private static StackElement assertLineTokenization(final IGrammar grammar, final RawTestLine testCase,
+			final StackElement prevState) {
+		final var line = testCase.line;
+		final var actual = grammar.tokenizeLine(line, prevState);
 
-		List<RawToken> actualTokens = getActualTokens(actual.getTokens(), testCase);
+		final var actualTokens = Arrays.stream(actual.getTokens())
+				.map(token -> new RawToken(
+						line.substring(
+								token.getStartIndex(),
+								Math.min(token.getEndIndex(), line.length())), // TODO Math.min not required in upstream why?
+						token.getScopes()))
+				.collect(toList());
 
-		List<RawToken> expectedTokens = testCase.getTokens();
-		// // TODO@Alex: fix tests instead of working around
-		if (!testCase.getLine().isEmpty()) {
+		// TODO@Alex: fix tests instead of working around
+		if (!line.isEmpty()) {
 			// Remove empty tokens...
-			expectedTokens = testCase.getTokens().stream().filter(token -> !token.getValue().isEmpty())
-					.collect(Collectors.toList());
+			testCase.tokens = testCase.tokens.stream().filter(token -> !token.getValue().isEmpty()).collect(toList());
 		}
-		deepEqual(actualTokens, expectedTokens, "Tokenizing line '" + testCase.getLine() + "'");
+
+		deepEqual(actualTokens, testCase.tokens, "Tokenizing line '" + line + "'");
 
 		return actual.getRuleStack();
 	}
 
-	private static void deepEqual(List<RawToken> actualTokens, List<RawToken> expextedTokens, String message) {
+	private static void deepEqual(final List<RawToken> actualTokens, final List<RawToken> expextedTokens,
+			final String message) {
+
 		// compare collection size
-		assertEquals(expextedTokens.size(), actualTokens.size(), message + " (collection size problem)");
+		if (expextedTokens.size() != actualTokens.size()) {
+			final var actualTokensStr = actualTokens.stream().map(Object::toString).collect(joining("\n"));
+			final var expextedTokensStr = expextedTokens.stream().map(Object::toString).collect(joining("\n"));
+
+			assertEquals(expextedTokensStr, actualTokensStr,
+					message + " (collection size problem: actual=" + actualTokens.size() + " expected="
+							+ expextedTokens.size() + ")");
+		}
+
 		// compare item
 		for (int i = 0; i < expextedTokens.size(); i++) {
-			RawToken expected = expextedTokens.get(i);
-			RawToken actual = actualTokens.get(i);
+			final var expected = expextedTokens.get(i);
+			final var actual = actualTokens.get(i);
 			assertEquals(expected.getValue(), actual.getValue(), message + " (value of item '" + i + "' problem)");
 			assertEquals(expected.getScopes(), actual.getScopes(), message + " (tokens of item '" + i + "' problem)");
 		}
-
 	}
 
-	private static List<RawToken> getActualTokens(IToken[] tokens, RawTestLine testCase) {
-		List<RawToken> actualTokens = new ArrayList<>();
-		for (IToken token : tokens) {
-			String value = testCase.getLine().substring(token.getStartIndex(),
-					token.getEndIndex() < testCase.getLine().length() ? token.getEndIndex()
-							: testCase.getLine().length());
-			actualTokens.add(new RawToken(value, token.getScopes()));
-		}
-		return actualTokens;
-	}
-
-	public void setTestLocation(File testLocation) {
+	public void setTestLocation(final File testLocation) {
 		this.testLocation = testLocation;
 	}
-
 }

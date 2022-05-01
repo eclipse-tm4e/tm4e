@@ -18,11 +18,12 @@
 package org.eclipse.tm4e.core.internal.grammar;
 
 import java.util.List;
-import java.util.function.Predicate;
+
+import org.eclipse.tm4e.core.internal.matcher.Matcher;
 
 public interface TokenTypeMatcher {
 
-	Predicate<List<String>> getMatcher();
+	Matcher<List<String>> getMatcher();
 
 	int /*StandardTokenType*/ getType();
 }

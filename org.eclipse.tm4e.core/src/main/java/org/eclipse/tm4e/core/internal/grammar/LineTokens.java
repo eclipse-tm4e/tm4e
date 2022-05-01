@@ -16,10 +16,9 @@
  */
 package org.eclipse.tm4e.core.internal.grammar;
 
+import static java.lang.System.Logger.Level.*;
 import static org.eclipse.tm4e.core.internal.utils.MoreCollections.*;
 import static org.eclipse.tm4e.core.internal.utils.NullSafetyHelper.*;
-
-import static java.lang.System.Logger.Level.*;
 
 import java.lang.System.Logger;
 import java.util.ArrayList;
@@ -97,7 +96,7 @@ final class LineTokens {
 				// Only generate scope array when required to improve performance
 				final var scopes = scopesList.generateScopes();
 				for (final var tokenType : tokenTypeOverrides) {
-					if (tokenType.getMatcher().test(scopes)) {
+					if (tokenType.getMatcher().matches(scopes)) {
 						metadata = StackElementMetadata.set(
 								metadata,
 								0,

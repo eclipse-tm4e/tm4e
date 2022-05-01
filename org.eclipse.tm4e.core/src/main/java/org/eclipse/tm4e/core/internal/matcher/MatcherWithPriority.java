@@ -16,14 +16,12 @@
  */
 package org.eclipse.tm4e.core.internal.matcher;
 
-import java.util.function.Predicate;
-
 public final class MatcherWithPriority<T> {
 
-	public final Predicate<T> matcher;
+	public final Matcher<T> matcher;
 	public final int priority;
 
-	MatcherWithPriority(final Predicate<T> matcher, final int priority) {
+	MatcherWithPriority(final Matcher<T> matcher, final int priority) {
 		this.matcher = matcher;
 		this.priority = priority;
 	}

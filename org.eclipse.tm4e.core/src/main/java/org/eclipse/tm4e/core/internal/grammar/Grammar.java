@@ -27,7 +27,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.function.IntFunction;
-import java.util.function.Predicate;
 
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
@@ -97,7 +96,7 @@ public final class Grammar implements IGrammar, IRuleFactoryHelper {
 						}
 
 						@Override
-						public Predicate<List<String>> getMatcher() {
+						public Matcher<List<String>> getMatcher() {
 							return matcher.matcher;
 						}
 					});

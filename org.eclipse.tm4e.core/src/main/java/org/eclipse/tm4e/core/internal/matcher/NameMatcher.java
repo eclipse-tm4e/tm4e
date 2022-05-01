@@ -26,17 +26,17 @@ import org.eclipse.jdt.annotation.Nullable;
  *      "https://github.com/microsoft/vscode-textmate/blob/9157c7f869219dbaf9a5a5607f099c00fe694a29/src/grammar.ts#L276">
  *      github.com/Microsoft/vscode-textmate/blob/master/src/grammar.ts</a>
  */
-public interface IMatchesName<T> {
+public interface NameMatcher<T> {
 
-	IMatchesName<List<String>> NAME_MATCHER = new IMatchesName<>() {
+	NameMatcher<List<String>> DEFAULT = new NameMatcher<>() {
 
 		@Override
-		public boolean match(final Collection<String> identifers, final List<String> scopes) {
-			if (scopes.size() < identifers.size()) {
+		public boolean matches(final Collection<String> identifiers, final List<String> scopes) {
+			if (scopes.size() < identifiers.size()) {
 				return false;
 			}
 			final int[] lastIndex = { 0 };
-			return identifers.stream().allMatch(identifier -> {
+			return identifiers.stream().allMatch(identifier -> {
 				for (int i = lastIndex[0]; i < scopes.size(); i++) {
 					if (scopesAreMatching(scopes.get(i), identifier)) {
 						lastIndex[0]++;
@@ -61,5 +61,5 @@ public interface IMatchesName<T> {
 		}
 	};
 
-	boolean match(Collection<String> names, T scopes);
+	boolean matches(Collection<String> names, T scopes);
 }

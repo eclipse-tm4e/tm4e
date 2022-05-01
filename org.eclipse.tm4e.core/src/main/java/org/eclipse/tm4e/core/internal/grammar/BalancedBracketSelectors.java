@@ -18,14 +18,13 @@
 package org.eclipse.tm4e.core.internal.grammar;
 
 import java.util.List;
-import java.util.function.Predicate;
 import java.util.stream.Stream;
 
 import org.eclipse.tm4e.core.internal.matcher.Matcher;
 
 public class BalancedBracketSelectors {
-	private final Predicate<List<String>>[] balancedBracketScopes;
-	private final Predicate<List<String>>[] unbalancedBracketScopes;
+	private final Matcher<List<String>>[] balancedBracketScopes;
+	private final Matcher<List<String>>[] unbalancedBracketScopes;
 
 	private boolean allowAny = false;
 
@@ -38,11 +37,11 @@ public class BalancedBracketSelectors {
 					}
 					return Matcher.createMatchers(selector).stream();
 				})
-				.map(m -> m.matcher).toArray(Predicate[]::new);
+				.map(m -> m.matcher).toArray(Matcher[]::new);
 
 		this.unbalancedBracketScopes = unbalancedBracketScopes.stream()
 				.flatMap(selector -> Matcher.createMatchers(selector).stream())
-				.map(m -> m.matcher).toArray(Predicate[]::new);
+				.map(m -> m.matcher).toArray(Matcher[]::new);
 	}
 
 	boolean matchesAlways() {
@@ -55,13 +54,13 @@ public class BalancedBracketSelectors {
 
 	boolean match(final List<String> scopes) {
 		for (final var excluder : this.unbalancedBracketScopes) {
-			if (excluder.test(scopes)) {
+			if (excluder.matches(scopes)) {
 				return false;
 			}
 		}
 
 		for (final var includer : this.balancedBracketScopes) {
-			if (includer.test(scopes)) {
+			if (includer.matches(scopes)) {
 				return true;
 			}
 		}

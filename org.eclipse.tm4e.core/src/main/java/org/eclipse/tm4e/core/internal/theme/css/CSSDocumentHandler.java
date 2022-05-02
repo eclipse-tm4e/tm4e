@@ -14,6 +14,7 @@ package org.eclipse.tm4e.core.internal.theme.css;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.tm4e.core.theme.IStyle;
 import org.eclipse.tm4e.core.theme.RGB;
 import org.eclipse.tm4e.core.theme.css.CSSStyle;
@@ -24,20 +25,20 @@ import org.w3c.css.sac.LexicalUnit;
 import org.w3c.css.sac.SACMediaList;
 import org.w3c.css.sac.SelectorList;
 import org.w3c.dom.css.CSSPrimitiveValue;
-import org.w3c.dom.css.RGBColor;
 
 public final class CSSDocumentHandler implements DocumentHandler {
 
 	private final List<IStyle> list = new ArrayList<>();
+
+	@Nullable
 	private CSSStyle currentStyle;
 
 	@Override
-	public void comment(final String arg0) throws CSSException {
-
+	public void comment(@Nullable final String arg0) throws CSSException {
 	}
 
 	@Override
-	public void endDocument(final InputSource arg0) throws CSSException {
+	public void endDocument(@Nullable final InputSource arg0) throws CSSException {
 		// TODO Auto-generated method stub
 	}
 
@@ -47,38 +48,41 @@ public final class CSSDocumentHandler implements DocumentHandler {
 	}
 
 	@Override
-	public void endMedia(final SACMediaList arg0) throws CSSException {
+	public void endMedia(@Nullable final SACMediaList arg0) throws CSSException {
 		// TODO Auto-generated method stub
 	}
 
 	@Override
-	public void endPage(final String arg0, final String arg1) throws CSSException {
+	public void endPage(@Nullable final String arg0, @Nullable final String arg1) throws CSSException {
 		// TODO Auto-generated method stub
 	}
 
 	@Override
-	public void endSelector(final SelectorList selector) throws CSSException {
+	public void endSelector(@Nullable final SelectorList selector) throws CSSException {
 		currentStyle = null;
 	}
 
 	@Override
-	public void ignorableAtRule(final String arg0) throws CSSException {
+	public void ignorableAtRule(@Nullable final String arg0) throws CSSException {
 		// TODO Auto-generated method stub
 	}
 
 	@Override
-	public void importStyle(final String arg0, final SACMediaList arg1, final String arg2) throws CSSException {
+	public void importStyle(@Nullable final String arg0, @Nullable final SACMediaList arg1, @Nullable final String arg2)
+			throws CSSException {
 		// TODO Auto-generated method stub
 	}
 
 	@Override
-	public void namespaceDeclaration(final String arg0, final String arg1) throws CSSException {
+	public void namespaceDeclaration(@Nullable final String arg0, @Nullable final String arg1) throws CSSException {
 		// TODO Auto-generated method stub
 	}
 
 	@Override
-	public void property(final String name, final LexicalUnit value, final boolean arg2) throws CSSException {
-		if (currentStyle != null && name != null) {
+	public void property(@Nullable final String name, @Nullable final LexicalUnit value, final boolean arg2)
+			throws CSSException {
+		final var currentStyle = this.currentStyle;
+		if (currentStyle != null && name != null && value != null) {
 			switch (name) {
 			case "color":
 				currentStyle.setColor(createRGB(value));
@@ -106,7 +110,7 @@ public final class CSSDocumentHandler implements DocumentHandler {
 	}
 
 	private RGB createRGB(final LexicalUnit value) {
-		final RGBColor rgbColor = new RGBColorImpl(value);
+		final var rgbColor = new RGBColorImpl(value);
 		final int green = ((int) rgbColor.getGreen().getFloatValue(CSSPrimitiveValue.CSS_NUMBER));
 		final int red = ((int) rgbColor.getRed().getFloatValue(CSSPrimitiveValue.CSS_NUMBER));
 		final int blue = ((int) rgbColor.getBlue().getFloatValue(CSSPrimitiveValue.CSS_NUMBER));
@@ -114,7 +118,7 @@ public final class CSSDocumentHandler implements DocumentHandler {
 	}
 
 	@Override
-	public void startDocument(final InputSource arg0) throws CSSException {
+	public void startDocument(@Nullable final InputSource arg0) throws CSSException {
 		// TODO Auto-generated method stub
 	}
 
@@ -124,17 +128,17 @@ public final class CSSDocumentHandler implements DocumentHandler {
 	}
 
 	@Override
-	public void startMedia(final SACMediaList arg0) throws CSSException {
+	public void startMedia(@Nullable final SACMediaList arg0) throws CSSException {
 		// TODO Auto-generated method stub
 	}
 
 	@Override
-	public void startPage(final String arg0, final String arg1) throws CSSException {
+	public void startPage(@Nullable final String arg0, @Nullable final String arg1) throws CSSException {
 		// TODO Auto-generated method stub
 	}
 
 	@Override
-	public void startSelector(final SelectorList selector) throws CSSException {
+	public void startSelector(@Nullable final SelectorList selector) throws CSSException {
 		currentStyle = new CSSStyle(selector);
 		list.add(currentStyle);
 	}

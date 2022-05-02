@@ -11,9 +11,11 @@
  */
 package org.eclipse.tm4e.core.internal.theme.css;
 
+import org.eclipse.jdt.annotation.Nullable;
+
 final class CSSElementSelector extends AbstractElementSelector {
 
-	CSSElementSelector(final String uri, final String name) {
+	CSSElementSelector(@Nullable final String uri, @Nullable final String name) {
 		super(uri, name);
 	}
 

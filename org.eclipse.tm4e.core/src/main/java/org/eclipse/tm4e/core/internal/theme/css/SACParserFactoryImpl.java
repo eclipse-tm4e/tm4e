@@ -6,7 +6,7 @@
  * http://www.eclipse.org/legal/epl-v10.html
  *
  * Contributors:
- *     Angelo Zerr <angelo.zerr@gmail.com> - initial API and implementation
+ * Angelo Zerr <angelo.zerr@gmail.com> - initial API and implementation
  *******************************************************************************/
 package org.eclipse.tm4e.core.internal.theme.css;
 
@@ -14,6 +14,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.tm4e.core.theme.css.SACConstants;
 import org.eclipse.tm4e.core.theme.css.SACParserFactory;
 import org.w3c.css.sac.Parser;
@@ -24,7 +25,7 @@ import org.w3c.css.sac.Parser;
  */
 public final class SACParserFactoryImpl extends SACParserFactory {
 
-	private static Map<String, String> parsers = new HashMap<>();
+	private static Map<String, @Nullable String> parsers = new HashMap<>();
 
 	static {
 		// Register Flute SAC Parser
@@ -42,20 +43,21 @@ public final class SACParserFactoryImpl extends SACParserFactory {
 		super.setPreferredParserName(SACConstants.SACPARSER_BATIK);
 	}
 
+	@Nullable
 	@Override
-	public Parser makeParser(final String name) throws ClassNotFoundException, IllegalAccessException, InstantiationException,
-	NullPointerException, ClassCastException {
+	public Parser makeParser(@Nullable final String name) throws ClassNotFoundException, IllegalAccessException,
+			InstantiationException, NullPointerException, ClassCastException {
 		final String classNameParser = parsers.get(name);
 		if (classNameParser != null) {
 			final Class<?> classParser = super.getClass().getClassLoader().loadClass(classNameParser);
 			try {
 				return (Parser) classParser.getDeclaredConstructor().newInstance();
-			} catch (InvocationTargetException|NoSuchMethodException ex) {
-				throw (InstantiationException)((new InstantiationException()).initCause(ex));
+			} catch (InvocationTargetException | NoSuchMethodException ex) {
+				throw (InstantiationException) ((new InstantiationException()).initCause(ex));
 			}
 		}
-		throw new IllegalAccessException("SAC parser with name=" + name
-				+ " was not registered into SAC parser factory.");
+		throw new IllegalAccessException(
+				"SAC parser with name=" + name + " was not registered into SAC parser factory.");
 	}
 
 	/**

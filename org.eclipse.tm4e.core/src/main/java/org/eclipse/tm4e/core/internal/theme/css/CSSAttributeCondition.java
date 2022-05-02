@@ -11,16 +11,20 @@
  */
 package org.eclipse.tm4e.core.internal.theme.css;
 
+import org.eclipse.jdt.annotation.Nullable;
+
 class CSSAttributeCondition extends AbstractAttributeCondition {
 
 	/**
 	 * The attribute's local name.
 	 */
+	@Nullable
 	private final String localName;
 
 	/**
 	 * The attribute's namespace URI.
 	 */
+	@Nullable
 	private final String namespaceURI;
 
 	/**
@@ -28,18 +32,20 @@ class CSSAttributeCondition extends AbstractAttributeCondition {
 	 */
 	private final boolean specified;
 
-	protected CSSAttributeCondition(final String localName, final String namespaceURI, final boolean specified, final String value) {
+	protected CSSAttributeCondition(@Nullable final String localName, @Nullable final String namespaceURI, final boolean specified, final String value) {
 		super(value);
 		this.localName = localName;
 		this.namespaceURI = namespaceURI;
 		this.specified = specified;
 	}
 
+	@Nullable
 	@Override
 	public String getLocalName() {
 		return localName;
 	}
 
+	@Nullable
 	@Override
 	public String getNamespaceURI() {
 		return namespaceURI;
@@ -57,7 +63,8 @@ class CSSAttributeCondition extends AbstractAttributeCondition {
 
 	@Override
 	public int nbMatch(final String... names) {
-//		String val = getValue();
+//		TODO
+//      String val = getValue();
 //		if (val == null) {
 //			return !e.getAttribute(getLocalName()).equals("");
 //		}

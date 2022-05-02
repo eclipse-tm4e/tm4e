@@ -11,6 +11,7 @@
  *******************************************************************************/
 package org.eclipse.tm4e.core.internal.theme.css;
 
+import org.eclipse.jdt.annotation.Nullable;
 import org.w3c.dom.DOMException;
 import org.w3c.dom.css.CSSPrimitiveValue;
 import org.w3c.dom.css.Counter;
@@ -33,7 +34,7 @@ abstract class CSSValueImpl implements CSSPrimitiveValue {
 	}
 
 	@Override
-	public void setCssText(final String cssText) throws DOMException {
+	public void setCssText(@Nullable final String cssText) throws DOMException {
 		// TODO Auto-generated method stub
 		throw new UnsupportedOperationException("NOT YET IMPLEMENTED");
 	}
@@ -74,7 +75,7 @@ abstract class CSSValueImpl implements CSSPrimitiveValue {
 	}
 
 	@Override
-	public void setStringValue(final short arg0, final String arg1) throws DOMException {
+	public void setStringValue(final short arg0, @Nullable final String arg1) throws DOMException {
 		// TODO Auto-generated method stub
 		throw new UnsupportedOperationException("NOT YET IMPLEMENTED");
 	}

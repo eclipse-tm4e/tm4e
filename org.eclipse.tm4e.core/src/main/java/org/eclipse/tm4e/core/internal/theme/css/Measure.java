@@ -45,17 +45,6 @@ final class Measure extends CSSValueImpl {
 		return value.getFloatValue();
 	}
 
-	/**
-	 * Return an int representation of the receiver's value.
-	 *
-	 * @param valueType
-	 *            a short representing the value type, see
-	 *            {@link CSSValue#getCssValueType()}
-	 */
-	private int getIntegerValue(final short valueType) throws DOMException {
-		return value.getIntegerValue();
-	}
-
 	@Override
 	public String getStringValue() throws DOMException {
 		final short lexicalUnit = value.getLexicalUnitType();

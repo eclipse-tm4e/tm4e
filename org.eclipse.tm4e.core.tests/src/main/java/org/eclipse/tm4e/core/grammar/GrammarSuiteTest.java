@@ -12,7 +12,6 @@
 package org.eclipse.tm4e.core.grammar;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
@@ -26,13 +25,10 @@ import org.junit.jupiter.api.DynamicTest;
 import org.junit.jupiter.api.TestFactory;
 
 import com.google.gson.GsonBuilder;
-import com.google.gson.JsonIOException;
-import com.google.gson.JsonSyntaxException;
 import com.google.gson.reflect.TypeToken;
 
 /**
- * VSCode TextMate grammar tests which uses same vscode-textmate tests located
- * at src\test\resources\test-cases
+ * VSCode TextMate grammar tests which uses same vscode-textmate tests located at src\test\resources\test-cases
  *
  * @see <a href="https://github.com/Microsoft/vscode-textmate/blob/master/src/tests/tests.ts">
  *      github.com/Microsoft/vscode-textmate/blob/master/src/tests/tests.ts</a>
@@ -64,33 +60,35 @@ public class GrammarSuiteTest {
 		return createVSCodeTestSuite(new File(REPO_ROOT, "test-cases/suite1/whileTests.json"));
 	}
 
-	private List<DynamicTest> createVSCodeTestSuite(File testLocation) throws Exception {
-		Type listType = new TypeToken<ArrayList<RawTestImpl>>() {
-		}.getType();
-		List<RawTestImpl> tests = new GsonBuilder().create().fromJson(new FileReader(testLocation), listType);
-		List<DynamicTest> dynamicTests = new ArrayList<>();
-		for (RawTestImpl test : tests) {
-			if (!IGNORE_TESTS.contains(test.getDesc())) {
-				test.setTestLocation(testLocation);
-				dynamicTests.add(DynamicTest.dynamicTest(test.getDesc(), test::executeTest));
+	private List<DynamicTest> createVSCodeTestSuite(final File testLocation) throws Exception {
+		try (var fileReader = new FileReader(testLocation)) {
+			final Type listType = new TypeToken<ArrayList<RawTestImpl>>() {
+			}.getType();
+			final List<RawTestImpl> tests = new GsonBuilder().create().fromJson(fileReader, listType);
+			final var dynamicTests = new ArrayList<DynamicTest>();
+			for (final RawTestImpl test : tests) {
+				if (!IGNORE_TESTS.contains(test.getDesc())) {
+					test.setTestLocation(testLocation);
+					dynamicTests.add(DynamicTest.dynamicTest(test.getDesc(), test::executeTest));
+				}
 			}
+			return dynamicTests;
 		}
-		return dynamicTests;
 	}
 
 	@TestFactory
 	@DisplayName("Matcher tests")
-	Collection<DynamicTest> dynamicTestsWithCollection() throws JsonIOException, JsonSyntaxException, FileNotFoundException {
-		Type listType = new TypeToken<ArrayList<MatcherTestImpl>>() {
-		}.getType();
-		List<MatcherTestImpl> tests = new GsonBuilder().create()
-				.fromJson(new FileReader(new File(REPO_ROOT, "matcher-tests.json")), listType);
-		List<DynamicTest> dynamicTests = new ArrayList<>();
-		int i = 0;
-		for (MatcherTestImpl test : tests) {
-			dynamicTests.add(DynamicTest.dynamicTest("Test #" + (i++), test::executeTest));
+	Collection<DynamicTest> dynamicTestsWithCollection() throws Exception {
+		try (var fileReader = new FileReader(new File(REPO_ROOT, "matcher-tests.json"))) {
+			final Type listType = new TypeToken<ArrayList<MatcherTestImpl>>() {
+			}.getType();
+			final List<MatcherTestImpl> tests = new GsonBuilder().create().fromJson(fileReader, listType);
+			final var dynamicTests = new ArrayList<DynamicTest>();
+			int i = 0;
+			for (final MatcherTestImpl test : tests) {
+				dynamicTests.add(DynamicTest.dynamicTest("Test #" + (i++), test::executeTest));
+			}
+			return dynamicTests;
 		}
-		return dynamicTests;
 	}
-
 }

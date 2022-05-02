@@ -45,23 +45,23 @@ import org.eclipse.tm4e.core.theme.Theme;
  */
 public class Registry {
 
-	private final IRegistryOptions locator;
+	private final IRegistryOptions options;
 	private final SyncRegistry syncRegistry;
 
 	public Registry() {
 		this(IRegistryOptions.DEFAULT_LOCATOR);
 	}
 
-	public Registry(final IRegistryOptions locator) {
-		this.locator = locator;
-		this.syncRegistry = new SyncRegistry(Theme.createFromRawTheme(locator.getTheme()));
+	public Registry(final IRegistryOptions options) {
+		this.options = options;
+		this.syncRegistry = new SyncRegistry(Theme.createFromRawTheme(options.getTheme(), options.getColorMap()));
 	}
 
 	/**
 	 * Change the theme. Once called, no previous `ruleStack` should be used anymore.
 	 */
 	public void setTheme(final IRawTheme theme) {
-		this.syncRegistry.setTheme(Theme.createFromRawTheme(theme));
+		this.syncRegistry.setTheme(Theme.createFromRawTheme(theme, options.getColorMap()));
 	}
 
 	/**
@@ -86,7 +86,7 @@ public class Registry {
 				continue;
 			}
 
-			final String filePath = this.locator.getFilePath(scopeName);
+			final String filePath = this.options.getFilePath(scopeName);
 			if (filePath == null) {
 				if (scopeName.equals(initialScopeName)) {
 					throw new TMException("Unknown location for grammar <" + initialScopeName + ">");
@@ -94,12 +94,12 @@ public class Registry {
 				continue;
 			}
 
-			try (InputStream in = this.locator.getInputStream(scopeName)) {
+			try (InputStream in = this.options.getInputStream(scopeName)) {
 				if (in == null) {
 					throw new TMException("Unknown location for grammar <" + initialScopeName + ">");
 				}
 				final var grammar = GrammarReader.readGrammarSync(filePath, in);
-				final var injections = this.locator.getInjections(scopeName);
+				final var injections = this.options.getInjections(scopeName);
 
 				final var deps = this.syncRegistry.addGrammar(grammar, injections);
 				for (final String dep : deps) {
@@ -136,7 +136,7 @@ public class Registry {
 	public IGrammar loadGrammarFromPathSync(final String path, final InputStream in, final int initialLanguage,
 			@Nullable final Map<String, Integer> embeddedLanguages) throws Exception {
 		final var rawGrammar = GrammarReader.readGrammarSync(path, in);
-		final var injections = this.locator.getInjections(rawGrammar.getScopeName());
+		final var injections = this.options.getInjections(rawGrammar.getScopeName());
 		this.syncRegistry.addGrammar(rawGrammar, injections);
 		return this.grammarForScopeName(rawGrammar.getScopeName(), initialLanguage, embeddedLanguages);
 	}
@@ -158,6 +158,6 @@ public class Registry {
 	}
 
 	public IRegistryOptions getLocator() {
-		return locator;
+		return options;
 	}
 }

@@ -74,4 +74,10 @@ public class ParsedThemeRule {
 				&& Objects.equals(foreground, other.foreground) && index == other.index
 				&& Objects.equals(parentScopes, other.parentScopes) && Objects.equals(scope, other.scope);
 	}
+
+	@Override
+	public String toString() {
+		return "ParsedThemeRule [scope=" + scope + ", parentScopes=" + parentScopes + ", index=" + index
+				+ ", fontStyle=" + fontStyle + ", foreground=" + foreground + ", background=" + background + "]";
+	}
 }

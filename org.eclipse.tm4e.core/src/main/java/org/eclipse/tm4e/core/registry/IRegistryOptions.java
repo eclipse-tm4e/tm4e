@@ -19,6 +19,7 @@ package org.eclipse.tm4e.core.registry;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Collection;
+import java.util.List;
 
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
@@ -55,6 +56,11 @@ public interface IRegistryOptions {
 
 	@Nullable
 	default IRawTheme getTheme() {
+		return null;
+	}
+
+	@Nullable
+	default List<String> getColorMap() {
 		return null;
 	}
 

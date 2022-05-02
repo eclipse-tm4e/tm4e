@@ -270,6 +270,6 @@ class ThemeMatchingTest {
 	}
 
 	private Theme loadTheme(String theme) throws Exception {
-		return Theme.createFromRawTheme(ThemeReader.readThemeSync("theme.json", new ByteArrayInputStream(theme.getBytes())));
+		return Theme.createFromRawTheme(ThemeReader.readThemeSync("theme.json", new ByteArrayInputStream(theme.getBytes())), null);
 	}
 }

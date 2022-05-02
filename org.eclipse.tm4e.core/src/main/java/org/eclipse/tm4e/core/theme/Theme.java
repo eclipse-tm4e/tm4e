@@ -46,12 +46,12 @@ public class Theme {
 	private static final Pattern RGB = Pattern.compile("^#[0-9a-f]{3}", Pattern.CASE_INSENSITIVE);
 	private static final Pattern RGBA = Pattern.compile("^#[0-9a-f]{4}", Pattern.CASE_INSENSITIVE);
 
-	public static Theme createFromRawTheme(@Nullable final IRawTheme source) {
-		return createFromParsedTheme(parseTheme(source));
+	public static Theme createFromRawTheme(@Nullable final IRawTheme source, @Nullable List<String> colorMap) {
+		return createFromParsedTheme(parseTheme(source), colorMap);
 	}
 
-	public static Theme createFromParsedTheme(final List<ParsedThemeRule> source) {
-		return resolveParsedThemeRules(source);
+	public static Theme createFromParsedTheme(final List<ParsedThemeRule> source, @Nullable List<String> colorMap) {
+		return resolveParsedThemeRules(source, colorMap);
 	}
 
 	private final ColorMap colorMap;
@@ -178,7 +178,12 @@ public class Theme {
 	/**
 	 * Resolve rules (i.e. inheritance).
 	 */
-	public static Theme resolveParsedThemeRules(final List<ParsedThemeRule> parsedThemeRules) {
+	public static Theme resolveParsedThemeRules(final List<ParsedThemeRule> _parsedThemeRules,
+			@Nullable List<String> _colorMap) {
+
+		// copy the list since we cannot be sure the given list is mutable
+		final var parsedThemeRules = new ArrayList<>(_parsedThemeRules);
+
 		// Sort rules lexicographically, and then by index if necessary
 		parsedThemeRules.sort((a, b) -> {
 			int r = CompareUtils.strcmp(a.scope, b.scope);
@@ -208,7 +213,7 @@ public class Theme {
 				defaultBackground = incomingDefaults.background;
 			}
 		}
-		final var colorMap = new ColorMap();
+		final var colorMap = new ColorMap(_colorMap);
 		final var defaults = new ThemeTrieElementRule(0, null, defaultFontStyle, colorMap.getId(defaultForeground),
 				colorMap.getId(defaultBackground));
 

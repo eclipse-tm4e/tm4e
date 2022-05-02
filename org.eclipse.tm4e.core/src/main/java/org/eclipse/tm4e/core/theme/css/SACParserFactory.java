@@ -40,7 +40,7 @@ public abstract class SACParserFactory extends ParserFactory implements ISACPars
 			if (preferredParserName != null) {
 				return makeParser(preferredParserName);
 			}
-		} catch (Throwable ex) {
+		} catch (final Throwable ex) {
 			LOGGER.log(ERROR, ex.getMessage(), ex);
 		}
 		return super.makeParser();
@@ -60,7 +60,7 @@ public abstract class SACParserFactory extends ParserFactory implements ISACPars
 	 *
 	 * @param preferredParserName
 	 */
-	public void setPreferredParserName(String preferredParserName) {
+	public void setPreferredParserName(final String preferredParserName) {
 		this.preferredParserName = preferredParserName;
 	}
 

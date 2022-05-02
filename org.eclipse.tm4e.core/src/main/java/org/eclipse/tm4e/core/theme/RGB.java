@@ -17,7 +17,7 @@ public class RGB {
 	public final int green;
 	public final int blue;
 
-	public RGB(int red, int green, int blue) {
+	public RGB(final int red, final int green, final int blue) {
 		this.red = red;
 		this.green = green;
 		this.blue = blue;

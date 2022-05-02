@@ -25,8 +25,8 @@ public class ThemeTrieElementRule {
 	public int foreground;
 	public int background;
 
-	public ThemeTrieElementRule(int scopeDepth, List<String> parentScopes, int fontStyle, int foreground,
-			int background) {
+	public ThemeTrieElementRule(final int scopeDepth, final List<String> parentScopes, final int fontStyle, final int foreground,
+			final int background) {
 		this.scopeDepth = scopeDepth;
 		this.parentScopes = parentScopes;
 		this.fontStyle = fontStyle;
@@ -40,15 +40,15 @@ public class ThemeTrieElementRule {
 				this.background);
 	}
 
-	public static List<ThemeTrieElementRule> cloneArr(List<ThemeTrieElementRule> arr) {
-		List<ThemeTrieElementRule> r = new ArrayList<>();
+	public static List<ThemeTrieElementRule> cloneArr(final List<ThemeTrieElementRule> arr) {
+		final List<ThemeTrieElementRule> r = new ArrayList<>();
 		for (int i = 0, len = arr.size(); i < len; i++) {
 			r.add(arr.get(i).clone());
 		}
 		return r;
 	}
 
-	public void acceptOverwrite(int scopeDepth, int fontStyle, int foreground, int background) {
+	public void acceptOverwrite(final int scopeDepth, final int fontStyle, final int foreground, final int background) {
 		if (this.scopeDepth > scopeDepth) {
 			// TODO!!!
 			// console.log('how did this happen?');
@@ -74,7 +74,7 @@ public class ThemeTrieElementRule {
 	}
 
 	@Override
-	public boolean equals(Object obj) {
+	public boolean equals(final Object obj) {
 		if (this == obj) {
 			return true;
 		}
@@ -84,7 +84,7 @@ public class ThemeTrieElementRule {
 		if (getClass() != obj.getClass()) {
 			return false;
 		}
-		ThemeTrieElementRule other = (ThemeTrieElementRule) obj;
+		final ThemeTrieElementRule other = (ThemeTrieElementRule) obj;
 		return background == other.background && fontStyle == other.fontStyle && foreground == other.foreground &&
 		    Objects.equals(parentScopes, other.parentScopes) && scopeDepth == other.scopeDepth;
 	}

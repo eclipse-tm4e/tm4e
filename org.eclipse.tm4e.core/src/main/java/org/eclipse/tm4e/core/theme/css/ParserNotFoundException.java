@@ -18,7 +18,7 @@ public class ParserNotFoundException extends RuntimeException {
 
 	private static final long serialVersionUID = 4339161134287845644L;
 
-	public ParserNotFoundException(Throwable throwable) {
+	public ParserNotFoundException(final Throwable throwable) {
 		super(throwable);
 	}
 }

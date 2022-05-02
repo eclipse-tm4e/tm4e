@@ -27,22 +27,22 @@ public class ThemeTrieElement {
 	private final List<ThemeTrieElementRule> rulesWithParentScopes;
 	private final Map<String /* segment */, ThemeTrieElement> children;
 
-	public ThemeTrieElement(ThemeTrieElementRule mainRule) {
+	public ThemeTrieElement(final ThemeTrieElementRule mainRule) {
 		this(mainRule, new ArrayList<>(), new HashMap<>());
 	}
 
-	public ThemeTrieElement(ThemeTrieElementRule mainRule, List<ThemeTrieElementRule> rulesWithParentScopes) {
+	public ThemeTrieElement(final ThemeTrieElementRule mainRule, final List<ThemeTrieElementRule> rulesWithParentScopes) {
 		this(mainRule, rulesWithParentScopes, new HashMap<>());
 	}
 
-	public ThemeTrieElement(ThemeTrieElementRule mainRule, List<ThemeTrieElementRule> rulesWithParentScopes,
-			Map<String /* segment */, ThemeTrieElement> children) {
+	public ThemeTrieElement(final ThemeTrieElementRule mainRule, final List<ThemeTrieElementRule> rulesWithParentScopes,
+			final Map<String /* segment */, ThemeTrieElement> children) {
 		this.mainRule = mainRule;
 		this.rulesWithParentScopes = rulesWithParentScopes;
 		this.children = children;
 	}
 
-	private static List<ThemeTrieElementRule> sortBySpecificity(List<ThemeTrieElementRule> arr) {
+	private static List<ThemeTrieElementRule> sortBySpecificity(final List<ThemeTrieElementRule> arr) {
 		if (arr.size() == 1) {
 			return arr;
 		}
@@ -50,20 +50,22 @@ public class ThemeTrieElement {
 		return arr;
 	}
 
-	private static int cmpBySpecificity(ThemeTrieElementRule a, ThemeTrieElementRule b) {
+	private static int cmpBySpecificity(final ThemeTrieElementRule a, final ThemeTrieElementRule b) {
 		if (a.scopeDepth == b.scopeDepth) {
-			List<String> aParentScopes = a.parentScopes;
-			List<String> bParentScopes = b.parentScopes;
-			int aParentScopesLen = aParentScopes == null ? 0 : aParentScopes.size();
-			int bParentScopesLen = bParentScopes == null ? 0 : bParentScopes.size();
+			final List<String> aParentScopes = a.parentScopes;
+			final List<String> bParentScopes = b.parentScopes;
+			final int aParentScopesLen = aParentScopes == null ? 0 : aParentScopes.size();
+			final int bParentScopesLen = bParentScopes == null ? 0 : bParentScopes.size();
 			if (aParentScopesLen == bParentScopesLen) {
 				for (int i = 0; i < aParentScopesLen; i++) {
 					@SuppressWarnings("null")
+					final
 					String aScope = aParentScopes.get(i);
 					@SuppressWarnings("null")
+					final
 					String bScope = bParentScopes.get(i);
-					int aLen = aScope.length();
-					int bLen = bScope.length();
+					final int aLen = aScope.length();
+					final int bLen = bScope.length();
 					if (aLen != bLen) {
 						return bLen - aLen;
 					}
@@ -74,15 +76,15 @@ public class ThemeTrieElement {
 		return b.scopeDepth - a.scopeDepth;
 	}
 
-	public List<ThemeTrieElementRule> match(String scope) {
+	public List<ThemeTrieElementRule> match(final String scope) {
 		if ("".equals(scope)) {
-			List<ThemeTrieElementRule> arr = new ArrayList<>();
+			final List<ThemeTrieElementRule> arr = new ArrayList<>();
 			arr.add(this.mainRule);
 			arr.addAll(this.rulesWithParentScopes);
 			return ThemeTrieElement.sortBySpecificity(arr);
 		}
 
-		int dotIndex = scope.indexOf('.');
+		final int dotIndex = scope.indexOf('.');
 		String head;
 		String tail;
 		if (dotIndex == -1) {
@@ -97,20 +99,20 @@ public class ThemeTrieElement {
 			return this.children.get(head).match(tail);
 		}
 
-		List<ThemeTrieElementRule> arr = new ArrayList<>();
+		final List<ThemeTrieElementRule> arr = new ArrayList<>();
 		arr.add(this.mainRule);
 		arr.addAll(this.rulesWithParentScopes);
 		return ThemeTrieElement.sortBySpecificity(arr);
 	}
 
-	public void insert(int scopeDepth, String scope, List<String> parentScopes, int fontStyle, int foreground,
-			int background) {
+	public void insert(final int scopeDepth, final String scope, final List<String> parentScopes, final int fontStyle, final int foreground,
+			final int background) {
 		if ("".equals(scope)) {
 			this.doInsertHere(scopeDepth, parentScopes, fontStyle, foreground, background);
 			return;
 		}
 
-		int dotIndex = scope.indexOf('.');
+		final int dotIndex = scope.indexOf('.');
 		String head;
 		String tail;
 		if (dotIndex == -1) {
@@ -133,7 +135,7 @@ public class ThemeTrieElement {
 		child.insert(scopeDepth + 1, tail, parentScopes, fontStyle, foreground, background);
 	}
 
-	private void doInsertHere(int scopeDepth, List<String> parentScopes, int fontStyle, int foreground,
+	private void doInsertHere(final int scopeDepth, final List<String> parentScopes, int fontStyle, int foreground,
 			int background) {
 
 		if (parentScopes == null) {
@@ -143,7 +145,7 @@ public class ThemeTrieElement {
 		}
 
 		// Try to merge into existing rule
-		for (ThemeTrieElementRule rule : this.rulesWithParentScopes) {
+		for (final ThemeTrieElementRule rule : this.rulesWithParentScopes) {
 			if (CompareUtils.strArrCmp(rule.parentScopes, parentScopes) == 0) {
 				// bingo! => we get to merge this into an existing one
 				rule.acceptOverwrite(scopeDepth, fontStyle, foreground, background);
@@ -174,7 +176,7 @@ public class ThemeTrieElement {
 	}
 
 	@Override
-	public boolean equals(Object obj) {
+	public boolean equals(final Object obj) {
 		if (this == obj) {
 			return true;
 		}
@@ -184,7 +186,7 @@ public class ThemeTrieElement {
 		if (getClass() != obj.getClass()) {
 			return false;
 		}
-		ThemeTrieElement other = (ThemeTrieElement) obj;
+		final ThemeTrieElement other = (ThemeTrieElement) obj;
 		return Objects.equals(children, other.children) && Objects.equals(mainRule, other.mainRule) && Objects.equals(rulesWithParentScopes, other.rulesWithParentScopes);
 	}
 

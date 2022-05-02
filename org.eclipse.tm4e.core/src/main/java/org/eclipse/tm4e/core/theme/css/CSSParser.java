@@ -35,25 +35,25 @@ public class CSSParser {
 
 	private final CSSDocumentHandler handler;
 
-	public CSSParser(InputStream source) throws Exception {
+	public CSSParser(final InputStream source) throws Exception {
 		this(toSource(source));
 	}
 
-	private static InputSource toSource(InputStream source) {
-		InputSource in = new InputSource();
+	private static InputSource toSource(final InputStream source) {
+		final InputSource in = new InputSource();
 		in.setByteStream(source);
 		return in;
 	}
 
-	public CSSParser(InputSource source) throws Exception {
+	public CSSParser(final InputSource source) throws Exception {
 		this(source, SACParserFactory.newInstance().makeParser());
 	}
 
-	public CSSParser(String source) throws Exception {
+	public CSSParser(final String source) throws Exception {
 		this(new InputSource(new StringReader(source)));
 	}
 
-	public CSSParser(InputSource source, Parser parser) throws CSSException, IOException {
+	public CSSParser(final InputSource source, final Parser parser) throws CSSException, IOException {
 		this.handler = new CSSDocumentHandler();
 		parser.setDocumentHandler(handler);
 		parser.setConditionFactory(CSSConditionFactory.INSTANCE);
@@ -61,16 +61,16 @@ public class CSSParser {
 		parser.parseStyleSheet(source);
 	}
 
-	public IStyle getBestStyle(String... names) {
+	public IStyle getBestStyle(final String... names) {
 		int bestSpecificity = 0;
 		IStyle bestStyle = null;
-		for (IStyle style : handler.getList()) {
-			SelectorList list = ((CSSStyle) style).getSelectorList();
+		for (final IStyle style : handler.getList()) {
+			final SelectorList list = ((CSSStyle) style).getSelectorList();
 			for (int i = 0; i < list.getLength(); i++) {
-				Selector selector = list.item(i);
+				final Selector selector = list.item(i);
 				if (selector instanceof ExtendedSelector) {
-					ExtendedSelector s = ((ExtendedSelector) selector);
-					int nbMatch = s.nbMatch(names);
+					final ExtendedSelector s = ((ExtendedSelector) selector);
+					final int nbMatch = s.nbMatch(names);
 					if (nbMatch > 0 && nbMatch == s.nbClass()) {
 						if (bestStyle == null || (nbMatch >= bestSpecificity)) {
 							bestStyle = style;

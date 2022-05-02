@@ -36,8 +36,8 @@ public class ColorMap {
 		return value;
 	}
 
-	public String getColor(int id) {
-		for (Entry<String, Integer> entry : color2id.entrySet()) {
+	public String getColor(final int id) {
+		for (final Entry<String, Integer> entry : color2id.entrySet()) {
 			if (id == entry.getValue()) {
 				return entry.getKey();
 			}
@@ -55,7 +55,7 @@ public class ColorMap {
 	}
 
 	@Override
-	public boolean equals(Object obj) {
+	public boolean equals(final Object obj) {
 		if (this == obj) {
 			return true;
 		}
@@ -65,7 +65,7 @@ public class ColorMap {
 		if (getClass() != obj.getClass()) {
 			return false;
 		}
-		ColorMap other = (ColorMap) obj;
+		final ColorMap other = (ColorMap) obj;
 		return Objects.equals(color2id, other.color2id) && lastColorId == other.lastColorId;
 	}
 

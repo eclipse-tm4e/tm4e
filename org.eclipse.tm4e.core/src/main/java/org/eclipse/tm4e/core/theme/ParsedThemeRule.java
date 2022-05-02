@@ -28,8 +28,8 @@ public class ParsedThemeRule {
 	public final String foreground;
 	public final String background;
 
-	public ParsedThemeRule(String scope, List<String> parentScopes, int index, int fontStyle, String foreground,
-			String background) {
+	public ParsedThemeRule(final String scope, final List<String> parentScopes, final int index, final int fontStyle, final String foreground,
+			final String background) {
 		this.scope = scope;
 		this.parentScopes = parentScopes;
 		this.index = index;
@@ -52,14 +52,14 @@ public class ParsedThemeRule {
 	}
 
 	@Override
-	public boolean equals(Object obj) {
+	public boolean equals(final Object obj) {
 		if (this == obj)
 			return true;
 		if (obj == null)
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		ParsedThemeRule other = (ParsedThemeRule) obj;
+		final ParsedThemeRule other = (ParsedThemeRule) obj;
 		if (background == null) {
 			if (other.background != null)
 				return false;

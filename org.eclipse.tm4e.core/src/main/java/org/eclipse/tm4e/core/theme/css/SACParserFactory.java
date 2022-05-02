@@ -6,7 +6,7 @@
  * http://www.eclipse.org/legal/epl-v10.html
  *
  * Contributors:
- *     Angelo Zerr <angelo.zerr@gmail.com> - initial API and implementation
+ * Angelo Zerr <angelo.zerr@gmail.com> - initial API and implementation
  *******************************************************************************/
 package org.eclipse.tm4e.core.theme.css;
 
@@ -14,6 +14,7 @@ import static java.lang.System.Logger.Level.*;
 
 import java.lang.System.Logger;
 
+import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.tm4e.core.internal.theme.css.SACParserFactoryImpl;
 import org.w3c.css.sac.Parser;
 import org.w3c.css.sac.helpers.ParserFactory;
@@ -25,6 +26,7 @@ public abstract class SACParserFactory extends ParserFactory implements ISACPars
 
 	private static final Logger LOGGER = System.getLogger(SACParserFactory.class.getName());
 
+	@Nullable
 	private String preferredParserName;
 
 	/**
@@ -46,28 +48,19 @@ public abstract class SACParserFactory extends ParserFactory implements ISACPars
 		return super.makeParser();
 	}
 
-	/**
-	 * Return preferred SAC parser name if it is filled and null otherwise.
-	 *
-	 * @return
-	 */
+	@Nullable
+	@Override
 	public String getPreferredParserName() {
 		return preferredParserName;
 	}
 
-	/**
-	 * Set the preferred SAC parser name to use when makeParser is called.
-	 *
-	 * @param preferredParserName
-	 */
-	public void setPreferredParserName(final String preferredParserName) {
+	@Override
+	public void setPreferredParserName(@Nullable final String preferredParserName) {
 		this.preferredParserName = preferredParserName;
 	}
 
 	/**
-	 * Return instance of SACParserFactory
-	 *
-	 * @return
+	 * @return instance of SACParserFactory
 	 */
 	public static ISACParserFactory newInstance() {
 		// TODO : manage new instance of SAC Parser Factory like

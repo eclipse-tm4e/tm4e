@@ -16,6 +16,7 @@ import java.io.InputStream;
 import java.io.StringReader;
 import java.util.List;
 
+import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.tm4e.core.internal.theme.css.CSSConditionFactory;
 import org.eclipse.tm4e.core.internal.theme.css.CSSDocumentHandler;
 import org.eclipse.tm4e.core.internal.theme.css.CSSSelectorFactory;
@@ -61,6 +62,7 @@ public class CSSParser {
 		parser.parseStyleSheet(source);
 	}
 
+	@Nullable
 	public IStyle getBestStyle(final String... names) {
 		int bestSpecificity = 0;
 		IStyle bestStyle = null;

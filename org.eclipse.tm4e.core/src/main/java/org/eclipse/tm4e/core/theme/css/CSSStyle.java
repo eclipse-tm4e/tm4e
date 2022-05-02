@@ -11,6 +11,7 @@
  */
 package org.eclipse.tm4e.core.theme.css;
 
+import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.tm4e.core.theme.IStyle;
 import org.eclipse.tm4e.core.theme.RGB;
 import org.w3c.css.sac.SelectorList;
@@ -18,9 +19,13 @@ import org.w3c.css.sac.SelectorList;
 public class CSSStyle implements IStyle {
 
 	private final SelectorList selector;
+
+	@Nullable
 	private RGB color;
+
+	@Nullable
 	private RGB backgroundColor;
-	
+
 	private boolean bold;
 	private boolean italic;
 	private boolean underline;
@@ -34,20 +39,22 @@ public class CSSStyle implements IStyle {
 		this.color = color;
 	}
 
+	@Nullable
 	@Override
 	public RGB getColor() {
 		return color;
 	}
 
+	@Nullable
 	@Override
 	public RGB getBackgroundColor() {
 		return backgroundColor;
 	}
-	
+
 	public void setBackgroundColor(final RGB backgroundColor) {
-		this.backgroundColor = backgroundColor;		
+		this.backgroundColor = backgroundColor;
 	}
-	
+
 	public SelectorList getSelectorList() {
 		return selector;
 	}
@@ -83,7 +90,7 @@ public class CSSStyle implements IStyle {
 	public boolean isStrikeThrough() {
 		return strikeThrough;
 	}
-	
+
 	public void setStrikeThrough(final boolean strikeThrough) {
 		this.strikeThrough = strikeThrough;
 	}

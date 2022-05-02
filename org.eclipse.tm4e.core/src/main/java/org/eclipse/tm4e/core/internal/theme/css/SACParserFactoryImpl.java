@@ -43,15 +43,16 @@ public final class SACParserFactoryImpl extends SACParserFactory {
 		super.setPreferredParserName(SACConstants.SACPARSER_BATIK);
 	}
 
-	@Nullable
 	@Override
-	public Parser makeParser(@Nullable final String name) throws ClassNotFoundException, IllegalAccessException,
-			InstantiationException, NullPointerException, ClassCastException {
+	public Parser makeParser(final String name) throws ClassNotFoundException, IllegalAccessException,
+			InstantiationException, ClassCastException {
 		final String classNameParser = parsers.get(name);
 		if (classNameParser != null) {
 			final Class<?> classParser = super.getClass().getClassLoader().loadClass(classNameParser);
 			try {
-				return (Parser) classParser.getDeclaredConstructor().newInstance();
+				final var parser = (Parser) classParser.getDeclaredConstructor().newInstance();
+				assert parser != null;
+				return parser;
 			} catch (InvocationTargetException | NoSuchMethodException ex) {
 				throw (InstantiationException) ((new InstantiationException()).initCause(ex));
 			}

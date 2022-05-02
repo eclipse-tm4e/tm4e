@@ -139,6 +139,7 @@ public final class CSSDocumentHandler implements DocumentHandler {
 
 	@Override
 	public void startSelector(@Nullable final SelectorList selector) throws CSSException {
+		assert selector != null;
 		currentStyle = new CSSStyle(selector);
 		list.add(currentStyle);
 	}

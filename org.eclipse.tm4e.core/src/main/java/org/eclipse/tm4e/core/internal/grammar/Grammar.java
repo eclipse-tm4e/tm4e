@@ -33,9 +33,9 @@ import java.util.function.IntFunction;
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.tm4e.core.grammar.IGrammar;
+import org.eclipse.tm4e.core.grammar.IStackElement;
 import org.eclipse.tm4e.core.grammar.ITokenizeLineResult;
 import org.eclipse.tm4e.core.grammar.ITokenizeLineResult2;
-import org.eclipse.tm4e.core.grammar.StackElement;
 import org.eclipse.tm4e.core.internal.matcher.Matcher;
 import org.eclipse.tm4e.core.internal.oniguruma.OnigString;
 import org.eclipse.tm4e.core.internal.registry.IGrammarRepository;
@@ -257,8 +257,8 @@ public final class Grammar implements IGrammar, IRuleFactoryHelper {
 	}
 
 	@Override
-	public ITokenizeLineResult tokenizeLine(final String lineText, @Nullable final StackElement prevState) {
-		return tokenize(lineText, prevState, false);
+	public ITokenizeLineResult tokenizeLine(final String lineText, @Nullable final IStackElement prevState) {
+		return tokenize(lineText, (StackElement) prevState, false);
 	}
 
 	@Override
@@ -267,8 +267,8 @@ public final class Grammar implements IGrammar, IRuleFactoryHelper {
 	}
 
 	@Override
-	public ITokenizeLineResult2 tokenizeLine2(final String lineText, @Nullable final StackElement prevState) {
-		return tokenize(lineText, prevState, true);
+	public ITokenizeLineResult2 tokenizeLine2(final String lineText, @Nullable final IStackElement prevState) {
+		return tokenize(lineText, (StackElement) prevState, true);
 	}
 
 	@SuppressWarnings("unchecked")

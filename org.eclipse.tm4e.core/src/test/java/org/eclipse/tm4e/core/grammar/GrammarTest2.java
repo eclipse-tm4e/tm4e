@@ -34,7 +34,7 @@ class GrammarTest2 {
 		String path = "JavaScript.tmLanguage";
 		IGrammar grammar = castNonNull(registry.loadGrammarFromPathSync(path, Data.class.getResourceAsStream(path)));
 
-		StackElement ruleStack = null;
+		IStackElement ruleStack = null;
 		int i = 0;
 
 		List<String> lines = new ArrayList<>();

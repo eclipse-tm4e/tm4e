@@ -69,7 +69,7 @@ public interface IGrammar {
 	 *            previous line state.
 	 * @return the result of the tokenization.
 	 */
-	ITokenizeLineResult tokenizeLine(String lineText, @Nullable StackElement prevState);
+	ITokenizeLineResult tokenizeLine(String lineText, @Nullable IStackElement prevState);
 
 	/**
 	 * Tokenize `lineText` using previous line state `prevState`.
@@ -93,6 +93,6 @@ public interface IGrammar {
 	 *  - background color
 	 * e.g. for getting the languageId: `(metadata & MetadataConsts.LANGUAGEID_MASK) >>> MetadataConsts.LANGUAGEID_OFFSET`
 	 */
-	ITokenizeLineResult2 tokenizeLine2(String lineText, @Nullable StackElement prevState);
+	ITokenizeLineResult2 tokenizeLine2(String lineText, @Nullable IStackElement prevState);
 
 }

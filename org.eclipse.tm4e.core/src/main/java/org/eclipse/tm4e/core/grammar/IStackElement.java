@@ -16,20 +16,17 @@
  */
 package org.eclipse.tm4e.core.grammar;
 
+import org.eclipse.tm4e.core.internal.grammar.StackElement;
+
 /**
- * Result of the line tokenization API.
+ * Represents a "pushed" state on the stack (as a linked list element).
  *
- * @see <a href="https://github.com/Microsoft/vscode-textmate/blob/master/src/main.ts">
+ * @see <a href=
+ *      "https://github.com/microsoft/vscode-textmate/blob/9157c7f869219dbaf9a5a5607f099c00fe694a29/src/main.ts#L244">
  *      github.com/Microsoft/vscode-textmate/blob/master/src/main.ts</a>
  */
-public interface ITokenizeLineResult {
+public interface IStackElement {
+	IStackElement INITIAL = StackElement.NULL;
 
-	IToken[] getTokens();
-
-	/**
-	 * Returns the `prevState` to be passed on to the next line tokenization.
-	 *
-	 * @return the `prevState` to be passed on to the next line tokenization.
-	 */
-	IStackElement getRuleStack();
+	int getDepth();
 }

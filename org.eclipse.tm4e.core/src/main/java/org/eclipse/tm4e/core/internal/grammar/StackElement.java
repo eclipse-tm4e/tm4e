@@ -14,7 +14,7 @@
  * - Microsoft Corporation: Initial code, written in TypeScript, licensed under MIT license
  * - Angelo Zerr <angelo.zerr@gmail.com> - translation and adaptation to Java
  */
-package org.eclipse.tm4e.core.grammar;
+package org.eclipse.tm4e.core.internal.grammar;
 
 import static org.eclipse.tm4e.core.internal.utils.NullSafetyHelper.*;
 
@@ -23,18 +23,18 @@ import java.util.List;
 import java.util.Objects;
 
 import org.eclipse.jdt.annotation.Nullable;
-import org.eclipse.tm4e.core.internal.grammar.ScopeListElement;
+import org.eclipse.tm4e.core.grammar.IStackElement;
 import org.eclipse.tm4e.core.internal.rule.IRuleRegistry;
 import org.eclipse.tm4e.core.internal.rule.Rule;
 
 /**
  * Represents a "pushed" state on the stack (as a linked list element).
  *
- * @see <a href="https://github.com/Microsoft/vscode-textmate/blob/master/src/grammar.ts">
+ * @see <a href=
+ *      "https://github.com/microsoft/vscode-textmate/blob/9157c7f869219dbaf9a5a5607f099c00fe694a29/src/grammar.ts#L1347">
  *      github.com/Microsoft/vscode-textmate/blob/master/src/grammar.ts</a>
- *
  */
-public class StackElement {
+public final class StackElement implements IStackElement {
 
 	public static final StackElement NULL = new StackElement(null, 0, 0, 0, false, null,
 			new ScopeListElement(null, "", 0), new ScopeListElement(null, "", 0));
@@ -92,7 +92,7 @@ public class StackElement {
 	 */
 	public final ScopeListElement contentNameScopesList;
 
-	public StackElement(
+	StackElement(
 			@Nullable final StackElement parent,
 			final int ruleId,
 			final int enterPos,
@@ -161,6 +161,11 @@ public class StackElement {
 	}
 
 	@Override
+	public int getDepth() {
+		return depth;
+	}
+
+	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
@@ -170,7 +175,7 @@ public class StackElement {
 		return result;
 	}
 
-	public void reset() {
+	void reset() {
 		StackElement el = this;
 		while (el != null) {
 			el.enterPosition = -1;
@@ -180,17 +185,17 @@ public class StackElement {
 	}
 
 	@Nullable
-	public StackElement pop() {
+	StackElement pop() {
 		return parent;
 	}
 
-	public StackElement safePop() {
+	StackElement safePop() {
 		if (parent != null)
 			return parent;
 		return this;
 	}
 
-	public StackElement push(final int ruleId,
+	StackElement push(final int ruleId,
 			final int enterPos,
 			final int anchorPos,
 			final boolean beginRuleCapturedEOL,
@@ -207,15 +212,15 @@ public class StackElement {
 				contentNameScopesList);
 	}
 
-	public int getAnchorPos() {
+	int getAnchorPos() {
 		return anchorPos;
 	}
 
-	public int getEnterPos() {
+	int getEnterPos() {
 		return enterPosition;
 	}
 
-	public Rule getRule(final IRuleRegistry grammar) {
+	Rule getRule(final IRuleRegistry grammar) {
 		return grammar.getRule(ruleId);
 	}
 
@@ -234,7 +239,7 @@ public class StackElement {
 		return '[' + String.join(", ", r) + ']';
 	}
 
-	public StackElement setContentNameScopesList(final ScopeListElement contentNameScopesList) {
+	StackElement setContentNameScopesList(final ScopeListElement contentNameScopesList) {
 		if (this.contentNameScopesList.equals(contentNameScopesList)) {
 			return this;
 		}
@@ -247,7 +252,7 @@ public class StackElement {
 				contentNameScopesList);
 	}
 
-	public StackElement setEndRule(final String endRule) {
+	StackElement setEndRule(final String endRule) {
 		if (this.endRule != null && this.endRule.equals(endRule)) {
 			return this;
 		}
@@ -261,7 +266,7 @@ public class StackElement {
 				this.contentNameScopesList);
 	}
 
-	public boolean hasSameRuleAs(final StackElement other) {
+	boolean hasSameRuleAs(final StackElement other) {
 		var el = this;
 		while (el != null && el.enterPosition == other.enterPosition) {
 			if (el.ruleId == other.ruleId) {

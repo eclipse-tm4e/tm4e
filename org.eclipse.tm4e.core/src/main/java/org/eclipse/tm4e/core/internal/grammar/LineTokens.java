@@ -27,7 +27,6 @@ import java.util.List;
 
 import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.tm4e.core.grammar.IToken;
-import org.eclipse.tm4e.core.grammar.StackElement;
 import org.eclipse.tm4e.core.theme.FontStyle;
 
 final class LineTokens {

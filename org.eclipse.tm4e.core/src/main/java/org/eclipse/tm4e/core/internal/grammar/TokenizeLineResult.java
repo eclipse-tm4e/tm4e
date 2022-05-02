@@ -18,7 +18,6 @@ package org.eclipse.tm4e.core.internal.grammar;
 
 import org.eclipse.tm4e.core.grammar.IToken;
 import org.eclipse.tm4e.core.grammar.ITokenizeLineResult;
-import org.eclipse.tm4e.core.grammar.StackElement;
 
 /**
  * Result of the line tokenization implementation.

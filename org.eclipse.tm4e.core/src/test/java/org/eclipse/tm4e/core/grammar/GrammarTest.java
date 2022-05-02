@@ -79,7 +79,7 @@ public class GrammarTest {
 		String path = "JavaScript.tmLanguage";
 		IGrammar grammar = registry.loadGrammarFromPathSync(path, Data.class.getResourceAsStream(path));
 
-		StackElement ruleStack = null;
+		IStackElement ruleStack = null;
 		int i = 0;
 		int j = 0;
 		String[] lines = { "function add(a,b)", "{ return a+b; }" };

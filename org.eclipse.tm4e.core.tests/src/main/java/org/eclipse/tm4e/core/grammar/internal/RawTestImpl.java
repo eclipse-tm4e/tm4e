@@ -22,7 +22,7 @@ import java.util.Collection;
 import java.util.List;
 
 import org.eclipse.tm4e.core.grammar.IGrammar;
-import org.eclipse.tm4e.core.grammar.StackElement;
+import org.eclipse.tm4e.core.grammar.IStackElement;
 import org.eclipse.tm4e.core.registry.IRegistryOptions;
 import org.eclipse.tm4e.core.registry.Registry;
 
@@ -100,7 +100,7 @@ public class RawTestImpl {
 			throw new Exception("I HAVE NO GRAMMAR FOR TEST");
 		}
 
-		StackElement prevState = null;
+		IStackElement prevState = null;
 		for (final var testLine : lines) {
 			prevState = assertLineTokenization(grammar, testLine, prevState);
 		}
@@ -117,8 +117,8 @@ public class RawTestImpl {
 		return grammar;
 	}
 
-	private static StackElement assertLineTokenization(final IGrammar grammar, final RawTestLine testCase,
-			final StackElement prevState) {
+	private static IStackElement assertLineTokenization(final IGrammar grammar, final RawTestLine testCase,
+			final IStackElement prevState) {
 		final var line = testCase.line;
 		final var actual = grammar.tokenizeLine(line, prevState);
 

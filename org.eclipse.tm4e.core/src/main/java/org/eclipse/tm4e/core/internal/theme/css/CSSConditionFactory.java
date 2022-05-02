@@ -26,50 +26,50 @@ public final class CSSConditionFactory implements ConditionFactory {
 	public static final ConditionFactory INSTANCE = new CSSConditionFactory();
 
 	@Override
-	public AttributeCondition createClassCondition(String namespaceURI, String value) throws CSSException {
+	public AttributeCondition createClassCondition(final String namespaceURI, final String value) throws CSSException {
 		return new CSSClassCondition(null, "class", value);
 	}
 
 	@Override
-	public AttributeCondition createAttributeCondition(String localName, String namespaceURI, boolean specified,
-			String value) throws CSSException {
+	public AttributeCondition createAttributeCondition(final String localName, final String namespaceURI, final boolean specified,
+			final String value) throws CSSException {
 		return new CSSAttributeCondition(localName, namespaceURI, specified, value);
 	}
 
 	@Override
-	public CombinatorCondition createAndCondition(Condition first,
-			Condition second) throws CSSException {
+	public CombinatorCondition createAndCondition(final Condition first,
+			final Condition second) throws CSSException {
 		return new CSSAndCondition(first, second);
 	}
 
 	@Override
-	public AttributeCondition createBeginHyphenAttributeCondition(String arg0, String arg1, boolean arg2, String arg3)
+	public AttributeCondition createBeginHyphenAttributeCondition(final String arg0, final String arg1, final boolean arg2, final String arg3)
 			throws CSSException {
 		throw new CSSException("Not implemented in CSS2");
 	}
 
 	@Override
-	public ContentCondition createContentCondition(String arg0) throws CSSException {
+	public ContentCondition createContentCondition(final String arg0) throws CSSException {
 		throw new CSSException("Not implemented in CSS2");
 	}
 
 	@Override
-	public AttributeCondition createIdCondition(String arg0) throws CSSException {
+	public AttributeCondition createIdCondition(final String arg0) throws CSSException {
 		throw new CSSException("Not implemented in CSS2");
 	}
 
 	@Override
-	public LangCondition createLangCondition(String arg0) throws CSSException {
+	public LangCondition createLangCondition(final String arg0) throws CSSException {
 		throw new CSSException("Not implemented in CSS2");
 	}
 
 	@Override
-	public NegativeCondition createNegativeCondition(Condition arg0) throws CSSException {
+	public NegativeCondition createNegativeCondition(final Condition arg0) throws CSSException {
 		throw new CSSException("Not implemented in CSS2");
 	}
 
 	@Override
-	public AttributeCondition createOneOfAttributeCondition(String arg0, String arg1, boolean arg2, String arg3)
+	public AttributeCondition createOneOfAttributeCondition(final String arg0, final String arg1, final boolean arg2, final String arg3)
 			throws CSSException {
 		throw new CSSException("Not implemented in CSS2");
 	}
@@ -85,17 +85,17 @@ public final class CSSConditionFactory implements ConditionFactory {
 	}
 
 	@Override
-	public CombinatorCondition createOrCondition(Condition arg0, Condition arg1) throws CSSException {
+	public CombinatorCondition createOrCondition(final Condition arg0, final Condition arg1) throws CSSException {
 		throw new CSSException("Not implemented in CSS2");
 	}
 
 	@Override
-	public PositionalCondition createPositionalCondition(int arg0, boolean arg1, boolean arg2) throws CSSException {
+	public PositionalCondition createPositionalCondition(final int arg0, final boolean arg1, final boolean arg2) throws CSSException {
 		throw new CSSException("Not implemented in CSS2");
 	}
 
 	@Override
-	public AttributeCondition createPseudoClassCondition(String arg0, String arg1) throws CSSException {
+	public AttributeCondition createPseudoClassCondition(final String arg0, final String arg1) throws CSSException {
 		throw new CSSException("Not implemented in CSS2");
 	}
 

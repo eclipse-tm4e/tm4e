@@ -30,7 +30,7 @@ final class CSSConditionalSelector implements ConditionalSelector, ExtendedSelec
 	/**
 	 * Creates a new ConditionalSelector object.
 	 */
-	CSSConditionalSelector(SimpleSelector simpleSelector, Condition condition) {
+	CSSConditionalSelector(final SimpleSelector simpleSelector, final Condition condition) {
 		this.simpleSelector = simpleSelector;
 		this.condition = condition;
 	}
@@ -57,7 +57,7 @@ final class CSSConditionalSelector implements ConditionalSelector, ExtendedSelec
 	}
 
 	@Override
-	public int nbMatch(String... names) {
+	public int nbMatch(final String... names) {
 		return ((ExtendedSelector)getSimpleSelector()).nbMatch(names) +
 	               ((ExtendedCondition)getCondition()).nbMatch(names);
 	}

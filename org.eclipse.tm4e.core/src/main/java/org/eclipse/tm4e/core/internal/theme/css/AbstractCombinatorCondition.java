@@ -22,7 +22,7 @@ public abstract class AbstractCombinatorCondition implements CombinatorCondition
 	/**
 	 * Creates a new CombinatorCondition object.
 	 */
-	protected AbstractCombinatorCondition(Condition c1, Condition c2) {
+	protected AbstractCombinatorCondition(final Condition c1, final Condition c2) {
 		firstCondition = c1;
 		secondCondition = c2;
 	}

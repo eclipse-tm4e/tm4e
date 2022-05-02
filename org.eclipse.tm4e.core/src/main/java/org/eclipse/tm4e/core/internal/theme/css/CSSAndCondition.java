@@ -18,7 +18,7 @@ final class CSSAndCondition extends AbstractCombinatorCondition {
 	/**
 	 * Creates a new CombinatorCondition object.
 	 */
-	CSSAndCondition(Condition c1, Condition c2) {
+	CSSAndCondition(final Condition c1, final Condition c2) {
 		super(c1, c2);
 	}
 
@@ -28,7 +28,7 @@ final class CSSAndCondition extends AbstractCombinatorCondition {
 	}
 
 	@Override
-	public int nbMatch(String... names) {
+	public int nbMatch(final String... names) {
 		return ((ExtendedCondition) getFirstCondition()).nbMatch(names)
 				+ ((ExtendedCondition) getSecondCondition()).nbMatch(names);
 	}

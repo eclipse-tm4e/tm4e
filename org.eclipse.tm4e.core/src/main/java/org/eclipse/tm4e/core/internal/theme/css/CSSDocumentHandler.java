@@ -32,12 +32,12 @@ public final class CSSDocumentHandler implements DocumentHandler {
 	private CSSStyle currentStyle;
 
 	@Override
-	public void comment(String arg0) throws CSSException {
+	public void comment(final String arg0) throws CSSException {
 
 	}
 
 	@Override
-	public void endDocument(InputSource arg0) throws CSSException {
+	public void endDocument(final InputSource arg0) throws CSSException {
 		// TODO Auto-generated method stub
 	}
 
@@ -47,37 +47,37 @@ public final class CSSDocumentHandler implements DocumentHandler {
 	}
 
 	@Override
-	public void endMedia(SACMediaList arg0) throws CSSException {
+	public void endMedia(final SACMediaList arg0) throws CSSException {
 		// TODO Auto-generated method stub
 	}
 
 	@Override
-	public void endPage(String arg0, String arg1) throws CSSException {
+	public void endPage(final String arg0, final String arg1) throws CSSException {
 		// TODO Auto-generated method stub
 	}
 
 	@Override
-	public void endSelector(SelectorList selector) throws CSSException {
+	public void endSelector(final SelectorList selector) throws CSSException {
 		currentStyle = null;
 	}
 
 	@Override
-	public void ignorableAtRule(String arg0) throws CSSException {
+	public void ignorableAtRule(final String arg0) throws CSSException {
 		// TODO Auto-generated method stub
 	}
 
 	@Override
-	public void importStyle(String arg0, SACMediaList arg1, String arg2) throws CSSException {
+	public void importStyle(final String arg0, final SACMediaList arg1, final String arg2) throws CSSException {
 		// TODO Auto-generated method stub
 	}
 
 	@Override
-	public void namespaceDeclaration(String arg0, String arg1) throws CSSException {
+	public void namespaceDeclaration(final String arg0, final String arg1) throws CSSException {
 		// TODO Auto-generated method stub
 	}
 
 	@Override
-	public void property(String name, LexicalUnit value, boolean arg2) throws CSSException {
+	public void property(final String name, final LexicalUnit value, final boolean arg2) throws CSSException {
 		if (currentStyle != null && name != null) {
 			switch (name) {
 			case "color":
@@ -93,7 +93,7 @@ public final class CSSDocumentHandler implements DocumentHandler {
 				currentStyle.setItalic(value.getStringValue().toUpperCase().contains("ITALIC"));
 				break;
 			case "text-decoration":
-				String decoration = value.getStringValue().toUpperCase();
+				final String decoration = value.getStringValue().toUpperCase();
 				if (decoration.contains("UNDERLINE")) {
 					currentStyle.setUnderline(true);
 				}
@@ -105,16 +105,16 @@ public final class CSSDocumentHandler implements DocumentHandler {
 		}
 	}
 
-	private RGB createRGB(LexicalUnit value) {
-		RGBColor rgbColor = new RGBColorImpl(value);
-		int green = ((int) rgbColor.getGreen().getFloatValue(CSSPrimitiveValue.CSS_NUMBER));
-		int red = ((int) rgbColor.getRed().getFloatValue(CSSPrimitiveValue.CSS_NUMBER));
-		int blue = ((int) rgbColor.getBlue().getFloatValue(CSSPrimitiveValue.CSS_NUMBER));
+	private RGB createRGB(final LexicalUnit value) {
+		final RGBColor rgbColor = new RGBColorImpl(value);
+		final int green = ((int) rgbColor.getGreen().getFloatValue(CSSPrimitiveValue.CSS_NUMBER));
+		final int red = ((int) rgbColor.getRed().getFloatValue(CSSPrimitiveValue.CSS_NUMBER));
+		final int blue = ((int) rgbColor.getBlue().getFloatValue(CSSPrimitiveValue.CSS_NUMBER));
 		return new RGB(red, green, blue);
 	}
 
 	@Override
-	public void startDocument(InputSource arg0) throws CSSException {
+	public void startDocument(final InputSource arg0) throws CSSException {
 		// TODO Auto-generated method stub
 	}
 
@@ -124,17 +124,17 @@ public final class CSSDocumentHandler implements DocumentHandler {
 	}
 
 	@Override
-	public void startMedia(SACMediaList arg0) throws CSSException {
+	public void startMedia(final SACMediaList arg0) throws CSSException {
 		// TODO Auto-generated method stub
 	}
 
 	@Override
-	public void startPage(String arg0, String arg1) throws CSSException {
+	public void startPage(final String arg0, final String arg1) throws CSSException {
 		// TODO Auto-generated method stub
 	}
 
 	@Override
-	public void startSelector(SelectorList selector) throws CSSException {
+	public void startSelector(final SelectorList selector) throws CSSException {
 		currentStyle = new CSSStyle(selector);
 		list.add(currentStyle);
 	}

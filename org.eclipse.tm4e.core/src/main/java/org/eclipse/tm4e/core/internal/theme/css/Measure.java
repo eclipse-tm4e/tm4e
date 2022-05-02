@@ -18,7 +18,7 @@ final class Measure extends CSSValueImpl {
 
 	private final LexicalUnit value;
 
-	Measure(LexicalUnit value) {
+	Measure(final LexicalUnit value) {
 		this.value = value;
 	}
 
@@ -30,7 +30,7 @@ final class Measure extends CSSValueImpl {
 	 *            {@link CSSValue#getCssValueType()}
 	 */
 	@Override
-	public float getFloatValue(short valueType) throws DOMException {
+	public float getFloatValue(final short valueType) throws DOMException {
 		// If it's actually a SAC_INTEGER return the integer value, callers tend
 		// to expect and cast
 		// There is no getIntegerFloat(short)
@@ -52,13 +52,13 @@ final class Measure extends CSSValueImpl {
 	 *            a short representing the value type, see
 	 *            {@link CSSValue#getCssValueType()}
 	 */
-	private int getIntegerValue(short valueType) throws DOMException {
+	private int getIntegerValue(final short valueType) throws DOMException {
 		return value.getIntegerValue();
 	}
 
 	@Override
 	public String getStringValue() throws DOMException {
-		short lexicalUnit = value.getLexicalUnitType();
+		final short lexicalUnit = value.getLexicalUnitType();
 		if ((lexicalUnit == LexicalUnit.SAC_IDENT) || (lexicalUnit == LexicalUnit.SAC_STRING_VALUE)
 				|| (lexicalUnit == LexicalUnit.SAC_URI))
 			return value.getStringValue();

@@ -23,7 +23,7 @@ public abstract class AbstractAttributeCondition implements AttributeCondition, 
 	/**
 	 * Creates a new AbstractAttributeCondition object.
 	 */
-	protected AbstractAttributeCondition(String value) {
+	protected AbstractAttributeCondition(final String value) {
 		this.value = value;
 	}
 

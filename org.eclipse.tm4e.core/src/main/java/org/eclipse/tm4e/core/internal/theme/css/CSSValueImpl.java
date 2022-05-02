@@ -33,7 +33,7 @@ abstract class CSSValueImpl implements CSSPrimitiveValue {
 	}
 
 	@Override
-	public void setCssText(String cssText) throws DOMException {
+	public void setCssText(final String cssText) throws DOMException {
 		// TODO Auto-generated method stub
 		throw new UnsupportedOperationException("NOT YET IMPLEMENTED");
 	}
@@ -68,13 +68,13 @@ abstract class CSSValueImpl implements CSSPrimitiveValue {
 	}
 
 	@Override
-	public void setFloatValue(short arg0, float arg1) throws DOMException {
+	public void setFloatValue(final short arg0, final float arg1) throws DOMException {
 		// TODO Auto-generated method stub
 		throw new UnsupportedOperationException("NOT YET IMPLEMENTED");
 	}
 
 	@Override
-	public void setStringValue(short arg0, String arg1) throws DOMException {
+	public void setStringValue(final short arg0, final String arg1) throws DOMException {
 		// TODO Auto-generated method stub
 		throw new UnsupportedOperationException("NOT YET IMPLEMENTED");
 	}
@@ -82,7 +82,7 @@ abstract class CSSValueImpl implements CSSPrimitiveValue {
 	// Additional methods
 
 	@Override
-	public float getFloatValue(short valueType) throws DOMException {
+	public float getFloatValue(final short valueType) throws DOMException {
 		// TODO Auto-generated method stub
 		throw new UnsupportedOperationException("NOT YET IMPLEMENTED");
 	}

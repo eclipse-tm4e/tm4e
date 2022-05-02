@@ -13,14 +13,14 @@ package org.eclipse.tm4e.core.internal.theme.css;
 
 final class CSSClassCondition extends CSSAttributeCondition {
 
-	CSSClassCondition(String localName, String namespaceURI, String value) {
+	CSSClassCondition(final String localName, final String namespaceURI, final String value) {
 		super(localName, namespaceURI, true, value);
 	}
 
 	@Override
-	public int nbMatch(String... names) {
-		String value = getValue();
-		for (String name : names) {
+	public int nbMatch(final String... names) {
+		final String value = getValue();
+		for (final String name : names) {
 			if (name.equals(value)) {
 				return 1;
 			}

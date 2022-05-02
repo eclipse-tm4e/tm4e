@@ -28,7 +28,7 @@ class CSSAttributeCondition extends AbstractAttributeCondition {
 	 */
 	private final boolean specified;
 
-	protected CSSAttributeCondition(String localName, String namespaceURI, boolean specified, String value) {
+	protected CSSAttributeCondition(final String localName, final String namespaceURI, final boolean specified, final String value) {
 		super(value);
 		this.localName = localName;
 		this.namespaceURI = namespaceURI;
@@ -56,7 +56,7 @@ class CSSAttributeCondition extends AbstractAttributeCondition {
 	}
 
 	@Override
-	public int nbMatch(String... names) {
+	public int nbMatch(final String... names) {
 //		String val = getValue();
 //		if (val == null) {
 //			return !e.getAttribute(getLocalName()).equals("");

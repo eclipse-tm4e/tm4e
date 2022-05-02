@@ -22,7 +22,7 @@ final class RGBColorImpl extends CSSValueImpl implements RGBColor {
 	private final CSSPrimitiveValue green;
 	private final CSSPrimitiveValue blue;
 
-	RGBColorImpl(LexicalUnit lexicalUnit) {
+	RGBColorImpl(final LexicalUnit lexicalUnit) {
 		LexicalUnit nextUnit = lexicalUnit.getParameters();
 		red = new Measure(nextUnit);
 		nextUnit = nextUnit.getNextLexicalUnit().getNextLexicalUnit();

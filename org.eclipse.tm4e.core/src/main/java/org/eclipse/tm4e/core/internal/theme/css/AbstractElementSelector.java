@@ -28,7 +28,7 @@ public abstract class AbstractElementSelector implements ElementSelector, Extend
 	/**
 	 * Creates a new ElementSelector object.
 	 */
-	protected AbstractElementSelector(String uri, String name) {
+	protected AbstractElementSelector(final String uri, final String name) {
 		namespaceURI = uri;
 		localName = name;
 	}

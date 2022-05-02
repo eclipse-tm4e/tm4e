@@ -35,55 +35,55 @@ public final class CSSSelectorFactory implements SelectorFactory {
 	}
 
 	@Override
-	public CharacterDataSelector createCDataSectionSelector(String arg0) throws CSSException {
+	public CharacterDataSelector createCDataSectionSelector(final String arg0) throws CSSException {
 		throw new UnsupportedOperationException("CSS CDATA section is not supported");
 	}
 
 	@Override
-	public DescendantSelector createChildSelector(Selector arg0, SimpleSelector arg1) throws CSSException {
+	public DescendantSelector createChildSelector(final Selector arg0, final SimpleSelector arg1) throws CSSException {
 		throw new UnsupportedOperationException("CSS child selector is not supported");
 	}
 
 	@Override
-	public CharacterDataSelector createCommentSelector(String arg0) throws CSSException {
+	public CharacterDataSelector createCommentSelector(final String arg0) throws CSSException {
 		throw new UnsupportedOperationException("CSS comment is not supported");
 	}
 
 	@Override
-	public ConditionalSelector createConditionalSelector(SimpleSelector selector, Condition condition)
+	public ConditionalSelector createConditionalSelector(final SimpleSelector selector, final Condition condition)
 			throws CSSException {
 		return new CSSConditionalSelector(selector, condition);
 	}
 
 	@Override
-	public DescendantSelector createDescendantSelector(Selector arg0, SimpleSelector arg1) throws CSSException {
+	public DescendantSelector createDescendantSelector(final Selector arg0, final SimpleSelector arg1) throws CSSException {
 		throw new UnsupportedOperationException("CSS descendant selector is not supported");
 	}
 
 	@Override
-	public SiblingSelector createDirectAdjacentSelector(short arg0, Selector arg1, SimpleSelector arg2)
+	public SiblingSelector createDirectAdjacentSelector(final short arg0, final Selector arg1, final SimpleSelector arg2)
 			throws CSSException {
 		throw new UnsupportedOperationException("CSS direct adjacent selector is not supported");
 	}
 
 	@Override
-	public ElementSelector createElementSelector(String uri, String name) throws CSSException {
+	public ElementSelector createElementSelector(final String uri, final String name) throws CSSException {
 		return new CSSElementSelector(uri, name);
 	}
 
 	@Override
-	public NegativeSelector createNegativeSelector(SimpleSelector arg0) throws CSSException {
+	public NegativeSelector createNegativeSelector(final SimpleSelector arg0) throws CSSException {
 		throw new UnsupportedOperationException("CSS negative selector is not supported");
 	}
 
 	@Override
-	public ProcessingInstructionSelector createProcessingInstructionSelector(String arg0, String arg1)
+	public ProcessingInstructionSelector createProcessingInstructionSelector(final String arg0, final String arg1)
 			throws CSSException {
 		throw new UnsupportedOperationException("CSS processing instruction is not supported");
 	}
 
 	@Override
-	public ElementSelector createPseudoElementSelector(String arg0, String arg1) throws CSSException {
+	public ElementSelector createPseudoElementSelector(final String arg0, final String arg1) throws CSSException {
 		throw new UnsupportedOperationException("CSS pseudo element selector is not supported");
 	}
 
@@ -93,7 +93,7 @@ public final class CSSSelectorFactory implements SelectorFactory {
 	}
 
 	@Override
-	public CharacterDataSelector createTextNodeSelector(String arg0) throws CSSException {
+	public CharacterDataSelector createTextNodeSelector(final String arg0) throws CSSException {
 		throw new UnsupportedOperationException("CSS text node selector is not supported");
 	}
 

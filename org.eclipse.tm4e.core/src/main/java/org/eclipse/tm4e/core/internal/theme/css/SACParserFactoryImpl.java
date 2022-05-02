@@ -43,11 +43,11 @@ public final class SACParserFactoryImpl extends SACParserFactory {
 	}
 
 	@Override
-	public Parser makeParser(String name) throws ClassNotFoundException, IllegalAccessException, InstantiationException,
+	public Parser makeParser(final String name) throws ClassNotFoundException, IllegalAccessException, InstantiationException,
 	NullPointerException, ClassCastException {
-		String classNameParser = parsers.get(name);
+		final String classNameParser = parsers.get(name);
 		if (classNameParser != null) {
-			Class<?> classParser = super.getClass().getClassLoader().loadClass(classNameParser);
+			final Class<?> classParser = super.getClass().getClassLoader().loadClass(classNameParser);
 			try {
 				return (Parser) classParser.getDeclaredConstructor().newInstance();
 			} catch (InvocationTargetException|NoSuchMethodException ex) {
@@ -63,7 +63,7 @@ public final class SACParserFactoryImpl extends SACParserFactory {
 	 *
 	 * @param parser
 	 */
-	private static void registerSACParser(String parser) {
+	private static void registerSACParser(final String parser) {
 		registerSACParser(parser, parser);
 	}
 
@@ -74,7 +74,7 @@ public final class SACParserFactoryImpl extends SACParserFactory {
 	 * @param name
 	 * @param classNameParser
 	 */
-	private static void registerSACParser(String name, String classNameParser) {
+	private static void registerSACParser(final String name, final String classNameParser) {
 		parsers.put(name, classNameParser);
 	}
 }

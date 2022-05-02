@@ -1,13 +1,13 @@
 /**
- *  Copyright (c) 2015-2017 Angelo ZERR.
+ * Copyright (c) 2015-2017 Angelo ZERR.
  * This program and the accompanying materials are made
  * available under the terms of the Eclipse Public License 2.0
  * which is available at https://www.eclipse.org/legal/epl-2.0/
  *
  * SPDX-License-Identifier: EPL-2.0
  *
- *  Contributors:
- *  Angelo Zerr <angelo.zerr@gmail.com> - initial API and implementation
+ * Contributors:
+ * Angelo Zerr <angelo.zerr@gmail.com> - initial API and implementation
  */
 package org.eclipse.tm4e.core.theme;
 
@@ -15,13 +15,16 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 
+import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.tm4e.core.internal.utils.CompareUtils;
 
+/**
+ * @see <a href=
+ *      "https://github.com/microsoft/vscode-textmate/blob/9157c7f869219dbaf9a5a5607f099c00fe694a29/src/theme.ts#L304">
+ *      github.com/Microsoft/vscode-textmate/blob/master/src/theme.ts</a>
+ */
 public class ThemeTrieElement {
-
-	// _themeTrieElementBrand: void;
 
 	private final ThemeTrieElementRule mainRule;
 	private final List<ThemeTrieElementRule> rulesWithParentScopes;
@@ -31,7 +34,8 @@ public class ThemeTrieElement {
 		this(mainRule, new ArrayList<>(), new HashMap<>());
 	}
 
-	public ThemeTrieElement(final ThemeTrieElementRule mainRule, final List<ThemeTrieElementRule> rulesWithParentScopes) {
+	public ThemeTrieElement(final ThemeTrieElementRule mainRule,
+			final List<ThemeTrieElementRule> rulesWithParentScopes) {
 		this(mainRule, rulesWithParentScopes, new HashMap<>());
 	}
 
@@ -52,18 +56,16 @@ public class ThemeTrieElement {
 
 	private static int cmpBySpecificity(final ThemeTrieElementRule a, final ThemeTrieElementRule b) {
 		if (a.scopeDepth == b.scopeDepth) {
-			final List<String> aParentScopes = a.parentScopes;
-			final List<String> bParentScopes = b.parentScopes;
+			final var aParentScopes = a.parentScopes;
+			final var bParentScopes = b.parentScopes;
 			final int aParentScopesLen = aParentScopes == null ? 0 : aParentScopes.size();
 			final int bParentScopesLen = bParentScopes == null ? 0 : bParentScopes.size();
 			if (aParentScopesLen == bParentScopesLen) {
 				for (int i = 0; i < aParentScopesLen; i++) {
 					@SuppressWarnings("null")
-					final
-					String aScope = aParentScopes.get(i);
+					final String aScope = aParentScopes.get(i);
 					@SuppressWarnings("null")
-					final
-					String bScope = bParentScopes.get(i);
+					final String bScope = bParentScopes.get(i);
 					final int aLen = aScope.length();
 					final int bLen = bScope.length();
 					if (aLen != bLen) {
@@ -78,7 +80,7 @@ public class ThemeTrieElement {
 
 	public List<ThemeTrieElementRule> match(final String scope) {
 		if ("".equals(scope)) {
-			final List<ThemeTrieElementRule> arr = new ArrayList<>();
+			final var arr = new ArrayList<ThemeTrieElementRule>();
 			arr.add(this.mainRule);
 			arr.addAll(this.rulesWithParentScopes);
 			return ThemeTrieElement.sortBySpecificity(arr);
@@ -99,15 +101,15 @@ public class ThemeTrieElement {
 			return this.children.get(head).match(tail);
 		}
 
-		final List<ThemeTrieElementRule> arr = new ArrayList<>();
+		final var arr = new ArrayList<ThemeTrieElementRule>();
 		arr.add(this.mainRule);
 		arr.addAll(this.rulesWithParentScopes);
 		return ThemeTrieElement.sortBySpecificity(arr);
 	}
 
-	public void insert(final int scopeDepth, final String scope, final List<String> parentScopes, final int fontStyle, final int foreground,
-			final int background) {
-		if ("".equals(scope)) {
+	public void insert(final int scopeDepth, final String scope, @Nullable final List<String> parentScopes,
+			final int fontStyle, final int foreground, final int background) {
+		if (scope.isEmpty()) {
 			this.doInsertHere(scopeDepth, parentScopes, fontStyle, foreground, background);
 			return;
 		}
@@ -135,8 +137,8 @@ public class ThemeTrieElement {
 		child.insert(scopeDepth + 1, tail, parentScopes, fontStyle, foreground, background);
 	}
 
-	private void doInsertHere(final int scopeDepth, final List<String> parentScopes, int fontStyle, int foreground,
-			int background) {
+	private void doInsertHere(final int scopeDepth, @Nullable final List<String> parentScopes, int fontStyle,
+			int foreground, int background) {
 
 		if (parentScopes == null) {
 			// Merge into the main rule
@@ -166,28 +168,29 @@ public class ThemeTrieElement {
 			background = this.mainRule.background;
 		}
 
-		this.rulesWithParentScopes
-				.add(new ThemeTrieElementRule(scopeDepth, parentScopes, fontStyle, foreground, background));
+		this.rulesWithParentScopes.add(
+				new ThemeTrieElementRule(scopeDepth, parentScopes, fontStyle, foreground, background));
 	}
 
 	@Override
 	public int hashCode() {
-	  return Objects.hash(children, mainRule, rulesWithParentScopes);
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + children.hashCode();
+		result = prime * result + mainRule.hashCode();
+		result = prime * result + rulesWithParentScopes.hashCode();
+		return result;
 	}
 
 	@Override
-	public boolean equals(final Object obj) {
-		if (this == obj) {
+	public boolean equals(@Nullable Object obj) {
+		if (this == obj)
 			return true;
-		}
-		if (obj == null) {
+		if (obj == null || getClass() != obj.getClass())
 			return false;
-		}
-		if (getClass() != obj.getClass()) {
-			return false;
-		}
-		final ThemeTrieElement other = (ThemeTrieElement) obj;
-		return Objects.equals(children, other.children) && Objects.equals(mainRule, other.mainRule) && Objects.equals(rulesWithParentScopes, other.rulesWithParentScopes);
+		ThemeTrieElement other = (ThemeTrieElement) obj;
+		return children.equals(other.children)
+				&& mainRule.equals(other.mainRule)
+				&& rulesWithParentScopes.equals(other.rulesWithParentScopes);
 	}
-
 }

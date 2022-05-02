@@ -11,33 +11,37 @@
  */
 package org.eclipse.tm4e.core.theme;
 
+import static org.eclipse.tm4e.core.internal.utils.NullSafetyHelper.*;
+
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Map.Entry;
 import java.util.Objects;
 import java.util.Set;
+
+import org.eclipse.jdt.annotation.Nullable;
 
 public class ColorMap {
 
 	private int lastColorId = 0;
-	private final Map<String /* color */, Integer /* ID color */ > color2id = new HashMap<>();
+	private final Map<String /* color */, @Nullable Integer /* ID color */ > color2id = new HashMap<>();
 
-	public int getId(String color) {
+	public int getId(@Nullable String color) {
 		if (color == null) {
 			return 0;
 		}
 		color = color.toUpperCase();
-		Integer value = this.color2id.get(color);
+		Integer value = color2id.get(color);
 		if (value != null) {
 			return value;
 		}
-		value = ++this.lastColorId;
-		this.color2id.put(color, value);
+		value = ++lastColorId;
+		color2id.put(castNonNull(color), value);
 		return value;
 	}
 
+	@Nullable
 	public String getColor(final int id) {
-		for (final Entry<String, Integer> entry : color2id.entrySet()) {
+		for (final var entry : color2id.entrySet()) {
 			if (id == entry.getValue()) {
 				return entry.getKey();
 			}
@@ -46,16 +50,20 @@ public class ColorMap {
 	}
 
 	public Set<String> getColorMap() {
-		return this.color2id.keySet();
+		return color2id.keySet();
 	}
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(color2id, lastColorId);
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + color2id.hashCode();
+		result = prime * result + lastColorId;
+		return result;
 	}
 
 	@Override
-	public boolean equals(final Object obj) {
+	public boolean equals(@Nullable final Object obj) {
 		if (this == obj) {
 			return true;
 		}
@@ -68,6 +76,4 @@ public class ColorMap {
 		final ColorMap other = (ColorMap) obj;
 		return Objects.equals(color2id, other.color2id) && lastColorId == other.lastColorId;
 	}
-
-
 }

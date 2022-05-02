@@ -12,9 +12,9 @@
 package org.eclipse.tm4e.core.theme;
 
 import static org.eclipse.tm4e.core.internal.utils.MoreCollections.*;
+
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -23,6 +23,7 @@ import java.util.Objects;
 import java.util.Set;
 import java.util.regex.Pattern;
 
+import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.tm4e.core.internal.utils.CompareUtils;
 
 import com.google.common.base.Splitter;
@@ -31,39 +32,45 @@ import com.google.common.collect.Lists;
 /**
  * TextMate theme.
  *
+ * @see <a href=
+ *      "https://github.com/microsoft/vscode-textmate/blob/9157c7f869219dbaf9a5a5607f099c00fe694a29/src/theme.ts#L8">
+ *      github.com/Microsoft/vscode-textmate/blob/master/src/theme.ts</a>
  */
 public class Theme {
 
 	private static final Splitter BY_COMMA_SPLITTER = Splitter.on(',');
 	private static final Splitter BY_SPACE_SPLITTER = Splitter.on(' ');
 
-	private static final Pattern rrggbb = Pattern.compile("^#[0-9a-f]{6}", Pattern.CASE_INSENSITIVE);
-	private static final Pattern rrggbbaa = Pattern.compile("^#[0-9a-f]{8}", Pattern.CASE_INSENSITIVE);
-	private static final Pattern rgb = Pattern.compile("^#[0-9a-f]{3}", Pattern.CASE_INSENSITIVE);
-	private static final Pattern rgba = Pattern.compile("^#[0-9a-f]{4}", Pattern.CASE_INSENSITIVE);
+	private static final Pattern RRGGBB = Pattern.compile("^#[0-9a-f]{6}", Pattern.CASE_INSENSITIVE);
+	private static final Pattern RRGGBBAA = Pattern.compile("^#[0-9a-f]{8}", Pattern.CASE_INSENSITIVE);
+	private static final Pattern RGB = Pattern.compile("^#[0-9a-f]{3}", Pattern.CASE_INSENSITIVE);
+	private static final Pattern RGBA = Pattern.compile("^#[0-9a-f]{4}", Pattern.CASE_INSENSITIVE);
 
 	private final ColorMap colorMap;
 	private final ThemeTrieElement root;
 	private final ThemeTrieElementRule defaults;
 	private final Map<String /* scopeName */, List<ThemeTrieElementRule>> cache = new HashMap<>();
 
-	public static Theme createFromRawTheme(final IRawTheme source) {
+	public static Theme createFromRawTheme(@Nullable final IRawTheme source) {
 		return createFromParsedTheme(parseTheme(source));
 	}
 
-	public static List<ParsedThemeRule> parseTheme(final IRawTheme source) {
-		if (source == null || source.getSettings() == null) {
+	public static List<ParsedThemeRule> parseTheme(@Nullable final IRawTheme source) {
+		if (source == null) {
 			return Collections.emptyList();
 		}
-		// if (!source.settings || !Array.isArray(source.settings)) {
-		// return [];
-		// }
-		final Collection<IRawThemeSetting> settings = source.getSettings();
-		final List<ParsedThemeRule> result = new ArrayList<>();
-		int i = 0;
-		for (final IRawThemeSetting entry : settings) {
 
-			if (entry.getSetting() == null) {
+		final List<IRawThemeSetting> settings = source.getSettings();
+		if (settings == null) {
+			return Collections.emptyList();
+		}
+
+		final List<ParsedThemeRule> result = new ArrayList<>();
+		for (int i = 0, len = settings.size(); i < len; i++) {
+			final var entry = settings.get(i);
+
+			final var entrySetting = entry.getSetting();
+			if (entrySetting == null) {
 				continue;
 			}
 
@@ -75,7 +82,7 @@ public class Theme {
 				// remove leading commas
 				scope = scope.replaceAll("^[,]+", "");
 
-				// remove trailing commans
+				// remove trailing commas
 				scope = scope.replaceAll("[,]+$", "");
 
 				scopes = BY_COMMA_SPLITTER.splitToList(scope);
@@ -86,7 +93,7 @@ public class Theme {
 			}
 
 			int fontStyle = FontStyle.NotSet;
-			final Object settingsFontStyle = entry.getSetting().getFontStyle();
+			final Object settingsFontStyle = entrySetting.getFontStyle();
 			if (settingsFontStyle instanceof String) {
 				fontStyle = FontStyle.None;
 
@@ -110,16 +117,17 @@ public class Theme {
 			}
 
 			String foreground = null;
-			final Object settingsForeground = entry.getSetting().getForeground();
+			final Object settingsForeground = entrySetting.getForeground();
 			if (settingsForeground instanceof String && isValidHexColor((String) settingsForeground)) {
 				foreground = (String) settingsForeground;
 			}
 
 			String background = null;
-			final Object settingsBackground = entry.getSetting().getBackground();
+			final Object settingsBackground = entrySetting.getBackground();
 			if (settingsBackground instanceof String && isValidHexColor((String) settingsBackground)) {
 				background = (String) settingsBackground;
 			}
+
 			for (int j = 0, lenJ = scopes.size(); j < lenJ; j++) {
 				final String _scope = scopes.get(j).trim();
 
@@ -132,36 +140,34 @@ public class Theme {
 					parentScopes = Lists.reverse(parentScopes);
 				}
 
-				final ParsedThemeRule t = new ParsedThemeRule(scope, parentScopes, i, fontStyle, foreground, background);
-				result.add(t);
+				result.add(new ParsedThemeRule(scope, parentScopes, i, fontStyle, foreground, background));
 			}
-			i++;
 		}
 
 		return result;
 	}
 
 	private static boolean isValidHexColor(final String hex) {
-		if (hex == null || hex.isEmpty()) {
+		if (hex.isEmpty()) {
 			return false;
 		}
 
-		if (rrggbb.matcher(hex).matches()) {
+		if (RRGGBB.matcher(hex).matches()) {
 			// #rrggbb
 			return true;
 		}
 
-		if (rrggbbaa.matcher(hex).matches()) {
+		if (RRGGBBAA.matcher(hex).matches()) {
 			// #rrggbbaa
 			return true;
 		}
 
-		if (rgb.matcher(hex).matches()) {
+		if (RGB.matcher(hex).matches()) {
 			// #rgb
 			return true;
 		}
 
-		if (rgba.matcher(hex).matches()) {
+		if (RGBA.matcher(hex).matches()) {
 			// #rgba
 			return true;
 		}
@@ -194,8 +200,8 @@ public class Theme {
 		int defaultFontStyle = FontStyle.None;
 		String defaultForeground = "#000000";
 		String defaultBackground = "#ffffff";
-		while (!parsedThemeRules.isEmpty() && "".equals(parsedThemeRules.get(0).scope)) {
-			final ParsedThemeRule incomingDefaults = parsedThemeRules.remove(0); // shift();
+		while (!parsedThemeRules.isEmpty() && parsedThemeRules.get(0).scope.isEmpty()) {
+			final var incomingDefaults = parsedThemeRules.remove(0);
 			if (incomingDefaults.fontStyle != FontStyle.NotSet) {
 				defaultFontStyle = incomingDefaults.fontStyle;
 			}
@@ -206,13 +212,13 @@ public class Theme {
 				defaultBackground = incomingDefaults.background;
 			}
 		}
-		final ColorMap colorMap = new ColorMap();
-		final ThemeTrieElementRule defaults = new ThemeTrieElementRule(0, null, defaultFontStyle,
-				colorMap.getId(defaultForeground), colorMap.getId(defaultBackground));
+		final var colorMap = new ColorMap();
+		final var defaults = new ThemeTrieElementRule(0, null, defaultFontStyle, colorMap.getId(defaultForeground),
+				colorMap.getId(defaultBackground));
 
-		final ThemeTrieElement root = new ThemeTrieElement(new ThemeTrieElementRule(0, null, FontStyle.NotSet, 0, 0),
+		final var root = new ThemeTrieElement(new ThemeTrieElementRule(0, null, FontStyle.NotSet, 0, 0),
 				Collections.emptyList());
-		for (final ParsedThemeRule rule : parsedThemeRules) {
+		for (final var rule : parsedThemeRules) {
 			root.insert(0, rule.scope, rule.parentScopes, rule.fontStyle, colorMap.getId(rule.foreground),
 					colorMap.getId(rule.background));
 		}
@@ -230,6 +236,7 @@ public class Theme {
 		return this.colorMap.getColorMap();
 	}
 
+	@Nullable
 	public String getColor(final int id) {
 		return this.colorMap.getColor(id);
 	}
@@ -247,23 +254,27 @@ public class Theme {
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(cache, colorMap, defaults, root);
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + cache.hashCode();
+		result = prime * result + colorMap.hashCode();
+		result = prime * result + defaults.hashCode();
+		result = prime * result + root.hashCode();
+		return result;
 	}
 
 	@Override
-	public boolean equals(final Object obj) {
+	public boolean equals(@Nullable final Object obj) {
 		if (this == obj) {
 			return true;
 		}
-		if (obj == null) {
-			return false;
-		}
-		if (getClass() != obj.getClass()) {
+		if (obj == null || getClass() != obj.getClass()) {
 			return false;
 		}
 		final Theme other = (Theme) obj;
-		return Objects.equals(cache, other.cache) && Objects.equals(colorMap, other.colorMap) &&
-				Objects.equals(defaults, other.defaults) && Objects.equals(root, other.root);
+		return Objects.equals(cache, other.cache)
+				&& Objects.equals(colorMap, other.colorMap)
+				&& Objects.equals(defaults, other.defaults)
+				&& Objects.equals(root, other.root);
 	}
-
 }

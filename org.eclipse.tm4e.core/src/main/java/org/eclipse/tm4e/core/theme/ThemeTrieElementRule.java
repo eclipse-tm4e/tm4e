@@ -1,13 +1,13 @@
 /**
- *  Copyright (c) 2015-2017 Angelo ZERR.
+ * Copyright (c) 2015-2017 Angelo ZERR.
  * This program and the accompanying materials are made
  * available under the terms of the Eclipse Public License 2.0
  * which is available at https://www.eclipse.org/legal/epl-2.0/
  *
  * SPDX-License-Identifier: EPL-2.0
  *
- *  Contributors:
- *  Angelo Zerr <angelo.zerr@gmail.com> - initial API and implementation
+ * Contributors:
+ * Angelo Zerr <angelo.zerr@gmail.com> - initial API and implementation
  */
 package org.eclipse.tm4e.core.theme;
 
@@ -15,17 +15,26 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
+import org.eclipse.jdt.annotation.Nullable;
+
+/**
+ * @see <a href=
+ *      "https://github.com/microsoft/vscode-textmate/blob/9157c7f869219dbaf9a5a5607f099c00fe694a29/src/theme.ts#L253">
+ *      github.com/Microsoft/vscode-textmate/blob/master/src/theme.ts</a>
+ */
 public class ThemeTrieElementRule {
 
-	// _themeTrieElementRuleBrand: void;
-
 	public int scopeDepth;
+
+	@Nullable
 	public final List<String> parentScopes;
+
 	public int fontStyle;
 	public int foreground;
 	public int background;
 
-	public ThemeTrieElementRule(final int scopeDepth, final List<String> parentScopes, final int fontStyle, final int foreground,
+	public ThemeTrieElementRule(final int scopeDepth, @Nullable final List<String> parentScopes, final int fontStyle,
+			final int foreground,
 			final int background) {
 		this.scopeDepth = scopeDepth;
 		this.parentScopes = parentScopes;
@@ -41,9 +50,9 @@ public class ThemeTrieElementRule {
 	}
 
 	public static List<ThemeTrieElementRule> cloneArr(final List<ThemeTrieElementRule> arr) {
-		final List<ThemeTrieElementRule> r = new ArrayList<>();
-		for (int i = 0, len = arr.size(); i < len; i++) {
-			r.add(arr.get(i).clone());
+		final var r = new ArrayList<ThemeTrieElementRule>(arr.size());
+		for (var e : arr) {
+			r.add(e.clone());
 		}
 		return r;
 	}
@@ -55,8 +64,7 @@ public class ThemeTrieElementRule {
 		} else {
 			this.scopeDepth = scopeDepth;
 		}
-		// console.log('TODO -> my depth: ' + this.scopeDepth + ', overwriting
-		// depth: ' + scopeDepth);
+		// console.log('TODO -> my depth: ' + this.scopeDepth + ', overwriting depth: ' + scopeDepth);
 		if (fontStyle != FontStyle.NotSet) {
 			this.fontStyle = fontStyle;
 		}
@@ -70,11 +78,18 @@ public class ThemeTrieElementRule {
 
 	@Override
 	public int hashCode() {
-	  return Objects.hash(background, fontStyle, foreground, parentScopes, scopeDepth);
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + background;
+		result = prime * result + fontStyle;
+		result = prime * result + foreground;
+		result = prime * result + Objects.hashCode(parentScopes);
+		result = prime * result + scopeDepth;
+		return result;
 	}
 
 	@Override
-	public boolean equals(final Object obj) {
+	public boolean equals(@Nullable final Object obj) {
 		if (this == obj) {
 			return true;
 		}
@@ -86,8 +101,6 @@ public class ThemeTrieElementRule {
 		}
 		final ThemeTrieElementRule other = (ThemeTrieElementRule) obj;
 		return background == other.background && fontStyle == other.fontStyle && foreground == other.foreground &&
-		    Objects.equals(parentScopes, other.parentScopes) && scopeDepth == other.scopeDepth;
+				Objects.equals(parentScopes, other.parentScopes) && scopeDepth == other.scopeDepth;
 	}
-
-
 }

@@ -11,12 +11,16 @@
  */
 package org.eclipse.tm4e.core.theme;
 
-import java.util.Collection;
+import java.util.List;
+
+import org.eclipse.jdt.annotation.Nullable;
 
 public interface IRawTheme {
 
+	@Nullable
 	String getName();
 
-	Collection<IRawThemeSetting> getSettings();
+	@Nullable
+	List<IRawThemeSetting> getSettings();
 
 }

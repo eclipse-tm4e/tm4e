@@ -11,6 +11,8 @@
  */
 package org.eclipse.tm4e.core.theme;
 
+import org.eclipse.jdt.annotation.Nullable;
+
 /**
  * A single theme setting.
  *
@@ -19,10 +21,13 @@ package org.eclipse.tm4e.core.theme;
  */
 public interface IRawThemeSetting {
 
+	@Nullable
 	String getName();
 
+	@Nullable
 	Object getScope();
 
+	@Nullable
 	IThemeSetting getSetting();
 
 }

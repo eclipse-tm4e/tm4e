@@ -34,7 +34,7 @@ class ThemeMatchingTest {
 
 	@Test
 	void testGivesHigherPriorityToDeeperMatches() throws Exception {
-		Theme theme = loadTheme("{" + 
+		Theme theme = loadTheme("{" +
 			"\"settings\": ["+
 						"{ \"settings\": { \"foreground\": \"#100000\", \"background\": \"#200000\" } },"+
 						"{ \"scope\": \"punctuation.definition.string.begin.html\", \"settings\": { \"foreground\": \"#300000\" } },"+
@@ -60,7 +60,7 @@ class ThemeMatchingTest {
 
 	@Test
 	void testGivesHigherPriorityToParentMatches1() throws Exception {
-		Theme theme = loadTheme("{" + 
+		Theme theme = loadTheme("{" +
 			"\"settings\": ["+
 						"{ \"settings\": { \"foreground\": \"#100000\", \"background\": \"#200000\" } },"+
 						"{ \"scope\": \"c a\", \"settings\": { \"foreground\": \"#300000\" } },"+
@@ -88,7 +88,7 @@ class ThemeMatchingTest {
 
 	@Test
 	void testGivesHigherPriorityToParentMatches2() throws Exception {
-		Theme theme = loadTheme("{" + 
+		Theme theme = loadTheme("{" +
 			"\"settings\": ["+
 						"{ \"settings\": { \"foreground\": \"#100000\", \"background\": \"#200000\" } },"+
 						"{ \"scope\": \"meta.tag entity\", \"settings\": { \"foreground\": \"#300000\" } },"+
@@ -194,9 +194,9 @@ class ThemeMatchingTest {
 
 	@Test
 	void testMicrosoft_vscode_23460() throws Exception {
-		Theme theme = loadTheme("{" + 
+		Theme theme = loadTheme("{" +
 			"\"settings\": ["+
-				"{" + 
+				"{" +
 					"\"settings\": {"+
 						"\"foreground\": \"#aec2e0\","+
 						"\"background\": \"#14191f\""+
@@ -270,6 +270,6 @@ class ThemeMatchingTest {
 	}
 
 	private Theme loadTheme(String theme) throws Exception {
-		return Theme.createFromRawTheme(ThemeReader.JSON_PARSER.parse(new ByteArrayInputStream(theme.getBytes())));
+		return Theme.createFromRawTheme(ThemeReader.readThemeSync("theme.json", new ByteArrayInputStream(theme.getBytes())));
 	}
 }

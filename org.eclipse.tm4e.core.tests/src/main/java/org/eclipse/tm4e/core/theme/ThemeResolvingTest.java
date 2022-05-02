@@ -401,6 +401,6 @@ public class ThemeResolvingTest {
 	}
 
 	private List<ParsedThemeRule> parseTheme(String theme) throws Exception {
-		return Theme.parseTheme(ThemeReader.JSON_PARSER.parse(new ByteArrayInputStream(theme.getBytes())));
+		return Theme.parseTheme(ThemeReader.readThemeSync("theme.json", new ByteArrayInputStream(theme.getBytes())));
 	}
 }

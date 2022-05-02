@@ -11,8 +11,8 @@
  */
 package org.eclipse.tm4e.core.internal.theme;
 
+import java.util.Collection;
 import java.util.HashMap;
-import java.util.List;
 
 import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.tm4e.core.theme.IRawTheme;
@@ -33,8 +33,8 @@ public final class ThemeRaw extends HashMap<String, @Nullable Object>
 	@SuppressWarnings("unchecked")
 	@Nullable
 	@Override
-	public List<IRawThemeSetting> getSettings() {
-		return (List<IRawThemeSetting>) super.get("settings");
+	public Collection<IRawThemeSetting> getSettings() {
+		return (Collection<IRawThemeSetting>) super.get("settings");
 	}
 
 	@Nullable

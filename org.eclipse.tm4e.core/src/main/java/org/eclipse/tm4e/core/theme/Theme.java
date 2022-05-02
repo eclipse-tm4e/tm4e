@@ -88,19 +88,20 @@ public class Theme {
 			return Collections.emptyList();
 		}
 
-		final List<IRawThemeSetting> settings = source.getSettings();
+		final var settings = source.getSettings();
 		if (settings == null) {
 			return Collections.emptyList();
 		}
 
 		final List<ParsedThemeRule> result = new ArrayList<>();
-		for (int i = 0, len = settings.size(); i < len; i++) {
-			final var entry = settings.get(i);
-
+		int i = -1;
+		for (final IRawThemeSetting entry : settings) {
 			final var entrySetting = entry.getSetting();
 			if (entrySetting == null) {
 				continue;
 			}
+
+			i++;
 
 			final Object settingScope = entry.getScope();
 			List<String> scopes;

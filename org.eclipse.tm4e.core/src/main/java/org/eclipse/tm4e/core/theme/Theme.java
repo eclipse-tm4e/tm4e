@@ -115,7 +115,9 @@ public class Theme {
 
 				scopes = BY_COMMA_SPLITTER.splitToList(scope);
 			} else if (settingScope instanceof List) {
-				scopes = (List<String>) settingScope;
+				@SuppressWarnings("unchecked")
+				final var settingScopes = (List<String>) settingScope;
+				scopes = settingScopes;
 			} else {
 				scopes = Arrays.asList("");
 			}

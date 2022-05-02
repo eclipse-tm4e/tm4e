@@ -30,6 +30,7 @@ public final class ThemeRaw extends HashMap<String, @Nullable Object>
 		return (String) super.get("name");
 	}
 
+	@SuppressWarnings("unchecked")
 	@Nullable
 	@Override
 	public List<IRawThemeSetting> getSettings() {

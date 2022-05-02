@@ -46,15 +46,43 @@ public class Theme {
 	private static final Pattern RGB = Pattern.compile("^#[0-9a-f]{3}", Pattern.CASE_INSENSITIVE);
 	private static final Pattern RGBA = Pattern.compile("^#[0-9a-f]{4}", Pattern.CASE_INSENSITIVE);
 
+	public static Theme createFromRawTheme(@Nullable final IRawTheme source) {
+		return createFromParsedTheme(parseTheme(source));
+	}
+
+	public static Theme createFromParsedTheme(final List<ParsedThemeRule> source) {
+		return resolveParsedThemeRules(source);
+	}
+
 	private final ColorMap colorMap;
 	private final ThemeTrieElement root;
 	private final ThemeTrieElementRule defaults;
 	private final Map<String /* scopeName */, List<ThemeTrieElementRule>> cache = new HashMap<>();
 
-	public static Theme createFromRawTheme(@Nullable final IRawTheme source) {
-		return createFromParsedTheme(parseTheme(source));
+	public Theme(final ColorMap colorMap, final ThemeTrieElementRule defaults, final ThemeTrieElement root) {
+		this.colorMap = colorMap;
+		this.root = root;
+		this.defaults = defaults;
 	}
 
+	public Set<String> getColorMap() {
+		return this.colorMap.getColorMap();
+	}
+
+	public ThemeTrieElementRule getDefaults() {
+		return this.defaults;
+	}
+
+	public List<ThemeTrieElementRule> match(final String scopeName) {
+		if (!this.cache.containsKey(scopeName)) {
+			this.cache.put(scopeName, this.root.match(scopeName));
+		}
+		return this.cache.get(scopeName);
+	}
+
+	/**
+	 * Parse a raw theme into rules.
+	 */
 	public static List<ParsedThemeRule> parseTheme(@Nullable final IRawTheme source) {
 		if (source == null) {
 			return Collections.emptyList();
@@ -147,38 +175,6 @@ public class Theme {
 		return result;
 	}
 
-	private static boolean isValidHexColor(final String hex) {
-		if (hex.isEmpty()) {
-			return false;
-		}
-
-		if (RRGGBB.matcher(hex).matches()) {
-			// #rrggbb
-			return true;
-		}
-
-		if (RRGGBBAA.matcher(hex).matches()) {
-			// #rrggbbaa
-			return true;
-		}
-
-		if (RGB.matcher(hex).matches()) {
-			// #rgb
-			return true;
-		}
-
-		if (RGBA.matcher(hex).matches()) {
-			// #rgba
-			return true;
-		}
-
-		return false;
-	}
-
-	public static Theme createFromParsedTheme(final List<ParsedThemeRule> source) {
-		return resolveParsedThemeRules(source);
-	}
-
 	/**
 	 * Resolve rules (i.e. inheritance).
 	 */
@@ -226,30 +222,37 @@ public class Theme {
 		return new Theme(colorMap, defaults, root);
 	}
 
-	public Theme(final ColorMap colorMap, final ThemeTrieElementRule defaults, final ThemeTrieElement root) {
-		this.colorMap = colorMap;
-		this.root = root;
-		this.defaults = defaults;
-	}
+	private static boolean isValidHexColor(final String hex) {
+		if (hex.isEmpty()) {
+			return false;
+		}
 
-	public Set<String> getColorMap() {
-		return this.colorMap.getColorMap();
+		if (RRGGBB.matcher(hex).matches()) {
+			// #rrggbb
+			return true;
+		}
+
+		if (RRGGBBAA.matcher(hex).matches()) {
+			// #rrggbbaa
+			return true;
+		}
+
+		if (RGB.matcher(hex).matches()) {
+			// #rgb
+			return true;
+		}
+
+		if (RGBA.matcher(hex).matches()) {
+			// #rgba
+			return true;
+		}
+
+		return false;
 	}
 
 	@Nullable
 	public String getColor(final int id) {
 		return this.colorMap.getColor(id);
-	}
-
-	public ThemeTrieElementRule getDefaults() {
-		return this.defaults;
-	}
-
-	public List<ThemeTrieElementRule> match(final String scopeName) {
-		if (!this.cache.containsKey(scopeName)) {
-			this.cache.put(scopeName, this.root.match(scopeName));
-		}
-		return this.cache.get(scopeName);
 	}
 
 	@Override

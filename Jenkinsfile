@@ -10,12 +10,25 @@ pipeline {
 		buildDiscarder(logRotator(numToKeepStr:'10'))
 	}
 	stages {
+		stage('initialize PGP') {
+			steps {
+				withCredentials([file(credentialsId: 'secret-subkeys.asc', variable: 'KEYRING')]) {
+					sh 'gpg --batch --import "${KEYRING}"'
+					sh 'for fpr in $(gpg --list-keys --with-colons  | awk -F: \'/fpr:/ {print $10}\' | sort -u); do echo -e "5\ny\n" |  gpg --batch --command-fd 0 --expert --edit-key ${fpr} trust; done'
+				}
+			}
+		}
 		stage('Build') {
 			steps {
 				withMaven(maven:'apache-maven-latest', mavenLocalRepo: '$WORKSPACE/.m2') {
-					wrap([$class: 'Xvnc', useXauthority: true]) {
-						sh 'mvn  clean verify -Dmaven.test.error.ignore=true -Dmaven.test.failure.ignore=true -PpackAndSign'
-					}
+				withCredentials([string(credentialsId: 'gpg-passphrase', variable: 'KEYRING_PASSPHRASE')]) {
+				wrap([$class: 'Xvnc', useXauthority: true]) {
+					sh 'mvn clean verify \
+						-Dmaven.test.error.ignore=true -Dmaven.test.failure.ignore=true \
+						-Psign -Dgpg.passphrase="${KEYRING_PASSPHRASE}"'
+
+				}
+				}
 				}
 			}
 			post {

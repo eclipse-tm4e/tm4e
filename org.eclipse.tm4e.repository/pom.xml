@@ -1,84 +1,33 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-  <modelVersion>4.0.0</modelVersion>
-  <artifactId>org.eclipse.tm4e.repository</artifactId>
-  <packaging>eclipse-repository</packaging>
-  <parent>
-    <groupId>org.eclipse</groupId>
-    <artifactId>org.eclipse.tm4e</artifactId>
-    <version>0.3.2-SNAPSHOT</version>
-  </parent>
-  <build>
-		<extensions>
-			<!-- Enabling the use of FTP -->
-			<extension>
-				<groupId>org.apache.maven.wagon</groupId>
-				<artifactId>wagon-ftp</artifactId>
-				<version>3.5.1</version>
-			</extension>
-		</extensions>
-	</build>
+	<modelVersion>4.0.0</modelVersion>
+	<artifactId>org.eclipse.tm4e.repository</artifactId>
+	<packaging>eclipse-repository</packaging>
+	<parent>
+		<groupId>org.eclipse</groupId>
+		<artifactId>org.eclipse.tm4e</artifactId>
+		<version>0.3.2-SNAPSHOT</version>
+	</parent>
+
 	<profiles>
-		<!-- This profile is used to upload the repo -->
 		<profile>
-			<id>uploadRepo</id>
-			<properties>
-				<!-- Properties relative to the distant host where to upload the repo -->
-				<ftp.url>ftp://ftp.online.net</ftp.url>
-				<ftp.toDir>/oss/textmate/${project.version}</ftp.toDir>
-				<!-- Relative path to the repo being uploaded -->
-				<repo.path>${project.build.directory}/repository/</repo.path>
-			</properties>
-			<build>
-				<plugins>
-					<!-- Upload the repo to the server -->
-					<plugin>
-						<groupId>org.codehaus.mojo</groupId>
-						<artifactId>wagon-maven-plugin</artifactId>
-						<version>2.0.2</version>
+			<id>sign</id>
+				<build>
+					<plugins>
+						<plugin>
+						<groupId>org.eclipse.tycho</groupId>
+						<artifactId>tycho-gpg-plugin</artifactId>
+						<version>${tycho-version}</version>
 						<executions>
 							<execution>
-								<id>upload-repo</id>
-								<phase>install</phase>
+								<id>pgpsigner</id>
 								<goals>
-									<goal>upload</goal>
+									<goal>sign-p2-artifacts</goal>
 								</goals>
 								<configuration>
-									<fromDir>${repo.path}</fromDir>
-									<includes>**</includes>
-									<toDir>${ftp.toDir}</toDir>
-									<url>${ftp.url}</url>
-									<serverId>p2Repo</serverId>
+									<keyname>27617A05E2DB057F</keyname>
 								</configuration>
 							</execution>
 						</executions>
-					</plugin>
-				</plugins>
-			</build>
-		</profile>
-		<profile>
-			<id>release</id>
-			<build>
-				<plugins>
-					<plugin>
-						<groupId>de.jutzig</groupId>
-						<artifactId>github-release-plugin</artifactId>
-						<version>1.4.0</version>
-						<executions>
-							<execution>
-								<id>github-upload</id>
-								<phase>verify</phase>
-								<goals>
-									<goal>release</goal>
-								</goals>
-								<inherited>false</inherited>
-							</execution>
-						</executions>
-						<configuration>
-							<overwriteArtifact>true</overwriteArtifact>
-							<tag>${project.artifactId}-${project.version}</tag>
-							<releaseName>${project.artifactId}-${project.version}</releaseName>
-							<artifact>${project.build.directory}/${project.artifactId}-${project.version}.zip</artifact>
-						</configuration>
 					</plugin>
 				</plugins>
 			</build>

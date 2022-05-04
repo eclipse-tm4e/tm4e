@@ -45,7 +45,7 @@ public final class GrammarRegistryManager extends AbstractGrammarRegistryManager
 		if (INSTANCE != null) {
 			return INSTANCE;
 		}
-		GrammarRegistryManager manager = new GrammarRegistryManager();
+		final GrammarRegistryManager manager = new GrammarRegistryManager();
 		manager.load();
 		return manager;
 	}
@@ -62,28 +62,28 @@ public final class GrammarRegistryManager extends AbstractGrammarRegistryManager
 	 * Load TextMate grammars from extension point.
 	 */
 	private void loadGrammarsFromExtensionPoints() {
-		IConfigurationElement[] cf = Platform.getExtensionRegistry()
+		final IConfigurationElement[] cf = Platform.getExtensionRegistry()
 				.getConfigurationElementsFor(TMEclipseRegistryPlugin.PLUGIN_ID, EXTENSION_GRAMMARS);
-		for (IConfigurationElement ce : cf) {
-			String extensionName = ce.getName();
+		for (final IConfigurationElement ce : cf) {
+			final String extensionName = ce.getName();
 			switch (extensionName) {
 			case XMLConstants.GRAMMAR_ELT:
 				super.registerGrammarDefinition(new GrammarDefinition(ce));
 				break;
 			case XMLConstants.INJECTION_ELT: {
-				String scopeName = ce.getAttribute(XMLConstants.SCOPE_NAME_ATTR);
-				String injectTo = ce.getAttribute(XMLConstants.INJECT_TO_ATTR);
+				final String scopeName = ce.getAttribute(XMLConstants.SCOPE_NAME_ATTR);
+				final String injectTo = ce.getAttribute(XMLConstants.INJECT_TO_ATTR);
 				super.registerInjection(scopeName, injectTo);
 				break;
 			}
 			case XMLConstants.SCOPE_NAME_CONTENT_TYPE_BINDING_ELT: {
-				String contentTypeId = ce.getAttribute(XMLConstants.CONTENT_TYPE_ID_ATTR);
-				IContentType contentType = Platform.getContentTypeManager().getContentType(contentTypeId);
+				final String contentTypeId = ce.getAttribute(XMLConstants.CONTENT_TYPE_ID_ATTR);
+				final IContentType contentType = Platform.getContentTypeManager().getContentType(contentTypeId);
 				if (contentType == null) {
 					Platform.getLog(getClass())
 							.warn("No content-type found with id='" + contentTypeId + "', ignoring TM4E association.");
 				} else {
-					String scopeName = ce.getAttribute(XMLConstants.SCOPE_NAME_ATTR);
+					final String scopeName = ce.getAttribute(XMLConstants.SCOPE_NAME_ATTR);
 					super.registerContentTypeBinding(contentType, scopeName);
 				}
 				break;
@@ -98,11 +98,11 @@ public final class GrammarRegistryManager extends AbstractGrammarRegistryManager
 	private void loadGrammarsFromPreferences() {
 		// Load grammar definitions from the
 		// "${workspace_loc}/metadata/.plugins/org.eclipse.core.runtime/.settings/org.eclipse.tm4e.registry.prefs"
-		IEclipsePreferences prefs = InstanceScope.INSTANCE.getNode(TMEclipseRegistryPlugin.PLUGIN_ID);
-		String json = prefs.get(PreferenceConstants.GRAMMARS, null);
+		final IEclipsePreferences prefs = InstanceScope.INSTANCE.getNode(TMEclipseRegistryPlugin.PLUGIN_ID);
+		final String json = prefs.get(PreferenceConstants.GRAMMARS, null);
 		if (json != null) {
-			IGrammarDefinition[] definitions = PreferenceHelper.loadGrammars(json);
-			for (IGrammarDefinition definition : definitions) {
+			final IGrammarDefinition[] definitions = PreferenceHelper.loadGrammars(json);
+			for (final IGrammarDefinition definition : definitions) {
 				userCache.registerGrammarDefinition(definition);
 			}
 		}
@@ -112,8 +112,8 @@ public final class GrammarRegistryManager extends AbstractGrammarRegistryManager
 	public void save() throws BackingStoreException {
 		// Save grammar definitions in the
 		// "${workspace_loc}/metadata/.plugins/org.eclipse.core.runtime/.settings/org.eclipse.tm4e.registry.prefs"
-		String json = PreferenceHelper.toJson(userCache.getDefinitions());
-		IEclipsePreferences prefs = InstanceScope.INSTANCE.getNode(TMEclipseRegistryPlugin.PLUGIN_ID);
+		final String json = PreferenceHelper.toJson(userCache.getDefinitions());
+		final IEclipsePreferences prefs = InstanceScope.INSTANCE.getNode(TMEclipseRegistryPlugin.PLUGIN_ID);
 		prefs.put(PreferenceConstants.GRAMMARS, json);
 		prefs.flush();
 	}

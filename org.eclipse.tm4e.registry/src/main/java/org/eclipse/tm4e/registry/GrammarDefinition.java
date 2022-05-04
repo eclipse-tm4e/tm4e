@@ -43,12 +43,12 @@ public class GrammarDefinition extends TMResource implements IGrammarDefinition 
 	 *
 	 * @param scopeName
 	 */
-	public GrammarDefinition(String scopeName, String path) {
+	public GrammarDefinition(final String scopeName, final String path) {
 		super(path);
 		this.scopeName = scopeName;
 	}
 
-	public GrammarDefinition(IConfigurationElement ce) {
+	public GrammarDefinition(final IConfigurationElement ce) {
 		super(ce);
 		this.scopeName = ce.getAttribute(XMLConstants.SCOPE_NAME_ATTR);
 	}

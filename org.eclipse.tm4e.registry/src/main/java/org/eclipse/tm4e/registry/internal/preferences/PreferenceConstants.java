@@ -13,7 +13,6 @@ package org.eclipse.tm4e.registry.internal.preferences;
 
 /**
  * Preferences constants for grammar.
- *
  */
 public final class PreferenceConstants {
 

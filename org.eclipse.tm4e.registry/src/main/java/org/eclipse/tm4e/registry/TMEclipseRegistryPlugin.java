@@ -31,12 +31,12 @@ public class TMEclipseRegistryPlugin implements BundleActivator {
 	}
 
 	@Override
-	public void start(BundleContext bundleContext) throws Exception {
+	public void start(final BundleContext bundleContext) throws Exception {
 		TMEclipseRegistryPlugin.context = bundleContext;
 	}
 
 	@Override
-	public void stop(BundleContext bundleContext) throws Exception {
+	public void stop(final BundleContext bundleContext) throws Exception {
 		TMEclipseRegistryPlugin.context = null;
 	}
 
@@ -56,8 +56,8 @@ public class TMEclipseRegistryPlugin implements BundleActivator {
 	 *            the option name
 	 * @return true if the debug option is enabled and false otherwise.
 	 */
-	public static boolean isDebugOptionEnabled(String option) {
-		String enabled = Platform.getDebugOption(option);
+	public static boolean isDebugOptionEnabled(final String option) {
+		final String enabled = Platform.getDebugOption(option);
 		return enabled != null && Boolean.parseBoolean(enabled);
 	}
 }

@@ -34,11 +34,11 @@ public final class PreferenceHelper {
 				.create();
 	}
 
-	public static IGrammarDefinition[] loadGrammars(String json) {
+	public static IGrammarDefinition[] loadGrammars(final String json) {
 		return DEFAULT_GSON.fromJson(json, GrammarDefinition[].class);
 	}
 
-	public static String toJson(Collection<IGrammarDefinition> definitions) {
+	public static String toJson(final Collection<IGrammarDefinition> definitions) {
 		return DEFAULT_GSON.toJson(definitions);
 	}
 

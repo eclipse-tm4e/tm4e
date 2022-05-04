@@ -38,11 +38,11 @@ final class GrammarCache {
 	 * @param definition
 	 *            the grammar definition to register.
 	 */
-	void registerGrammarDefinition(IGrammarDefinition definition) {
+	void registerGrammarDefinition(final IGrammarDefinition definition) {
 		definitions.put(definition.getScopeName(), definition);
 	}
 
-	void unregisterGrammarDefinition(IGrammarDefinition definition) {
+	void unregisterGrammarDefinition(final IGrammarDefinition definition) {
 		definitions.remove(definition.getScopeName());
 	}
 
@@ -63,7 +63,7 @@ final class GrammarCache {
 	 * @return the grammar definition from the given <code>scopeName</code> and
 	 *         null otherwise.
 	 */
-	IGrammarDefinition getDefinition(String scopeName) {
+	IGrammarDefinition getDefinition(final String scopeName) {
 		return definitions.get(scopeName);
 	}
 
@@ -75,7 +75,7 @@ final class GrammarCache {
 	 * @return list of scope names to inject for the given
 	 *         <code>scopeName</code> and null otheriwse.
 	 */
-	Collection<String> getInjections(String scopeName) {
+	Collection<String> getInjections(final String scopeName) {
 		return injections.get(scopeName);
 	}
 
@@ -86,7 +86,7 @@ final class GrammarCache {
 	 * @param scopeName
 	 * @param injectTo
 	 */
-	void registerInjection(String scopeName, String injectTo) {
+	void registerInjection(final String scopeName, final String injectTo) {
 		Collection<String> injections = getInjections(injectTo);
 		if (injections == null) {
 			injections = new ArrayList<>();
@@ -101,11 +101,11 @@ final class GrammarCache {
 	 * @param contentType
 	 * @return scope name bound with the given content type and null otherwise.
 	 */
-	String getScopeNameForContentType(IContentType contentType) {
+	String getScopeNameForContentType(final IContentType contentType) {
 		return scopeNameBindings.get(contentType);
 	}
 
-	List<IContentType> getContentTypesForScope(String scopeName) {
+	List<IContentType> getContentTypesForScope(final String scopeName) {
 		if (scopeName == null) {
 			return List.of();
 		}
@@ -113,7 +113,7 @@ final class GrammarCache {
 				.map(Entry::getKey).collect(Collectors.toList());
 	}
 
-	void registerContentTypeBinding(IContentType contentType, String scopeName) {
+	void registerContentTypeBinding(final IContentType contentType, final String scopeName) {
 		scopeNameBindings.put(contentType, scopeName);
 	}
 

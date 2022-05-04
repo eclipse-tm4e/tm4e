@@ -42,16 +42,16 @@ public class TMResource implements ITMResource {
 	 *
 	 * @param path
 	 */
-	public TMResource(String path) {
+	public TMResource(final String path) {
 		this.path = path;
 	}
 
-	public TMResource(IConfigurationElement ce) {
+	public TMResource(final IConfigurationElement ce) {
 		this(ce.getAttribute(XMLConstants.PATH_ATTR));
 		this.pluginId = ce.getNamespaceIdentifier();
 	}
 
-	public TMResource(String path, String pluginId) {
+	public TMResource(final String path, final String pluginId) {
 		this.path = path;
 		this.pluginId = pluginId;
 	}
@@ -72,7 +72,7 @@ public class TMResource implements ITMResource {
 			return null;
 		}
 		if (pluginId != null) {
-			URL url = new URL(PLATFORM_PLUGIN + pluginId + "/" + path);
+			final URL url = new URL(PLATFORM_PLUGIN + pluginId + "/" + path);
 			return url.openStream();
 		}
 		return new FileInputStream(new File(path));
@@ -84,13 +84,13 @@ public class TMResource implements ITMResource {
 				return null;
 			}
 			return convertStreamToString(in);
-		} catch (Exception e) {
+		} catch (final Exception e) {
 			e.printStackTrace();
 		}
 		return null;
 	}
 
-	private static String convertStreamToString(InputStream is) {
+	private static String convertStreamToString(final InputStream is) {
 		try (Scanner s = new Scanner(is)) {
 			s.useDelimiter("\\A");
 			return s.hasNext() ? s.next() : "";

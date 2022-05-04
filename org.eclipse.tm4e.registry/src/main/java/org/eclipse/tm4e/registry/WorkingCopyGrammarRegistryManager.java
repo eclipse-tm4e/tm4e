@@ -30,23 +30,23 @@ public class WorkingCopyGrammarRegistryManager extends AbstractGrammarRegistryMa
 
 	private List<IGrammarDefinition> removed;
 
-	public WorkingCopyGrammarRegistryManager(IGrammarRegistryManager manager) {
+	public WorkingCopyGrammarRegistryManager(final IGrammarRegistryManager manager) {
 		this.manager = manager;
 		load();
 	}
 
 	private void load() {
 		// Copy grammar definitions
-		IGrammarDefinition[] definitions = manager.getDefinitions();
-		for (IGrammarDefinition definition : definitions) {
+		final IGrammarDefinition[] definitions = manager.getDefinitions();
+		for (final IGrammarDefinition definition : definitions) {
 			super.registerGrammarDefinition(definition);
 			// Copy binding scope/content types
-			String scopeName = definition.getScopeName();
+			final String scopeName = definition.getScopeName();
 			manager.getContentTypesForScope(scopeName).forEach(contentType -> super.registerContentTypeBinding(contentType, scopeName));
 			// Copy injection
-			Collection<String> injections = manager.getInjections(scopeName);
+			final Collection<String> injections = manager.getInjections(scopeName);
 			if (injections != null) {
-				for (String injectFrom : injections) {
+				for (final String injectFrom : injections) {
 					super.registerInjection(injectFrom, scopeName);
 				}
 			}
@@ -54,7 +54,7 @@ public class WorkingCopyGrammarRegistryManager extends AbstractGrammarRegistryMa
 	}
 
 	@Override
-	public void registerGrammarDefinition(IGrammarDefinition definition) {
+	public void registerGrammarDefinition(final IGrammarDefinition definition) {
 		super.registerGrammarDefinition(definition);
 		if (added == null) {
 			added = new ArrayList<>();
@@ -63,7 +63,7 @@ public class WorkingCopyGrammarRegistryManager extends AbstractGrammarRegistryMa
 	}
 
 	@Override
-	public void unregisterGrammarDefinition(IGrammarDefinition definition) {
+	public void unregisterGrammarDefinition(final IGrammarDefinition definition) {
 		super.unregisterGrammarDefinition(definition);
 		if (added != null && added.contains(definition)) {
 			added.remove(definition);
@@ -78,12 +78,12 @@ public class WorkingCopyGrammarRegistryManager extends AbstractGrammarRegistryMa
 	@Override
 	public void save() throws BackingStoreException {
 		if (added != null) {
-			for (IGrammarDefinition definition : added) {
+			for (final IGrammarDefinition definition : added) {
 				manager.registerGrammarDefinition(definition);
 			}
 		}
 		if (removed != null) {
-			for (IGrammarDefinition definition : removed) {
+			for (final IGrammarDefinition definition : removed) {
 				manager.unregisterGrammarDefinition(definition);
 			}
 		}

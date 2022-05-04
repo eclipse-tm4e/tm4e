@@ -57,40 +57,39 @@ public final class StackElement implements IStackElement {
 	 * The previous state on the stack (or null for the root state).
 	 */
 	@Nullable
-	public final StackElement parent;
+	final StackElement parent;
 
 	/**
 	 * The depth of the stack.
 	 */
-	public final int depth;
+	final int depth;
 
 	/**
 	 * The state (rule) that this element represents.
 	 */
-	public final int ruleId;
+	final int ruleId;
 
 	/**
 	 * The state has entered and captured \n. This means that the next line should have an anchorPosition of 0.
 	 */
-	public final boolean beginRuleCapturedEOL;
+	final boolean beginRuleCapturedEOL;
 
 	/**
 	 * The "pop" (end) condition for this state in case that it was dynamically generated through captured text.
 	 */
 	@Nullable
-	public final String endRule;
+	final String endRule;
 
 	/**
 	 * The list of scopes containing the "name" for this state.
 	 */
-
-	public final ScopeListElement nameScopesList;
+	final ScopeListElement nameScopesList;
 
 	/**
 	 * The list of scopes containing the "contentName" (besides "name") for this state.
 	 * This list **must** contain as an element `scopeName`.
 	 */
-	public final ScopeListElement contentNameScopesList;
+	final ScopeListElement contentNameScopesList;
 
 	StackElement(
 			@Nullable final StackElement parent,

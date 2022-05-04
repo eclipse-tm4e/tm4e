@@ -56,7 +56,7 @@ import org.eclipse.tm4e.core.theme.IThemeProvider;
  */
 public final class Grammar implements IGrammar, IRuleFactoryHelper {
 
-	private static final Logger LOGGER = System.getLogger(RuleFactory.class.getName());
+	private static final Logger LOGGER = System.getLogger(Grammar.class.getName());
 
 	private final String scopeName;
 

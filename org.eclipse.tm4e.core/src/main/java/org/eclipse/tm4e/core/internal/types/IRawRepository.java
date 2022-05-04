@@ -16,32 +16,26 @@
  */
 package org.eclipse.tm4e.core.internal.types;
 
-import java.util.Map;
-import java.util.Map.Entry;
-import java.util.Set;
-
 import org.eclipse.jdt.annotation.Nullable;
-import org.eclipse.tm4e.core.internal.grammar.Raw;
+import org.eclipse.tm4e.core.internal.grammar.RawRepository;
+import org.eclipse.tm4e.core.internal.parser.PropertySettable;
 
 public interface IRawRepository {
 
 	static IRawRepository merge(@Nullable IRawRepository... sources) {
-		final Raw merged = new Raw();
-		for (final IRawRepository source : sources) {
+		final RawRepository merged = new RawRepository();
+		for (final var source : sources) {
 			if (source == null)
 				continue;
-			final Set<Entry<String, @Nullable Object>> entries = source.entrySet();
-			for (final Entry<String, @Nullable Object> entry : entries) {
-				merged.put(entry.getKey(), entry.getValue());
-			}
+			source.putEntries(merged);
 		}
 		return merged;
 	}
 
-	Set<Map.Entry<String, @Nullable Object /*TODO IRawRule*/>> entrySet();
+	void putEntries(PropertySettable<IRawRule> target);
 
 	@Nullable
-	IRawRule getProp(String name);
+	IRawRule getRule(String name);
 
 	IRawRule getBase();
 

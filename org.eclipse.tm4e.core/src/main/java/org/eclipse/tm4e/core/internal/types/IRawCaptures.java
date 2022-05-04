@@ -1,5 +1,5 @@
 /**
- *  Copyright (c) 2015-2017 Angelo ZERR.
+ * Copyright (c) 2015-2017 Angelo ZERR.
  * This program and the accompanying materials are made
  * available under the terms of the Eclipse Public License 2.0
  * which is available at https://www.eclipse.org/legal/epl-2.0/
@@ -11,12 +11,14 @@
  * Initial license: MIT
  *
  * Contributors:
- *  - Microsoft Corporation: Initial code, written in TypeScript, licensed under MIT license
- *  - Angelo Zerr <angelo.zerr@gmail.com> - translation and adaptation to Java
+ * - Microsoft Corporation: Initial code, written in TypeScript, licensed under MIT license
+ * - Angelo Zerr <angelo.zerr@gmail.com> - translation and adaptation to Java
  */
 package org.eclipse.tm4e.core.internal.types;
 
-public interface IRawCaptures extends Iterable<String> {
+public interface IRawCaptures {
 
 	IRawRule getCapture(String captureId);
+
+	Iterable<String> getCaptureIds();
 }

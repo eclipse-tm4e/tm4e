@@ -29,7 +29,8 @@ import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.tm4e.core.grammar.IGrammar;
 import org.eclipse.tm4e.core.internal.grammar.BalancedBracketSelectors;
 import org.eclipse.tm4e.core.internal.grammar.Grammar;
-import org.eclipse.tm4e.core.internal.grammar.Raw;
+import org.eclipse.tm4e.core.internal.grammar.RawRepository;
+import org.eclipse.tm4e.core.internal.grammar.RawRule;
 import org.eclipse.tm4e.core.internal.types.IRawGrammar;
 import org.eclipse.tm4e.core.internal.types.IRawRepository;
 import org.eclipse.tm4e.core.internal.types.IRawRule;
@@ -129,13 +130,13 @@ public final class SyncRegistry implements IGrammarRepository, IThemeProvider {
 	}
 
 	private static void collectIncludedScopes(final Collection<String> result, final IRawGrammar grammar) {
-		final var grammarPattners = grammar.getPatterns();
-		if (grammarPattners != null) {
-			extractIncludedScopesInPatterns(result, grammarPattners);
+		final var grammarPatterns = grammar.getPatterns();
+		if (grammarPatterns != null) {
+			extractIncludedScopesInPatterns(result, grammarPatterns);
 		}
 
-		final IRawRepository repository = grammar.getRepository();
-		if (repository != null) {
+		if (grammar.isRepositorySet()) {
+			final IRawRepository repository = grammar.getRepository();
 			extractIncludedScopesInRepository(result, repository);
 		}
 
@@ -159,7 +160,7 @@ public final class SyncRegistry implements IGrammarRepository, IThemeProvider {
 				continue;
 			}
 
-			if (include.equals(Raw.DOLLAR_BASE) || include.equals(Raw.DOLLAR_SELF)) {
+			if (include.equals(RawRepository.DOLLAR_BASE) || include.equals(RawRepository.DOLLAR_SELF)) {
 				// Special includes that can be resolved locally in this grammar
 				continue;
 			}
@@ -189,10 +190,10 @@ public final class SyncRegistry implements IGrammarRepository, IThemeProvider {
 	 */
 	private static void extractIncludedScopesInRepository(final Collection<String> result,
 			final IRawRepository repository) {
-		if (!(repository instanceof Raw)) {
+		if (!(repository instanceof RawRule)) {
 			return;
 		}
-		final Raw rawRepository = (Raw) repository;
+		final RawRule rawRepository = (RawRule) repository;
 		for (final var entry : rawRepository.values()) {
 			final IRawRule rule = (IRawRule) castNonNull(entry);
 			final var patterns = rule.getPatterns();

@@ -12,12 +12,11 @@
  */
 package org.eclipse.tm4e.core.internal.parser;
 
-import java.util.Map;
+public interface PropertySettable<V> {
 
-import org.eclipse.jdt.annotation.Nullable;
+	public interface Factory<I> {
+		PropertySettable<?> create(I args);
+	}
 
-@FunctionalInterface
-public interface MapFactory {
-
-	Map<String, @Nullable Object> createMap();
+	void setProperty(String name, V value);
 }

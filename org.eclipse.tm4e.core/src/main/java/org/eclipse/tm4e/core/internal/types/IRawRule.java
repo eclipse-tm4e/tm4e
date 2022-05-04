@@ -30,12 +30,8 @@ public interface IRawRule {
 	@Nullable
 	String getInclude();
 
-	void setInclude(@Nullable String include);
-
 	@Nullable
 	String getName();
-
-	void setName(String name);
 
 	@Nullable
 	String getContentName();
@@ -52,8 +48,6 @@ public interface IRawRule {
 	@Nullable
 	IRawCaptures getBeginCaptures();
 
-	void setBeginCaptures(@Nullable IRawCaptures beginCaptures);
-
 	@Nullable
 	String getEnd();
 
@@ -69,12 +63,8 @@ public interface IRawRule {
 	@Nullable
 	Collection<IRawRule> getPatterns();
 
-	void setPatterns(@Nullable Collection<IRawRule> patterns);
-
 	@Nullable
 	IRawRepository getRepository();
-
-	void setRepository(@Nullable IRawRepository repository);
 
 	boolean isApplyEndPatternLast();
 }

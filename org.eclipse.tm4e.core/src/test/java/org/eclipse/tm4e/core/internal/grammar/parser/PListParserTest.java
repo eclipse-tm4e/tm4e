@@ -14,18 +14,19 @@ package org.eclipse.tm4e.core.internal.grammar.parser;
 import static org.junit.jupiter.api.Assertions.*;
 
 import org.eclipse.tm4e.core.Data;
-import org.eclipse.tm4e.core.internal.grammar.Raw;
+import org.eclipse.tm4e.core.internal.grammar.RawGrammar;
+import org.eclipse.tm4e.core.internal.grammar.reader.GrammarReader;
+import org.eclipse.tm4e.core.internal.parser.PListParser;
 import org.eclipse.tm4e.core.internal.parser.PListParserJSON;
 import org.eclipse.tm4e.core.internal.parser.PListParserXML;
 import org.eclipse.tm4e.core.internal.parser.PListParserYAML;
-import org.eclipse.tm4e.core.internal.types.IRawGrammar;
 import org.junit.jupiter.api.Test;
 
 public class PListParserTest {
 
 	@Test
 	void testParseJSONPList() throws Exception {
-		final var parser = new PListParserJSON<IRawGrammar>(Raw::new);
+		final PListParser<RawGrammar> parser = new PListParserJSON<>(GrammarReader.OBJECT_FACTORY);
 		try (final var is = Data.class.getResourceAsStream("csharp.json")) {
 			final var grammar = parser.parse(is);
 			assertNotNull(grammar);
@@ -36,7 +37,7 @@ public class PListParserTest {
 
 	@Test
 	void testParseYAMLPlist() throws Exception {
-		final var parser = new PListParserYAML<IRawGrammar>(Raw::new);
+		final PListParser<RawGrammar> parser = new PListParserYAML<>(GrammarReader.OBJECT_FACTORY);
 		try (final var is = Data.class.getResourceAsStream("JavaScript.tmLanguage.yaml")) {
 			final var grammar = parser.parse(is);
 			assertNotNull(grammar);
@@ -47,7 +48,7 @@ public class PListParserTest {
 
 	@Test
 	void testParseXMLPlist() throws Exception {
-		final var parser = new PListParserXML<IRawGrammar>(Raw::new);
+		final PListParser<RawGrammar> parser = new PListParserXML<>(GrammarReader.OBJECT_FACTORY);
 		try (final var is = Data.class.getResourceAsStream("JavaScript.tmLanguage")) {
 			final var grammar = parser.parse(is);
 			assertNotNull(grammar);

@@ -22,18 +22,19 @@ import com.google.gson.stream.JsonReader;
 
 public final class PListParserJSON<T> implements PListParser<T> {
 
-	private final MapFactory mapFactory;
+	private final PropertySettable.Factory<PListPath> objectFactory;
 
-	public PListParserJSON(final MapFactory mapFactory) {
-		this.mapFactory = mapFactory;
+	public PListParserJSON(final PropertySettable.Factory<PListPath> objectFactory) {
+		this.objectFactory = objectFactory;
 	}
 
 	@Override
 	public T parse(final InputStream contents) throws IOException, SAXException {
-		final var pList = new PListParserContentHandler<T>(mapFactory);
+		final var pList = new PListContentHandler<T>(objectFactory);
 		try (final var reader = new JsonReader(new InputStreamReader(contents, StandardCharsets.UTF_8))) {
 			// reader.setLenient(true);
 			boolean parsing = true;
+			pList.startElement(null, "plist", null, null);
 			while (parsing) {
 				final var nextToken = reader.peek();
 				switch (nextToken) {
@@ -79,6 +80,7 @@ public final class PListParserJSON<T> implements PListParser<T> {
 					break;
 				}
 			}
+			pList.endElement(null, "plist", null);
 		}
 		return pList.getResult();
 	}

@@ -1,5 +1,5 @@
 /**
- *  Copyright (c) 2015-2017 Angelo ZERR.
+ * Copyright (c) 2015-2017 Angelo ZERR.
  * This program and the accompanying materials are made
  * available under the terms of the Eclipse Public License 2.0
  * which is available at https://www.eclipse.org/legal/epl-2.0/
@@ -11,8 +11,8 @@
  * Initial license: MIT
  *
  * Contributors:
- *  - Microsoft Corporation: Initial code, written in TypeScript, licensed under MIT license
- *  - Angelo Zerr <angelo.zerr@gmail.com> - translation and adaptation to Java
+ * - Microsoft Corporation: Initial code, written in TypeScript, licensed under MIT license
+ * - Angelo Zerr <angelo.zerr@gmail.com> - translation and adaptation to Java
  */
 package org.eclipse.tm4e.core.internal.types;
 
@@ -28,16 +28,14 @@ import org.eclipse.jdt.annotation.Nullable;
  */
 public interface IRawGrammar {
 
-	IRawGrammar clone();
+	IRawGrammar deepClone();
 
-	@Nullable
+	boolean isRepositorySet();
 	IRawRepository getRepository();
-
-	IRawRepository getRepositorySafe();
 
 	String getScopeName();
 
-	@Nullable
+	@Nullable // TODO non-null in upstream project
 	Collection<IRawRule> getPatterns();
 
 	@Nullable
@@ -53,4 +51,9 @@ public interface IRawGrammar {
 
 	@Nullable
 	String getFirstLineMatch();
+
+	void setRepository(IRawRepository repository);
+
+	IRawRule toRawRule();
+
 }

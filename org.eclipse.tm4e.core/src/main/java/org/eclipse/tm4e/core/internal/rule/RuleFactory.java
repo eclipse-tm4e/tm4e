@@ -16,9 +16,8 @@
  */
 package org.eclipse.tm4e.core.internal.rule;
 
-import static org.eclipse.tm4e.core.internal.utils.NullSafetyHelper.*;
-
 import static java.lang.System.Logger.Level.*;
+import static org.eclipse.tm4e.core.internal.utils.NullSafetyHelper.*;
 
 import java.lang.System.Logger;
 import java.util.ArrayList;
@@ -27,7 +26,8 @@ import java.util.Collections;
 import java.util.List;
 
 import org.eclipse.jdt.annotation.Nullable;
-import org.eclipse.tm4e.core.internal.grammar.Raw;
+import org.eclipse.tm4e.core.internal.grammar.RawRepository;
+import org.eclipse.tm4e.core.internal.grammar.RawRule;
 import org.eclipse.tm4e.core.internal.types.IRawCaptures;
 import org.eclipse.tm4e.core.internal.types.IRawGrammar;
 import org.eclipse.tm4e.core.internal.types.IRawRepository;
@@ -66,7 +66,7 @@ public final class RuleFactory {
 							: IRawRepository.merge(repository, desc.getRepository());
 					var patterns = desc.getPatterns();
 					if (patterns == null && desc.getInclude() != null) {
-						final var includeRule = new Raw();
+						final var includeRule = new RawRule();
 						includeRule.setInclude(desc.getInclude());
 						patterns = List.of(includeRule);
 					}
@@ -120,7 +120,7 @@ public final class RuleFactory {
 
 		// Find the maximum capture id
 		int maximumCaptureId = 0;
-		for (final String captureId : captures) {
+		for (final String captureId : captures.getCaptureIds()) {
 			final int numericCaptureId = parseInt(captureId, 10);
 			if (numericCaptureId > maximumCaptureId) {
 				maximumCaptureId = numericCaptureId;
@@ -134,7 +134,7 @@ public final class RuleFactory {
 		}
 
 		// Fill out result
-		for (String captureId : captures) {
+		for (String captureId : captures.getCaptureIds()) {
 			final int numericCaptureId = parseInt(captureId, 10);
 			final IRawRule rule = captures.getCapture(captureId);
 			final Integer retokenizeCapturedWithRuleId = rule.getPatterns() == null
@@ -169,16 +169,18 @@ public final class RuleFactory {
 			} else {
 				if (patternInclude.charAt(0) == '#') {
 					// Local include found in `repository`
-					final IRawRule localIncludedRule = repository.getProp(patternInclude.substring(1));
+					final IRawRule localIncludedRule = repository.getRule(patternInclude.substring(1));
 					if (localIncludedRule != null) {
 						patternId = getCompiledRuleId(localIncludedRule, helper, repository);
 					} else if (LOGGER.isLoggable(DEBUG)) {
 						LOGGER.log(DEBUG, "CANNOT find rule for scopeName: %s, I am: %s",
 								patternInclude, repository.getBase().getName());
 					}
-				} else if (patternInclude.equals(Raw.DOLLAR_BASE)) { // Special include also found in `repository`
+				} else if (patternInclude.equals(RawRepository.DOLLAR_BASE)) { // Special include also found in
+																				 // `repository`
 					patternId = getCompiledRuleId(repository.getBase(), helper, repository);
-				} else if (patternInclude.equals(Raw.DOLLAR_SELF)) { // Special include also found in `repository`
+				} else if (patternInclude.equals(RawRepository.DOLLAR_SELF)) { // Special include also found in
+																				 // `repository`
 					patternId = getCompiledRuleId(repository.getSelf(), helper, repository);
 				} else {
 					final String externalGrammarName;
@@ -195,9 +197,9 @@ public final class RuleFactory {
 					// External include
 					final IRawGrammar externalGrammar = helper.getExternalGrammar(externalGrammarName, repository);
 					if (externalGrammar != null) {
-						final var externalGrammarRepo = externalGrammar.getRepositorySafe();
+						final var externalGrammarRepo = externalGrammar.getRepository();
 						if (externalGrammarInclude != null) {
-							final IRawRule externalIncludedRule = externalGrammarRepo.getProp(externalGrammarInclude);
+							final IRawRule externalIncludedRule = externalGrammarRepo.getRule(externalGrammarInclude);
 							if (externalIncludedRule != null) {
 								patternId = getCompiledRuleId(externalIncludedRule, helper, externalGrammarRepo);
 							} else if (LOGGER.isLoggable(DEBUG)) {

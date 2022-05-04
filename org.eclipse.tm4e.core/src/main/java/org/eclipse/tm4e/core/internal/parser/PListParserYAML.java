@@ -12,7 +12,8 @@
  */
 package org.eclipse.tm4e.core.internal.parser;
 
-import static org.eclipse.tm4e.core.internal.utils.NullSafetyHelper.castNonNull;
+import static org.eclipse.tm4e.core.internal.utils.NullSafetyHelper.*;
+
 import java.io.InputStream;
 import java.util.List;
 import java.util.Map;
@@ -27,14 +28,14 @@ import org.yaml.snakeyaml.error.YAMLException;
  */
 public final class PListParserYAML<T> implements PListParser<T> {
 
-	private final MapFactory mapFactory;
+	private final PropertySettable.Factory<PListPath> objectFactory;
 
-	public PListParserYAML(final MapFactory mapFactory) {
-		this.mapFactory = mapFactory;
+	public PListParserYAML(final PropertySettable.Factory<PListPath> objectFactory) {
+		this.objectFactory = objectFactory;
 	}
 
 	@SuppressWarnings("unchecked")
-	private void addListToPList(final PListParserContentHandler<T> pList, final List<Object> list) throws SAXException {
+	private void addListToPList(final PListContentHandler<T> pList, final List<Object> list) throws SAXException {
 		pList.startElement(null, "array", null, null);
 
 		for (final Object item : list) {
@@ -51,7 +52,7 @@ public final class PListParserYAML<T> implements PListParser<T> {
 	}
 
 	@SuppressWarnings("unchecked")
-	private void addMapToPList(final PListParserContentHandler<T> pList, final Map<String, Object> map)
+	private void addMapToPList(final PListContentHandler<T> pList, final Map<String, Object> map)
 			throws SAXException {
 		pList.startElement(null, "dict", null, null);
 
@@ -71,7 +72,7 @@ public final class PListParserYAML<T> implements PListParser<T> {
 		pList.endElement(null, "dict", null);
 	}
 
-	private void addStringToPList(final PListParserContentHandler<T> pList, final String value) throws SAXException {
+	private void addStringToPList(final PListContentHandler<T> pList, final String value) throws SAXException {
 		pList.startElement(null, "string", null, null);
 		pList.characters(value);
 		pList.endElement(null, "string", null);
@@ -79,8 +80,10 @@ public final class PListParserYAML<T> implements PListParser<T> {
 
 	@Override
 	public T parse(final InputStream contents) throws SAXException, YAMLException {
-		final var pList = new PListParserContentHandler<T>(mapFactory);
+		final var pList = new PListContentHandler<T>(objectFactory);
+		pList.startElement(null, "plist", null, null);
 		addMapToPList(pList, new Yaml().loadAs(contents, Map.class));
+		pList.endElement(null, "plist", null);
 		return pList.getResult();
 	}
 }

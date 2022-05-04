@@ -18,6 +18,8 @@ package org.eclipse.tm4e.core.internal.theme.reader;
 
 import java.io.InputStream;
 
+import org.eclipse.tm4e.core.internal.parser.PListPath;
+import org.eclipse.tm4e.core.internal.parser.PropertySettable;
 import org.eclipse.tm4e.core.internal.parser.PListParser;
 import org.eclipse.tm4e.core.internal.parser.PListParserJSON;
 import org.eclipse.tm4e.core.internal.parser.PListParserXML;
@@ -31,22 +33,18 @@ import org.eclipse.tm4e.core.theme.IRawTheme;
  */
 public final class ThemeReader {
 
-	/**
-	 * Helper class, use methods statically
-	 */
-	private ThemeReader() {
-	}
+	private static final PropertySettable.Factory<PListPath> OBJECT_FACTORY = path -> new ThemeRaw();
 
-	private static final PListParserJSON<IRawTheme> JSON_PARSER = new PListParserJSON<>(ThemeRaw::new);
-	private static final PListParserYAML<IRawTheme> YAML_PARSER = new PListParserYAML<>(ThemeRaw::new);
-	private static final PListParserXML<IRawTheme> XML_PARSER = new PListParserXML<>(ThemeRaw::new);
+	private static final PListParserJSON<ThemeRaw> JSON_PARSER = new PListParserJSON<>(OBJECT_FACTORY);
+	private static final PListParserYAML<ThemeRaw> YAML_PARSER = new PListParserYAML<>(OBJECT_FACTORY);
+	private static final PListParserXML<ThemeRaw> XML_PARSER = new PListParserXML<>(OBJECT_FACTORY);
 
 	public static IRawTheme readThemeSync(final String filePath, final InputStream in) throws Exception {
 		final var reader = new SyncThemeReader(in, getThemeParser(filePath));
 		return reader.load();
 	}
 
-	private static PListParser<IRawTheme> getThemeParser(final String filePath) {
+	private static PListParser<ThemeRaw> getThemeParser(final String filePath) {
 		String extension = filePath.substring(filePath.lastIndexOf('.') + 1).trim().toLowerCase();
 
 		switch (extension) {
@@ -61,5 +59,11 @@ public final class ThemeReader {
 		default:
 			return XML_PARSER;
 		}
+	}
+
+	/**
+	 * Helper class, use methods statically
+	 */
+	private ThemeReader() {
 	}
 }

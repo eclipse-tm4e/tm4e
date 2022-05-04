@@ -15,12 +15,13 @@ import java.util.Collection;
 import java.util.HashMap;
 
 import org.eclipse.jdt.annotation.Nullable;
+import org.eclipse.tm4e.core.internal.parser.PropertySettable;
 import org.eclipse.tm4e.core.theme.IRawTheme;
 import org.eclipse.tm4e.core.theme.IRawThemeSetting;
 import org.eclipse.tm4e.core.theme.IThemeSetting;
 
 public final class ThemeRaw extends HashMap<String, @Nullable Object>
-		implements IRawTheme, IRawThemeSetting, IThemeSetting {
+		implements IRawTheme, IRawThemeSetting, IThemeSetting, PropertySettable<Object> {
 
 	private static final long serialVersionUID = 1L;
 
@@ -65,5 +66,10 @@ public final class ThemeRaw extends HashMap<String, @Nullable Object>
 	@Override
 	public String getForeground() {
 		return (String) super.get("foreground");
+	}
+
+	@Override
+	public void setProperty(String name, Object value) {
+		put(name, value);
 	}
 }

@@ -24,9 +24,9 @@ import org.eclipse.tm4e.core.theme.IRawTheme;
 final class SyncThemeReader {
 
 	private final InputStream in;
-	private final PListParser<IRawTheme> parser;
+	private final PListParser<? extends IRawTheme> parser;
 
-	SyncThemeReader(final InputStream in, final PListParser<IRawTheme> parser) {
+	SyncThemeReader(final InputStream in, final PListParser<? extends IRawTheme> parser) {
 		this.in = in;
 		this.parser = parser;
 	}

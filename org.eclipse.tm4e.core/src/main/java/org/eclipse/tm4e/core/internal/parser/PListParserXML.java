@@ -25,10 +25,10 @@ import org.xml.sax.XMLReader;
 
 public final class PListParserXML<T> implements PListParser<T> {
 
-	private final MapFactory mapFactory;
+	private final PropertySettable.Factory<PListPath> objectFactory;
 
-	public PListParserXML(final MapFactory mapFactory) {
-		this.mapFactory = mapFactory;
+	public PListParserXML(final PropertySettable.Factory<PListPath> objectFactory) {
+		this.objectFactory = objectFactory;
 	}
 
 	@Override
@@ -49,7 +49,7 @@ public final class PListParserXML<T> implements PListParser<T> {
 		final XMLReader xmlReader = saxParser.getXMLReader();
 		xmlReader.setEntityResolver((publicId, systemId) -> new InputSource(
 				new ByteArrayInputStream("<?xml version='1.0' encoding='UTF-8'?>".getBytes())));
-		final var result = new PListParserContentHandler<T>(mapFactory);
+		final var result = new PListContentHandler<T>(objectFactory);
 		xmlReader.setContentHandler(result);
 		xmlReader.parse(new InputSource(contents));
 		return result.getResult();

@@ -120,7 +120,7 @@ public final class Grammar implements IGrammar, IRuleFactoryHelper {
 	private void collectInjections(final List<Injection> result, final String selector, final IRawRule rule,
 			final IRuleFactoryHelper ruleFactoryHelper, final IRawGrammar grammar) {
 		final var matchers = Matcher.createMatchers(selector);
-		final int ruleId = RuleFactory.getCompiledRuleId(rule, ruleFactoryHelper, this.grammar.getRepositorySafe());
+		final int ruleId = RuleFactory.getCompiledRuleId(rule, ruleFactoryHelper, this.grammar.getRepository());
 
 		for (final var matcher : matchers) {
 			result.add(new Injection(selector, matcher.matcher, ruleId, grammar, matcher.priority));
@@ -173,7 +173,7 @@ public final class Grammar implements IGrammar, IRuleFactoryHelper {
 					if (injectionGrammar != null) {
 						final var selector = injectionGrammar.getInjectionSelector();
 						if (selector != null) {
-							collectInjections(result, selector, (IRawRule) injectionGrammar, this,
+							collectInjections(result, selector, injectionGrammar.toRawRule(), this,
 									injectionGrammar);
 						}
 					}
@@ -237,13 +237,17 @@ public final class Grammar implements IGrammar, IRuleFactoryHelper {
 	}
 
 	private IRawGrammar initGrammar(IRawGrammar grammar, @Nullable final IRawRule base) {
-		grammar = grammar.clone();
-		var repo = grammar.getRepository();
-		if (repo == null) {
-			repo = new Raw();
-			((IRawRule) grammar).setRepository(repo);
+		grammar = grammar.deepClone();
+
+		final IRawRepository repo;
+		if (grammar.isRepositorySet()) {
+			repo = grammar.getRepository();
+		} else {
+			repo = new RawRepository();
+			grammar.setRepository(repo);
 		}
-		final var self = new Raw();
+
+		final var self = new RawRule();
 		self.setPatterns(grammar.getPatterns());
 		self.setName(grammar.getScopeName());
 		repo.setSelf(self);
@@ -274,8 +278,8 @@ public final class Grammar implements IGrammar, IRuleFactoryHelper {
 	@SuppressWarnings("unchecked")
 	private <T> T tokenize(String lineText, @Nullable StackElement prevState, final boolean emitBinaryTokens) {
 		if (this.rootId == -1) {
-			this.rootId = RuleFactory.getCompiledRuleId(this.grammar.getRepositorySafe().getSelf(), this,
-					this.grammar.getRepositorySafe());
+			this.rootId = RuleFactory.getCompiledRuleId(this.grammar.getRepository().getSelf(), this,
+					this.grammar.getRepository());
 		}
 
 		boolean isFirstLine;
@@ -309,7 +313,8 @@ public final class Grammar implements IGrammar, IRuleFactoryHelper {
 		final var onigLineText = OnigString.of(lineText);
 		final int lineLength = lineText.length();
 		final var lineTokens = new LineTokens(emitBinaryTokens, lineText, tokenTypeMatchers, balancedBracketSelectors);
-		final var nextState = LineTokenizer.tokenizeString(this, onigLineText, isFirstLine, 0, prevState, lineTokens, true);
+		final var nextState = LineTokenizer.tokenizeString(this, onigLineText, isFirstLine, 0, prevState, lineTokens,
+				true);
 
 		if (emitBinaryTokens) {
 			return (T) new TokenizeLineResult2(lineTokens.getBinaryResult(nextState, lineLength), nextState);

@@ -18,11 +18,16 @@ package org.eclipse.tm4e.core.internal.grammar.reader;
 
 import java.io.InputStream;
 
-import org.eclipse.tm4e.core.internal.grammar.Raw;
+import org.eclipse.tm4e.core.internal.grammar.RawRule;
+import org.eclipse.tm4e.core.internal.grammar.RawCaptures;
+import org.eclipse.tm4e.core.internal.grammar.RawGrammar;
+import org.eclipse.tm4e.core.internal.grammar.RawRepository;
 import org.eclipse.tm4e.core.internal.parser.PListParser;
 import org.eclipse.tm4e.core.internal.parser.PListParserJSON;
 import org.eclipse.tm4e.core.internal.parser.PListParserXML;
 import org.eclipse.tm4e.core.internal.parser.PListParserYAML;
+import org.eclipse.tm4e.core.internal.parser.PListPath;
+import org.eclipse.tm4e.core.internal.parser.PropertySettable;
 import org.eclipse.tm4e.core.internal.types.IRawGrammar;
 
 /**
@@ -30,21 +35,31 @@ import org.eclipse.tm4e.core.internal.types.IRawGrammar;
  */
 public final class GrammarReader {
 
-	/**
-	 * methods should be accessed statically
-	 */
-	private GrammarReader() {
-	}
+	public static final PropertySettable.Factory<PListPath> OBJECT_FACTORY = path -> {
+		if (path.size() == 0) {
+			return new RawGrammar();
+		}
+		switch (path.last()) {
+		case RawRule.REPOSITORY:
+			return new RawRepository();
+		case RawRule.BEGIN_CAPTURES:
+		case RawRule.CAPTURES:
+		case RawRule.END_CAPTURES:
+		case RawRule.WHILE_CAPTURES:
+			return new RawCaptures();
+		}
+		return new RawRule();
+	};
 
-	private static final PListParser<IRawGrammar> JSON_PARSER = new PListParserJSON<>(Raw::new);
-	private static final PListParser<IRawGrammar> XML_PARSER = new PListParserXML<>(Raw::new);
-	private static final PListParser<IRawGrammar> YAML_PARSER = new PListParserYAML<>(Raw::new);
+	private static final PListParser<RawGrammar> JSON_PARSER = new PListParserJSON<>(OBJECT_FACTORY);
+	private static final PListParser<RawGrammar> XML_PARSER = new PListParserXML<>(OBJECT_FACTORY);
+	private static final PListParser<RawGrammar> YAML_PARSER = new PListParserYAML<>(OBJECT_FACTORY);
 
 	public static IRawGrammar readGrammarSync(final String filePath, final InputStream in) throws Exception {
 		return getGrammarParser(filePath).parse(in);
 	}
 
-	private static PListParser<IRawGrammar> getGrammarParser(final String filePath) {
+	private static PListParser<RawGrammar> getGrammarParser(final String filePath) {
 		String extension = filePath.substring(filePath.lastIndexOf('.') + 1).trim().toLowerCase();
 
 		switch (extension) {
@@ -60,5 +75,11 @@ public final class GrammarReader {
 		default:
 			return XML_PARSER;
 		}
+	}
+
+	/**
+	 * methods should be accessed statically
+	 */
+	private GrammarReader() {
 	}
 }

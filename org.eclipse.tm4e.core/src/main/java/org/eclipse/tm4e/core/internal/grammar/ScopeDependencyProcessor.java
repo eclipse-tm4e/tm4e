@@ -173,11 +173,11 @@ class ScopeDependencyProcessor {
 	void collectSpecificDependencies(final ScopeDependencyCollector result, final IRawGrammar baseGrammar,
 			final IRawGrammar selfGrammar,
 			final String include, @Nullable IRawRepository repository) {
-		if (repository == null) {
+		if (repository == null && selfGrammar.isRepositorySet()) {
 			repository = selfGrammar.getRepository();
 		}
 		if (repository != null) {
-			final var rule = repository.getProp(include);
+			final var rule = repository.getRule(include);
 			if (rule != null) {
 				extractIncludedScopesInPatterns(result, baseGrammar, selfGrammar, List.of(rule), repository);
 			}
@@ -228,9 +228,9 @@ class ScopeDependencyProcessor {
 				continue;
 			}
 
-			if (include.equals(Raw.DOLLAR_BASE) || include.equals(baseGrammar.getScopeName())) {
+			if (include.equals(RawRepository.DOLLAR_BASE) || include.equals(baseGrammar.getScopeName())) {
 				collectDependencies(result, baseGrammar, baseGrammar);
-			} else if (include.equals(Raw.DOLLAR_SELF) || include.equals(selfGrammar.getScopeName())) {
+			} else if (include.equals(RawRepository.DOLLAR_SELF) || include.equals(selfGrammar.getScopeName())) {
 				collectDependencies(result, baseGrammar, selfGrammar);
 			} else if (include.charAt(0) == '#') {
 				collectSpecificDependencies(result, baseGrammar, selfGrammar, include.substring(1), patternRepository);

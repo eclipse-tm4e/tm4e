@@ -11,6 +11,8 @@
  */
 package org.eclipse.tm4e.registry;
 
+import org.eclipse.jdt.annotation.Nullable;
+
 /**
  * TextMate definition API.
  *
@@ -19,9 +21,10 @@ public interface ITMDefinition {
 
 	/**
 	 * Returns the plugin id which has registered the TextMate resource.
-	 * 
+	 *
 	 * @return the plugin id which has registered the TextMate resource.
 	 */
+	@Nullable
 	String getPluginId();
 
 }

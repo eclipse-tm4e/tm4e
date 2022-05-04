@@ -14,8 +14,8 @@ package org.eclipse.tm4e.registry.internal;
 import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.core.runtime.content.IContentType;
-import org.eclipse.core.runtime.preferences.IEclipsePreferences;
 import org.eclipse.core.runtime.preferences.InstanceScope;
+import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.tm4e.registry.GrammarDefinition;
 import org.eclipse.tm4e.registry.IGrammarDefinition;
 import org.eclipse.tm4e.registry.TMEclipseRegistryPlugin;
@@ -31,6 +31,7 @@ public final class GrammarRegistryManager extends AbstractGrammarRegistryManager
 
 	private static final String EXTENSION_GRAMMARS = "grammars";
 
+	@Nullable
 	private static GrammarRegistryManager INSTANCE;
 
 	public static GrammarRegistryManager getInstance() {
@@ -98,8 +99,8 @@ public final class GrammarRegistryManager extends AbstractGrammarRegistryManager
 	private void loadGrammarsFromPreferences() {
 		// Load grammar definitions from the
 		// "${workspace_loc}/metadata/.plugins/org.eclipse.core.runtime/.settings/org.eclipse.tm4e.registry.prefs"
-		final IEclipsePreferences prefs = InstanceScope.INSTANCE.getNode(TMEclipseRegistryPlugin.PLUGIN_ID);
-		final String json = prefs.get(PreferenceConstants.GRAMMARS, null);
+		final var prefs = InstanceScope.INSTANCE.getNode(TMEclipseRegistryPlugin.PLUGIN_ID);
+		final var json = prefs.get(PreferenceConstants.GRAMMARS, null);
 		if (json != null) {
 			final IGrammarDefinition[] definitions = PreferenceHelper.loadGrammars(json);
 			for (final IGrammarDefinition definition : definitions) {
@@ -112,10 +113,9 @@ public final class GrammarRegistryManager extends AbstractGrammarRegistryManager
 	public void save() throws BackingStoreException {
 		// Save grammar definitions in the
 		// "${workspace_loc}/metadata/.plugins/org.eclipse.core.runtime/.settings/org.eclipse.tm4e.registry.prefs"
-		final String json = PreferenceHelper.toJson(userCache.getDefinitions());
-		final IEclipsePreferences prefs = InstanceScope.INSTANCE.getNode(TMEclipseRegistryPlugin.PLUGIN_ID);
+		final var json = PreferenceHelper.toJson(userCache.getDefinitions());
+		final var prefs = InstanceScope.INSTANCE.getNode(TMEclipseRegistryPlugin.PLUGIN_ID);
 		prefs.put(PreferenceConstants.GRAMMARS, json);
 		prefs.flush();
 	}
-
 }

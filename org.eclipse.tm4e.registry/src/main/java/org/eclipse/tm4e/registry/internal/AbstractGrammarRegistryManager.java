@@ -1,14 +1,14 @@
 /**
- *  Copyright (c) 2015-2019 Angelo ZERR.
+ * Copyright (c) 2015-2019 Angelo ZERR.
  * This program and the accompanying materials are made
  * available under the terms of the Eclipse Public License 2.0
  * which is available at https://www.eclipse.org/legal/epl-2.0/
  *
  * SPDX-License-Identifier: EPL-2.0
  *
- *  Contributors:
- *  Angelo Zerr <angelo.zerr@gmail.com> - initial API and implementation
- *  Pierre-Yves B. - Issue #221 NullPointerException when retrieving fileTypes
+ * Contributors:
+ * Angelo Zerr <angelo.zerr@gmail.com> - initial API and implementation
+ * Pierre-Yves B. - Issue #221 NullPointerException when retrieving fileTypes
  */
 package org.eclipse.tm4e.registry.internal;
 
@@ -19,6 +19,7 @@ import java.util.Collection;
 import java.util.List;
 
 import org.eclipse.core.runtime.content.IContentType;
+import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.tm4e.core.grammar.IGrammar;
 import org.eclipse.tm4e.core.registry.IRegistryOptions;
 import org.eclipse.tm4e.core.registry.Registry;
@@ -32,31 +33,52 @@ import org.eclipse.tm4e.registry.IGrammarRegistryManager;
 public abstract class AbstractGrammarRegistryManager extends Registry implements IGrammarRegistryManager {
 
 	private final GrammarCache pluginCache;
-	protected final GrammarCache userCache;
+	final GrammarCache userCache;
 
 	private static final class EclipseRegistryOptions implements IRegistryOptions {
 
+		@Nullable
 		private AbstractGrammarRegistryManager registry;
 
 		private void setRegistry(final AbstractGrammarRegistryManager registry) {
 			this.registry = registry;
 		}
 
+		@Nullable
 		@Override
 		public Collection<String> getInjections(final String scopeName) {
+			final var registry = this.registry;
+			if (registry == null) {
+				return null;
+			}
 			return registry.getInjections(scopeName);
 		}
 
+		@Nullable
 		@Override
 		public String getFilePath(final String scopeName) {
-			final IGrammarDefinition info = registry.getDefinition(scopeName);
+			final IGrammarDefinition info = getDefinition(scopeName);
 			return info != null ? info.getPath() : null;
 		}
 
+		@Nullable
 		@Override
 		public InputStream getInputStream(final String scopeName) throws IOException {
-			final IGrammarDefinition info = registry.getDefinition(scopeName);
+			final IGrammarDefinition info = getDefinition(scopeName);
 			return info != null ? info.getInputStream() : null;
+		}
+
+		@Nullable
+		private IGrammarDefinition getDefinition(final String scopeName) {
+			final var registry = this.registry;
+			if (registry == null) {
+				return null;
+			}
+			final IGrammarDefinition definition = registry.userCache.getDefinition(scopeName);
+			if (definition != null) {
+				return definition;
+			}
+			return registry.pluginCache.getDefinition(scopeName);
 		}
 	}
 
@@ -71,8 +93,9 @@ public abstract class AbstractGrammarRegistryManager extends Registry implements
 		this.userCache = new GrammarCache();
 	}
 
+	@Nullable
 	@Override
-	public IGrammar getGrammarFor(final IContentType[] contentTypes) {
+	public IGrammar getGrammarFor(final IContentType @Nullable [] contentTypes) {
 		if (contentTypes == null) {
 			return null;
 		}
@@ -89,18 +112,20 @@ public abstract class AbstractGrammarRegistryManager extends Registry implements
 		return null;
 	}
 
+	@Nullable
 	@Override
 	public IGrammar getGrammarForScope(final String scopeName) {
 		return getGrammar(scopeName);
 	}
 
+	@Nullable
 	@Override
 	public IGrammar getGrammarForFileType(String fileType) {
 		// TODO: cache grammar by file types
 		final IGrammarDefinition[] definitions = getDefinitions();
 		// #202
-		if(fileType.startsWith(".")) {
-			fileType=fileType.substring(1);
+		if (fileType.startsWith(".")) {
+			fileType = fileType.substring(1);
 		}
 		for (final IGrammarDefinition definition : definitions) {
 			// Not very optimized because it forces the load of the whole
@@ -118,11 +143,7 @@ public abstract class AbstractGrammarRegistryManager extends Registry implements
 		return null;
 	}
 
-	/**
-	 * Returns the whole registered grammar definition.
-	 *
-	 * @return
-	 */
+	@Nullable
 	@Override
 	public IGrammarDefinition[] getDefinitions() {
 		final Collection<IGrammarDefinition> pluginDefinitions = pluginCache.getDefinitions();
@@ -133,14 +154,12 @@ public abstract class AbstractGrammarRegistryManager extends Registry implements
 	}
 
 	/**
-	 * Returns the loaded grammar from the given <code>scopeName</code> and null
-	 * otherwise.
+	 * Returns the loaded grammar from the given <code>scopeName</code> and null otherwise.
 	 *
-	 * @param scopeName
-	 * @return the loaded grammar from the given <code>scopeName</code> and null
-	 *         otherwise.
+	 * @return the loaded grammar from the given <code>scopeName</code> and null otherwise.
 	 */
-	private IGrammar getGrammar(final String scopeName) {
+	@Nullable
+	private IGrammar getGrammar(@Nullable final String scopeName) {
 		if (scopeName == null) {
 			return null;
 		}
@@ -151,52 +170,24 @@ public abstract class AbstractGrammarRegistryManager extends Registry implements
 		return super.loadGrammar(scopeName);
 	}
 
-	/**
-	 * Returns the grammar definition from the given <code>scopeName</code> and
-	 * null otherwise.
-	 *
-	 * @param scopeName
-	 * @return the grammar definition from the given <code>scopeName</code> and
-	 *         null otherwise.
-	 */
-	private IGrammarDefinition getDefinition(final String scopeName) {
-		final IGrammarDefinition definition = userCache.getDefinition(scopeName);
-		if (definition != null) {
-			return definition;
-		}
-		return pluginCache.getDefinition(scopeName);
-	}
-
-	/**
-	 * Returns list of scope names to inject for the given
-	 * <code>scopeName</code> and null otheriwse.
-	 *
-	 * @param scopeName
-	 * @return list of scope names to inject for the given
-	 *         <code>scopeName</code> and null otheriwse.
-	 */
+	@Nullable
 	@Override
 	public Collection<String> getInjections(final String scopeName) {
 		return pluginCache.getInjections(scopeName);
 	}
 
 	/**
-	 * Register the given <code>scopeName</code> to inject to the given scope
-	 * name <code>injectTo</code>.
-	 *
-	 * @param scopeName
-	 * @param injectTo
+	 * Register the given <code>scopeName</code> to inject to the given scope name <code>injectTo</code>.
 	 */
 	protected void registerInjection(final String scopeName, final String injectTo) {
 		pluginCache.registerInjection(scopeName, injectTo);
 	}
 
 	/**
-	 * @param contentType
-	 * @return scope name bound with the given content type (or its base type) and
-	 *         <code>null</code> otherwise.
+	 * @return scope name bound with the given content type (or its base type) and <code>null</code> otherwise.
 	 */
-	private String getScopeNameForContentType(IContentType contentType) {
+	@Nullable
+	private String getScopeNameForContentType(@Nullable IContentType contentType) {
 		while (contentType != null) {
 			final String scopeName = pluginCache.getScopeNameForContentType(contentType);
 			if (scopeName != null) {
@@ -207,6 +198,7 @@ public abstract class AbstractGrammarRegistryManager extends Registry implements
 		return null;
 	}
 
+	@Nullable
 	@Override
 	public List<IContentType> getContentTypesForScope(final String scopeName) {
 		return pluginCache.getContentTypesForScope(scopeName);

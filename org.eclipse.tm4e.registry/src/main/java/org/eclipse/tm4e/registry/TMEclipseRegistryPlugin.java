@@ -12,37 +12,39 @@
 package org.eclipse.tm4e.registry;
 
 import org.eclipse.core.runtime.Platform;
+import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.tm4e.registry.internal.GrammarRegistryManager;
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
 
 /**
  * OSGi Activator for TextMate Eclipse registry bundle.
- *
  */
 public class TMEclipseRegistryPlugin implements BundleActivator {
 
 	public static final String PLUGIN_ID = "org.eclipse.tm4e.registry";
 
+	@Nullable
 	private static BundleContext context;
 
+	@Nullable
 	static BundleContext getContext() {
 		return context;
 	}
 
 	@Override
-	public void start(final BundleContext bundleContext) throws Exception {
+	public void start(@Nullable final BundleContext bundleContext) throws Exception {
 		TMEclipseRegistryPlugin.context = bundleContext;
 	}
 
 	@Override
-	public void stop(final BundleContext bundleContext) throws Exception {
+	public void stop(@Nullable final BundleContext bundleContext) throws Exception {
 		TMEclipseRegistryPlugin.context = null;
 	}
 
 	/**
 	 * Returns the TextMate grammar manager.
-	 * 
+	 *
 	 * @return the TextMate grammar manager.
 	 */
 	public static IGrammarRegistryManager getGrammarRegistryManager() {
@@ -51,7 +53,7 @@ public class TMEclipseRegistryPlugin implements BundleActivator {
 
 	/**
 	 * Returns true if the debug option is enabled and false otherwise.
-	 * 
+	 *
 	 * @param option
 	 *            the option name
 	 * @return true if the debug option is enabled and false otherwise.

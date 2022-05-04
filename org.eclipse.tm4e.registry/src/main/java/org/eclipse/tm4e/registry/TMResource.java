@@ -1,13 +1,13 @@
 /**
- *  Copyright (c) 2015-2017 Angelo ZERR.
+ * Copyright (c) 2015-2017 Angelo ZERR.
  * This program and the accompanying materials are made
  * available under the terms of the Eclipse Public License 2.0
  * which is available at https://www.eclipse.org/legal/epl-2.0/
  *
  * SPDX-License-Identifier: EPL-2.0
  *
- *  Contributors:
- *  Angelo Zerr <angelo.zerr@gmail.com> - initial API and implementation
+ * Contributors:
+ * Angelo Zerr <angelo.zerr@gmail.com> - initial API and implementation
  */
 package org.eclipse.tm4e.registry;
 
@@ -19,6 +19,7 @@ import java.net.URL;
 import java.util.Scanner;
 
 import org.eclipse.core.runtime.IConfigurationElement;
+import org.eclipse.jdt.annotation.Nullable;
 
 /**
  * TextMate Resource.
@@ -27,7 +28,10 @@ public class TMResource implements ITMResource {
 
 	private static final String PLATFORM_PLUGIN = "platform:/plugin/"; //$NON-NLS-1$
 
+	@Nullable
 	private String path;
+
+	@Nullable
 	private String pluginId;
 
 	/**
@@ -51,24 +55,27 @@ public class TMResource implements ITMResource {
 		this.pluginId = ce.getNamespaceIdentifier();
 	}
 
-	public TMResource(final String path, final String pluginId) {
+	public TMResource(@Nullable final String path, @Nullable final String pluginId) {
 		this.path = path;
 		this.pluginId = pluginId;
 	}
 
+	@Nullable
 	@Override
 	public String getPath() {
 		return path;
 	}
 
+	@Nullable
 	@Override
 	public String getPluginId() {
 		return pluginId;
 	}
 
+	@Nullable
 	@Override
 	public InputStream getInputStream() throws IOException {
-		if (path == null || path.isEmpty()) {
+		if (path == null || "".equals(path)) {
 			return null;
 		}
 		if (pluginId != null) {
@@ -78,6 +85,7 @@ public class TMResource implements ITMResource {
 		return new FileInputStream(new File(path));
 	}
 
+	@Nullable
 	protected String getResourceContent() {
 		try (InputStream in = this.getInputStream()) {
 			if (in == null) {

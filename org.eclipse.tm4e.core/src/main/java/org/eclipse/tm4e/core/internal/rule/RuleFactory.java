@@ -134,7 +134,7 @@ public final class RuleFactory {
 		}
 
 		// Fill out result
-		for (String captureId : captures.getCaptureIds()) {
+		for (final String captureId : captures.getCaptureIds()) {
 			final int numericCaptureId = parseInt(captureId, 10);
 			final IRawRule rule = captures.getCapture(captureId);
 			final Integer retokenizeCapturedWithRuleId = rule.getPatterns() == null
@@ -149,7 +149,7 @@ public final class RuleFactory {
 	private static int parseInt(final String string, final int base) {
 		try {
 			return Integer.parseInt(string, base);
-		} catch (NumberFormatException ex) {
+		} catch (final NumberFormatException ex) {
 			return 0;
 		}
 	}
@@ -185,7 +185,7 @@ public final class RuleFactory {
 				} else {
 					final String externalGrammarName;
 					final String externalGrammarInclude;
-					int sharpIndex = patternInclude.indexOf('#');
+					final int sharpIndex = patternInclude.indexOf('#');
 					if (sharpIndex >= 0) {
 						externalGrammarName = patternInclude.substring(0, sharpIndex);
 						externalGrammarInclude = patternInclude.substring(sharpIndex + 1);
@@ -220,7 +220,7 @@ public final class RuleFactory {
 				Rule rule;
 				try {
 					rule = helper.getRule(patternId);
-				} catch (IndexOutOfBoundsException ex) {
+				} catch (final IndexOutOfBoundsException ex) {
 					rule = null;
 					if (patternInclude != null) {
 						// TODO currently happens if an include rule references another not yet parsed rule

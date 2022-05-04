@@ -26,7 +26,7 @@ final class CompilePatternsResult {
 	final int[] patterns;
 	final boolean hasMissingPatterns;
 
-	CompilePatternsResult(int[] patterns, boolean hasMissingPatterns) {
+	CompilePatternsResult(final int[] patterns, final boolean hasMissingPatterns) {
 		this.hasMissingPatterns = hasMissingPatterns;
 		this.patterns = patterns;
 	}

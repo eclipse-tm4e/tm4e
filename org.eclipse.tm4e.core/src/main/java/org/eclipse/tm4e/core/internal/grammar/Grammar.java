@@ -80,8 +80,8 @@ public final class Grammar implements IGrammar, IRuleFactoryHelper {
 			final IRawGrammar grammar,
 			final int initialLanguage,
 			@Nullable final Map<String, Integer> embeddedLanguages,
-			@Nullable Map<String, Integer> tokenTypes,
-			@Nullable BalancedBracketSelectors balancedBracketSelectors,
+			@Nullable final Map<String, Integer> tokenTypes,
+			@Nullable final BalancedBracketSelectors balancedBracketSelectors,
 			final IGrammarRepository grammarRepository,
 			final IThemeProvider themeProvider) {
 		this.scopeName = scopeName;

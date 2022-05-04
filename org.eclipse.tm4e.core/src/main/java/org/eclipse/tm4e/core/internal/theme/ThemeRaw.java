@@ -69,7 +69,7 @@ public final class ThemeRaw extends HashMap<String, @Nullable Object>
 	}
 
 	@Override
-	public void setProperty(String name, Object value) {
+	public void setProperty(final String name, final Object value) {
 		put(name, value);
 	}
 }

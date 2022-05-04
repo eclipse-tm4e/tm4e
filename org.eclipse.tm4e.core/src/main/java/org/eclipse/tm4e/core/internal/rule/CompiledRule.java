@@ -31,7 +31,7 @@ public final class CompiledRule {
 	public final OnigScanner scanner;
 	public final int[] rules;
 
-	CompiledRule(List<String> regExps, int[] rules) {
+	CompiledRule(final List<String> regExps, final int[] rules) {
 		this.debugRegExps = regExps;
 		this.rules = rules;
 		this.scanner = new OnigScanner(regExps);

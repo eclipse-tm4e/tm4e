@@ -48,13 +48,13 @@ final class IncludeOnlyRule extends Rule {
 	}
 
 	@Override
-	public CompiledRule compile(IRuleRegistry grammar, @Nullable String endRegexSource) {
+	public CompiledRule compile(final IRuleRegistry grammar, @Nullable final String endRegexSource) {
 		return getCachedCompiledPatterns(grammar).compile();
 	}
 
 	@Override
-	public CompiledRule compileAG(IRuleRegistry grammar, @Nullable String endRegexSource, boolean allowA,
-			boolean allowG) {
+	public CompiledRule compileAG(final IRuleRegistry grammar, @Nullable final String endRegexSource, final boolean allowA,
+			final boolean allowG) {
 		return getCachedCompiledPatterns(grammar).compileAG(allowA, allowG);
 	}
 

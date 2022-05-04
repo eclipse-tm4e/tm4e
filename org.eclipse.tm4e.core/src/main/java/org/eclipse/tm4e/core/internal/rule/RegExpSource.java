@@ -117,7 +117,7 @@ final class RegExpSource {
 					final var replacement = RegexSource.escapeRegExpCharacters(capturedValues.get(index));
 					return Matcher.quoteReplacement(replacement); // see https://stackoverflow.com/a/70785772/5116073
 				}
-			} catch (NumberFormatException ex) {
+			} catch (final NumberFormatException ex) {
 				// ignore
 			}
 			return "";

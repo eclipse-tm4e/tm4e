@@ -45,7 +45,7 @@ public final class ThemeReader {
 	}
 
 	private static PListParser<ThemeRaw> getThemeParser(final String filePath) {
-		String extension = filePath.substring(filePath.lastIndexOf('.') + 1).trim().toLowerCase();
+		final String extension = filePath.substring(filePath.lastIndexOf('.') + 1).trim().toLowerCase();
 
 		switch (extension) {
 

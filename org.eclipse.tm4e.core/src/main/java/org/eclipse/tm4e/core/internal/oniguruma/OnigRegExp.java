@@ -54,7 +54,7 @@ final class OnigRegExp {
 		try {
 			regex = new Regex(pattern, 0, pattern.length, Option.CAPTURE_GROUP, UTF8Encoding.INSTANCE, Syntax.DEFAULT,
 					WarnCallback.DEFAULT);
-		} catch (SyntaxException ex) {
+		} catch (final SyntaxException ex) {
 			throw new TMException("Parsing regex pattern \"" + source + "\" failed with " + ex, ex);
 		}
 	}

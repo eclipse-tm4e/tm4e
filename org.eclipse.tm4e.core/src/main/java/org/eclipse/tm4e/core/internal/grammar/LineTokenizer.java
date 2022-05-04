@@ -101,7 +101,7 @@ final class LineTokenizer {
 		this.lineTokens = lineTokens;
 	}
 
-	private StackElement scan(boolean checkWhileConditions) {
+	private StackElement scan(final boolean checkWhileConditions) {
 		stop = false;
 
 		if (checkWhileConditions) {
@@ -556,7 +556,7 @@ final class LineTokenizer {
 		return new LineTokenizer(grammar, lineText, isFirstLine, linePos, stack, lineTokens).scan(checkWhileConditions);
 	}
 
-	static String debugCompiledRuleToString(CompiledRule ruleScanner) {
+	static String debugCompiledRuleToString(final CompiledRule ruleScanner) {
 		final var r = new ArrayList<String>();
 		for (int i = 0, l = ruleScanner.rules.length; i < l; i++) {
 			r.add("   - " + ruleScanner.rules[i] + ": " + ruleScanner.debugRegExps.get(i));

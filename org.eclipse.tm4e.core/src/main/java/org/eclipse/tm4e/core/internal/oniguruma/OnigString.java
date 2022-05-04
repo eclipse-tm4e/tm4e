@@ -83,7 +83,7 @@ public abstract class OnigString {
 				while (byteIndex <= maxByteIndex) {
 					final int charLenInBytes = UTF8Encoding.INSTANCE.length(bytesUTF8, byteIndex, bytesCount);
 					// same as "Arrays.fill(offsets, byteIndex, byteIndex + charLenInBytes, charIndex)" but faster
-					for (int l = byteIndex + charLenInBytes; byteIndex < l; byteIndex++) {
+					for (final int l = byteIndex + charLenInBytes; byteIndex < l; byteIndex++) {
 						offsets[byteIndex] = charIndex;
 					}
 					charIndex++;

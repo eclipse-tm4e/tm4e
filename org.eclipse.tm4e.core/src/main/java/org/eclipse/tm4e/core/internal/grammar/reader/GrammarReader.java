@@ -60,7 +60,7 @@ public final class GrammarReader {
 	}
 
 	private static PListParser<RawGrammar> getGrammarParser(final String filePath) {
-		String extension = filePath.substring(filePath.lastIndexOf('.') + 1).trim().toLowerCase();
+		final String extension = filePath.substring(filePath.lastIndexOf('.') + 1).trim().toLowerCase();
 
 		switch (extension) {
 

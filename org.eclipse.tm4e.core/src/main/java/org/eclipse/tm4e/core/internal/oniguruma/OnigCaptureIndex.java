@@ -24,7 +24,7 @@ public final class OnigCaptureIndex {
 	public final int start;
 	public final int end;
 
-	OnigCaptureIndex(final int index, int start, final int end) {
+	OnigCaptureIndex(final int index, final int start, final int end) {
 		this.index = index;
 		this.start = start >= 0 ? start : 0;
 		this.end = end >= 0 ? end : 0;

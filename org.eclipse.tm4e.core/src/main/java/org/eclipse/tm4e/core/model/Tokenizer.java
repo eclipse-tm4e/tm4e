@@ -43,7 +43,7 @@ public class Tokenizer implements ITokenizationSupport {
 	}
 
 	@Override
-	public LineTokens tokenize(final String line, @Nullable final TMState state, @Nullable Integer offsetDeltaOrNull,
+	public LineTokens tokenize(final String line, @Nullable final TMState state, @Nullable final Integer offsetDeltaOrNull,
 			@Nullable final Integer stopAtOffset) {
 		/*
 		 Do not attempt to tokenize if a line has over 20k or

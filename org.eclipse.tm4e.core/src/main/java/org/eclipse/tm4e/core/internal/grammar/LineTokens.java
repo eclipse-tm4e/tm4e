@@ -58,8 +58,8 @@ final class LineTokens {
 	@Nullable
 	private final BalancedBracketSelectors balancedBracketSelectors;
 
-	LineTokens(final boolean emitBinaryTokens, final String lineText, List<TokenTypeMatcher> tokenTypeOverrides,
-			@Nullable BalancedBracketSelectors balancedBracketSelectors) {
+	LineTokens(final boolean emitBinaryTokens, final String lineText, final List<TokenTypeMatcher> tokenTypeOverrides,
+			@Nullable final BalancedBracketSelectors balancedBracketSelectors) {
 		this.emitBinaryTokens = emitBinaryTokens;
 		this.lineText = LOGGER.isLoggable(TRACE) ? lineText : null; // store line only if it's logged
 		if (this.emitBinaryTokens) {

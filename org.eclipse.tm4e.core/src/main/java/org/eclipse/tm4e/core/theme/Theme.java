@@ -46,11 +46,11 @@ public class Theme {
 	private static final Pattern RGB = Pattern.compile("^#[0-9a-f]{3}", Pattern.CASE_INSENSITIVE);
 	private static final Pattern RGBA = Pattern.compile("^#[0-9a-f]{4}", Pattern.CASE_INSENSITIVE);
 
-	public static Theme createFromRawTheme(@Nullable final IRawTheme source, @Nullable List<String> colorMap) {
+	public static Theme createFromRawTheme(@Nullable final IRawTheme source, @Nullable final List<String> colorMap) {
 		return createFromParsedTheme(parseTheme(source), colorMap);
 	}
 
-	public static Theme createFromParsedTheme(final List<ParsedThemeRule> source, @Nullable List<String> colorMap) {
+	public static Theme createFromParsedTheme(final List<ParsedThemeRule> source, @Nullable final List<String> colorMap) {
 		return resolveParsedThemeRules(source, colorMap);
 	}
 
@@ -182,7 +182,7 @@ public class Theme {
 	 * Resolve rules (i.e. inheritance).
 	 */
 	public static Theme resolveParsedThemeRules(final List<ParsedThemeRule> _parsedThemeRules,
-			@Nullable List<String> _colorMap) {
+			@Nullable final List<String> _colorMap) {
 
 		// copy the list since we cannot be sure the given list is mutable
 		final var parsedThemeRules = new ArrayList<>(_parsedThemeRules);

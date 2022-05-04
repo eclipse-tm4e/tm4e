@@ -152,7 +152,7 @@ final class MatcherBuilder<T> {
 	/**
 	 * https://github.com/microsoft/vscode-textmate/blob/master/src/matcher.ts#L89
 	 */
-	private boolean isIdentifier(String token) {
+	private boolean isIdentifier(final String token) {
 		if (token.isEmpty())
 			return false;
 

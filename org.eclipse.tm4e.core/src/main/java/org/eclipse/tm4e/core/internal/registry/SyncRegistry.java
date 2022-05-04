@@ -116,7 +116,7 @@ public final class SyncRegistry implements IGrammarRepository, IThemeProvider {
 	public IGrammar grammarForScopeName(final String scopeName, final int initialLanguage,
 			@Nullable final Map<String, Integer> embeddedLanguages,
 			@Nullable final Map<String, Integer> tokenTypes,
-			@Nullable BalancedBracketSelectors balancedBracketSelectors) {
+			@Nullable final BalancedBracketSelectors balancedBracketSelectors) {
 		if (!this.grammars.containsKey(scopeName)) {
 			final var rawGrammar = lookup(scopeName);
 			if (rawGrammar == null) {

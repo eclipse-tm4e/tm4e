@@ -288,7 +288,7 @@ public class TMModel implements ITMModel {
 	 * Interrupt the thread.
 	 */
 	private synchronized void stop() {
-		var fThread = this.fThread;
+		final var fThread = this.fThread;
 		if (fThread == null) {
 			return;
 		}

@@ -64,7 +64,7 @@ public final class StackElementMetadata {
 	 * A value of `0`, `NotSet` or `null` indicates that the corresponding field should be left as is.
 	 */
 	static int set(final int metadata, final int languageId, final /*OptionalStandardTokenType*/ int tokenType,
-			@Nullable Boolean containsBalancedBrackets, final int fontStyle, final int foreground, int background) {
+			@Nullable final Boolean containsBalancedBrackets, final int fontStyle, final int foreground, final int background) {
 		final var _languageId = languageId == 0 ? getLanguageId(metadata) : languageId;
 		final var _tokenType = tokenType == OptionalStandardTokenType.NotSet ? getTokenType(metadata) : tokenType;
 		final var _containsBalancedBracketsBit = (containsBalancedBrackets == null ? containsBalancedBrackets(metadata)

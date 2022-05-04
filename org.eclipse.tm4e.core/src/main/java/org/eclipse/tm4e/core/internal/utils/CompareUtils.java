@@ -16,7 +16,7 @@ public final class CompareUtils {
 		if (b == null) {
 			return 1;
 		}
-		int result = a.compareTo(b);
+		final int result = a.compareTo(b);
 		if (result < 0) {
 			return -1;
 		} else if (result > 0) {
@@ -35,11 +35,11 @@ public final class CompareUtils {
 		if (b == null) {
 			return 1;
 		}
-		int len1 = a.size();
-		int len2 = b.size();
+		final int len1 = a.size();
+		final int len2 = b.size();
 		if (len1 == len2) {
 			for (int i = 0; i < len1; i++) {
-				int res = strcmp(a.get(i), b.get(i));
+				final int res = strcmp(a.get(i), b.get(i));
 				if (res != 0) {
 					return res;
 				}

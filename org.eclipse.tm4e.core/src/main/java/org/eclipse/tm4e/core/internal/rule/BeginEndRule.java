@@ -42,10 +42,10 @@ public final class BeginEndRule extends Rule {
 	@Nullable
 	private RegExpSourceList cachedCompiledPatterns;
 
-	BeginEndRule(int id, @Nullable String name, @Nullable String contentName, String begin,
-			List<@Nullable CaptureRule> beginCaptures, @Nullable String end, List<@Nullable CaptureRule> endCaptures,
-			boolean applyEndPatternLast,
-			CompilePatternsResult patterns) {
+	BeginEndRule(final int id, @Nullable final String name, @Nullable final String contentName, final String begin,
+			final List<@Nullable CaptureRule> beginCaptures, @Nullable final String end, final List<@Nullable CaptureRule> endCaptures,
+			final boolean applyEndPatternLast,
+			final CompilePatternsResult patterns) {
 		super(id, name, contentName);
 		this.begin = new RegExpSource(begin, this.id);
 		this.beginCaptures = beginCaptures;
@@ -57,7 +57,7 @@ public final class BeginEndRule extends Rule {
 		this.hasMissingPatterns = patterns.hasMissingPatterns;
 	}
 
-	public String getEndWithResolvedBackReferences(String lineText, OnigCaptureIndex[] captureIndices) {
+	public String getEndWithResolvedBackReferences(final String lineText, final OnigCaptureIndex[] captureIndices) {
 		return this.end.resolveBackReferences(lineText, captureIndices);
 	}
 
@@ -75,7 +75,7 @@ public final class BeginEndRule extends Rule {
 	}
 
 	@Override
-	public CompiledRule compile(IRuleRegistry grammar, @Nullable String endRegexSource) {
+	public CompiledRule compile(final IRuleRegistry grammar, @Nullable final String endRegexSource) {
 		return getCachedCompiledPatterns(grammar, endRegexSource).compile();
 	}
 

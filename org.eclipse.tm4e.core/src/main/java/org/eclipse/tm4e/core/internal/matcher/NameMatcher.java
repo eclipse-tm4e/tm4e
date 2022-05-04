@@ -54,7 +54,7 @@ public interface NameMatcher<T> {
 			if (thisScopeName.equals(scopeName)) {
 				return true;
 			}
-			int len = scopeName.length();
+			final int len = scopeName.length();
 			return thisScopeName.length() > len
 					&& thisScopeName.substring(0, len).equals(scopeName)
 					&& thisScopeName.charAt(len) == '.';

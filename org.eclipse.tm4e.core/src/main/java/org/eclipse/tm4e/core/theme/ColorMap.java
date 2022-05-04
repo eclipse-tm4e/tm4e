@@ -34,7 +34,7 @@ public class ColorMap {
 		this(null);
 	}
 
-	public ColorMap(@Nullable List<String> colorMap) {
+	public ColorMap(@Nullable final List<String> colorMap) {
 		if (colorMap != null) {
 			this.isFrozen = true;
 			for (int i = 0, len = colorMap.size(); i < len; i++) {

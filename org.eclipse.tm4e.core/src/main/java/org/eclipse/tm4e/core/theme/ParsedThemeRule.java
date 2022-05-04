@@ -62,14 +62,14 @@ public class ParsedThemeRule {
 	}
 
 	@Override
-	public boolean equals(@Nullable Object obj) {
+	public boolean equals(@Nullable final Object obj) {
 		if (this == obj)
 			return true;
 		if (obj == null)
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		ParsedThemeRule other = (ParsedThemeRule) obj;
+		final ParsedThemeRule other = (ParsedThemeRule) obj;
 		return Objects.equals(background, other.background) && fontStyle == other.fontStyle
 				&& Objects.equals(foreground, other.foreground) && index == other.index
 				&& Objects.equals(parentScopes, other.parentScopes) && Objects.equals(scope, other.scope);

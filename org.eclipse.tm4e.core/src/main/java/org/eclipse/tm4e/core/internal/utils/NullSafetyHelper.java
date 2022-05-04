@@ -19,13 +19,13 @@ import org.eclipse.jdt.annotation.Nullable;
 
 public final class NullSafetyHelper {
 
-	public static <T> Iterator<@NonNull T> castNonNull(@Nullable Iterator<T> value) {
+	public static <T> Iterator<@NonNull T> castNonNull(@Nullable final Iterator<T> value) {
 		assert value != null;
 		return value;
 	}
 
 	@NonNull
-	public static <T> T castNonNull(@Nullable T value) {
+	public static <T> T castNonNull(@Nullable final T value) {
 		assert value != null;
 		return value;
 	}

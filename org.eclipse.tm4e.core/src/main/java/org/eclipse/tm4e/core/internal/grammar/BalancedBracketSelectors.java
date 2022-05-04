@@ -28,7 +28,7 @@ public class BalancedBracketSelectors {
 
 	private boolean allowAny = false;
 
-	BalancedBracketSelectors(List<String> balancedBracketScopes, List<String> unbalancedBracketScopes) {
+	BalancedBracketSelectors(final List<String> balancedBracketScopes, final List<String> unbalancedBracketScopes) {
 		this.balancedBracketScopes = balancedBracketScopes.stream()
 				.flatMap(selector -> {
 					if ("*".equals(selector)) {

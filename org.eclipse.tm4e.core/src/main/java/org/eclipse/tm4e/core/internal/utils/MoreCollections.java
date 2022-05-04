@@ -19,7 +19,7 @@ import org.eclipse.jdt.annotation.Nullable;
 public final class MoreCollections {
 
 	@Nullable
-	public static <T> T findLastElement(@Nullable List<T> list) {
+	public static <T> T findLastElement(@Nullable final List<T> list) {
 		if (list == null || list.isEmpty())
 			return null;
 		return getLastElement(list);
@@ -28,7 +28,7 @@ public final class MoreCollections {
 	/**
 	 * @param list a non-empty list with non-nullable elements
 	 */
-	public static <T> T getLastElement(List<T> list) {
+	public static <T> T getLastElement(final List<T> list) {
 		return list.get(list.size() - 1);
 	}
 
@@ -40,7 +40,7 @@ public final class MoreCollections {
 	 * @throws UnsupportedOperationException if the {@code remove} operation is not supported by this list
 	 * @throws IndexOutOfBoundsException if the list is empty
 	 */
-	public static <T> T removeLastElement(List<T> list) {
+	public static <T> T removeLastElement(final List<T> list) {
 		return list.remove(list.size() - 1);
 	}
 

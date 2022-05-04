@@ -37,7 +37,7 @@ final class PListContentHandler<T> extends DefaultHandler {
 		final List<Integer> keysDepths = new ArrayList<>();
 		int depth = 0;
 
-		void add(String key) {
+		void add(final String key) {
 			trim();
 			keysDepths.add(depth);
 			keys.add(key);
@@ -53,7 +53,7 @@ final class PListContentHandler<T> extends DefaultHandler {
 		}
 
 		@Override
-		public String get(int index) {
+		public String get(final int index) {
 			return keys.get(index);
 		}
 
@@ -155,7 +155,7 @@ final class PListContentHandler<T> extends DefaultHandler {
 			throws SAXException {
 		assert localName != null;
 
-		var currObject = this.currObject;
+		final var currObject = this.currObject;
 		if (currObject == null) {
 			throw new SAXException("Root <plist><dict> or <plist><array> element not found!");
 		}

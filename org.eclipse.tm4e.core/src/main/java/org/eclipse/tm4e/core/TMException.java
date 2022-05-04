@@ -19,11 +19,11 @@ public class TMException extends RuntimeException {
 
 	private static final long serialVersionUID = 1L;
 
-	public TMException(String message) {
+	public TMException(final String message) {
 		super(message);
 	}
 
-	public TMException(String message, Throwable cause) {
+	public TMException(final String message, final Throwable cause) {
 		super(message, cause);
 	}
 }

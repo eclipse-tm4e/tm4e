@@ -183,12 +183,12 @@ public class ThemeTrieElement {
 	}
 
 	@Override
-	public boolean equals(@Nullable Object obj) {
+	public boolean equals(@Nullable final Object obj) {
 		if (this == obj)
 			return true;
 		if (obj == null || getClass() != obj.getClass())
 			return false;
-		ThemeTrieElement other = (ThemeTrieElement) obj;
+		final ThemeTrieElement other = (ThemeTrieElement) obj;
 		return children.equals(other.children)
 				&& mainRule.equals(other.mainRule)
 				&& rulesWithParentScopes.equals(other.rulesWithParentScopes);

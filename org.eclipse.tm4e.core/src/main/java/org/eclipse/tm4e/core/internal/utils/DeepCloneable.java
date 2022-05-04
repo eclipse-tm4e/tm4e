@@ -25,7 +25,7 @@ import org.eclipse.jdt.annotation.Nullable;
 public interface DeepCloneable {
 
 	@SuppressWarnings("unchecked")
-	public static <T> T deepClone(T obj) {
+	public static <T> T deepClone(final T obj) {
 		if (obj instanceof DeepCloneable) {
 			return (T) ((DeepCloneable) obj).deepClone();
 		}
@@ -94,7 +94,7 @@ public interface DeepCloneable {
 	}
 
 	@Nullable
-	public static <T> T deepCloneNullable(@Nullable T obj) {
+	public static <T> T deepCloneNullable(@Nullable final T obj) {
 		if (obj == null) {
 			return null;
 		}

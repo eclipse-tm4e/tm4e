@@ -28,25 +28,25 @@ public final class CaptureRule extends Rule {
 	@Nullable
 	public final Integer retokenizeCapturedWithRuleId;
 
-	CaptureRule(int id, @Nullable String name, @Nullable String contentName,
-			@Nullable Integer retokenizeCapturedWithRuleId) {
+	CaptureRule(final int id, @Nullable final String name, @Nullable final String contentName,
+			@Nullable final Integer retokenizeCapturedWithRuleId) {
 		super(id, name, contentName);
 		this.retokenizeCapturedWithRuleId = retokenizeCapturedWithRuleId;
 	}
 
 	@Override
-	public void collectPatternsRecursive(IRuleRegistry grammar, RegExpSourceList out, boolean isFirst) {
+	public void collectPatternsRecursive(final IRuleRegistry grammar, final RegExpSourceList out, final boolean isFirst) {
 		throw new UnsupportedOperationException();
 	}
 
 	@Override
-	public CompiledRule compile(IRuleRegistry grammar, @Nullable String endRegexSource) {
+	public CompiledRule compile(final IRuleRegistry grammar, @Nullable final String endRegexSource) {
 		throw new UnsupportedOperationException();
 	}
 
 	@Override
-	public CompiledRule compileAG(IRuleRegistry grammar, @Nullable String endRegexSource, boolean allowA,
-			boolean allowG) {
+	public CompiledRule compileAG(final IRuleRegistry grammar, @Nullable final String endRegexSource, final boolean allowA,
+			final boolean allowG) {
 		throw new UnsupportedOperationException();
 	}
 }

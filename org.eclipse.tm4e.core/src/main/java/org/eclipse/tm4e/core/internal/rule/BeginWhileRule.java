@@ -42,9 +42,9 @@ public final class BeginWhileRule extends Rule {
 	@Nullable
 	private RegExpSourceList cachedCompiledWhilePatterns;
 
-	BeginWhileRule(int id, @Nullable String name, @Nullable String contentName, String begin,
-			List<@Nullable CaptureRule> beginCaptures, String _while, List<@Nullable CaptureRule> whileCaptures,
-			CompilePatternsResult patterns) {
+	BeginWhileRule(final int id, @Nullable final String name, @Nullable final String contentName, final String begin,
+			final List<@Nullable CaptureRule> beginCaptures, final String _while, final List<@Nullable CaptureRule> whileCaptures,
+			final CompilePatternsResult patterns) {
 		super(/* $location, */id, name, contentName);
 		this.begin = new RegExpSource(begin, this.id);
 		this.beginCaptures = beginCaptures;
@@ -55,15 +55,15 @@ public final class BeginWhileRule extends Rule {
 		this.hasMissingPatterns = patterns.hasMissingPatterns;
 	}
 
-	public String getWhileWithResolvedBackReferences(String lineText, OnigCaptureIndex[] captureIndices) {
+	public String getWhileWithResolvedBackReferences(final String lineText, final OnigCaptureIndex[] captureIndices) {
 		return this._while.resolveBackReferences(lineText, captureIndices);
 	}
 
 	@Override
-	public void collectPatternsRecursive(IRuleRegistry grammar, RegExpSourceList out, boolean isFirst) {
+	public void collectPatternsRecursive(final IRuleRegistry grammar, final RegExpSourceList out, final boolean isFirst) {
 		if (isFirst) {
 			Rule rule;
-			for (int pattern : patterns) {
+			for (final int pattern : patterns) {
 				rule = grammar.getRule(pattern);
 				rule.collectPatternsRecursive(grammar, out, false);
 			}
@@ -73,13 +73,13 @@ public final class BeginWhileRule extends Rule {
 	}
 
 	@Override
-	public CompiledRule compile(IRuleRegistry grammar, @Nullable String endRegexSource) {
+	public CompiledRule compile(final IRuleRegistry grammar, @Nullable final String endRegexSource) {
 		return getCachedCompiledPatterns(grammar).compile();
 	}
 
 	@Override
-	public CompiledRule compileAG(IRuleRegistry grammar, @Nullable String endRegexSource, boolean allowA,
-			boolean allowG) {
+	public CompiledRule compileAG(final IRuleRegistry grammar, @Nullable final String endRegexSource, final boolean allowA,
+			final boolean allowG) {
 		return getCachedCompiledPatterns(grammar).compileAG(allowA, allowG);
 	}
 
@@ -97,7 +97,7 @@ public final class BeginWhileRule extends Rule {
 		return getCachedCompiledWhilePatterns(endRegexSource).compile();
 	}
 
-	public CompiledRule compileWhileAG(@Nullable final String endRegexSource, boolean allowA, boolean allowG) {
+	public CompiledRule compileWhileAG(@Nullable final String endRegexSource, final boolean allowA, final boolean allowG) {
 		return getCachedCompiledWhilePatterns(endRegexSource).compileAG(allowA, allowG);
 	}
 

@@ -1,0 +1,11 @@
+<plist>
+   <dict>
+      <key>key1</key>
+      <true />
+      <key>key2</key>
+      <dict>
+         <key>key3</key>
+         <string>foo</string>
+      </dict>
+   </dict>
+</plist>

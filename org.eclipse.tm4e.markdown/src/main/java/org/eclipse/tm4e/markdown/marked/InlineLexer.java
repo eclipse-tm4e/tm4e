@@ -16,10 +16,12 @@
  */
 package org.eclipse.tm4e.markdown.marked;
 
-import static org.eclipse.tm4e.markdown.marked.Helpers.escape;
-import static org.eclipse.tm4e.markdown.marked.Helpers.isEmpty;
+import static org.eclipse.tm4e.markdown.marked.Helpers.htmlEscape;
 
+import com.google.common.base.Strings;
 import java.util.regex.Matcher;
+
+import org.eclipse.jdt.annotation.Nullable;
 
 public class InlineLexer {
 
@@ -27,7 +29,7 @@ public class InlineLexer {
 	private final InlineRules rules;
 	private final IRenderer renderer;
 
-	public InlineLexer(final Object links, final Options options, final IRenderer renderer) {
+	public InlineLexer(@Nullable final Object links, @Nullable final Options options, @Nullable final IRenderer renderer) {
 		this.options = options != null ? options : Options.DEFAULTS;
 		// this.links = links;
 		this.renderer = renderer != null ? renderer : new HTMLRenderer();
@@ -54,13 +56,13 @@ public class InlineLexer {
 
 	public void output(String src) {
 		Matcher cap = null;
-		while (!isEmpty(src)) {
+		while (!Strings.isNullOrEmpty(src)) {
 
 			// strong
 			if ((cap = this.rules.strong.exec(src)) != null) {
 				src = src.substring(cap.group(0).length());
 				this.renderer.startStrong();
-				this.output(!isEmpty(cap.group(2)) ? cap.group(2) : cap.group(1));
+				this.output(!Strings.isNullOrEmpty(cap.group(2)) ? cap.group(2) : cap.group(1));
 				this.renderer.endStrong();
 				continue;
 			}
@@ -69,7 +71,7 @@ public class InlineLexer {
 			if ((cap = this.rules.em.exec(src)) != null) {
 				src = src.substring(cap.group(0).length());
 				this.renderer.startEm();
-				this.output(!isEmpty(cap.group(2)) ? cap.group(2) : cap.group(1));
+				this.output(!Strings.isNullOrEmpty(cap.group(2)) ? cap.group(2) : cap.group(1));
 				this.renderer.endEm();
 				continue;
 			}
@@ -77,14 +79,14 @@ public class InlineLexer {
 			// code
 			if ((cap = this.rules.code.exec(src)) != null) {
 				src = src.substring(cap.group(0).length());
-				this.renderer.codespan(escape(cap.group(2), true));
+				this.renderer.codespan(htmlEscape(cap.group(2), true));
 				continue;
 			}
 
 			// text
 			if ((cap = this.rules.text.exec(src)) != null) {
 				src = src.substring(cap.group(0).length());
-				this.renderer.text(escape(this.smartypants(cap.group(0))));
+				this.renderer.text(htmlEscape(this.smartypants(cap.group(0))));
 				continue;
 			}
 		}

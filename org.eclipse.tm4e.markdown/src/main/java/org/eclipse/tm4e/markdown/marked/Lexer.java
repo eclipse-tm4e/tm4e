@@ -16,9 +16,10 @@
  */
 package org.eclipse.tm4e.markdown.marked;
 
-import static org.eclipse.tm4e.markdown.marked.Helpers.isEmpty;
-
 import java.util.regex.Matcher;
+
+import com.google.common.base.Strings;
+import org.eclipse.jdt.annotation.Nullable;
 
 public class Lexer {
 
@@ -26,7 +27,7 @@ public class Lexer {
 	private final Tokens tokens;
 	private final Options options;
 
-	public Lexer(final Options options) {
+	public Lexer(@Nullable final Options options) {
 		this.tokens = new Tokens();
 		this.options = options != null ? options : Options.DEFAULTS;
 
@@ -41,7 +42,7 @@ public class Lexer {
 		}
 	}
 
-	public static Tokens lex(final String src, final Options options) {
+	public static Tokens lex(final String src, @Nullable final Options options) {
 		final Lexer lexer = new Lexer(options);
 		return lexer.lex(src);
 	}
@@ -56,10 +57,10 @@ public class Lexer {
 		return token(src, top, null);
 	}
 
-	private Tokens token(String src, final boolean top, final Object bq) {
+	private Tokens token(String src, final boolean top, @Nullable final Object bq) {
 		src = src.replaceAll("^ +$", "");
 		Matcher cap;
-		while (!isEmpty(src)) {
+		while (!Strings.isNullOrEmpty(src)) {
 
 			// newline
 			if ((cap = this.rules.newline.exec(src)) != null) {
@@ -84,7 +85,7 @@ public class Lexer {
 			if ((cap = this.rules.fences.exec(src)) != null) {
 				src = src.substring(cap.group(0).length());
 				final String lang = cap.group(2);
-				final String text = !isEmpty(cap.group(3)) ? cap.group(3) : "";
+				final String text = !Strings.isNullOrEmpty(cap.group(3)) ? cap.group(3) : "";
 				this.tokens.add(new Token(TokenType.code, lang, text));
 				continue;
 			}

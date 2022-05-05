@@ -16,7 +16,9 @@
  */
 package org.eclipse.tm4e.markdown.marked;
 
-import static org.eclipse.tm4e.markdown.marked.Helpers.escape;
+import static org.eclipse.tm4e.markdown.marked.Helpers.htmlEscape;
+
+import org.eclipse.jdt.annotation.Nullable;
 
 public class HTMLRenderer implements IRenderer {
 
@@ -31,14 +33,14 @@ public class HTMLRenderer implements IRenderer {
 	}
 
 	@Override
-	public void code(final String code, final String lang, final boolean escaped) {
+	public void code(final String code, @Nullable final String lang, final boolean escaped) {
 		if (lang == null) {
 			html.append("<pre><code>");
-			html.append(escaped ? code : escape(code, true));
+			html.append(escaped ? code : htmlEscape(code, true));
 			html.append("\n</code></pre>");
 		} else {
 			html.append("<pre><code>");
-			html.append(escaped ? code : escape(code, true));
+			html.append(escaped ? code : htmlEscape(code, true));
 			html.append("\n</code></pre>");
 		}
 	}

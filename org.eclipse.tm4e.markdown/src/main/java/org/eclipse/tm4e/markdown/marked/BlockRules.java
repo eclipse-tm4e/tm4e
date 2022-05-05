@@ -1,5 +1,5 @@
 /**
- *  Copyright (c) 2015-2017 Angelo ZERR.
+ * Copyright (c) 2015-2017 Angelo ZERR.
  * This program and the accompanying materials are made
  * available under the terms of the Eclipse Public License 2.0
  * which is available at https://www.eclipse.org/legal/epl-2.0/
@@ -11,8 +11,8 @@
  * Initial license: MIT
  *
  * Contributors:
- *  - Christopher Jeffrey and others: Initial code, written in JavaScript, licensed under MIT license
- *  - Angelo Zerr <angelo.zerr@gmail.com> - translation and adaptation to Java
+ * - Christopher Jeffrey and others: Initial code, written in JavaScript, licensed under MIT license
+ * - Angelo Zerr <angelo.zerr@gmail.com> - translation and adaptation to Java
  */
 package org.eclipse.tm4e.markdown.marked;
 
@@ -43,8 +43,10 @@ public class BlockRules {
 	public final RegExp bullet;
 	public final RegExp item;
 
-	public BlockRules(final RegExp newline, final RegExp code, final RegExp fences, final RegExp hr, final RegExp heading, final RegExp nptable,
-			final RegExp lheading, final RegExp blockquote, final RegExp list, final RegExp html, final RegExp def, final RegExp table, final RegExp paragraph,
+	public BlockRules(final RegExp newline, final RegExp code, final RegExp fences, final RegExp hr,
+			final RegExp heading, final RegExp nptable,
+			final RegExp lheading, final RegExp blockquote, final RegExp list, final RegExp html, final RegExp def,
+			final RegExp table, final RegExp paragraph,
 			final RegExp text, final RegExp bullet, final RegExp item) {
 		this.newline = newline;
 		this.code = code;
@@ -98,20 +100,22 @@ public class BlockRules {
 
 	private static BlockRules gfm() {
 		final BlockRules gfm = normal();
-		gfm.fences.source = "^ *(`{3,}|~{3,})[ \\.]*(\\S+)? *\\n([\\s\\S]*?)\\s*\\1 *(?:\\n+|$)";
+		final var source = "^ *(`{3,}|~{3,})[ \\.]*(\\S+)? *\\n([\\s\\S]*?)\\s*\\1 *(?:\\n+|$)";
+		gfm.fences.source = source;
 		// gfm.paragraph.source = "^";
 		gfm.heading.source = "^ *(#{1,6}) +([^\\n]+?) *#* *(?:\\n+|$)";
-		final String pattern = "(?!" + gfm.fences.source.replaceFirst("\\\\1", "\\\\2") + "|"
-				+ gfm.list.source.replaceFirst("\\\\1", "\\\\3") + "|";
-		//pattern = pattern.replaceAll("\\\"", "\\\\\"");
-		//pattern = pattern.replaceAll("[$]", "\\\\\\$");
+		final String pattern = "(?!"
+				+ source.replaceFirst("\\\\1", "\\\\2") + "|"
+				+ source.replaceFirst("\\\\1", "\\\\3")
+				+ "|";
+		// pattern = pattern.replaceAll("\\\"", "\\\\\"");
+		// pattern = pattern.replaceAll("[$]", "\\\\\\$");
 		gfm.paragraph.replace("\\(\\?\\!", pattern);
 		return gfm;
 	}
 
 	private static BlockRules tables() {
 		final BlockRules tables = gfm();
-
 		return tables;
 	}
 }

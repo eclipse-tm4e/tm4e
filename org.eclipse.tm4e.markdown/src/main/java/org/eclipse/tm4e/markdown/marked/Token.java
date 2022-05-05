@@ -1,5 +1,5 @@
 /**
- *  Copyright (c) 2015-2017 Angelo ZERR.
+ * Copyright (c) 2015-2017 Angelo ZERR.
  * This program and the accompanying materials are made
  * available under the terms of the Eclipse Public License 2.0
  * which is available at https://www.eclipse.org/legal/epl-2.0/
@@ -11,16 +11,22 @@
  * Initial license: MIT
  *
  * Contributors:
- *  - Christopher Jeffrey and others: Initial code, written in JavaScript, licensed under MIT license
- *  - Angelo Zerr <angelo.zerr@gmail.com> - translation and adaptation to Java
+ * - Christopher Jeffrey and others: Initial code, written in JavaScript, licensed under MIT license
+ * - Angelo Zerr <angelo.zerr@gmail.com> - translation and adaptation to Java
  */
 package org.eclipse.tm4e.markdown.marked;
+
+import org.eclipse.jdt.annotation.Nullable;
 
 public class Token {
 
 	public final TokenType type;
+
+	@Nullable
 	public final String text;
 	public final int depth;
+
+	@Nullable
 	public final String lang;
 	public final boolean escaped;
 
@@ -28,11 +34,11 @@ public class Token {
 		this(type, null);
 	}
 
-	public Token(final TokenType type, final String text) {
+	public Token(final TokenType type, @Nullable final String text) {
 		this(type, text, -1);
 	}
 
-	public Token(final TokenType type, final String text, final int depth) {
+	public Token(final TokenType type, @Nullable final String text, final int depth) {
 		this(type, text, depth, null, false);
 	}
 
@@ -40,7 +46,8 @@ public class Token {
 		this(type, text, -1, lang, false);
 	}
 
-	private Token(final TokenType type, final String text, final int depth, final String lang, final boolean escaped) {
+	private Token(final TokenType type, @Nullable final String text, final int depth, @Nullable final String lang,
+			final boolean escaped) {
 		this.type = type;
 		this.text = text;
 		this.depth = depth;

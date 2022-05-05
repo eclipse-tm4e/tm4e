@@ -1,5 +1,5 @@
 /**
- *  Copyright (c) 2015-2017 Angelo ZERR.
+ * Copyright (c) 2015-2017 Angelo ZERR.
  * This program and the accompanying materials are made
  * available under the terms of the Eclipse Public License 2.0
  * which is available at https://www.eclipse.org/legal/epl-2.0/
@@ -11,28 +11,23 @@
  * Initial license: MIT
  *
  * Contributors:
- *  - Christopher Jeffrey and others: Initial code, written in JavaScript, licensed under MIT license
- *  - Angelo Zerr <angelo.zerr@gmail.com> - translation and adaptation to Java
+ * - Christopher Jeffrey and others: Initial code, written in JavaScript, licensed under MIT license
+ * - Angelo Zerr <angelo.zerr@gmail.com> - translation and adaptation to Java
  */
 package org.eclipse.tm4e.markdown.marked;
 
 public class Helpers {
 
-	public static String escape(final String html) {
-		return escape(html, false);
+	public static String htmlEscape(final String html) {
+		return htmlEscape(html, false);
 	}
 
-	public static String escape(final String html, final boolean encode) {
+	public static String htmlEscape(final String html, final boolean encode) {
 		return html
-			    .replaceAll(!encode ? "&(?!#?\\w+;)" : "&", "&amp;")
-			    .replace("<", "&lt;")
-			    .replace(">", "&gt;")
-			    .replace("\"", "&quot;")
-			    .replace("'", "&#39;");
+				.replaceAll(!encode ? "&(?!#?\\w+;)" : "&", "&amp;")
+				.replace("<", "&lt;")
+				.replace(">", "&gt;")
+				.replace("\"", "&quot;")
+				.replace("'", "&#39;");
 	}
-
-	public static boolean isEmpty(final String s) {
-		return s == null || s.isEmpty();
-	}
-
 }

@@ -19,8 +19,13 @@ package org.eclipse.tm4e.markdown.marked;
 import java.util.ArrayList;
 import java.util.Collections;
 
+import org.eclipse.jdt.annotation.Nullable;
+
 public class Tokens extends ArrayList<Token> {
 
+	private static final long serialVersionUID = 1L;
+
+	@Nullable
 	public Object links;
 
 	public Tokens reverse() {
@@ -28,6 +33,7 @@ public class Tokens extends ArrayList<Token> {
 		return this;
 	}
 
+	@Nullable
 	public Token pop() {
 		if (super.isEmpty()) {
 			return null;

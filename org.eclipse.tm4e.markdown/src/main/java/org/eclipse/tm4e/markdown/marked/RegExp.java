@@ -1,5 +1,5 @@
 /**
- *  Copyright (c) 2015-2017 Angelo ZERR.
+ * Copyright (c) 2015-2017 Angelo ZERR.
  * This program and the accompanying materials are made
  * available under the terms of the Eclipse Public License 2.0
  * which is available at https://www.eclipse.org/legal/epl-2.0/
@@ -11,30 +11,39 @@
  * Initial license: MIT
  *
  * Contributors:
- *  - Christopher Jeffrey and others: Initial code, written in JavaScript, licensed under MIT license
- *  - Angelo Zerr <angelo.zerr@gmail.com> - translation and adaptation to Java
+ * - Christopher Jeffrey and others: Initial code, written in JavaScript, licensed under MIT license
+ * - Angelo Zerr <angelo.zerr@gmail.com> - translation and adaptation to Java
  */
 package org.eclipse.tm4e.markdown.marked;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.eclipse.jdt.annotation.Nullable;
+
 public class RegExp {
 
+	@Nullable
 	protected String source;
+
+	@Nullable
 	private Pattern pattern;
 
-	public RegExp(final String source) {
+	public RegExp(@Nullable final String source) {
 		this.source = source;
 	}
 
+	@Nullable
 	public Matcher exec(final String s) {
 		if (source == null) {
 			return null;
 		}
+
 		if (pattern == null) {
 			pattern = Pattern.compile(source);
 		}
+
+		assert pattern != null;
 		final Matcher matcher = pattern.matcher(s);
 		if (matcher.find()) {
 			return matcher;
@@ -46,11 +55,16 @@ public class RegExp {
 		return replace(name, val.source);
 	}
 
-	public RegExp replace(final String name, String val) {
+	public RegExp replace(@Nullable final String name, @Nullable String val) {
+		final var source = this.source;
+
 		if (name == null)
-			return new RegExp(this.source);
-		val = val.replaceAll("(^|[^\\[])\\^", "$1");
-		this.source = this.source.replaceFirst(name, Matcher.quoteReplacement(val));
+			return new RegExp(source);
+
+		if (source != null && val != null) {
+			val = val.replaceAll("(^|[^\\[])\\^", "$1");
+			this.source = source.replaceFirst(name, Matcher.quoteReplacement(val));
+		}
 		return this;
 	}
 
@@ -58,11 +72,16 @@ public class RegExp {
 		return replaceAll(name, val.source);
 	}
 
-	public RegExp replaceAll(final String name, String val) {
+	public RegExp replaceAll(@Nullable final String name, @Nullable String val) {
+		final var source = this.source;
+
 		if (name == null)
-			return new RegExp(this.source);
-		val = val.replaceAll("(^|[^\\[])\\^", "$1");
-		this.source = this.source.replaceAll(name, Matcher.quoteReplacement(val));
+			return new RegExp(source);
+
+		if (source != null && val != null) {
+			val = val.replaceAll("(^|[^\\[])\\^", "$1");
+			this.source = source.replaceAll(name, Matcher.quoteReplacement(val));
+		}
 		return this;
 	}
 

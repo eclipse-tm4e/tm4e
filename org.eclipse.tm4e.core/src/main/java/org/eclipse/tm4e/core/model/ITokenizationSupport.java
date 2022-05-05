@@ -16,15 +16,17 @@
  */
 package org.eclipse.tm4e.core.model;
 
+import org.eclipse.jdt.annotation.Nullable;
+
 public interface ITokenizationSupport {
 
 	TMState getInitialState();
 
-	LineTokens tokenize(String line, TMState state);
-	
+	LineTokens tokenize(String line, @Nullable TMState state);
+
 	// add offsetDelta to each of the returned indices
 	// stop tokenizing at absolute value stopAtOffset (i.e. stream.pos() +
 	// offsetDelta > stopAtOffset)
-	LineTokens tokenize(String line, TMState state, Integer offsetDelta, Integer stopAtOffset);
+	LineTokens tokenize(String line, @Nullable TMState state, Integer offsetDelta, Integer stopAtOffset);
 
 }

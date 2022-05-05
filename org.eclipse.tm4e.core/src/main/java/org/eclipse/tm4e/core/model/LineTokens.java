@@ -43,7 +43,6 @@ public class LineTokens {
 		this.endState = endState;
 	}
 
-	@Nullable
 	public List<TMToken> getTokens() {
 		return tokens;
 	}

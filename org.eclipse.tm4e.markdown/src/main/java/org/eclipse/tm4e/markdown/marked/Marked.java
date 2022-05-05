@@ -16,6 +16,8 @@
  */
 package org.eclipse.tm4e.markdown.marked;
 
+import org.eclipse.jdt.annotation.Nullable;
+
 public class Marked {
 
 	public static IRenderer parse(final String src) {
@@ -26,12 +28,11 @@ public class Marked {
 		return parse(src, null, renderer);
 	}
 
-	public static IRenderer parse(final String src, final Options opt) {
+	public static IRenderer parse(final String src, @Nullable final Options opt) {
 		return parse(src, opt, null);
 	}
 
-	public static IRenderer parse(final String src, final Options opt, final IRenderer renderer) {
-
+	public static IRenderer parse(final String src, @Nullable final Options opt, @Nullable final IRenderer renderer) {
 		return Parser.parse(Lexer.lex(src, opt), opt, renderer);
 	}
 }

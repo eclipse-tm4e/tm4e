@@ -16,9 +16,11 @@
  */
 package org.eclipse.tm4e.markdown.marked;
 
+import org.eclipse.jdt.annotation.Nullable;
+
 public interface IRenderer {
 
-	void code(String code, String lang, boolean escaped);
+	void code(String code, @Nullable String lang, boolean escaped);
 
 	void blockquote(String quote);
 
@@ -33,7 +35,7 @@ public interface IRenderer {
 	void listitem(String text);
 
 	void startParagraph();
-	
+
 	void endParagraph();
 
 	void table(String header, String body);
@@ -43,13 +45,13 @@ public interface IRenderer {
 	void tablecell(String content, String flags);
 
 	void startEm();
-	
+
 	void endEm();
-	
+
 	void startStrong();
-	
+
 	void endStrong();
-	
+
 	void codespan(String text);
 
 	void br();
@@ -62,6 +64,6 @@ public interface IRenderer {
 
 	void text(String text);
 
-	
+
 
 }

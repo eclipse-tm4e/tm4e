@@ -38,7 +38,7 @@ public class Tokenizer implements ITokenizationSupport {
 	}
 
 	@Override
-	public LineTokens tokenize(final String line, final TMState state) {
+	public LineTokens tokenize(final String line, @Nullable final TMState state) {
 		return tokenize(line, state, null, null);
 	}
 

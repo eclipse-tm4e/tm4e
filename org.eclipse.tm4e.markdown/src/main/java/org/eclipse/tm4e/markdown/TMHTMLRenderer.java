@@ -15,6 +15,7 @@ import java.util.List;
 
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.core.runtime.content.IContentType;
+import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.tm4e.core.grammar.IGrammar;
 import org.eclipse.tm4e.core.model.ITokenizationSupport;
 import org.eclipse.tm4e.core.model.LineTokens;
@@ -34,7 +35,7 @@ public class TMHTMLRenderer extends HTMLRenderer {
 	}
 
 	@Override
-	public void code(final String code, final String lang, final boolean escaped) {
+	public void code(final String code, @Nullable final String lang, final boolean escaped) {
 		final IGrammar grammar = lang == null ? getDefaultGrammar() : getGrammar(lang);
 		if (grammar == null) {
 			super.code(code, lang, escaped);
@@ -63,23 +64,21 @@ public class TMHTMLRenderer extends HTMLRenderer {
 		html.append("<br/>");
 	}
 
-	private TMState tokenizeLine(final String line, final ITokenizationSupport tokenizationSupport, final TMState startState) {
+	@Nullable
+	private TMState tokenizeLine(final String line, final ITokenizationSupport tokenizationSupport, @Nullable final TMState startState) {
 		final LineTokens tokenized = tokenizationSupport.tokenize(line, startState);
 		final TMState endState = tokenized.getEndState();
 		final List<TMToken> tokens = tokenized.getTokens();
 		int offset = 0;
 		String tokenText;
 
-		// For each token inject spans with proper class names based on token
-		// type
+		// For each token inject spans with proper class names based on token type
 		for (int j = 0; j < tokens.size(); j++) {
 			final TMToken token = tokens.get(j);
 
 			// Tokens only provide a startIndex from where they are valid from.
-			// As such, we need to
-			// look ahead the value of the token by advancing until the next
-			// tokens start inex or the
-			// end of the line.
+			// As such, we need to look ahead the value of the token by advancing until the next
+			// tokens start inex or the end of the line.
 			if (j < tokens.size() - 1) {
 				tokenText = line.substring(offset, tokens.get(j + 1).startIndex);
 				offset = tokens.get(j + 1).startIndex;
@@ -97,7 +96,7 @@ public class TMHTMLRenderer extends HTMLRenderer {
 			html.append("class=\"");
 			html.append(className);
 			html.append("\">");
-			html.append(Helpers.escape(tokenText));
+			html.append(Helpers.htmlEscape(tokenText));
 			html.append("</span>");
 			// emitToken(className, tokenText);
 		}
@@ -105,10 +104,12 @@ public class TMHTMLRenderer extends HTMLRenderer {
 		return endState;
 	}
 
+	@Nullable
 	protected IGrammar getDefaultGrammar() {
 		return getGrammar(defaultLang);
 	}
 
+	@Nullable
 	protected IGrammar getGrammar(final String lang) {
 		final IContentType[] contentTypes = Platform.getContentTypeManager().findContentTypesFor("x." + lang);
 		return TMEclipseRegistryPlugin.getGrammarRegistryManager().getGrammarFor(contentTypes);

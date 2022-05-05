@@ -24,23 +24,23 @@ public class Token {
 	public final String lang;
 	public final boolean escaped;
 
-	public Token(TokenType type) {
+	public Token(final TokenType type) {
 		this(type, null);
 	}
 
-	public Token(TokenType type, String text) {
+	public Token(final TokenType type, final String text) {
 		this(type, text, -1);
 	}
 
-	public Token(TokenType type, String text, int depth) {
+	public Token(final TokenType type, final String text, final int depth) {
 		this(type, text, depth, null, false);
 	}
 
-	public Token(TokenType type, String lang, String text) {
+	public Token(final TokenType type, final String lang, final String text) {
 		this(type, text, -1, lang, false);
 	}
 
-	private Token(TokenType type, String text, int depth, String lang, boolean escaped) {
+	private Token(final TokenType type, final String text, final int depth, final String lang, final boolean escaped) {
 		this.type = type;
 		this.text = text;
 		this.depth = depth;

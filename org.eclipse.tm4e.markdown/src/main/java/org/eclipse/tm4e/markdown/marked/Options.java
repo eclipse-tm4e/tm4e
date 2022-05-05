@@ -33,7 +33,7 @@ public class Options {
 		return gfm;
 	}
 
-	public void setGfm(boolean gfm) {
+	public void setGfm(final boolean gfm) {
 		this.gfm = gfm;
 	}
 
@@ -41,7 +41,7 @@ public class Options {
 		return breaks;
 	}
 
-	public void setBreaks(boolean breaks) {
+	public void setBreaks(final boolean breaks) {
 		this.breaks = breaks;
 	}
 
@@ -49,7 +49,7 @@ public class Options {
 		return pedantic;
 	}
 
-	public void setPedantic(boolean pedantic) {
+	public void setPedantic(final boolean pedantic) {
 		this.pedantic = pedantic;
 	}
 
@@ -57,7 +57,7 @@ public class Options {
 		return tables;
 	}
 
-	public void setTables(boolean tables) {
+	public void setTables(final boolean tables) {
 		this.tables = tables;
 	}
 

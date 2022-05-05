@@ -18,19 +18,19 @@ package org.eclipse.tm4e.markdown.marked;
 
 public class Marked {
 
-	public static IRenderer parse(String src) {
+	public static IRenderer parse(final String src) {
 		return parse(src, (Options) null);
 	}
 
-	public static IRenderer parse(String src, IRenderer renderer) {
+	public static IRenderer parse(final String src, final IRenderer renderer) {
 		return parse(src, null, renderer);
 	}
 
-	public static IRenderer parse(String src, Options opt) {
+	public static IRenderer parse(final String src, final Options opt) {
 		return parse(src, opt, null);
 	}
 
-	public static IRenderer parse(String src, Options opt, IRenderer renderer) {
+	public static IRenderer parse(final String src, final Options opt, final IRenderer renderer) {
 
 		return Parser.parse(Lexer.lex(src, opt), opt, renderer);
 	}

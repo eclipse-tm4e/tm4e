@@ -26,12 +26,12 @@ public class HTMLRenderer implements IRenderer {
 		this(new StringBuilder());
 	}
 
-	public HTMLRenderer(StringBuilder html) {
+	public HTMLRenderer(final StringBuilder html) {
 		this.html = html;
 	}
 
 	@Override
-	public void code(String code, String lang, boolean escaped) {
+	public void code(final String code, final String lang, final boolean escaped) {
 		if (lang == null) {
 			html.append("<pre><code>");
 			html.append(escaped ? code : escape(code, true));
@@ -44,19 +44,19 @@ public class HTMLRenderer implements IRenderer {
 	}
 
 	@Override
-	public void blockquote(String quote) {
+	public void blockquote(final String quote) {
 		// TODO Auto-generated method stub
 
 	}
 
 	@Override
-	public void html(String html) {
+	public void html(final String html) {
 		// TODO Auto-generated method stub
 
 	}
 
 	@Override
-	public void heading(String text, int level, String raw) {
+	public void heading(final String text, final int level, final String raw) {
 		html.append("<h");
 		html.append(level);
 		html.append(" id=\"");
@@ -73,13 +73,13 @@ public class HTMLRenderer implements IRenderer {
 	}
 
 	@Override
-	public void list(String body, boolean ordered) {
+	public void list(final String body, final boolean ordered) {
 		// TODO Auto-generated method stub
 
 	}
 
 	@Override
-	public void listitem(String text) {
+	public void listitem(final String text) {
 		// TODO Auto-generated method stub
 
 	}
@@ -95,19 +95,19 @@ public class HTMLRenderer implements IRenderer {
 	}
 
 	@Override
-	public void table(String header, String body) {
+	public void table(final String header, final String body) {
 		// TODO Auto-generated method stub
 
 	}
 
 	@Override
-	public void tablerow(String content) {
+	public void tablerow(final String content) {
 		// TODO Auto-generated method stub
 
 	}
 
 	@Override
-	public void tablecell(String content, String flags) {
+	public void tablecell(final String content, final String flags) {
 		// TODO Auto-generated method stub
 
 	}
@@ -133,7 +133,7 @@ public class HTMLRenderer implements IRenderer {
 	}
 
 	@Override
-	public void codespan(String text) {
+	public void codespan(final String text) {
 		html.append("<code>");
 		html.append(text);
 		html.append("</code>");
@@ -146,25 +146,25 @@ public class HTMLRenderer implements IRenderer {
 	}
 
 	@Override
-	public void del(String text) {
+	public void del(final String text) {
 		// TODO Auto-generated method stub
 
 	}
 
 	@Override
-	public void link(String href, String title, String text) {
+	public void link(final String href, final String title, final String text) {
 		// TODO Auto-generated method stub
 
 	}
 
 	@Override
-	public void image(String href, String title, String text) {
+	public void image(final String href, final String title, final String text) {
 		// TODO Auto-generated method stub
 
 	}
 
 	@Override
-	public void text(String text) {
+	public void text(final String text) {
 		html.append(text);
 	}
 

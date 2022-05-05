@@ -43,8 +43,8 @@ public class InlineRules {
 	public final RegExp del;
 	public final RegExp text;
 
-	public InlineRules(RegExp escape, RegExp autolink, RegExp url, RegExp tag, RegExp link, RegExp reflink,
-			RegExp nolink, RegExp strong, RegExp em, RegExp code, RegExp br, RegExp del, RegExp text) {
+	public InlineRules(final RegExp escape, final RegExp autolink, final RegExp url, final RegExp tag, final RegExp link, final RegExp reflink,
+			final RegExp nolink, final RegExp strong, final RegExp em, final RegExp code, final RegExp br, final RegExp del, final RegExp text) {
 		this.escape = escape;
 		this.autolink = autolink;
 		this.url = url;
@@ -61,19 +61,19 @@ public class InlineRules {
 	}
 
 	private static InlineRules inline() {
-		RegExp escape = new RegExp("^\\\\([\\\\`*{}\\[\\]()#+\\-.!_>])");
-		RegExp autolink = new RegExp("^<([^ >]+(@|:\\/)[^ >]+)>");
-		RegExp url = RegExp.noop();
-		RegExp tag = new RegExp("^<!--[\\s\\S]*?-->|^<\\/?\\w+(?:\"[^\"]*\"|'[^']*'|[^'\">])*?>");
-		RegExp link = new RegExp("^!?\\[(inside)\\]\\(href\\)");
-		RegExp reflink = new RegExp("^!?\\[(inside)\\]\\s*\\[([^\\]]*)\\]");
-		RegExp nolink = new RegExp("^!?\\[((?:\\[[^\\]]*\\]|[^\\[\\]])*)\\]");
-		RegExp strong = new RegExp("^__([\\s\\S]+?)__(?!_)|^\\*\\*([\\s\\S]+?)\\*\\*(?!\\*)");
-		RegExp em = new RegExp("^\\b_((?:[^_]|__)+?)_\\b|^\\*((?:\\*\\*|[\\s\\S])+?)\\*(?!\\*)");
-		RegExp code = new RegExp("^(`+)\\s*([\\s\\S]*?[^`])\\s*\\1(?!`)");
-		RegExp br = new RegExp("^ {2,}\\n(?!\\s*$)");
-		RegExp del = RegExp.noop();
-		RegExp text = new RegExp("^[\\s\\S]+?(?=[\\\\<!\\[_*`]| {2,}\\n|$)");
+		final RegExp escape = new RegExp("^\\\\([\\\\`*{}\\[\\]()#+\\-.!_>])");
+		final RegExp autolink = new RegExp("^<([^ >]+(@|:\\/)[^ >]+)>");
+		final RegExp url = RegExp.noop();
+		final RegExp tag = new RegExp("^<!--[\\s\\S]*?-->|^<\\/?\\w+(?:\"[^\"]*\"|'[^']*'|[^'\">])*?>");
+		final RegExp link = new RegExp("^!?\\[(inside)\\]\\(href\\)");
+		final RegExp reflink = new RegExp("^!?\\[(inside)\\]\\s*\\[([^\\]]*)\\]");
+		final RegExp nolink = new RegExp("^!?\\[((?:\\[[^\\]]*\\]|[^\\[\\]])*)\\]");
+		final RegExp strong = new RegExp("^__([\\s\\S]+?)__(?!_)|^\\*\\*([\\s\\S]+?)\\*\\*(?!\\*)");
+		final RegExp em = new RegExp("^\\b_((?:[^_]|__)+?)_\\b|^\\*((?:\\*\\*|[\\s\\S])+?)\\*(?!\\*)");
+		final RegExp code = new RegExp("^(`+)\\s*([\\s\\S]*?[^`])\\s*\\1(?!`)");
+		final RegExp br = new RegExp("^ {2,}\\n(?!\\s*$)");
+		final RegExp del = RegExp.noop();
+		final RegExp text = new RegExp("^[\\s\\S]+?(?=[\\\\<!\\[_*`]| {2,}\\n|$)");
 		// Replacement
 		link.replace("inside", INLINE_INSIDE).replace("href", INLINE_HREF);
 		reflink.replace("inside", INLINE_INSIDE);
@@ -81,19 +81,19 @@ public class InlineRules {
 	}
 
 	private static InlineRules normal() {
-		InlineRules normal = inline();
+		final InlineRules normal = inline();
 		return normal;
 	}
 
 	private static InlineRules pedantic() {
-		InlineRules pedantic = normal();
+		final InlineRules pedantic = normal();
 		pedantic.strong.source = "^__(?=\\S)([\\s\\S]*?\\S)__(?!_)|^\\*\\*(?=\\S)([\\s\\S]*?\\S)\\*\\*(?!\\*)";
 		pedantic.em.source = "^_(?=\\S)([\\s\\S]*?\\S)_(?!_)|^\\*(?=\\S)([\\s\\S]*?\\S)\\*(?!\\*)";
 		return pedantic;
 	}
 
 	private static InlineRules gfm() {
-		InlineRules gmf = normal();
+		final InlineRules gmf = normal();
 		gmf.escape.replace("\\]\\)", "~|])");
 		gmf.url.source = "^(https?:\\/\\/[^\\s<]+[^<.,:;\"')\\]\\s])";
 		gmf.del.source = "^~~(?=\\S)([\\s\\S]*?\\S)~~";
@@ -102,7 +102,7 @@ public class InlineRules {
 	}
 
 	private static InlineRules breaks() {
-		InlineRules breaks = gfm();
+		final InlineRules breaks = gfm();
 		breaks.br.replace("{2,}", "*");
 		breaks.text.replace("{2,}", "*");
 		return breaks;

@@ -29,25 +29,25 @@ public class TMHTMLRenderer extends HTMLRenderer {
 
 	private final String defaultLang;
 
-	public TMHTMLRenderer(String defaultLang) {
+	public TMHTMLRenderer(final String defaultLang) {
 		this.defaultLang = defaultLang;
 	}
 
 	@Override
-	public void code(String code, String lang, boolean escaped) {
-		IGrammar grammar = lang == null ? getDefaultGrammar() : getGrammar(lang);
+	public void code(final String code, final String lang, final boolean escaped) {
+		final IGrammar grammar = lang == null ? getDefaultGrammar() : getGrammar(lang);
 		if (grammar == null) {
 			super.code(code, lang, escaped);
 		} else {
-			ITokenizationSupport tokenizationSupport = new Tokenizer(grammar);
+			final ITokenizationSupport tokenizationSupport = new Tokenizer(grammar);
 			html.append("<div style=\"white-space: pre-wrap;\">");
 			tokenizeLines(code, tokenizationSupport);
 			html.append("</div>");
 		}
 	}
 
-	private void tokenizeLines(String text, ITokenizationSupport tokenizationSupport) {
-		String[] lines = text.split("\r\n|\r|\n");
+	private void tokenizeLines(final String text, final ITokenizationSupport tokenizationSupport) {
+		final String[] lines = text.split("\r\n|\r|\n");
 		TMState currentState = tokenizationSupport.getInitialState();
 		for (int i = 0; i < lines.length; i++) {
 			currentState = tokenizeLine(lines[i], tokenizationSupport, currentState);
@@ -63,17 +63,17 @@ public class TMHTMLRenderer extends HTMLRenderer {
 		html.append("<br/>");
 	}
 
-	private TMState tokenizeLine(String line, ITokenizationSupport tokenizationSupport, TMState startState) {
-		LineTokens tokenized = tokenizationSupport.tokenize(line, startState);
-		TMState endState = tokenized.getEndState();
-		List<TMToken> tokens = tokenized.getTokens();
+	private TMState tokenizeLine(final String line, final ITokenizationSupport tokenizationSupport, final TMState startState) {
+		final LineTokens tokenized = tokenizationSupport.tokenize(line, startState);
+		final TMState endState = tokenized.getEndState();
+		final List<TMToken> tokens = tokenized.getTokens();
 		int offset = 0;
 		String tokenText;
 
 		// For each token inject spans with proper class names based on token
 		// type
 		for (int j = 0; j < tokens.size(); j++) {
-			TMToken token = tokens.get(j);
+			final TMToken token = tokens.get(j);
 
 			// Tokens only provide a startIndex from where they are valid from.
 			// As such, we need to
@@ -88,7 +88,7 @@ public class TMHTMLRenderer extends HTMLRenderer {
 			}
 
 			String className = "token";
-			String safeType = token.type.replaceAll("[^a-z0-9\\-]", " ");
+			final String safeType = token.type.replaceAll("[^a-z0-9\\-]", " ");
 			if (!safeType.isEmpty()) {
 				className += ' ' + safeType;
 			}
@@ -109,8 +109,8 @@ public class TMHTMLRenderer extends HTMLRenderer {
 		return getGrammar(defaultLang);
 	}
 
-	protected IGrammar getGrammar(String lang) {
-		IContentType[] contentTypes = Platform.getContentTypeManager().findContentTypesFor("x." + lang);
+	protected IGrammar getGrammar(final String lang) {
+		final IContentType[] contentTypes = Platform.getContentTypeManager().findContentTypesFor("x." + lang);
 		return TMEclipseRegistryPlugin.getGrammarRegistryManager().getGrammarFor(contentTypes);
 	}
 }

@@ -24,29 +24,29 @@ public class RegExp {
 	protected String source;
 	private Pattern pattern;
 
-	public RegExp(String source) {
+	public RegExp(final String source) {
 		this.source = source;
 	}
 
-	public Matcher exec(String s) {
+	public Matcher exec(final String s) {
 		if (source == null) {
 			return null;
 		}
 		if (pattern == null) {
 			pattern = Pattern.compile(source);
 		}
-		Matcher matcher = pattern.matcher(s);
+		final Matcher matcher = pattern.matcher(s);
 		if (matcher.find()) {
 			return matcher;
 		}
 		return null;
 	}
 
-	public RegExp replace(String name, RegExp val) {
+	public RegExp replace(final String name, final RegExp val) {
 		return replace(name, val.source);
 	}
 
-	public RegExp replace(String name, String val) {
+	public RegExp replace(final String name, String val) {
 		if (name == null)
 			return new RegExp(this.source);
 		val = val.replaceAll("(^|[^\\[])\\^", "$1");
@@ -54,11 +54,11 @@ public class RegExp {
 		return this;
 	}
 
-	public RegExp replaceAll(String name, RegExp val) {
+	public RegExp replaceAll(final String name, final RegExp val) {
 		return replaceAll(name, val.source);
 	}
 
-	public RegExp replaceAll(String name, String val) {
+	public RegExp replaceAll(final String name, String val) {
 		if (name == null)
 			return new RegExp(this.source);
 		val = val.replaceAll("(^|[^\\[])\\^", "$1");

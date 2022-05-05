@@ -18,11 +18,11 @@ package org.eclipse.tm4e.markdown.marked;
 
 public class Helpers {
 
-	public static String escape(String html) {
+	public static String escape(final String html) {
 		return escape(html, false);
 	}
 
-	public static String escape(String html, boolean encode) {
+	public static String escape(final String html, final boolean encode) {
 		return html
 			    .replaceAll(!encode ? "&(?!#?\\w+;)" : "&", "&amp;")
 			    .replace("<", "&lt;")
@@ -31,7 +31,7 @@ public class Helpers {
 			    .replace("'", "&#39;");
 	}
 
-	public static boolean isEmpty(String s) {
+	public static boolean isEmpty(final String s) {
 		return s == null || s.isEmpty();
 	}
 

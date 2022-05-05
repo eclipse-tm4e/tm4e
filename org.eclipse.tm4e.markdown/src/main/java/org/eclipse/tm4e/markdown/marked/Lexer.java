@@ -26,7 +26,7 @@ public class Lexer {
 	private final Tokens tokens;
 	private final Options options;
 
-	public Lexer(Options options) {
+	public Lexer(final Options options) {
 		this.tokens = new Tokens();
 		this.options = options != null ? options : Options.DEFAULTS;
 
@@ -41,8 +41,8 @@ public class Lexer {
 		}
 	}
 
-	public static Tokens lex(String src, Options options) {
-		Lexer lexer = new Lexer(options);
+	public static Tokens lex(final String src, final Options options) {
+		final Lexer lexer = new Lexer(options);
 		return lexer.lex(src);
 	}
 
@@ -52,11 +52,11 @@ public class Lexer {
 		return this.token(src, true);
 	}
 
-	private Tokens token(String src, boolean top) {
+	private Tokens token(final String src, final boolean top) {
 		return token(src, top, null);
 	}
 
-	private Tokens token(String src, boolean top, Object bq) {
+	private Tokens token(String src, final boolean top, final Object bq) {
 		src = src.replaceAll("^ +$", "");
 		Matcher cap;
 		while (!isEmpty(src)) {
@@ -83,8 +83,8 @@ public class Lexer {
 			// fences (gfm)
 			if ((cap = this.rules.fences.exec(src)) != null) {
 				src = src.substring(cap.group(0).length());
-				String lang = cap.group(2);
-				String text = !isEmpty(cap.group(3)) ? cap.group(3) : "";
+				final String lang = cap.group(2);
+				final String text = !isEmpty(cap.group(3)) ? cap.group(3) : "";
 				this.tokens.add(new Token(TokenType.code, lang, text));
 				continue;
 			}
@@ -92,8 +92,8 @@ public class Lexer {
 			// heading
 			if ((cap = this.rules.heading.exec(src)) != null) {
 				src = src.substring(cap.group(0).length());
-				String text = cap.group(2);
-				int depth = cap.group(1).length();
+				final String text = cap.group(2);
+				final int depth = cap.group(1).length();
 				this.tokens.add(new Token(TokenType.heading, text, depth));
 				continue;
 			}
@@ -104,8 +104,8 @@ public class Lexer {
 			// lheading
 			if ((cap = this.rules.lheading.exec(src)) != null) {
 				src = src.substring(cap.group(0).length());
-				String text = cap.group(1);
-				int depth = cap.group(2).equals("=") ? 1 : 2;
+				final String text = cap.group(1);
+				final int depth = cap.group(2).equals("=") ? 1 : 2;
 				this.tokens.add(new Token(TokenType.heading, text, depth));
 				continue;
 			}
@@ -120,7 +120,7 @@ public class Lexer {
 			// top-level paragraph
 			if (top && ((cap = this.rules.paragraph.exec(src)) != null)) {
 				src = src.substring(cap.group(0).length());
-				String text = cap.group(1).charAt(cap.group(1).length() - 1) == '\n' ? cap.group(1) : cap.group(1);
+				final String text = cap.group(1).charAt(cap.group(1).length() - 1) == '\n' ? cap.group(1) : cap.group(1);
 				this.tokens.add(new Token(TokenType.paragraph, text));
 				continue;
 			}

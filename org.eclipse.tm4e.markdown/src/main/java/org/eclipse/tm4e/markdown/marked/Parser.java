@@ -24,19 +24,19 @@ public class Parser {
 	private InlineLexer inline;
 	private final IRenderer renderer;
 
-	public Parser(Options options, IRenderer renderer) {
+	public Parser(final Options options, final IRenderer renderer) {
 		this.tokens = new Tokens();
 		this.token = null;
 		this.options = options != null ? options : Options.DEFAULTS;
 		this.renderer = renderer != null ? renderer : new HTMLRenderer();
 	}
 
-	public static IRenderer parse(Tokens src, Options options, IRenderer renderer) {
-		Parser parser = new Parser(options, renderer);
+	public static IRenderer parse(final Tokens src, final Options options, final IRenderer renderer) {
+		final Parser parser = new Parser(options, renderer);
 		return parser.parse(src);
 	}
 
-	private IRenderer parse(Tokens src) {
+	private IRenderer parse(final Tokens src) {
 		this.inline = new InlineLexer(src.links, this.options, this.renderer);
 		this.tokens = src.reverse();
 

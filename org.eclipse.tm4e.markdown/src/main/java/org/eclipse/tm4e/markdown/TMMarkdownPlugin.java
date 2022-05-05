@@ -29,12 +29,12 @@ public class TMMarkdownPlugin implements BundleActivator {
 	}
 
 	@Override
-	public void start(BundleContext bundleContext) throws Exception {
+	public void start(final BundleContext bundleContext) throws Exception {
 		TMMarkdownPlugin.context = bundleContext;
 	}
 
 	@Override
-	public void stop(BundleContext bundleContext) throws Exception {
+	public void stop(final BundleContext bundleContext) throws Exception {
 		TMMarkdownPlugin.context = null;
 	}
 }

@@ -43,9 +43,9 @@ public class BlockRules {
 	public final RegExp bullet;
 	public final RegExp item;
 
-	public BlockRules(RegExp newline, RegExp code, RegExp fences, RegExp hr, RegExp heading, RegExp nptable,
-			RegExp lheading, RegExp blockquote, RegExp list, RegExp html, RegExp def, RegExp table, RegExp paragraph,
-			RegExp text, RegExp bullet, RegExp item) {
+	public BlockRules(final RegExp newline, final RegExp code, final RegExp fences, final RegExp hr, final RegExp heading, final RegExp nptable,
+			final RegExp lheading, final RegExp blockquote, final RegExp list, final RegExp html, final RegExp def, final RegExp table, final RegExp paragraph,
+			final RegExp text, final RegExp bullet, final RegExp item) {
 		this.newline = newline;
 		this.code = code;
 		this.fences = fences;
@@ -65,22 +65,22 @@ public class BlockRules {
 	}
 
 	private static BlockRules block() {
-		RegExp newline = new RegExp("^\\n+");
-		RegExp code = new RegExp("^( {4}[^\\n]+\\n*)+/");
-		RegExp fences = new RegExp("");
-		RegExp hr = new RegExp("^( *[-*_]){3,} *(?:\\n+|$)");
-		RegExp heading = new RegExp("^ *(#{1,6}) *([^\\n]+?) *#* *(?:\\n+|$)");
-		RegExp nptable = new RegExp("");
-		RegExp lheading = new RegExp("^([^\\n]+)\\n *(=|-){2,} *(?:\\n+|$)");
-		RegExp blockquote = new RegExp("^( *>[^\\n]+(\\n(?!def)[^\\n]+)*\\n*)+");
-		RegExp list = new RegExp("^( *)(bull) [\\s\\S]+?(?:hr|def|\\n{2,}(?! )(?!\\1bull )\\n*|\\s*$)");
-		RegExp html = new RegExp("^ *(?:comment *(?:\\n|\\s*$)|closed *(?:\\n{2,}|\\s*$)|closing *(?:\\n{2,}|\\s*$))");
-		RegExp def = new RegExp("^ *\\[([^\\]]+)\\]: *<?([^\\s>]+)>?(?: +[\"(]([^\\n]+)[\")])? *(?:\\n+|$)");
-		RegExp table = RegExp.noop();
-		RegExp paragraph = new RegExp("^((?:[^\\n]+\\n?(?!hr|heading|lheading|blockquote|tag|def))+)\\n*");
-		RegExp text = new RegExp("^[^\\n]+");
-		RegExp bullet = new RegExp("(?:[*+-]|\\d+\\.)");
-		RegExp item = new RegExp("^( *)(bull) [^\\n]*(?:\\n(?!\\1bull )[^\\n]*)*");
+		final RegExp newline = new RegExp("^\\n+");
+		final RegExp code = new RegExp("^( {4}[^\\n]+\\n*)+/");
+		final RegExp fences = new RegExp("");
+		final RegExp hr = new RegExp("^( *[-*_]){3,} *(?:\\n+|$)");
+		final RegExp heading = new RegExp("^ *(#{1,6}) *([^\\n]+?) *#* *(?:\\n+|$)");
+		final RegExp nptable = new RegExp("");
+		final RegExp lheading = new RegExp("^([^\\n]+)\\n *(=|-){2,} *(?:\\n+|$)");
+		final RegExp blockquote = new RegExp("^( *>[^\\n]+(\\n(?!def)[^\\n]+)*\\n*)+");
+		final RegExp list = new RegExp("^( *)(bull) [\\s\\S]+?(?:hr|def|\\n{2,}(?! )(?!\\1bull )\\n*|\\s*$)");
+		final RegExp html = new RegExp("^ *(?:comment *(?:\\n|\\s*$)|closed *(?:\\n{2,}|\\s*$)|closing *(?:\\n{2,}|\\s*$))");
+		final RegExp def = new RegExp("^ *\\[([^\\]]+)\\]: *<?([^\\s>]+)>?(?: +[\"(]([^\\n]+)[\")])? *(?:\\n+|$)");
+		final RegExp table = RegExp.noop();
+		final RegExp paragraph = new RegExp("^((?:[^\\n]+\\n?(?!hr|heading|lheading|blockquote|tag|def))+)\\n*");
+		final RegExp text = new RegExp("^[^\\n]+");
+		final RegExp bullet = new RegExp("(?:[*+-]|\\d+\\.)");
+		final RegExp item = new RegExp("^( *)(bull) [^\\n]*(?:\\n(?!\\1bull )[^\\n]*)*");
 
 		item.replaceAll("bull", bullet);
 		list.replaceAll("bull", bullet).replace("hr", "\\n+(?=\\1?(?:[-*_] *){3,}(?:\\n+|$))").replace("def",
@@ -97,11 +97,11 @@ public class BlockRules {
 	}
 
 	private static BlockRules gfm() {
-		BlockRules gfm = normal();
+		final BlockRules gfm = normal();
 		gfm.fences.source = "^ *(`{3,}|~{3,})[ \\.]*(\\S+)? *\\n([\\s\\S]*?)\\s*\\1 *(?:\\n+|$)";
 		// gfm.paragraph.source = "^";
 		gfm.heading.source = "^ *(#{1,6}) +([^\\n]+?) *#* *(?:\\n+|$)";
-		String pattern = "(?!" + gfm.fences.source.replaceFirst("\\\\1", "\\\\2") + "|"
+		final String pattern = "(?!" + gfm.fences.source.replaceFirst("\\\\1", "\\\\2") + "|"
 				+ gfm.list.source.replaceFirst("\\\\1", "\\\\3") + "|";
 		//pattern = pattern.replaceAll("\\\"", "\\\\\"");
 		//pattern = pattern.replaceAll("[$]", "\\\\\\$");
@@ -110,7 +110,7 @@ public class BlockRules {
 	}
 
 	private static BlockRules tables() {
-		BlockRules tables = gfm();
+		final BlockRules tables = gfm();
 
 		return tables;
 	}

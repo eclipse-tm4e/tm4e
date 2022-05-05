@@ -27,7 +27,7 @@ public class InlineLexer {
 	private final InlineRules rules;
 	private final IRenderer renderer;
 
-	public InlineLexer(Object links, Options options, IRenderer renderer) {
+	public InlineLexer(final Object links, final Options options, final IRenderer renderer) {
 		this.options = options != null ? options : Options.DEFAULTS;
 		// this.links = links;
 		this.renderer = renderer != null ? renderer : new HTMLRenderer();
@@ -90,7 +90,7 @@ public class InlineLexer {
 		}
 	}
 
-	private String smartypants(String text) {
+	private String smartypants(final String text) {
 		return text;
 	}
 

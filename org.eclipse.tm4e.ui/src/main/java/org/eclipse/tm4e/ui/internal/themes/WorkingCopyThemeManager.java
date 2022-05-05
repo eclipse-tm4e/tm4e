@@ -33,26 +33,26 @@ public final class WorkingCopyThemeManager extends AbstractThemeManager {
 	private List<IThemeAssociation> associationAdded;
 	private List<IThemeAssociation> associationRemoved;
 
-	public WorkingCopyThemeManager(IThemeManager manager) {
+	public WorkingCopyThemeManager(final IThemeManager manager) {
 		this.manager = manager;
 		load();
 	}
 
 	private void load() {
 		// Copy themes
-		ITheme[] themes = manager.getThemes();
-		for (ITheme theme : themes) {
+		final ITheme[] themes = manager.getThemes();
+		for (final ITheme theme : themes) {
 			super.registerTheme(theme);
 		}
 		// Copy theme associations
-		IThemeAssociation[] associations = manager.getAllThemeAssociations();
-		for (IThemeAssociation association : associations) {
+		final IThemeAssociation[] associations = manager.getAllThemeAssociations();
+		for (final IThemeAssociation association : associations) {
 			super.registerThemeAssociation(association);
 		}
 	}
 
 	@Override
-	public void registerTheme(ITheme theme) {
+	public void registerTheme(final ITheme theme) {
 		super.registerTheme(theme);
 		if (themeAdded == null) {
 			themeAdded = new ArrayList<>();
@@ -61,7 +61,7 @@ public final class WorkingCopyThemeManager extends AbstractThemeManager {
 	}
 
 	@Override
-	public void unregisterTheme(ITheme theme) {
+	public void unregisterTheme(final ITheme theme) {
 		super.unregisterTheme(theme);
 		if (themeAdded != null && themeAdded.contains(theme)) {
 			themeAdded.remove(theme);
@@ -74,7 +74,7 @@ public final class WorkingCopyThemeManager extends AbstractThemeManager {
 	}
 
 	@Override
-	public void registerThemeAssociation(IThemeAssociation association) {
+	public void registerThemeAssociation(final IThemeAssociation association) {
 		super.registerThemeAssociation(association);
 		if (associationAdded == null) {
 			associationAdded = new ArrayList<>();
@@ -83,7 +83,7 @@ public final class WorkingCopyThemeManager extends AbstractThemeManager {
 	}
 
 	@Override
-	public void unregisterThemeAssociation(IThemeAssociation association) {
+	public void unregisterThemeAssociation(final IThemeAssociation association) {
 		super.unregisterThemeAssociation(association);
 		if (associationAdded != null && associationAdded.contains(association)) {
 			associationAdded.remove(association);
@@ -98,22 +98,22 @@ public final class WorkingCopyThemeManager extends AbstractThemeManager {
 	@Override
 	public void save() throws BackingStoreException {
 		if (themeAdded != null) {
-			for (ITheme theme : themeAdded) {
+			for (final ITheme theme : themeAdded) {
 				manager.registerTheme(theme);
 			}
 		}
 		if (themeRemoved != null) {
-			for (ITheme theme : themeRemoved) {
+			for (final ITheme theme : themeRemoved) {
 				manager.unregisterTheme(theme);
 			}
 		}
 		if (associationAdded != null) {
-			for (IThemeAssociation association : associationAdded) {
+			for (final IThemeAssociation association : associationAdded) {
 				manager.registerThemeAssociation(association);
 			}
 		}
 		if (associationRemoved != null) {
-			for (IThemeAssociation association : associationRemoved) {
+			for (final IThemeAssociation association : associationRemoved) {
 				manager.unregisterThemeAssociation(association);
 			}
 		}

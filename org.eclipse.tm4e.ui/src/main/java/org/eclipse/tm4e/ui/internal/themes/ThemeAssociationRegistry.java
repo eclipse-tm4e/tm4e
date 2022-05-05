@@ -36,7 +36,7 @@ final class ThemeAssociationRegistry {
 			return light;
 		}
 
-		void setLight(IThemeAssociation light) {
+		void setLight(final IThemeAssociation light) {
 			this.light = light;
 		}
 
@@ -44,17 +44,17 @@ final class ThemeAssociationRegistry {
 			return dark;
 		}
 
-		void setDark(IThemeAssociation dark) {
+		void setDark(final IThemeAssociation dark) {
 			this.dark = dark;
 		}
 
 	}
 
 
-	IThemeAssociation getThemeAssociationFor(String scopeName, boolean dark) {
+	IThemeAssociation getThemeAssociationFor(final String scopeName, final boolean dark) {
 		// From theme assiocations
 		IThemeAssociation userAssociation = null;
-		EclipseThemeAssociation registry = scopes.get(scopeName);
+		final EclipseThemeAssociation registry = scopes.get(scopeName);
 		if (registry != null) {
 			userAssociation = dark ? registry.getDark() : registry.getLight();
 		}
@@ -64,14 +64,14 @@ final class ThemeAssociationRegistry {
 		return null;
 	}
 
-	void register(IThemeAssociation association) {
-		String scopeName = association.getScopeName();
+	void register(final IThemeAssociation association) {
+		final String scopeName = association.getScopeName();
 		EclipseThemeAssociation registry = scopes.get(scopeName);
 		if (registry == null) {
 			registry = new EclipseThemeAssociation();
 			scopes.put(scopeName, registry);
 		}
-		boolean dark = association.isWhenDark();
+		final boolean dark = association.isWhenDark();
 		if (dark) {
 			registry.setDark(association);
 		} else {
@@ -79,11 +79,11 @@ final class ThemeAssociationRegistry {
 		}
 	}
 
-	void unregister(IThemeAssociation association) {
-		String scopeName = association.getScopeName();
-		EclipseThemeAssociation registry = scopes.get(scopeName);
+	void unregister(final IThemeAssociation association) {
+		final String scopeName = association.getScopeName();
+		final EclipseThemeAssociation registry = scopes.get(scopeName);
 		if (registry != null) {
-			boolean dark = association.isWhenDark();
+			final boolean dark = association.isWhenDark();
 			if (dark) {
 				registry.setDark(null);
 			} else {
@@ -148,9 +148,9 @@ final class ThemeAssociationRegistry {
 	//
 	// @Override
 	List<IThemeAssociation> getThemeAssociations() {
-		List<IThemeAssociation> associations = new ArrayList<>();
-		Collection<EclipseThemeAssociation> eclipseAssociations = scopes.values();
-		for (EclipseThemeAssociation eclipseAssociation : eclipseAssociations) {
+		final List<IThemeAssociation> associations = new ArrayList<>();
+		final Collection<EclipseThemeAssociation> eclipseAssociations = scopes.values();
+		for (final EclipseThemeAssociation eclipseAssociation : eclipseAssociations) {
 			if (eclipseAssociation.getLight() != null) {
 				associations.add(eclipseAssociation.getLight());
 			}

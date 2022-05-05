@@ -64,8 +64,8 @@ final class SelectGrammarWizardPage extends AbstractWizardPage {
 	}
 
 	@Override
-	protected void createBody(Composite ancestor) {
-		Composite parent = new Composite(ancestor, SWT.NONE);
+	protected void createBody(final Composite ancestor) {
+		final Composite parent = new Composite(ancestor, SWT.NONE);
 		parent.setFont(parent.getFont());
 		parent.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		parent.setLayout(new GridLayout(2, false));
@@ -75,9 +75,9 @@ final class SelectGrammarWizardPage extends AbstractWizardPage {
 		grammarFileText.addListener(SWT.Modify, this);
 
 		// Buttons
-		Composite buttons = new Composite(parent, SWT.NONE);
+		final Composite buttons = new Composite(parent, SWT.NONE);
 		buttons.setLayout(new GridLayout(2, false));
-		GridData gd = new GridData(GridData.FILL_HORIZONTAL);
+		final GridData gd = new GridData(GridData.FILL_HORIZONTAL);
 		gd.horizontalSpan = 2;
 		gd.horizontalAlignment = SWT.RIGHT;
 		buttons.setLayoutData(gd);
@@ -86,11 +86,11 @@ final class SelectGrammarWizardPage extends AbstractWizardPage {
 		browseFileSystemButton.setText(TMUIMessages.Button_browse_FileSystem);
 		browseFileSystemButton.addSelectionListener(new SelectionAdapter() {
 			@Override
-			public void widgetSelected(SelectionEvent e) {
-				FileDialog dialog = new FileDialog(parent.getShell());
+			public void widgetSelected(final SelectionEvent e) {
+				final FileDialog dialog = new FileDialog(parent.getShell());
 				dialog.setFilterExtensions(TEXTMATE_EXTENSIONS);
 				dialog.setFilterPath(grammarFileText.getText());
-				String result = dialog.open();
+				final String result = dialog.open();
 				if (result != null && !result.isEmpty()) {
 					grammarFileText.setText(result);
 				}
@@ -101,22 +101,22 @@ final class SelectGrammarWizardPage extends AbstractWizardPage {
 		browseWorkspaceButton.setText(TMUIMessages.Button_browse_Workspace);
 		browseWorkspaceButton.addSelectionListener(new SelectionAdapter() {
 			@Override
-			public void widgetSelected(SelectionEvent e) {
+			public void widgetSelected(final SelectionEvent e) {
 				// TODO
 			}
 		});
 
 		grammarInfoWidget = new GrammarInfoWidget(parent, SWT.NONE);
-		GridData data = new GridData(GridData.FILL_HORIZONTAL);
+		final GridData data = new GridData(GridData.FILL_HORIZONTAL);
 		data.horizontalSpan = 2;
 		grammarInfoWidget.setLayoutData(data);
 	}
 
-	private Text createText(Composite parent, String s) {
-		Label label = new Label(parent, SWT.NONE);
+	private Text createText(final Composite parent, final String s) {
+		final Label label = new Label(parent, SWT.NONE);
 		label.setText(s);
 
-		Text text = new Text(parent, SWT.BORDER);
+		final Text text = new Text(parent, SWT.BORDER);
 		text.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		return text;
 	}
@@ -127,23 +127,23 @@ final class SelectGrammarWizardPage extends AbstractWizardPage {
 	}
 
 	@Override
-	protected IStatus validatePage(Event event) {
+	protected IStatus validatePage(final Event event) {
 		grammarInfoWidget.refresh(null);
-		String path = grammarFileText.getText();
+		final String path = grammarFileText.getText();
 		if (path.isEmpty()) {
 			return new Status(IStatus.ERROR, TMUIPlugin.PLUGIN_ID,
 					TMUIMessages.SelectGrammarWizardPage_file_error_required);
 		}
-		File f = new File(path);
-		Registry registry = new Registry();
+		final File f = new File(path);
+		final Registry registry = new Registry();
 		try(InputStream is = new FileInputStream(f)) {
-			IGrammar grammar = registry.loadGrammarFromPathSync(f.getName(), is);
+			final IGrammar grammar = registry.loadGrammarFromPathSync(f.getName(), is);
 			if (grammar == null || grammar.getScopeName() == null) {
 				return new Status(IStatus.ERROR, TMUIPlugin.PLUGIN_ID,
 						TMUIMessages.SelectGrammarWizardPage_file_error_invalid);
 			}
 			grammarInfoWidget.refresh(grammar);
-		} catch (Exception e) {
+		} catch (final Exception e) {
 			return new Status(IStatus.ERROR, TMUIPlugin.PLUGIN_ID,
 					NLS.bind(TMUIMessages.SelectGrammarWizardPage_file_error_load, e.getMessage()), e);
 		}

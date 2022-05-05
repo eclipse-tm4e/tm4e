@@ -33,49 +33,49 @@ public final class TMViewer extends SourceViewer {
 
 	private TMPresentationReconciler reconciler;
 
-	public TMViewer(Composite parent, IVerticalRuler ruler, int styles) {
+	public TMViewer(final Composite parent, final IVerticalRuler ruler, final int styles) {
 		super(parent, ruler, styles);
 		init();
 	}
 
-	public TMViewer(Composite parent, IVerticalRuler verticalRuler, IOverviewRuler overviewRuler,
-			boolean showAnnotationsOverview, int styles) {
+	public TMViewer(final Composite parent, final IVerticalRuler verticalRuler, final IOverviewRuler overviewRuler,
+			final boolean showAnnotationsOverview, final int styles) {
 		super(parent, verticalRuler, overviewRuler, showAnnotationsOverview, styles);
 		init();
 	}
 
 	private void init() {
 		this.reconciler = new TMPresentationReconciler();
-		SourceViewerConfiguration configuration = new TMSourceViewerConfiguration();
+		final SourceViewerConfiguration configuration = new TMSourceViewerConfiguration();
 		this.configure(configuration);
 	}
 
 	private final class TMSourceViewerConfiguration extends SourceViewerConfiguration {
 
 		@Override
-		public IPresentationReconciler getPresentationReconciler(ISourceViewer sourceViewer) {
+		public IPresentationReconciler getPresentationReconciler(final ISourceViewer sourceViewer) {
 			return reconciler;
 		}
 
 	}
 
-	public void setGrammar(IGrammar grammar) {
+	public void setGrammar(final IGrammar grammar) {
 		reconciler.setGrammar(grammar);
 		if (getDocument() == null) {
 			super.setDocument(new Document());
 		}
 	}
 
-	public void setTheme(ITheme theme) {
+	public void setTheme(final ITheme theme) {
 		reconciler.setTheme(theme);
-		StyledText styledText = getTextWidget();
+		final StyledText styledText = getTextWidget();
 		styledText.setForeground(null);
 		styledText.setBackground(null);
 		theme.initializeViewerColors(styledText);
 		getTextWidget().setFont(JFaceResources.getTextFont());
 	}
 
-	public void setText(String text) {
+	public void setText(final String text) {
 		if (getDocument() == null) {
 			super.setDocument(new Document());
 		}

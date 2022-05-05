@@ -23,37 +23,37 @@ import org.eclipse.jface.text.Region;
  */
 final class DocumentHelper {
 
-	static int getStartLine(DocumentEvent event) throws BadLocationException {
+	static int getStartLine(final DocumentEvent event) throws BadLocationException {
 		return event.getDocument().getLineOfOffset(event.getOffset());
 	}
 
-	static int getEndLine(DocumentEvent event, boolean documentAboutToBeChanged) throws BadLocationException {
-		int length = documentAboutToBeChanged ? event.getLength() : event.getText().length();
+	static int getEndLine(final DocumentEvent event, final boolean documentAboutToBeChanged) throws BadLocationException {
+		final int length = documentAboutToBeChanged ? event.getLength() : event.getText().length();
 		return event.getDocument().getLineOfOffset(event.getOffset() + length);
 	}
 
-	static boolean isRemove(DocumentEvent event) {
+	static boolean isRemove(final DocumentEvent event) {
 		return event.getText() == null || event.getText().isEmpty();
 	}
 
-	static boolean isInsert(DocumentEvent event) {
+	static boolean isInsert(final DocumentEvent event) {
 		return event.getLength() == 0 && event.getText() != null;
 	}
 
-	static String getLineText(IDocument document, int line, boolean withLineDelimiter)
+	static String getLineText(final IDocument document, final int line, final boolean withLineDelimiter)
 			throws BadLocationException {
-		int lo = document.getLineOffset(line);
+		final int lo = document.getLineOffset(line);
 		int ll = document.getLineLength(line);
 		if (!withLineDelimiter) {
-			String delim = document.getLineDelimiter(line);
+			final String delim = document.getLineDelimiter(line);
 			ll = ll - (delim != null ? delim.length() : 0);
 		}
 		return document.get(lo, ll);
 	}
 
-	private static IRegion getRegion(IDocument document, int fromLine, int toLine) throws BadLocationException {
-		int startOffset = document.getLineOffset(fromLine);
-		int endOffset = document.getLineOffset(toLine) + document.getLineLength(toLine);
+	private static IRegion getRegion(final IDocument document, final int fromLine, final int toLine) throws BadLocationException {
+		final int startOffset = document.getLineOffset(fromLine);
+		final int endOffset = document.getLineOffset(toLine) + document.getLineLength(toLine);
 		return new Region(startOffset, endOffset - startOffset);
 	}
 }

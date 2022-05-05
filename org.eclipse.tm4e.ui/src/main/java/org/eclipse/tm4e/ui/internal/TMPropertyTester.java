@@ -25,11 +25,11 @@ public final class TMPropertyTester extends PropertyTester {
 	private static final String CAN_SUPPORT_TEXT_MATE = "canSupportTextMate";
 
 	@Override
-	public boolean test(Object receiver, String property, Object[] args, Object expectedValue) {
+	public boolean test(final Object receiver, final String property, final Object[] args, final Object expectedValue) {
 		if (CAN_SUPPORT_TEXT_MATE.equals(property)) {
 			if (receiver instanceof IEditorPart) {
-				IEditorPart editorPart = (IEditorPart) receiver;
-				TMPresentationReconciler reconciler = TMPresentationReconciler.getTMPresentationReconciler(editorPart);
+				final IEditorPart editorPart = (IEditorPart) receiver;
+				final TMPresentationReconciler reconciler = TMPresentationReconciler.getTMPresentationReconciler(editorPart);
 				return reconciler != null  && reconciler.isEnabled();
 			}
 		}

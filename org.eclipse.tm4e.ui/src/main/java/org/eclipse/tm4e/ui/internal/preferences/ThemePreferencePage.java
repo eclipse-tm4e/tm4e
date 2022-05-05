@@ -90,21 +90,21 @@ public final class ThemePreferencePage extends PreferencePage implements IWorkbe
 	}
 
 	@Override
-	protected Control createContents(Composite ancestor) {
-		Composite parent = new Composite(ancestor, SWT.NONE);
-		GridLayout layout = new GridLayout();
+	protected Control createContents(final Composite ancestor) {
+		final Composite parent = new Composite(ancestor, SWT.NONE);
+		final GridLayout layout = new GridLayout();
 		layout.numColumns = 2;
 		layout.marginHeight = 0;
 		layout.marginWidth = 0;
 		parent.setLayout(layout);
 
-		Composite innerParent = new Composite(parent, SWT.NONE);
-		GridLayout innerLayout = new GridLayout();
+		final Composite innerParent = new Composite(parent, SWT.NONE);
+		final GridLayout innerLayout = new GridLayout();
 		innerLayout.numColumns = 2;
 		innerLayout.marginHeight = 0;
 		innerLayout.marginWidth = 0;
 		innerParent.setLayout(innerLayout);
-		GridData gd = new GridData(GridData.FILL_BOTH);
+		final GridData gd = new GridData(GridData.FILL_BOTH);
 		gd.horizontalSpan = 2;
 		innerParent.setLayoutData(gd);
 
@@ -129,42 +129,42 @@ public final class ThemePreferencePage extends PreferencePage implements IWorkbe
 	 *
 	 * @param parent
 	 */
-	private void createThemesContent(Composite parent) {
+	private void createThemesContent(final Composite parent) {
 		GridLayout layout;
-		Composite tableComposite = new Composite(parent, SWT.NONE);
-		GridData data = new GridData(GridData.FILL_BOTH);
+		final Composite tableComposite = new Composite(parent, SWT.NONE);
+		final GridData data = new GridData(GridData.FILL_BOTH);
 		data.widthHint = 360;
 		data.heightHint = convertHeightInCharsToPixels(10);
 		tableComposite.setLayoutData(data);
 
-		TableColumnLayout columnLayout = new TableColumnLayout();
+		final TableColumnLayout columnLayout = new TableColumnLayout();
 		tableComposite.setLayout(columnLayout);
-		Table table = new Table(tableComposite,
+		final Table table = new Table(tableComposite,
 				SWT.BORDER | SWT.MULTI | SWT.FULL_SELECTION | SWT.H_SCROLL | SWT.V_SCROLL);
 
 		table.setHeaderVisible(true);
 		table.setLinesVisible(true);
 
-		GC gc = new GC(getShell());
+		final GC gc = new GC(getShell());
 		gc.setFont(JFaceResources.getDialogFont());
 
-		ColumnViewerComparator viewerComparator = new ColumnViewerComparator();
+		final ColumnViewerComparator viewerComparator = new ColumnViewerComparator();
 
 		themeViewer = new TableViewer(table);
 
-		TableColumn column1 = new TableColumn(table, SWT.NONE);
+		final TableColumn column1 = new TableColumn(table, SWT.NONE);
 		column1.setText(TMUIMessages.ThemePreferencePage_column_name);
 		int minWidth = computeMinimumColumnWidth(gc, TMUIMessages.ThemePreferencePage_column_name);
 		columnLayout.setColumnData(column1, new ColumnWeightData(2, minWidth, true));
 		column1.addSelectionListener(new ColumnSelectionAdapter(column1, themeViewer, 0, viewerComparator));
 
-		TableColumn column2 = new TableColumn(table, SWT.NONE);
+		final TableColumn column2 = new TableColumn(table, SWT.NONE);
 		column2.setText(TMUIMessages.ThemePreferencePage_column_path);
 		minWidth = computeMinimumColumnWidth(gc, TMUIMessages.ThemePreferencePage_column_path);
 		columnLayout.setColumnData(column2, new ColumnWeightData(2, minWidth, true));
 		column2.addSelectionListener(new ColumnSelectionAdapter(column2, themeViewer, 1, viewerComparator));
 
-		TableColumn column3 = new TableColumn(table, SWT.NONE);
+		final TableColumn column3 = new TableColumn(table, SWT.NONE);
 		column3.setText(TMUIMessages.ThemePreferencePage_column_pluginId);
 		minWidth = computeMinimumColumnWidth(gc, TMUIMessages.ThemePreferencePage_column_pluginId);
 		columnLayout.setColumnData(column3, new ColumnWeightData(2, minWidth, true));
@@ -192,20 +192,20 @@ public final class ThemePreferencePage extends PreferencePage implements IWorkbe
 
 		BidiUtils.applyTextDirection(themeViewer.getControl(), BidiUtils.BTD_DEFAULT);
 
-		Composite buttons = new Composite(parent, SWT.NONE);
+		final Composite buttons = new Composite(parent, SWT.NONE);
 		buttons.setLayoutData(new GridData(GridData.VERTICAL_ALIGN_BEGINNING));
 		layout = new GridLayout();
 		layout.marginHeight = 0;
 		layout.marginWidth = 0;
 		buttons.setLayout(layout);
 
-		Button themeNewButton = new Button(buttons, SWT.PUSH);
+		final Button themeNewButton = new Button(buttons, SWT.PUSH);
 		themeNewButton.setText(TMUIMessages.Button_new);
 		themeNewButton.setLayoutData(getButtonGridData(themeNewButton));
 		themeNewButton.addListener(SWT.Selection, new Listener() {
 			@Override
-			public void handleEvent(Event e) {
-				ITheme newTheme = addTheme();
+			public void handleEvent(final Event e) {
+				final ITheme newTheme = addTheme();
 				if (newTheme != null) {
 					themeManager.registerTheme(newTheme);
 					selectedTheme = newTheme;
@@ -215,15 +215,15 @@ public final class ThemePreferencePage extends PreferencePage implements IWorkbe
 			}
 
 			private ITheme addTheme() {
-				FileDialog dialog = new FileDialog(getShell());
+				final FileDialog dialog = new FileDialog(getShell());
 				dialog.setText("Select textmate theme file");
 				dialog.setFilterExtensions(new String[]{"*.css"});
-				String res = dialog.open();
+				final String res = dialog.open();
 				if (res == null) {
 					return null;
 				}
-				File file = new File(res);
-				String name = file.getName().substring(0, file.getName().length() - ".css".length());
+				final File file = new File(res);
+				final String name = file.getName().substring(0, file.getName().length() - ".css".length());
 				return new Theme(name, file.getAbsolutePath(), name, false, false);
 			}
 		});
@@ -242,13 +242,13 @@ public final class ThemePreferencePage extends PreferencePage implements IWorkbe
 	 *
 	 * @param parent
 	 */
-	private void createThemeDetailContent(Composite ancestor) {
-		Composite parent = new Composite(ancestor, SWT.NONE);
-		GridData data = new GridData(GridData.FILL_HORIZONTAL);
+	private void createThemeDetailContent(final Composite ancestor) {
+		final Composite parent = new Composite(ancestor, SWT.NONE);
+		final GridData data = new GridData(GridData.FILL_HORIZONTAL);
 		data.horizontalSpan = 2;
 		parent.setLayoutData(data);
 
-		GridLayout layout = new GridLayout();
+		final GridLayout layout = new GridLayout();
 		layout.marginHeight = 0;
 		layout.marginWidth = 0;
 		layout.marginLeft = 0;
@@ -269,13 +269,13 @@ public final class ThemePreferencePage extends PreferencePage implements IWorkbe
 	 *
 	 * @param parent
 	 */
-	private void createPreviewContent(Composite ancestor) {
-		Composite parent = new Composite(ancestor, SWT.NONE);
-		GridData data = new GridData(GridData.FILL_HORIZONTAL);
+	private void createPreviewContent(final Composite ancestor) {
+		final Composite parent = new Composite(ancestor, SWT.NONE);
+		final GridData data = new GridData(GridData.FILL_HORIZONTAL);
 		data.horizontalSpan = 2;
 		parent.setLayoutData(data);
 
-		GridLayout layout = new GridLayout(2, false);
+		final GridLayout layout = new GridLayout(2, false);
 		layout.marginHeight = 0;
 		layout.marginWidth = 0;
 		parent.setLayout(layout);
@@ -283,7 +283,7 @@ public final class ThemePreferencePage extends PreferencePage implements IWorkbe
 		previewViewer = doCreateViewer(parent);
 	}
 
-	private int computeMinimumColumnWidth(GC gc, String string) {
+	private int computeMinimumColumnWidth(final GC gc, final String string) {
 		return gc.stringExtent(string).x + 10; // pad 10 to accommodate table
 												// header trimmings
 	}
@@ -295,8 +295,8 @@ public final class ThemePreferencePage extends PreferencePage implements IWorkbe
 	 *            the button
 	 * @return the grid data
 	 */
-	private static GridData getButtonGridData(Button button) {
-		GridData data = new GridData(GridData.FILL_HORIZONTAL);
+	private static GridData getButtonGridData(final Button button) {
+		final GridData data = new GridData(GridData.FILL_HORIZONTAL);
 		// TODO replace SWTUtil
 		// data.widthHint= SWTUtil.getButtonWidthHint(button);
 		// data.heightHint= SWTUtil.getButtonHeightHint(button);
@@ -305,14 +305,14 @@ public final class ThemePreferencePage extends PreferencePage implements IWorkbe
 	}
 
 	@Override
-	public void setVisible(boolean visible) {
+	public void setVisible(final boolean visible) {
 		super.setVisible(visible);
 		if (visible)
 			setTitle(TMUIMessages.ThemePreferencePage_title);
 	}
 
 	@Override
-	public void init(IWorkbench workbench) {
+	public void init(final IWorkbench workbench) {
 	}
 
 	private void preview() {
@@ -320,23 +320,23 @@ public final class ThemePreferencePage extends PreferencePage implements IWorkbe
 		if (selection.isEmpty()) {
 			return;
 		}
-		ITheme theme = (ITheme) selection.getFirstElement();
+		final ITheme theme = (ITheme) selection.getFirstElement();
 
 		selection = (IStructuredSelection) grammarViewer.getSelection();
 		if (selection.isEmpty()) {
 			return;
 		}
 
-		IGrammarDefinition definition = (IGrammarDefinition) selection.getFirstElement();
+		final IGrammarDefinition definition = (IGrammarDefinition) selection.getFirstElement();
 
 		// Preview the grammar
-		IGrammar grammar = grammarRegistryManager.getGrammarForScope(definition.getScopeName());
+		final IGrammar grammar = grammarRegistryManager.getGrammarForScope(definition.getScopeName());
 		previewViewer.setTheme(theme);
 		previewViewer.setGrammar(grammar);
 	}
 
-	private TMViewer doCreateViewer(Composite parent) {
-		Label label = new Label(parent, SWT.NONE);
+	private TMViewer doCreateViewer(final Composite parent) {
+		final Label label = new Label(parent, SWT.NONE);
 		label.setText(TMUIMessages.ThemePreferencePage_preview);
 		GridData data = new GridData();
 		label.setLayoutData(data);
@@ -347,13 +347,13 @@ public final class ThemePreferencePage extends PreferencePage implements IWorkbe
 		grammarViewer.addSelectionChangedListener(e -> preview());
 		grammarViewer.getControl().setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 
-		TMViewer viewer = createViewer(parent);
+		final TMViewer viewer = createViewer(parent);
 
 		// Don't set caret to 'null' as this causes
 		// https://bugs.eclipse.org/293263
 		// viewer.getTextWidget().setCaret(null);
 
-		Control control = viewer.getControl();
+		final Control control = viewer.getControl();
 		data = new GridData(GridData.FILL_BOTH);
 		data.horizontalSpan = 2;
 		data.heightHint = convertHeightInCharsToPixels(5);
@@ -371,7 +371,7 @@ public final class ThemePreferencePage extends PreferencePage implements IWorkbe
 	 *            the parent control
 	 * @return a configured source viewer
 	 */
-	private TMViewer createViewer(Composite parent) {
+	private TMViewer createViewer(final Composite parent) {
 		return new TMViewer(parent, null, null, false, SWT.BORDER | SWT.V_SCROLL | SWT.H_SCROLL);
 	}
 
@@ -381,7 +381,7 @@ public final class ThemePreferencePage extends PreferencePage implements IWorkbe
 			themeManager.save();
 			grammarRegistryManager.save();
 			return true;
-		} catch (BackingStoreException e) {
+		} catch (final BackingStoreException e) {
 			TMUIPlugin.getDefault().getLog().log(new Status(IStatus.ERROR, TMUIPlugin.PLUGIN_ID, e.getMessage(), e));
 			return false;
 		}

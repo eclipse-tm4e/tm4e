@@ -24,7 +24,7 @@ public final class DocumentInputStream extends InputStream {
 	private final IDocument fDocument;
 	private int fCurrPos = 0;
 
-	public DocumentInputStream(IDocument document) {
+	public DocumentInputStream(final IDocument document) {
 		fDocument= document;
 	}
 
@@ -38,7 +38,7 @@ public final class DocumentInputStream extends InputStream {
 		 	if (fCurrPos < fDocument.getLength()) {
 		 	 	return fDocument.getChar(fCurrPos++);
 		 	}
-	 	} catch (BadLocationException e) {
+	 	} catch (final BadLocationException e) {
 	 		// ignore
 	 	}
 	 	return -1;

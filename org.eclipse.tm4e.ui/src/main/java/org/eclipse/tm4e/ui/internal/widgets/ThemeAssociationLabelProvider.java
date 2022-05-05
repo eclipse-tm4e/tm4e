@@ -27,22 +27,22 @@ import org.eclipse.tm4e.ui.themes.IThemeManager;
 public final class ThemeAssociationLabelProvider extends LabelProvider implements ITableLabelProvider {
 
 	@Override
-	public Image getColumnImage(Object element, int columnIndex) {
+	public Image getColumnImage(final Object element, final int columnIndex) {
 		return null;
 	}
 
 	@Override
-	public String getText(Object element) {
+	public String getText(final Object element) {
 		return getColumnText(element, 0);
 	}
 
 	@Override
-	public String getColumnText(Object element, int columnIndex) {
-		IThemeAssociation association = (IThemeAssociation) element;
+	public String getColumnText(final Object element, final int columnIndex) {
+		final IThemeAssociation association = (IThemeAssociation) element;
 		switch (columnIndex) {
 		case 0:
-			ITheme theme = getTheme(association);
-			String themeName = theme != null ? theme.getName() : association.getThemeId();
+			final ITheme theme = getTheme(association);
+			final String themeName = theme != null ? theme.getName() : association.getThemeId();
 			if (association.isWhenDark()) {
 				return NLS.bind(TMUIMessages.ThemeAssociationLabelProvider_dark, themeName);
 			}
@@ -52,9 +52,9 @@ public final class ThemeAssociationLabelProvider extends LabelProvider implement
 		}
 	}
 
-	private ITheme getTheme(IThemeAssociation association) {
-		String themeId = association.getThemeId();
-		IThemeManager themeManager = TMUIPlugin.getThemeManager();
+	private ITheme getTheme(final IThemeAssociation association) {
+		final String themeId = association.getThemeId();
+		final IThemeManager themeManager = TMUIPlugin.getThemeManager();
 		return themeManager.getThemeById(themeId);
 	}
 

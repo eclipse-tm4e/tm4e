@@ -32,13 +32,13 @@ final class Snippet extends TMResource implements ISnippet {
 	 *
 	 * @param scopeName
 	 */
-	Snippet(String scopeName, String path, String name) {
+	Snippet(final String scopeName, final String path, final String name) {
 		super(path);
 		this.scopeName = scopeName;
 		this.name = name;
 	}
 
-	Snippet(IConfigurationElement ce) {
+	Snippet(final IConfigurationElement ce) {
 		super(ce);
 		this.scopeName = ce.getAttribute(XMLConstants.SCOPE_NAME_ATTR);
 		this.name = ce.getAttribute(XMLConstants.NAME_ATTR);

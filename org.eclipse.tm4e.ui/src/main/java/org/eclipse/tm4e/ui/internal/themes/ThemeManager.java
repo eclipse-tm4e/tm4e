@@ -60,7 +60,7 @@ public final class ThemeManager extends AbstractThemeManager {
 		if (INSTANCE != null) {
 			return INSTANCE;
 		}
-		ThemeManager manager = new ThemeManager();
+		final ThemeManager manager = new ThemeManager();
 		manager.load();
 		return manager;
 	}
@@ -77,10 +77,10 @@ public final class ThemeManager extends AbstractThemeManager {
 	 * Load TextMate Themes from extension point.
 	 */
 	private void loadThemesFromExtensionPoints() {
-		IConfigurationElement[] cf = Platform.getExtensionRegistry().getConfigurationElementsFor(TMUIPlugin.PLUGIN_ID,
+		final IConfigurationElement[] cf = Platform.getExtensionRegistry().getConfigurationElementsFor(TMUIPlugin.PLUGIN_ID,
 				EXTENSION_THEMES);
-		for (IConfigurationElement ce : cf) {
-			String name = ce.getName();
+		for (final IConfigurationElement ce : cf) {
+			final String name = ce.getName();
 			switch (name) {
 			case THEME_ELT:
 				super.registerTheme(new Theme(ce));
@@ -98,19 +98,19 @@ public final class ThemeManager extends AbstractThemeManager {
 	private void loadThemesFromPreferences() {
 		// Load Theme definitions from the
 		// "${workspace_loc}/metadata/.plugins/org.eclipse.core.runtime/.settings/org.eclipse.tm4e.ui.prefs"
-		IEclipsePreferences prefs = InstanceScope.INSTANCE.getNode(TMUIPlugin.PLUGIN_ID);
+		final IEclipsePreferences prefs = InstanceScope.INSTANCE.getNode(TMUIPlugin.PLUGIN_ID);
 		String json = prefs.get(PreferenceConstants.THEMES, null);
 		if (json != null) {
-			for (JsonObject element : new Gson().fromJson(json, JsonObject[].class)) {
-				String name = element.get("id").getAsString();
+			for (final JsonObject element : new Gson().fromJson(json, JsonObject[].class)) {
+				final String name = element.get("id").getAsString();
 				super.registerTheme(new Theme(name, element.get("path").getAsString(), name, element.get("dark").getAsBoolean(), false));
 			}
 		}
 
 		json = prefs.get(PreferenceConstants.THEME_ASSOCIATIONS, null);
 		if (json != null) {
-			IThemeAssociation[] themeAssociations = PreferenceHelper.loadThemeAssociations(json);
-			for (IThemeAssociation association : themeAssociations) {
+			final IThemeAssociation[] themeAssociations = PreferenceHelper.loadThemeAssociations(json);
+			for (final IThemeAssociation association : themeAssociations) {
 				super.registerThemeAssociation(association);
 			}
 		}
@@ -118,23 +118,23 @@ public final class ThemeManager extends AbstractThemeManager {
 
 	@Override
 	public void save() throws BackingStoreException {
-		IEclipsePreferences prefs = InstanceScope.INSTANCE.getNode(TMUIPlugin.PLUGIN_ID);
+		final IEclipsePreferences prefs = InstanceScope.INSTANCE.getNode(TMUIPlugin.PLUGIN_ID);
 		// Save Themes in the
 		// "${workspace_loc}/metadata/.plugins/org.eclipse.core.runtime/.settings/org.eclipse.tm4e.ui.prefs"
 		prefs.put(PreferenceConstants.THEMES, Arrays.stream(getThemes()) //
 				.filter(t -> t.getPluginId() == null) //
 				.map(theme -> {
-					JsonObject json = new JsonObject();
+					final JsonObject json = new JsonObject();
 					json.addProperty("id", theme.getId());
 					json.addProperty("path", theme.getPath());
 					json.addProperty("dark", theme.isDark());
 					return json;
-			}).collect(JsonArray::new, (JsonArray array, JsonObject object) -> array.add(object), (r,r1) -> {})
+			}).collect(JsonArray::new, (final JsonArray array, final JsonObject object) -> array.add(object), (r,r1) -> {})
 				.toString());
 
 		// Save Theme associations in the
 		// "${workspace_loc}/metadata/.plugins/org.eclipse.core.runtime/.settings/org.eclipse.tm4e.ui.prefs"
-		String json = PreferenceHelper.toJsonThemeAssociations(Arrays.stream(getAllThemeAssociations())
+		final String json = PreferenceHelper.toJsonThemeAssociations(Arrays.stream(getAllThemeAssociations())
 				.filter(t -> t.getPluginId() == null).collect(Collectors.toList()));
 		prefs.put(PreferenceConstants.THEME_ASSOCIATIONS, json);
 
@@ -148,7 +148,7 @@ public final class ThemeManager extends AbstractThemeManager {
 	 *
 	 * @param themeChangeListener
 	 */
-	public void addPreferenceChangeListener(IPreferenceChangeListener themeChangeListener) {
+	public void addPreferenceChangeListener(final IPreferenceChangeListener themeChangeListener) {
 		// Observe change of Eclipse E4 Theme
 		IEclipsePreferences preferences = PreferenceUtils.getE4PreferenceStore();
 		if (preferences != null) {
@@ -167,7 +167,7 @@ public final class ThemeManager extends AbstractThemeManager {
 	 *
 	 * @param themeChangeListener
 	 */
-	public void removePreferenceChangeListener(IPreferenceChangeListener themeChangeListener) {
+	public void removePreferenceChangeListener(final IPreferenceChangeListener themeChangeListener) {
 		// Observe change of Eclipse E4 Theme
 		IEclipsePreferences preferences = PreferenceUtils.getE4PreferenceStore();
 		if (preferences != null) {

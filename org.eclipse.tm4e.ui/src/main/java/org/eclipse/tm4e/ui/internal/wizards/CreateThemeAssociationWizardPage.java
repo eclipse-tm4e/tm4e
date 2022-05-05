@@ -49,8 +49,8 @@ final class CreateThemeAssociationWizardPage extends AbstractWizardPage {
 
 	private Button whenDarkButton;
 
-	protected CreateThemeAssociationWizardPage(IGrammarDefinition initialDefinition,
-			IThemeAssociation initialAssociation) {
+	protected CreateThemeAssociationWizardPage(final IGrammarDefinition initialDefinition,
+			final IThemeAssociation initialAssociation) {
 		super(PAGE_NAME);
 		super.setTitle(TMUIMessages.CreateThemeAssociationWizardPage_title);
 		super.setDescription(TMUIMessages.CreateThemeAssociationWizardPage_description);
@@ -59,8 +59,8 @@ final class CreateThemeAssociationWizardPage extends AbstractWizardPage {
 	}
 
 	@Override
-	protected void createBody(Composite ancestor) {
-		Composite parent = new Composite(ancestor, SWT.NONE);
+	protected void createBody(final Composite ancestor) {
+		final Composite parent = new Composite(ancestor, SWT.NONE);
 		parent.setFont(parent.getFont());
 		parent.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		parent.setLayout(new GridLayout(4, false));
@@ -90,11 +90,11 @@ final class CreateThemeAssociationWizardPage extends AbstractWizardPage {
 
 		whenDarkButton = new Button(parent, SWT.CHECK);
 		whenDarkButton.setText(TMUIMessages.CreateThemeAssociationWizardPage_whenDark_text);
-		GridData data = new GridData();
+		final GridData data = new GridData();
 		data.horizontalSpan = 4;
 		whenDarkButton.setLayoutData(data);
 		if (initialAssociation != null) {
-			ITheme selectedTheme = TMUIPlugin.getThemeManager().getThemeById(initialAssociation.getThemeId());
+			final ITheme selectedTheme = TMUIPlugin.getThemeManager().getThemeById(initialAssociation.getThemeId());
 			if (selectedTheme != null) {
 				themeViewer.setSelection(new StructuredSelection(selectedTheme));
 			}
@@ -108,7 +108,7 @@ final class CreateThemeAssociationWizardPage extends AbstractWizardPage {
 	}
 
 	@Override
-	protected IStatus validatePage(Event event) {
+	protected IStatus validatePage(final Event event) {
 		if (themeViewer.getSelection().isEmpty()) {
 			return new Status(IStatus.ERROR, TMUIPlugin.PLUGIN_ID,
 					TMUIMessages.CreateThemeAssociationWizardPage_theme_error_required);
@@ -121,10 +121,10 @@ final class CreateThemeAssociationWizardPage extends AbstractWizardPage {
 	}
 
 	IThemeAssociation getThemeAssociation() {
-		String themeId = ((ITheme) themeViewer.getStructuredSelection().getFirstElement()).getId();
-		String scopeName = ((IGrammarDefinition) grammarViewer.getStructuredSelection().getFirstElement())
+		final String themeId = ((ITheme) themeViewer.getStructuredSelection().getFirstElement()).getId();
+		final String scopeName = ((IGrammarDefinition) grammarViewer.getStructuredSelection().getFirstElement())
 				.getScopeName();
-		boolean whenDark = whenDarkButton.getSelection();
+		final boolean whenDark = whenDarkButton.getSelection();
 		return new ThemeAssociation(themeId, scopeName, whenDark);
 	}
 

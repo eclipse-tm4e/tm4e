@@ -38,7 +38,7 @@ public final class ColorManager {
 	private ColorManager() {
 	}
 
-	public Color getColor(RGB rgb) {
+	public Color getColor(final RGB rgb) {
 		Color color = fColorTable.get(rgb);
 		if (color == null) {
 			color = new Color(Display.getCurrent(), rgb.red, rgb.green, rgb.blue);
@@ -48,7 +48,7 @@ public final class ColorManager {
 	}
 
 	public void dispose() {
-		Iterator<Color> e = fColorTable.values().iterator();
+		final Iterator<Color> e = fColorTable.values().iterator();
 		while (e.hasNext()) {
 			e.next().dispose();
 		}
@@ -61,7 +61,7 @@ public final class ColorManager {
 	 *        name of the token
 	 * @return Color matching token
 	 */
-	public Color getPreferenceEditorColor(String tokenId) {
+	public Color getPreferenceEditorColor(final String tokenId) {
 		return getColor(stringToRGB(PreferenceUtils.getEditorsPreferenceStore().get(tokenId, "")));
 	}
 
@@ -72,8 +72,8 @@ public final class ColorManager {
 	 *        name of the token
 	 * @return color is user defined or not
 	 */
-	public boolean isColorUserDefined(String tokenId) {
-		String systemDefaultToken = getSystemDefaultToken(tokenId);
+	public boolean isColorUserDefined(final String tokenId) {
+		final String systemDefaultToken = getSystemDefaultToken(tokenId);
 
 		return "".equals(systemDefaultToken) || // returns true if system default token doesn't exists
 				!PreferenceUtils.getEditorsPreferenceStore().getBoolean(systemDefaultToken, true);
@@ -90,8 +90,8 @@ public final class ColorManager {
 	 *        name of the token for preferences store
 	 * @return Highest priority color
 	 */
-	public Color getPriorityColor(Color themeColor, String tokenId) {
-		Color prefColor = getPreferenceEditorColor(tokenId);
+	public Color getPriorityColor(final Color themeColor, final String tokenId) {
+		final Color prefColor = getPreferenceEditorColor(tokenId);
 
 		if (isColorUserDefined(tokenId)) {
 			return prefColor;
@@ -107,7 +107,7 @@ public final class ColorManager {
 	 *        name of the token
 	 * @return system default token or empty string if doesn't exist
 	 */
-	private String getSystemDefaultToken(String tokenId) {
+	private String getSystemDefaultToken(final String tokenId) {
 		switch (tokenId) {
 		case AbstractTextEditor.PREFERENCE_COLOR_FOREGROUND:
 			return AbstractTextEditor.PREFERENCE_COLOR_FOREGROUND_SYSTEM_DEFAULT;
@@ -129,8 +129,8 @@ public final class ColorManager {
 	 *        string value of rgb
 	 * @return RGB value
 	 */
-	private RGB stringToRGB(String value) {
-		String[] rgbValues = BY_COMMA_SPLITTER.splitToStream(value).toArray(String[]::new);
+	private RGB stringToRGB(final String value) {
+		final String[] rgbValues = BY_COMMA_SPLITTER.splitToStream(value).toArray(String[]::new);
 		return rgbValues.length == 3
 			? new RGB(Integer.parseInt(rgbValues[0]), Integer.parseInt(rgbValues[1]), Integer.parseInt(rgbValues[2]))
 			: new RGB(255, 255, 255);

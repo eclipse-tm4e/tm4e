@@ -24,12 +24,12 @@ public final class ThemeContentProvider implements IStructuredContentProvider {
 	private IThemeManager registry;
 
 	@Override
-	public Object[] getElements(Object input) {
+	public Object[] getElements(final Object input) {
 		return registry.getThemes();
 	}
 
 	@Override
-	public void inputChanged(Viewer viewer, Object oldInput, Object newInput) {
+	public void inputChanged(final Viewer viewer, final Object oldInput, final Object newInput) {
 		registry = (IThemeManager) newInput;
 	}
 

@@ -42,29 +42,29 @@ public final class ThemeContribution extends CompoundContributionItem implements
 	private IHandlerService handlerService;
 
 	@Override
-	public void initialize(IServiceLocator serviceLocator) {
+	public void initialize(final IServiceLocator serviceLocator) {
 		handlerService = serviceLocator.getService(IHandlerService.class);
 	}
 
 	@Override
 	protected IContributionItem[] getContributionItems() {
-		List<IContributionItem> items = new ArrayList<>();
+		final List<IContributionItem> items = new ArrayList<>();
 		if (handlerService != null) {
-			IEditorPart editorPart = getActivePart(handlerService.getCurrentState());
+			final IEditorPart editorPart = getActivePart(handlerService.getCurrentState());
 			if (editorPart != null) {
-				IThemeManager manager = TMUIPlugin.getThemeManager();
-				boolean dark = manager.isDarkEclipseTheme();
-				ITheme[] themes = manager.getThemes();
-				TMPresentationReconciler presentationReconciler = TMPresentationReconciler.getTMPresentationReconciler(editorPart);
+				final IThemeManager manager = TMUIPlugin.getThemeManager();
+				final boolean dark = manager.isDarkEclipseTheme();
+				final ITheme[] themes = manager.getThemes();
+				final TMPresentationReconciler presentationReconciler = TMPresentationReconciler.getTMPresentationReconciler(editorPart);
 				if (themes != null && presentationReconciler != null) {
-					String scopeName = presentationReconciler.getGrammar().getScopeName();
-					ITheme selectedTheme = manager.getThemeForScope(scopeName, dark);
-					for (ITheme theme : themes) {
-						IAction action = createAction(scopeName, theme, dark);
+					final String scopeName = presentationReconciler.getGrammar().getScopeName();
+					final ITheme selectedTheme = manager.getThemeForScope(scopeName, dark);
+					for (final ITheme theme : themes) {
+						final IAction action = createAction(scopeName, theme, dark);
 						if (theme.equals(selectedTheme)) {
 							action.setChecked(true);
 						}
-						IContributionItem item = new ActionContributionItem(action);
+						final IContributionItem item = new ActionContributionItem(action);
 						items.add(item);
 					}
 				}
@@ -74,27 +74,27 @@ public final class ThemeContribution extends CompoundContributionItem implements
 		return items.toArray(IContributionItem[]::new);
 	}
 
-	private Action createAction(final String scopeName, final ITheme theme, boolean whenDark) {
+	private Action createAction(final String scopeName, final ITheme theme, final boolean whenDark) {
 		return new Action(theme.getName()) {
 			@Override
 			public void run() {
-				IThemeManager manager = TMUIPlugin.getThemeManager();
-				IThemeAssociation association = new ThemeAssociation(theme.getId(), scopeName, whenDark);
+				final IThemeManager manager = TMUIPlugin.getThemeManager();
+				final IThemeAssociation association = new ThemeAssociation(theme.getId(), scopeName, whenDark);
 				manager.registerThemeAssociation(association);
 				try {
 					manager.save();
-				} catch (BackingStoreException e) {
+				} catch (final BackingStoreException e) {
 					e.printStackTrace();
 				}
 			}
 		};
 	}
 
-	private static IEditorPart getActivePart(IEvaluationContext context) {
+	private static IEditorPart getActivePart(final IEvaluationContext context) {
 		if (context == null)
 			return null;
 
-		Object activePart = context.getVariable(ISources.ACTIVE_PART_NAME);
+		final Object activePart = context.getVariable(ISources.ACTIVE_PART_NAME);
 		if ((activePart instanceof IEditorPart))
 			return (IEditorPart) activePart;
 

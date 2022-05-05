@@ -43,7 +43,7 @@ public final class ColumnViewerComparator extends ViewerComparator {
 	 * @param column
 	 *            New sort column
 	 */
-	public void setColumn(int column) {
+	public void setColumn(final int column) {
 		if (column == fSortColumn) {
 			fSortOrder *= -1;
 		} else {
@@ -53,14 +53,14 @@ public final class ColumnViewerComparator extends ViewerComparator {
 	}
 
 	@Override
-	public int compare(Viewer viewer, Object e1, Object e2) {
+	public int compare(final Viewer viewer, final Object e1, final Object e2) {
 
 		if (viewer instanceof TableViewer) {
-			IBaseLabelProvider baseLabel = ((TableViewer) viewer).getLabelProvider();
+			final IBaseLabelProvider baseLabel = ((TableViewer) viewer).getLabelProvider();
 
-			String left = ((ITableLabelProvider) baseLabel).getColumnText(e1, fSortColumn);
-			String right = ((ITableLabelProvider) baseLabel).getColumnText(e2, fSortColumn);
-			int sortResult = getComparator().compare(left != null ? left : "", right != null ? right : "");
+			final String left = ((ITableLabelProvider) baseLabel).getColumnText(e1, fSortColumn);
+			final String right = ((ITableLabelProvider) baseLabel).getColumnText(e2, fSortColumn);
+			final int sortResult = getComparator().compare(left != null ? left : "", right != null ? right : "");
 			return sortResult * fSortOrder;
 		}
 

@@ -22,18 +22,18 @@ import org.eclipse.tm4e.registry.IGrammarDefinition;
 public final class GrammarDefinitionLabelProvider extends LabelProvider implements ITableLabelProvider {
 
 	@Override
-	public Image getColumnImage(Object element, int columnIndex) {
+	public Image getColumnImage(final Object element, final int columnIndex) {
 		return null;
 	}
 
 	@Override
-	public String getText(Object element) {
+	public String getText(final Object element) {
 		return getColumnText(element, 0);
 	}
 
 	@Override
-	public String getColumnText(Object element, int columnIndex) {
-		IGrammarDefinition definition = (IGrammarDefinition) element;
+	public String getColumnText(final Object element, final int columnIndex) {
+		final IGrammarDefinition definition = (IGrammarDefinition) element;
 
 		switch (columnIndex) {
 		case 0:

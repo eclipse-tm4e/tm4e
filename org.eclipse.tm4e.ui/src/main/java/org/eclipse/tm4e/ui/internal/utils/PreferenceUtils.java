@@ -40,7 +40,7 @@ public final class PreferenceUtils {
 	 * @return themeIf of the current eclipse theme
 	 */
 	public static String getE4PreferenceCSSThemeId() {
-		IEclipsePreferences preferences = getE4PreferenceStore();
+		final IEclipsePreferences preferences = getE4PreferenceStore();
 		return preferences != null ? preferences.get(PreferenceConstants.E4_THEME_ID, null) : null;
 	}
 

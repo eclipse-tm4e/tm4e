@@ -38,11 +38,11 @@ public class CSSTokenProvider extends AbstractTokenProvider {
 	private final Map<IStyle, IToken> tokenMaps = new HashMap<>();
 	private CSSParser parser;
 
-	public CSSTokenProvider(InputStream in) {
+	public CSSTokenProvider(final InputStream in) {
 		try {
 			parser = new CSSParser(in);
-			for (IStyle style : parser.getStyles()) {
-				RGB color = style.getColor();
+			for (final IStyle style : parser.getStyles()) {
+				final RGB color = style.getColor();
 				if (color != null) {
 					int s = SWT.NORMAL;
 					if (style.isBold()) {
@@ -61,19 +61,19 @@ public class CSSTokenProvider extends AbstractTokenProvider {
 							new Token(new TextAttribute(ColorManager.getInstance().getColor(color), null, s)));
 				}
 			}
-		} catch (Exception e) {
+		} catch (final Exception e) {
 			TMUIPlugin.getDefault().getLog().log(new Status(IStatus.ERROR, TMUIPlugin.PLUGIN_ID, e.getMessage(), e));
 		}
 	}
 
 	@Override
-	public IToken getToken(String type) {
+	public IToken getToken(final String type) {
 		if (type == null) {
 			return null;
 		}
-		IStyle style = parser.getBestStyle(BY_DOT_SPLITTER.splitToStream(type).toArray(String[]::new));
+		final IStyle style = parser.getBestStyle(BY_DOT_SPLITTER.splitToStream(type).toArray(String[]::new));
 		if (style != null) {
-			IToken t = tokenMaps.get(style);
+			final IToken t = tokenMaps.get(style);
 			if (t != null) {
 				return t;
 			}
@@ -83,7 +83,7 @@ public class CSSTokenProvider extends AbstractTokenProvider {
 
 	@Override
 	public Color getEditorForeground() {
-		IStyle style = parser.getBestStyle("editor");
+		final IStyle style = parser.getBestStyle("editor");
 		if (style != null && style.getColor() != null) {
 			return ColorManager.getInstance().getColor(style.getColor());
 		}
@@ -92,7 +92,7 @@ public class CSSTokenProvider extends AbstractTokenProvider {
 
 	@Override
 	public Color getEditorBackground() {
-		IStyle style = parser.getBestStyle("editor");
+		final IStyle style = parser.getBestStyle("editor");
 		if (style != null && style.getBackgroundColor() != null) {
 			return ColorManager.getInstance().getColor(style.getBackgroundColor());
 		}
@@ -101,7 +101,7 @@ public class CSSTokenProvider extends AbstractTokenProvider {
 
 	@Override
 	public Color getEditorSelectionForeground() {
-		IStyle style = parser.getBestStyle("editor", "selection");
+		final IStyle style = parser.getBestStyle("editor", "selection");
 		if (style != null && style.getColor() != null) {
 			return ColorManager.getInstance().getColor(style.getColor());
 		}
@@ -110,7 +110,7 @@ public class CSSTokenProvider extends AbstractTokenProvider {
 
 	@Override
 	public Color getEditorSelectionBackground() {
-		IStyle style = parser.getBestStyle("editor", "selection");
+		final IStyle style = parser.getBestStyle("editor", "selection");
 		if (style != null && style.getBackgroundColor() != null) {
 			return ColorManager.getInstance().getColor(style.getBackgroundColor());
 		}
@@ -119,7 +119,7 @@ public class CSSTokenProvider extends AbstractTokenProvider {
 
 	@Override
 	public Color getEditorCurrentLineHighlight() {
-		IStyle style = parser.getBestStyle("editor", "lineHighlight");
+		final IStyle style = parser.getBestStyle("editor", "lineHighlight");
 		if (style != null && style.getBackgroundColor() != null) {
 			return ColorManager.getInstance().getColor(style.getBackgroundColor());
 		}

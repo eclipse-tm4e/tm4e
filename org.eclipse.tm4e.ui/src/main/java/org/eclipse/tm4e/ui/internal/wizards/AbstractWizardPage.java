@@ -31,19 +31,19 @@ import org.eclipse.swt.widgets.Listener;
  */
 abstract class AbstractWizardPage extends WizardPage implements Listener {
 
-	protected AbstractWizardPage(String pageName) {
+	protected AbstractWizardPage(final String pageName) {
 		super(pageName);
 	}
 
-	protected AbstractWizardPage(String pageName, String title, ImageDescriptor titleImage) {
+	protected AbstractWizardPage(final String pageName, final String title, final ImageDescriptor titleImage) {
 		super(pageName, title, titleImage);
 	}
 
 	@Override
-	public final void createControl(Composite parent) {
+	public final void createControl(final Composite parent) {
 		initializeDialogUnits(parent);
 		// top level group
-		Composite topLevel = new Composite(parent, SWT.NONE);
+		final Composite topLevel = new Composite(parent, SWT.NONE);
 		topLevel.setLayout(new GridLayout());
 		topLevel.setLayoutData(new GridData(GridData.VERTICAL_ALIGN_FILL | GridData.HORIZONTAL_ALIGN_FILL));
 		topLevel.setFont(parent.getFont());
@@ -58,16 +58,16 @@ abstract class AbstractWizardPage extends WizardPage implements Listener {
 	}
 
 	@Override
-	public void handleEvent(Event event) {
+	public void handleEvent(final Event event) {
 		validateAndUpdateStatus(event);
 	}
 
-	private void validateAndUpdateStatus(Event event) {
-		IStatus status = validatePage(event);
+	private void validateAndUpdateStatus(final Event event) {
+		final IStatus status = validatePage(event);
 		statusChanged(status == null ? Status.OK_STATUS : status);
 	}
 
-	void statusChanged(IStatus status) {
+	void statusChanged(final IStatus status) {
 		setPageComplete(!status.matches(IStatus.ERROR));
 		applyToStatusLine(this, status);
 	}
@@ -75,7 +75,7 @@ abstract class AbstractWizardPage extends WizardPage implements Listener {
 	/**
 	 * Applies the status to the status line of a dialog page.
 	 */
-	private static void applyToStatusLine(DialogPage page, IStatus status) {
+	private static void applyToStatusLine(final DialogPage page, final IStatus status) {
 		String message = Status.OK_STATUS.equals(status) ? null : status.getMessage();
 		switch (status.getSeverity()) {
 		case IStatus.OK:

@@ -23,24 +23,24 @@ import org.eclipse.swt.graphics.Image;
 public final class ContentTypeLabelProvider extends LabelProvider implements ITableLabelProvider {
 
 	@Override
-	public Image getColumnImage(Object element, int columnIndex) {
+	public Image getColumnImage(final Object element, final int columnIndex) {
 		return null;
 	}
 
 	@Override
-	public String getText(Object element) {
+	public String getText(final Object element) {
 		return getColumnText(element, 0);
 	}
 
 	@Override
-	public String getColumnText(Object element, int columnIndex) {
+	public String getColumnText(final Object element, final int columnIndex) {
 		switch (columnIndex) {
 		case 0:
 			IContentType contentType = null;
 			if(element instanceof IContentType) {
 				contentType = (IContentType) element;
 			} else if(element instanceof String) {
-				String contentTypeId = (String) element;
+				final String contentTypeId = (String) element;
 				contentType = Platform.getContentTypeManager().getContentType(contentTypeId);
 				if (contentType == null) {
 					return contentTypeId;

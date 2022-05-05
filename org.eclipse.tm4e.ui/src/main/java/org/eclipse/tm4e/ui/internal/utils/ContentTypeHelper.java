@@ -50,9 +50,9 @@ public final class ContentTypeHelper {
 	 *         otherwise.
 	 * @throws CoreException
 	 */
-	public static ContentTypeInfo findContentTypes(IDocument document) throws CoreException {
+	public static ContentTypeInfo findContentTypes(final IDocument document) throws CoreException {
 		// Find content types from FileBuffers
-		ContentTypeInfo contentTypes = findContentTypesFromFileBuffers(document);
+		final ContentTypeInfo contentTypes = findContentTypesFromFileBuffers(document);
 		if (contentTypes != null) {
 			return contentTypes;
 		}
@@ -66,8 +66,8 @@ public final class ContentTypeHelper {
 	 * @param contentTypeId
 	 * @return matching content type or null
 	 */
-	public static IContentType getContentTypeById(String contentTypeId) {
-		IContentTypeManager manager = Platform.getContentTypeManager();
+	public static IContentType getContentTypeById(final String contentTypeId) {
+		final IContentTypeManager manager = Platform.getContentTypeManager();
 		return manager.getContentType(contentTypeId);
 	}
 
@@ -82,9 +82,9 @@ public final class ContentTypeHelper {
 	 *         {@link ITextFileBufferManager} and null otherwise.
 	 * @throws CoreException
 	 */
-	private static ContentTypeInfo findContentTypesFromFileBuffers(IDocument document) throws CoreException {
-		ITextFileBufferManager bufferManager = FileBuffers.getTextFileBufferManager();
-		ITextFileBuffer buffer = bufferManager.getTextFileBuffer(document);
+	private static ContentTypeInfo findContentTypesFromFileBuffers(final IDocument document) throws CoreException {
+		final ITextFileBufferManager bufferManager = FileBuffers.getTextFileBufferManager();
+		final ITextFileBuffer buffer = bufferManager.getTextFileBuffer(document);
 		if (buffer != null) {
 			return getContentTypes(buffer);
 		}
@@ -98,11 +98,11 @@ public final class ContentTypeHelper {
 	 * @return the content types from the given {@link ITextFileBuffer}.
 	 * @throws CoreException
 	 */
-	private static ContentTypeInfo getContentTypes(ITextFileBuffer buffer) throws CoreException {
+	private static ContentTypeInfo getContentTypes(final ITextFileBuffer buffer) throws CoreException {
 		try {
-			String fileName = buffer.getFileStore().getName();
-			Collection<IContentType> contentTypes = new LinkedHashSet<>();
-			IContentType bufferContentType = buffer.getContentType();
+			final String fileName = buffer.getFileStore().getName();
+			final Collection<IContentType> contentTypes = new LinkedHashSet<>();
+			final IContentType bufferContentType = buffer.getContentType();
 			if (bufferContentType != null) {
 				contentTypes.add(bufferContentType);
 			}
@@ -110,7 +110,7 @@ public final class ContentTypeHelper {
 				// Buffer is dirty (content of the filesystem is not synch with
 				// the editor content), use IDocument content.
 				try (InputStream input = new DocumentInputStream(buffer.getDocument())) {
-					IContentType[] contentTypesForInput = Platform.getContentTypeManager().findContentTypesFor(input, fileName);
+					final IContentType[] contentTypesForInput = Platform.getContentTypeManager().findContentTypesFor(input, fileName);
 					if (contentTypesForInput != null) {
 						contentTypes.addAll(Arrays.asList(contentTypesForInput));
 						return new ContentTypeInfo(fileName, contentTypes.toArray(IContentType[]::new));
@@ -122,10 +122,10 @@ public final class ContentTypeHelper {
 			try (InputStream contents = getContents(buffer)) {
 				contentTypes.addAll(Arrays.asList(Platform.getContentTypeManager().findContentTypesFor(contents, fileName)));
 				return new ContentTypeInfo(fileName, contentTypes.toArray(IContentType[]::new));
-			} catch (Throwable e) {
+			} catch (final Throwable e) {
 				return null;
 			}
-		} catch (IOException x) {
+		} catch (final IOException x) {
 			x.printStackTrace();
 			return null;
 		}
@@ -138,11 +138,11 @@ public final class ContentTypeHelper {
 	 * @return the content of the given buffer.
 	 * @throws CoreException
 	 */
-	private static InputStream getContents(ITextFileBuffer buffer) throws CoreException {
-		IPath path = buffer.getLocation();
+	private static InputStream getContents(final ITextFileBuffer buffer) throws CoreException {
+		final IPath path = buffer.getLocation();
 		if (path != null) {
-			IWorkspaceRoot workspaceRoot = ResourcesPlugin.getWorkspace().getRoot();
-			IFile file = workspaceRoot.getFile(path);
+			final IWorkspaceRoot workspaceRoot = ResourcesPlugin.getWorkspace().getRoot();
+			final IFile file = workspaceRoot.getFile(path);
 			if (file.exists() && buffer.isSynchronized()) {
 				return file.getContents();
 			}
@@ -160,18 +160,18 @@ public final class ContentTypeHelper {
 	 * @return the content types from the given {@link IDocument} by using
 	 *         {@link IEditorInput} and null otherwise.
 	 */
-	private static ContentTypeInfo findContentTypesFromEditorInput(IDocument document) {
-		IEditorInput editorInput = getEditorInput(document);
+	private static ContentTypeInfo findContentTypesFromEditorInput(final IDocument document) {
+		final IEditorInput editorInput = getEditorInput(document);
 		if (editorInput != null) {
 			if (editorInput instanceof IStorageEditorInput) {
 				try {
-					IStorage storage = ((IStorageEditorInput) editorInput).getStorage();
-					String fileName = storage.getName();
+					final IStorage storage = ((IStorageEditorInput) editorInput).getStorage();
+					final String fileName = storage.getName();
 					try (InputStream input = storage.getContents()) {
 						return new ContentTypeInfo(fileName,
 								Platform.getContentTypeManager().findContentTypesFor(input, fileName));
 					}
-				} catch (Exception e) {
+				} catch (final Exception e) {
 					return null;
 				}
 			} else {
@@ -187,7 +187,7 @@ public final class ContentTypeHelper {
 	 * @param document
 	 * @return the {@link IEditorInput} from the given document and null otherwise.
 	 */
-	private static IEditorInput getEditorInput(IDocument document) {
+	private static IEditorInput getEditorInput(final IDocument document) {
 		try {
 			// This utilities class is very ugly, I have not found a clean mean
 			// to retrieve the IEditorInput linked to a document.
@@ -199,24 +199,24 @@ public final class ContentTypeHelper {
 			// ISorageEditorInput, see StorageDocumentProvider)
 
 			// get list of IDocumentListener
-			ListenerList<?> listeners = ClassHelper.getFieldValue(document, "fDocumentListeners");
+			final ListenerList<?> listeners = ClassHelper.getFieldValue(document, "fDocumentListeners");
 			if (listeners != null) {
 				// Get AbstractDocumentProvider#ElementInfo
-				Object[] l = listeners.getListeners();
+				final Object[] l = listeners.getListeners();
 				for (int i = 0; i < l.length; i++) {
-					Object /* AbstractDocumentProvider#ElementInfo */ info = l[i];
+					final Object /* AbstractDocumentProvider#ElementInfo */ info = l[i];
 					try {
 						/* The element for which the info is stored */
-						Object input = ClassHelper.getFieldValue(info, "fElement");
+						final Object input = ClassHelper.getFieldValue(info, "fElement");
 						if (input instanceof IEditorInput) {
 							return (IEditorInput) input;
 						}
-					} catch (Exception e) {
+					} catch (final Exception e) {
 
 					}
 				}
 			}
-		} catch (Exception e) {
+		} catch (final Exception e) {
 			e.printStackTrace();
 		}
 		return null;

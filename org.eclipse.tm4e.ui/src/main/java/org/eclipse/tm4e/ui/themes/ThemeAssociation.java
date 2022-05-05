@@ -63,13 +63,13 @@ public class ThemeAssociation implements IThemeAssociation {
 	 * @param scopeName
 	 * @param whenDark
 	 */
-	public ThemeAssociation(String themeId, String scopeName, boolean whenDark) {
+	public ThemeAssociation(final String themeId, final String scopeName, final boolean whenDark) {
 		this.themeId = themeId;
 		this.scopeName = scopeName;
 		this.whenDark = whenDark;
 	}
 
-	public ThemeAssociation(IConfigurationElement ce) {
+	public ThemeAssociation(final IConfigurationElement ce) {
 		this(ce.getAttribute(THEME_ID_ATTR), ce.getAttribute(SCOPE_NAME_ATTR),
 				"true".equals(ce.getAttribute(WHEN_DARK_ATTR)));
 		this.pluginId = ce.getNamespaceIdentifier();
@@ -107,14 +107,14 @@ public class ThemeAssociation implements IThemeAssociation {
 	}
 
 	@Override
-	public boolean equals(Object obj) {
+	public boolean equals(final Object obj) {
 		if (this == obj)
 			return true;
 		if (obj == null)
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		ThemeAssociation other = (ThemeAssociation) obj;
+		final ThemeAssociation other = (ThemeAssociation) obj;
 		if (pluginId == null) {
 			if (other.pluginId != null)
 				return false;

@@ -34,9 +34,9 @@ public final class GrammarInfoWidget extends Composite {
 	private Text scopeNameText;
 	private Text fileTypesText;
 
-	public GrammarInfoWidget(Composite parent, int style) {
+	public GrammarInfoWidget(final Composite parent, final int style) {
 		super(parent, style);
-		GridLayout layout = new GridLayout();
+		final GridLayout layout = new GridLayout();
 		layout.marginHeight = 0;
 		layout.marginWidth = 0;
 		layout.marginLeft = 0;
@@ -46,9 +46,9 @@ public final class GrammarInfoWidget extends Composite {
 		createUI(this);
 	}
 
-	private void createUI(Composite ancestor) {
-		Composite parent = new Composite(ancestor, SWT.NONE);
-		GridLayout layout = new GridLayout(2, false);
+	private void createUI(final Composite ancestor) {
+		final Composite parent = new Composite(ancestor, SWT.NONE);
+		final GridLayout layout = new GridLayout(2, false);
 		layout.marginHeight = 0;
 		layout.marginWidth = 0;
 		layout.marginLeft = 0;
@@ -56,34 +56,34 @@ public final class GrammarInfoWidget extends Composite {
 		parent.setLayout(layout);
 		parent.setLayoutData(new GridData(GridData.FILL_BOTH));
 
-		Label grammarNameLabel = new Label(parent, SWT.NONE);
+		final Label grammarNameLabel = new Label(parent, SWT.NONE);
 		grammarNameLabel.setText(TMUIMessages.GrammarInfoWidget_name_text);
 		nameText = new Text(parent, SWT.BORDER | SWT.READ_ONLY);
 		nameText.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 
-		Label grammarScopeNameLabel = new Label(parent, SWT.NONE);
+		final Label grammarScopeNameLabel = new Label(parent, SWT.NONE);
 		grammarScopeNameLabel.setText(TMUIMessages.GrammarInfoWidget_scopeName_text);
 		scopeNameText = new Text(parent, SWT.BORDER | SWT.READ_ONLY);
 		scopeNameText.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 
-		Label grammarFileTypesLabel = new Label(parent, SWT.NONE);
+		final Label grammarFileTypesLabel = new Label(parent, SWT.NONE);
 		grammarFileTypesLabel.setText(TMUIMessages.GrammarInfoWidget_fileTypes_text);
 		fileTypesText = new Text(parent, SWT.BORDER | SWT.READ_ONLY);
 		fileTypesText.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 	}
 
-	public void refresh(IGrammar grammar) {
+	public void refresh(final IGrammar grammar) {
 		if (grammar == null) {
 			nameText.setText("");
 			scopeNameText.setText("");
 			fileTypesText.setText("");
 		} else {
-			String name = grammar.getName();
+			final String name = grammar.getName();
 			nameText.setText(name != null ? name : "");
-			String scope = grammar.getScopeName();
+			final String scope = grammar.getScopeName();
 			scopeNameText.setText(scope != null ? scope : "");
-			Collection<String> fileTypes = grammar.getFileTypes();
-			String types = fileTypes.stream().map(Object::toString).collect(Collectors.joining(","));
+			final Collection<String> fileTypes = grammar.getFileTypes();
+			final String types = fileTypes.stream().map(Object::toString).collect(Collectors.joining(","));
 			fileTypesText.setText(types);
 		}
 	}

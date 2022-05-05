@@ -36,34 +36,34 @@ public abstract class AbstractThemeManager implements IThemeManager {
 	private final ThemeAssociationRegistry themeAssociationRegistry = new ThemeAssociationRegistry();
 
 	@Override
-	public void registerTheme(ITheme theme) {
+	public void registerTheme(final ITheme theme) {
 		themes.put(theme.getId(), theme);
 	}
 
 	@Override
-	public void unregisterTheme(ITheme theme) {
+	public void unregisterTheme(final ITheme theme) {
 		themes.remove(theme.getId());
 	}
 
 	@Override
-	public ITheme getThemeById(String themeId) {
+	public ITheme getThemeById(final String themeId) {
 		return themes.get(themeId);
 	}
 
 	@Override
 	public ITheme[] getThemes() {
-		Collection<ITheme> themes = this.themes.values();
+		final Collection<ITheme> themes = this.themes.values();
 		return themes.toArray(ITheme[]::new);
 	}
 
 	@Override
 	public ITheme getDefaultTheme() {
-		boolean dark = isDarkEclipseTheme();
+		final boolean dark = isDarkEclipseTheme();
 		return getDefaultTheme(dark);
 	}
 
-	ITheme getDefaultTheme(boolean dark) {
-		for (ITheme theme : this.themes.values()) {
+	ITheme getDefaultTheme(final boolean dark) {
+		for (final ITheme theme : this.themes.values()) {
 			if (theme.isDark() == dark && theme.isDefault()) {
 				return theme;
 			}
@@ -72,7 +72,7 @@ public abstract class AbstractThemeManager implements IThemeManager {
 	}
 
 	@Override
-	public ITheme[] getThemes(boolean dark) {
+	public ITheme[] getThemes(final boolean dark) {
 		return themes.values().stream().filter(theme -> theme.isDark() == dark)
 		   .collect(Collectors.toList()).toArray(ITheme[]::new);
 	}
@@ -83,28 +83,28 @@ public abstract class AbstractThemeManager implements IThemeManager {
 	}
 
 	@Override
-	public boolean isDarkEclipseTheme(String eclipseThemeId) {
+	public boolean isDarkEclipseTheme(final String eclipseThemeId) {
 		return eclipseThemeId != null && eclipseThemeId.toLowerCase().contains("dark");
 	}
 
 	@Override
-	public ITheme getThemeForScope(String scopeName, boolean dark) {
-		IThemeAssociation association = themeAssociationRegistry.getThemeAssociationFor(scopeName, dark);
+	public ITheme getThemeForScope(final String scopeName, final boolean dark) {
+		final IThemeAssociation association = themeAssociationRegistry.getThemeAssociationFor(scopeName, dark);
 		if (association != null) {
-			String themeId = association.getThemeId();
+			final String themeId = association.getThemeId();
 			return getThemeById(themeId);
 		}
 		return getDefaultTheme(dark);
 	}
 
 	@Override
-	public ITheme getThemeForScope(String scopeName) {
+	public ITheme getThemeForScope(final String scopeName) {
 		return getThemeForScope(scopeName, isDarkEclipseTheme());
 	}
 
 	@Override
-	public IThemeAssociation[] getThemeAssociationsForScope(String scopeName) {
-		List<IThemeAssociation> associations = new ArrayList<>();
+	public IThemeAssociation[] getThemeAssociationsForScope(final String scopeName) {
+		final List<IThemeAssociation> associations = new ArrayList<>();
 		IThemeAssociation light = themeAssociationRegistry.getThemeAssociationFor(scopeName, false);
 		if (light == null) {
 			light = new ThemeAssociation(getDefaultTheme(false).getId(), scopeName, false);
@@ -119,23 +119,23 @@ public abstract class AbstractThemeManager implements IThemeManager {
 	}
 
 	@Override
-	public void registerThemeAssociation(IThemeAssociation association) {
+	public void registerThemeAssociation(final IThemeAssociation association) {
 		themeAssociationRegistry.register(association);
 	}
 
 	@Override
-	public void unregisterThemeAssociation(IThemeAssociation association) {
+	public void unregisterThemeAssociation(final IThemeAssociation association) {
 		themeAssociationRegistry.unregister(association);
 	}
 
 	@Override
 	public IThemeAssociation[] getAllThemeAssociations() {
-		List<IThemeAssociation> associations = themeAssociationRegistry.getThemeAssociations();
+		final List<IThemeAssociation> associations = themeAssociationRegistry.getThemeAssociations();
 		return associations.toArray(IThemeAssociation[]::new);
 	}
 
 	@Override
-	public ITokenProvider getThemeForScope(String scopeName, RGB background) {
+	public ITokenProvider getThemeForScope(final String scopeName, final RGB background) {
 		return getThemeForScope(scopeName, 0.299 * background.red + 0.587 * background.green + 0.114 * background.blue < 128);
 	}
 

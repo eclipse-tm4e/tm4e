@@ -18,7 +18,7 @@ public final class TMDocumentModel extends TMModel {
 
 	private final IDocument document;
 
-	public TMDocumentModel(IDocument document) {
+	public TMDocumentModel(final IDocument document) {
 		super(new DocumentLineList(document));
 		this.document = document;
 	}

@@ -33,7 +33,7 @@ final class DocumentLineList extends AbstractLineList {
 	private final IDocument document;
 	private final InternalListener listener = new InternalListener();
 
-	DocumentLineList(IDocument document) {
+	DocumentLineList(final IDocument document) {
 		this.document = document;
 		document.addDocumentListener(listener);
 		for (int i = 0; i < document.getNumberOfLines(); i++) {
@@ -44,31 +44,31 @@ final class DocumentLineList extends AbstractLineList {
 	private final class InternalListener implements IDocumentListener {
 
 		@Override
-		public void documentAboutToBeChanged(DocumentEvent event) {
+		public void documentAboutToBeChanged(final DocumentEvent event) {
 			try {
 				if (!DocumentHelper.isInsert(event)) {
 					// Remove or Replace (Remove + Insert)
 					removeLine(event);
 				}
-			} catch (BadLocationException e) {
+			} catch (final BadLocationException e) {
 				e.printStackTrace();
 			}
 		}
 
-		private void removeLine(DocumentEvent event) throws BadLocationException {
-			int startLine = DocumentHelper.getStartLine(event);
-			int endLine = DocumentHelper.getEndLine(event, true);
+		private void removeLine(final DocumentEvent event) throws BadLocationException {
+			final int startLine = DocumentHelper.getStartLine(event);
+			final int endLine = DocumentHelper.getEndLine(event, true);
 			for (int i = endLine; i > startLine; i--) {
 				DocumentLineList.this.removeLine(i);
 			}
 		}
 
 		@Override
-		public void documentChanged(DocumentEvent event) {
+		public void documentChanged(final DocumentEvent event) {
 			try {
-				int startLine = DocumentHelper.getStartLine(event);
+				final int startLine = DocumentHelper.getStartLine(event);
 				if (!DocumentHelper.isRemove(event)) {
-					int endLine = DocumentHelper.getEndLine(event, false);
+					final int endLine = DocumentHelper.getEndLine(event, false);
 					// Insert new lines
 					for (int i = startLine; i < endLine; i++) {
 						DocumentLineList.this.addLine(i + 1);
@@ -81,7 +81,7 @@ final class DocumentLineList extends AbstractLineList {
 					DocumentLineList.this.updateLine(startLine);
 				}
 				invalidateLine(startLine);
-			} catch (BadLocationException e) {
+			} catch (final BadLocationException e) {
 				TMUIPlugin.getDefault().getLog().log(new Status(IStatus.ERROR, TMUIPlugin.PLUGIN_ID, e.getMessage(), e));
 			}
 		}
@@ -93,12 +93,12 @@ final class DocumentLineList extends AbstractLineList {
 	}
 
 	@Override
-	public String getLineText(int line) throws Exception {
+	public String getLineText(final int line) throws Exception {
 		return DocumentHelper.getLineText(document, line, false);
 	}
 
 	@Override
-	public int getLineLength(int line) throws Exception {
+	public int getLineLength(final int line) throws Exception {
 		return document.getLineLength(line);
 	}
 

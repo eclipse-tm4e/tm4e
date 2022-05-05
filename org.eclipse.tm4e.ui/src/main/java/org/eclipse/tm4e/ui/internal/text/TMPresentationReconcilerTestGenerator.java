@@ -41,7 +41,7 @@ public final class TMPresentationReconcilerTestGenerator
 	}*/
 
 	@Override
-	public void install(ITextViewer viewer, IDocument document) {
+	public void install(final ITextViewer viewer, final IDocument document) {
 		this.viewer = viewer;
 		this.document = document;
 		document.addDocumentListener(this);
@@ -89,10 +89,10 @@ public final class TMPresentationReconcilerTestGenerator
 
 	}
 
-	private String toText(String text) {
+	private String toText(final String text) {
 		final StringBuilder newText = new StringBuilder();
 		for (int i = 0; i < text.length(); i++) {
-			char c = text.charAt(i);
+			final char c = text.charAt(i);
 			switch (c) {
 			case '\n':
 				newText.append("\\n");
@@ -151,7 +151,7 @@ public final class TMPresentationReconcilerTestGenerator
 	}
 
 	@Override
-	public void colorize(TextPresentation presentation, Throwable e) {
+	public void colorize(final TextPresentation presentation, final Throwable e) {
 //		Command command = commands.get(commands.size() - 1);
 //		if (e != null) {
 //			command.error = e;
@@ -160,26 +160,26 @@ public final class TMPresentationReconcilerTestGenerator
 //		}
 	}
 
-	private void write(String s, boolean newLine) {
+	private void write(final String s, final boolean newLine) {
 		code.append(s);
 		if (newLine) {
 			code.append("\n");
 		}
 	}
 
-	private void write(String s) {
+	private void write(final String s) {
 		write(s, false);
 	}
 
 	@Override
-	public void documentAboutToBeChanged(DocumentEvent event) {
+	public void documentAboutToBeChanged(final DocumentEvent event) {
 
 	}
 
 	@Override
-	public void documentChanged(DocumentEvent event) {
+	public void documentChanged(final DocumentEvent event) {
 
-		String command = "document.replace(" + event.getOffset() + ", " + event.getLength() + ", \""
+		final String command = "document.replace(" + event.getOffset() + ", " + event.getLength() + ", \""
 				+ toText(event.getText()) + "\");";
 		write("\t\t" + command, true);
 
@@ -187,12 +187,12 @@ public final class TMPresentationReconcilerTestGenerator
 	}
 
 	@Override
-	public void textChanged(TextEvent event) {
+	public void textChanged(final TextEvent event) {
 		if (event.getDocumentEvent() != null) {
 			return;
 		}
 
-		String command = "viewer.invalidateTextPresentation(" + event.getOffset() + ", " + event.getLength() + ");";
+		final String command = "viewer.invalidateTextPresentation(" + event.getOffset() + ", " + event.getLength() + ");";
 		write("\t\t" + command, true);
 
 		//commands.add(new Command(command));

@@ -20,33 +20,33 @@ import java.lang.reflect.Field;
 public final class ClassHelper {
 
 	@SuppressWarnings("unchecked")
-	public static <T> T getFieldValue(Object object, String name, Class<?> clazz) {
-		Field f = getDeclaredField(clazz, name);
+	public static <T> T getFieldValue(final Object object, final String name, final Class<?> clazz) {
+		final Field f = getDeclaredField(clazz, name);
 		if (f != null) {
 			try {
 				return (T) f.get(object);
-			} catch (Exception e) {
+			} catch (final Exception e) {
 				return null;
 			}
 		}
 		return null;
 	}
 
-	public static <T> T getFieldValue(Object object, String name) {
+	public static <T> T getFieldValue(final Object object, final String name) {
 		return getFieldValue(object, name, object.getClass());
 	}
 
-	public static Field getDeclaredField(Class<?> clazz, String name) {
+	public static Field getDeclaredField(final Class<?> clazz, final String name) {
 		if (clazz == null) {
 			return null;
 		}
 		try {
-			Field f = clazz.getDeclaredField(name);
+			final Field f = clazz.getDeclaredField(name);
 			f.setAccessible(true);
 			return f;
-		} catch (NoSuchFieldException e) {
+		} catch (final NoSuchFieldException e) {
 			return getDeclaredField(clazz.getSuperclass(), name);
-		} catch (SecurityException e) {
+		} catch (final SecurityException e) {
 			return null;
 		}
 	}

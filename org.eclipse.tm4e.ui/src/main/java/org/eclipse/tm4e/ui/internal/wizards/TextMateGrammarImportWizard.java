@@ -34,7 +34,7 @@ public final class TextMateGrammarImportWizard extends Wizard implements IImport
 
 	private final boolean save;
 
-	public TextMateGrammarImportWizard(boolean save) {
+	public TextMateGrammarImportWizard(final boolean save) {
 		this.save = save;
 	}
 
@@ -43,7 +43,7 @@ public final class TextMateGrammarImportWizard extends Wizard implements IImport
 	 *
 	 * @param grammarRegistryManager
 	 */
-	public void setGrammarRegistryManager(IGrammarRegistryManager grammarRegistryManager) {
+	public void setGrammarRegistryManager(final IGrammarRegistryManager grammarRegistryManager) {
 		this.grammarRegistryManager = grammarRegistryManager;
 	}
 
@@ -55,12 +55,12 @@ public final class TextMateGrammarImportWizard extends Wizard implements IImport
 
 	@Override
 	public boolean performFinish() {
-		IGrammarDefinition definition = mainPage.getGrammarDefinition();
+		final IGrammarDefinition definition = mainPage.getGrammarDefinition();
 		grammarRegistryManager.registerGrammarDefinition(definition);
 		if (save) {
 			try {
 				grammarRegistryManager.save();
-			} catch (BackingStoreException e) {
+			} catch (final BackingStoreException e) {
 				e.printStackTrace();
 				return false;
 			}
@@ -70,7 +70,7 @@ public final class TextMateGrammarImportWizard extends Wizard implements IImport
 	}
 
 	@Override
-	public void init(IWorkbench workbench, IStructuredSelection selection) {
+	public void init(final IWorkbench workbench, final IStructuredSelection selection) {
 
 	}
 

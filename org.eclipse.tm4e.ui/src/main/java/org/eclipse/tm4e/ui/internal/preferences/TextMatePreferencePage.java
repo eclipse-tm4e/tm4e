@@ -30,9 +30,9 @@ import org.eclipse.ui.preferences.IWorkbenchPreferenceContainer;
 public final class TextMatePreferencePage extends PreferencePage implements IWorkbenchPreferencePage {
 
 	@Override
-	protected Control createContents(Composite parent) {
-		Composite composite = new Composite(parent, SWT.NONE);
-		GridLayout layout = new GridLayout(1, false);
+	protected Control createContents(final Composite parent) {
+		final Composite composite = new Composite(parent, SWT.NONE);
+		final GridLayout layout = new GridLayout(1, false);
 		layout.marginHeight = layout.marginWidth = 0;
 		composite.setLayout(layout);
 
@@ -53,16 +53,16 @@ public final class TextMatePreferencePage extends PreferencePage implements IWor
 
 	}
 
-	private void addRelatedLink(Composite parent, String pageId, String message) {
-		PreferenceLinkArea contentTypeArea = new PreferenceLinkArea(parent, SWT.NONE, pageId, message,
+	private void addRelatedLink(final Composite parent, final String pageId, final String message) {
+		final PreferenceLinkArea contentTypeArea = new PreferenceLinkArea(parent, SWT.NONE, pageId, message,
 				(IWorkbenchPreferenceContainer) getContainer(), null);
 
-		GridData data = new GridData(GridData.FILL_HORIZONTAL | GridData.GRAB_HORIZONTAL);
+		final GridData data = new GridData(GridData.FILL_HORIZONTAL | GridData.GRAB_HORIZONTAL);
 		contentTypeArea.getControl().setLayoutData(data);
 	}
 
 	@Override
-	public void init(IWorkbench workbench) {
+	public void init(final IWorkbench workbench) {
 
 	}
 }

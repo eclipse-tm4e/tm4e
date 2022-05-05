@@ -36,7 +36,7 @@ public final class TMModelManager implements ITMModelManager {
 	}
 
 	@Override
-	public ITMModel connect(IDocument document) {
+	public ITMModel connect(final IDocument document) {
 		ITMModel model = models.get(document);
 		if (model != null) {
 			return model;
@@ -47,8 +47,8 @@ public final class TMModelManager implements ITMModelManager {
 	}
 
 	@Override
-	public void disconnect(IDocument document) {
-		ITMModel model = models.remove(document);
+	public void disconnect(final IDocument document) {
+		final ITMModel model = models.remove(document);
 		if (model != null) {
 			model.dispose();
 		}

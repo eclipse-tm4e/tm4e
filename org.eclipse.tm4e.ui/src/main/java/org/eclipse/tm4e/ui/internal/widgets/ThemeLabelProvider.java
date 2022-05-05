@@ -22,19 +22,19 @@ import org.eclipse.tm4e.ui.themes.ITheme;
 public final class ThemeLabelProvider extends LabelProvider implements ITableLabelProvider {
 
 	@Override
-	public Image getColumnImage(Object element, int columnIndex) {
+	public Image getColumnImage(final Object element, final int columnIndex) {
 		return null;
 	}
 	
 	@Override
-	public String getText(Object element) {
-		ITheme theme = (ITheme) element;
+	public String getText(final Object element) {
+		final ITheme theme = (ITheme) element;
 		return theme.getName();
 	}
 
 	@Override
-	public String getColumnText(Object element, int columnIndex) {
-		ITheme theme = (ITheme) element;
+	public String getColumnText(final Object element, final int columnIndex) {
+		final ITheme theme = (ITheme) element;
 		switch (columnIndex) {
 		case 0:
 			return theme.getName();

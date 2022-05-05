@@ -28,7 +28,7 @@ public final class ColumnSelectionAdapter extends SelectionAdapter {
 	private final int fColumnIndex;
 	private final ColumnViewerComparator viewerComparator;
 
-	public ColumnSelectionAdapter(TableColumn column, TableViewer tableViewer, int index, ColumnViewerComparator vc) {
+	public ColumnSelectionAdapter(final TableColumn column, final TableViewer tableViewer, final int index, final ColumnViewerComparator vc) {
 		fTableColumn = column;
 		this.tableViewer = tableViewer;
 		fColumnIndex = index;
@@ -36,10 +36,10 @@ public final class ColumnSelectionAdapter extends SelectionAdapter {
 	}
 
 	@Override
-	public void widgetSelected(SelectionEvent e) {
+	public void widgetSelected(final SelectionEvent e) {
 		viewerComparator.setColumn(fColumnIndex);
-		int dir = viewerComparator.getDirection();
-		Table table = tableViewer.getTable();
+		final int dir = viewerComparator.getDirection();
+		final Table table = tableViewer.getTable();
 		table.setSortDirection(dir);
 		table.setSortColumn(fTableColumn);
 		tableViewer.refresh();

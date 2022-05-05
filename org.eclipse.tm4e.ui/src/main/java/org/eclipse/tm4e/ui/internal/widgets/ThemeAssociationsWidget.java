@@ -43,7 +43,7 @@ public final class ThemeAssociationsWidget extends TableAndButtonsWidget {
 
 	private IGrammarDefinition definition;
 
-	public ThemeAssociationsWidget(IThemeManager themeManager, Composite parent, int style) {
+	public ThemeAssociationsWidget(final IThemeManager themeManager, final Composite parent, final int style) {
 		super(parent, style, TMUIMessages.ThemeAssociationsWidget_description);
 		this.themeManager = themeManager;
 		super.setContentProvider(ArrayContentProvider.getInstance());
@@ -51,20 +51,20 @@ public final class ThemeAssociationsWidget extends TableAndButtonsWidget {
 	}
 
 	@Override
-	protected void createButtons(Composite parent) {
+	protected void createButtons(final Composite parent) {
 		editButton = new Button(parent, SWT.PUSH);
 		editButton.setText(TMUIMessages.Button_edit);
 		editButton.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		editButton.addListener(SWT.Selection, e -> {
 			// Open the wizard to create association between theme and grammar.
-			CreateThemeAssociationWizard wizard = new CreateThemeAssociationWizard(false);
+			final CreateThemeAssociationWizard wizard = new CreateThemeAssociationWizard(false);
 			wizard.setInitialDefinition(definition);
-			IStructuredSelection selection = super.getSelection();
+			final IStructuredSelection selection = super.getSelection();
 			wizard.setInitialAssociation(selection.isEmpty() ? null : (IThemeAssociation) selection.getFirstElement());
 			wizard.setThemeManager(themeManager);
-			WizardDialog dialog = new WizardDialog(getShell(), wizard);
+			final WizardDialog dialog = new WizardDialog(getShell(), wizard);
 			if (dialog.open() == Window.OK) {
-				IThemeAssociation association = wizard.getCreatedThemeAssociation();
+				final IThemeAssociation association = wizard.getCreatedThemeAssociation();
 				refresh(association);
 			}
 		});
@@ -77,10 +77,10 @@ public final class ThemeAssociationsWidget extends TableAndButtonsWidget {
 
 			if (MessageDialog.openConfirm(getShell(), TMUIMessages.ThemeAssociationsWidget_remove_dialog_title,
 					TMUIMessages.ThemeAssociationsWidget_remove_dialog_message)) {
-				IStructuredSelection selection = super.getSelection();
-				Iterator<IThemeAssociation> it = selection.iterator();
+				final IStructuredSelection selection = super.getSelection();
+				final Iterator<IThemeAssociation> it = selection.iterator();
 				while (it.hasNext()) {
-					IThemeAssociation association = it.next();
+					final IThemeAssociation association = it.next();
 					themeManager.unregisterThemeAssociation(association);
 				}
 				refresh(null);
@@ -98,13 +98,13 @@ public final class ThemeAssociationsWidget extends TableAndButtonsWidget {
 		return removeButton;
 	}
 
-	public IThemeAssociation[] setGrammarDefinition(IGrammarDefinition definition) {
+	public IThemeAssociation[] setGrammarDefinition(final IGrammarDefinition definition) {
 		this.definition = definition;
 		return refresh(null);
 	}
 
 	private IThemeAssociation[] refresh(IThemeAssociation association) {
-		IThemeAssociation[] themeAssociations = themeManager.getThemeAssociationsForScope(definition.getScopeName());
+		final IThemeAssociation[] themeAssociations = themeManager.getThemeAssociationsForScope(definition.getScopeName());
 		// Refresh the list of associations
 		super.setInput(themeAssociations);
 		// Select the first of given association

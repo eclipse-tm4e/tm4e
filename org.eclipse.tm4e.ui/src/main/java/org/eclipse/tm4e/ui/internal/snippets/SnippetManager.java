@@ -45,7 +45,7 @@ public final class SnippetManager implements ISnippetManager {
 		if (INSTANCE != null) {
 			return INSTANCE;
 		}
-		SnippetManager manager = new SnippetManager();
+		final SnippetManager manager = new SnippetManager();
 		manager.load();
 		return manager;
 	}
@@ -63,18 +63,18 @@ public final class SnippetManager implements ISnippetManager {
 	 * Load snippets from extension point.
 	 */
 	private void loadGrammarsFromExtensionPoints() {
-		IConfigurationElement[] cf = Platform.getExtensionRegistry().getConfigurationElementsFor(TMUIPlugin.PLUGIN_ID,
+		final IConfigurationElement[] cf = Platform.getExtensionRegistry().getConfigurationElementsFor(TMUIPlugin.PLUGIN_ID,
 				EXTENSION_SNIPPETS);
-		for (IConfigurationElement ce : cf) {
-			String extensionName = ce.getName();
+		for (final IConfigurationElement ce : cf) {
+			final String extensionName = ce.getName();
 			if (SNIPPET_ELT.equals(extensionName)) {
 				this.registerSnippet(new Snippet(ce));
 			}
 		}
 	}
 
-	private void registerSnippet(Snippet snippet) {
-		String scopeName = snippet.getScopeName();
+	private void registerSnippet(final Snippet snippet) {
+		final String scopeName = snippet.getScopeName();
 		Collection<ISnippet> snippets = this.snippets.get(scopeName);
 		if (snippets == null) {
 			snippets = new ArrayList<>();
@@ -84,8 +84,8 @@ public final class SnippetManager implements ISnippetManager {
 	}
 
 	@Override
-	public ISnippet[] getSnippets(String scopeName) {
-		Collection<ISnippet> snippets = this.snippets.get(scopeName);
+	public ISnippet[] getSnippets(final String scopeName) {
+		final Collection<ISnippet> snippets = this.snippets.get(scopeName);
 		return snippets != null ? snippets.toArray(ISnippet[]::new) : EMPTY_SNIPPETS;
 	}
 }

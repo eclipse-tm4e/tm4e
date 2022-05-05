@@ -50,7 +50,7 @@ public class Theme extends TMResource implements ITheme {
 	 *
 	 * @param id
 	 */
-	public Theme(String id, String path, String name, boolean dark, boolean isDefault) {
+	public Theme(final String id, final String path, final String name, final boolean dark, final boolean isDefault) {
 		super(path);
 		this.id = id;
 		this.name = name;
@@ -58,7 +58,7 @@ public class Theme extends TMResource implements ITheme {
 		this.isDefault = isDefault;
 	}
 
-	public Theme(IConfigurationElement ce) {
+	public Theme(final IConfigurationElement ce) {
 		super(ce);
 		id = ce.getAttribute(XMLConstants.ID_ATTR);
 		name = ce.getAttribute(XMLConstants.NAME_ATTR);
@@ -77,48 +77,48 @@ public class Theme extends TMResource implements ITheme {
 	}
 
 	@Override
-	public IToken getToken(String type) {
-		ITokenProvider provider = getTokenProvider();
+	public IToken getToken(final String type) {
+		final ITokenProvider provider = getTokenProvider();
 		return provider != null ? provider.getToken(type) : null;
 	}
 
 	@Override
 	public Color getEditorForeground() {
-		ITokenProvider provider = getTokenProvider();
-		Color themeColor = provider != null ? provider.getEditorForeground() : null;
+		final ITokenProvider provider = getTokenProvider();
+		final Color themeColor = provider != null ? provider.getEditorForeground() : null;
 		return ColorManager.getInstance()
 				.getPriorityColor(themeColor, AbstractTextEditor.PREFERENCE_COLOR_FOREGROUND);
 	}
 
 	@Override
 	public Color getEditorBackground() {
-		ITokenProvider provider = getTokenProvider();
-		Color themeColor = provider != null ? provider.getEditorBackground() : null;
+		final ITokenProvider provider = getTokenProvider();
+		final Color themeColor = provider != null ? provider.getEditorBackground() : null;
 		return ColorManager.getInstance()
 				.getPriorityColor(themeColor, AbstractTextEditor.PREFERENCE_COLOR_BACKGROUND);
 	}
 
 	@Override
 	public Color getEditorSelectionForeground() {
-		ITokenProvider provider = getTokenProvider();
-		Color themeColor = provider != null ? provider.getEditorSelectionForeground() : null;
+		final ITokenProvider provider = getTokenProvider();
+		final Color themeColor = provider != null ? provider.getEditorSelectionForeground() : null;
 		return ColorManager.getInstance()
 				.getPriorityColor(themeColor, AbstractTextEditor.PREFERENCE_COLOR_SELECTION_FOREGROUND);
 	}
 
 	@Override
 	public Color getEditorSelectionBackground() {
-		ITokenProvider provider = getTokenProvider();
-		Color themeColor = provider != null ? provider.getEditorSelectionBackground() : null;
+		final ITokenProvider provider = getTokenProvider();
+		final Color themeColor = provider != null ? provider.getEditorSelectionBackground() : null;
 		return ColorManager.getInstance()
 				.getPriorityColor(themeColor, AbstractTextEditor.PREFERENCE_COLOR_SELECTION_BACKGROUND);
 	}
 
 	@Override
 	public Color getEditorCurrentLineHighlight() {
-		ITokenProvider provider = getTokenProvider();
-		Color themeColor = provider != null ? provider.getEditorCurrentLineHighlight() : null;
-		ColorManager manager = ColorManager.getInstance();
+		final ITokenProvider provider = getTokenProvider();
+		final Color themeColor = provider != null ? provider.getEditorCurrentLineHighlight() : null;
+		final ColorManager manager = ColorManager.getInstance();
 		return manager.isColorUserDefined(AbstractTextEditor.PREFERENCE_COLOR_BACKGROUND)
 				? manager.getPreferenceEditorColor(PreferenceConstants.EDITOR_CURRENTLINE_HIGHLIGHT)
 				: themeColor;
@@ -131,7 +131,7 @@ public class Theme extends TMResource implements ITheme {
 					return null;
 				}
 				tokenProvider = new CSSTokenProvider(in);
-			} catch (Exception e) {
+			} catch (final Exception e) {
 				e.printStackTrace();
 			}
 		}
@@ -154,7 +154,7 @@ public class Theme extends TMResource implements ITheme {
 	}
 
 	@Override
-	public void initializeViewerColors(StyledText styledText) {
+	public void initializeViewerColors(final StyledText styledText) {
 		Color color = getEditorBackground();
 		if (color != null) {
 			styledText.setBackground(color);

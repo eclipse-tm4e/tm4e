@@ -22,13 +22,13 @@ import org.eclipse.tm4e.ui.internal.TMUIMessages;
  */
 public final class ContentTypesBindingWidget extends TableAndButtonsWidget {
 
-	public ContentTypesBindingWidget(Composite parent, int style) {
+	public ContentTypesBindingWidget(final Composite parent, final int style) {
 		super(parent, style, TMUIMessages.ContentTypesBindingWidget_description);
 		super.setContentProvider(ArrayContentProvider.getInstance());
 		super.setLabelProvider(new ContentTypeLabelProvider());
 	}
 
 	@Override
-	protected void createButtons(Composite parent) {
+	protected void createButtons(final Composite parent) {
 	}
 }

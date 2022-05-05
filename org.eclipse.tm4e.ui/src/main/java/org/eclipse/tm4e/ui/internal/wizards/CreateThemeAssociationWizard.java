@@ -36,7 +36,7 @@ public final class CreateThemeAssociationWizard extends Wizard {
 
 	private IThemeAssociation initialAssociation;
 
-	public CreateThemeAssociationWizard(boolean save) {
+	public CreateThemeAssociationWizard(final boolean save) {
 		this.save = save;
 	}
 
@@ -45,7 +45,7 @@ public final class CreateThemeAssociationWizard extends Wizard {
 	 *
 	 * @param themeManager
 	 */
-	public void setThemeManager(IThemeManager themeManager) {
+	public void setThemeManager(final IThemeManager themeManager) {
 		this.themeManager = themeManager;
 	}
 
@@ -57,12 +57,12 @@ public final class CreateThemeAssociationWizard extends Wizard {
 
 	@Override
 	public boolean performFinish() {
-		IThemeAssociation association = mainPage.getThemeAssociation();
+		final IThemeAssociation association = mainPage.getThemeAssociation();
 		themeManager.registerThemeAssociation(association);
 		if (save) {
 			try {
 				themeManager.save();
-			} catch (BackingStoreException e) {
+			} catch (final BackingStoreException e) {
 				e.printStackTrace();
 				return false;
 			}
@@ -75,11 +75,11 @@ public final class CreateThemeAssociationWizard extends Wizard {
 		return createdThemeAssociation;
 	}
 
-	public void setInitialDefinition(IGrammarDefinition definition) {
+	public void setInitialDefinition(final IGrammarDefinition definition) {
 		this.initialDefinition = definition;
 	}
 
-	public void setInitialAssociation(IThemeAssociation association) {
+	public void setInitialAssociation(final IThemeAssociation association) {
 		this.initialAssociation = association;
 	}
 }

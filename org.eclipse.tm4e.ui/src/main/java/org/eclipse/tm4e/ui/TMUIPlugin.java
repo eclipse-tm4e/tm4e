@@ -47,23 +47,23 @@ public class TMUIPlugin extends AbstractUIPlugin {
 	public TMUIPlugin() {
 	}
 
-	public void trace(String message) {
+	public void trace(final String message) {
 		if (Boolean.parseBoolean(Platform.getDebugOption(TRACE_ID))) {
 			getLog().log(new Status(IStatus.INFO, PLUGIN_ID, message));
 		}
 	}
 
 	@Override
-	public void start(BundleContext context) throws Exception {
+	public void start(final BundleContext context) throws Exception {
 		super.start(context);
 		plugin = this;
-		boolean isDebugOn = Boolean.parseBoolean(Platform.getDebugOption(TRACE_ID));
+		final boolean isDebugOn = Boolean.parseBoolean(Platform.getDebugOption(TRACE_ID));
 		if (isDebugOn) {
-			Logger tm4eCoreLogger = Logger.getLogger("org.eclipse.tm4e");
+			final Logger tm4eCoreLogger = Logger.getLogger("org.eclipse.tm4e");
 			tm4eCoreLogger.setLevel(Level.FINEST);
 			tm4eCoreLogger.addHandler(new Handler() {
 
-				@Override public void publish(LogRecord record) {
+				@Override public void publish(final LogRecord record) {
 					TMUIPlugin.getDefault().getLog().log(new Status(
 						toSeverity(record.getLevel()),
 						"org.eclipse.tm4e.core",
@@ -71,7 +71,7 @@ public class TMUIPlugin extends AbstractUIPlugin {
 					));
 				}
 
-				private int toSeverity(Level level) {
+				private int toSeverity(final Level level) {
 					if (level.intValue() >= Level.SEVERE.intValue()) {
 						return IStatus.ERROR;
 					}
@@ -93,7 +93,7 @@ public class TMUIPlugin extends AbstractUIPlugin {
 	}
 
 	@Override
-	public void stop(BundleContext context) throws Exception {
+	public void stop(final BundleContext context) throws Exception {
 		ColorManager.getInstance().dispose();
 		plugin = null;
 		super.stop(context);

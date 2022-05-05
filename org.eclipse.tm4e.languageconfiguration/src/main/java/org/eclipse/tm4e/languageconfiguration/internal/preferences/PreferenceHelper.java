@@ -35,8 +35,8 @@ public final class PreferenceHelper {
 	static {
 		DEFAULT_GSON = new GsonBuilder().registerTypeAdapter(LanguageConfigurationDefinition.class,
 				(JsonDeserializer<LanguageConfigurationDefinition>) (json, typeOfT, context) -> {
-					JsonObject object = json.getAsJsonObject();
-					JsonElement pluginId = object.get("pluginId");
+					final JsonObject object = json.getAsJsonObject();
+					final JsonElement pluginId = object.get("pluginId");
 					return new LanguageConfigurationDefinition(
 							ContentTypeHelper.getContentTypeById(object.get("contentTypeId").getAsString()), //$NON-NLS-1$
 							object.get("path").getAsString(), //$NON-NLS-1$
@@ -46,7 +46,7 @@ public final class PreferenceHelper {
 							object.get("matchingPairsEnabled").getAsBoolean()); //$NON-NLS-1$
 				}).registerTypeAdapter(LanguageConfigurationDefinition.class,
 						(JsonSerializer<LanguageConfigurationDefinition>) (definition, typeOfT, context) -> {
-							JsonObject object = new JsonObject();
+							final JsonObject object = new JsonObject();
 							object.addProperty("path", definition.getPath()); //$NON-NLS-1$
 							object.addProperty("pluginId", definition.getPluginId()); //$NON-NLS-1$
 							object.addProperty("contentTypeId", definition.getContentType().getId()); //$NON-NLS-1$
@@ -58,11 +58,11 @@ public final class PreferenceHelper {
 				.create();
 	}
 
-	public static ILanguageConfigurationDefinition[] loadLanguageConfigurationDefinitions(String json) {
+	public static ILanguageConfigurationDefinition[] loadLanguageConfigurationDefinitions(final String json) {
 		return DEFAULT_GSON.fromJson(json, LanguageConfigurationDefinition[].class);
 	}
 
-	public static String toJson(Collection<ILanguageConfigurationDefinition> definitions) {
+	public static String toJson(final Collection<ILanguageConfigurationDefinition> definitions) {
 		return DEFAULT_GSON.toJson(definitions);
 	}
 

@@ -11,6 +11,7 @@
  */
 package org.eclipse.tm4e.languageconfiguration.internal;
 
+import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.framework.BundleContext;
 
@@ -23,20 +24,22 @@ public final class LanguageConfigurationPlugin extends AbstractUIPlugin {
 
 	public static final String PLUGIN_ID = "org.eclipse.tm4e.languageconfiguration"; //$NON-NLS-1$
 
+	@Nullable
 	private static LanguageConfigurationPlugin INSTANCE = null;
 
+	@Nullable
 	static LanguageConfigurationPlugin getInstance() {
 		return INSTANCE;
 	}
 
 	@Override
-	public void start(BundleContext context) throws Exception {
+	public void start(@Nullable final BundleContext context) throws Exception {
 		super.start(context);
 		INSTANCE = this;
 	}
 
 	@Override
-	public void stop(BundleContext context) throws Exception {
+	public void stop(@Nullable final BundleContext context) throws Exception {
 		INSTANCE = null;
 		super.stop(context);
 	}

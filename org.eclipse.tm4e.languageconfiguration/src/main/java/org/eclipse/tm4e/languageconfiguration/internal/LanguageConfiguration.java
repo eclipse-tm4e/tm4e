@@ -15,6 +15,7 @@ import java.io.Reader;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.tm4e.languageconfiguration.ILanguageConfiguration;
 import org.eclipse.tm4e.languageconfiguration.internal.supports.AutoClosingPairConditional;
 import org.eclipse.tm4e.languageconfiguration.internal.supports.CharacterPair;
@@ -38,6 +39,7 @@ import com.google.gson.JsonObject;
  */
 public final class LanguageConfiguration implements ILanguageConfiguration {
 
+
 	/**
 	 * Returns an instance of {@link LanguageConfiguration} loaded from the VSCode
 	 * language-configuration.json file reader.
@@ -47,24 +49,25 @@ public final class LanguageConfiguration implements ILanguageConfiguration {
 	 * @return an instance of {@link LanguageConfiguration} loaded from the VSCode
 	 *         language-configuration.json file reader.
 	 */
-	public static LanguageConfiguration load(Reader reader) {
+	@Nullable
+	public static LanguageConfiguration load(final Reader reader) {
 		return new GsonBuilder()
-				.registerTypeAdapter(OnEnterRule.class, (JsonDeserializer<OnEnterRule>) (json, typeOfT, context) -> {
+				.registerTypeAdapter(OnEnterRule.class, (JsonDeserializer<@Nullable OnEnterRule>) (json, typeOfT, context) -> {
 					String beforeText = null;
 					String afterText = null;
 					EnterAction action = null;
 					if (json.isJsonObject()) {
-						JsonObject object = json.getAsJsonObject();
+						final JsonObject object = json.getAsJsonObject();
 						beforeText = getAsString(object.get("beforeText")); //$NON-NLS-1$
 						afterText = getAsString(object.get("afterText")); //$NON-NLS-1$
-						JsonElement actionElement = object.get("action"); //$NON-NLS-1$
+						final JsonElement actionElement = object.get("action"); //$NON-NLS-1$
 						if (actionElement != null && actionElement.isJsonObject()) {
-							JsonObject actionObject = actionElement.getAsJsonObject();
-							String indentActionString = getAsString(actionObject.get("indentAction")); //$NON-NLS-1$
+							final JsonObject actionObject = actionElement.getAsJsonObject();
+							final String indentActionString = getAsString(actionObject.get("indentAction")); //$NON-NLS-1$
 							if (indentActionString != null) {
-								IndentAction indentAction = IndentAction.valueOf(indentActionString);
-								Integer removeText = getAsInt(actionObject.get("removeText")); //$NON-NLS-1$
-								String appendText = getAsString(actionObject.get("appendText")); //$NON-NLS-1$
+								final IndentAction indentAction = IndentAction.valueOf(indentActionString);
+								final Integer removeText = getAsInteger(actionObject.get("removeText")); //$NON-NLS-1$
+								final String appendText = getAsString(actionObject.get("appendText")); //$NON-NLS-1$
 								action = new EnterAction(indentAction);
 								action.setAppendText(appendText);
 								action.setRemoveText(removeText);
@@ -75,19 +78,19 @@ public final class LanguageConfiguration implements ILanguageConfiguration {
 						return null;
 					}
 					return new OnEnterRule(beforeText, afterText, action);
-				}).registerTypeAdapter(Comments.class, (JsonDeserializer<Comments>) (json, typeOfT, context) -> {
+				}).registerTypeAdapter(Comments.class, (JsonDeserializer<@Nullable Comments>) (json, typeOfT, context) -> {
 					// ex: {"lineComment": "//","blockComment": [ "/*", "*/" ]}
 					String lineComment = null;
 					CharacterPair blockComment = null;
 					if (json.isJsonObject()) {
-						JsonObject object = json.getAsJsonObject();
+						final JsonObject object = json.getAsJsonObject();
 						lineComment = getAsString(object.get("lineComment")); //$NON-NLS-1$
-						JsonElement blockCommentElement = object.get("blockComment"); //$NON-NLS-1$
+						final JsonElement blockCommentElement = object.get("blockComment"); //$NON-NLS-1$
 						if (blockCommentElement != null && blockCommentElement.isJsonArray()) {
-							JsonArray blockCommentArray = blockCommentElement.getAsJsonArray();
+							final JsonArray blockCommentArray = blockCommentElement.getAsJsonArray();
 							if (blockCommentArray.size() == 2) {
-								String blockCommentStart = getAsString(blockCommentArray.get(0));
-								String blockCommentEnd = getAsString(blockCommentArray.get(1));
+								final String blockCommentStart = getAsString(blockCommentArray.get(0));
+								final String blockCommentEnd = getAsString(blockCommentArray.get(1));
 								if (blockCommentStart != null && blockCommentEnd != null) {
 									blockComment = new CharacterPair(blockCommentStart, blockCommentEnd);
 								}
@@ -99,12 +102,12 @@ public final class LanguageConfiguration implements ILanguageConfiguration {
 					}
 					return new Comments(lineComment, blockComment);
 				}).registerTypeAdapter(CharacterPair.class,
-						(JsonDeserializer<CharacterPair>) (json, typeOfT, context) -> {
+						(JsonDeserializer<@Nullable CharacterPair>) (json, typeOfT, context) -> {
 							String open = null;
 							String close = null;
 							if (json.isJsonArray()) {
 								// ex: ["{","}"]
-								JsonArray characterPairs = json.getAsJsonArray();
+								final JsonArray characterPairs = json.getAsJsonArray();
 								if (characterPairs.size() == 2) {
 									open = getAsString(characterPairs.get(0));
 									close = getAsString(characterPairs.get(1));
@@ -116,27 +119,27 @@ public final class LanguageConfiguration implements ILanguageConfiguration {
 							return new CharacterPair(open, close);
 						})
 				.registerTypeAdapter(AutoClosingPairConditional.class,
-						(JsonDeserializer<AutoClosingPairConditional>) (json, typeOfT, context) -> {
-							List<String> notInList = new ArrayList<>();
+						(JsonDeserializer<@Nullable AutoClosingPairConditional>) (json, typeOfT, context) -> {
+							final List<String> notInList = new ArrayList<>();
 							String open = null;
 							String close = null;
 							if (json.isJsonArray()) {
 								// ex: ["{","}"]
-								JsonArray characterPairs = json.getAsJsonArray();
+								final JsonArray characterPairs = json.getAsJsonArray();
 								if (characterPairs.size() == 2) {
 									open = getAsString(characterPairs.get(0));
 									close = getAsString(characterPairs.get(1));
 								}
 							} else if (json.isJsonObject()) {
 								// ex: {"open":"'","close":"'", "notIn": ["string", "comment"]}
-								JsonObject object = json.getAsJsonObject();
+								final JsonObject object = json.getAsJsonObject();
 								open = getAsString(object.get("open")); //$NON-NLS-1$
 								close = getAsString(object.get("close")); //$NON-NLS-1$
-								JsonElement notInElement = object.get("notIn"); //$NON-NLS-1$
+								final JsonElement notInElement = object.get("notIn"); //$NON-NLS-1$
 								if (notInElement != null && notInElement.isJsonArray()) {
-									JsonArray notInArray = notInElement.getAsJsonArray();
+									final JsonArray notInArray = notInElement.getAsJsonArray();
 									notInArray.forEach(element -> {
-										String string = getAsString(element);
+										final String string = getAsString(element);
 										if (string != null) {
 											notInList.add(string);
 										}
@@ -148,17 +151,17 @@ public final class LanguageConfiguration implements ILanguageConfiguration {
 							}
 							return new AutoClosingPairConditional(open, close, notInList);
 						})
-				.registerTypeAdapter(Folding.class, (JsonDeserializer<Folding>) (json, typeOfT, context) -> {
+				.registerTypeAdapter(Folding.class, (JsonDeserializer<@Nullable Folding>) (json, typeOfT, context) -> {
 					// ex: {"offSide": true, "markers": {"start": "^\\s*/", "end": "^\\s*"}}
 					boolean offSide = false;
 					String startMarker = null;
 					String endMarker = null;
 					if (json.isJsonObject()) {
-						JsonObject object = json.getAsJsonObject();
+						final JsonObject object = json.getAsJsonObject();
 						offSide = getAsBoolean(object.get("offSide"), offSide); //$NON-NLS-1$
-						JsonElement markersElement = object.get("markers"); //$NON-NLS-1$
+						final JsonElement markersElement = object.get("markers"); //$NON-NLS-1$
 						if (markersElement != null && markersElement.isJsonObject()) {
-							JsonObject markersObject = markersElement.getAsJsonObject();
+							final JsonObject markersObject = markersElement.getAsJsonObject();
 							startMarker = getAsString(markersObject.get("start")); //$NON-NLS-1$
 							endMarker = getAsString(markersObject.get("end")); //$NON-NLS-1$
 						}
@@ -170,35 +173,37 @@ public final class LanguageConfiguration implements ILanguageConfiguration {
 				}).create().fromJson(reader, LanguageConfiguration.class);
 	}
 
-	private static String getAsString(JsonElement element) {
+	@Nullable
+	private static String getAsString(@Nullable final JsonElement element) {
 		if (element == null) {
 			return null;
 		}
 		try {
 			return element.getAsString();
-		} catch (Exception e) {
+		} catch (final Exception e) {
 			return null;
 		}
 	}
 
-	private static Boolean getAsBoolean(JsonElement element, Boolean defaultValue) {
+	private static boolean getAsBoolean(@Nullable final JsonElement element, final boolean defaultValue) {
 		if (element == null) {
 			return defaultValue;
 		}
 		try {
 			return element.getAsBoolean();
-		} catch (Exception e) {
+		} catch (final Exception e) {
 			return defaultValue;
 		}
 	}
 
-	private static Integer getAsInt(JsonElement element) {
+	@Nullable
+	private static Integer getAsInteger(@Nullable final JsonElement element) {
 		if (element == null) {
 			return null;
 		}
 		try {
 			return element.getAsInt();
-		} catch (Exception e) {
+		} catch (final Exception e) {
 			return null;
 		}
 	}
@@ -206,17 +211,19 @@ public final class LanguageConfiguration implements ILanguageConfiguration {
 	/**
 	 * Defines the comment symbols
 	 */
+	@Nullable
 	private Comments comments;
 
 	/**
-	 * The language's brackets. This configuration implicitly affects pressing Enter
-	 * around these brackets.
+	 * The language's brackets. This configuration implicitly affects pressing Enter around these brackets.
 	 */
+	@Nullable
 	private List<CharacterPair> brackets;
 
 	/**
 	 * The language's rules to be evaluated when pressing Enter.
 	 */
+	@Nullable
 	private List<OnEnterRule> onEnterRules;
 
 	/**
@@ -224,6 +231,7 @@ public final class LanguageConfiguration implements ILanguageConfiguration {
 	 * inserted with the 'open' character is typed. If not set, the configured
 	 * brackets will be used.
 	 */
+	@Nullable
 	private List<AutoClosingPairConditional> autoClosingPairs;
 
 	/**
@@ -231,49 +239,58 @@ public final class LanguageConfiguration implements ILanguageConfiguration {
 	 * selection, the selected string is surrounded by the open and close
 	 * characters. If not set, the autoclosing pairs settings will be used.
 	 */
+	@Nullable
 	private List<CharacterPair> surroundingPairs;
 
 	/**
 	 * Defines when and how code should be folded in the editor
 	 */
+	@Nullable
 	private Folding folding;
 
 	/**
-	 * Regex which defines what is considered to be a word in the programming
-	 * language.
+	 * Regex which defines what is considered to be a word in the programming language.
 	 */
+	@Nullable
 	private String wordPattern;
 
+	@Nullable
 	@Override
 	public Comments getComments() {
 		return comments;
 	}
 
+	@Nullable
 	@Override
 	public List<CharacterPair> getBrackets() {
 		return brackets;
 	}
 
+	@Nullable
 	@Override
 	public List<AutoClosingPairConditional> getAutoClosingPairs() {
 		return autoClosingPairs;
 	}
 
+	@Nullable
 	@Override
 	public List<OnEnterRule> getOnEnterRules() {
 		return onEnterRules;
 	}
 
+	@Nullable
 	@Override
 	public List<CharacterPair> getSurroundingPairs() {
 		return surroundingPairs;
 	}
 
+	@Nullable
 	@Override
 	public Folding getFolding() {
 		return folding;
 	}
 
+	@Nullable
 	@Override
 	public String getWordPattern() {
 		return wordPattern;

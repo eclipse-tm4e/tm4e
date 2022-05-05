@@ -12,6 +12,7 @@
 package org.eclipse.tm4e.languageconfiguration;
 
 import org.eclipse.core.runtime.content.IContentType;
+import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.tm4e.registry.ITMResource;
 
 public interface ILanguageConfigurationDefinition extends ITMResource {
@@ -28,6 +29,7 @@ public interface ILanguageConfigurationDefinition extends ITMResource {
 	 *
 	 * @return the language configuration.
 	 */
+	@Nullable
 	ILanguageConfiguration getLanguageConfiguration();
 
 	/**
@@ -37,7 +39,7 @@ public interface ILanguageConfigurationDefinition extends ITMResource {
 	 * @return <code>true</code> if on enter is enabled, <code>false</code>
 	 *         otherwise
 	 */
-	Boolean isOnEnterEnabled();
+	boolean isOnEnterEnabled();
 
 	/**
 	 * Set whether on-enter actions are enabled for this language configuration
@@ -52,7 +54,7 @@ public interface ILanguageConfigurationDefinition extends ITMResource {
 	 * @return <code>true</code> if bracket auto closing is enabled,
 	 *         <code>false</code> otherwise
 	 */
-	Boolean isBracketAutoClosingEnabled();
+	boolean isBracketAutoClosingEnabled();
 
 	/**
 	 * Set whether the bracket auto closing action is enabled for this language
@@ -67,7 +69,7 @@ public interface ILanguageConfigurationDefinition extends ITMResource {
 	 * @return <code>true</code> if highlighting of matching pairs is enabled,
 	 *         <code>false</code> otherwise
 	 */
-	Boolean isMatchingPairsEnabled();
+	boolean isMatchingPairsEnabled();
 
 	/**
 	 * Set whether the highlighting of matching pairs is enabled for this language

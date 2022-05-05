@@ -19,7 +19,7 @@ public final class Folding {
 
 	private final String markersEnd;
 
-	public Folding(Boolean offSide, String markersStart, String markersEnd) {
+	public Folding(final Boolean offSide, final String markersStart, final String markersEnd) {
 		this.offSide = offSide;
 		this.markersStart = markersStart;
 		this.markersEnd = markersEnd;

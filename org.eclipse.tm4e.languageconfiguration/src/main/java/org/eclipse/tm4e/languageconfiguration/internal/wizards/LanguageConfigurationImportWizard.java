@@ -1,16 +1,17 @@
 /**
- *  Copyright (c) 2018 Red Hat Inc. and others.
+ * Copyright (c) 2018 Red Hat Inc. and others.
  * This program and the accompanying materials are made
  * available under the terms of the Eclipse Public License 2.0
  * which is available at https://www.eclipse.org/legal/epl-2.0/
  *
  * SPDX-License-Identifier: EPL-2.0
  *
- *  Contributors:
- *  Lucas Bullen (Red Hat Inc.) - initial API and implementation
+ * Contributors:
+ * Lucas Bullen (Red Hat Inc.) - initial API and implementation
  */
 package org.eclipse.tm4e.languageconfiguration.internal.wizards;
 
+import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.wizard.Wizard;
 import org.eclipse.tm4e.languageconfiguration.ILanguageConfigurationDefinition;
@@ -26,25 +27,25 @@ import org.osgi.service.prefs.BackingStoreException;
  */
 public final class LanguageConfigurationImportWizard extends Wizard implements IImportWizard {
 
+	@Nullable
 	private SelectLanguageConfigurationWizardPage mainPage;
 
+	@Nullable
 	private ILanguageConfigurationDefinition createdDefinition;
 
 	private ILanguageConfigurationRegistryManager registryManager;
 
 	private final boolean save;
 
-	public LanguageConfigurationImportWizard(boolean save) {
+	public LanguageConfigurationImportWizard(final boolean save) {
 		this.save = save;
-		setRegistryManager(LanguageConfigurationRegistryManager.getInstance());
+		this.registryManager = LanguageConfigurationRegistryManager.getInstance();
 	}
 
 	/**
 	 * Set registry to use to add the created grammar definitions.
-	 *
-	 * @param registryManager
 	 */
-	public void setRegistryManager(ILanguageConfigurationRegistryManager registryManager) {
+	public void setRegistryManager(final ILanguageConfigurationRegistryManager registryManager) {
 		this.registryManager = registryManager;
 	}
 
@@ -56,12 +57,13 @@ public final class LanguageConfigurationImportWizard extends Wizard implements I
 
 	@Override
 	public boolean performFinish() {
-		ILanguageConfigurationDefinition definition = mainPage.getDefinition();
+		assert mainPage != null;
+		final ILanguageConfigurationDefinition definition = mainPage.getDefinition();
 		registryManager.registerLanguageConfigurationDefinition(definition);
 		if (save) {
 			try {
 				registryManager.save();
-			} catch (BackingStoreException e) {
+			} catch (final BackingStoreException e) {
 				e.printStackTrace();
 				return false;
 			}
@@ -71,10 +73,11 @@ public final class LanguageConfigurationImportWizard extends Wizard implements I
 	}
 
 	@Override
-	public void init(IWorkbench workbench, IStructuredSelection selection) {
+	public void init(@Nullable final IWorkbench workbench, @Nullable final IStructuredSelection selection) {
 
 	}
 
+	@Nullable
 	public ILanguageConfigurationDefinition getCreatedDefinition() {
 		return createdDefinition;
 	}

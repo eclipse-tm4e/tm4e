@@ -11,6 +11,8 @@
  */
 package org.eclipse.tm4e.languageconfiguration.internal.supports;
 
+import org.eclipse.jdt.annotation.Nullable;
+
 /**
  * Describes what to do when pressing Enter.
  */
@@ -46,17 +48,22 @@ public final class EnterAction {
 	/**
 	 * Describe whether to outdent current line.
 	 */
+	@Nullable
 	private Boolean outdentCurrentLine;
+
 	/**
 	 * Describes text to be appended after the new line and after the indentation.
 	 */
+	@Nullable
 	private String appendText;
+
 	/**
 	 * Describes the number of characters to remove from the new line's indentation.
 	 */
+	@Nullable
 	private Integer removeText;
 
-	public EnterAction(IndentAction indentAction) {
+	public EnterAction(final IndentAction indentAction) {
 		this.indentAction = indentAction;
 	}
 
@@ -67,6 +74,7 @@ public final class EnterAction {
 	/**
 	 * @return the outdentCurrentLine
 	 */
+	@Nullable
 	private Boolean getOutdentCurrentLine() {
 		return outdentCurrentLine;
 	}
@@ -76,7 +84,7 @@ public final class EnterAction {
 	 *            the outdentCurrentLine to set
 	 * @return
 	 */
-	private EnterAction setOutdentCurrentLine(Boolean outdentCurrentLine) {
+	private EnterAction setOutdentCurrentLine(final Boolean outdentCurrentLine) {
 		this.outdentCurrentLine = outdentCurrentLine;
 		return this;
 	}
@@ -84,16 +92,15 @@ public final class EnterAction {
 	/**
 	 * @return the appendText
 	 */
+	@Nullable
 	public String getAppendText() {
 		return appendText;
 	}
 
 	/**
-	 * @param appendText
-	 *            the appendText to set
-	 * @return
+	 * @param appendText the appendText to set
 	 */
-	public EnterAction setAppendText(String appendText) {
+	public EnterAction setAppendText(@Nullable final String appendText) {
 		this.appendText = appendText;
 		return this;
 	}
@@ -101,16 +108,15 @@ public final class EnterAction {
 	/**
 	 * @return the removeText
 	 */
+	@Nullable
 	public Integer getRemoveText() {
 		return removeText;
 	}
 
 	/**
-	 * @param removeText
-	 *            the removeText to set
-	 * @return
+	 * @param removeText the removeText to set
 	 */
-	public EnterAction setRemoveText(Integer removeText) {
+	public EnterAction setRemoveText(@Nullable final Integer removeText) {
 		this.removeText = removeText;
 		return this;
 	}

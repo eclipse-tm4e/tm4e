@@ -1,13 +1,13 @@
 /**
- *  Copyright (c) 2018 Red Hat Inc. and others.
+ * Copyright (c) 2018 Red Hat Inc. and others.
  * This program and the accompanying materials are made
  * available under the terms of the Eclipse Public License 2.0
  * which is available at https://www.eclipse.org/legal/epl-2.0/
  *
  * SPDX-License-Identifier: EPL-2.0
  *
- *  Contributors:
- *  Lucas Bullen (Red Hat Inc.) - initial API and implementation
+ * Contributors:
+ * Lucas Bullen (Red Hat Inc.) - initial API and implementation
  */
 package org.eclipse.tm4e.languageconfiguration;
 
@@ -21,6 +21,7 @@ import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.core.runtime.Adapters;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.content.IContentType;
+import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.jface.text.BadLocationException;
 import org.eclipse.jface.text.IDocument;
 import org.eclipse.jface.text.IMultiTextSelection;
@@ -29,17 +30,13 @@ import org.eclipse.jface.text.IRewriteTarget;
 import org.eclipse.jface.text.ITextSelection;
 import org.eclipse.jface.text.Region;
 import org.eclipse.jface.text.TextSelection;
-import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.tm4e.languageconfiguration.internal.LanguageConfigurationRegistryManager;
 import org.eclipse.tm4e.languageconfiguration.internal.supports.CharacterPair;
 import org.eclipse.tm4e.languageconfiguration.internal.supports.CommentSupport;
 import org.eclipse.tm4e.languageconfiguration.internal.utils.TextUtils;
 import org.eclipse.tm4e.ui.internal.utils.ContentTypeHelper;
 import org.eclipse.tm4e.ui.internal.utils.ContentTypeInfo;
-import org.eclipse.ui.IEditorInput;
-import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.handlers.HandlerUtil;
-import org.eclipse.ui.texteditor.IDocumentProvider;
 import org.eclipse.ui.texteditor.ITextEditor;
 
 public class ToggleLineCommentHandler extends AbstractHandler {
@@ -47,25 +44,34 @@ public class ToggleLineCommentHandler extends AbstractHandler {
 	public static final String ADD_BLOCK_COMMENT_COMMAND_ID = "org.eclipse.tm4e.languageconfiguration.addblockcommentcommand";
 	public static final String REMOVE_BLOCK_COMMENT_COMMAND_ID = "org.eclipse.tm4e.languageconfiguration.removeblockcommentcommand";
 
+	@Nullable
+	private static <T> T adapt(@Nullable Object sourceObject, Class<T> adapter) {
+		return Adapters.adapt(sourceObject, adapter);
+	}
+
+	@Nullable
 	@Override
-	public Object execute(ExecutionEvent event) throws ExecutionException {
-		IEditorPart part = HandlerUtil.getActiveEditor(event);
-		ITextEditor editor = Adapters.adapt(part, ITextEditor.class);
+	public Object execute(@Nullable final ExecutionEvent event) throws ExecutionException {
+		if (event == null) {
+			return null;
+		}
+		final var part = HandlerUtil.getActiveEditor(event);
+		final var editor = adapt(part, ITextEditor.class);
 		if (editor == null) {
 			return null;
 		}
-		ISelection selection = editor.getSelectionProvider().getSelection();
+		final var selection = editor.getSelectionProvider().getSelection();
 		if (!(selection instanceof ITextSelection)) {
 			return null;
 		}
-		ITextSelection textSelection = (ITextSelection) selection;
-		IEditorInput input = editor.getEditorInput();
-		IDocumentProvider docProvider = editor.getDocumentProvider();
+		final var textSelection = (ITextSelection) selection;
+		final var input = editor.getEditorInput();
+		final var docProvider = editor.getDocumentProvider();
 		if (docProvider == null || input == null) {
 			return null;
 		}
 
-		IDocument document = docProvider.getDocument(input);
+		final var document = docProvider.getDocument(input);
 		if (document == null) {
 			return null;
 		}
@@ -73,12 +79,12 @@ public class ToggleLineCommentHandler extends AbstractHandler {
 		ContentTypeInfo info;
 		try {
 			info = ContentTypeHelper.findContentTypes(document);
-		} catch (CoreException e) {
+		} catch (final CoreException e) {
 			return null;
 		}
-		IContentType[] contentTypes = info.getContentTypes();
-		Command command = event.getCommand();
-		CommentSupport commentSupport = getCommentSupport(contentTypes);
+		final var contentTypes = info.getContentTypes();
+		final var command = event.getCommand();
+		final var commentSupport = getCommentSupport(contentTypes);
 		if (commentSupport == null) {
 			return null;
 		}
@@ -87,33 +93,51 @@ public class ToggleLineCommentHandler extends AbstractHandler {
 			return null;
 		}
 
-		IRewriteTarget target = editor.getAdapter(IRewriteTarget.class);
+		final var target = adapt(editor, IRewriteTarget.class);
 		if (target != null) {
 			target.beginCompoundChange();
 		}
 		try {
-			if (TOGGLE_LINE_COMMENT_COMMAND_ID.equals(command.getId())) {
-				if (commentSupport.getLineComment() != null && !commentSupport.getLineComment().isEmpty()) {
-					updateLineComment(document, textSelection, commentSupport.getLineComment(), editor);
-				} else if (commentSupport.getBlockComment() != null) {
-					Set<Integer> lines = computeLines(textSelection, document);
-					for (int line : lines) {
-						int lineOffset = document.getLineOffset(line);
-						int lineLength = document.getLineLength(line);
-						ITextSelection range = new TextSelection(lineOffset, line == document.getNumberOfLines() - 1 ? lineLength : lineLength - 1);
-						toggleBlockComment(document, range, commentSupport, editor);
+			switch (command.getId()) {
+			case TOGGLE_LINE_COMMENT_COMMAND_ID: {
+				final var lineComment = commentSupport.getLineComment();
+				if (lineComment != null && !lineComment.isEmpty()) {
+					updateLineComment(document, textSelection, lineComment, editor);
+				} else {
+					final var blockComment = commentSupport.getBlockComment();
+					if (blockComment != null) {
+						final Set<Integer> lines = computeLines(textSelection, document);
+						for (final int line : lines) {
+							final int lineOffset = document.getLineOffset(line);
+							final int lineLength = document.getLineLength(line);
+							final ITextSelection range = new TextSelection(lineOffset,
+									line == document.getNumberOfLines() - 1 ? lineLength : lineLength - 1);
+							toggleBlockComment(document, range, commentSupport, editor);
+						}
 					}
 				}
-			} else {
-				IRegion existingBlock = getBlockComment(document, textSelection, commentSupport);
-				if (ADD_BLOCK_COMMENT_COMMAND_ID.equals(command.getId()) && existingBlock == null) {
-					addBlockComment(document, textSelection, commentSupport.getBlockComment(), editor);
-				} else if (REMOVE_BLOCK_COMMENT_COMMAND_ID.equals(command.getId()) && existingBlock != null) {
-					removeBlockComment(document, textSelection, existingBlock, commentSupport.getBlockComment(),
-							editor);
-				}
+				break;
 			}
-		} catch (BadLocationException e) {
+
+			case ADD_BLOCK_COMMENT_COMMAND_ID: {
+				final IRegion existingBlock = getBlockComment(document, textSelection, commentSupport);
+				final var blockComment = commentSupport.getBlockComment();
+				if (existingBlock != null && blockComment != null) {
+					addBlockComment(document, textSelection, blockComment, editor);
+				}
+				break;
+			}
+
+			case REMOVE_BLOCK_COMMENT_COMMAND_ID: {
+				final IRegion existingBlock = getBlockComment(document, textSelection, commentSupport);
+				final var blockComment = commentSupport.getBlockComment();
+				if (existingBlock != null && blockComment != null) {
+					removeBlockComment(document, textSelection, existingBlock, blockComment, editor);
+				}
+				break;
+			}
+			}
+		} catch (final BadLocationException e) {
 			// Caught by making no changes
 		} finally {
 			if (target != null) {
@@ -123,14 +147,15 @@ public class ToggleLineCommentHandler extends AbstractHandler {
 		return null;
 	}
 
-	private Set<Integer> computeLines(ITextSelection textSelection, IDocument document) throws BadLocationException {
-		IRegion[] regions = textSelection instanceof IMultiTextSelection ?
-			((IMultiTextSelection)textSelection).getRegions() :
-			new IRegion[] { new Region(textSelection.getOffset(), textSelection.getLength()) };
-		Set<Integer> lines = new HashSet<>();
-		for (IRegion region : regions) {
-			int lineFrom = document.getLineOfOffset(region.getOffset());
-			int lineTo = document.getLineOfOffset(region.getOffset() + region.getLength());
+	private Set<Integer> computeLines(final ITextSelection textSelection, final IDocument document)
+			throws BadLocationException {
+		final var regions = textSelection instanceof IMultiTextSelection
+				? ((IMultiTextSelection) textSelection).getRegions()
+				: new IRegion[] { new Region(textSelection.getOffset(), textSelection.getLength()) };
+		final var lines = new HashSet<Integer>();
+		for (final var region : regions) {
+			final int lineFrom = document.getLineOfOffset(region.getOffset());
+			final int lineTo = document.getLineOfOffset(region.getOffset() + region.getLength());
 			for (int line = lineFrom; line <= lineTo; line++) {
 				lines.add(line);
 			}
@@ -138,9 +163,10 @@ public class ToggleLineCommentHandler extends AbstractHandler {
 		return lines;
 	}
 
-	private void toggleBlockComment(IDocument document, ITextSelection textSelection, CommentSupport commentSupport, ITextEditor editor) throws BadLocationException {
-		IRegion existingBlock = getBlockComment(document, textSelection, commentSupport);
-		CharacterPair blockComment = commentSupport.getBlockComment();
+	private void toggleBlockComment(final IDocument document, final ITextSelection textSelection,
+			final CommentSupport commentSupport, final ITextEditor editor) throws BadLocationException {
+		final var existingBlock = getBlockComment(document, textSelection, commentSupport);
+		final var blockComment = commentSupport.getBlockComment();
 		if (blockComment == null) {
 			return;
 		}
@@ -154,37 +180,41 @@ public class ToggleLineCommentHandler extends AbstractHandler {
 	/**
 	 * Returns true if comment support is valid according the command to do and
 	 * false otherwise.
-	 * 
+	 *
 	 * @param commentSupport
 	 * @param command
+	 *
 	 * @return true if comment support is valid according the command to do and
 	 *         false otherwise.
 	 */
-	private boolean isValid(CommentSupport commentSupport, Command command) {
-		if (TOGGLE_LINE_COMMENT_COMMAND_ID.equals(command.getId()) && commentSupport.getLineComment() != null && !commentSupport.getLineComment().isEmpty()) {
+	private boolean isValid(final CommentSupport commentSupport, final Command command) {
+		final var lineComment = commentSupport.getLineComment();
+		if (TOGGLE_LINE_COMMENT_COMMAND_ID.equals(command.getId()) && lineComment != null
+				&& !lineComment.isEmpty()) {
 			return true;
 		}
 		// check if block comment is valid
-		CharacterPair characterPair = commentSupport.getBlockComment();
-		return characterPair != null && characterPair.getKey() != null && !characterPair.getKey().isEmpty()
-				&& characterPair.getValue() != null && !characterPair.getValue().isEmpty();
+		final var blockComment = commentSupport.getBlockComment();
+		return blockComment != null
+				&& !"".equals(blockComment.getKey())
+				&& !"".equals(blockComment.getValue());
 	}
 
 	/**
-	 * Returns the comment support from the given list of content types and null
-	 * otherwise.
-	 * 
+	 * Returns the comment support from the given list of content types and null otherwise.
+	 *
 	 * @param contentTypes
-	 * @return the comment support from the given list of content types and null
-	 *         otherwise.
+	 *
+	 * @return the comment support from the given list of content types and null otherwise.
 	 */
-	private CommentSupport getCommentSupport(IContentType[] contentTypes) {
-		LanguageConfigurationRegistryManager registry = LanguageConfigurationRegistryManager.getInstance();
-		for (IContentType contentType : contentTypes) {
+	@Nullable
+	private CommentSupport getCommentSupport(final IContentType[] contentTypes) {
+		final var registry = LanguageConfigurationRegistryManager.getInstance();
+		for (final var contentType : contentTypes) {
 			if (!registry.shouldComment(contentType)) {
 				continue;
 			}
-			CommentSupport commentSupport = registry.getCommentSupport(contentType);
+			final var commentSupport = registry.getCommentSupport(contentType);
 			if (commentSupport != null) {
 				return commentSupport;
 			}
@@ -192,8 +222,8 @@ public class ToggleLineCommentHandler extends AbstractHandler {
 		return null;
 	}
 
-	private void updateLineComment(IDocument document, ITextSelection selection, String comment, ITextEditor editor)
-			throws BadLocationException {
+	private void updateLineComment(final IDocument document, final ITextSelection selection, final String comment,
+			final ITextEditor editor) throws BadLocationException {
 		if (areLinesCommented(document, selection, comment)) {
 			removeLineComments(document, selection, comment, editor);
 		} else {
@@ -201,11 +231,11 @@ public class ToggleLineCommentHandler extends AbstractHandler {
 		}
 	}
 
-	private boolean areLinesCommented(IDocument document, ITextSelection selection, String comment)
+	private boolean areLinesCommented(final IDocument document, final ITextSelection selection, final String comment)
 			throws BadLocationException {
 		int lineNumber = selection.getStartLine();
 		while (lineNumber <= selection.getEndLine()) {
-			IRegion lineRegion = document.getLineInformation(lineNumber);
+			final var lineRegion = document.getLineInformation(lineNumber);
 			if (!document.get(lineRegion.getOffset(), lineRegion.getLength()).trim().startsWith(comment)) {
 				return false;
 			}
@@ -214,16 +244,21 @@ public class ToggleLineCommentHandler extends AbstractHandler {
 		return true;
 	}
 
-	private IRegion getBlockComment(IDocument document, ITextSelection selection, CommentSupport commentSupport)
-			throws BadLocationException {
+	@Nullable
+	private IRegion getBlockComment(final IDocument document, final ITextSelection selection,
+			final CommentSupport commentSupport) throws BadLocationException {
 		if (selection.getText() == null) {
 			return null;
 		}
-		String text = document.get();
-		String open = commentSupport.getBlockComment().getKey();
-		String close = commentSupport.getBlockComment().getValue();
-		int selectionStart = selection.getOffset();
-		int selectionEnd = selectionStart + selection.getLength();
+		final var blockComment = commentSupport.getBlockComment();
+		if (blockComment == null) {
+			return null;
+		}
+		final String text = document.get();
+		final String open = blockComment.getKey();
+		final String close = blockComment.getValue();
+		final int selectionStart = selection.getOffset();
+		final int selectionEnd = selectionStart + selection.getLength();
 		int openOffset = TextUtils.startIndexOfOffsetTouchingString(text, selectionStart, open);
 		if (openOffset == -1) {
 			openOffset = text.lastIndexOf(open, selectionStart);
@@ -235,7 +270,7 @@ public class ToggleLineCommentHandler extends AbstractHandler {
 		int closeOffset = TextUtils.startIndexOfOffsetTouchingString(text, selectionEnd, close);
 		if (closeOffset == -1 || closeOffset < openOffset + open.length()) {
 			closeOffset = text.indexOf(close, selectionEnd);
-			IRegion endLineRegion = document.getLineInformation(document.getLineOfOffset(selectionEnd));
+			final IRegion endLineRegion = document.getLineInformation(document.getLineOfOffset(selectionEnd));
 			if (openOffset == -1 || closeOffset < openOffset + open.length()
 					|| closeOffset > endLineRegion.getOffset() + endLineRegion.getLength()) {
 				return null;
@@ -245,7 +280,7 @@ public class ToggleLineCommentHandler extends AbstractHandler {
 		// Make sure there isn't a different block closer before the one we found
 		int othercloseOffset = text.indexOf(close, openOffset + open.length());
 		while (othercloseOffset != -1 && othercloseOffset < closeOffset) {
-			int startOfLineOffset = document.getLineOffset(document.getLineOfOffset(othercloseOffset));
+			final int startOfLineOffset = document.getLineOffset(document.getLineOfOffset(othercloseOffset));
 			if (commentSupport.getLineComment() != null && text.substring(startOfLineOffset, othercloseOffset)
 					.indexOf(commentSupport.getLineComment()) != -1) {
 				return null;
@@ -255,16 +290,16 @@ public class ToggleLineCommentHandler extends AbstractHandler {
 		return new Region(openOffset, closeOffset - openOffset);
 	}
 
-	private void removeLineComments(IDocument document, ITextSelection selection, String comment, ITextEditor editor)
-			throws BadLocationException {
+	private void removeLineComments(final IDocument document, final ITextSelection selection, final String comment,
+			final ITextEditor editor) throws BadLocationException {
 		int lineNumber = selection.getStartLine();
-		int endLineNumber = selection.getEndLine();
-		String oldText = document.get();
+		final int endLineNumber = selection.getEndLine();
+		final String oldText = document.get();
 		int deletedChars = 0;
 		boolean isStartBeforeComment = false;
 
 		while (lineNumber <= endLineNumber) {
-			int commentOffset = oldText.indexOf(comment, document.getLineOffset(lineNumber) + deletedChars);
+			final int commentOffset = oldText.indexOf(comment, document.getLineOffset(lineNumber) + deletedChars);
 			document.replace(commentOffset - deletedChars, comment.length(), "");
 			if (deletedChars == 0) {
 				isStartBeforeComment = commentOffset > selection.getOffset();
@@ -274,31 +309,32 @@ public class ToggleLineCommentHandler extends AbstractHandler {
 			}
 			lineNumber++;
 		}
-		ITextSelection newSelection = new TextSelection(
+		final var newSelection = new TextSelection(
 				selection.getOffset() - (isStartBeforeComment ? 0 : comment.length()),
 				selection.getLength() - deletedChars);
 		editor.selectAndReveal(newSelection.getOffset(), newSelection.getLength());
 	}
 
-	private void addLineComments(IDocument document, ITextSelection selection, String comment, ITextEditor editor)
-			throws BadLocationException {
+	private void addLineComments(final IDocument document, final ITextSelection selection, final String comment,
+			final ITextEditor editor) throws BadLocationException {
 		int insertedChars = 0;
 
-		for (int lineNumber : computeLines(selection, document)) {
+		for (final int lineNumber : computeLines(selection, document)) {
 			document.replace(document.getLineOffset(lineNumber), 0, comment);
 			insertedChars += comment.length();
 		}
-		ITextSelection newSelection = new TextSelection(selection.getOffset() + comment.length(),
+		final ITextSelection newSelection = new TextSelection(selection.getOffset() + comment.length(),
 				selection.getLength() + insertedChars);
 		editor.selectAndReveal(newSelection.getOffset(), newSelection.getLength());
 	}
 
-	private void removeBlockComment(IDocument document, ITextSelection selection, IRegion existingBlock,
-			CharacterPair blockComment, ITextEditor editor) throws BadLocationException {
-		int openOffset = existingBlock.getOffset();
-		int openLength = blockComment.getKey().length();
-		int closeOffset = existingBlock.getOffset() + existingBlock.getLength();
-		int closeLength = blockComment.getValue().length();
+	private void removeBlockComment(final IDocument document, final ITextSelection selection,
+			final IRegion existingBlock, final CharacterPair blockComment, final ITextEditor editor)
+			throws BadLocationException {
+		final int openOffset = existingBlock.getOffset();
+		final int openLength = blockComment.getKey().length();
+		final int closeOffset = existingBlock.getOffset() + existingBlock.getLength();
+		final int closeLength = blockComment.getValue().length();
 		document.replace(openOffset, openLength, "");
 		document.replace(closeOffset - openLength, closeLength, "");
 
@@ -311,17 +347,17 @@ public class ToggleLineCommentHandler extends AbstractHandler {
 		if (selection.getOffset() + selection.getLength() > closeOffset) {
 			lengthFix += selection.getOffset() + selection.getLength() - closeOffset;
 		}
-		ITextSelection newSelection = new TextSelection(selection.getOffset() - offsetFix,
+		final var newSelection = new TextSelection(selection.getOffset() - offsetFix,
 				selection.getLength() - lengthFix);
 		editor.selectAndReveal(newSelection.getOffset(), newSelection.getLength());
 	}
 
-	private void addBlockComment(IDocument document, ITextSelection selection, CharacterPair blockComment,
-			ITextEditor editor) throws BadLocationException {
+	private void addBlockComment(final IDocument document, final ITextSelection selection,
+			final CharacterPair blockComment, final ITextEditor editor) throws BadLocationException {
 		document.replace(selection.getOffset(), 0, blockComment.getKey());
 		document.replace(selection.getOffset() + selection.getLength() + blockComment.getKey().length(), 0,
 				blockComment.getValue());
-		ITextSelection newSelection = new TextSelection(selection.getOffset() + blockComment.getKey().length(),
+		final var newSelection = new TextSelection(selection.getOffset() + blockComment.getKey().length(),
 				selection.getLength());
 		editor.selectAndReveal(newSelection.getOffset(), newSelection.getLength());
 	}

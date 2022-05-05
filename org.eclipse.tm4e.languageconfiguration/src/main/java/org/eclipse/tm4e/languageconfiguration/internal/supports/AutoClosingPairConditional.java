@@ -13,16 +13,20 @@ package org.eclipse.tm4e.languageconfiguration.internal.supports;
 
 import java.util.List;
 
+import org.eclipse.jdt.annotation.Nullable;
+
 @SuppressWarnings("serial")
 public final class AutoClosingPairConditional extends CharacterPair {
 
+	@Nullable
 	private final List<String> notIn;
 
-	public AutoClosingPairConditional(String open, String close, List<String> notIn) {
+	public AutoClosingPairConditional(final String open, final String close, @Nullable final List<String> notIn) {
 		super(open, close);
 		this.notIn = notIn;
 	}
 
+	@Nullable
 	public List<String> getNotIn() {
 		return notIn;
 	}

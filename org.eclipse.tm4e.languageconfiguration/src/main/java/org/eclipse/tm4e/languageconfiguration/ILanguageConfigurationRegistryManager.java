@@ -12,6 +12,7 @@
 package org.eclipse.tm4e.languageconfiguration;
 
 import org.eclipse.core.runtime.content.IContentType;
+import org.eclipse.jdt.annotation.Nullable;
 import org.osgi.service.prefs.BackingStoreException;
 
 /**
@@ -65,6 +66,7 @@ public interface ILanguageConfigurationRegistryManager {
 	 * @return the {@link ILanguageConfiguration} for the given content type and
 	 *         null otherwise.
 	 */
+	@Nullable
 	ILanguageConfiguration getLanguageConfigurationFor(IContentType[] contentTypes);
 
 }

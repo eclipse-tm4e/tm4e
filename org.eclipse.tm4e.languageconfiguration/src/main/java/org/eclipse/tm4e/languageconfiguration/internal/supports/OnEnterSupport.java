@@ -18,6 +18,7 @@ import java.util.Objects;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
+import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.tm4e.languageconfiguration.internal.supports.EnterAction.IndentAction;
 import org.eclipse.tm4e.languageconfiguration.internal.utils.RegExpUtils;
 
@@ -27,26 +28,32 @@ import org.eclipse.tm4e.languageconfiguration.internal.utils.RegExpUtils;
  */
 public class OnEnterSupport {
 
-	private static final List<CharacterPair> DEFAULT_BRACKETS = Arrays.asList(new CharacterPair("(", ")"), //$NON-NLS-1$ //$NON-NLS-2$
-			new CharacterPair("{", "}"), new CharacterPair("[", "]")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
+	private static final List<CharacterPair> DEFAULT_BRACKETS = Arrays.asList(
+			new CharacterPair("(", ")"), //$NON-NLS-1$ //$NON-NLS-2$
+			new CharacterPair("{", "}"), //$NON-NLS-1$ //$NON-NLS-2$
+			new CharacterPair("[", "]")); //$NON-NLS-1$ //$NON-NLS-2$
 
 	private final List<ProcessedBracketPair> brackets;
 
 	private final List<OnEnterRule> regExpRules;
 
-	public OnEnterSupport(List<CharacterPair> brackets, List<OnEnterRule> regExpRules) {
+	public OnEnterSupport(@Nullable final List<CharacterPair> brackets, @Nullable final List<OnEnterRule> regExpRules) {
 		this.brackets = (brackets != null ? brackets : DEFAULT_BRACKETS).stream().filter(Objects::nonNull)
 				.map(ProcessedBracketPair::new).collect(Collectors.toList());
 
 		this.regExpRules = regExpRules != null ? regExpRules : Collections.emptyList();
 	}
 
-	public EnterAction onEnter(String oneLineAboveText, String beforeEnterText, String afterEnterText) {
+	@Nullable
+	public EnterAction onEnter(final String oneLineAboveText, final String beforeEnterText,
+			final String afterEnterText) {
 		// (1): `regExpRules`
-		for (OnEnterRule rule : regExpRules) {
-			if (rule.getBeforeText().matcher(beforeEnterText).find()) {
-				if (rule.getAfterText() != null) {
-					if (rule.getAfterText().matcher(afterEnterText).find()) {
+		for (final OnEnterRule rule : regExpRules) {
+			final var beforeText = rule.getBeforeText();
+			if (beforeText != null && beforeText.matcher(beforeEnterText).find()) {
+				final var afterText = rule.getAfterText();
+				if (afterText != null) {
+					if (afterText.matcher(afterEnterText).find()) {
 						return rule.getAction();
 					}
 				} else {
@@ -57,7 +64,7 @@ public class OnEnterSupport {
 
 		// (2): Special indent-outdent
 		if (!beforeEnterText.isEmpty() && !afterEnterText.isEmpty()) {
-			for (ProcessedBracketPair bracket : brackets) {
+			for (final ProcessedBracketPair bracket : brackets) {
 				if (bracket.matchOpen(beforeEnterText) && bracket.matchClose(afterEnterText)) {
 					return new EnterAction(IndentAction.IndentOutdent);
 				}
@@ -66,7 +73,7 @@ public class OnEnterSupport {
 
 		// (3): Open bracket based logic
 		if (!beforeEnterText.isEmpty()) {
-			for (ProcessedBracketPair bracket : brackets) {
+			for (final ProcessedBracketPair bracket : brackets) {
 				if (bracket.matchOpen(beforeEnterText)) {
 					return new EnterAction(IndentAction.Indent);
 				}
@@ -79,7 +86,10 @@ public class OnEnterSupport {
 
 		private static final Pattern B_REGEXP = Pattern.compile("\\B"); //$NON-NLS-1$
 
+		@Nullable
 		private final Pattern openRegExp;
+
+		@Nullable
 		private final Pattern closeRegExp;
 
 		private ProcessedBracketPair(final CharacterPair charPair) {
@@ -87,17 +97,18 @@ public class OnEnterSupport {
 			closeRegExp = createCloseBracketRegExp(charPair.getValue());
 		}
 
-		private boolean matchOpen(String beforeEnterText) {
+		private boolean matchOpen(final String beforeEnterText) {
 			return openRegExp != null && openRegExp.matcher(beforeEnterText).find();
 		}
 
-		private boolean matchClose(String afterEnterText) {
+		private boolean matchClose(final String afterEnterText) {
 			return closeRegExp != null && closeRegExp.matcher(afterEnterText).find();
 		}
 
-		private static Pattern createOpenBracketRegExp(String bracket) {
+		@Nullable
+		private static Pattern createOpenBracketRegExp(final String bracket) {
 			final StringBuilder str = new StringBuilder(RegExpUtils.escapeRegExpCharacters(bracket));
-			String c = String.valueOf(str.charAt(0));
+			final String c = String.valueOf(str.charAt(0));
 			if (!B_REGEXP.matcher(c).find()) {
 				str.insert(0, "\\b"); //$NON-NLS-1$
 			}
@@ -105,15 +116,15 @@ public class OnEnterSupport {
 			return RegExpUtils.create(str.toString());
 		}
 
-		private static Pattern createCloseBracketRegExp(String bracket) {
+		@Nullable
+		private static Pattern createCloseBracketRegExp(final String bracket) {
 			final StringBuilder str = new StringBuilder(RegExpUtils.escapeRegExpCharacters(bracket));
-			String c = String.valueOf(str.charAt(str.length() - 1));
+			final String c = String.valueOf(str.charAt(str.length() - 1));
 			if (!B_REGEXP.matcher(c).find()) {
 				str.append("\\b"); //$NON-NLS-1$
 			}
 			str.insert(0, "^\\s*"); //$NON-NLS-1$
 			return RegExpUtils.create(str.toString());
 		}
-
 	}
 }

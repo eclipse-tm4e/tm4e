@@ -11,6 +11,7 @@
  */
 package org.eclipse.tm4e.languageconfiguration.internal.widgets;
 
+import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
@@ -28,7 +29,7 @@ public final class ColumnSelectionAdapter extends SelectionAdapter {
 	private final int fColumnIndex;
 	private final ColumnViewerComparator viewerComparator;
 
-	public ColumnSelectionAdapter(TableColumn column, TableViewer tableViewer, int index, ColumnViewerComparator vc) {
+	public ColumnSelectionAdapter(final TableColumn column, final TableViewer tableViewer, final int index, final ColumnViewerComparator vc) {
 		fTableColumn = column;
 		this.tableViewer = tableViewer;
 		fColumnIndex = index;
@@ -36,10 +37,10 @@ public final class ColumnSelectionAdapter extends SelectionAdapter {
 	}
 
 	@Override
-	public void widgetSelected(SelectionEvent e) {
+	public void widgetSelected(@Nullable final SelectionEvent e) {
 		viewerComparator.setColumn(fColumnIndex);
-		int dir = viewerComparator.getDirection();
-		Table table = tableViewer.getTable();
+		final int dir = viewerComparator.getDirection();
+		final Table table = tableViewer.getTable();
 		table.setSortDirection(dir);
 		table.setSortColumn(fTableColumn);
 		tableViewer.refresh();

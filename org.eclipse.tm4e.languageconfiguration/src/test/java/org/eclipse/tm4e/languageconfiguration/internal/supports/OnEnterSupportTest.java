@@ -1,22 +1,22 @@
 /**
- *  Copyright (c) 2015-2017 Angelo ZERR.
+ * Copyright (c) 2015-2017 Angelo ZERR.
  * This program and the accompanying materials are made
  * available under the terms of the Eclipse Public License 2.0
  * which is available at https://www.eclipse.org/legal/epl-2.0/
  *
  * SPDX-License-Identifier: EPL-2.0
  *
- *  Contributors:
- *  Angelo Zerr <angelo.zerr@gmail.com> - initial API and implementation
+ * Contributors:
+ * Angelo Zerr <angelo.zerr@gmail.com> - initial API and implementation
  */
 package org.eclipse.tm4e.languageconfiguration.internal.supports;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.Arrays;
+import java.util.List;
 
+import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.tm4e.languageconfiguration.internal.supports.EnterAction.IndentAction;
 import org.junit.jupiter.api.Test;
 
@@ -61,6 +61,7 @@ public class OnEnterSupportTest {
 			if (expected == IndentAction.None) {
 				assertNull(actual);
 			} else {
+				assertNotNull(actual);
 				assertEquals(expected, actual.getIndentAction());
 			}
 		}
@@ -113,7 +114,7 @@ public class OnEnterSupportTest {
 
 		public RegExpRulesTest() {
 			super(null,
-					Arrays.asList(
+					List.of(
 							new OnEnterRule("^\\s*\\/\\*\\*(?!\\/)([^\\*]|\\*(?!\\/))*$", "^\\s*\\*\\/$",
 									new EnterAction(IndentAction.IndentOutdent).setAppendText(" * ")),
 							new OnEnterRule("^\\s*\\/\\*\\*(?!\\/)([^\\*]|\\*(?!\\/))*$", null,
@@ -126,13 +127,13 @@ public class OnEnterSupportTest {
 									new EnterAction(IndentAction.None).setRemoveText(1))));
 		}
 
-		public void testIndentAction(String beforeText, String afterText, IndentAction expectedIndentAction,
-				String expectedAppendText) {
+		public void testIndentAction(String beforeText, String afterText, @Nullable IndentAction expectedIndentAction,
+				@Nullable String expectedAppendText) {
 			testIndentAction(beforeText, afterText, expectedIndentAction, expectedAppendText, 0);
 		}
 
-		public void testIndentAction(String beforeText, String afterText, IndentAction expectedIndentAction,
-				String expectedAppendText, int removeText) {
+		public void testIndentAction(String beforeText, String afterText, @Nullable IndentAction expectedIndentAction,
+				@Nullable String expectedAppendText, int removeText) {
 			EnterAction actual = super.onEnter("", beforeText, afterText);
 			if (expectedIndentAction == null) {
 				assertNull(actual, "isNull:" + beforeText);

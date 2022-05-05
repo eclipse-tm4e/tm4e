@@ -13,29 +13,30 @@ package org.eclipse.tm4e.languageconfiguration.internal.utils;
 
 import java.util.regex.Pattern;
 
+import org.eclipse.jdt.annotation.Nullable;
+
 /**
  * Regex utilities.
- *
  */
 public final class RegExpUtils {
 
 	/**
 	 * Escapes regular expression characters in a given string
 	 */
-	public static String escapeRegExpCharacters(String value) {
+	public static String escapeRegExpCharacters(final String value) {
 		return value.replaceAll("[\\-\\\\\\{\\}\\*\\+\\?\\|\\^\\$\\.\\[\\]\\(\\)\\#]", "\\\\$0"); //$NON-NLS-1$ //$NON-NLS-2$
 	}
 
 	/**
 	 * Create Java Regexp and null otherwise.
 	 *
-	 * @param regex
 	 * @return Java Regexp and null otherwise.
 	 */
-	public static Pattern create(String regex) {
+	@Nullable
+	public static Pattern create(final String regex) {
 		try {
 			return Pattern.compile(regex);
-		} catch (Exception e) {
+		} catch (final Exception e) {
 			return null;
 		}
 	}

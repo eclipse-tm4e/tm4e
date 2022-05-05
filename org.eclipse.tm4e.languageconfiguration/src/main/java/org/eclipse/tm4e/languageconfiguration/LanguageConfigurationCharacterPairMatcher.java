@@ -1,13 +1,13 @@
 /**
- *  Copyright (c) 2018 Angelo ZERR.
+ * Copyright (c) 2018 Angelo ZERR.
  * This program and the accompanying materials are made
  * available under the terms of the Eclipse Public License 2.0
  * which is available at https://www.eclipse.org/legal/epl-2.0/
  *
  * SPDX-License-Identifier: EPL-2.0
  *
- *  Contributors:
- *  Angelo Zerr <angelo.zerr@gmail.com> - initial API and implementation
+ * Contributors:
+ * Angelo Zerr <angelo.zerr@gmail.com> - initial API and implementation
  */
 package org.eclipse.tm4e.languageconfiguration;
 
@@ -15,6 +15,7 @@ import java.util.List;
 
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.content.IContentType;
+import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.jface.text.IDocument;
 import org.eclipse.jface.text.IRegion;
 import org.eclipse.jface.text.source.DefaultCharacterPairMatcher;
@@ -27,25 +28,36 @@ import org.eclipse.tm4e.ui.internal.utils.ContentTypeInfo;
 
 /**
  * Support of matching bracket with language configuration.
- *
  */
 public class LanguageConfigurationCharacterPairMatcher
 		implements ICharacterPairMatcher, ICharacterPairMatcherExtension {
 
+	@Nullable
 	private DefaultCharacterPairMatcher matcher;
 
+	@Nullable
 	private IDocument document;
 
+	@Nullable
 	@Override
-	public IRegion match(IDocument document, int offset) {
-		DefaultCharacterPairMatcher matcher = getMatcher(document);
-		return matcher != null ? matcher.match(document, offset) : null;
+	public IRegion match(@Nullable final IDocument document, final int offset) {
+		if (document == null)
+			return null;
+		final var matcher = getMatcher(document);
+		return matcher != null
+				? matcher.match(document, offset)
+				: null;
 	}
 
+	@Nullable
 	@Override
-	public IRegion match(IDocument document, int offset, int length) {
-		DefaultCharacterPairMatcher matcher = getMatcher(document);
-		return matcher != null ? matcher.match(document, offset, length) : null;
+	public IRegion match(@Nullable final IDocument document, final int offset, final int length) {
+		if (document == null)
+			return null;
+		final var matcher = getMatcher(document);
+		return matcher != null
+				? matcher.match(document, offset, length)
+				: null;
 	}
 
 	@Override
@@ -53,28 +65,44 @@ public class LanguageConfigurationCharacterPairMatcher
 		return matcher != null ? matcher.getAnchor() : -1;
 	}
 
+	@Nullable
 	@Override
-	public IRegion findEnclosingPeerCharacters(IDocument document, int offset, int length) {
-		DefaultCharacterPairMatcher matcher = getMatcher(document);
-		return matcher != null ? matcher.findEnclosingPeerCharacters(document, offset, length) : null;
+	public IRegion findEnclosingPeerCharacters(@Nullable final IDocument document, final int offset, final int length) {
+		if (document == null)
+			return null;
+		final var matcher = getMatcher(document);
+		return matcher != null
+				? matcher.findEnclosingPeerCharacters(document, offset, length)
+				: null;
 	}
 
 	@Override
-	public boolean isMatchedChar(char ch) {
-		DefaultCharacterPairMatcher matcher = getMatcher(document);
-		return matcher != null ? matcher.isMatchedChar(ch) : false;
+	public boolean isMatchedChar(final char ch) {
+		final var document = this.document;
+		if (document == null)
+			return false;
+		final var matcher = getMatcher(document);
+		return matcher != null
+				? matcher.isMatchedChar(ch)
+				: false;
 	}
 
 	@Override
-	public boolean isMatchedChar(char ch, IDocument document, int offset) {
-		DefaultCharacterPairMatcher matcher = getMatcher(document);
-		return matcher != null ? matcher.isMatchedChar(ch, document, offset) : false;
+	public boolean isMatchedChar(final char ch, @Nullable final IDocument document, final int offset) {
+		if (document == null)
+			return false;
+		final var matcher = getMatcher(document);
+		return matcher != null
+				? matcher.isMatchedChar(ch, document, offset)
+				: false;
 	}
 
 	@Override
-	public boolean isRecomputationOfEnclosingPairRequired(IDocument document, IRegion currentSelection,
-			IRegion previousSelection) {
-		DefaultCharacterPairMatcher matcher = getMatcher(document);
+	public boolean isRecomputationOfEnclosingPairRequired(@Nullable final IDocument document,
+			@Nullable final IRegion currentSelection, @Nullable final IRegion previousSelection) {
+		if (document == null)
+			return false;
+		final var matcher = getMatcher(document);
 		return matcher != null
 				? matcher.isRecomputationOfEnclosingPairRequired(document, currentSelection, previousSelection)
 				: false;
@@ -97,45 +125,45 @@ public class LanguageConfigurationCharacterPairMatcher
 
 	/**
 	 * Returns the matcher from the document.
-	 *
-	 * @param document
-	 * @return
 	 */
-	private DefaultCharacterPairMatcher getMatcher(IDocument document) {
+	@Nullable
+	private DefaultCharacterPairMatcher getMatcher(final IDocument document) {
 		if (!document.equals(this.document)) {
 			matcher = null;
 		}
 		if (matcher == null) {
-			// initizalize a DefaultCharacterPairMatcher by using character pairs of the
-			// language configuration.
-			final StringBuilder chars = new StringBuilder();
+			// initialize a DefaultCharacterPairMatcher by using character pairs of the language configuration.
+			final var sb = new StringBuilder();
 			this.document = document;
-			IContentType[] contentTypes = findContentTypes(document);
+			final IContentType[] contentTypes = findContentTypes(document);
 			if (contentTypes != null) {
-				LanguageConfigurationRegistryManager registry = LanguageConfigurationRegistryManager.getInstance();
-				for (IContentType contentType : contentTypes) {
+				final LanguageConfigurationRegistryManager registry = LanguageConfigurationRegistryManager
+						.getInstance();
+				for (final IContentType contentType : contentTypes) {
 					if (!registry.shouldSurroundingPairs(document, -1, contentType)) {
 						continue;
 					}
-					List<CharacterPair> surroundingPairs = registry.getSurroundingPairs(contentType);
-					for (CharacterPair surroundingPair : surroundingPairs) {
-						chars.append(surroundingPair.getKey());
-						chars.append(surroundingPair.getValue());
+					final List<CharacterPair> surroundingPairs = registry.getSurroundingPairs(contentType);
+					for (final CharacterPair surroundingPair : surroundingPairs) {
+						sb.append(surroundingPair.getKey());
+						sb.append(surroundingPair.getValue());
 					}
 				}
 			}
-			matcher = new DefaultCharacterPairMatcher(chars.toString().toCharArray());
+			final var chars = new char[sb.length()];
+			sb.getChars(0, sb.length(), chars, 0);
+			matcher = new DefaultCharacterPairMatcher(chars);
 		}
 		return matcher;
 	}
 
-	private IContentType[] findContentTypes(IDocument document) {
+	private IContentType @Nullable [] findContentTypes(final IDocument document) {
 		try {
-			ContentTypeInfo info = ContentTypeHelper.findContentTypes(document);
-			if(info != null) {
+			final ContentTypeInfo info = ContentTypeHelper.findContentTypes(document);
+			if (info != null) {
 				return info.getContentTypes();
 			}
-		} catch (CoreException e) {
+		} catch (final CoreException e) {
 			e.printStackTrace();
 		}
 		return null;

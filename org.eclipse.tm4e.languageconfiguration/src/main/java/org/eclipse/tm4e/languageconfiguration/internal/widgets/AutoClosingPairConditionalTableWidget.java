@@ -11,6 +11,7 @@
  */
 package org.eclipse.tm4e.languageconfiguration.internal.widgets;
 
+import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.jface.layout.TableColumnLayout;
 import org.eclipse.jface.resource.JFaceResources;
 import org.eclipse.jface.viewers.ColumnWeightData;
@@ -23,17 +24,17 @@ import org.eclipse.tm4e.languageconfiguration.internal.supports.AutoClosingPairC
 
 final class AutoClosingPairConditionalTableWidget extends CharacterPairsTableWidget {
 
-	AutoClosingPairConditionalTableWidget(Table table) {
+	AutoClosingPairConditionalTableWidget(final Table table) {
 		super(table);
 		setLabelProvider(new AutoClosingPairConditionalLabelProvider());
 
-		GC gc = new GC(table.getShell());
+		final GC gc = new GC(table.getShell());
 		gc.setFont(JFaceResources.getDialogFont());
-		TableColumnLayout columnLayout = new TableColumnLayout();
+		final TableColumnLayout columnLayout = new TableColumnLayout();
 
-		TableColumn column2 = new TableColumn(table, SWT.NONE);
+		final TableColumn column2 = new TableColumn(table, SWT.NONE);
 		column2.setText(LanguageConfigurationMessages.AutoClosingPairConditionalTableWidget_notIn);
-		int minWidth = computeMinimumColumnWidth(gc,
+		final int minWidth = computeMinimumColumnWidth(gc,
 				LanguageConfigurationMessages.AutoClosingPairConditionalTableWidget_notIn);
 		columnLayout.setColumnData(column2, new ColumnWeightData(2, minWidth, true));
 
@@ -42,11 +43,12 @@ final class AutoClosingPairConditionalTableWidget extends CharacterPairsTableWid
 
 	private static final class AutoClosingPairConditionalLabelProvider extends CharacterPairLabelProvider {
 
+		@Nullable
 		@Override
-		public String getColumnText(Object element, int columnIndex) {
+		public String getColumnText(@Nullable final Object element, final int columnIndex) {
 			if (columnIndex == 2) {
 				if ((element instanceof AutoClosingPairConditional)) {
-					AutoClosingPairConditional conditionalPair = (AutoClosingPairConditional) element;
+					final AutoClosingPairConditional conditionalPair = (AutoClosingPairConditional) element;
 					return String.join(", ", conditionalPair.getNotIn()); //$NON-NLS-1$
 				}
 				return ""; //$NON-NLS-1$

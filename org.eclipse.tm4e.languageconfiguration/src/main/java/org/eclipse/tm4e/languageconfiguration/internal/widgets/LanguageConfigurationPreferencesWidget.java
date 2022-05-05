@@ -13,6 +13,8 @@ package org.eclipse.tm4e.languageconfiguration.internal.widgets;
 
 import static org.eclipse.swt.events.SelectionListener.widgetSelectedAdapter;
 
+import org.eclipse.jdt.annotation.NonNullByDefault;
+import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Button;
@@ -21,6 +23,7 @@ import org.eclipse.swt.widgets.TabFolder;
 import org.eclipse.tm4e.languageconfiguration.ILanguageConfigurationDefinition;
 import org.eclipse.tm4e.languageconfiguration.ILanguageConfigurationRegistryManager;
 
+@NonNullByDefault({})
 public final class LanguageConfigurationPreferencesWidget extends LanguageConfigurationInfoWidget {
 
 	private Button toggleOnEnterButton;
@@ -30,11 +33,11 @@ public final class LanguageConfigurationPreferencesWidget extends LanguageConfig
 	private ILanguageConfigurationDefinition definition;
 	private ILanguageConfigurationRegistryManager manager;
 
-	public LanguageConfigurationPreferencesWidget(Composite parent, int style) {
+	public LanguageConfigurationPreferencesWidget(final Composite parent, final int style) {
 		super(parent, style);
 	}
 
-	public void refresh(ILanguageConfigurationDefinition definition, ILanguageConfigurationRegistryManager manager) {
+	public void refresh(@Nullable final ILanguageConfigurationDefinition definition, final ILanguageConfigurationRegistryManager manager) {
 		super.refresh(definition == null ? null : definition.getLanguageConfiguration());
 		if (definition == null) {
 			toggleOnEnterButton.setEnabled(false);
@@ -56,9 +59,9 @@ public final class LanguageConfigurationPreferencesWidget extends LanguageConfig
 	}
 
 	@Override
-	protected void createOnEnterRulesTab(TabFolder folder) {
+	protected void createOnEnterRulesTab(final TabFolder folder) {
 		super.createOnEnterRulesTab(folder);
-		Composite parent = (Composite) onEnterRulesTab.getControl();
+		final Composite parent = (Composite) onEnterRulesTab.getControl();
 		toggleOnEnterButton = new Button(parent, SWT.CHECK);
 		toggleOnEnterButton.setText("Enable on enter actions");
 		toggleOnEnterButton.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
@@ -74,14 +77,14 @@ public final class LanguageConfigurationPreferencesWidget extends LanguageConfig
 		return toggleOnEnterButton.getSelection();
 	}
 
-	private void setToggleOnEnter(Boolean selection) {
+	private void setToggleOnEnter(final Boolean selection) {
 		toggleOnEnterButton.setSelection(selection);
 	}
 
 	@Override
-	protected void createAutoClosingPairsTab(TabFolder folder) {
+	protected void createAutoClosingPairsTab(final TabFolder folder) {
 		super.createAutoClosingPairsTab(folder);
-		Composite parent = (Composite) autoClosingPairsTab.getControl();
+		final Composite parent = (Composite) autoClosingPairsTab.getControl();
 		toggleBracketAutoClosingButton = new Button(parent, SWT.CHECK);
 		toggleBracketAutoClosingButton.setText("Enable auto closing brackets");
 		toggleBracketAutoClosingButton.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
@@ -97,14 +100,14 @@ public final class LanguageConfigurationPreferencesWidget extends LanguageConfig
 		return toggleBracketAutoClosingButton.getSelection();
 	}
 
-	private void setBracketAutoClosing(Boolean selection) {
+	private void setBracketAutoClosing(final Boolean selection) {
 		toggleBracketAutoClosingButton.setSelection(selection);
 	}
 
 	@Override
-	protected void createSurroundingPairsTab(TabFolder folder) {
+	protected void createSurroundingPairsTab(final TabFolder folder) {
 		super.createSurroundingPairsTab(folder);
-		Composite parent = (Composite) surroundingPairsTab.getControl();
+		final Composite parent = (Composite) surroundingPairsTab.getControl();
 		toggleMatchingPairsButton = new Button(parent, SWT.CHECK);
 		toggleMatchingPairsButton.setText("Enable matching brackets");
 		toggleMatchingPairsButton.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
@@ -120,7 +123,7 @@ public final class LanguageConfigurationPreferencesWidget extends LanguageConfig
 		return toggleMatchingPairsButton.getSelection();
 	}
 
-	private void setMatchingPairs(Boolean selection) {
+	private void setMatchingPairs(final Boolean selection) {
 		toggleMatchingPairsButton.setSelection(selection);
 	}
 

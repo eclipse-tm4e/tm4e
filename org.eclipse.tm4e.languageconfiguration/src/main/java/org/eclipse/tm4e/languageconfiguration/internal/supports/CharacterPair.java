@@ -16,11 +16,11 @@ import java.util.AbstractMap.SimpleEntry;
 /**
  * A tuple of two characters, like a pair of opening and closing brackets.
  */
-@SuppressWarnings("serial")
 public class CharacterPair extends SimpleEntry<String, String> {
 
-	public CharacterPair(String key, String value) {
+	private static final long serialVersionUID = 1L;
+
+	public CharacterPair(final String key, final String value) {
 		super(key, value);
 	}
-
 }

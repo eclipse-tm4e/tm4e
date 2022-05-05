@@ -13,6 +13,7 @@ package org.eclipse.tm4e.languageconfiguration.internal.supports;
 
 import java.util.regex.Pattern;
 
+import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.tm4e.languageconfiguration.internal.utils.RegExpUtils;
 
 /**
@@ -21,15 +22,15 @@ import org.eclipse.tm4e.languageconfiguration.internal.utils.RegExpUtils;
 public final class OnEnterRule {
 
 	/**
-	 * This rule will only execute if the text before the cursor matches this
-	 * regular expression.
+	 * This rule will only execute if the text before the cursor matches this regular expression.
 	 */
+	@Nullable
 	private final Pattern beforeText;
 
 	/**
-	 * This rule will only execute if the text after the cursor matches this regular
-	 * expression.
+	 * This rule will only execute if the text after the cursor matches this regular expression.
 	 */
+	@Nullable
 	private final Pattern afterText;
 
 	/**
@@ -37,16 +38,18 @@ public final class OnEnterRule {
 	 */
 	private final EnterAction action;
 
-	public OnEnterRule(String beforeText, String afterText, EnterAction action) {
+	public OnEnterRule(final String beforeText, @Nullable final String afterText, final EnterAction action) {
 		this.beforeText = RegExpUtils.create(beforeText);
 		this.afterText = afterText != null ? RegExpUtils.create(afterText) : null;
 		this.action = action;
 	}
 
+	@Nullable
 	public Pattern getBeforeText() {
 		return beforeText;
 	}
 
+	@Nullable
 	public Pattern getAfterText() {
 		return afterText;
 	}

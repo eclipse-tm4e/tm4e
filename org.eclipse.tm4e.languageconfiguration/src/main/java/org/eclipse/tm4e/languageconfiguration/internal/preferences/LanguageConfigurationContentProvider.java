@@ -11,21 +11,25 @@
  */
 package org.eclipse.tm4e.languageconfiguration.internal.preferences;
 
+import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.jface.viewers.IStructuredContentProvider;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.tm4e.languageconfiguration.ILanguageConfigurationRegistryManager;
 
 final class LanguageConfigurationContentProvider implements IStructuredContentProvider {
 
+	private static final Object[] EMPTY = {};
+
+	@Nullable
 	private ILanguageConfigurationRegistryManager registry;
 
 	@Override
-	public Object[] getElements(Object input) {
-		return registry.getDefinitions();
+	public Object[] getElements(@Nullable final Object input) {
+		return registry != null ? registry.getDefinitions() : EMPTY;
 	}
 
 	@Override
-	public void inputChanged(Viewer viewer, Object oldInput, Object newInput) {
+	public void inputChanged(@Nullable final Viewer viewer, @Nullable final Object oldInput, @Nullable final Object newInput) {
 		registry = (ILanguageConfigurationRegistryManager) newInput;
 	}
 

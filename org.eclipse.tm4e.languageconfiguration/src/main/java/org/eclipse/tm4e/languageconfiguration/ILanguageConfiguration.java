@@ -13,6 +13,7 @@ package org.eclipse.tm4e.languageconfiguration;
 
 import java.util.List;
 
+import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.tm4e.languageconfiguration.internal.supports.AutoClosingPairConditional;
 import org.eclipse.tm4e.languageconfiguration.internal.supports.CharacterPair;
 import org.eclipse.tm4e.languageconfiguration.internal.supports.Comments;
@@ -27,6 +28,7 @@ public interface ILanguageConfiguration {
 	 *
 	 * @return the language's comments or <code>null</code> if not set
 	 */
+	@Nullable
 	Comments getComments();
 
 	/**
@@ -36,6 +38,7 @@ public interface ILanguageConfiguration {
 	 * @return the language's brackets. This configuration implicitly affects
 	 *         pressing Enter around these brackets.
 	 */
+	@Nullable
 	List<CharacterPair> getBrackets();
 
 	/**
@@ -44,9 +47,10 @@ public interface ILanguageConfiguration {
 	 * configured brackets will be used.
 	 *
 	 * @return the language's auto closing pairs. The 'close' character is
-	 *         autautomatically inserted with the 'open' character is typed. If not
+	 *         automatically inserted with the 'open' character is typed. If not
 	 *         set, the configured brackets will be used.
 	 */
+	@Nullable
 	List<AutoClosingPairConditional> getAutoClosingPairs();
 
 	/**
@@ -54,6 +58,7 @@ public interface ILanguageConfiguration {
 	 *
 	 * @return the language's rules to be evaluated when pressing Enter.
 	 */
+	@Nullable
 	List<OnEnterRule> getOnEnterRules();
 
 	/**
@@ -66,6 +71,7 @@ public interface ILanguageConfiguration {
 	 *         close characters. If not set, the autoclosing pairs settings will be
 	 *         used.
 	 */
+	@Nullable
 	List<CharacterPair> getSurroundingPairs();
 
 	/**
@@ -73,6 +79,7 @@ public interface ILanguageConfiguration {
 	 *
 	 * @return the language's folding or <code>null</code> if not set
 	 */
+	@Nullable
 	Folding getFolding();
 
 	/**
@@ -81,5 +88,6 @@ public interface ILanguageConfiguration {
 	 *
 	 * @return the language's word pattern or <code>null</code> if not set
 	 */
+	@Nullable
 	String getWordPattern();
 }

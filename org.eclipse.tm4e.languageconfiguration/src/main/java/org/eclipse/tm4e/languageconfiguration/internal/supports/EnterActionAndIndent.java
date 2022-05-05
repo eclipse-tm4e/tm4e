@@ -21,7 +21,7 @@ public final class EnterActionAndIndent {
 	 * @param enterAction
 	 * @param indentation
 	 */
-	public EnterActionAndIndent(EnterAction enterAction, String indentation) {
+	public EnterActionAndIndent(final EnterAction enterAction, final String indentation) {
 		this.enterAction = enterAction;
 		this.indentation = indentation;
 	}

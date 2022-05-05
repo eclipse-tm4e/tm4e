@@ -1,58 +1,75 @@
 /**
- *  Copyright (c) 2018 Red Hat Inc. and others.
+ * Copyright (c) 2018 Red Hat Inc. and others.
  * This program and the accompanying materials are made
  * available under the terms of the Eclipse Public License 2.0
  * which is available at https://www.eclipse.org/legal/epl-2.0/
  *
  * SPDX-License-Identifier: EPL-2.0
  *
- *  Contributors:
- *  Lucas Bullen (Red Hat Inc.) - initial API and implementation
+ * Contributors:
+ * Lucas Bullen (Red Hat Inc.) - initial API and implementation
  */
 package org.eclipse.tm4e.languageconfiguration.internal.supports;
 
+import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.jface.text.BadLocationException;
 import org.eclipse.jface.text.IDocument;
 
 public final class CommentSupport {
 
+	@Nullable
 	private final Comments comments;
 
-	public CommentSupport(Comments comments) {
+	public CommentSupport(@Nullable final Comments comments) {
 		this.comments = comments;
 	}
 
-	private boolean isInComment(IDocument document, int offset) {
+	private boolean isInComment(final IDocument document, final int offset) {
 		try {
 			if (isInBlockComment(document.get(0, offset))) {
 				return true;
 			}
-			int line = document.getLineOfOffset(offset);
-			int lineOffset = document.getLineOffset(line);
+			final int line = document.getLineOfOffset(offset);
+			final int lineOffset = document.getLineOffset(line);
 			return isInLineComment(document.get(lineOffset, offset - lineOffset));
-		} catch (BadLocationException e) {
+		} catch (final BadLocationException e) {
 			return false;
 		}
 	}
 
+	@Nullable
 	public String getLineComment() {
-		return comments.getLineComment();
+		final var comments = this.comments;
+		return comments == null ? null : comments.getLineComment();
 	}
 
+	@Nullable
 	public CharacterPair getBlockComment() {
-		return comments.getBlockComment();
+		final var comments = this.comments;
+		return comments == null ? null : comments.getBlockComment();
 	}
 
-	private boolean isInLineComment(String indexLinePrefix) {
+	private boolean isInLineComment(final String indexLinePrefix) {
+		final var comments = this.comments;
+		if (comments == null)
+			return false;
 		return indexLinePrefix.indexOf(comments.getLineComment()) != -1;
 	}
 
-	private boolean isInBlockComment(String indexPrefix) {
-		String commentOpen = comments.getBlockComment().getKey();
-		String commentClose = comments.getBlockComment().getValue();
+	private boolean isInBlockComment(final String indexPrefix) {
+		final var comments = this.comments;
+		if (comments == null)
+			return false;
+
+		final var blockComment = comments.getBlockComment();
+		if (blockComment == null)
+			return false;
+
+		final String commentOpen = blockComment.getKey();
+		final String commentClose = blockComment.getValue();
 		int index = indexPrefix.indexOf(commentOpen);
 		while (index != -1 && index < indexPrefix.length()) {
-			int closeIndex = indexPrefix.indexOf(commentClose, index + commentOpen.length());
+			final int closeIndex = indexPrefix.indexOf(commentClose, index + commentOpen.length());
 			if (closeIndex == -1) {
 				return true;
 			}

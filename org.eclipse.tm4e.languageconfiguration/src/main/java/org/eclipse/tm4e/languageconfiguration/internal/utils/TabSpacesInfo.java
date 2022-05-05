@@ -16,7 +16,7 @@ public final class TabSpacesInfo {
 	private final int tabSize;
 	private final boolean insertSpaces;
 
-	TabSpacesInfo(int tabSize, boolean insertSpaces) {
+	TabSpacesInfo(final int tabSize, final boolean insertSpaces) {
 		this.tabSize = tabSize;
 		this.insertSpaces = insertSpaces;
 	}

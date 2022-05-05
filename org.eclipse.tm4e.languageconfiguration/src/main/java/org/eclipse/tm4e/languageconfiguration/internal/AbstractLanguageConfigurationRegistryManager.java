@@ -17,6 +17,7 @@ import java.util.Map;
 import java.util.Set;
 
 import org.eclipse.core.runtime.content.IContentType;
+import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.tm4e.languageconfiguration.ILanguageConfiguration;
 import org.eclipse.tm4e.languageconfiguration.ILanguageConfigurationDefinition;
 import org.eclipse.tm4e.languageconfiguration.ILanguageConfigurationRegistryManager;
@@ -28,14 +29,14 @@ public abstract class AbstractLanguageConfigurationRegistryManager implements IL
 
 	@Override
 	public ILanguageConfigurationDefinition[] getDefinitions() {
-		Set<ILanguageConfigurationDefinition> definitions = new HashSet<>();
+		final Set<ILanguageConfigurationDefinition> definitions = new HashSet<>();
 		userDefinitions.values().forEach(definitions::add);
 		pluginDefinitions.values().forEach(definitions::add);
 		return definitions.toArray(ILanguageConfigurationDefinition[]::new);
 	}
 
 	@Override
-	public void registerLanguageConfigurationDefinition(ILanguageConfigurationDefinition definition) {
+	public void registerLanguageConfigurationDefinition(final ILanguageConfigurationDefinition definition) {
 		if (definition.getPluginId() == null) {
 			userDefinitions.put(definition.getContentType(), definition);
 		} else {
@@ -44,7 +45,7 @@ public abstract class AbstractLanguageConfigurationRegistryManager implements IL
 	}
 
 	@Override
-	public void unregisterLanguageConfigurationDefinition(ILanguageConfigurationDefinition definition) {
+	public void unregisterLanguageConfigurationDefinition(final ILanguageConfigurationDefinition definition) {
 		if (definition.getPluginId() == null) {
 			userDefinitions.remove(definition.getContentType());
 		} else {
@@ -52,9 +53,10 @@ public abstract class AbstractLanguageConfigurationRegistryManager implements IL
 		}
 	}
 
+	@Nullable
 	@Override
-	public ILanguageConfiguration getLanguageConfigurationFor(IContentType[] contentTypes) {
-		for (IContentType contentType : contentTypes) {
+	public ILanguageConfiguration getLanguageConfigurationFor(final IContentType[] contentTypes) {
+		for (final IContentType contentType : contentTypes) {
 			if (userDefinitions.containsKey(contentType)) {
 				return userDefinitions.get(contentType).getLanguageConfiguration();
 			}

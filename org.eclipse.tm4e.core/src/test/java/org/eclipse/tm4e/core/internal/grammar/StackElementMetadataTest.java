@@ -22,7 +22,7 @@ import org.junit.jupiter.api.Test;
  * @see <a href="https://github.com/Microsoft/vscode-textmate/blob/master/src/tests/grammar.test.ts">
  *      github.com/Microsoft/vscode-textmate/blob/master/src/tests/grammar.test.ts</a>
  */
-public class GrammarTest {
+public class StackElementMetadataTest {
 
 	@Test
 	public void testWorks() {

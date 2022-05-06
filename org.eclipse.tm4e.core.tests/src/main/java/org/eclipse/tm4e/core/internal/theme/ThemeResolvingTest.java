@@ -19,12 +19,6 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 
-import org.eclipse.tm4e.core.internal.theme.ColorMap;
-import org.eclipse.tm4e.core.internal.theme.FontStyle;
-import org.eclipse.tm4e.core.internal.theme.ParsedThemeRule;
-import org.eclipse.tm4e.core.internal.theme.Theme;
-import org.eclipse.tm4e.core.internal.theme.ThemeTrieElement;
-import org.eclipse.tm4e.core.internal.theme.ThemeTrieElementRule;
 import org.eclipse.tm4e.core.internal.theme.reader.ThemeReader;
 import org.eclipse.tm4e.core.internal.utils.CompareUtils;
 import org.junit.jupiter.api.Test;

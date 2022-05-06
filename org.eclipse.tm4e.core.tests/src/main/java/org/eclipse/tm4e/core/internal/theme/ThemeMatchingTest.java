@@ -11,8 +11,7 @@
  */
 package org.eclipse.tm4e.core.internal.theme;
 
-import static org.junit.jupiter.api.Assertions.assertArrayEquals;
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.*;
 
 import java.io.ByteArrayInputStream;
 import java.util.Arrays;
@@ -21,10 +20,6 @@ import java.util.List;
 import org.eclipse.tm4e.core.internal.grammar.ScopeListElement;
 import org.eclipse.tm4e.core.internal.grammar.ScopeMetadata;
 import org.eclipse.tm4e.core.internal.grammar.StackElementMetadata;
-import org.eclipse.tm4e.core.internal.theme.ColorMap;
-import org.eclipse.tm4e.core.internal.theme.FontStyle;
-import org.eclipse.tm4e.core.internal.theme.Theme;
-import org.eclipse.tm4e.core.internal.theme.ThemeTrieElementRule;
 import org.eclipse.tm4e.core.internal.theme.reader.ThemeReader;
 import org.junit.jupiter.api.Test;
 

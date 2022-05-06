@@ -8,22 +8,20 @@
  * Contributors:
  * Angelo Zerr <angelo.zerr@gmail.com> - initial API and implementation
  *******************************************************************************/
-package org.eclipse.tm4e.core.internal.theme.css;
+package org.eclipse.tm4e.core.internal.theme.css.sac;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
 import java.util.Map;
 
 import org.eclipse.jdt.annotation.Nullable;
-import org.eclipse.tm4e.core.theme.css.SACConstants;
-import org.eclipse.tm4e.core.theme.css.SACParserFactory;
 import org.w3c.css.sac.Parser;
 
 /**
  * SAC Parser factory implementation. By default, this SAC FActory support
  * Flute, SteadyState and Batik SAC Parser.
  */
-public final class SACParserFactoryImpl extends SACParserFactory {
+public final class SACParserFactory extends AbstractSACParserFactory {
 
 	private static Map<String, @Nullable String> parsers = new HashMap<>();
 
@@ -38,7 +36,7 @@ public final class SACParserFactoryImpl extends SACParserFactory {
 		registerSACParser(SACConstants.SACPARSER_BATIK);
 	}
 
-	public SACParserFactoryImpl() {
+	public SACParserFactory() {
 		// Flute parser is the default SAC Parser to use.
 		super.setPreferredParserName(SACConstants.SACPARSER_BATIK);
 	}

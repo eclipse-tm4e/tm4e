@@ -8,23 +8,22 @@
  * Contributors:
  * Angelo Zerr <angelo.zerr@gmail.com> - initial API and implementation
  *******************************************************************************/
-package org.eclipse.tm4e.core.theme.css;
+package org.eclipse.tm4e.core.internal.theme.css.sac;
 
 import static java.lang.System.Logger.Level.*;
 
 import java.lang.System.Logger;
 
 import org.eclipse.jdt.annotation.Nullable;
-import org.eclipse.tm4e.core.internal.theme.css.SACParserFactoryImpl;
 import org.w3c.css.sac.Parser;
 import org.w3c.css.sac.helpers.ParserFactory;
 
 /**
  * SAC Parser Factory.
  */
-public abstract class SACParserFactory extends ParserFactory implements ISACParserFactory {
+public abstract class AbstractSACParserFactory extends ParserFactory implements ISACParserFactory {
 
-	private static final Logger LOGGER = System.getLogger(SACParserFactory.class.getName());
+	private static final Logger LOGGER = System.getLogger(AbstractSACParserFactory.class.getName());
 
 	@Nullable
 	private String preferredParserName;
@@ -32,7 +31,7 @@ public abstract class SACParserFactory extends ParserFactory implements ISACPars
 	/**
 	 * Return default instance of SAC Parser. If preferredParserName is filled,
 	 * it return the instance of SAC Parser registered with this name, otherwise
-	 * this method search the SAC Parser class name to instanciate into System
+	 * this method search the SAC Parser class name to instantiate into System
 	 * property with key org.w3c.css.sac.parser.
 	 */
 	@Override
@@ -57,14 +56,5 @@ public abstract class SACParserFactory extends ParserFactory implements ISACPars
 	@Override
 	public void setPreferredParserName(@Nullable final String preferredParserName) {
 		this.preferredParserName = preferredParserName;
-	}
-
-	/**
-	 * @return instance of SACParserFactory
-	 */
-	public static ISACParserFactory newInstance() {
-		// TODO : manage new instance of SAC Parser Factory like
-		// SAXParserFactory.
-		return new SACParserFactoryImpl();
 	}
 }

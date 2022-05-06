@@ -8,7 +8,7 @@
  * Contributors:
  *     Angelo Zerr <angelo.zerr@gmail.com> - initial API and implementation
  *******************************************************************************/
-package org.eclipse.tm4e.core.theme.css;
+package org.eclipse.tm4e.core.internal.theme.css.sac;
 
 /**
  * SAC Constants Parsers.

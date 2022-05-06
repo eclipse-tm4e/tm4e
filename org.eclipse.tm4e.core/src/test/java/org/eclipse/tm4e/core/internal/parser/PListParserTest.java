@@ -9,17 +9,13 @@
  * Contributors:
  * Angelo Zerr <angelo.zerr@gmail.com> - initial API and implementation
  */
-package org.eclipse.tm4e.core.internal.grammar.parser;
+package org.eclipse.tm4e.core.internal.parser;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 import org.eclipse.tm4e.core.Data;
 import org.eclipse.tm4e.core.internal.grammar.RawGrammar;
 import org.eclipse.tm4e.core.internal.grammar.reader.GrammarReader;
-import org.eclipse.tm4e.core.internal.parser.PListParser;
-import org.eclipse.tm4e.core.internal.parser.PListParserJSON;
-import org.eclipse.tm4e.core.internal.parser.PListParserXML;
-import org.eclipse.tm4e.core.internal.parser.PListParserYAML;
 import org.junit.jupiter.api.Test;
 
 public class PListParserTest {

@@ -31,12 +31,12 @@ import org.eclipse.tm4e.core.internal.grammar.BalancedBracketSelectors;
 import org.eclipse.tm4e.core.internal.grammar.Grammar;
 import org.eclipse.tm4e.core.internal.grammar.RawRepository;
 import org.eclipse.tm4e.core.internal.grammar.RawRule;
+import org.eclipse.tm4e.core.internal.theme.IThemeProvider;
+import org.eclipse.tm4e.core.internal.theme.Theme;
+import org.eclipse.tm4e.core.internal.theme.ThemeTrieElementRule;
 import org.eclipse.tm4e.core.internal.types.IRawGrammar;
 import org.eclipse.tm4e.core.internal.types.IRawRepository;
 import org.eclipse.tm4e.core.internal.types.IRawRule;
-import org.eclipse.tm4e.core.theme.IThemeProvider;
-import org.eclipse.tm4e.core.theme.Theme;
-import org.eclipse.tm4e.core.theme.ThemeTrieElementRule;
 
 /**
  * @see <a href=

@@ -19,7 +19,7 @@ package org.eclipse.tm4e.core.internal.theme.reader;
 import java.io.InputStream;
 
 import org.eclipse.tm4e.core.internal.parser.PListParser;
-import org.eclipse.tm4e.core.theme.IRawTheme;
+import org.eclipse.tm4e.core.internal.theme.IRawTheme;
 
 final class SyncThemeReader {
 

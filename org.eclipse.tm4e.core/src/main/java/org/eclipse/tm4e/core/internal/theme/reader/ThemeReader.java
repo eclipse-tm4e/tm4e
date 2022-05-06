@@ -24,8 +24,8 @@ import org.eclipse.tm4e.core.internal.parser.PListParser;
 import org.eclipse.tm4e.core.internal.parser.PListParserJSON;
 import org.eclipse.tm4e.core.internal.parser.PListParserXML;
 import org.eclipse.tm4e.core.internal.parser.PListParserYAML;
+import org.eclipse.tm4e.core.internal.theme.IRawTheme;
 import org.eclipse.tm4e.core.internal.theme.ThemeRaw;
-import org.eclipse.tm4e.core.theme.IRawTheme;
 
 /**
  * TextMate Theme reader utilities.

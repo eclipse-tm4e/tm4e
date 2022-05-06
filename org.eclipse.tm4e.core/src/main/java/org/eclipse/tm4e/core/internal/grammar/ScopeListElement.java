@@ -17,8 +17,8 @@ import java.util.List;
 import java.util.Objects;
 
 import org.eclipse.jdt.annotation.Nullable;
-import org.eclipse.tm4e.core.theme.FontStyle;
-import org.eclipse.tm4e.core.theme.ThemeTrieElementRule;
+import org.eclipse.tm4e.core.internal.theme.FontStyle;
+import org.eclipse.tm4e.core.internal.theme.ThemeTrieElementRule;
 
 import com.google.common.base.Splitter;
 

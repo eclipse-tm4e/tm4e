@@ -11,7 +11,7 @@
  */
 package org.eclipse.tm4e.core.internal.grammar;
 
-import static org.eclipse.tm4e.core.theme.FontStyle.*;
+import static org.eclipse.tm4e.core.internal.theme.FontStyle.*;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;

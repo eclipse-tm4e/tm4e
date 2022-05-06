@@ -20,9 +20,9 @@ import java.util.stream.Collectors;
 
 import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.tm4e.core.TMException;
+import org.eclipse.tm4e.core.internal.theme.IThemeProvider;
+import org.eclipse.tm4e.core.internal.theme.ThemeTrieElementRule;
 import org.eclipse.tm4e.core.internal.utils.RegexSource;
-import org.eclipse.tm4e.core.theme.IThemeProvider;
-import org.eclipse.tm4e.core.theme.ThemeTrieElementRule;
 
 /**
  * @see <a href=

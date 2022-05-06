@@ -9,14 +9,18 @@
  * Contributors:
  * Angelo Zerr <angelo.zerr@gmail.com> - initial API and implementation
  */
-package org.eclipse.tm4e.core.theme;
+package org.eclipse.tm4e.core.internal.theme;
 
-import java.util.List;
+import java.util.Collection;
 
-public interface IThemeProvider {
+import org.eclipse.jdt.annotation.Nullable;
 
-	List<ThemeTrieElementRule> themeMatch(String scopeName);
+public interface IRawTheme {
 
-	ThemeTrieElementRule getDefaults();
+	@Nullable
+	String getName();
+
+	@Nullable
+	Collection<IRawThemeSetting> getSettings();
 
 }

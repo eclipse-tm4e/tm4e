@@ -23,7 +23,7 @@ import java.util.List;
 
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
-import org.eclipse.tm4e.core.theme.IRawTheme;
+import org.eclipse.tm4e.core.internal.theme.IRawTheme;
 
 /**
  * @see <a href=

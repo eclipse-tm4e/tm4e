@@ -42,10 +42,10 @@ import org.eclipse.tm4e.core.internal.registry.IGrammarRepository;
 import org.eclipse.tm4e.core.internal.rule.IRuleFactoryHelper;
 import org.eclipse.tm4e.core.internal.rule.Rule;
 import org.eclipse.tm4e.core.internal.rule.RuleFactory;
+import org.eclipse.tm4e.core.internal.theme.IThemeProvider;
 import org.eclipse.tm4e.core.internal.types.IRawGrammar;
 import org.eclipse.tm4e.core.internal.types.IRawRepository;
 import org.eclipse.tm4e.core.internal.types.IRawRule;
-import org.eclipse.tm4e.core.theme.IThemeProvider;
 
 /**
  * TextMate grammar implementation.

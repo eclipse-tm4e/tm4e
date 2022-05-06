@@ -9,7 +9,7 @@
  * Contributors:
  * Angelo Zerr <angelo.zerr@gmail.com> - initial API and implementation
  */
-package org.eclipse.tm4e.core.theme;
+package org.eclipse.tm4e.core.internal.theme;
 
 /**
  * Font style definitions.

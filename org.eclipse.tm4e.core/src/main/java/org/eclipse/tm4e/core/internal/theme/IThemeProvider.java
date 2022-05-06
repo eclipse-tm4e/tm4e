@@ -9,18 +9,14 @@
  * Contributors:
  * Angelo Zerr <angelo.zerr@gmail.com> - initial API and implementation
  */
-package org.eclipse.tm4e.core.theme;
+package org.eclipse.tm4e.core.internal.theme;
 
-import org.eclipse.jdt.annotation.Nullable;
+import java.util.List;
 
-public interface IThemeSetting {
+public interface IThemeProvider {
 
-	@Nullable
-	Object getFontStyle();
+	List<ThemeTrieElementRule> themeMatch(String scopeName);
 
-	@Nullable
-	String getBackground();
+	ThemeTrieElementRule getDefaults();
 
-	@Nullable
-	String getForeground();
 }

@@ -9,25 +9,18 @@
  * Contributors:
  * Angelo Zerr <angelo.zerr@gmail.com> - initial API and implementation
  */
-package org.eclipse.tm4e.core.theme;
+package org.eclipse.tm4e.core.internal.theme;
 
 import org.eclipse.jdt.annotation.Nullable;
 
-/**
- * A single theme setting.
- *
- * @see <a href="https://github.com/Microsoft/vscode-textmate/blob/master/src/main.ts">
- *      github.com/Microsoft/vscode-textmate/blob/master/src/main.ts</a>
- */
-public interface IRawThemeSetting {
+public interface IThemeSetting {
 
 	@Nullable
-	String getName();
+	Object getFontStyle();
 
 	@Nullable
-	Object getScope();
+	String getBackground();
 
 	@Nullable
-	IThemeSetting getSetting();
-
+	String getForeground();
 }

@@ -29,8 +29,8 @@ import org.eclipse.tm4e.core.TMException;
 import org.eclipse.tm4e.core.grammar.IGrammar;
 import org.eclipse.tm4e.core.internal.grammar.reader.GrammarReader;
 import org.eclipse.tm4e.core.internal.registry.SyncRegistry;
-import org.eclipse.tm4e.core.theme.IRawTheme;
-import org.eclipse.tm4e.core.theme.Theme;
+import org.eclipse.tm4e.core.internal.theme.IRawTheme;
+import org.eclipse.tm4e.core.internal.theme.Theme;
 
 /**
  * The registry that will hold all grammars.

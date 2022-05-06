@@ -9,7 +9,7 @@
  * Contributors:
  * Angelo Zerr <angelo.zerr@gmail.com> - initial API and implementation
  */
-package org.eclipse.tm4e.core.theme;
+package org.eclipse.tm4e.core.internal.theme;
 
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 
@@ -17,6 +17,9 @@ import java.io.ByteArrayInputStream;
 import java.util.Arrays;
 import java.util.List;
 
+import org.eclipse.tm4e.core.internal.theme.FontStyle;
+import org.eclipse.tm4e.core.internal.theme.ParsedThemeRule;
+import org.eclipse.tm4e.core.internal.theme.Theme;
 import org.eclipse.tm4e.core.internal.theme.reader.ThemeReader;
 import org.junit.jupiter.api.Test;
 

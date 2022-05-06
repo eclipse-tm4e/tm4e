@@ -14,7 +14,7 @@ package org.eclipse.tm4e.core.internal.grammar;
 import java.util.List;
 
 import org.eclipse.jdt.annotation.Nullable;
-import org.eclipse.tm4e.core.theme.ThemeTrieElementRule;
+import org.eclipse.tm4e.core.internal.theme.ThemeTrieElementRule;
 
 public final class ScopeMetadata {
 

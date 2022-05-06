@@ -20,7 +20,7 @@ public class ModelLine {
 	boolean isInvalid;
 
 	@Nullable
-	private TMState state;
+	TMState state;
 
 	@Nullable
 	List<TMToken> tokens;

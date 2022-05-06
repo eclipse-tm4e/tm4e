@@ -22,6 +22,8 @@ import java.util.Map;
 
 import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.tm4e.core.grammar.IGrammar;
+import org.eclipse.tm4e.core.internal.model.DecodeMap;
+import org.eclipse.tm4e.core.internal.model.TMTokenDecodeData;
 
 public class Tokenizer implements ITokenizationSupport {
 

@@ -14,7 +14,7 @@
  *  - Microsoft Corporation: Initial code, written in TypeScript, licensed under MIT license
  *  - Angelo Zerr <angelo.zerr@gmail.com> - translation and adaptation to Java
  */
-package org.eclipse.tm4e.core.model;
+package org.eclipse.tm4e.core.internal.model;
 
 import java.util.Map;
 
@@ -23,7 +23,7 @@ public class TMTokenDecodeData {
 	public final String[] scopes;
 	public final Map<Integer, Map<Integer, Boolean>> scopeTokensMaps;
 
-	TMTokenDecodeData(final String[] scopes, final Map<Integer, Map<Integer, Boolean>> scopeTokensMaps) {
+	public TMTokenDecodeData(final String[] scopes, final Map<Integer, Map<Integer, Boolean>> scopeTokensMaps) {
 		this.scopes = scopes;
 		this.scopeTokensMaps = scopeTokensMaps;
 	}

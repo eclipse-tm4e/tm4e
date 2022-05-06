@@ -14,15 +14,18 @@
  *  - Microsoft Corporation: Initial code, written in TypeScript, licensed under MIT license
  *  - Angelo Zerr <angelo.zerr@gmail.com> - translation and adaptation to Java
  */
-package org.eclipse.tm4e.core.model;
+package org.eclipse.tm4e.core.internal.model;
 
 import static org.eclipse.tm4e.core.internal.utils.MoreCollections.*;
 import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.jdt.annotation.Nullable;
+import org.eclipse.tm4e.core.model.ITMModel;
+import org.eclipse.tm4e.core.model.ModelTokensChangedEvent;
+import org.eclipse.tm4e.core.model.Range;
 
-final class ModelTokensChangedEventBuilder {
+public final class ModelTokensChangedEventBuilder {
 
 	private final ITMModel model;
 	private final List<Range> ranges = new ArrayList<>();

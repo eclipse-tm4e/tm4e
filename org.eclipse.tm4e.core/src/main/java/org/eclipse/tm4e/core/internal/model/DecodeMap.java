@@ -14,7 +14,7 @@
  * - Microsoft Corporation: Initial code, written in TypeScript, licensed under MIT license
  * - Angelo Zerr <angelo.zerr@gmail.com> - translation and adaptation to Java
  */
-package org.eclipse.tm4e.core.model;
+package org.eclipse.tm4e.core.internal.model;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -23,7 +23,7 @@ import org.eclipse.jdt.annotation.Nullable;
 
 import com.google.common.base.Splitter;
 
-final class DecodeMap {
+public final class DecodeMap {
 
 	private static final String[] EMPTY_STRING_ARRAY = new String[0];
 	private static final Splitter BY_DOT_SPLITTER = Splitter.on('.');
@@ -32,7 +32,7 @@ final class DecodeMap {
 	private final Map<String /* scope */, int @Nullable[] /* ids */ > scopeToTokenIds = new LinkedHashMap<>();
 	private final Map<String /* token */, @Nullable Integer /* id */ > tokenToTokenId = new LinkedHashMap<>();
 	private final Map<Integer /* id */, String /* id */ > tokenIdToToken = new LinkedHashMap<>();
-	TMTokenDecodeData prevToken = new TMTokenDecodeData(EMPTY_STRING_ARRAY,
+	public TMTokenDecodeData prevToken = new TMTokenDecodeData(EMPTY_STRING_ARRAY,
 			new LinkedHashMap<>());
 
 	public int[] getTokenIds(final String scope) {

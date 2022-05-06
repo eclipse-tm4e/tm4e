@@ -39,7 +39,7 @@ public abstract class AbstractLineList implements IModelLines {
 	@Nullable
 	private TMModel model;
 
-	void setModel(@Nullable final TMModel model) {
+	protected void setModel(@Nullable final TMModel model) {
 		this.model = model;
 	}
 

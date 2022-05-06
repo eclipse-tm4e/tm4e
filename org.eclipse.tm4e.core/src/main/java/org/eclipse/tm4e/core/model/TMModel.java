@@ -25,6 +25,7 @@ import java.util.function.Consumer;
 
 import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.tm4e.core.grammar.IGrammar;
+import org.eclipse.tm4e.core.internal.model.ModelTokensChangedEventBuilder;
 
 /**
  * TextMate model class.
@@ -132,7 +133,7 @@ public class TMModel implements ITMModel {
 				// - tokenizing the next line would go above MAX_ALLOWED_TIME
 
 				int lineIndex = startLine;
-				while (lineIndex <= toLineIndex && lineIndex < model.getLines().getNumberOfLines()) {
+				while (lineIndex <= toLineIndex && lineIndex < model.lines.getNumberOfLines()) {
 					elapsedTime = System.currentTimeMillis() - startTime;
 					if (elapsedTime > MAX_ALLOWED_TIME) {
 						// Stop if MAX_ALLOWED_TIME is reached
@@ -187,7 +188,7 @@ public class TMModel implements ITMModel {
 				try {
 					text = model.lines.getLineText(lineIndex);
 					// Tokenize only the first X characters
-					r = castNonNull(model.tokenizer).tokenize(text, modeLine.getState(), 0, stopLineTokenizationAfter);
+					r = castNonNull(model.tokenizer).tokenize(text, modeLine.state, 0, stopLineTokenizationAfter);
 				} catch (final Exception ex) {
 					LOGGER.log(ERROR, ex.toString());
 					return nextInvalidLineIndex;
@@ -281,7 +282,7 @@ public class TMModel implements ITMModel {
 	@Override
 	public void dispose() {
 		stop();
-		getLines().dispose();
+		lines.dispose();
 	}
 
 	/**
@@ -341,9 +342,5 @@ public class TMModel implements ITMModel {
 	void invalidateLine(final int lineIndex) {
 		lines.get(lineIndex).isInvalid = true;
 		invalidLines.add(lineIndex);
-	}
-
-	public IModelLines getLines() {
-		return lines;
 	}
 }

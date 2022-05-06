@@ -11,6 +11,7 @@
  */
 package org.eclipse.tm4e.languageconfiguration.internal;
 
+import org.eclipse.core.runtime.IStatus;
 import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.framework.BundleContext;
@@ -30,6 +31,13 @@ public final class LanguageConfigurationPlugin extends AbstractUIPlugin {
 	@Nullable
 	static LanguageConfigurationPlugin getInstance() {
 		return INSTANCE;
+	}
+
+	public static void log(IStatus status) {
+		final var plugin = LanguageConfigurationPlugin.INSTANCE;
+		if (plugin != null) {
+			plugin.getLog().log(status);
+		}
 	}
 
 	@Override

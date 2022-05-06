@@ -16,6 +16,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.core.runtime.content.IContentType;
 import org.eclipse.core.runtime.preferences.InstanceScope;
@@ -67,8 +68,9 @@ public final class LanguageConfigurationRegistryManager extends AbstractLanguage
 		for (final var iDefinition : getDefinitions()) {
 			if (iDefinition instanceof LanguageConfigurationDefinition) {
 				final var definition = (LanguageConfigurationDefinition) iDefinition;
-				if (contentType.isKindOf(definition.getContentType())
-						&& (bestFit == null || definition.getContentType().isKindOf(bestFit.getContentType()))) {
+				final var definitionContentType = definition.getContentType();
+				if (contentType.isKindOf(definitionContentType)
+						&& (bestFit == null || definitionContentType.isKindOf(bestFit.getContentType()))) {
 					bestFit = definition;
 				}
 			}
@@ -253,7 +255,13 @@ public final class LanguageConfigurationRegistryManager extends AbstractLanguage
 		for (final var configElem : config) {
 			final String name = configElem.getName();
 			if (LANGUAGE_CONFIGURATION_ELT.equals(name)) {
-				final LanguageConfigurationDefinition delegate = new LanguageConfigurationDefinition(configElem);
+				final LanguageConfigurationDefinition delegate;
+				try {
+					delegate = new LanguageConfigurationDefinition(configElem);
+				} catch (CoreException ex) {
+					LanguageConfigurationPlugin.log(ex.getStatus());
+					continue;
+				}
 				registerLanguageConfigurationDefinition(delegate);
 			}
 		}

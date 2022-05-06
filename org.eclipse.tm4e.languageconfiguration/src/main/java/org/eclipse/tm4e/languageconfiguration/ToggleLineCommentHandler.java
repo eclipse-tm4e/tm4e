@@ -76,9 +76,11 @@ public class ToggleLineCommentHandler extends AbstractHandler {
 			return null;
 		}
 
-		ContentTypeInfo info;
+		final ContentTypeInfo info;
 		try {
 			info = ContentTypeHelper.findContentTypes(document);
+			if (info == null)
+				return null;
 		} catch (final CoreException e) {
 			return null;
 		}

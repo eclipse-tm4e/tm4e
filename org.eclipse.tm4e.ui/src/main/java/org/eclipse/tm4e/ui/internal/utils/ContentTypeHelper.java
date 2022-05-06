@@ -67,6 +67,7 @@ public final class ContentTypeHelper {
 	 * @param contentTypeId
 	 * @return matching content type or null
 	 */
+	@Nullable
 	public static IContentType getContentTypeById(final String contentTypeId) {
 		final IContentTypeManager manager = Platform.getContentTypeManager();
 		return manager.getContentType(contentTypeId);

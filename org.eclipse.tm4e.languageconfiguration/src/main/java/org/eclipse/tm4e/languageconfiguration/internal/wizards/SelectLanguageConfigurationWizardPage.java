@@ -302,8 +302,7 @@ final class SelectLanguageConfigurationWizardPage extends WizardPage implements 
 		}
 
 		final var contentTypeText = this.contentTypeText;
-		assert contentTypeText != null;
-		if (contentTypeText.getText().isEmpty()) {
+		if (contentTypeText == null || contentTypeText.getText().isEmpty()) {
 			return new Status(IStatus.ERROR, LanguageConfigurationPlugin.PLUGIN_ID,
 					SelectLanguageConfigurationWizardPage_contentTypeError_noSelection);
 		}
@@ -320,17 +319,15 @@ final class SelectLanguageConfigurationWizardPage extends WizardPage implements 
 	}
 
 	ILanguageConfigurationDefinition getDefinition() {
-		final var fileText = this.fileText;
 		assert fileText != null;
 		IPath path = new Path(fileText.getText());
 		if (!path.isAbsolute()) {
 			path = ResourcesPlugin.getWorkspace().getRoot().getFile(path).getLocation();
 		}
 
-		final var contentTypeText = this.contentTypeText;
 		assert contentTypeText != null;
-		return new LanguageConfigurationDefinition(
-				ContentTypeHelper.getContentTypeById(contentTypeText.getText()),
-				path.toString());
+		final var contentType = ContentTypeHelper.getContentTypeById(contentTypeText.getText());
+		assert contentType != null;
+		return new LanguageConfigurationDefinition(contentType, path.toString());
 	}
 }

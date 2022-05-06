@@ -15,6 +15,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.nio.charset.Charset;
 
+import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
@@ -54,9 +55,15 @@ public final class LanguageConfigurationDefinition extends TMResource implements
 		this.contentType = contentType;
 	}
 
-	public LanguageConfigurationDefinition(final IConfigurationElement ce) {
+	public LanguageConfigurationDefinition(final IConfigurationElement ce) throws CoreException {
 		super(ce);
-		this.contentType = ContentTypeHelper.getContentTypeById(ce.getAttribute(XMLConstants.CONTENT_TYPE_ID_ATTR));
+		final var contentTypeId = ce.getAttribute(XMLConstants.CONTENT_TYPE_ID_ATTR);
+		final var contentType = ContentTypeHelper.getContentTypeById(contentTypeId);
+		if (contentType == null)
+			throw new CoreException(
+					new Status(IStatus.ERROR, LanguageConfiguration.class,
+							"Cannot load language configuration with unknown content type ID " + contentTypeId));
+		this.contentType = contentType;
 	}
 
 	/**

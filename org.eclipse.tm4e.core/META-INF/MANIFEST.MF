@@ -5,7 +5,8 @@ Bundle-Vendor: %providerName
 Bundle-Localization: plugin
 Bundle-SymbolicName: org.eclipse.tm4e.core
 Bundle-Version: 0.4.4.qualifier
-Require-Bundle: org.apache.batik.css;bundle-version="1.9.1";resolution:=optional,
+Require-Bundle: org.eclipse.collections;bundle-version="11.0.0",
+ org.apache.batik.css;bundle-version="1.9.1";resolution:=optional,
  org.apache.batik.util;bundle-version="1.9.1";resolution:=optional,
  com.google.gson,
  com.google.guava;bundle-version="30.1.0",

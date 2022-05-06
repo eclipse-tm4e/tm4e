@@ -25,6 +25,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import org.eclipse.collections.impl.list.mutable.primitive.IntArrayList;
 import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.tm4e.core.grammar.IToken;
 import org.eclipse.tm4e.core.theme.FontStyle;
@@ -32,6 +33,8 @@ import org.eclipse.tm4e.core.theme.FontStyle;
 final class LineTokens {
 
 	private static final Logger LOGGER = System.getLogger(LineTokens.class.getName());
+
+   private static final IntArrayList EMPTY_INT_LIST = new IntArrayList(0);
 
 	/**
 	 * defined only if `LOGGER.isLoggable(TRACE)`.
@@ -49,7 +52,7 @@ final class LineTokens {
 	/**
 	 * used only if `emitBinaryTokens` is true.
 	 */
-	private final List<Integer> binaryTokens;
+   private final IntArrayList binaryTokens;
 
 	private int lastTokenEndIndex = 0;
 
@@ -64,10 +67,10 @@ final class LineTokens {
 		this.lineText = LOGGER.isLoggable(TRACE) ? lineText : null; // store line only if it's logged
 		if (this.emitBinaryTokens) {
 			this.tokens = Collections.emptyList();
-			this.binaryTokens = new ArrayList<>();
+         this.binaryTokens = new IntArrayList();
 		} else {
 			this.tokens = new ArrayList<>();
-			this.binaryTokens = Collections.emptyList();
+         this.binaryTokens = EMPTY_INT_LIST;
 		}
 		this.tokenTypeOverrides = tokenTypeOverrides;
 		this.balancedBracketSelectors = balancedBracketSelectors;
@@ -122,7 +125,7 @@ final class LineTokens {
 						0);
 			}
 
-			if (!this.binaryTokens.isEmpty() && getLastElement(this.binaryTokens) == metadata) {
+			if (this.binaryTokens.notEmpty() && this.binaryTokens.getLast() == metadata) {
 				// no need to push a token with the same metadata
 				this.lastTokenEndIndex = endIndex;
 				return;
@@ -184,7 +187,7 @@ final class LineTokens {
 	}
 
 	int[] getBinaryResult(final StackElement stack, final int lineLength) {
-		if (!this.binaryTokens.isEmpty() && this.binaryTokens.get(binaryTokens.size() - 2) == lineLength - 1) {
+      if (this.binaryTokens.size() > 1 && getElementAt(this.binaryTokens, -2) == lineLength - 1) {
 			// pop produced token for newline
 			removeLastElement(this.binaryTokens);
 			removeLastElement(this.binaryTokens);
@@ -196,6 +199,6 @@ final class LineTokens {
 			this.binaryTokens.set(binaryTokens.size() - 2, 0);
 		}
 
-		return binaryTokens.stream().mapToInt(Integer::intValue).toArray();
+      return binaryTokens.toArray();
 	}
 }

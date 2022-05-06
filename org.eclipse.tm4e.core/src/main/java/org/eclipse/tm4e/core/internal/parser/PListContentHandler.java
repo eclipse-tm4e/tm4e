@@ -21,6 +21,7 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
+import org.eclipse.collections.impl.list.mutable.primitive.IntArrayList;
 import org.eclipse.jdt.annotation.Nullable;
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
@@ -34,7 +35,7 @@ final class PListContentHandler<T> extends DefaultHandler {
 
 	private static final class PListPathImpl implements PListPath {
 		final LinkedList<String> keys = new LinkedList<>();
-		final List<Integer> keysDepths = new ArrayList<>();
+		final IntArrayList keysDepths = new IntArrayList();
 		int depth = 0;
 
 		void add(final String key) {
@@ -46,7 +47,7 @@ final class PListContentHandler<T> extends DefaultHandler {
 		void trim() {
 			for (int i = keysDepths.size() - 1; i >= 0; i--) {
 				if (keysDepths.get(i) >= depth) {
-					keysDepths.remove(i);
+					keysDepths.removeAtIndex(i);
 					keys.remove(i);
 				}
 			}

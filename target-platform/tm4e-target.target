@@ -23,6 +23,10 @@
             <unit id="org.eclipse.ui.trace" version="0.0.0"/>
             <repository location="https://download.eclipse.org/eclipse/updates/4.22/"/>
         </location>
+        <location includeAllPlatforms="false" includeConfigurePhase="true" includeMode="planner" includeSource="true" type="InstallableUnit">
+            <repository location="https://download.eclipse.org/collections/11.0.0/repository/"/>
+            <unit id="org.eclipse.collections.feature.feature.group" version="11.0.0.v20211123-1459"/>
+        </location>
         <location includeDependencyDepth="direct" includeDependencyScopes="compile" includeSource="true" missingManifest="generate" type="Maven">
             <dependencies>
                 <dependency>

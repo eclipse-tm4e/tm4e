@@ -25,6 +25,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
+import org.eclipse.collections.impl.list.mutable.primitive.IntArrayList;
 import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.tm4e.core.internal.grammar.RawRepository;
 import org.eclipse.tm4e.core.internal.grammar.RawRule;
@@ -160,7 +161,7 @@ public final class RuleFactory {
 			return new CompilePatternsResult(new int[0], false);
 		}
 
-		final var r = new ArrayList<Integer>();
+		final var result = new IntArrayList();
 		for (final IRawRule pattern : patterns) {
 			int patternId = -1;
 			final var patternInclude = pattern.getInclude();
@@ -253,10 +254,10 @@ public final class RuleFactory {
 					continue;
 				}
 
-				r.add(patternId);
+				result.add(patternId);
 			}
 		}
 
-		return new CompilePatternsResult(r.stream().mapToInt(Integer::intValue).toArray(), patterns.size() != r.size());
+		return new CompilePatternsResult(result.toArray(), patterns.size() != result.size());
 	}
 }

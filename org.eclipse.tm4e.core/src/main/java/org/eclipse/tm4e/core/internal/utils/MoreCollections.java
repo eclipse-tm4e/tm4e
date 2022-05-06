@@ -14,10 +14,15 @@ package org.eclipse.tm4e.core.internal.utils;
 
 import java.util.List;
 
+import org.eclipse.collections.api.list.primitive.IntList;
+import org.eclipse.collections.api.list.primitive.MutableIntList;
 import org.eclipse.jdt.annotation.Nullable;
 
 public final class MoreCollections {
 
+	/**
+	 * @return the last element or null if list is empty
+	 */
 	@Nullable
 	public static <T> T findLastElement(@Nullable final List<T> list) {
 		if (list == null || list.isEmpty())
@@ -26,7 +31,40 @@ public final class MoreCollections {
 	}
 
 	/**
-	 * @param list a non-empty list with non-nullable elements
+	 * @param list a non-empty list
+	 * @param index the element to get. negative index counts from end of list, e.g. -1 = last element.
+	 *
+	 * @throws IndexOutOfBoundsException if the list is empty
+	 */
+	public static int getElementAt(final IntList list, int index) {
+		if (index < 0)
+			return list.get(list.size() - 1);
+		return list.get(index);
+	}
+
+	/**
+	 * @param list a non-empty list
+	 * @param index the element to get. negative index counts from end of list, e.g. -1 = last element.
+	 *
+	 * @throws IndexOutOfBoundsException if the list is empty
+	 */
+	public static <T> T getElementAt(final List<T> list, int index) {
+		if (index < 0)
+			return list.get(list.size() - 1);
+		return list.get(index);
+	}
+
+	/**
+	 * @param list a non-empty list
+	 */
+	public static int getLastElement(final IntList list) {
+		return list.get(list.size() - 1);
+	}
+
+	/**
+	 * @param list a non-empty list
+	 *
+	 * @throws IndexOutOfBoundsException if the list is empty
 	 */
 	public static <T> T getLastElement(final List<T> list) {
 		return list.get(list.size() - 1);
@@ -44,6 +82,18 @@ public final class MoreCollections {
 		return list.remove(list.size() - 1);
 	}
 
-   private MoreCollections() {
-   }
+	/**
+	 * Removes the last element in this list.
+	 *
+	 * @return the element previously at the specified position
+	 *
+	 * @throws UnsupportedOperationException if the {@code remove} operation is not supported by this list
+	 * @throws IndexOutOfBoundsException if the list is empty
+	 */
+	public static int removeLastElement(final MutableIntList list) {
+		return list.removeAtIndex(list.size() - 1);
+	}
+
+	private MoreCollections() {
+	}
 }

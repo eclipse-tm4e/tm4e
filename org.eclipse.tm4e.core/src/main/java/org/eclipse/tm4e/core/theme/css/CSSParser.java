@@ -20,6 +20,7 @@ import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.tm4e.core.internal.theme.css.CSSConditionFactory;
 import org.eclipse.tm4e.core.internal.theme.css.CSSDocumentHandler;
 import org.eclipse.tm4e.core.internal.theme.css.CSSSelectorFactory;
+import org.eclipse.tm4e.core.internal.theme.css.CSSStyle;
 import org.eclipse.tm4e.core.internal.theme.css.ExtendedSelector;
 import org.eclipse.tm4e.core.internal.theme.css.sac.SACParserFactory;
 import org.eclipse.tm4e.core.theme.IStyle;

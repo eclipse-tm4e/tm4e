@@ -9,7 +9,7 @@
  *  Contributors:
  *  Angelo Zerr <angelo.zerr@gmail.com> - initial API and implementation
  */
-package org.eclipse.tm4e.core.theme.css;
+package org.eclipse.tm4e.core.internal.theme.css;
 
 import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.tm4e.core.theme.IStyle;

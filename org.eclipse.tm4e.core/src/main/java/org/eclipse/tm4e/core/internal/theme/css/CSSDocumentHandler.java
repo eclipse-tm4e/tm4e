@@ -17,7 +17,6 @@ import java.util.List;
 import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.tm4e.core.theme.IStyle;
 import org.eclipse.tm4e.core.theme.RGB;
-import org.eclipse.tm4e.core.theme.css.CSSStyle;
 import org.w3c.css.sac.CSSException;
 import org.w3c.css.sac.DocumentHandler;
 import org.w3c.css.sac.InputSource;

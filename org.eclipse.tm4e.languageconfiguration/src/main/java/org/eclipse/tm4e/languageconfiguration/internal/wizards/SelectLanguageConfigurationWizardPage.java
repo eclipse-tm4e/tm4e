@@ -312,7 +312,7 @@ final class SelectLanguageConfigurationWizardPage extends WizardPage implements 
 			return new Status(IStatus.ERROR, LanguageConfigurationPlugin.PLUGIN_ID,
 					SelectLanguageConfigurationWizardPage_contentTypeError_invalid);
 		}
-		if (registryManager.getLanguageConfigurationFor(new IContentType[] { contentType }) != null) {
+		if (registryManager.getLanguageConfigurationFor(contentType) != null) {
 			return new Status(IStatus.WARNING, LanguageConfigurationPlugin.PLUGIN_ID,
 					SelectLanguageConfigurationWizardPage_contentTypeWarning_duplicate);
 		}

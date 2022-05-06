@@ -55,7 +55,7 @@ public abstract class AbstractLanguageConfigurationRegistryManager implements IL
 
 	@Nullable
 	@Override
-	public ILanguageConfiguration getLanguageConfigurationFor(final IContentType[] contentTypes) {
+	public ILanguageConfiguration getLanguageConfigurationFor(final IContentType... contentTypes) {
 		for (final IContentType contentType : contentTypes) {
 			if (userDefinitions.containsKey(contentType)) {
 				return userDefinitions.get(contentType).getLanguageConfiguration();

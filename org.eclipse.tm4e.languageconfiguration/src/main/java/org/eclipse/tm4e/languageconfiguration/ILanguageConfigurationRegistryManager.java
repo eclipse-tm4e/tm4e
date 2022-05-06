@@ -67,6 +67,5 @@ public interface ILanguageConfigurationRegistryManager {
 	 *         null otherwise.
 	 */
 	@Nullable
-	ILanguageConfiguration getLanguageConfigurationFor(IContentType[] contentTypes);
-
+	ILanguageConfiguration getLanguageConfigurationFor(IContentType... contentTypes);
 }

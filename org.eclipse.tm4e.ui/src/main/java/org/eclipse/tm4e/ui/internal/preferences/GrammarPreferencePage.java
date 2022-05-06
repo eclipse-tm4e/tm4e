@@ -306,7 +306,8 @@ public final class GrammarPreferencePage extends PreferencePage implements IWork
 				if (selectedAssociation != null) {
 					setPreviewTheme(selectedAssociation.getThemeId());
 				}
-				castNonNull(previewViewer).setGrammar(grammar);
+				final var previewViewer = castNonNull(GrammarPreferencePage.this.previewViewer);
+				previewViewer.setGrammar(grammar);
 
 				// Snippet
 				final ISnippet[] snippets = snippetManager.getSnippets(scopeName);
@@ -314,10 +315,9 @@ public final class GrammarPreferencePage extends PreferencePage implements IWork
 					previewViewer.setText("");
 				} else {
 					// TODO: manage list of snippet for the given scope.
-				   castNonNull(previewViewer).setText(snippets[0].getContent());
+				   previewViewer.setText(snippets[0].getContent());
 				}
 			}
-
 		});
 
 		// Specify default sorting

@@ -11,6 +11,7 @@
  */
 package org.eclipse.tm4e.ui.themes;
 
+import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.jface.text.rules.IToken;
 import org.eclipse.swt.graphics.Color;
 
@@ -22,19 +23,25 @@ public interface ITokenProvider {
 
 	/**
 	 * Returns the Eclipse {@link IToken} from the given type and null otherwise.
-	 * 
+	 *
 	 * @param type
 	 * @return the Eclipse {@link IToken} from the given type and null otherwise.
 	 */
+	@Nullable
 	IToken getToken(String type);
 
+	@Nullable
 	Color getEditorBackground();
 
+	@Nullable
 	Color getEditorForeground();
 
+	@Nullable
 	Color getEditorSelectionBackground();
 
+	@Nullable
 	Color getEditorSelectionForeground();
-	
+
+	@Nullable
 	Color getEditorCurrentLineHighlight();
 }

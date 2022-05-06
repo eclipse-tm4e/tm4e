@@ -11,6 +11,7 @@
  */
 package org.eclipse.tm4e.ui.themes;
 
+import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.swt.graphics.RGB;
 import org.osgi.service.prefs.BackingStoreException;
 
@@ -22,7 +23,7 @@ public interface IThemeManager {
 
 	/**
 	 * Register the given theme.
-	 * 
+	 *
 	 * @param theme
 	 *            to unregister.
 	 */
@@ -30,7 +31,7 @@ public interface IThemeManager {
 
 	/**
 	 * Unregister the given theme.
-	 * 
+	 *
 	 * @param theme
 	 *            to unregister.
 	 */
@@ -38,30 +39,31 @@ public interface IThemeManager {
 
 	/**
 	 * Returns the {@link ITheme} by the theme id.
-	 * 
+	 *
 	 * @param themeId
 	 *            the theme id.
 	 * @return the {@link ITheme} by the theme id.
 	 */
+	@Nullable
 	ITheme getThemeById(String themeId);
 
 	/**
 	 * Returns the list of TextMate themes.
-	 * 
+	 *
 	 * @return the list of TextMate themes.
 	 */
 	ITheme[] getThemes();
 
 	/**
 	 * Returns the default theme.
-	 * 
+	 *
 	 * @return the default theme.
 	 */
 	ITheme getDefaultTheme();
 
 	/**
 	 * Returns the list of TextMate themes for the given eclipse theme id.
-	 * 
+	 *
 	 * @return the list of TextMate themes for the given eclipse theme id.
 	 */
 	ITheme[] getThemes(boolean dark);
@@ -69,7 +71,7 @@ public interface IThemeManager {
 	/**
 	 * Returns the TextMate theme {@link ITheme} for the given TextMate grammar
 	 * <code>scopeName</code> and E4 Theme <code>eclipseThemeId</code>.
-	 * 
+	 *
 	 * @param scopeName
 	 *            the TextMate grammar
 	 * @param eclipseThemeId
@@ -82,7 +84,7 @@ public interface IThemeManager {
 	/**
 	 * Returns the TextMate theme {@link ITheme} for the given TextMate grammar
 	 * <code>scopeName</code> and default E4 Theme.
-	 * 
+	 *
 	 * @param scopeName
 	 * @return the TextMate theme {@link ITheme} for the given TextMate grammar
 	 *         <code>scopeName</code> and default E4 Theme.
@@ -91,7 +93,7 @@ public interface IThemeManager {
 
 	/**
 	 * Register the given theme association.
-	 * 
+	 *
 	 * @param association
 	 *            to register.
 	 */
@@ -99,7 +101,7 @@ public interface IThemeManager {
 
 	/**
 	 * Unregister the given theme association.
-	 * 
+	 *
 	 * @param association
 	 *            to unregister.
 	 */
@@ -107,7 +109,7 @@ public interface IThemeManager {
 
 	/**
 	 * Returns list of all theme associations.
-	 * 
+	 *
 	 * @return list of all theme associations.
 	 */
 	IThemeAssociation[] getAllThemeAssociations();
@@ -115,7 +117,7 @@ public interface IThemeManager {
 	/**
 	 * Returns the theme associations for the given TextMate grammar
 	 * <code>scopeName</code>.
-	 * 
+	 *
 	 * @param scopeName
 	 * @return the theme associations for the given TextMate grammar
 	 *         <code>scopeName</code>.
@@ -124,17 +126,17 @@ public interface IThemeManager {
 
 	/**
 	 * Save the themes definitions.
-	 * 
+	 *
 	 * @throws BackingStoreException
 	 */
 	void save() throws BackingStoreException;
 
 	boolean isDarkEclipseTheme();
 
-	boolean isDarkEclipseTheme(String eclipseThemeId);
+	boolean isDarkEclipseTheme(@Nullable String eclipseThemeId);
 
 	/**
-	 * 
+	 *
 	 * @param scopeName
 	 * @param background
 	 * @return the theme that will fit best for the defined background color

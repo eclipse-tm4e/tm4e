@@ -14,6 +14,7 @@ package org.eclipse.tm4e.ui.internal.model;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.jface.text.IDocument;
 import org.eclipse.tm4e.core.model.ITMModel;
 import org.eclipse.tm4e.ui.model.ITMModelManager;
@@ -30,7 +31,7 @@ public final class TMModelManager implements ITMModelManager {
 		return INSTANCE;
 	}
 
-	private final Map<IDocument, ITMModel> models = new HashMap<>();
+	private final Map<IDocument, @Nullable ITMModel> models = new HashMap<>();
 
 	private TMModelManager() {
 	}

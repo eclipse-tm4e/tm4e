@@ -6,16 +6,20 @@
  * http://www.eclipse.org/legal/epl-v10.html
  *
  * Contributors:
- *     IBM Corporation - initial API and implementation
- *     Nicolaj Hoess <nicohoess@gmail.com> - Editor templates pref page: Allow to sort by column - https://bugs.eclipse.org/203722
- *     Angelo Zerr <angelo.zerr@gmail.com> - Adapt org.eclipse.ui.texteditor.templates.TemplatePreferencePage for TextMate theme
+ * IBM Corporation - initial API and implementation
+ * Nicolaj Hoess <nicohoess@gmail.com> - Editor templates pref page: Allow to sort by column -
+ * https://bugs.eclipse.org/203722
+ * Angelo Zerr <angelo.zerr@gmail.com> - Adapt org.eclipse.ui.texteditor.templates.TemplatePreferencePage for TextMate
+ * theme
  *******************************************************************************/
 package org.eclipse.tm4e.ui.internal.preferences;
 
+import static org.eclipse.tm4e.core.internal.utils.NullSafetyHelper.*;
 import java.io.File;
 
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
+import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.layout.TableColumnLayout;
 import org.eclipse.jface.preference.PreferencePage;
@@ -60,29 +64,35 @@ import org.eclipse.ui.IWorkbenchPreferencePage;
 import org.osgi.service.prefs.BackingStoreException;
 
 /**
- * A theme preference page allows configuration of the TextMate themes It
- * provides controls for adding, removing and changing theme as well as
- * enablement, default management.
+ * A theme preference page allows configuration of the TextMate themes.
+ * It provides controls for adding, removing and changing theme as well as enablement, default management.
  */
 public final class ThemePreferencePage extends PreferencePage implements IWorkbenchPreferencePage {
 
 	static final String PAGE_ID = "org.eclipse.tm4e.ui.preferences.ThemePreferencePage";
 
 	// Theme content
+	@Nullable
 	private TableViewer themeViewer;
+	@Nullable
 	private Button themeRemoveButton;
 
 	// Preview content
+	@Nullable
 	private ComboViewer grammarViewer;
+	@Nullable
 	private TMViewer previewViewer;
 
 	private final IGrammarRegistryManager grammarRegistryManager = TMEclipseRegistryPlugin.getGrammarRegistryManager();
 	private final IThemeManager themeManager = TMUIPlugin.getThemeManager();
 
+	@Nullable
 	private Button darkThemeButton;
 
+	@Nullable
 	private Button defaultThemeButton;
 
+	@Nullable
 	private ITheme selectedTheme;
 
 	public ThemePreferencePage() {
@@ -90,7 +100,7 @@ public final class ThemePreferencePage extends PreferencePage implements IWorkbe
 	}
 
 	@Override
-	protected Control createContents(final Composite ancestor) {
+	protected Control createContents(@Nullable final Composite ancestor) {
 		final Composite parent = new Composite(ancestor, SWT.NONE);
 		final GridLayout layout = new GridLayout();
 		layout.numColumns = 2;
@@ -112,11 +122,13 @@ public final class ThemePreferencePage extends PreferencePage implements IWorkbe
 		createThemeDetailContent(innerParent);
 		createPreviewContent(innerParent);
 
+		final var grammarViewer = castNonNull(this.grammarViewer);
 		grammarViewer.setInput(grammarRegistryManager);
 		if (grammarViewer.getCombo().getItemCount() > 0) {
 			grammarViewer.getCombo().select(0);
 		}
-		themeViewer.setInput(themeManager);
+
+		castNonNull(themeViewer).setInput(themeManager);
 
 		Dialog.applyDialogFont(parent);
 		innerParent.layout();
@@ -150,7 +162,7 @@ public final class ThemePreferencePage extends PreferencePage implements IWorkbe
 
 		final ColumnViewerComparator viewerComparator = new ColumnViewerComparator();
 
-		themeViewer = new TableViewer(table);
+		final var themeViewer = this.themeViewer = new TableViewer(table);
 
 		final TableColumn column1 = new TableColumn(table, SWT.NONE);
 		column1.setText(TMUIMessages.ThemePreferencePage_column_name);
@@ -177,11 +189,12 @@ public final class ThemePreferencePage extends PreferencePage implements IWorkbe
 		themeViewer.setComparator(viewerComparator);
 		themeViewer.addSelectionChangedListener(e -> {
 			// Fill Theme details
-			selectedTheme = ((ITheme) ((IStructuredSelection) themeViewer.getSelection()).getFirstElement());
+			final var selectedTheme = ThemePreferencePage.this.selectedTheme = ((ITheme) ((IStructuredSelection) themeViewer
+					.getSelection()).getFirstElement());
 			if (selectedTheme != null) {
-				darkThemeButton.setSelection(selectedTheme.isDark());
-				defaultThemeButton.setSelection(selectedTheme.isDefault());
-				themeRemoveButton.setEnabled(selectedTheme.getPluginId() == null);
+				castNonNull(darkThemeButton).setSelection(selectedTheme.isDark());
+				castNonNull(defaultThemeButton).setSelection(selectedTheme.isDefault());
+				castNonNull(themeRemoveButton).setEnabled(selectedTheme.getPluginId() == null);
 			}
 			preview();
 		});
@@ -204,7 +217,7 @@ public final class ThemePreferencePage extends PreferencePage implements IWorkbe
 		themeNewButton.setLayoutData(getButtonGridData(themeNewButton));
 		themeNewButton.addListener(SWT.Selection, new Listener() {
 			@Override
-			public void handleEvent(final Event e) {
+			public void handleEvent(@Nullable final Event e) {
 				final ITheme newTheme = addTheme();
 				if (newTheme != null) {
 					themeManager.registerTheme(newTheme);
@@ -214,10 +227,11 @@ public final class ThemePreferencePage extends PreferencePage implements IWorkbe
 				}
 			}
 
+			@Nullable
 			private ITheme addTheme() {
 				final FileDialog dialog = new FileDialog(getShell());
 				dialog.setText("Select textmate theme file");
-				dialog.setFilterExtensions(new String[]{"*.css"});
+				dialog.setFilterExtensions(new String[] { "*.css" });
 				final String res = dialog.open();
 				if (res == null) {
 					return null;
@@ -228,11 +242,13 @@ public final class ThemePreferencePage extends PreferencePage implements IWorkbe
 			}
 		});
 
-		themeRemoveButton = new Button(buttons, SWT.PUSH);
+		final var themeRemoveButton = this.themeRemoveButton = new Button(buttons, SWT.PUSH);
 		themeRemoveButton.setText(TMUIMessages.Button_remove);
 		themeRemoveButton.setLayoutData(getButtonGridData(themeRemoveButton));
 		themeRemoveButton.addListener(SWT.Selection, e -> {
-			themeManager.unregisterTheme(selectedTheme);
+			if (selectedTheme != null) {
+				themeManager.unregisterTheme(selectedTheme);
+			}
 			themeViewer.refresh();
 		});
 	}
@@ -255,11 +271,11 @@ public final class ThemePreferencePage extends PreferencePage implements IWorkbe
 		layout.marginRight = 0;
 		parent.setLayout(layout);
 
-		darkThemeButton = new Button(parent, SWT.CHECK);
+		final var darkThemeButton = this.darkThemeButton = new Button(parent, SWT.CHECK);
 		darkThemeButton.setText(TMUIMessages.ThemePreferencePage_darkThemeButton_label);
 		darkThemeButton.setEnabled(false);
 
-		defaultThemeButton = new Button(parent, SWT.CHECK);
+		final var defaultThemeButton = this.defaultThemeButton = new Button(parent, SWT.CHECK);
 		defaultThemeButton.setText(TMUIMessages.ThemePreferencePage_defaultThemeButton_label);
 		defaultThemeButton.setEnabled(false);
 	}
@@ -285,15 +301,11 @@ public final class ThemePreferencePage extends PreferencePage implements IWorkbe
 
 	private int computeMinimumColumnWidth(final GC gc, final String string) {
 		return gc.stringExtent(string).x + 10; // pad 10 to accommodate table
-												// header trimmings
+												 // header trimmings
 	}
 
 	/**
-	 * Return the grid data for the button.
-	 *
-	 * @param button
-	 *            the button
-	 * @return the grid data
+	 * @returns the grid data for the button.
 	 */
 	private static GridData getButtonGridData(final Button button) {
 		final GridData data = new GridData(GridData.FILL_HORIZONTAL);
@@ -312,17 +324,17 @@ public final class ThemePreferencePage extends PreferencePage implements IWorkbe
 	}
 
 	@Override
-	public void init(final IWorkbench workbench) {
+	public void init(@Nullable final IWorkbench workbench) {
 	}
 
 	private void preview() {
-		IStructuredSelection selection = (IStructuredSelection) themeViewer.getSelection();
+		IStructuredSelection selection = (IStructuredSelection) castNonNull(themeViewer).getSelection();
 		if (selection.isEmpty()) {
 			return;
 		}
 		final ITheme theme = (ITheme) selection.getFirstElement();
 
-		selection = (IStructuredSelection) grammarViewer.getSelection();
+		selection = (IStructuredSelection) castNonNull(grammarViewer).getSelection();
 		if (selection.isEmpty()) {
 			return;
 		}
@@ -331,6 +343,7 @@ public final class ThemePreferencePage extends PreferencePage implements IWorkbe
 
 		// Preview the grammar
 		final IGrammar grammar = grammarRegistryManager.getGrammarForScope(definition.getScopeName());
+		final var previewViewer = castNonNull(this.previewViewer);
 		previewViewer.setTheme(theme);
 		previewViewer.setGrammar(grammar);
 	}
@@ -341,7 +354,7 @@ public final class ThemePreferencePage extends PreferencePage implements IWorkbe
 		GridData data = new GridData();
 		label.setLayoutData(data);
 
-		grammarViewer = new ComboViewer(parent);
+		final var grammarViewer = this.grammarViewer = new ComboViewer(parent);
 		grammarViewer.setContentProvider(new GrammarDefinitionContentProvider());
 		grammarViewer.setLabelProvider(new GrammarDefinitionLabelProvider());
 		grammarViewer.addSelectionChangedListener(e -> preview());
@@ -368,7 +381,8 @@ public final class ThemePreferencePage extends PreferencePage implements IWorkbe
 	 * source viewer featuring e.g. syntax coloring.
 	 *
 	 * @param parent
-	 *            the parent control
+	 *        the parent control
+	 *
 	 * @return a configured source viewer
 	 */
 	private TMViewer createViewer(final Composite parent) {
@@ -382,9 +396,8 @@ public final class ThemePreferencePage extends PreferencePage implements IWorkbe
 			grammarRegistryManager.save();
 			return true;
 		} catch (final BackingStoreException e) {
-			TMUIPlugin.getDefault().getLog().log(new Status(IStatus.ERROR, TMUIPlugin.PLUGIN_ID, e.getMessage(), e));
+			TMUIPlugin.log(new Status(IStatus.ERROR, TMUIPlugin.PLUGIN_ID, e.getMessage(), e));
 			return false;
 		}
 	}
-
 }

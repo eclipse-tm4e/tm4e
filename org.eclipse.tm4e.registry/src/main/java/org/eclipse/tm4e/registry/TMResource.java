@@ -55,7 +55,7 @@ public class TMResource implements ITMResource {
 		this.pluginId = ce.getNamespaceIdentifier();
 	}
 
-	public TMResource(@Nullable final String path, @Nullable final String pluginId) {
+	public TMResource(final String path, final String pluginId) {
 		this.path = path;
 		this.pluginId = pluginId;
 	}

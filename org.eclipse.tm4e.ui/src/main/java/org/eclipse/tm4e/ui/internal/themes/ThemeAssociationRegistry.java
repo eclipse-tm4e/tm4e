@@ -1,62 +1,47 @@
 /**
- *  Copyright (c) 2015-2017 Angelo ZERR.
+ * Copyright (c) 2015-2017 Angelo ZERR.
  * This program and the accompanying materials are made
  * available under the terms of the Eclipse Public License 2.0
  * which is available at https://www.eclipse.org/legal/epl-2.0/
  *
  * SPDX-License-Identifier: EPL-2.0
  *
- *  Contributors:
- *  Angelo Zerr <angelo.zerr@gmail.com> - initial API and implementation
+ * Contributors:
+ * Angelo Zerr <angelo.zerr@gmail.com> - initial API and implementation
  */
 package org.eclipse.tm4e.ui.internal.themes;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.tm4e.ui.themes.IThemeAssociation;
 
 /**
  * Theme association registry.
- *
  */
 final class ThemeAssociationRegistry {
 
-	private final Map<String, EclipseThemeAssociation> scopes = new HashMap<>();
+	private final Map<@Nullable String, @Nullable EclipseThemeAssociation> scopes = new HashMap<>();
 
 	private static final class EclipseThemeAssociation {
 
-		private IThemeAssociation light;
-		private IThemeAssociation dark;
+		@Nullable
+		IThemeAssociation light;
 
-		IThemeAssociation getLight() {
-			return light;
-		}
-
-		void setLight(final IThemeAssociation light) {
-			this.light = light;
-		}
-
-		IThemeAssociation getDark() {
-			return dark;
-		}
-
-		void setDark(final IThemeAssociation dark) {
-			this.dark = dark;
-		}
-
+		@Nullable
+		IThemeAssociation dark;
 	}
 
-
+	@Nullable
 	IThemeAssociation getThemeAssociationFor(final String scopeName, final boolean dark) {
-		// From theme assiocations
+		// From theme associations
 		IThemeAssociation userAssociation = null;
 		final EclipseThemeAssociation registry = scopes.get(scopeName);
 		if (registry != null) {
-			userAssociation = dark ? registry.getDark() : registry.getLight();
+			userAssociation = dark ? registry.dark : registry.light;
 		}
 		if (userAssociation != null) {
 			return userAssociation;
@@ -73,9 +58,9 @@ final class ThemeAssociationRegistry {
 		}
 		final boolean dark = association.isWhenDark();
 		if (dark) {
-			registry.setDark(association);
+			registry.dark = association;
 		} else {
-			registry.setLight(association);
+			registry.light = association;
 		}
 	}
 
@@ -85,9 +70,9 @@ final class ThemeAssociationRegistry {
 		if (registry != null) {
 			final boolean dark = association.isWhenDark();
 			if (dark) {
-				registry.setDark(null);
+				registry.dark = null;
 			} else {
-				registry.setLight(null);
+				registry.light = null;
 			}
 		}
 	}
@@ -148,14 +133,16 @@ final class ThemeAssociationRegistry {
 	//
 	// @Override
 	List<IThemeAssociation> getThemeAssociations() {
-		final List<IThemeAssociation> associations = new ArrayList<>();
-		final Collection<EclipseThemeAssociation> eclipseAssociations = scopes.values();
+		final var associations = new ArrayList<IThemeAssociation>();
+		final var eclipseAssociations = scopes.values();
 		for (final EclipseThemeAssociation eclipseAssociation : eclipseAssociations) {
-			if (eclipseAssociation.getLight() != null) {
-				associations.add(eclipseAssociation.getLight());
+			if (eclipseAssociation == null)
+				continue;
+			if (eclipseAssociation.light != null) {
+				associations.add(eclipseAssociation.light);
 			}
-			if (eclipseAssociation.getDark() != null) {
-				associations.add(eclipseAssociation.getDark());
+			if (eclipseAssociation.dark != null) {
+				associations.add(eclipseAssociation.dark);
 			}
 		}
 		return associations;

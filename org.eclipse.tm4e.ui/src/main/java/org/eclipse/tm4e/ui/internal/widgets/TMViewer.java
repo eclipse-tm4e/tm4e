@@ -1,16 +1,17 @@
 /**
- *  Copyright (c) 2015-2017 Angelo ZERR.
+ * Copyright (c) 2015-2017 Angelo ZERR.
  * This program and the accompanying materials are made
  * available under the terms of the Eclipse Public License 2.0
  * which is available at https://www.eclipse.org/legal/epl-2.0/
  *
  * SPDX-License-Identifier: EPL-2.0
  *
- *  Contributors:
- *  Angelo Zerr <angelo.zerr@gmail.com> - initial API and implementation
+ * Contributors:
+ * Angelo Zerr <angelo.zerr@gmail.com> - initial API and implementation
  */
 package org.eclipse.tm4e.ui.internal.widgets;
 
+import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.jface.resource.JFaceResources;
 import org.eclipse.jface.text.Document;
 import org.eclipse.jface.text.presentation.IPresentationReconciler;
@@ -27,39 +28,30 @@ import org.eclipse.tm4e.ui.themes.ITheme;
 
 /**
  * Simple TextMate Viewer.
- *
  */
 public final class TMViewer extends SourceViewer {
 
-	private TMPresentationReconciler reconciler;
+	private final TMPresentationReconciler reconciler = new TMPresentationReconciler();
 
 	public TMViewer(final Composite parent, final IVerticalRuler ruler, final int styles) {
-		super(parent, ruler, styles);
-		init();
+		this(parent, ruler, null, false, styles);
 	}
 
-	public TMViewer(final Composite parent, final IVerticalRuler verticalRuler, final IOverviewRuler overviewRuler,
+	public TMViewer(final Composite parent, @Nullable final IVerticalRuler verticalRuler,
+			@Nullable final IOverviewRuler overviewRuler,
 			final boolean showAnnotationsOverview, final int styles) {
 		super(parent, verticalRuler, overviewRuler, showAnnotationsOverview, styles);
-		init();
-	}
-
-	private void init() {
-		this.reconciler = new TMPresentationReconciler();
-		final SourceViewerConfiguration configuration = new TMSourceViewerConfiguration();
-		this.configure(configuration);
+		configure(new TMSourceViewerConfiguration());
 	}
 
 	private final class TMSourceViewerConfiguration extends SourceViewerConfiguration {
-
 		@Override
-		public IPresentationReconciler getPresentationReconciler(final ISourceViewer sourceViewer) {
+		public IPresentationReconciler getPresentationReconciler(@Nullable final ISourceViewer sourceViewer) {
 			return reconciler;
 		}
-
 	}
 
-	public void setGrammar(final IGrammar grammar) {
+	public void setGrammar(@Nullable final IGrammar grammar) {
 		reconciler.setGrammar(grammar);
 		if (getDocument() == null) {
 			super.setDocument(new Document());

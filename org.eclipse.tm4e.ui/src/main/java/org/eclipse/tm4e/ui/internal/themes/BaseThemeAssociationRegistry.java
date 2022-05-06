@@ -12,12 +12,12 @@
 package org.eclipse.tm4e.ui.internal.themes;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.tm4e.ui.themes.IThemeAssociation;
 
 /**
@@ -27,8 +27,9 @@ import org.eclipse.tm4e.ui.themes.IThemeAssociation;
  */
 final class BaseThemeAssociationRegistry {
 
+	@Nullable
 	private IThemeAssociation defaultAssociation;
-	private final Map<String /* E4 Theme id */, List<IThemeAssociation>> eclipseThemeIds = new HashMap<>();
+	private final Map<String /* E4 Theme id */, @Nullable List<IThemeAssociation>> eclipseThemeIds = new HashMap<>();
 	private final List<IThemeAssociation> allAssociations = new ArrayList<>();
 
 	void register(final IThemeAssociation association) {
@@ -66,6 +67,7 @@ final class BaseThemeAssociationRegistry {
 		allAssociations.clear();
 	}
 
+	@Nullable
 	IThemeAssociation getThemeAssociationFor(final String eclipseThemeId) {
 		final List<IThemeAssociation> associations = eclipseThemeIds.get(eclipseThemeId);
 		if (associations != null) {
@@ -89,6 +91,7 @@ final class BaseThemeAssociationRegistry {
 		return getThemeAssociations().toArray(IThemeAssociation[]::new);
 	}
 
+	@Nullable
 	IThemeAssociation getDefaultAssociation() {
 		return defaultAssociation;
 	}
@@ -125,8 +128,8 @@ final class BaseThemeAssociationRegistry {
 			if (defaultAssociation != null) {
 				allAssociations.add(defaultAssociation);
 			}
-			final Collection<List<IThemeAssociation>> associations = eclipseThemeIds.values();
-			for (final Collection<IThemeAssociation> collection : associations) {
+			final var associations = eclipseThemeIds.values();
+			for (final var collection : associations) {
 				allAssociations.addAll(collection);
 			}
 		}

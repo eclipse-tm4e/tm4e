@@ -11,6 +11,7 @@
  */
 package org.eclipse.tm4e.ui.text;
 
+import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.jface.text.IDocument;
 import org.eclipse.jface.text.ITextViewer;
 import org.eclipse.jface.text.TextPresentation;
@@ -23,7 +24,7 @@ public interface ITMPresentationReconcilerListener {
 
 	/**
 	 * Install the given viewer and document.
-	 * 
+	 *
 	 * @param viewer
 	 * @param document
 	 */
@@ -36,11 +37,11 @@ public interface ITMPresentationReconcilerListener {
 
 	/**
 	 * Colorize the StyledText with the given text presentation.
-	 * 
+	 *
 	 * @param presentation
 	 *            the text presentation.
 	 * @param error
 	 *            when there are error.
 	 */
-	void colorize(TextPresentation presentation, Throwable error);
+	void colorize(TextPresentation presentation, @Nullable Throwable error);
 }

@@ -1,16 +1,19 @@
 /**
- *  Copyright (c) 2015-2017 Angelo ZERR.
+ * Copyright (c) 2015-2017 Angelo ZERR.
  * This program and the accompanying materials are made
  * available under the terms of the Eclipse Public License 2.0
  * which is available at https://www.eclipse.org/legal/epl-2.0/
  *
  * SPDX-License-Identifier: EPL-2.0
  *
- *  Contributors:
- *  Angelo Zerr <angelo.zerr@gmail.com> - initial API and implementation
+ * Contributors:
+ * Angelo Zerr <angelo.zerr@gmail.com> - initial API and implementation
  */
 package org.eclipse.tm4e.ui.internal.widgets;
 
+import static org.eclipse.tm4e.core.internal.utils.NullSafetyHelper.*;
+
+import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.jface.viewers.IBaseLabelProvider;
 import org.eclipse.jface.viewers.IContentProvider;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
@@ -29,6 +32,7 @@ import org.eclipse.swt.widgets.Table;
  */
 public abstract class TableAndButtonsWidget extends Composite {
 
+	@Nullable
 	private TableViewer viewer;
 
 	protected TableAndButtonsWidget(final Composite parent, final int style, final String title) {
@@ -73,9 +77,6 @@ public abstract class TableAndButtonsWidget extends Composite {
 	protected abstract void createButtons(Composite parent);
 
 	private void createTitle(final String title, final Composite ancestor) {
-		if (title == null) {
-			return;
-		}
 		final Label label = new Label(ancestor, SWT.NONE);
 		label.setText(title);
 		final GridData data = new GridData(GridData.FILL_HORIZONTAL);
@@ -84,7 +85,8 @@ public abstract class TableAndButtonsWidget extends Composite {
 	}
 
 	private void createTable(final Composite parent) {
-		final Table table = new Table(parent, SWT.BORDER | SWT.MULTI | SWT.FULL_SELECTION | SWT.H_SCROLL | SWT.V_SCROLL);
+		final Table table = new Table(parent,
+				SWT.BORDER | SWT.MULTI | SWT.FULL_SELECTION | SWT.H_SCROLL | SWT.V_SCROLL);
 		table.setHeaderVisible(false);
 		table.setLinesVisible(false);
 
@@ -93,31 +95,32 @@ public abstract class TableAndButtonsWidget extends Composite {
 
 	}
 
-	public void setInput(final Object input) {
-		viewer.setInput(input);
+	public void setInput(@Nullable final Object input) {
+		castNonNull(viewer).setInput(input);
 	}
 
+	@Nullable
 	public TableViewer getViewer() {
 		return viewer;
 	}
 
 	public void setLabelProvider(final IBaseLabelProvider labelProvider) {
-		viewer.setLabelProvider(labelProvider);
+		castNonNull(viewer).setLabelProvider(labelProvider);
 	}
 
 	public void setContentProvider(final IContentProvider provider) {
-		viewer.setContentProvider(provider);
+		castNonNull(viewer).setContentProvider(provider);
 	}
 
 	public void addSelectionChangedListener(final ISelectionChangedListener listener) {
-		viewer.addSelectionChangedListener(listener);
+		castNonNull(viewer).addSelectionChangedListener(listener);
 	}
 
 	public void setSelection(final IStructuredSelection selection) {
-		viewer.setSelection(selection);
+		castNonNull(viewer).setSelection(selection);
 	}
 
 	public IStructuredSelection getSelection() {
-		return viewer.getStructuredSelection();
+		return castNonNull(viewer).getStructuredSelection();
 	}
 }

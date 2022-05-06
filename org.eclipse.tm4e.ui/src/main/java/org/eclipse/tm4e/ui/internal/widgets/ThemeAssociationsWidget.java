@@ -1,18 +1,21 @@
 /**
- *  Copyright (c) 2015-2017 Angelo ZERR.
+ * Copyright (c) 2015-2017 Angelo ZERR.
  * This program and the accompanying materials are made
  * available under the terms of the Eclipse Public License 2.0
  * which is available at https://www.eclipse.org/legal/epl-2.0/
  *
  * SPDX-License-Identifier: EPL-2.0
  *
- *  Contributors:
- *  Angelo Zerr <angelo.zerr@gmail.com> - initial API and implementation
+ * Contributors:
+ * Angelo Zerr <angelo.zerr@gmail.com> - initial API and implementation
  */
 package org.eclipse.tm4e.ui.internal.widgets;
 
+import static org.eclipse.tm4e.core.internal.utils.NullSafetyHelper.*;
+
 import java.util.Iterator;
 
+import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.ArrayContentProvider;
 import org.eclipse.jface.viewers.IStructuredSelection;
@@ -38,9 +41,11 @@ public final class ThemeAssociationsWidget extends TableAndButtonsWidget {
 
 	private final IThemeManager themeManager;
 
+	@Nullable
 	private Button editButton;
+	@Nullable
 	private Button removeButton;
-
+	@Nullable
 	private IGrammarDefinition definition;
 
 	public ThemeAssociationsWidget(final IThemeManager themeManager, final Composite parent, final int style) {
@@ -52,7 +57,7 @@ public final class ThemeAssociationsWidget extends TableAndButtonsWidget {
 
 	@Override
 	protected void createButtons(final Composite parent) {
-		editButton = new Button(parent, SWT.PUSH);
+		final var editButton = this.editButton = new Button(parent, SWT.PUSH);
 		editButton.setText(TMUIMessages.Button_edit);
 		editButton.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		editButton.addListener(SWT.Selection, e -> {
@@ -70,11 +75,10 @@ public final class ThemeAssociationsWidget extends TableAndButtonsWidget {
 		});
 		editButton.setEnabled(false);
 
-		removeButton = new Button(parent, SWT.PUSH);
+		final var removeButton = this.removeButton = new Button(parent, SWT.PUSH);
 		removeButton.setText(TMUIMessages.Button_remove);
 		removeButton.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		removeButton.addListener(SWT.Selection, e -> {
-
 			if (MessageDialog.openConfirm(getShell(), TMUIMessages.ThemeAssociationsWidget_remove_dialog_title,
 					TMUIMessages.ThemeAssociationsWidget_remove_dialog_message)) {
 				final IStructuredSelection selection = super.getSelection();
@@ -91,11 +95,11 @@ public final class ThemeAssociationsWidget extends TableAndButtonsWidget {
 	}
 
 	public Button getNewButton() {
-		return editButton;
+		return castNonNull(editButton);
 	}
 
 	public Button getRemoveButton() {
-		return removeButton;
+		return castNonNull(removeButton);
 	}
 
 	public IThemeAssociation[] setGrammarDefinition(final IGrammarDefinition definition) {
@@ -103,12 +107,17 @@ public final class ThemeAssociationsWidget extends TableAndButtonsWidget {
 		return refresh(null);
 	}
 
-	private IThemeAssociation[] refresh(IThemeAssociation association) {
-		final IThemeAssociation[] themeAssociations = themeManager.getThemeAssociationsForScope(definition.getScopeName());
+	private IThemeAssociation[] refresh(@Nullable IThemeAssociation association) {
+		final var definition = this.definition;
+		if (definition == null) {
+			return new IThemeAssociation[0];
+		}
+		final IThemeAssociation[] themeAssociations = themeManager
+				.getThemeAssociationsForScope(definition.getScopeName());
 		// Refresh the list of associations
 		super.setInput(themeAssociations);
 		// Select the first of given association
-		if (association == null && themeAssociations != null && themeAssociations.length > 0) {
+		if (association == null && themeAssociations.length > 0) {
 			association = themeAssociations[0];
 		}
 		if (association != null) {

@@ -11,6 +11,7 @@
  */
 package org.eclipse.tm4e.ui.internal.widgets;
 
+import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
@@ -36,7 +37,7 @@ public final class ColumnSelectionAdapter extends SelectionAdapter {
 	}
 
 	@Override
-	public void widgetSelected(final SelectionEvent e) {
+	public void widgetSelected(@Nullable final SelectionEvent e) {
 		viewerComparator.setColumn(fColumnIndex);
 		final int dir = viewerComparator.getDirection();
 		final Table table = tableViewer.getTable();

@@ -195,13 +195,13 @@ public class LanguageConfigurationAutoEditStrategy implements IAutoEditStrategy 
 		new DefaultIndentLineAutoEditStrategy().customizeDocumentCommand(document, command);
 	}
 
-	private IContentType @Nullable [] findContentTypes(@Nullable final IDocument document) {
+	private IContentType @Nullable [] findContentTypes(final IDocument document) {
 		if (this.document != null && this.document.equals(document)) {
 			return contentTypes;
 		}
 		try {
 			final ContentTypeInfo info = ContentTypeHelper.findContentTypes(document);
-			this.contentTypes = info.getContentTypes();
+			this.contentTypes = info == null ? null : info.getContentTypes();
 			this.document = document;
 		} catch (final CoreException e) {
 			e.printStackTrace();

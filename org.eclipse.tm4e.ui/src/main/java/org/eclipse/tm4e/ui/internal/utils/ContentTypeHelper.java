@@ -31,6 +31,7 @@ import org.eclipse.core.runtime.ListenerList;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.core.runtime.content.IContentType;
 import org.eclipse.core.runtime.content.IContentTypeManager;
+import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.jface.text.IDocument;
 import org.eclipse.tm4e.ui.internal.model.DocumentInputStream;
 import org.eclipse.ui.IEditorInput;
@@ -46,10 +47,10 @@ public final class ContentTypeHelper {
 	 * Find the content types from the given {@link IDocument} and null otherwise.
 	 *
 	 * @param document
-	 * @return the content types from the given {@link IDocument} and null
-	 *         otherwise.
+	 * @return the content types from the given {@link IDocument} and null otherwise.
 	 * @throws CoreException
 	 */
+	@Nullable
 	public static ContentTypeInfo findContentTypes(final IDocument document) throws CoreException {
 		// Find content types from FileBuffers
 		final ContentTypeInfo contentTypes = findContentTypesFromFileBuffers(document);
@@ -82,6 +83,7 @@ public final class ContentTypeHelper {
 	 *         {@link ITextFileBufferManager} and null otherwise.
 	 * @throws CoreException
 	 */
+	@Nullable
 	private static ContentTypeInfo findContentTypesFromFileBuffers(final IDocument document) throws CoreException {
 		final ITextFileBufferManager bufferManager = FileBuffers.getTextFileBufferManager();
 		final ITextFileBuffer buffer = bufferManager.getTextFileBuffer(document);
@@ -98,6 +100,7 @@ public final class ContentTypeHelper {
 	 * @return the content types from the given {@link ITextFileBuffer}.
 	 * @throws CoreException
 	 */
+	@Nullable
 	private static ContentTypeInfo getContentTypes(final ITextFileBuffer buffer) throws CoreException {
 		try {
 			final String fileName = buffer.getFileStore().getName();
@@ -160,6 +163,7 @@ public final class ContentTypeHelper {
 	 * @return the content types from the given {@link IDocument} by using
 	 *         {@link IEditorInput} and null otherwise.
 	 */
+	@Nullable
 	private static ContentTypeInfo findContentTypesFromEditorInput(final IDocument document) {
 		final IEditorInput editorInput = getEditorInput(document);
 		if (editorInput != null) {
@@ -174,9 +178,9 @@ public final class ContentTypeHelper {
 				} catch (final Exception e) {
 					return null;
 				}
-			} else {
+			} /*else {
 				// TODO: manage other type of IEditorInput
-			}
+			}*/
 		}
 		return null;
 	}
@@ -187,6 +191,7 @@ public final class ContentTypeHelper {
 	 * @param document
 	 * @return the {@link IEditorInput} from the given document and null otherwise.
 	 */
+	@Nullable
 	private static IEditorInput getEditorInput(final IDocument document) {
 		try {
 			// This utilities class is very ugly, I have not found a clean mean

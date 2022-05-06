@@ -12,9 +12,9 @@
 package org.eclipse.tm4e.ui.themes;
 
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.Map;
 
+import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.tm4e.core.theme.RGB;
@@ -33,7 +33,7 @@ public final class ColorManager {
 		return INSTANCE;
 	}
 
-	private final Map<RGB, Color> fColorTable = new HashMap<>(10);
+	private final Map<RGB, @Nullable Color> fColorTable = new HashMap<>(10);
 
 	private ColorManager() {
 	}
@@ -48,9 +48,9 @@ public final class ColorManager {
 	}
 
 	public void dispose() {
-		final Iterator<Color> e = fColorTable.values().iterator();
-		while (e.hasNext()) {
-			e.next().dispose();
+		for (final var c : fColorTable.values()) {
+			if (c != null)
+				c.dispose();
 		}
 	}
 
@@ -59,10 +59,15 @@ public final class ColorManager {
 	 *
 	 * @param tokenId
 	 *        name of the token
+	 *
 	 * @return Color matching token
 	 */
+	@Nullable
 	public Color getPreferenceEditorColor(final String tokenId) {
-		return getColor(stringToRGB(PreferenceUtils.getEditorsPreferenceStore().get(tokenId, "")));
+		final var prefStore = PreferenceUtils.getEditorsPreferenceStore();
+		if(prefStore == null)
+			return null;
+		return getColor(stringToRGB(prefStore.get(tokenId, "")));
 	}
 
 	/**
@@ -70,13 +75,18 @@ public final class ColorManager {
 	 *
 	 * @param tokenId
 	 *        name of the token
+	 *
 	 * @return color is user defined or not
 	 */
 	public boolean isColorUserDefined(final String tokenId) {
+		final var prefStore = PreferenceUtils.getEditorsPreferenceStore();
+		if(prefStore == null)
+			return false;
+
 		final String systemDefaultToken = getSystemDefaultToken(tokenId);
 
 		return "".equals(systemDefaultToken) || // returns true if system default token doesn't exists
-				!PreferenceUtils.getEditorsPreferenceStore().getBoolean(systemDefaultToken, true);
+				!prefStore.getBoolean(systemDefaultToken, true);
 	}
 
 	/**
@@ -88,9 +98,11 @@ public final class ColorManager {
 	 *        color defined in TM theme
 	 * @param tokenId
 	 *        name of the token for preferences store
+	 *
 	 * @return Highest priority color
 	 */
-	public Color getPriorityColor(final Color themeColor, final String tokenId) {
+	@Nullable
+	public Color getPriorityColor(@Nullable final Color themeColor, final String tokenId) {
 		final Color prefColor = getPreferenceEditorColor(tokenId);
 
 		if (isColorUserDefined(tokenId)) {
@@ -105,6 +117,7 @@ public final class ColorManager {
 	 *
 	 * @param tokenId
 	 *        name of the token
+	 *
 	 * @return system default token or empty string if doesn't exist
 	 */
 	private String getSystemDefaultToken(final String tokenId) {
@@ -127,13 +140,13 @@ public final class ColorManager {
 	 *
 	 * @param value
 	 *        string value of rgb
+	 *
 	 * @return RGB value
 	 */
 	private RGB stringToRGB(final String value) {
 		final String[] rgbValues = BY_COMMA_SPLITTER.splitToStream(value).toArray(String[]::new);
 		return rgbValues.length == 3
-			? new RGB(Integer.parseInt(rgbValues[0]), Integer.parseInt(rgbValues[1]), Integer.parseInt(rgbValues[2]))
-			: new RGB(255, 255, 255);
+				? new RGB(Integer.parseInt(rgbValues[0]), Integer.parseInt(rgbValues[1]), Integer.parseInt(rgbValues[2]))
+				: new RGB(255, 255, 255);
 	}
-
 }

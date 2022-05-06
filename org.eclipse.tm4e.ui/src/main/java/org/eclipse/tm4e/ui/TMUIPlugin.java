@@ -1,13 +1,13 @@
 /**
- *  Copyright (c) 2015-2017 Angelo ZERR.
+ * Copyright (c) 2015-2017 Angelo ZERR.
  * This program and the accompanying materials are made
  * available under the terms of the Eclipse Public License 2.0
  * which is available at https://www.eclipse.org/legal/epl-2.0/
  *
  * SPDX-License-Identifier: EPL-2.0
  *
- *  Contributors:
- *  Angelo Zerr <angelo.zerr@gmail.com> - initial API and implementation
+ * Contributors:
+ * Angelo Zerr <angelo.zerr@gmail.com> - initial API and implementation
  */
 package org.eclipse.tm4e.ui;
 
@@ -19,6 +19,7 @@ import java.util.logging.Logger;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.core.runtime.Status;
+import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.tm4e.ui.internal.model.TMModelManager;
 import org.eclipse.tm4e.ui.internal.snippets.SnippetManager;
 import org.eclipse.tm4e.ui.internal.themes.ThemeManager;
@@ -39,22 +40,24 @@ public class TMUIPlugin extends AbstractUIPlugin {
 	private static final String TRACE_ID = PLUGIN_ID + "/trace"; //$NON-NLS-1$
 
 	// The shared instance
-	private static TMUIPlugin plugin;
+	@Nullable
+	private static volatile TMUIPlugin plugin;
 
-	/**
-	 * The constructor
-	 */
-	public TMUIPlugin() {
+	public static void log(IStatus status) {
+		final var plugin = TMUIPlugin.plugin;
+		if (plugin != null) {
+			plugin.getLog().log(status);
+		}
 	}
 
-	public void trace(final String message) {
+	public static void trace(final String message) {
 		if (Boolean.parseBoolean(Platform.getDebugOption(TRACE_ID))) {
-			getLog().log(new Status(IStatus.INFO, PLUGIN_ID, message));
+			log(new Status(IStatus.INFO, PLUGIN_ID, message));
 		}
 	}
 
 	@Override
-	public void start(final BundleContext context) throws Exception {
+	public void start(@Nullable final BundleContext context) throws Exception {
 		super.start(context);
 		plugin = this;
 		final boolean isDebugOn = Boolean.parseBoolean(Platform.getDebugOption(TRACE_ID));
@@ -63,12 +66,14 @@ public class TMUIPlugin extends AbstractUIPlugin {
 			tm4eCoreLogger.setLevel(Level.FINEST);
 			tm4eCoreLogger.addHandler(new Handler() {
 
-				@Override public void publish(final LogRecord record) {
-					TMUIPlugin.getDefault().getLog().log(new Status(
-						toSeverity(record.getLevel()),
-						"org.eclipse.tm4e.core",
-						record.getMessage()
-					));
+				@Override
+				public void publish(@Nullable final LogRecord record) {
+					if (record != null) {
+						log(new Status(
+								toSeverity(record.getLevel()),
+								"org.eclipse.tm4e.core",
+								record.getMessage()));
+					}
 				}
 
 				private int toSeverity(final Level level) {
@@ -81,11 +86,13 @@ public class TMUIPlugin extends AbstractUIPlugin {
 					return IStatus.INFO;
 				}
 
-				@Override public void flush() {
+				@Override
+				public void flush() {
 					// nothing to do
 				}
 
-				@Override public void close() throws SecurityException {
+				@Override
+				public void close() throws SecurityException {
 					// nothing to do
 				}
 			});
@@ -93,7 +100,7 @@ public class TMUIPlugin extends AbstractUIPlugin {
 	}
 
 	@Override
-	public void stop(final BundleContext context) throws Exception {
+	public void stop(@Nullable final BundleContext context) throws Exception {
 		ColorManager.getInstance().dispose();
 		plugin = null;
 		super.stop(context);
@@ -104,6 +111,7 @@ public class TMUIPlugin extends AbstractUIPlugin {
 	 *
 	 * @return the shared instance
 	 */
+	@Nullable
 	public static TMUIPlugin getDefault() {
 		return plugin;
 	}
@@ -134,5 +142,4 @@ public class TMUIPlugin extends AbstractUIPlugin {
 	public static ISnippetManager getSnippetManager() {
 		return SnippetManager.getInstance();
 	}
-
 }

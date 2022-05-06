@@ -13,12 +13,15 @@ package org.eclipse.tm4e.ui.internal.utils;
 
 import java.lang.reflect.Field;
 
+import org.eclipse.jdt.annotation.Nullable;
+
 /**
  * Class Reflection utilities.
  *
  */
 public final class ClassHelper {
 
+	@Nullable
 	@SuppressWarnings("unchecked")
 	public static <T> T getFieldValue(final Object object, final String name, final Class<?> clazz) {
 		final Field f = getDeclaredField(clazz, name);
@@ -32,11 +35,13 @@ public final class ClassHelper {
 		return null;
 	}
 
+	@Nullable
 	public static <T> T getFieldValue(final Object object, final String name) {
 		return getFieldValue(object, name, object.getClass());
 	}
 
-	public static Field getDeclaredField(final Class<?> clazz, final String name) {
+	@Nullable
+	public static Field getDeclaredField(@Nullable final Class<?> clazz, final String name) {
 		if (clazz == null) {
 			return null;
 		}

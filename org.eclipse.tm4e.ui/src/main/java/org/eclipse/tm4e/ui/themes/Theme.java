@@ -1,19 +1,20 @@
 /**
- *  Copyright (c) 2015-2017 Angelo ZERR.
+ * Copyright (c) 2015-2017 Angelo ZERR.
  * This program and the accompanying materials are made
  * available under the terms of the Eclipse Public License 2.0
  * which is available at https://www.eclipse.org/legal/epl-2.0/
  *
  * SPDX-License-Identifier: EPL-2.0
  *
- *  Contributors:
- *  Angelo Zerr <angelo.zerr@gmail.com> - initial API and implementation
+ * Contributors:
+ * Angelo Zerr <angelo.zerr@gmail.com> - initial API and implementation
  */
 package org.eclipse.tm4e.ui.themes;
 
 import java.io.InputStream;
 
 import org.eclipse.core.runtime.IConfigurationElement;
+import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.jface.text.rules.IToken;
 import org.eclipse.swt.custom.StyledText;
 import org.eclipse.swt.graphics.Color;
@@ -32,6 +33,7 @@ public class Theme extends TMResource implements ITheme {
 	private static final String DARK_ATTR = "dark";
 	private static final String DEFAULT_ATTR = "default";
 
+	@Nullable
 	private ITokenProvider tokenProvider;
 
 	private String id;
@@ -43,6 +45,8 @@ public class Theme extends TMResource implements ITheme {
 	 * Constructor for user preferences (loaded from Json with Gson).
 	 */
 	public Theme() {
+		name = "<set-by-gson>";
+		id = "<set-by-gson>";
 	}
 
 	/**
@@ -76,12 +80,14 @@ public class Theme extends TMResource implements ITheme {
 		return name;
 	}
 
+	@Nullable
 	@Override
 	public IToken getToken(final String type) {
 		final ITokenProvider provider = getTokenProvider();
 		return provider != null ? provider.getToken(type) : null;
 	}
 
+	@Nullable
 	@Override
 	public Color getEditorForeground() {
 		final ITokenProvider provider = getTokenProvider();
@@ -90,6 +96,7 @@ public class Theme extends TMResource implements ITheme {
 				.getPriorityColor(themeColor, AbstractTextEditor.PREFERENCE_COLOR_FOREGROUND);
 	}
 
+	@Nullable
 	@Override
 	public Color getEditorBackground() {
 		final ITokenProvider provider = getTokenProvider();
@@ -98,6 +105,7 @@ public class Theme extends TMResource implements ITheme {
 				.getPriorityColor(themeColor, AbstractTextEditor.PREFERENCE_COLOR_BACKGROUND);
 	}
 
+	@Nullable
 	@Override
 	public Color getEditorSelectionForeground() {
 		final ITokenProvider provider = getTokenProvider();
@@ -106,6 +114,7 @@ public class Theme extends TMResource implements ITheme {
 				.getPriorityColor(themeColor, AbstractTextEditor.PREFERENCE_COLOR_SELECTION_FOREGROUND);
 	}
 
+	@Nullable
 	@Override
 	public Color getEditorSelectionBackground() {
 		final ITokenProvider provider = getTokenProvider();
@@ -114,6 +123,7 @@ public class Theme extends TMResource implements ITheme {
 				.getPriorityColor(themeColor, AbstractTextEditor.PREFERENCE_COLOR_SELECTION_BACKGROUND);
 	}
 
+	@Nullable
 	@Override
 	public Color getEditorCurrentLineHighlight() {
 		final ITokenProvider provider = getTokenProvider();
@@ -124,9 +134,10 @@ public class Theme extends TMResource implements ITheme {
 				: themeColor;
 	}
 
+	@Nullable
 	private ITokenProvider getTokenProvider() {
 		if (tokenProvider == null) {
-			try(InputStream in = super.getInputStream()) {
+			try (InputStream in = super.getInputStream()) {
 				if (in == null) {
 					return null;
 				}
@@ -138,6 +149,7 @@ public class Theme extends TMResource implements ITheme {
 		return tokenProvider;
 	}
 
+	@Nullable
 	@Override
 	public String toCSSStyleSheet() {
 		return super.getResourceContent();

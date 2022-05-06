@@ -11,12 +11,13 @@
  */
 package org.eclipse.tm4e.ui.internal;
 
+import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.eclipse.osgi.util.NLS;
 
 /**
  * Helper class to get NLSed messages.
- *
  */
+@NonNullByDefault({})
 public final class TMUIMessages extends NLS {
 
 	private static final String BUNDLE_NAME = "org.eclipse.tm4e.ui.internal.TMUIMessages"; //$NON-NLS-1$

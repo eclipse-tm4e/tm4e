@@ -12,18 +12,20 @@
  */
 package org.eclipse.tm4e.core.internal.utils;
 
-import java.util.Iterator;
-
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 
 public final class NullSafetyHelper {
 
-	public static <T> Iterator<@NonNull T> castNonNull(@Nullable final Iterator<T> value) {
-		assert value != null;
-		return value;
-	}
-
+	/**
+	 * Casts non-null value marked as {@link Nullable} to {@link NonNull}.
+	 * <p>
+	 * Only use if you are sure the value is non-null but annotation-based null analysis was not able to determine it.
+	 * <p>
+	 * This method is not meant for non-null input validation.
+	 *
+	 * @throws AssertionError if JVM assertions are enabled and the given value is null
+	 */
 	@NonNull
 	public static <T> T castNonNull(@Nullable final T value) {
 		assert value != null;

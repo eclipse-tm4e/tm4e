@@ -1,43 +1,45 @@
 /**
- *  Copyright (c) 2015-2017 Angelo ZERR.
+ * Copyright (c) 2015-2017 Angelo ZERR.
  * This program and the accompanying materials are made
  * available under the terms of the Eclipse Public License 2.0
  * which is available at https://www.eclipse.org/legal/epl-2.0/
  *
  * SPDX-License-Identifier: EPL-2.0
  *
- *  Contributors:
- *  Angelo Zerr <angelo.zerr@gmail.com> - initial API and implementation
+ * Contributors:
+ * Angelo Zerr <angelo.zerr@gmail.com> - initial API and implementation
  */
 /**
- *  Copyright (c) 2015-2017 Angelo ZERR.
+ * Copyright (c) 2015-2017 Angelo ZERR.
  * This program and the accompanying materials are made
  * available under the terms of the Eclipse Public License 2.0
  * which is available at https://www.eclipse.org/legal/epl-2.0/
  *
  * SPDX-License-Identifier: EPL-2.0
  *
- *  Contributors:
- *  Angelo Zerr <angelo.zerr@gmail.com> - initial API and implementation
+ * Contributors:
+ * Angelo Zerr <angelo.zerr@gmail.com> - initial API and implementation
  */
 package org.eclipse.tm4e.ui.themes;
 
+import java.util.Objects;
+
 /**
- *  Copyright (c) 2015-2017 Angelo ZERR.
+ * Copyright (c) 2015-2017 Angelo ZERR.
  * This program and the accompanying materials are made
  * available under the terms of the Eclipse Public License 2.0
  * which is available at https://www.eclipse.org/legal/epl-2.0/
  *
  * SPDX-License-Identifier: EPL-2.0
  *
- *  Contributors:
- *  Angelo Zerr <angelo.zerr@gmail.com> - initial API and implementation
+ * Contributors:
+ * Angelo Zerr <angelo.zerr@gmail.com> - initial API and implementation
  */
 import org.eclipse.core.runtime.IConfigurationElement;
+import org.eclipse.jdt.annotation.Nullable;
 
 /**
  * Theme association implementation.
- *
  */
 public class ThemeAssociation implements IThemeAssociation {
 
@@ -46,22 +48,24 @@ public class ThemeAssociation implements IThemeAssociation {
 	private static final String WHEN_DARK_ATTR = "whenDark"; //$NON-NLS-1$
 
 	private String themeId;
+
+	@Nullable
 	private String scopeName;
+
 	private boolean whenDark;
+
+	@Nullable
 	private String pluginId;
 
 	/**
 	 * Constructor for user preferences (loaded from Json with Gson).
 	 */
 	public ThemeAssociation() {
+		themeId = "<set-by-gson>";
 	}
 
 	/**
 	 * Constructor to register theme associations for a given scope name.
-	 *
-	 * @param themeId
-	 * @param scopeName
-	 * @param whenDark
 	 */
 	public ThemeAssociation(final String themeId, final String scopeName, final boolean whenDark) {
 		this.themeId = themeId;
@@ -75,6 +79,7 @@ public class ThemeAssociation implements IThemeAssociation {
 		this.pluginId = ce.getNamespaceIdentifier();
 	}
 
+	@Nullable
 	@Override
 	public String getPluginId() {
 		return pluginId;
@@ -85,6 +90,7 @@ public class ThemeAssociation implements IThemeAssociation {
 		return themeId;
 	}
 
+	@Nullable
 	@Override
 	public String getScopeName() {
 		return scopeName;
@@ -97,42 +103,22 @@ public class ThemeAssociation implements IThemeAssociation {
 
 	@Override
 	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + ((pluginId == null) ? 0 : pluginId.hashCode());
-		result = prime * result + ((scopeName == null) ? 0 : scopeName.hashCode());
-		result = prime * result + ((themeId == null) ? 0 : themeId.hashCode());
-		result = prime * result + (whenDark ? 1231 : 1237);
-		return result;
+		return Objects.hash(pluginId, scopeName, themeId, whenDark);
 	}
 
 	@Override
-	public boolean equals(final Object obj) {
+	public boolean equals(@Nullable Object obj) {
 		if (this == obj)
 			return true;
 		if (obj == null)
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		final ThemeAssociation other = (ThemeAssociation) obj;
-		if (pluginId == null) {
-			if (other.pluginId != null)
-				return false;
-		} else if (!pluginId.equals(other.pluginId))
-			return false;
-		if (scopeName == null) {
-			if (other.scopeName != null)
-				return false;
-		} else if (!scopeName.equals(other.scopeName))
-			return false;
-		if (themeId == null) {
-			if (other.themeId != null)
-				return false;
-		} else if (!themeId.equals(other.themeId))
-			return false;
-		if (whenDark != other.whenDark)
-			return false;
-		return true;
+		ThemeAssociation other = (ThemeAssociation) obj;
+		return Objects.equals(pluginId, other.pluginId)
+				&& Objects.equals(scopeName, other.scopeName)
+				&& Objects.equals(themeId, other.themeId)
+				&& whenDark == other.whenDark;
 	}
 
 }

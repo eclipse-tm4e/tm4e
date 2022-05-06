@@ -11,6 +11,7 @@
  */
 package org.eclipse.tm4e.ui.themes;
 
+import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.tm4e.registry.ITMDefinition;
 
 /**
@@ -21,16 +22,17 @@ public interface IThemeAssociation extends ITMDefinition {
 
 	/**
 	 * Returns the TextMate theme id.
-	 * 
+	 *
 	 * @return the TextMate theme id.
 	 */
 	String getThemeId();
 
 	/**
 	 * Returns the TextMate grammar scope linked to the theme id and null otherwise.
-	 * 
+	 *
 	 * @return the TextMate grammar scope to the theme id and null otherwise.
 	 */
+	@Nullable
 	String getScopeName();
 
 	boolean isWhenDark();

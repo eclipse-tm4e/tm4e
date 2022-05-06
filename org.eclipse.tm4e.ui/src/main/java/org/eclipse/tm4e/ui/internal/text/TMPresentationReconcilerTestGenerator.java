@@ -1,16 +1,19 @@
 /**
- *  Copyright (c) 2015-2017 Angelo ZERR.
+ * Copyright (c) 2015-2017 Angelo ZERR.
  * This program and the accompanying materials are made
  * available under the terms of the Eclipse Public License 2.0
  * which is available at https://www.eclipse.org/legal/epl-2.0/
  *
  * SPDX-License-Identifier: EPL-2.0
  *
- *  Contributors:
- *  Angelo Zerr <angelo.zerr@gmail.com> - initial API and implementation
+ * Contributors:
+ * Angelo Zerr <angelo.zerr@gmail.com> - initial API and implementation
  */
 package org.eclipse.tm4e.ui.internal.text;
 
+import static org.eclipse.tm4e.core.internal.utils.NullSafetyHelper.*;
+
+import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.jface.text.DocumentEvent;
 import org.eclipse.jface.text.IDocument;
 import org.eclipse.jface.text.IDocumentListener;
@@ -23,7 +26,10 @@ import org.eclipse.tm4e.ui.text.ITMPresentationReconcilerListener;
 public final class TMPresentationReconcilerTestGenerator
 		implements ITMPresentationReconcilerListener, IDocumentListener, ITextListener {
 
+	@Nullable
 	private ITextViewer viewer;
+
+	@Nullable
 	private IDocument document;
 
 	private final StringBuilder code = new StringBuilder();
@@ -113,10 +119,10 @@ public final class TMPresentationReconcilerTestGenerator
 	@Override
 	public void uninstall() {
 
-//		for (Command command : commands) {
-//			write(toString(command.ranges));
-//		}
-//
+		// for (Command command : commands) {
+		// write(toString(command.ranges));
+		// }
+		//
 		write("", true);
 		write("\t\twhile (!shell.isDisposed()) {", true);
 		write("\t\t}", true);
@@ -144,20 +150,19 @@ public final class TMPresentationReconcilerTestGenerator
 		write("}");
 
 		System.err.println(code.toString());
-		document.removeDocumentListener(this);
-		viewer.removeTextListener(this);
-		//commands.clear();
-
+		castNonNull(document).removeDocumentListener(this);
+		castNonNull(viewer).removeTextListener(this);
+		// commands.clear();
 	}
 
 	@Override
-	public void colorize(final TextPresentation presentation, final Throwable e) {
-//		Command command = commands.get(commands.size() - 1);
-//		if (e != null) {
-//			command.error = e;
-//		} else {
-//			command.ranges = viewer.getTextWidget().getStyleRanges();
-//		}
+	public void colorize(final TextPresentation presentation, @Nullable final Throwable e) {
+		// Command command = commands.get(commands.size() - 1);
+		// if (e != null) {
+		// command.error = e;
+		// } else {
+		// command.ranges = viewer.getTextWidget().getStyleRanges();
+		// }
 	}
 
 	private void write(final String s, final boolean newLine) {
@@ -172,30 +177,31 @@ public final class TMPresentationReconcilerTestGenerator
 	}
 
 	@Override
-	public void documentAboutToBeChanged(final DocumentEvent event) {
+	public void documentAboutToBeChanged(@Nullable final DocumentEvent event) {
 
 	}
 
 	@Override
-	public void documentChanged(final DocumentEvent event) {
-
+	public void documentChanged(@Nullable final DocumentEvent event) {
+		if (event == null)
+			return;
 		final String command = "document.replace(" + event.getOffset() + ", " + event.getLength() + ", \""
 				+ toText(event.getText()) + "\");";
 		write("\t\t" + command, true);
 
-		//commands.add(new Command(command));
+		// commands.add(new Command(command));
 	}
 
 	@Override
-	public void textChanged(final TextEvent event) {
-		if (event.getDocumentEvent() != null) {
+	public void textChanged(@Nullable final TextEvent event) {
+		if (event == null || event.getDocumentEvent() != null) {
 			return;
 		}
 
-		final String command = "viewer.invalidateTextPresentation(" + event.getOffset() + ", " + event.getLength() + ");";
+		final String command = "viewer.invalidateTextPresentation(" + event.getOffset() + ", " + event.getLength()
+				+ ");";
 		write("\t\t" + command, true);
 
-		//commands.add(new Command(command));
-
+		// commands.add(new Command(command));
 	}
 }

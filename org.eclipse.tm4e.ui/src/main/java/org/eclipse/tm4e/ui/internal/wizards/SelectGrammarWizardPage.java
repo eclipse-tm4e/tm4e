@@ -1,22 +1,23 @@
 /**
- *  Copyright (c) 2015-2017 Angelo ZERR.
+ * Copyright (c) 2015-2017 Angelo ZERR.
  * This program and the accompanying materials are made
  * available under the terms of the Eclipse Public License 2.0
  * which is available at https://www.eclipse.org/legal/epl-2.0/
  *
  * SPDX-License-Identifier: EPL-2.0
  *
- *  Contributors:
- *  Angelo Zerr <angelo.zerr@gmail.com> - initial API and implementation
+ * Contributors:
+ * Angelo Zerr <angelo.zerr@gmail.com> - initial API and implementation
  */
 package org.eclipse.tm4e.ui.internal.wizards;
 
-import java.io.File;
+import static org.eclipse.tm4e.core.internal.utils.NullSafetyHelper.*;
+
 import java.io.FileInputStream;
-import java.io.InputStream;
 
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
+import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.osgi.util.NLS;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
@@ -46,13 +47,17 @@ final class SelectGrammarWizardPage extends AbstractWizardPage {
 
 	private static final String PAGE_NAME = SelectGrammarWizardPage.class.getName();
 
-	private static final String[] TEXTMATE_EXTENSIONS = {"*.tmLanguage","*.json","*.YAML-tmLanguage","*.yaml","*.yml"};
+	private static final String[] TEXTMATE_EXTENSIONS = {
+			"*.tmLanguage",
+			"*.json",
+			"*.YAML-tmLanguage",
+			"*.yaml",
+			"*.yml" };
 
-	private Button browseFileSystemButton;
-	private Button browseWorkspaceButton;
-
+	@Nullable
 	private Text grammarFileText;
 
+	@Nullable
 	private GrammarInfoWidget grammarInfoWidget;
 
 	// private ContentTypesBindingWidget contentTypesWidget;
@@ -71,7 +76,8 @@ final class SelectGrammarWizardPage extends AbstractWizardPage {
 		parent.setLayout(new GridLayout(2, false));
 
 		// Text Field
-		grammarFileText = createText(parent, TMUIMessages.SelectGrammarWizardPage_file_label);
+		final var grammarFileText = this.grammarFileText = createText(parent,
+				TMUIMessages.SelectGrammarWizardPage_file_label);
 		grammarFileText.addListener(SWT.Modify, this);
 
 		// Buttons
@@ -82,12 +88,12 @@ final class SelectGrammarWizardPage extends AbstractWizardPage {
 		gd.horizontalAlignment = SWT.RIGHT;
 		buttons.setLayoutData(gd);
 
-		browseFileSystemButton = new Button(buttons, SWT.NONE);
+		final var browseFileSystemButton = new Button(buttons, SWT.NONE);
 		browseFileSystemButton.setText(TMUIMessages.Button_browse_FileSystem);
 		browseFileSystemButton.addSelectionListener(new SelectionAdapter() {
 			@Override
-			public void widgetSelected(final SelectionEvent e) {
-				final FileDialog dialog = new FileDialog(parent.getShell());
+			public void widgetSelected(@Nullable final SelectionEvent e) {
+				final var dialog = new FileDialog(parent.getShell());
 				dialog.setFilterExtensions(TEXTMATE_EXTENSIONS);
 				dialog.setFilterPath(grammarFileText.getText());
 				final String result = dialog.open();
@@ -97,26 +103,26 @@ final class SelectGrammarWizardPage extends AbstractWizardPage {
 			}
 		});
 
-		browseWorkspaceButton = new Button(buttons, SWT.NONE);
+		final var browseWorkspaceButton = new Button(buttons, SWT.NONE);
 		browseWorkspaceButton.setText(TMUIMessages.Button_browse_Workspace);
 		browseWorkspaceButton.addSelectionListener(new SelectionAdapter() {
 			@Override
-			public void widgetSelected(final SelectionEvent e) {
+			public void widgetSelected(@Nullable final SelectionEvent e) {
 				// TODO
 			}
 		});
 
-		grammarInfoWidget = new GrammarInfoWidget(parent, SWT.NONE);
 		final GridData data = new GridData(GridData.FILL_HORIZONTAL);
 		data.horizontalSpan = 2;
+		grammarInfoWidget = new GrammarInfoWidget(parent, SWT.NONE);
 		grammarInfoWidget.setLayoutData(data);
 	}
 
 	private Text createText(final Composite parent, final String s) {
-		final Label label = new Label(parent, SWT.NONE);
+		final var label = new Label(parent, SWT.NONE);
 		label.setText(s);
 
-		final Text text = new Text(parent, SWT.BORDER);
+		final var text = new Text(parent, SWT.BORDER);
 		text.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		return text;
 	}
@@ -126,19 +132,25 @@ final class SelectGrammarWizardPage extends AbstractWizardPage {
 		setPageComplete(false);
 	}
 
+	@Nullable
 	@Override
 	protected IStatus validatePage(final Event event) {
+		final var grammarInfoWidget = this.grammarInfoWidget;
+		final var grammarFileText = this.grammarFileText;
+		if (grammarInfoWidget == null || grammarFileText == null)
+			return new Status(IStatus.ERROR, TMUIPlugin.PLUGIN_ID,
+					TMUIMessages.SelectGrammarWizardPage_file_error_required);
+
 		grammarInfoWidget.refresh(null);
 		final String path = grammarFileText.getText();
 		if (path.isEmpty()) {
 			return new Status(IStatus.ERROR, TMUIPlugin.PLUGIN_ID,
 					TMUIMessages.SelectGrammarWizardPage_file_error_required);
 		}
-		final File f = new File(path);
-		final Registry registry = new Registry();
-		try(InputStream is = new FileInputStream(f)) {
-			final IGrammar grammar = registry.loadGrammarFromPathSync(f.getName(), is);
-			if (grammar == null || grammar.getScopeName() == null) {
+		final var registry = new Registry();
+		try (var is = new FileInputStream(path)) {
+			final IGrammar grammar = registry.loadGrammarFromPathSync(path, is);
+			if (grammar == null) {
 				return new Status(IStatus.ERROR, TMUIPlugin.PLUGIN_ID,
 						TMUIMessages.SelectGrammarWizardPage_file_error_invalid);
 			}
@@ -151,7 +163,8 @@ final class SelectGrammarWizardPage extends AbstractWizardPage {
 	}
 
 	IGrammarDefinition getGrammarDefinition() {
-		return new GrammarDefinition(grammarInfoWidget.getScopeNameText().getText(), grammarFileText.getText());
+		return new GrammarDefinition(
+				castNonNull(grammarInfoWidget).getScopeNameText().getText(),
+				castNonNull(grammarFileText).getText());
 	}
-
 }

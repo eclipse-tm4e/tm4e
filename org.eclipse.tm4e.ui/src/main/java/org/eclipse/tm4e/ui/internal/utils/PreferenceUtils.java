@@ -13,6 +13,7 @@ package org.eclipse.tm4e.ui.internal.utils;
 
 import org.eclipse.core.runtime.preferences.IEclipsePreferences;
 import org.eclipse.core.runtime.preferences.InstanceScope;
+import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.tm4e.ui.TMUIPlugin;
 import org.eclipse.tm4e.ui.internal.preferences.PreferenceConstants;
@@ -30,6 +31,7 @@ public final class PreferenceUtils {
 	 *
 	 * @return preferences store
 	 */
+	@Nullable
 	public static IEclipsePreferences getE4PreferenceStore() {
 		return InstanceScope.INSTANCE.getNode(E4_CSS_PREFERENCE_NAME);
 	}
@@ -39,6 +41,7 @@ public final class PreferenceUtils {
 	 *
 	 * @return themeIf of the current eclipse theme
 	 */
+	@Nullable
 	public static String getE4PreferenceCSSThemeId() {
 		final IEclipsePreferences preferences = getE4PreferenceStore();
 		return preferences != null ? preferences.get(PreferenceConstants.E4_THEME_ID, null) : null;
@@ -49,6 +52,7 @@ public final class PreferenceUtils {
 	 *
 	 * @return preferences store
 	 */
+	@Nullable
 	public static IEclipsePreferences getEditorsPreferenceStore() {
 		return InstanceScope.INSTANCE.getNode(EDITORS_PREFERENCE_NAME);
 	}
@@ -58,8 +62,9 @@ public final class PreferenceUtils {
 	 *
 	 * @return preferences store
 	 */
+	@Nullable
 	public static IPreferenceStore getTM4EPreferencesStore() {
-		return TMUIPlugin.getDefault().getPreferenceStore();
-
+		final var plugin = TMUIPlugin.getDefault();
+		return plugin == null ? null : plugin.getPreferenceStore();
 	}
 }

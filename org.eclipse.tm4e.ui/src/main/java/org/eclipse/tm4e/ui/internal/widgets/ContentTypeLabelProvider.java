@@ -13,6 +13,7 @@ package org.eclipse.tm4e.ui.internal.widgets;
 
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.core.runtime.content.IContentType;
+import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.jface.viewers.ITableLabelProvider;
 import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.swt.graphics.Image;
@@ -22,18 +23,21 @@ import org.eclipse.swt.graphics.Image;
  */
 public final class ContentTypeLabelProvider extends LabelProvider implements ITableLabelProvider {
 
+	@Nullable
 	@Override
-	public Image getColumnImage(final Object element, final int columnIndex) {
+	public Image getColumnImage(@Nullable final Object element, final int columnIndex) {
 		return null;
 	}
 
+	@Nullable
 	@Override
-	public String getText(final Object element) {
+	public String getText(@Nullable final Object element) {
 		return getColumnText(element, 0);
 	}
 
+	@Nullable
 	@Override
-	public String getColumnText(final Object element, final int columnIndex) {
+	public String getColumnText(@Nullable final Object element, final int columnIndex) {
 		switch (columnIndex) {
 		case 0:
 			IContentType contentType = null;

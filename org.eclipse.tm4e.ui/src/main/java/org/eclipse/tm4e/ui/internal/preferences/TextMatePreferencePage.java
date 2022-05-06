@@ -11,6 +11,7 @@
  */
 package org.eclipse.tm4e.ui.internal.preferences;
 
+import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.jface.preference.PreferencePage;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
@@ -30,7 +31,7 @@ import org.eclipse.ui.preferences.IWorkbenchPreferenceContainer;
 public final class TextMatePreferencePage extends PreferencePage implements IWorkbenchPreferencePage {
 
 	@Override
-	protected Control createContents(final Composite parent) {
+	protected Control createContents(@Nullable final Composite parent) {
 		final Composite composite = new Composite(parent, SWT.NONE);
 		final GridLayout layout = new GridLayout(1, false);
 		layout.marginHeight = layout.marginWidth = 0;
@@ -62,7 +63,7 @@ public final class TextMatePreferencePage extends PreferencePage implements IWor
 	}
 
 	@Override
-	public void init(final IWorkbench workbench) {
+	public void init(@Nullable final IWorkbench workbench) {
 
 	}
 }

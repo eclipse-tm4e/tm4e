@@ -1,19 +1,20 @@
 /**
- *  Copyright (c) 2015-2017 Angelo ZERR.
+ * Copyright (c) 2015-2017 Angelo ZERR.
  * This program and the accompanying materials are made
  * available under the terms of the Eclipse Public License 2.0
  * which is available at https://www.eclipse.org/legal/epl-2.0/
  *
  * SPDX-License-Identifier: EPL-2.0
  *
- *  Contributors:
- *  Angelo Zerr <angelo.zerr@gmail.com> - initial API and implementation
+ * Contributors:
+ * Angelo Zerr <angelo.zerr@gmail.com> - initial API and implementation
  *
  */
 package org.eclipse.tm4e.ui.internal.wizards;
 
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
+import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.jface.dialogs.DialogPage;
 import org.eclipse.jface.dialogs.IMessageProvider;
 import org.eclipse.jface.resource.ImageDescriptor;
@@ -40,7 +41,9 @@ abstract class AbstractWizardPage extends WizardPage implements Listener {
 	}
 
 	@Override
-	public final void createControl(final Composite parent) {
+	public final void createControl(@Nullable final Composite parent) {
+		assert parent != null;
+
 		initializeDialogUnits(parent);
 		// top level group
 		final Composite topLevel = new Composite(parent, SWT.NONE);
@@ -53,13 +56,14 @@ abstract class AbstractWizardPage extends WizardPage implements Listener {
 		// initialize page with default values
 		initializeDefaultValues();
 		// Validate page fields.
-//		validateAndUpdateStatus(null);
+		// validateAndUpdateStatus(null);
 		setControl(topLevel);
 	}
 
 	@Override
-	public void handleEvent(final Event event) {
-		validateAndUpdateStatus(event);
+	public void handleEvent(@Nullable final Event event) {
+		if (event != null)
+			validateAndUpdateStatus(event);
 	}
 
 	private void validateAndUpdateStatus(final Event event) {
@@ -104,6 +108,7 @@ abstract class AbstractWizardPage extends WizardPage implements Listener {
 
 	protected abstract void initializeDefaultValues();
 
+	@Nullable
 	protected abstract IStatus validatePage(Event event);
 
 }

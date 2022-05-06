@@ -14,8 +14,11 @@
  *******************************************************************************/
 package org.eclipse.tm4e.ui.internal.preferences;
 
+import static org.eclipse.tm4e.core.internal.utils.NullSafetyHelper.*;
+
 import java.util.Arrays;
 
+import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.layout.TableColumnLayout;
 import org.eclipse.jface.preference.PreferencePage;
@@ -85,17 +88,23 @@ public final class GrammarPreferencePage extends PreferencePage implements IWork
 	private ISnippetManager snippetManager = TMUIPlugin.getSnippetManager();
 
 	// Grammar list
+	@Nullable
 	private TableViewer grammarViewer;
-	private Button grammarNewButton;
+
+	@Nullable
 	private Button grammarRemoveButton;
 
 	// General tab
+	@Nullable
 	private GrammarInfoWidget grammarInfoWidget;
 	// Content type tab
+	@Nullable
 	private ContentTypesBindingWidget contentTypesWidget;
 	// Theme associations tab
+	@Nullable
 	private ThemeAssociationsWidget themeAssociationsWidget;
 	// Preview
+	@Nullable
 	private TMViewer previewViewer;
 
 	public GrammarPreferencePage() {
@@ -147,21 +156,21 @@ public final class GrammarPreferencePage extends PreferencePage implements IWork
 	}
 
 	@Override
-	protected Control createContents(final Composite ancestor) {
-		final Composite parent = new Composite(ancestor, SWT.NONE);
-		final GridLayout layout = new GridLayout();
+	protected Control createContents(@Nullable final Composite ancestor) {
+		final var parent = new Composite(ancestor, SWT.NONE);
+		final var layout = new GridLayout();
 		layout.numColumns = 2;
 		layout.marginHeight = 0;
 		layout.marginWidth = 0;
 		parent.setLayout(layout);
 
-		final Composite innerParent = new Composite(parent, SWT.NONE);
-		final GridLayout innerLayout = new GridLayout();
+		final var innerParent = new Composite(parent, SWT.NONE);
+		final var innerLayout = new GridLayout();
 		innerLayout.numColumns = 2;
 		innerLayout.marginHeight = 0;
 		innerLayout.marginWidth = 0;
 		innerParent.setLayout(innerLayout);
-		final GridData gd = new GridData(GridData.FILL_BOTH);
+		final var gd = new GridData(GridData.FILL_BOTH);
 		gd.horizontalSpan = 2;
 		innerParent.setLayoutData(gd);
 
@@ -169,7 +178,7 @@ public final class GrammarPreferencePage extends PreferencePage implements IWork
 		createGrammarDetailContent(innerParent);
 
 		previewViewer = doCreateViewer(innerParent);
-		grammarViewer.setInput(grammarRegistryManager);
+		castNonNull(grammarViewer).setInput(grammarRegistryManager);
 
 		updateButtons();
 		Dialog.applyDialogFont(parent);
@@ -180,19 +189,17 @@ public final class GrammarPreferencePage extends PreferencePage implements IWork
 
 	/**
 	 * Create grammar list content.
-	 *
-	 * @param parent
 	 */
 	private void createGrammarListContent(final Composite parent) {
-		final Composite tableComposite = new Composite(parent, SWT.NONE);
-		final GridData data = new GridData(GridData.FILL_BOTH);
+		final var tableComposite = new Composite(parent, SWT.NONE);
+		final var data = new GridData(GridData.FILL_BOTH);
 		data.widthHint = 360;
 		data.heightHint = convertHeightInCharsToPixels(10);
 		tableComposite.setLayoutData(data);
 
-		final TableColumnLayout columnLayout = new TableColumnLayout();
+		final var columnLayout = new TableColumnLayout();
 		tableComposite.setLayout(columnLayout);
-		final Table table = new Table(tableComposite,
+		final var table = new Table(tableComposite,
 				SWT.BORDER | SWT.MULTI | SWT.FULL_SELECTION | SWT.H_SCROLL | SWT.V_SCROLL | SWT.SINGLE);
 
 		table.setHeaderVisible(true);
@@ -201,23 +208,23 @@ public final class GrammarPreferencePage extends PreferencePage implements IWork
 		final GC gc = new GC(getShell());
 		gc.setFont(JFaceResources.getDialogFont());
 
-		final ColumnViewerComparator viewerComparator = new ColumnViewerComparator();
+		final var viewerComparator = new ColumnViewerComparator();
 
-		grammarViewer = new TableViewer(table);
+		final var grammarViewer = this.grammarViewer = new TableViewer(table);
 
-		final TableColumn column1 = new TableColumn(table, SWT.NONE);
+		final var column1 = new TableColumn(table, SWT.NONE);
 		column1.setText(TMUIMessages.GrammarPreferencePage_column_scopeName);
 		int minWidth = computeMinimumColumnWidth(gc, TMUIMessages.GrammarPreferencePage_column_scopeName);
 		columnLayout.setColumnData(column1, new ColumnWeightData(2, minWidth, true));
 		column1.addSelectionListener(new ColumnSelectionAdapter(column1, grammarViewer, 0, viewerComparator));
 
-		final TableColumn column2 = new TableColumn(table, SWT.NONE);
+		final var column2 = new TableColumn(table, SWT.NONE);
 		column2.setText(TMUIMessages.GrammarPreferencePage_column_path);
 		minWidth = computeMinimumColumnWidth(gc, TMUIMessages.GrammarPreferencePage_column_path);
 		columnLayout.setColumnData(column2, new ColumnWeightData(2, minWidth, true));
 		column2.addSelectionListener(new ColumnSelectionAdapter(column2, grammarViewer, 1, viewerComparator));
 
-		final TableColumn column3 = new TableColumn(table, SWT.NONE);
+		final var column3 = new TableColumn(table, SWT.NONE);
 		column3.setText(TMUIMessages.GrammarPreferencePage_column_pluginId);
 		minWidth = computeMinimumColumnWidth(gc, TMUIMessages.GrammarPreferencePage_column_pluginId);
 		columnLayout.setColumnData(column3, new ColumnWeightData(2, minWidth, true));
@@ -228,20 +235,22 @@ public final class GrammarPreferencePage extends PreferencePage implements IWork
 		grammarViewer.setLabelProvider(new GrammarDefinitionLabelProvider());
 		grammarViewer.setContentProvider(new GrammarDefinitionContentProvider());
 		grammarViewer.setComparator(viewerComparator);
-
 		grammarViewer.addSelectionChangedListener(new ISelectionChangedListener() {
-
 			@Override
-			public void selectionChanged(final SelectionChangedEvent e) {
+			public void selectionChanged(@Nullable final SelectionChangedEvent e) {
+				if (e == null)
+					return;
 				final IStructuredSelection selection = grammarViewer.getStructuredSelection();
 				if (selection.isEmpty()) {
 					return;
 				}
 				final IGrammarDefinition definition = (IGrammarDefinition) (selection).getFirstElement();
+
 				// Update button
-				grammarRemoveButton.setEnabled(definition.getPluginId() == null);
-				themeAssociationsWidget.getNewButton().setEnabled(false);
-				themeAssociationsWidget.getRemoveButton().setEnabled(false);
+				castNonNull(grammarRemoveButton).setEnabled(definition.getPluginId() == null);
+				castNonNull(themeAssociationsWidget).getNewButton().setEnabled(false);
+				castNonNull(themeAssociationsWidget).getRemoveButton().setEnabled(false);
+
 				// Select grammar
 				selectGrammar(definition);
 			}
@@ -260,16 +269,18 @@ public final class GrammarPreferencePage extends PreferencePage implements IWork
 
 			private void fillGeneralTab(final String scopeName) {
 				final IGrammar grammar = grammarRegistryManager.getGrammarForScope(scopeName);
-				grammarInfoWidget.refresh(grammar);
+				castNonNull(grammarInfoWidget).refresh(grammar);
 			}
 
 			private void fillContentTypeTab(final String scopeName) {
 				// Load the content type binding for the given grammar
-				contentTypesWidget.setInput(grammarRegistryManager.getContentTypesForScope(scopeName));
+				castNonNull(contentTypesWidget).setInput(grammarRegistryManager.getContentTypesForScope(scopeName));
 			}
 
+			@Nullable
 			private IThemeAssociation fillThemeTab(final IGrammarDefinition definition) {
 				IThemeAssociation selectedAssociation = null;
+				final var themeAssociationsWidget = castNonNull(GrammarPreferencePage.this.themeAssociationsWidget);
 				final IStructuredSelection oldSelection = themeAssociationsWidget.getSelection();
 				// Load the theme associations for the given grammar
 				final IThemeAssociation[] themeAssociations = themeAssociationsWidget.setGrammarDefinition(definition);
@@ -279,7 +290,7 @@ public final class GrammarPreferencePage extends PreferencePage implements IWork
 					selectedAssociation = (IThemeAssociation) oldSelection.getFirstElement();
 					themeAssociationsWidget.setSelection(oldSelection);
 				} else {
-					selectedAssociation = themeAssociations != null && themeAssociations.length > 0
+					selectedAssociation = themeAssociations.length > 0
 							? themeAssociations[0]
 							: null;
 					if (selectedAssociation != null) {
@@ -289,21 +300,21 @@ public final class GrammarPreferencePage extends PreferencePage implements IWork
 				return selectedAssociation;
 			}
 
-			private void fillPreview(final String scopeName, final IThemeAssociation selectedAssociation) {
+			private void fillPreview(final String scopeName, @Nullable final IThemeAssociation selectedAssociation) {
 				// Preview the grammar
 				final IGrammar grammar = grammarRegistryManager.getGrammarForScope(scopeName);
 				if (selectedAssociation != null) {
 					setPreviewTheme(selectedAssociation.getThemeId());
 				}
-				previewViewer.setGrammar(grammar);
+				castNonNull(previewViewer).setGrammar(grammar);
 
 				// Snippet
 				final ISnippet[] snippets = snippetManager.getSnippets(scopeName);
-				if (snippets == null || snippets.length == 0) {
+				if (snippets.length == 0) {
 					previewViewer.setText("");
 				} else {
 					// TODO: manage list of snippet for the given scope.
-					previewViewer.setText(snippets[0].getContent());
+				   castNonNull(previewViewer).setText(snippets[0].getContent());
 				}
 			}
 
@@ -315,28 +326,28 @@ public final class GrammarPreferencePage extends PreferencePage implements IWork
 
 		BidiUtils.applyTextDirection(grammarViewer.getControl(), BidiUtils.BTD_DEFAULT);
 
-		final Composite buttons = new Composite(parent, SWT.NONE);
+		final var buttons = new Composite(parent, SWT.NONE);
 		buttons.setLayoutData(new GridData(GridData.VERTICAL_ALIGN_BEGINNING));
-		final GridLayout layout = new GridLayout();
+		final var layout = new GridLayout();
 		layout.marginHeight = 0;
 		layout.marginWidth = 0;
 		buttons.setLayout(layout);
 
-		grammarNewButton = new Button(buttons, SWT.PUSH);
+		final var grammarNewButton = new Button(buttons, SWT.PUSH);
 		grammarNewButton.setText(TMUIMessages.Button_new);
 		grammarNewButton.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		grammarNewButton.addListener(SWT.Selection, new Listener() {
 
 			@Override
-			public void handleEvent(final Event e) {
+			public void handleEvent(@Nullable final Event e) {
 				add();
 			}
 
 			private void add() {
 				// Open import wizard for TextMate grammar.
-				final TextMateGrammarImportWizard wizard = new TextMateGrammarImportWizard(false);
+				final var wizard = new TextMateGrammarImportWizard(false);
 				wizard.setGrammarRegistryManager(grammarRegistryManager);
-				final WizardDialog dialog = new WizardDialog(getShell(), wizard);
+				final var dialog = new WizardDialog(getShell(), wizard);
 				if (dialog.open() == Window.OK) {
 					// User grammar was saved, refresh the list of grammar and
 					// select the created grammar.
@@ -347,18 +358,18 @@ public final class GrammarPreferencePage extends PreferencePage implements IWork
 			}
 		});
 
-		grammarRemoveButton = new Button(buttons, SWT.PUSH);
+		final var grammarRemoveButton = this.grammarRemoveButton = new Button(buttons, SWT.PUSH);
 		grammarRemoveButton.setText(TMUIMessages.Button_remove);
 		grammarRemoveButton.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		grammarRemoveButton.addListener(SWT.Selection, new Listener() {
 
 			@Override
-			public void handleEvent(final Event e) {
+			public void handleEvent(@Nullable final Event e) {
 				remove();
 			}
 
 			private void remove() {
-				final IGrammarDefinition definition = (IGrammarDefinition) ((IStructuredSelection) grammarViewer
+				final var definition = (IGrammarDefinition) ((IStructuredSelection) grammarViewer
 						.getSelection()).getFirstElement();
 				grammarRegistryManager.unregisterGrammarDefinition(definition);
 				grammarViewer.refresh();
@@ -367,15 +378,12 @@ public final class GrammarPreferencePage extends PreferencePage implements IWork
 	}
 
 	/**
-	 * Create detail grammar content which is filled when a grammar is selected in
-	 * the grammar list.
-	 *
-	 * @param parent
+	 * Create detail grammar content which is filled when a grammar is selected in the grammar list.
 	 */
 	private void createGrammarDetailContent(final Composite parent) {
-		final TabFolder folder = new TabFolder(parent, SWT.NONE);
+		final var folder = new TabFolder(parent, SWT.NONE);
 
-		final GridData gd = new GridData(GridData.FILL_HORIZONTAL);
+		final var gd = new GridData(GridData.FILL_HORIZONTAL);
 		gd.horizontalSpan = 2;
 		folder.setLayoutData(gd);
 
@@ -387,14 +395,12 @@ public final class GrammarPreferencePage extends PreferencePage implements IWork
 
 	/**
 	 * Create "General" tab
-	 *
-	 * @param folder
 	 */
 	private void createGeneralTab(final TabFolder folder) {
-		final TabItem tab = new TabItem(folder, SWT.NONE);
+		final var tab = new TabItem(folder, SWT.NONE);
 		tab.setText(TMUIMessages.GrammarPreferencePage_tab_general_text);
 
-		final Composite parent = new Composite(folder, SWT.NONE);
+		final var parent = new Composite(folder, SWT.NONE);
 		parent.setLayout(new GridLayout());
 		parent.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 
@@ -402,19 +408,16 @@ public final class GrammarPreferencePage extends PreferencePage implements IWork
 		grammarInfoWidget.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 
 		tab.setControl(parent);
-
 	}
 
 	/**
 	 * Create "Content type" tab
-	 *
-	 * @param folder
 	 */
 	private void createContentTypeTab(final TabFolder folder) {
-		final TabItem tab = new TabItem(folder, SWT.NONE);
+		final var tab = new TabItem(folder, SWT.NONE);
 		tab.setText(TMUIMessages.GrammarPreferencePage_tab_contentType_text);
 
-		final Composite parent = new Composite(folder, SWT.NONE);
+		final var parent = new Composite(folder, SWT.NONE);
 		parent.setLayout(new GridLayout());
 		parent.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 
@@ -426,31 +429,31 @@ public final class GrammarPreferencePage extends PreferencePage implements IWork
 
 	/**
 	 * Create "Theme" tab
-	 *
-	 * @param folder
 	 */
 	private void createThemeTab(final TabFolder folder) {
-		final TabItem tab = new TabItem(folder, SWT.NONE);
+		final var tab = new TabItem(folder, SWT.NONE);
 		tab.setText(TMUIMessages.GrammarPreferencePage_tab_theme_text);
 
-		final Composite parent = new Composite(folder, SWT.NONE);
+		final var parent = new Composite(folder, SWT.NONE);
 		parent.setLayout(new GridLayout());
 		parent.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 
-		themeAssociationsWidget = new ThemeAssociationsWidget(themeManager, parent, SWT.NONE);
-		final GridData data = new GridData(GridData.FILL_HORIZONTAL);
+		final var themeAssociationsWidget = this.themeAssociationsWidget = new ThemeAssociationsWidget(themeManager,
+				parent, SWT.NONE);
+		final var data = new GridData(GridData.FILL_HORIZONTAL);
 		data.horizontalSpan = 2;
 		themeAssociationsWidget.setLayoutData(data);
 		themeAssociationsWidget.addSelectionChangedListener(new ISelectionChangedListener() {
 
 			@Override
-			public void selectionChanged(final SelectionChangedEvent e) {
-				final IThemeAssociation association = (IThemeAssociation) ((IStructuredSelection) e.getSelection())
-						.getFirstElement();
+			public void selectionChanged(@Nullable final SelectionChangedEvent e) {
+				if (e == null)
+					return;
+				final var association = (IThemeAssociation) ((IStructuredSelection) e.getSelection()).getFirstElement();
 				selectTheme(association);
 			}
 
-			private void selectTheme(final IThemeAssociation association) {
+			private void selectTheme(@Nullable final IThemeAssociation association) {
 				themeAssociationsWidget.getNewButton()
 						.setEnabled(association != null /* && association.getPluginId() == null */);
 				themeAssociationsWidget.getRemoveButton()
@@ -466,7 +469,7 @@ public final class GrammarPreferencePage extends PreferencePage implements IWork
 
 	private void setPreviewTheme(final String themeId) {
 		final ITheme theme = themeManager.getThemeById(themeId);
-		if (theme != null) {
+		if (theme != null && previewViewer != null) {
 			previewViewer.setTheme(theme);
 		}
 	}
@@ -477,10 +480,10 @@ public final class GrammarPreferencePage extends PreferencePage implements IWork
 	 * @param folder
 	 */
 	private void createInjectionTab(final TabFolder folder) {
-		final TabItem tab = new TabItem(folder, SWT.NONE);
+		final var tab = new TabItem(folder, SWT.NONE);
 		tab.setText(TMUIMessages.GrammarPreferencePage_tab_injection_text);
 
-		final Composite parent = new Composite(folder, SWT.NONE);
+		final var parent = new Composite(folder, SWT.NONE);
 		parent.setLayout(new GridLayout());
 		parent.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 
@@ -490,12 +493,12 @@ public final class GrammarPreferencePage extends PreferencePage implements IWork
 	}
 
 	private int computeMinimumColumnWidth(final GC gc, final String string) {
-		return gc.stringExtent(string).x + 10; // pad 10 to accommodate table
-												 // header trimmings
+		return gc.stringExtent(string).x + 10; // pad 10 to accommodate table header trimmings
 	}
 
 	private void updateButtons() {
-		grammarRemoveButton.setEnabled(false);
+		if (grammarRemoveButton != null)
+			grammarRemoveButton.setEnabled(false);
 
 	}
 
@@ -507,14 +510,14 @@ public final class GrammarPreferencePage extends PreferencePage implements IWork
 	}
 
 	@Override
-	public void init(final IWorkbench workbench) {
+	public void init(@Nullable final IWorkbench workbench) {
 
 	}
 
 	private TMViewer doCreateViewer(final Composite parent) {
-		final Label label = new Label(parent, SWT.NONE);
+		final var label = new Label(parent, SWT.NONE);
 		label.setText(TMUIMessages.GrammarPreferencePage_preview);
-		GridData data = new GridData();
+		var data = new GridData();
 		data.horizontalSpan = 2;
 		label.setLayoutData(data);
 
@@ -524,7 +527,7 @@ public final class GrammarPreferencePage extends PreferencePage implements IWork
 		// https://bugs.eclipse.org/293263
 		// viewer.getTextWidget().setCaret(null);
 
-		final Control control = viewer.getControl();
+		final var control = viewer.getControl();
 		data = new GridData(GridData.FILL_BOTH);
 		data.horizontalSpan = 2;
 		data.heightHint = convertHeightInCharsToPixels(5);
@@ -553,8 +556,8 @@ public final class GrammarPreferencePage extends PreferencePage implements IWork
 			// Save the working copy if there are some changed.
 			grammarRegistryManager.save();
 			themeManager.save();
-		} catch (final BackingStoreException e) {
-			e.printStackTrace();
+		} catch (final BackingStoreException ex) {
+			ex.printStackTrace();
 			return false;
 		}
 		return super.performOk();

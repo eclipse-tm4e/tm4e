@@ -11,6 +11,7 @@
  */
 package org.eclipse.tm4e.ui.internal.widgets;
 
+import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.jface.viewers.IBaseLabelProvider;
 import org.eclipse.jface.viewers.ITableLabelProvider;
 import org.eclipse.jface.viewers.TableViewer;
@@ -53,7 +54,7 @@ public final class ColumnViewerComparator extends ViewerComparator {
 	}
 
 	@Override
-	public int compare(final Viewer viewer, final Object e1, final Object e2) {
+	public int compare(@Nullable final Viewer viewer, @Nullable final Object e1, @Nullable final Object e2) {
 
 		if (viewer instanceof TableViewer) {
 			final IBaseLabelProvider baseLabel = ((TableViewer) viewer).getLabelProvider();

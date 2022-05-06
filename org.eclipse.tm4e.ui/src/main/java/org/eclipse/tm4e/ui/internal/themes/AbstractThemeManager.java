@@ -1,13 +1,13 @@
 /**
- *  Copyright (c) 2015, 2021 Angelo ZERR and others.
+ * Copyright (c) 2015, 2021 Angelo ZERR and others.
  * This program and the accompanying materials are made
  * available under the terms of the Eclipse Public License 2.0
  * which is available at https://www.eclipse.org/legal/epl-2.0/
  *
  * SPDX-License-Identifier: EPL-2.0
  *
- *  Contributors:
- *  Angelo Zerr <angelo.zerr@gmail.com> - initial API and implementation
+ * Contributors:
+ * Angelo Zerr <angelo.zerr@gmail.com> - initial API and implementation
  */
 package org.eclipse.tm4e.ui.internal.themes;
 
@@ -18,6 +18,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.swt.graphics.RGB;
 import org.eclipse.tm4e.ui.internal.utils.PreferenceUtils;
 import org.eclipse.tm4e.ui.themes.ITheme;
@@ -45,6 +46,7 @@ public abstract class AbstractThemeManager implements IThemeManager {
 		themes.remove(theme.getId());
 	}
 
+	@Nullable
 	@Override
 	public ITheme getThemeById(final String themeId) {
 		return themes.get(themeId);
@@ -68,13 +70,13 @@ public abstract class AbstractThemeManager implements IThemeManager {
 				return theme;
 			}
 		}
-		return null;
+		throw new IllegalStateException("Should never be reached");
 	}
 
 	@Override
 	public ITheme[] getThemes(final boolean dark) {
 		return themes.values().stream().filter(theme -> theme.isDark() == dark)
-		   .collect(Collectors.toList()).toArray(ITheme[]::new);
+				.collect(Collectors.toList()).toArray(ITheme[]::new);
 	}
 
 	@Override
@@ -83,7 +85,7 @@ public abstract class AbstractThemeManager implements IThemeManager {
 	}
 
 	@Override
-	public boolean isDarkEclipseTheme(final String eclipseThemeId) {
+	public boolean isDarkEclipseTheme(@Nullable final String eclipseThemeId) {
 		return eclipseThemeId != null && eclipseThemeId.toLowerCase().contains("dark");
 	}
 
@@ -92,7 +94,10 @@ public abstract class AbstractThemeManager implements IThemeManager {
 		final IThemeAssociation association = themeAssociationRegistry.getThemeAssociationFor(scopeName, dark);
 		if (association != null) {
 			final String themeId = association.getThemeId();
-			return getThemeById(themeId);
+			final var theme = getThemeById(themeId);
+			if (theme != null) {
+				return theme;
+			}
 		}
 		return getDefaultTheme(dark);
 	}
@@ -136,7 +141,8 @@ public abstract class AbstractThemeManager implements IThemeManager {
 
 	@Override
 	public ITokenProvider getThemeForScope(final String scopeName, final RGB background) {
-		return getThemeForScope(scopeName, 0.299 * background.red + 0.587 * background.green + 0.114 * background.blue < 128);
+		return getThemeForScope(scopeName, 0.299 * background.red
+				+ 0.587 * background.green
+				+ 0.114 * background.blue < 128);
 	}
-
 }

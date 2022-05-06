@@ -1,18 +1,19 @@
 /**
- *  Copyright (c) 2015-2017 Angelo ZERR.
+ * Copyright (c) 2015-2017 Angelo ZERR.
  * This program and the accompanying materials are made
  * available under the terms of the Eclipse Public License 2.0
  * which is available at https://www.eclipse.org/legal/epl-2.0/
  *
  * SPDX-License-Identifier: EPL-2.0
  *
- *  Contributors:
- *  Angelo Zerr <angelo.zerr@gmail.com> - initial API and implementation
+ * Contributors:
+ * Angelo Zerr <angelo.zerr@gmail.com> - initial API and implementation
  */
 package org.eclipse.tm4e.ui.internal.model;
 
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
+import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.jface.text.BadLocationException;
 import org.eclipse.jface.text.DocumentEvent;
 import org.eclipse.jface.text.IDocument;
@@ -44,7 +45,9 @@ final class DocumentLineList extends AbstractLineList {
 	private final class InternalListener implements IDocumentListener {
 
 		@Override
-		public void documentAboutToBeChanged(final DocumentEvent event) {
+		public void documentAboutToBeChanged(@Nullable final DocumentEvent event) {
+			if (event == null)
+				return;
 			try {
 				if (!DocumentHelper.isInsert(event)) {
 					// Remove or Replace (Remove + Insert)
@@ -64,7 +67,9 @@ final class DocumentLineList extends AbstractLineList {
 		}
 
 		@Override
-		public void documentChanged(final DocumentEvent event) {
+		public void documentChanged(@Nullable final DocumentEvent event) {
+			if (event == null)
+				return;
 			try {
 				final int startLine = DocumentHelper.getStartLine(event);
 				if (!DocumentHelper.isRemove(event)) {
@@ -82,7 +87,7 @@ final class DocumentLineList extends AbstractLineList {
 				}
 				invalidateLine(startLine);
 			} catch (final BadLocationException e) {
-				TMUIPlugin.getDefault().getLog().log(new Status(IStatus.ERROR, TMUIPlugin.PLUGIN_ID, e.getMessage(), e));
+				TMUIPlugin.log(new Status(IStatus.ERROR, TMUIPlugin.PLUGIN_ID, e.getMessage(), e));
 			}
 		}
 	}

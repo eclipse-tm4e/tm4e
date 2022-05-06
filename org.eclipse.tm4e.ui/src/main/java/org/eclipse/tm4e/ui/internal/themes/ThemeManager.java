@@ -14,11 +14,10 @@ package org.eclipse.tm4e.ui.internal.themes;
 import java.util.Arrays;
 import java.util.stream.Collectors;
 
-import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.Platform;
-import org.eclipse.core.runtime.preferences.IEclipsePreferences;
 import org.eclipse.core.runtime.preferences.IEclipsePreferences.IPreferenceChangeListener;
 import org.eclipse.core.runtime.preferences.InstanceScope;
+import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.tm4e.ui.TMUIPlugin;
 import org.eclipse.tm4e.ui.internal.preferences.PreferenceConstants;
 import org.eclipse.tm4e.ui.internal.preferences.PreferenceHelper;
@@ -46,6 +45,7 @@ public final class ThemeManager extends AbstractThemeManager {
 	// "themeAssociation" declaration
 	private static final String THEME_ASSOCIATION_ELT = "themeAssociation"; //$NON-NLS-1$
 
+	@Nullable
 	private static ThemeManager INSTANCE;
 
 	public static ThemeManager getInstance() {
@@ -77,16 +77,16 @@ public final class ThemeManager extends AbstractThemeManager {
 	 * Load TextMate Themes from extension point.
 	 */
 	private void loadThemesFromExtensionPoints() {
-		final IConfigurationElement[] cf = Platform.getExtensionRegistry().getConfigurationElementsFor(TMUIPlugin.PLUGIN_ID,
+		final var config = Platform.getExtensionRegistry().getConfigurationElementsFor(TMUIPlugin.PLUGIN_ID,
 				EXTENSION_THEMES);
-		for (final IConfigurationElement ce : cf) {
-			final String name = ce.getName();
+		for (final var configElement : config) {
+			final String name = configElement.getName();
 			switch (name) {
 			case THEME_ELT:
-				super.registerTheme(new Theme(ce));
+				super.registerTheme(new Theme(configElement));
 				break;
 			case THEME_ASSOCIATION_ELT:
-				super.registerThemeAssociation(new ThemeAssociation(ce));
+				super.registerThemeAssociation(new ThemeAssociation(configElement));
 				break;
 			}
 		}
@@ -98,10 +98,10 @@ public final class ThemeManager extends AbstractThemeManager {
 	private void loadThemesFromPreferences() {
 		// Load Theme definitions from the
 		// "${workspace_loc}/metadata/.plugins/org.eclipse.core.runtime/.settings/org.eclipse.tm4e.ui.prefs"
-		final IEclipsePreferences prefs = InstanceScope.INSTANCE.getNode(TMUIPlugin.PLUGIN_ID);
+		final var prefs = InstanceScope.INSTANCE.getNode(TMUIPlugin.PLUGIN_ID);
 		String json = prefs.get(PreferenceConstants.THEMES, null);
 		if (json != null) {
-			for (final JsonObject element : new Gson().fromJson(json, JsonObject[].class)) {
+			for (final var element : new Gson().fromJson(json, JsonObject[].class)) {
 				final String name = element.get("id").getAsString();
 				super.registerTheme(new Theme(name, element.get("path").getAsString(), name, element.get("dark").getAsBoolean(), false));
 			}
@@ -109,7 +109,7 @@ public final class ThemeManager extends AbstractThemeManager {
 
 		json = prefs.get(PreferenceConstants.THEME_ASSOCIATIONS, null);
 		if (json != null) {
-			final IThemeAssociation[] themeAssociations = PreferenceHelper.loadThemeAssociations(json);
+			final var themeAssociations = PreferenceHelper.loadThemeAssociations(json);
 			for (final IThemeAssociation association : themeAssociations) {
 				super.registerThemeAssociation(association);
 			}
@@ -118,7 +118,7 @@ public final class ThemeManager extends AbstractThemeManager {
 
 	@Override
 	public void save() throws BackingStoreException {
-		final IEclipsePreferences prefs = InstanceScope.INSTANCE.getNode(TMUIPlugin.PLUGIN_ID);
+		final var prefs = InstanceScope.INSTANCE.getNode(TMUIPlugin.PLUGIN_ID);
 		// Save Themes in the
 		// "${workspace_loc}/metadata/.plugins/org.eclipse.core.runtime/.settings/org.eclipse.tm4e.ui.prefs"
 		prefs.put(PreferenceConstants.THEMES, Arrays.stream(getThemes()) //
@@ -150,7 +150,7 @@ public final class ThemeManager extends AbstractThemeManager {
 	 */
 	public void addPreferenceChangeListener(final IPreferenceChangeListener themeChangeListener) {
 		// Observe change of Eclipse E4 Theme
-		IEclipsePreferences preferences = PreferenceUtils.getE4PreferenceStore();
+		var preferences = PreferenceUtils.getE4PreferenceStore();
 		if (preferences != null) {
 			preferences.addPreferenceChangeListener(themeChangeListener);
 		}
@@ -169,7 +169,7 @@ public final class ThemeManager extends AbstractThemeManager {
 	 */
 	public void removePreferenceChangeListener(final IPreferenceChangeListener themeChangeListener) {
 		// Observe change of Eclipse E4 Theme
-		IEclipsePreferences preferences = PreferenceUtils.getE4PreferenceStore();
+		var preferences = PreferenceUtils.getE4PreferenceStore();
 		if (preferences != null) {
 			preferences.removePreferenceChangeListener(themeChangeListener);
 		}
@@ -179,5 +179,4 @@ public final class ThemeManager extends AbstractThemeManager {
 			preferences.removePreferenceChangeListener(themeChangeListener);
 		}
 	}
-
 }

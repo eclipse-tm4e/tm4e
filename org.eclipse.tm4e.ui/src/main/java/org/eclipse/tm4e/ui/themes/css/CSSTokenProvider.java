@@ -17,6 +17,7 @@ import java.util.Map;
 
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
+import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.jface.text.TextAttribute;
 import org.eclipse.jface.text.rules.IToken;
 import org.eclipse.jface.text.rules.Token;
@@ -35,7 +36,9 @@ public class CSSTokenProvider extends AbstractTokenProvider {
 
 	private static final Splitter BY_DOT_SPLITTER = Splitter.on('.');
 
-	private final Map<IStyle, IToken> tokenMaps = new HashMap<>();
+	private final Map<IStyle, @Nullable IToken> tokenMaps = new HashMap<>();
+
+	@Nullable
 	private CSSParser parser;
 
 	public CSSTokenProvider(final InputStream in) {
@@ -62,68 +65,72 @@ public class CSSTokenProvider extends AbstractTokenProvider {
 				}
 			}
 		} catch (final Exception e) {
-			TMUIPlugin.getDefault().getLog().log(new Status(IStatus.ERROR, TMUIPlugin.PLUGIN_ID, e.getMessage(), e));
+			TMUIPlugin.log(new Status(IStatus.ERROR, TMUIPlugin.PLUGIN_ID, e.getMessage(), e));
 		}
 	}
 
+	@Nullable
 	@Override
-	public IToken getToken(final String type) {
-		if (type == null) {
+	public IToken getToken(@Nullable final String type) {
+		if (type == null)
 			return null;
-		}
+
+		final var parser = this.parser;
+		if (parser == null)
+			return null;
+
 		final IStyle style = parser.getBestStyle(BY_DOT_SPLITTER.splitToStream(type).toArray(String[]::new));
-		if (style != null) {
-			final IToken t = tokenMaps.get(style);
-			if (t != null) {
-				return t;
-			}
-		}
-		return null;
+		if (style == null)
+			return null;
+
+		return tokenMaps.get(style);
 	}
 
+	@Nullable
+	private Color getColor(final boolean isForeground, final String... styles) {
+		final var parser = this.parser;
+		if (parser == null)
+			return null;
+
+		final var style = parser.getBestStyle(styles);
+		if (style == null)
+			return null;
+
+		final var rgb = isForeground ? style.getColor() : style.getBackgroundColor();
+		if (rgb == null)
+			return null;
+
+		return ColorManager.getInstance().getColor(rgb);
+	}
+
+	@Nullable
 	@Override
 	public Color getEditorForeground() {
-		final IStyle style = parser.getBestStyle("editor");
-		if (style != null && style.getColor() != null) {
-			return ColorManager.getInstance().getColor(style.getColor());
-		}
-		return null;
+		return getColor(true, "editor");
 	}
 
+	@Nullable
 	@Override
 	public Color getEditorBackground() {
-		final IStyle style = parser.getBestStyle("editor");
-		if (style != null && style.getBackgroundColor() != null) {
-			return ColorManager.getInstance().getColor(style.getBackgroundColor());
-		}
-		return null;
+		return getColor(false, "editor");
 	}
 
+	@Nullable
 	@Override
 	public Color getEditorSelectionForeground() {
-		final IStyle style = parser.getBestStyle("editor", "selection");
-		if (style != null && style.getColor() != null) {
-			return ColorManager.getInstance().getColor(style.getColor());
-		}
-		return null;
+		return getColor(true, "editor", "selection");
 	}
 
+	@Nullable
 	@Override
 	public Color getEditorSelectionBackground() {
-		final IStyle style = parser.getBestStyle("editor", "selection");
-		if (style != null && style.getBackgroundColor() != null) {
-			return ColorManager.getInstance().getColor(style.getBackgroundColor());
-		}
-		return null;
+		return getColor(false, "editor", "selection");
+
 	}
 
+	@Nullable
 	@Override
 	public Color getEditorCurrentLineHighlight() {
-		final IStyle style = parser.getBestStyle("editor", "lineHighlight");
-		if (style != null && style.getBackgroundColor() != null) {
-			return ColorManager.getInstance().getColor(style.getBackgroundColor());
-		}
-		return null;
+		return getColor(false, "editor", "lineHighlight");
 	}
-
 }

@@ -14,9 +14,7 @@ package org.eclipse.tm4e.ui.internal.utils;
 import org.eclipse.core.runtime.content.IContentType;
 
 /**
- *
  * @author azerr
- *
  */
 public final class ContentTypeInfo {
 

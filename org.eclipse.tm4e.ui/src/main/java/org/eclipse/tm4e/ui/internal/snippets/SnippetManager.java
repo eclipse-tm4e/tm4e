@@ -18,6 +18,7 @@ import java.util.Map;
 
 import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.Platform;
+import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.tm4e.ui.TMUIPlugin;
 import org.eclipse.tm4e.ui.snippets.ISnippet;
 import org.eclipse.tm4e.ui.snippets.ISnippetManager;
@@ -31,6 +32,7 @@ public final class SnippetManager implements ISnippetManager {
 	// "snippets" extension point
 	private static final String EXTENSION_SNIPPETS = "snippets"; //$NON-NLS-1$
 
+	@Nullable
 	private static ISnippetManager INSTANCE;
 
 	public static ISnippetManager getInstance() {
@@ -50,7 +52,7 @@ public final class SnippetManager implements ISnippetManager {
 		return manager;
 	}
 
-	private final Map<String, Collection<ISnippet>> snippets = new HashMap<>();
+	private final Map<String, @Nullable Collection<ISnippet>> snippets = new HashMap<>();
 
 	private SnippetManager() {
 	}

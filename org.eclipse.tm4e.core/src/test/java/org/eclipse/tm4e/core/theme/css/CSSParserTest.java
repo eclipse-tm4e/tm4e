@@ -9,10 +9,9 @@
  *  Contributors:
  *  Angelo Zerr <angelo.zerr@gmail.com> - initial API and implementation
  */
-package org.eclipse.tm4e.core.css;
+package org.eclipse.tm4e.core.theme.css;
 
 import org.eclipse.tm4e.core.theme.IStyle;
-import org.eclipse.tm4e.core.theme.css.CSSParser;
 
 public class CSSParserTest {
 
@@ -20,10 +19,10 @@ public class CSSParserTest {
 		CSSParser parser = new CSSParser(".comment {color:rgb(0,1,2)} .comment.ts {color:rgb(0,1,2)}");
 		String[] names = "comment".split("[.]");
 		parser.getBestStyle(names);
-		
+
 		names = "comment.ts".split("[.]");
 		IStyle style = parser.getBestStyle(names);
-		
+
 		System.err.println(style.getColor().red);
 	}
 }

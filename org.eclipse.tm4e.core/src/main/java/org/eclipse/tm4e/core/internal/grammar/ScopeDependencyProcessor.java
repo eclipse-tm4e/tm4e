@@ -39,7 +39,7 @@ import org.eclipse.tm4e.core.internal.types.IRawRule;
  */
 class ScopeDependencyProcessor {
 
-	private static abstract class ScopeDependency {
+	private abstract static class ScopeDependency {
 		final String scopeName;
 
 		ScopeDependency(final String scopeName) {

@@ -53,7 +53,9 @@ public class TMModel implements ITMModel {
 
 	public TMModel(final IModelLines lines) {
 		this.lines = lines;
-		((AbstractLineList) lines).setModel(this);
+		if (lines instanceof AbstractLineList) {
+			((AbstractLineList) lines).setModel(this);
+		}
 		lines.forEach(ModelLine::resetTokenizationState);
 		invalidateLine(0);
 	}
@@ -127,8 +129,7 @@ public class TMModel implements ITMModel {
 				long currentEstimatedTimeToTokenize = 0;
 				long elapsedTime;
 				final long startTime = System.currentTimeMillis();
-				// Tokenize at most 1000 lines. Estimate the tokenization speed per
-				// character and stop when:
+				// Tokenize at most 1000 lines. Estimate the tokenization speed per character and stop when:
 				// - MAX_ALLOWED_TIME is reached
 				// - tokenizing the next line would go above MAX_ALLOWED_TIME
 

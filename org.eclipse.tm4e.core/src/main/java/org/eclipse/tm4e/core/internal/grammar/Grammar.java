@@ -91,12 +91,14 @@ public final class Grammar implements IGrammar, IRuleFactoryHelper {
 		this.grammar = initGrammar(grammar, null);
 
 		if (tokenTypes != null) {
-			for (final var selector : tokenTypes.keySet()) {
+			for (final var entry : tokenTypes.entrySet()) {
+				final var selector = entry.getKey();
+				final var type = entry.getValue().intValue();
 				for (final var matcher : Matcher.createMatchers(selector)) {
 					tokenTypeMatchers.add(new TokenTypeMatcher() {
 						@Override
 						public int getType() {
-							return tokenTypes.get(selector);
+							return type;
 						}
 
 						@Override

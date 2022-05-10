@@ -6,6 +6,9 @@
 !**/.settings/org.eclipse.jdt.core.prefs
 !**/.settings/org.eclipse.pde.core.prefs
 
+# Eclipse GFM Viewer
+*.md.html
+
 # Maven
 /target
 /*/target

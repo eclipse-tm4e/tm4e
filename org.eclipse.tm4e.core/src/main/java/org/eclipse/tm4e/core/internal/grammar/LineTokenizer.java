@@ -17,11 +17,11 @@
 package org.eclipse.tm4e.core.internal.grammar;
 
 import static java.lang.System.Logger.Level.*;
-import static org.eclipse.tm4e.core.internal.utils.MoreCollections.*;
 import static org.eclipse.tm4e.core.internal.utils.NullSafetyHelper.*;
 
 import java.lang.System.Logger;
 import java.lang.System.Logger.Level;
+import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -425,7 +425,7 @@ final class LineTokenizer {
 		}
 
 		final int len = Math.min(captures.size(), captureIndices.length);
-		final List<LocalStackElement> localStack = new ArrayList<>();
+		final var localStack = new ArrayDeque<LocalStackElement>();
 		final int maxEnd = captureIndices[0].end;
 		OnigCaptureIndex captureIndex;
 
@@ -449,14 +449,14 @@ final class LineTokenizer {
 			}
 
 			// pop captures while needed
-			while (!localStack.isEmpty() && getLastElement(localStack).endPos <= captureIndex.start) {
+			while (!localStack.isEmpty() && localStack.getLast().endPos <= captureIndex.start) {
 				// pop!
-				lineTokens.produceFromScopes(getLastElement(localStack).scopes, getLastElement(localStack).endPos);
-				removeLastElement(localStack);
+				final var lastElem = localStack.removeLast();
+				lineTokens.produceFromScopes(lastElem.scopes, lastElem.endPos);
 			}
 
 			if (!localStack.isEmpty()) {
-				lineTokens.produceFromScopes(getLastElement(localStack).scopes, captureIndex.start);
+				lineTokens.produceFromScopes(localStack.getLast().scopes, captureIndex.start);
 			} else {
 				lineTokens.produce(stack, captureIndex.start);
 			}
@@ -484,7 +484,7 @@ final class LineTokenizer {
 				// push
 				final ScopeListElement base = localStack.isEmpty()
 						? stack.contentNameScopesList
-						: getLastElement(localStack).scopes;
+						: localStack.getLast().scopes;
 				final ScopeListElement captureRuleScopesList = base.push(grammar, captureRuleScopeName);
 				localStack.add(new LocalStackElement(captureRuleScopesList, captureIndex.end));
 			}
@@ -492,8 +492,8 @@ final class LineTokenizer {
 
 		while (!localStack.isEmpty()) {
 			// pop!
-			lineTokens.produceFromScopes(getLastElement(localStack).scopes, getLastElement(localStack).endPos);
-			removeLastElement(localStack);
+			final var lastElem = localStack.removeLast();
+			lineTokens.produceFromScopes(lastElem.scopes, lastElem.endPos);
 		}
 	}
 

@@ -21,8 +21,10 @@ import static org.eclipse.tm4e.core.internal.utils.MoreCollections.*;
 import static org.eclipse.tm4e.core.internal.utils.NullSafetyHelper.*;
 
 import java.lang.System.Logger;
+import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Deque;
 import java.util.List;
 
 import org.eclipse.jdt.annotation.Nullable;
@@ -33,6 +35,8 @@ final class LineTokens {
 
 	private static final Logger LOGGER = System.getLogger(LineTokens.class.getName());
 
+	private static final Deque<IToken> EMPTY_DEQUE = new ArrayDeque<>(0);
+
 	/**
 	 * defined only if `LOGGER.isLoggable(TRACE)`.
 	 */
@@ -42,7 +46,7 @@ final class LineTokens {
 	/**
 	 * used only if `emitBinaryTokens` is false.
 	 */
-	private final List<IToken> tokens;
+	private final Deque<IToken> tokens;
 
 	private final boolean emitBinaryTokens;
 
@@ -63,10 +67,10 @@ final class LineTokens {
 		this.emitBinaryTokens = emitBinaryTokens;
 		this.lineText = LOGGER.isLoggable(TRACE) ? lineText : null; // store line only if it's logged
 		if (this.emitBinaryTokens) {
-			this.tokens = Collections.emptyList();
+			this.tokens = EMPTY_DEQUE;
 			this.binaryTokens = new ArrayList<>();
 		} else {
-			this.tokens = new ArrayList<>();
+			this.tokens = new ArrayDeque<>();
 			this.binaryTokens = Collections.emptyList();
 		}
 		this.tokenTypeOverrides = tokenTypeOverrides;
@@ -169,15 +173,15 @@ final class LineTokens {
 	}
 
 	IToken[] getResult(final StackElement stack, final int lineLength) {
-		if (!this.tokens.isEmpty() && getLastElement(this.tokens).getStartIndex() == lineLength - 1) {
+		if (!this.tokens.isEmpty() && this.tokens.getLast().getStartIndex() == lineLength - 1) {
 			// pop produced token for newline
-			removeLastElement(this.tokens);
+			this.tokens.removeLast();
 		}
 
 		if (this.tokens.isEmpty()) {
 			this.lastTokenEndIndex = -1;
 			this.produce(stack, lineLength);
-			getLastElement(this.tokens).setStartIndex(0);
+			this.tokens.getLast().setStartIndex(0);
 		}
 
 		return this.tokens.toArray(IToken[]::new);

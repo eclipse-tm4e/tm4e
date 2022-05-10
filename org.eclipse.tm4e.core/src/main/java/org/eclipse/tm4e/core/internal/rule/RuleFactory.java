@@ -259,4 +259,7 @@ public final class RuleFactory {
 
 		return new CompilePatternsResult(r.stream().mapToInt(Integer::intValue).toArray(), patterns.size() != r.size());
 	}
+
+	private RuleFactory() {
+	}
 }

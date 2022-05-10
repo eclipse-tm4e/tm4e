@@ -18,7 +18,7 @@ package org.eclipse.tm4e.core.internal.theme;
  *      "https://github.com/microsoft/vscode-textmate/blob/9157c7f869219dbaf9a5a5607f099c00fe694a29/src/theme.ts#L153">
  *      github.com/microsoft/vscode-textmate/blob/master/src/theme.ts</a>
  */
-public class FontStyle {
+public final class FontStyle {
 
 	public static final int NotSet = -1;
 
@@ -29,4 +29,6 @@ public class FontStyle {
 	public static final int Underline = 4;
 	public static final int Strikethrough = 8;
 
+	private FontStyle() {
+	}
 }

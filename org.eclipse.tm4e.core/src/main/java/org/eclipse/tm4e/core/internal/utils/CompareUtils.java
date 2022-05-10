@@ -48,4 +48,7 @@ public final class CompareUtils {
 		}
 		return len1 - len2;
 	}
+
+	private CompareUtils() {
+	}
 }

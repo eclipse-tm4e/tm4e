@@ -17,7 +17,7 @@ package org.eclipse.tm4e.core.internal.theme.css.sac;
  * @author <a href="mailto:angelo.zerr@gmail.com">Angelo ZERR</a>
  *
  */
-public class SACConstants {
+public final class SACConstants {
 
 	/**
 	 * org.w3c.flute.parser.Parser SAC Parser.
@@ -39,4 +39,6 @@ public class SACConstants {
 	 */
 	public static final String SACPARSER_BATIK = "org.apache.batik.css.parser.Parser";
 
+	private SACConstants() {
+	}
 }

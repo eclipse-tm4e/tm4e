@@ -85,14 +85,14 @@ public final class BenchmarkRunner {
 				final var heapBytesPerIteration = (startFreeMem - RUNTIME.freeMemory())
 						/ (float) iterations;
 				System.out.println(String.format(
-						" -> result: %5d ms/round | %,7.2f ops/s | %,5.2f ms/op | %,5.2f MB/op",
+						" -> result: %,5d ms/round | %,7.2f ops/s | %,5.2f ms/op | %,6.3f MB/op",
 						durationMS,
 						iterationsPerSecond,
 						durationMSPerIteration,
 						heapBytesPerIteration / 1024 / 1024));
 			} else {
 				System.out.println(String.format(
-						" -> result: %5d ms/round | %,7.2f ops/s | %,5.2f ms/op",
+						" -> result: %,5d ms/round | %,7.2f ops/s | %,5.2f ms/op",
 						durationMS,
 						iterationsPerSecond,
 						durationMSPerIteration));

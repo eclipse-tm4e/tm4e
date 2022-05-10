@@ -59,7 +59,7 @@ public final class ScopeListElement {
 				return false;
 			}
 
-			if (a.scope != b.scope || a.metadata != b.metadata) {
+			if (!Objects.equals(a.scope, b.scope) || a.metadata != b.metadata) {
 				return false;
 			}
 

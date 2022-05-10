@@ -81,10 +81,4 @@ public abstract class AbstractLineList implements IModelLines {
 			model.invalidateLine(lineIndex);
 		}
 	}
-
-	@Override
-	@Deprecated
-	public int getSize() {
-		return getNumberOfLines();
-	}
 }

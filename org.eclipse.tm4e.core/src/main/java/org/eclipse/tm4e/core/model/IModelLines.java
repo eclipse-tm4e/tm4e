@@ -40,12 +40,6 @@ public interface IModelLines {
 	void updateLine(int lineIndex);
 
 	/**
-	 * @deprecated use {@link #getNumberOfLines()}
-	 */
-	@Deprecated
-	int getSize();
-
-	/**
 	 * @param lineIndex (0-based)
 	 * @throws IndexOutOfBoundsException
 	 */

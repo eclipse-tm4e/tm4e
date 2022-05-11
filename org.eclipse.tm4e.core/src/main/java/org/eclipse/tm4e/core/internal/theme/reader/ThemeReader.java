@@ -47,18 +47,11 @@ public final class ThemeReader {
 	private static PListParser<ThemeRaw> getThemeParser(final String filePath) {
 		final String extension = filePath.substring(filePath.lastIndexOf('.') + 1).trim().toLowerCase();
 
-		switch (extension) {
-
-		case "json":
-			return JSON_PARSER;
-
-		case "yaml":
-		case "yml":
-			return YAML_PARSER;
-
-		default:
-			return XML_PARSER;
-		}
+		return switch (extension) {
+		case "json" -> JSON_PARSER;
+		case "yaml", "yml" -> YAML_PARSER;
+		default -> XML_PARSER;
+		};
 	}
 
 	/**

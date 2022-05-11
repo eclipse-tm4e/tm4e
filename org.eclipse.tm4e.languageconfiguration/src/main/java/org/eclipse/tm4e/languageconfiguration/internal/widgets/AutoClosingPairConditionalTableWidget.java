@@ -47,8 +47,7 @@ final class AutoClosingPairConditionalTableWidget extends CharacterPairsTableWid
 		@Override
 		public String getColumnText(@Nullable final Object element, final int columnIndex) {
 			if (columnIndex == 2) {
-				if ((element instanceof AutoClosingPairConditional)) {
-					final AutoClosingPairConditional conditionalPair = (AutoClosingPairConditional) element;
+				if (element instanceof AutoClosingPairConditional conditionalPair) {
 					return String.join(", ", conditionalPair.getNotIn()); //$NON-NLS-1$
 				}
 				return ""; //$NON-NLS-1$

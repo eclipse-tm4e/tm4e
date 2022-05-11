@@ -4,7 +4,7 @@ Bundle-Name: %pluginName
 Bundle-Vendor: %providerName
 Bundle-Localization: plugin
 Bundle-SymbolicName: org.eclipse.tm4e.core
-Bundle-Version: 0.4.4.qualifier
+Bundle-Version: 0.4.6.qualifier
 Require-Bundle: org.apache.batik.css;bundle-version="1.9.1";resolution:=optional,
  org.apache.batik.util;bundle-version="1.9.1";resolution:=optional,
  com.google.gson,
@@ -15,7 +15,7 @@ Require-Bundle: org.apache.batik.css;bundle-version="1.9.1";resolution:=optional
 Import-Package: org.w3c.css.sac;resolution:=optional,
  org.w3c.css.sac.helpers;resolution:=optional,
  org.w3c.dom.css
-Bundle-RequiredExecutionEnvironment: JavaSE-11
+Bundle-RequiredExecutionEnvironment: JavaSE-17
 Export-Package: org.eclipse.tm4e.core,
  org.eclipse.tm4e.core.grammar,
  org.eclipse.tm4e.core.internal.grammar;x-friends:="org.eclipse.tm4e.core.tests",

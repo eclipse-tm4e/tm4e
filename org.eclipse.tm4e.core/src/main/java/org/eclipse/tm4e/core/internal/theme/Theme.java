@@ -105,9 +105,7 @@ public class Theme {
 
 			final Object settingScope = entry.getScope();
 			List<String> scopes;
-			if (settingScope instanceof String) {
-				String scope = (String) settingScope;
-
+			if (settingScope instanceof String scope) {
 				// remove leading commas
 				scope = scope.replaceAll("^[,]+", "");
 
@@ -125,10 +123,10 @@ public class Theme {
 
 			int fontStyle = FontStyle.NotSet;
 			final Object settingsFontStyle = entrySetting.getFontStyle();
-			if (settingsFontStyle instanceof String) {
+			if (settingsFontStyle instanceof String style) {
 				fontStyle = FontStyle.None;
 
-				final Iterable<String> segments = BY_SPACE_SPLITTER.split((String) settingsFontStyle);
+				final Iterable<String> segments = BY_SPACE_SPLITTER.split(style);
 				for (final String segment : segments) {
 					switch (segment) {
 					case "italic":
@@ -149,14 +147,14 @@ public class Theme {
 
 			String foreground = null;
 			final Object settingsForeground = entrySetting.getForeground();
-			if (settingsForeground instanceof String && isValidHexColor((String) settingsForeground)) {
-				foreground = (String) settingsForeground;
+			if (settingsForeground instanceof String stringSettingsForeground && isValidHexColor(stringSettingsForeground)) {
+				foreground = stringSettingsForeground;
 			}
 
 			String background = null;
 			final Object settingsBackground = entrySetting.getBackground();
-			if (settingsBackground instanceof String && isValidHexColor((String) settingsBackground)) {
-				background = (String) settingsBackground;
+			if (settingsBackground instanceof String stringSettingsBackground && isValidHexColor(stringSettingsBackground)) {
+				background = stringSettingsBackground;
 			}
 
 			for (int j = 0, lenJ = scopes.size(); j < lenJ; j++) {

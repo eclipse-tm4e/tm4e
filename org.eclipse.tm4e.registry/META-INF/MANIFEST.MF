@@ -3,8 +3,8 @@ Bundle-ManifestVersion: 2
 Bundle-Name: %pluginName
 Bundle-Vendor: %providerName
 Bundle-SymbolicName: org.eclipse.tm4e.registry;singleton:=true
-Bundle-Version: 0.5.1.qualifier
-Bundle-RequiredExecutionEnvironment: JavaSE-11
+Bundle-Version: 0.5.2.qualifier
+Bundle-RequiredExecutionEnvironment: JavaSE-17
 Require-Bundle: org.eclipse.tm4e.core;bundle-version="0.4.4",
  org.eclipse.core.runtime,
  com.google.gson,

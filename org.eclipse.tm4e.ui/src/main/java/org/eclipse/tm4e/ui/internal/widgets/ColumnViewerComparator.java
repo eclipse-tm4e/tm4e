@@ -56,8 +56,8 @@ public final class ColumnViewerComparator extends ViewerComparator {
 	@Override
 	public int compare(@Nullable final Viewer viewer, @Nullable final Object e1, @Nullable final Object e2) {
 
-		if (viewer instanceof TableViewer) {
-			final IBaseLabelProvider baseLabel = ((TableViewer) viewer).getLabelProvider();
+		if (viewer instanceof TableViewer tableViewer) {
+			final IBaseLabelProvider baseLabel = tableViewer.getLabelProvider();
 
 			final String left = ((ITableLabelProvider) baseLabel).getColumnText(e1, fSortColumn);
 			final String right = ((ITableLabelProvider) baseLabel).getColumnText(e2, fSortColumn);

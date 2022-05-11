@@ -38,23 +38,22 @@ public final class ContentTypeLabelProvider extends LabelProvider implements ITa
 	@Nullable
 	@Override
 	public String getColumnText(@Nullable final Object element, final int columnIndex) {
-		switch (columnIndex) {
-		case 0:
+		return switch (columnIndex) {
+		case 0 -> {
 			IContentType contentType = null;
-			if(element instanceof IContentType) {
-				contentType = (IContentType) element;
-			} else if(element instanceof String) {
-				final String contentTypeId = (String) element;
+			if(element instanceof IContentType contentTypeElement) {
+				contentType = contentTypeElement;
+			} else if(element instanceof String contentTypeId) {
 				contentType = Platform.getContentTypeManager().getContentType(contentTypeId);
 				if (contentType == null) {
-					return contentTypeId;
+					yield contentTypeId;
 				}
 			} else {
-				return ""; //$NON-NLS-1$
+				yield ""; //$NON-NLS-1$
 			}
-			return contentType.getName() + " (" + contentType.getId() + ")";
-		default:
-			return ""; //$NON-NLS-1$
+			yield contentType.getName() + " (" + contentType.getId() + ")";
 		}
+		default -> ""; //$NON-NLS-1$
+		};
 	}
 }

@@ -168,9 +168,9 @@ public final class ContentTypeHelper {
 	private static ContentTypeInfo findContentTypesFromEditorInput(final IDocument document) {
 		final IEditorInput editorInput = getEditorInput(document);
 		if (editorInput != null) {
-			if (editorInput instanceof IStorageEditorInput) {
+			if (editorInput instanceof IStorageEditorInput storageInput) {
 				try {
-					final IStorage storage = ((IStorageEditorInput) editorInput).getStorage();
+					final IStorage storage = storageInput.getStorage();
 					final String fileName = storage.getName();
 					try (InputStream input = storage.getContents()) {
 						return new ContentTypeInfo(fileName,
@@ -214,7 +214,7 @@ public final class ContentTypeHelper {
 					try {
 						/* The element for which the info is stored */
 						final Object input = ClassHelper.getFieldValue(info, "fElement");
-						if (input instanceof IEditorInput) {
+						if (input instanceof IEditorInput editorInput) {
 							return (IEditorInput) input;
 						}
 					} catch (final Exception e) {

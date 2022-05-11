@@ -381,8 +381,7 @@ public class TMPresentationReconciler implements IPresentationReconciler {
 			final String text = e.getText();
 			final int length = text == null ? 0 : text.length();
 			final var viewer = castNonNull(TMPresentationReconciler.this.viewer);
-			if (viewer instanceof ITextViewerExtension5) {
-				final ITextViewerExtension5 extension = (ITextViewerExtension5) viewer;
+			if (viewer instanceof ITextViewerExtension5 extension) {
 				return extension.widgetRange2ModelRange(new Region(e.getOffset(), length));
 			}
 			final IRegion visible = viewer.getVisibleRegion();
@@ -412,19 +411,17 @@ public class TMPresentationReconciler implements IPresentationReconciler {
 				return;
 			}
 			final ITMModel model = event.model;
-			if (!(model instanceof TMDocumentModel)) {
-				return;
-			}
-			final TMDocumentModel docModel = (TMDocumentModel) model;
-			for (final Range range : event.ranges) {
-				try {
-					final int length = document.getLineOffset(range.toLineNumber - 1)
-							+ document.getLineLength(range.toLineNumber - 1)
-							- document.getLineOffset(range.fromLineNumber - 1);
-					final IRegion region = new Region(document.getLineOffset(range.fromLineNumber - 1), length);
-					TMPresentationReconciler.this.colorize(region, docModel);
-				} catch (final BadLocationException ex) {
-					TMUIPlugin.log(new Status(IStatus.ERROR, TMUIPlugin.PLUGIN_ID, ex.getMessage(), ex));
+			if (model instanceof TMDocumentModel docModel) {
+				for (final Range range : event.ranges) {
+					try {
+						final int length = document.getLineOffset(range.toLineNumber - 1)
+								+ document.getLineLength(range.toLineNumber - 1)
+								- document.getLineOffset(range.fromLineNumber - 1);
+						final IRegion region = new Region(document.getLineOffset(range.fromLineNumber - 1), length);
+						TMPresentationReconciler.this.colorize(region, docModel);
+					} catch (final BadLocationException ex) {
+						TMUIPlugin.log(new Status(IStatus.ERROR, TMUIPlugin.PLUGIN_ID, ex.getMessage(), ex));
+					}
 				}
 			}
 		}
@@ -486,14 +483,12 @@ public class TMPresentationReconciler implements IPresentationReconciler {
 				return;
 			final IDocument document = viewer.getDocument();
 			final ITMModel model = getTMModelManager().connect(document);
-			if (!(model instanceof TMDocumentModel)) {
-				return;
-			}
-			final TMDocumentModel docModel = (TMDocumentModel) model;
-			try {
-				colorize(new Region(0, document.getLength()), docModel);
-			} catch (final BadLocationException e) {
-				TMUIPlugin.log(new Status(IStatus.ERROR, TMUIPlugin.PLUGIN_ID, e.getMessage(), e));
+			if (model instanceof TMDocumentModel docModel) {
+				try {
+					colorize(new Region(0, document.getLength()), docModel);
+				} catch (final BadLocationException e) {
+					TMUIPlugin.log(new Status(IStatus.ERROR, TMUIPlugin.PLUGIN_ID, e.getMessage(), e));
+				}
 			}
 		}
 	}
@@ -683,8 +678,8 @@ public class TMPresentationReconciler implements IPresentationReconciler {
 	 */
 	protected TextAttribute getTokenTextAttribute(final IToken token) {
 		final Object data = token.getData();
-		if (data instanceof TextAttribute) {
-			return (TextAttribute) data;
+		if (data instanceof TextAttribute textAttribute) {
+			return textAttribute;
 		}
 		return fDefaultTextAttribute;
 	}
@@ -774,8 +769,7 @@ public class TMPresentationReconciler implements IPresentationReconciler {
 		}
 		@Nullable
 		final ITextOperationTarget target = editorPart.getAdapter(ITextOperationTarget.class);
-		if (target instanceof ITextViewer) {
-			final ITextViewer textViewer = ((ITextViewer) target);
+		if (target instanceof ITextViewer textViewer) {
 			return TMPresentationReconciler.getTMPresentationReconciler(textViewer);
 		}
 		return null;
@@ -794,8 +788,8 @@ public class TMPresentationReconciler implements IPresentationReconciler {
 				field.trySetAccessible();
 				final Object presentationReconciler = field.get(textViewer);
 				// field is IPresentationRecounciler, looking for TMPresentationReconciler implementation
-				return presentationReconciler instanceof TMPresentationReconciler
-						? (TMPresentationReconciler) presentationReconciler
+				return presentationReconciler instanceof TMPresentationReconciler tmPresentationReconciler 
+						? tmPresentationReconciler
 						: null;
 			}
 		} catch (SecurityException | NoSuchFieldException e) {
@@ -852,11 +846,11 @@ public class TMPresentationReconciler implements IPresentationReconciler {
 				return;
 			}
 			for (final IPainter painter : painters) {
-				if (painter instanceof CursorLinePainter) {
+				if (painter instanceof CursorLinePainter cursorLinePainter) {
 					// Update current line highlight
 					final Color background = tokenProvider.getEditorCurrentLineHighlight();
 					if (background != null) {
-						((CursorLinePainter) painter).setHighlightColor(background);
+						cursorLinePainter.setHighlightColor(background);
 					}
 					updateTextDecorations = true;
 				}

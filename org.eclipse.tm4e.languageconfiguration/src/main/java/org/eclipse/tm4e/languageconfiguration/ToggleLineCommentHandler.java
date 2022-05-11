@@ -61,89 +61,87 @@ public class ToggleLineCommentHandler extends AbstractHandler {
 			return null;
 		}
 		final var selection = editor.getSelectionProvider().getSelection();
-		if (!(selection instanceof ITextSelection)) {
-			return null;
-		}
-		final var textSelection = (ITextSelection) selection;
-		final var input = editor.getEditorInput();
-		final var docProvider = editor.getDocumentProvider();
-		if (docProvider == null || input == null) {
-			return null;
-		}
-
-		final var document = docProvider.getDocument(input);
-		if (document == null) {
-			return null;
-		}
-
-		final ContentTypeInfo info;
-		try {
-			info = ContentTypeHelper.findContentTypes(document);
-			if (info == null)
+		if (selection instanceof ITextSelection textSelection) {
+			final var input = editor.getEditorInput();
+			final var docProvider = editor.getDocumentProvider();
+			if (docProvider == null || input == null) {
 				return null;
-		} catch (final CoreException e) {
-			return null;
-		}
-		final var contentTypes = info.getContentTypes();
-		final var command = event.getCommand();
-		final var commentSupport = getCommentSupport(contentTypes);
-		if (commentSupport == null) {
-			return null;
-		}
-		// Check if comment support is valid according the command to do.
-		if (!isValid(commentSupport, command)) {
-			return null;
-		}
-
-		final var target = adapt(editor, IRewriteTarget.class);
-		if (target != null) {
-			target.beginCompoundChange();
-		}
-		try {
-			switch (command.getId()) {
-			case TOGGLE_LINE_COMMENT_COMMAND_ID: {
-				final var lineComment = commentSupport.getLineComment();
-				if (lineComment != null && !lineComment.isEmpty()) {
-					updateLineComment(document, textSelection, lineComment, editor);
-				} else {
-					final var blockComment = commentSupport.getBlockComment();
-					if (blockComment != null) {
-						final Set<Integer> lines = computeLines(textSelection, document);
-						for (final int line : lines) {
-							final int lineOffset = document.getLineOffset(line);
-							final int lineLength = document.getLineLength(line);
-							final ITextSelection range = new TextSelection(lineOffset,
-									line == document.getNumberOfLines() - 1 ? lineLength : lineLength - 1);
-							toggleBlockComment(document, range, commentSupport, editor);
+			}
+	
+			final var document = docProvider.getDocument(input);
+			if (document == null) {
+				return null;
+			}
+	
+			final ContentTypeInfo info;
+			try {
+				info = ContentTypeHelper.findContentTypes(document);
+				if (info == null)
+					return null;
+			} catch (final CoreException e) {
+				return null;
+			}
+			final var contentTypes = info.getContentTypes();
+			final var command = event.getCommand();
+			final var commentSupport = getCommentSupport(contentTypes);
+			if (commentSupport == null) {
+				return null;
+			}
+			// Check if comment support is valid according the command to do.
+			if (!isValid(commentSupport, command)) {
+				return null;
+			}
+	
+			final var target = adapt(editor, IRewriteTarget.class);
+			if (target != null) {
+				target.beginCompoundChange();
+			}
+			try {
+				switch (command.getId()) {
+				case TOGGLE_LINE_COMMENT_COMMAND_ID: {
+					final var lineComment = commentSupport.getLineComment();
+					if (lineComment != null && !lineComment.isEmpty()) {
+						updateLineComment(document, textSelection, lineComment, editor);
+					} else {
+						final var blockComment = commentSupport.getBlockComment();
+						if (blockComment != null) {
+							final Set<Integer> lines = computeLines(textSelection, document);
+							for (final int line : lines) {
+								final int lineOffset = document.getLineOffset(line);
+								final int lineLength = document.getLineLength(line);
+								final ITextSelection range = new TextSelection(lineOffset,
+										line == document.getNumberOfLines() - 1 ? lineLength : lineLength - 1);
+								toggleBlockComment(document, range, commentSupport, editor);
+							}
 						}
 					}
+					break;
 				}
-				break;
-			}
-
-			case ADD_BLOCK_COMMENT_COMMAND_ID: {
-				final IRegion existingBlock = getBlockComment(document, textSelection, commentSupport);
-				final var blockComment = commentSupport.getBlockComment();
-				if (existingBlock != null && blockComment != null) {
-					addBlockComment(document, textSelection, blockComment, editor);
+	
+				case ADD_BLOCK_COMMENT_COMMAND_ID: {
+					final IRegion existingBlock = getBlockComment(document, textSelection, commentSupport);
+					final var blockComment = commentSupport.getBlockComment();
+					if (existingBlock != null && blockComment != null) {
+						addBlockComment(document, textSelection, blockComment, editor);
+					}
+					break;
 				}
-				break;
-			}
-
-			case REMOVE_BLOCK_COMMENT_COMMAND_ID: {
-				final IRegion existingBlock = getBlockComment(document, textSelection, commentSupport);
-				final var blockComment = commentSupport.getBlockComment();
-				if (existingBlock != null && blockComment != null) {
-					removeBlockComment(document, textSelection, existingBlock, blockComment, editor);
+	
+				case REMOVE_BLOCK_COMMENT_COMMAND_ID: {
+					final IRegion existingBlock = getBlockComment(document, textSelection, commentSupport);
+					final var blockComment = commentSupport.getBlockComment();
+					if (existingBlock != null && blockComment != null) {
+						removeBlockComment(document, textSelection, existingBlock, blockComment, editor);
+					}
+					break;
 				}
-				break;
-			}
-			}
-		} catch (final BadLocationException e) {
-			// Caught by making no changes
-		} finally {
-			if (target != null) {
-				target.endCompoundChange();
+				}
+			} catch (final BadLocationException e) {
+				// Caught by making no changes
+			} finally {
+				if (target != null) {
+					target.endCompoundChange();
+				}
 			}
 		}
 		return null;
@@ -151,8 +149,8 @@ public class ToggleLineCommentHandler extends AbstractHandler {
 
 	private Set<Integer> computeLines(final ITextSelection textSelection, final IDocument document)
 			throws BadLocationException {
-		final var regions = textSelection instanceof IMultiTextSelection
-				? ((IMultiTextSelection) textSelection).getRegions()
+		final var regions = textSelection instanceof IMultiTextSelection multiSelection
+				? multiSelection.getRegions()
 				: new IRegion[] { new Region(textSelection.getOffset(), textSelection.getLength()) };
 		final var lines = new HashSet<Integer>();
 		for (final var region : regions) {

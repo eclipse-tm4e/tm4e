@@ -64,18 +64,14 @@ public class GrammarInjectionTest {
 			@Override
 			public String getFilePath(@Nullable String scopeName) {
 				if (scopeName != null) {
-					switch (scopeName) {
-					case "source.js":
-						return "JavaScript.tmLanguage.json";
-					case "text.html.basic":
-						return "html.json";
-					case "source.ts":
-						return "TypeScript.tmLanguage.json";
-					case "template.ng":
-						return "template.ng.json";
-					case "styles.ng":
-						return "styles.ng.json";
-					}
+					return switch (scopeName) {
+					case "source.js" -> "JavaScript.tmLanguage.json";
+					case "text.html.basic" -> "html.json";
+					case "source.ts" -> "TypeScript.tmLanguage.json";
+					case "template.ng" -> "template.ng.json";
+					case "styles.ng" -> "styles.ng.json";
+					default -> null;
+					};
 				}
 				return null;
 			}

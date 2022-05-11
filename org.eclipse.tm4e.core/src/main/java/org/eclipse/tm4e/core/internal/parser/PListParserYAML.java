@@ -39,10 +39,10 @@ public final class PListParserYAML<T> implements PListParser<T> {
 		pList.startElement(null, "array", null, null);
 
 		for (final Object item : list) {
-			if (item instanceof List) {
-				addListToPList(pList, (List<Object>) item);
-			} else if (item instanceof Map) {
-				addMapToPList(pList, (Map<String, Object>) item);
+			if (item instanceof List items) {
+				addListToPList(pList, items);
+			} else if (item instanceof Map map) {
+				addMapToPList(pList, map);
 			} else {
 				addStringToPList(pList, item.toString());
 			}
@@ -60,10 +60,10 @@ public final class PListParserYAML<T> implements PListParser<T> {
 			pList.startElement(null, "key", null, null);
 			pList.characters(entry.getKey());
 			pList.endElement(null, "key", null);
-			if (entry.getValue() instanceof List) {
-				addListToPList(pList, (List<Object>) entry.getValue());
-			} else if (entry.getValue() instanceof Map) {
-				addMapToPList(pList, (Map<String, Object>) entry.getValue());
+			if (entry.getValue() instanceof List list) {
+				addListToPList(pList, list);
+			} else if (entry.getValue() instanceof Map valueMap) {
+				addMapToPList(pList, valueMap);
 			} else {
 				addStringToPList(pList, castNonNull(entry.getValue()).toString());
 			}

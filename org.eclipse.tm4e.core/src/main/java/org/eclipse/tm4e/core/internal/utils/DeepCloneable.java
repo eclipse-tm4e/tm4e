@@ -26,17 +26,15 @@ public interface DeepCloneable {
 
 	@SuppressWarnings("unchecked")
 	public static <T> T deepClone(final T obj) {
-		if (obj instanceof DeepCloneable) {
-			return (T) ((DeepCloneable) obj).deepClone();
+		if (obj instanceof DeepCloneable deepCloneable) {
+			return (T) deepCloneable.deepClone();
 		}
 
-		if (obj instanceof List) {
-			final List<@Nullable Object> clone;
-			if (obj instanceof ArrayList) {
-				final var source = (ArrayList<@Nullable Object>) obj;
+		if (obj instanceof List<?>) {
+			List<@Nullable ?> clone;
+			if (obj instanceof ArrayList<?> source) {
 				clone = (ArrayList<@Nullable Object>) source.clone();
-			} else if (obj instanceof LinkedList) {
-				final var source = (LinkedList<@Nullable Object>) obj;
+			} else if (obj instanceof LinkedList<?> source) {
 				clone = (LinkedList<@Nullable Object>) source.clone();
 			} else {
 				final var source = (List<@Nullable Object>) obj;
@@ -47,14 +45,12 @@ public interface DeepCloneable {
 		}
 
 		if (obj instanceof Set) {
-			final Set<@Nullable Object> source;
+			final Set<@Nullable ?> source;
 			final Set<@Nullable Object> clone;
-			if (obj instanceof TreeSet) {
-				final var cloneable = (TreeSet<@Nullable Object>) obj;
+			if (obj instanceof TreeSet<?> cloneable) {
 				source = cloneable;
 				clone = (Set<@Nullable Object>) cloneable.clone();
-			} else if (obj instanceof HashSet) {
-				final var cloneable = (HashSet<@Nullable Object>) obj;
+			} else if (obj instanceof HashSet<?> cloneable) {
 				source = cloneable;
 				clone = (Set<@Nullable Object>) cloneable.clone();
 			} else {
@@ -69,20 +65,17 @@ public interface DeepCloneable {
 		}
 
 		if (obj instanceof Map) {
-			if (obj instanceof HashMap) {
-				final var source = (HashMap<Object, @Nullable Object>) obj;
+			if (obj instanceof HashMap<?, ?> source) {
 				final var clone = (Map<Object, @Nullable Object>) source.clone();
 				clone.replaceAll((k, v) -> deepCloneNullable(v));
 				return (T) clone;
 			}
-			if (obj instanceof IdentityHashMap) {
-				final var source = (IdentityHashMap<Object, @Nullable Object>) obj;
+			if (obj instanceof IdentityHashMap<?, ?> source) {
 				final var clone = (Map<Object, @Nullable Object>) source.clone();
 				clone.replaceAll((k, v) -> deepCloneNullable(v));
 				return (T) clone;
 			}
-			if (obj instanceof TreeMap) {
-				final var source = (TreeMap<Object, @Nullable Object>) obj;
+			if (obj instanceof TreeMap<?, ?> source) {
 				final var clone = (Map<Object, @Nullable Object>) source.clone();
 				clone.replaceAll((k, v) -> deepCloneNullable(v));
 				return (T) clone;

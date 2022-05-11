@@ -13,7 +13,10 @@ package org.eclipse.tm4e.languageconfiguration.internal.widgets;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
+import java.util.regex.Pattern;
 
+import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.jface.layout.TableColumnLayout;
 import org.eclipse.jface.resource.JFaceResources;
@@ -116,33 +119,29 @@ final class OnEnterRuleTableWidget extends TableViewer {
 			return getColumnText(element, 0);
 		}
 
-		@Nullable
 		@Override
-		public String getColumnText(@Nullable final Object element, final int columnIndex) {
+		public @Nullable String getColumnText(@Nullable final Object element, final int columnIndex) {
 			if (element == null)
 				return "";
 
 			final OnEnterRule rule = (OnEnterRule) element;
 			final EnterAction action = rule.getAction();
 
-			switch (columnIndex) {
-			case 0:
-				final var beforeText = rule.getBeforeText();
-				return beforeText == null ? "" : beforeText.pattern();
-			case 1:
-				final var afterText = rule.getAfterText();
-				return afterText == null ? "" : afterText.pattern(); //$NON-NLS-1$
-			case 2:
-				return action.getIndentAction().toString();
-			case 3:
-				final var appendText = action.getAppendText();
-				return appendText == null ? "" : appendText; //$NON-NLS-1$
-			case 4:
-				final var removeText = action.getRemoveText();
-				return removeText == null ? "" : removeText.toString(); //$NON-NLS-1$
-			default:
-				return ""; //$NON-NLS-1$
-			}
+			return switch (columnIndex) {
+			case 0 -> Optional.ofNullable(rule.getBeforeText()).map(OnEnterRuleTableWidget::nonNull).map(Pattern::pattern).orElse("");
+			case 1 -> Optional.ofNullable(rule.getAfterText()).map(OnEnterRuleTableWidget::nonNull).map(Pattern::pattern).orElse("");
+			case 2 -> action.getIndentAction().toString();
+			case 3 -> Optional.ofNullable(action.getAppendText()).orElse("");
+			case 4 -> Optional.ofNullable(action.getRemoveText()).map(OnEnterRuleTableWidget::nonNull).map(Object::toString).orElse("");
+			default -> ""; //$NON-NLS-1$
+			};
 		}
+	}
+	
+	private static <T> @NonNull T nonNull(final @Nullable T obj) {
+		if (obj != null) {
+			return obj;
+		}
+		throw new IllegalArgumentException("argument mustn't be null");
 	}
 }

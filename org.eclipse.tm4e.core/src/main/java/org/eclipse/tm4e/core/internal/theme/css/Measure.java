@@ -57,39 +57,23 @@ final class Measure extends CSSValueImpl {
 
 	@Override
 	public short getPrimitiveType() {
-		switch (value.getLexicalUnitType()) {
-		case LexicalUnit.SAC_IDENT:
-			return CSS_IDENT;
-		case LexicalUnit.SAC_INTEGER:
-		case LexicalUnit.SAC_REAL:
-			return CSS_NUMBER;
-		case LexicalUnit.SAC_URI:
-			return CSS_URI;
-		case LexicalUnit.SAC_PERCENTAGE:
-			return CSS_PERCENTAGE;
-		case LexicalUnit.SAC_PIXEL:
-			return CSS_PX;
-		case LexicalUnit.SAC_CENTIMETER:
-			return CSS_CM;
-		case LexicalUnit.SAC_EM:
-			return CSS_EMS;
-		case LexicalUnit.SAC_EX:
-			return CSS_EXS;
-		case LexicalUnit.SAC_INCH:
-			return CSS_IN;
-		case LexicalUnit.SAC_STRING_VALUE:
-			return CSS_STRING;
-		case LexicalUnit.SAC_DIMENSION:
-			return CSS_DIMENSION;
-		case LexicalUnit.SAC_OPERATOR_COMMA:
-			return CSS_CUSTOM; // TODO don't think this is right, see bug #278139
-		case LexicalUnit.SAC_INHERIT:
-			return CSS_INHERIT;
-		default:
-			// TODO Auto-generated method stub
-			throw new UnsupportedOperationException(
+		return switch (value.getLexicalUnitType()) {
+		case LexicalUnit.SAC_IDENT -> CSS_IDENT;
+		case LexicalUnit.SAC_INTEGER, LexicalUnit.SAC_REAL -> CSS_NUMBER;
+		case LexicalUnit.SAC_URI -> CSS_URI;
+		case LexicalUnit.SAC_PERCENTAGE -> CSS_PERCENTAGE;
+		case LexicalUnit.SAC_PIXEL -> CSS_PX;
+		case LexicalUnit.SAC_CENTIMETER -> CSS_CM;
+		case LexicalUnit.SAC_EM -> CSS_EMS;
+		case LexicalUnit.SAC_EX -> CSS_EXS;
+		case LexicalUnit.SAC_INCH -> CSS_IN;
+		case LexicalUnit.SAC_STRING_VALUE -> CSS_STRING;
+		case LexicalUnit.SAC_DIMENSION -> CSS_DIMENSION;
+		case LexicalUnit.SAC_OPERATOR_COMMA -> CSS_CUSTOM; // TODO don't think this is right, see bug #278139
+		case LexicalUnit.SAC_INHERIT -> CSS_INHERIT;
+		default -> throw new UnsupportedOperationException(
 					"NOT YET IMPLEMENTED - LexicalUnit type: " + value.getLexicalUnitType());
-		}
+		};
 	}
 
 	@Override
@@ -97,28 +81,23 @@ final class Measure extends CSSValueImpl {
 		// TODO: All LexicalUnit.SAC_OPERATOR_* except for COMMA left undone for
 		// now as it's not even clear whether they should be treated as measures
 		// see bug #278139
-		switch (value.getLexicalUnitType()) {
-		case LexicalUnit.SAC_INTEGER:
-			return String.valueOf(value.getIntegerValue());
-		case LexicalUnit.SAC_REAL:
-			return String.valueOf(value.getFloatValue());
-		case LexicalUnit.SAC_PERCENTAGE:
-		case LexicalUnit.SAC_PIXEL:
-		case LexicalUnit.SAC_CENTIMETER:
-		case LexicalUnit.SAC_EM:
-		case LexicalUnit.SAC_EX:
-		case LexicalUnit.SAC_PICA:
-		case LexicalUnit.SAC_POINT:
-		case LexicalUnit.SAC_INCH:
-		case LexicalUnit.SAC_DEGREE:
-			return String.valueOf(value.getFloatValue()) + value.getDimensionUnitText();
-		case LexicalUnit.SAC_URI:
-			return "url(" + value.getStringValue() + ")";
-		case LexicalUnit.SAC_OPERATOR_COMMA:
-			return ",";
-		case LexicalUnit.SAC_INHERIT:
-			return "inherit";
-		}
-		return value.getStringValue();
+		return switch (value.getLexicalUnitType()) {
+		case LexicalUnit.SAC_INTEGER -> String.valueOf(value.getIntegerValue());
+		case LexicalUnit.SAC_REAL -> String.valueOf(value.getFloatValue());
+		case LexicalUnit.SAC_PERCENTAGE,
+			LexicalUnit.SAC_PIXEL,
+			LexicalUnit.SAC_CENTIMETER,
+			LexicalUnit.SAC_EM,
+			LexicalUnit.SAC_EX,
+			LexicalUnit.SAC_PICA,
+			LexicalUnit.SAC_POINT,
+			LexicalUnit.SAC_INCH,
+			LexicalUnit.SAC_DEGREE ->
+			String.valueOf(value.getFloatValue()) + value.getDimensionUnitText();
+		case LexicalUnit.SAC_URI -> "url(" + value.getStringValue() + ")";
+		case LexicalUnit.SAC_OPERATOR_COMMA -> ",";
+		case LexicalUnit.SAC_INHERIT -> "inherit";
+		default -> value.getStringValue();
+		};
 	}
 }

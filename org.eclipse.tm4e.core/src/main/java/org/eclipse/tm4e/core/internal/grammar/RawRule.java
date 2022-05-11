@@ -94,10 +94,10 @@ public class RawRule extends HashMap<String, @Nullable Object>
 
 	private void updateCaptures(final String name) {
 		final Object captures = get(name);
-		if (captures instanceof List) {
+		if (captures instanceof List<?> capturesList) {
 			final RawRule rawCaptures = new RawRule();
 			int i = 0;
-			for (final Object capture : (List<?>) captures) {
+			for (final Object capture : capturesList) {
 				i++;
 				rawCaptures.put(Integer.toString(i), capture);
 			}
@@ -177,11 +177,11 @@ public class RawRule extends HashMap<String, @Nullable Object>
 		if (applyEndPatternLast == null) {
 			return false;
 		}
-		if (applyEndPatternLast instanceof Boolean) {
-			return (Boolean) applyEndPatternLast;
+		if (applyEndPatternLast instanceof Boolean asBool) {
+			return asBool;
 		}
-		if (applyEndPatternLast instanceof Integer) {
-			return ((Integer) applyEndPatternLast) == 1;
+		if (applyEndPatternLast instanceof Integer asInt) {
+			return asInt == 1;
 		}
 		return false;
 	}

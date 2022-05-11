@@ -96,10 +96,10 @@ final class PListContentHandler<T> extends DefaultHandler {
 
 		@SuppressWarnings("unchecked")
 		void addValue(final Object value) {
-			if (values instanceof PropertySettable) {
-				((PropertySettable<Object>) values).setProperty(path.last(), value);
-			} else if (values instanceof List) {
-				((List<Object>) values).add(value);
+			if (values instanceof PropertySettable propertySettable) {
+				propertySettable.setProperty(path.last(), value);
+			} else if (values instanceof List list) {
+				list.add(value);
 			}
 		}
 	}

@@ -121,18 +121,13 @@ public final class ColorManager {
 	 * @return system default token or empty string if doesn't exist
 	 */
 	private String getSystemDefaultToken(final String tokenId) {
-		switch (tokenId) {
-		case AbstractTextEditor.PREFERENCE_COLOR_FOREGROUND:
-			return AbstractTextEditor.PREFERENCE_COLOR_FOREGROUND_SYSTEM_DEFAULT;
-		case AbstractTextEditor.PREFERENCE_COLOR_BACKGROUND:
-			return AbstractTextEditor.PREFERENCE_COLOR_BACKGROUND_SYSTEM_DEFAULT;
-		case AbstractTextEditor.PREFERENCE_COLOR_SELECTION_BACKGROUND:
-			return AbstractTextEditor.PREFERENCE_COLOR_SELECTION_BACKGROUND_SYSTEM_DEFAULT;
-		case AbstractTextEditor.PREFERENCE_COLOR_SELECTION_FOREGROUND:
-			return AbstractTextEditor.PREFERENCE_COLOR_SELECTION_FOREGROUND_SYSTEM_DEFAULT;
-		default:
-			return "";
-		}
+		return switch (tokenId) {
+		case AbstractTextEditor.PREFERENCE_COLOR_FOREGROUND -> AbstractTextEditor.PREFERENCE_COLOR_FOREGROUND_SYSTEM_DEFAULT;
+		case AbstractTextEditor.PREFERENCE_COLOR_BACKGROUND -> AbstractTextEditor.PREFERENCE_COLOR_BACKGROUND_SYSTEM_DEFAULT;
+		case AbstractTextEditor.PREFERENCE_COLOR_SELECTION_BACKGROUND -> AbstractTextEditor.PREFERENCE_COLOR_SELECTION_BACKGROUND_SYSTEM_DEFAULT;
+		case AbstractTextEditor.PREFERENCE_COLOR_SELECTION_FOREGROUND -> AbstractTextEditor.PREFERENCE_COLOR_SELECTION_FOREGROUND_SYSTEM_DEFAULT;
+		default -> "";
+		};
 	}
 
 	/**

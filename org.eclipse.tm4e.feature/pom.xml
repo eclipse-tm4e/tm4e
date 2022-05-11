@@ -7,5 +7,5 @@
   </parent>
   <artifactId>org.eclipse.tm4e.feature</artifactId>
   <packaging>eclipse-feature</packaging>
-  <version>0.4.5-SNAPSHOT</version>
+  <version>0.4.6-SNAPSHOT</version>
 </project>

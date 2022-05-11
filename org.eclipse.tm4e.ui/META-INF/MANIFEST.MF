@@ -4,7 +4,7 @@ Bundle-Name: %pluginName
 Bundle-Vendor: %providerName
 Bundle-Localization: plugin
 Bundle-SymbolicName: org.eclipse.tm4e.ui;singleton:=true
-Bundle-Version: 0.5.1.qualifier
+Bundle-Version: 0.5.2.qualifier
 Require-Bundle: org.eclipse.tm4e.core;bundle-version="0.4.4",
  org.eclipse.jface.text,
  org.eclipse.core.runtime,
@@ -19,7 +19,7 @@ Require-Bundle: org.eclipse.tm4e.core;bundle-version="0.4.4",
  org.eclipse.core.expressions,
  org.eclipse.ui.workbench.texteditor,
  org.eclipse.ui.trace;resolution:=optional
-Bundle-RequiredExecutionEnvironment: JavaSE-11
+Bundle-RequiredExecutionEnvironment: JavaSE-17
 Export-Package: org.eclipse.tm4e.ui,
  org.eclipse.tm4e.ui.internal.model;x-friends:="org.eclipse.tm4e.ui.tests",
  org.eclipse.tm4e.ui.internal.themes;x-friends:="org.eclipse.tm4e.ui.tests",

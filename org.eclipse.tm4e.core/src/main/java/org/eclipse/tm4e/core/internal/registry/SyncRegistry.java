@@ -190,19 +190,17 @@ public final class SyncRegistry implements IGrammarRepository, IThemeProvider {
 	 */
 	private static void extractIncludedScopesInRepository(final Collection<String> result,
 			final IRawRepository repository) {
-		if (!(repository instanceof RawRule)) {
-			return;
-		}
-		final RawRule rawRepository = (RawRule) repository;
-		for (final var entry : rawRepository.values()) {
-			final IRawRule rule = (IRawRule) castNonNull(entry);
-			final var patterns = rule.getPatterns();
-			if (patterns != null) {
-				extractIncludedScopesInPatterns(result, patterns);
-			}
-			final var repo = rule.getRepository();
-			if (repo != null) {
-				extractIncludedScopesInRepository(result, repo);
+		if (repository instanceof RawRule rawRepository) {
+			for (final var entry : rawRepository.values()) {
+				final IRawRule rule = (IRawRule) castNonNull(entry);
+				final var patterns = rule.getPatterns();
+				if (patterns != null) {
+					extractIncludedScopesInPatterns(result, patterns);
+				}
+				final var repo = rule.getRepository();
+				if (repo != null) {
+					extractIncludedScopesInRepository(result, repo);
+				}
 			}
 		}
 	}

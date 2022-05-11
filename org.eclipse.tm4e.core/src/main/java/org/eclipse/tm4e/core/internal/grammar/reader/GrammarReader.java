@@ -39,16 +39,14 @@ public final class GrammarReader {
 		if (path.size() == 0) {
 			return new RawGrammar();
 		}
-		switch (path.last()) {
-		case RawRule.REPOSITORY:
-			return new RawRepository();
-		case RawRule.BEGIN_CAPTURES:
-		case RawRule.CAPTURES:
-		case RawRule.END_CAPTURES:
-		case RawRule.WHILE_CAPTURES:
-			return new RawCaptures();
-		}
-		return new RawRule();
+		return switch (path.last()) {
+		case RawRule.REPOSITORY -> new RawRepository();
+		case RawRule.BEGIN_CAPTURES,
+			RawRule.CAPTURES,
+			RawRule.END_CAPTURES,
+			RawRule.WHILE_CAPTURES -> new RawCaptures();
+		default -> new RawRule();
+		};
 	};
 
 	private static final PListParser<RawGrammar> JSON_PARSER = new PListParserJSON<>(OBJECT_FACTORY);
@@ -62,19 +60,11 @@ public final class GrammarReader {
 	private static PListParser<RawGrammar> getGrammarParser(final String filePath) {
 		final String extension = filePath.substring(filePath.lastIndexOf('.') + 1).trim().toLowerCase();
 
-		switch (extension) {
-
-		case "json":
-			return JSON_PARSER;
-
-		case "yaml":
-		case "yaml-tmlanguage":
-		case "yml":
-			return YAML_PARSER;
-
-		default:
-			return XML_PARSER;
-		}
+		return switch (extension) {
+		case "json" -> JSON_PARSER;
+		case "yaml", "yaml-tmlanguage", "yml" -> YAML_PARSER;
+		default -> XML_PARSER;
+		};
 	}
 
 	/**

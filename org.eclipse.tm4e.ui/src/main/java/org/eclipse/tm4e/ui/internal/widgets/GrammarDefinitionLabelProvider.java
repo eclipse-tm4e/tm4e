@@ -41,15 +41,11 @@ public final class GrammarDefinitionLabelProvider extends LabelProvider implemen
 
 		final IGrammarDefinition definition = (IGrammarDefinition) element;
 
-		switch (columnIndex) {
-		case 0:
-			return definition.getScopeName();
-		case 1:
-			return definition.getPath();
-		case 2:
-			return definition.getPluginId();
-		default:
-			return ""; //$NON-NLS-1$
-		}
+		return switch (columnIndex) {
+			case 0 -> definition.getScopeName();
+			case 1 -> definition.getPath();
+			case 2 -> definition.getPluginId();
+			default -> "";
+		};
 	}
 }

@@ -46,17 +46,17 @@ public final class ThemeAssociationLabelProvider extends LabelProvider implement
 			return "";
 
 		final IThemeAssociation association = (IThemeAssociation) element;
-		switch (columnIndex) {
-		case 0:
-			final ITheme theme = getTheme(association);
-			final String themeName = theme != null ? theme.getName() : association.getThemeId();
-			if (association.isWhenDark()) {
-				return NLS.bind(TMUIMessages.ThemeAssociationLabelProvider_dark, themeName);
+		return switch (columnIndex) {
+			case 0 -> {
+				final ITheme theme = getTheme(association);
+				final String themeName = theme != null ? theme.getName() : association.getThemeId();
+				if (association.isWhenDark()) {
+					yield NLS.bind(TMUIMessages.ThemeAssociationLabelProvider_dark, themeName);
+				}
+				yield NLS.bind(TMUIMessages.ThemeAssociationLabelProvider_light, themeName);
 			}
-			return NLS.bind(TMUIMessages.ThemeAssociationLabelProvider_light, themeName);
-		default:
-			return ""; //$NON-NLS-1$
-		}
+			default -> ""; //$NON-NLS-1$
+		};
 	}
 
 	@Nullable

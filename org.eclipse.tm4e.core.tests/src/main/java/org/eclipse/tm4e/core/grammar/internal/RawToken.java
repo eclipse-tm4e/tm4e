@@ -12,6 +12,7 @@
 package org.eclipse.tm4e.core.grammar.internal;
 
 import java.util.List;
+import java.util.Objects;
 
 public class RawToken {
 
@@ -36,23 +37,14 @@ public class RawToken {
 
 	@Override
 	public boolean equals(Object obj) {
-		if (!(obj instanceof RawToken)) {
-			return false;
-		}
-		RawToken other = (RawToken) obj;
-		if (!(this.value.equals(other.value))) {
-			return false;
-		}
-		return this.scopes.equals(other.scopes);
+		return obj instanceof RawToken other ?
+			Objects.equals(this.value, other.value) && Objects.equals(this.scopes, other.scopes) :
+			false;
 	}
 
 	@Override
 	public int hashCode() {
-		final var prime = 31;
-		var result = 1;
-		result = prime * result + (scopes == null ? 0 : scopes.hashCode());
-		result = prime * result + (value == null ? 0 : value.hashCode());
-		return result;
+		return Objects.hash(scopes, value);
 	}
 
 	@Override

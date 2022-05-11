@@ -53,8 +53,8 @@ public class TMModel implements ITMModel {
 
 	public TMModel(final IModelLines lines) {
 		this.lines = lines;
-		if (lines instanceof AbstractLineList) {
-			((AbstractLineList) lines).setModel(this);
+		if (lines instanceof AbstractLineList lineList) {
+			lineList.setModel(this);
 		}
 		lines.forEach(ModelLine::resetTokenizationState);
 		invalidateLine(0);

@@ -66,8 +66,7 @@ public final class LanguageConfigurationRegistryManager extends AbstractLanguage
 	private LanguageConfigurationDefinition getDefinition(final IContentType contentType) {
 		LanguageConfigurationDefinition bestFit = null;
 		for (final var iDefinition : getDefinitions()) {
-			if (iDefinition instanceof LanguageConfigurationDefinition) {
-				final var definition = (LanguageConfigurationDefinition) iDefinition;
+			if (iDefinition instanceof LanguageConfigurationDefinition definition) {
 				final var definitionContentType = definition.getContentType();
 				if (contentType.isKindOf(definitionContentType)
 						&& (bestFit == null || definitionContentType.isKindOf(bestFit.getContentType()))) {

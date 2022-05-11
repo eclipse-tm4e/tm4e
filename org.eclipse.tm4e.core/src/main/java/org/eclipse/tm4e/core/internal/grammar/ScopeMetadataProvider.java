@@ -144,17 +144,12 @@ final class ScopeMetadataProvider {
 			return OptionalStandardTokenType.NotSet;
 		}
 		final String group = m.group(1);
-		switch (group) {
-		case COMMENT_TOKEN_TYPE:
-			return OptionalStandardTokenType.Comment;
-		case STRING_TOKEN_TYPE:
-			return OptionalStandardTokenType.String;
-		case REGEX_TOKEN_TYPE:
-			return OptionalStandardTokenType.RegEx;
-		case META_EMBEDDED_TOKEN_TYPE:
-			return OptionalStandardTokenType.Other;
-		default:
-			throw new TMException("Unexpected match for standard token type: " + group);
-		}
+		return switch (group) {
+		case COMMENT_TOKEN_TYPE -> OptionalStandardTokenType.Comment;
+		case STRING_TOKEN_TYPE -> OptionalStandardTokenType.String;
+		case REGEX_TOKEN_TYPE -> OptionalStandardTokenType.RegEx;
+		case META_EMBEDDED_TOKEN_TYPE -> OptionalStandardTokenType.Other;
+		default -> throw new TMException("Unexpected match for standard token type: " + group);
+		};
 	}
 }

@@ -43,15 +43,11 @@ public final class ThemeLabelProvider extends LabelProvider implements ITableLab
 		if (element == null)
 			return "";
 		final ITheme theme = (ITheme) element;
-		switch (columnIndex) {
-		case 0:
-			return theme.getName();
-		case 1:
-			return theme.getPath();
-		case 2:
-			return theme.getPluginId();
-		default:
-			return ""; //$NON-NLS-1$
-		}
+		return switch (columnIndex) {
+		case 0 -> theme.getName();
+		case 1 -> theme.getPath();
+		case 2 -> theme.getPluginId();
+		default -> ""; //$NON-NLS-1$
+		};
 	}
 }

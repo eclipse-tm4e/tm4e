@@ -43,7 +43,7 @@ public class RawTestImpl {
 	private String grammarScopeName;
 	private List<String> grammarInjections;
 	private List<RawTestLine> lines;
-	private File testLocation;
+	private transient File testLocation;
 
 	public String getDesc() {
 		return desc;

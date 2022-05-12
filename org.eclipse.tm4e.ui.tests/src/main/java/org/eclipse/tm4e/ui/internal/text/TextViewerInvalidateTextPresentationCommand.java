@@ -33,13 +33,7 @@ public class TextViewerInvalidateTextPresentationCommand extends Command {
 
 	@Override
 	protected void doExecute() {
-		viewer.getTextWidget().getDisplay().syncExec(new Runnable() {
-
-			@Override
-			public void run() {
-				viewer.invalidateTextPresentation(offset, length);
-			}
-		});
+		viewer.getTextWidget().getDisplay().syncExec(() -> viewer.invalidateTextPresentation(offset, length));
 	}
 
 	@Override

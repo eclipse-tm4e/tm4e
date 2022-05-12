@@ -60,7 +60,7 @@ public final class ThemeManager extends AbstractThemeManager {
 		if (INSTANCE != null) {
 			return INSTANCE;
 		}
-		final ThemeManager manager = new ThemeManager();
+		final var manager = new ThemeManager();
 		manager.load();
 		return manager;
 	}
@@ -124,7 +124,7 @@ public final class ThemeManager extends AbstractThemeManager {
 		prefs.put(PreferenceConstants.THEMES, Arrays.stream(getThemes()) //
 				.filter(t -> t.getPluginId() == null) //
 				.map(theme -> {
-					final JsonObject json = new JsonObject();
+					final var json = new JsonObject();
 					json.addProperty("id", theme.getId());
 					json.addProperty("path", theme.getPath());
 					json.addProperty("dark", theme.isDark());

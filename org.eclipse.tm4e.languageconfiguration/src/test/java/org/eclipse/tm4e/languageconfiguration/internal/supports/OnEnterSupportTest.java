@@ -28,7 +28,7 @@ public class OnEnterSupportTest {
 
 	@Test
 	public void useBrackets() {
-		final UseBracketsTest support = new UseBracketsTest();
+		final var support = new UseBracketsTest();
 
 		support.testIndentAction("a", "", IndentAction.None);
 		support.testIndentAction("", "b", IndentAction.None);
@@ -69,7 +69,7 @@ public class OnEnterSupportTest {
 
 	@Test
 	public void regExpRules() {
-		final RegExpRulesTest support = new RegExpRulesTest();
+		final var support = new RegExpRulesTest();
 
 		support.testIndentAction("\t/**", " */", IndentAction.IndentOutdent, " * ");
 		support.testIndentAction("\t/**", "", IndentAction.None, " * ");

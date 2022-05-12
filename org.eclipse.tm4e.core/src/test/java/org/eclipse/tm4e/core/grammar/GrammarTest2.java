@@ -29,62 +29,58 @@ import org.junit.jupiter.api.Test;
  */
 class GrammarTest2 {
 
-	@Test
-	void tokenizeLines() throws Exception {
-		final var registry = new Registry();
-		final var path = "JavaScript.tmLanguage";
-		try (var is = Data.class.getResourceAsStream(path)) {
-			final var grammar = castNonNull(registry.loadGrammarFromPathSync(path, is));
+   @Test
+   void tokenizeLines() throws Exception {
+      final var registry = new Registry();
+      final var path = "JavaScript.tmLanguage";
+      try (var is = Data.class.getResourceAsStream(path)) {
+         final var grammar = castNonNull(registry.loadGrammarFromPathSync(path, is));
 
-			IStackElement ruleStack = null;
-			int i = 0;
+         IStackElement ruleStack = null;
+         int i = 0;
 
-			final var lines = new ArrayList<String>();
-			try (var reader = new BufferedReader(
-					new InputStreamReader(Data.class.getResourceAsStream("raytracer.ts")));) {
-				String line = null;
-				while ((line = reader.readLine()) != null) {
-					lines.add(line);
-				}
-			}
+         final var lines = new ArrayList<String>();
+         try (var reader = new BufferedReader(new InputStreamReader(Data.class.getResourceAsStream("raytracer.ts")));) {
+            String line = null;
+            while ((line = reader.readLine()) != null) {
+               lines.add(line);
+            }
+         }
 
-			int t = 0;
-			boolean stop = false;
-			final long start = System.currentTimeMillis();
-			for (final String line : lines) {
-				final ITokenizeLineResult lineTokens = grammar.tokenizeLine(line, ruleStack);
-				if (stop) {
-					t = 1000;
-					Thread.sleep(t);
-					stop = false;
-				}
-				ruleStack = lineTokens.getRuleStack();
-				for (i = 0; i < lineTokens.getTokens().length; i++) {
-					final IToken token = lineTokens.getTokens()[i];
-					final String s = "Token from " + token.getStartIndex() + " to " + token.getEndIndex() + " with scopes "
-							+ token.getScopes();
-					// System.err.println(s);
-					// Assert.assertEquals(EXPECTED_MULTI_LINE_TOKENS[i + j], s);
-				}
-			}
-			System.out.println(System.currentTimeMillis() - start - t);
-		}
-	}
+         int t = 0;
+         boolean stop = false;
+         final long start = System.currentTimeMillis();
+         for (final String line : lines) {
+            final ITokenizeLineResult lineTokens = grammar.tokenizeLine(line, ruleStack);
+            if (stop) {
+               t = 1000;
+               Thread.sleep(t);
+               stop = false;
+            }
+            ruleStack = lineTokens.getRuleStack();
+            for (i = 0; i < lineTokens.getTokens().length; i++) {
+               final IToken token = lineTokens.getTokens()[i];
+               final var s = "Token from " + token.getStartIndex() + " to " + token.getEndIndex() + " with scopes " + token.getScopes();
+               // System.err.println(s);
+               // Assert.assertEquals(EXPECTED_MULTI_LINE_TOKENS[i + j], s);
+            }
+         }
+         System.out.println(System.currentTimeMillis() - start - t);
+      }
+   }
 
-	@Test
-	public void testYamlMultiline() throws Exception {
-		final var registry = new Registry();
-		final var path = "yaml.tmLanguage.json";
-		try (var in = Data.class.getResourceAsStream(path)) {
-			final var grammar = castNonNull(registry.loadGrammarFromPathSync(path, in));
-			final String lines = ">\n should.be.string.unquoted.block.yaml\n should.also.be.string.unquoted.block.yaml";
-			final var result = TokenizationUtils.tokenizeText(lines, grammar).iterator();
-			assertTrue(Arrays.stream(result.next().getTokens())
-					.anyMatch(t -> t.getScopes().contains("keyword.control.flow.block-scalar.folded.yaml")));
-			assertTrue(Arrays.stream(result.next().getTokens())
-					.anyMatch(t -> t.getScopes().contains("string.unquoted.block.yaml")));
-			assertTrue(Arrays.stream(result.next().getTokens())
-					.anyMatch(t -> t.getScopes().contains("string.unquoted.block.yaml")));
-		}
-	}
+   @Test
+   public void testYamlMultiline() throws Exception {
+      final var registry = new Registry();
+      final var path = "yaml.tmLanguage.json";
+      try (var in = Data.class.getResourceAsStream(path)) {
+         final var grammar = castNonNull(registry.loadGrammarFromPathSync(path, in));
+         final var lines = ">\n should.be.string.unquoted.block.yaml\n should.also.be.string.unquoted.block.yaml";
+         final var result = TokenizationUtils.tokenizeText(lines, grammar).iterator();
+         assertTrue(Arrays.stream(result.next().getTokens()).anyMatch(t -> t.getScopes().contains(
+            "keyword.control.flow.block-scalar.folded.yaml")));
+         assertTrue(Arrays.stream(result.next().getTokens()).anyMatch(t -> t.getScopes().contains("string.unquoted.block.yaml")));
+         assertTrue(Arrays.stream(result.next().getTokens()).anyMatch(t -> t.getScopes().contains("string.unquoted.block.yaml")));
+      }
+   }
 }

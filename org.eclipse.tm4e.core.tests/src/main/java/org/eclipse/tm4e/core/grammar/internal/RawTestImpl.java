@@ -91,7 +91,7 @@ public class RawTestImpl {
 			}
 		};
 
-		final Registry registry = new Registry(options);
+		final var registry = new Registry(options);
 		IGrammar grammar = getGrammar(registry, testLocation.getParentFile());
 		if (getGrammarScopeName() != null) {
 			grammar = registry.grammarForScopeName(getGrammarScopeName());

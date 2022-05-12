@@ -61,19 +61,19 @@ public class InlineRules {
 	}
 
 	private static InlineRules inline() {
-		final RegExp escape = new RegExp("^\\\\([\\\\`*{}\\[\\]()#+\\-.!_>])");
-		final RegExp autolink = new RegExp("^<([^ >]+(@|:\\/)[^ >]+)>");
-		final RegExp url = RegExp.noop();
-		final RegExp tag = new RegExp("^<!--[\\s\\S]*?-->|^<\\/?\\w+(?:\"[^\"]*\"|'[^']*'|[^'\">])*?>");
-		final RegExp link = new RegExp("^!?\\[(inside)\\]\\(href\\)");
-		final RegExp reflink = new RegExp("^!?\\[(inside)\\]\\s*\\[([^\\]]*)\\]");
-		final RegExp nolink = new RegExp("^!?\\[((?:\\[[^\\]]*\\]|[^\\[\\]])*)\\]");
-		final RegExp strong = new RegExp("^__([\\s\\S]+?)__(?!_)|^\\*\\*([\\s\\S]+?)\\*\\*(?!\\*)");
-		final RegExp em = new RegExp("^\\b_((?:[^_]|__)+?)_\\b|^\\*((?:\\*\\*|[\\s\\S])+?)\\*(?!\\*)");
-		final RegExp code = new RegExp("^(`+)\\s*([\\s\\S]*?[^`])\\s*\\1(?!`)");
-		final RegExp br = new RegExp("^ {2,}\\n(?!\\s*$)");
-		final RegExp del = RegExp.noop();
-		final RegExp text = new RegExp("^[\\s\\S]+?(?=[\\\\<!\\[_*`]| {2,}\\n|$)");
+		final var escape = new RegExp("^\\\\([\\\\`*{}\\[\\]()#+\\-.!_>])");
+		final var autolink = new RegExp("^<([^ >]+(@|:\\/)[^ >]+)>");
+		final var url = RegExp.noop();
+		final var tag = new RegExp("^<!--[\\s\\S]*?-->|^<\\/?\\w+(?:\"[^\"]*\"|'[^']*'|[^'\">])*?>");
+		final var link = new RegExp("^!?\\[(inside)\\]\\(href\\)");
+		final var reflink = new RegExp("^!?\\[(inside)\\]\\s*\\[([^\\]]*)\\]");
+		final var nolink = new RegExp("^!?\\[((?:\\[[^\\]]*\\]|[^\\[\\]])*)\\]");
+		final var strong = new RegExp("^__([\\s\\S]+?)__(?!_)|^\\*\\*([\\s\\S]+?)\\*\\*(?!\\*)");
+		final var em = new RegExp("^\\b_((?:[^_]|__)+?)_\\b|^\\*((?:\\*\\*|[\\s\\S])+?)\\*(?!\\*)");
+		final var code = new RegExp("^(`+)\\s*([\\s\\S]*?[^`])\\s*\\1(?!`)");
+		final var br = new RegExp("^ {2,}\\n(?!\\s*$)");
+		final var del = RegExp.noop();
+		final var text = new RegExp("^[\\s\\S]+?(?=[\\\\<!\\[_*`]| {2,}\\n|$)");
 		// Replacement
 		link.replace("inside", INLINE_INSIDE).replace("href", INLINE_HREF);
 		reflink.replace("inside", INLINE_INSIDE);

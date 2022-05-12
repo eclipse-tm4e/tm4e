@@ -40,7 +40,7 @@ public class TMHTMLRenderer extends HTMLRenderer {
 		if (grammar == null) {
 			super.code(code, lang, escaped);
 		} else {
-			final ITokenizationSupport tokenizationSupport = new Tokenizer(grammar);
+			final var tokenizationSupport = new Tokenizer(grammar);
 			html.append("<div style=\"white-space: pre-wrap;\">");
 			tokenizeLines(code, tokenizationSupport);
 			html.append("</div>");

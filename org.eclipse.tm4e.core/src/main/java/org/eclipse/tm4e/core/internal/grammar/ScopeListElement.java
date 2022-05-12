@@ -109,7 +109,7 @@ public final class ScopeListElement {
 		}
 
 		parent_scopes_loop: for (final String selector : parentScopes) {
-			final String selectorWithDot = selector + '.';
+			final var selectorWithDot = selector + '.';
 
 			while (target != null) {
 				if (matchesScope(target.scope, selector, selectorWithDot)) {

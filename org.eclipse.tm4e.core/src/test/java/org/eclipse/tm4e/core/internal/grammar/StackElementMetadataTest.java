@@ -100,7 +100,7 @@ public class StackElementMetadataTest {
 
 	private static void assertEquals(final int metadata, final int languageId, final int /*StandardTokenType*/ tokenType,
 			final boolean containsBalancedBrackets, final int /*FontStyle*/ fontStyle, final int foreground, final int background) {
-		final String actual = "{\n" +
+		final var actual = "{\n" +
 				"languageId: " + StackElementMetadata.getLanguageId(metadata) + ",\n" +
 				"tokenType: " + StackElementMetadata.getTokenType(metadata) + ",\n" +
 				"containsBalancedBrackets: " + StackElementMetadata.containsBalancedBrackets(metadata) + ",\n" +
@@ -109,7 +109,7 @@ public class StackElementMetadataTest {
 				"background: " + StackElementMetadata.getBackground(metadata) + ",\n" +
 				"}";
 
-		final String expected = "{\n" +
+		final var expected = "{\n" +
 				"languageId: " + languageId + ",\n" +
 				"tokenType: " + tokenType + ",\n" +
 				"containsBalancedBrackets: " + containsBalancedBrackets + ",\n" +

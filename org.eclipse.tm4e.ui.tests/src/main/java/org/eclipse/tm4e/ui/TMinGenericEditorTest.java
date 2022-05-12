@@ -89,7 +89,7 @@ class TMinGenericEditorTest {
 	@Test
 	void testTMHighlightInGenericEditor() throws IOException, PartInitException {
 		f = File.createTempFile("test" + System.currentTimeMillis(), ".ts");
-		try (FileOutputStream fileOutputStream = new FileOutputStream(f)) {
+		try (var fileOutputStream = new FileOutputStream(f)) {
 			fileOutputStream.write("let a = '';\nlet b = 10;\nlet c = true;".getBytes());
 		}
 		f.deleteOnExit();
@@ -107,7 +107,7 @@ class TMinGenericEditorTest {
 	@Test
 	void testTMHighlightInGenericEditorEdit() throws IOException, PartInitException {
 		f = File.createTempFile("test" + System.currentTimeMillis(), ".ts");
-		try (FileOutputStream fileOutputStream = new FileOutputStream(f)) {
+		try (var fileOutputStream = new FileOutputStream(f)) {
 			fileOutputStream.write("let a = '';".getBytes());
 		}
 		f.deleteOnExit();

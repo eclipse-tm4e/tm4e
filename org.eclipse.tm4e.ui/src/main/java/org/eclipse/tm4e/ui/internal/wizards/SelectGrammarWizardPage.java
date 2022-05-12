@@ -70,7 +70,7 @@ final class SelectGrammarWizardPage extends AbstractWizardPage {
 
 	@Override
 	protected void createBody(final Composite ancestor) {
-		final Composite parent = new Composite(ancestor, SWT.NONE);
+		final var parent = new Composite(ancestor, SWT.NONE);
 		parent.setFont(parent.getFont());
 		parent.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		parent.setLayout(new GridLayout(2, false));
@@ -81,9 +81,9 @@ final class SelectGrammarWizardPage extends AbstractWizardPage {
 		grammarFileText.addListener(SWT.Modify, this);
 
 		// Buttons
-		final Composite buttons = new Composite(parent, SWT.NONE);
+		final var buttons = new Composite(parent, SWT.NONE);
 		buttons.setLayout(new GridLayout(2, false));
-		final GridData gd = new GridData(GridData.FILL_HORIZONTAL);
+		final var gd = new GridData(GridData.FILL_HORIZONTAL);
 		gd.horizontalSpan = 2;
 		gd.horizontalAlignment = SWT.RIGHT;
 		buttons.setLayoutData(gd);
@@ -112,7 +112,7 @@ final class SelectGrammarWizardPage extends AbstractWizardPage {
 			}
 		});
 
-		final GridData data = new GridData(GridData.FILL_HORIZONTAL);
+		final var data = new GridData(GridData.FILL_HORIZONTAL);
 		data.horizontalSpan = 2;
 		grammarInfoWidget = new GrammarInfoWidget(parent, SWT.NONE);
 		grammarInfoWidget.setLayoutData(data);

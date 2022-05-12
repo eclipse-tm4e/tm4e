@@ -107,8 +107,8 @@ public class OnEnterSupport {
 
 		@Nullable
 		private static Pattern createOpenBracketRegExp(final String bracket) {
-			final StringBuilder str = new StringBuilder(RegExpUtils.escapeRegExpCharacters(bracket));
-			final String c = String.valueOf(str.charAt(0));
+			final var str = new StringBuilder(RegExpUtils.escapeRegExpCharacters(bracket));
+			final var c = String.valueOf(str.charAt(0));
 			if (!B_REGEXP.matcher(c).find()) {
 				str.insert(0, "\\b"); //$NON-NLS-1$
 			}
@@ -118,8 +118,8 @@ public class OnEnterSupport {
 
 		@Nullable
 		private static Pattern createCloseBracketRegExp(final String bracket) {
-			final StringBuilder str = new StringBuilder(RegExpUtils.escapeRegExpCharacters(bracket));
-			final String c = String.valueOf(str.charAt(str.length() - 1));
+			final var str = new StringBuilder(RegExpUtils.escapeRegExpCharacters(bracket));
+			final var c = String.valueOf(str.charAt(str.length() - 1));
 			if (!B_REGEXP.matcher(c).find()) {
 				str.append("\\b"); //$NON-NLS-1$
 			}

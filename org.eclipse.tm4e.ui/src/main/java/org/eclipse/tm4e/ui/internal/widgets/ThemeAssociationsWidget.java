@@ -62,12 +62,12 @@ public final class ThemeAssociationsWidget extends TableAndButtonsWidget {
 		editButton.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		editButton.addListener(SWT.Selection, e -> {
 			// Open the wizard to create association between theme and grammar.
-			final CreateThemeAssociationWizard wizard = new CreateThemeAssociationWizard(false);
+			final var wizard = new CreateThemeAssociationWizard(false);
 			wizard.setInitialDefinition(definition);
 			final IStructuredSelection selection = super.getSelection();
 			wizard.setInitialAssociation(selection.isEmpty() ? null : (IThemeAssociation) selection.getFirstElement());
 			wizard.setThemeManager(themeManager);
-			final WizardDialog dialog = new WizardDialog(getShell(), wizard);
+			final var dialog = new WizardDialog(getShell(), wizard);
 			if (dialog.open() == Window.OK) {
 				final IThemeAssociation association = wizard.getCreatedThemeAssociation();
 				refresh(association);

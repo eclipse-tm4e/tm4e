@@ -35,7 +35,7 @@ public class Parser {
 
 	public static IRenderer parse(final Tokens src, @Nullable final Options options,
 			@Nullable final IRenderer renderer) {
-		final Parser parser = new Parser(options, renderer);
+		final var parser = new Parser(options, renderer);
 		return parser.parse(src);
 	}
 

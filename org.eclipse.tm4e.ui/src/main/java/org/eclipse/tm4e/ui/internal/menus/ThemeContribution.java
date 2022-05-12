@@ -51,7 +51,7 @@ public final class ThemeContribution extends CompoundContributionItem implements
 
 	@Override
 	protected IContributionItem[] getContributionItems() {
-		final List<IContributionItem> items = new ArrayList<>();
+		final var items = new ArrayList<IContributionItem>();
 		if (handlerService != null) {
 			final IEditorPart editorPart = getActivePart(handlerService.getCurrentState());
 			if (editorPart != null) {
@@ -70,7 +70,7 @@ public final class ThemeContribution extends CompoundContributionItem implements
 							if (theme.equals(selectedTheme)) {
 								action.setChecked(true);
 							}
-							final IContributionItem item = new ActionContributionItem(action);
+							final var item = new ActionContributionItem(action);
 							items.add(item);
 						}
 					}
@@ -86,7 +86,7 @@ public final class ThemeContribution extends CompoundContributionItem implements
 			@Override
 			public void run() {
 				final IThemeManager manager = TMUIPlugin.getThemeManager();
-				final IThemeAssociation association = new ThemeAssociation(theme.getId(), scopeName, whenDark);
+				final var association = new ThemeAssociation(theme.getId(), scopeName, whenDark);
 				manager.registerThemeAssociation(association);
 				try {
 					manager.save();

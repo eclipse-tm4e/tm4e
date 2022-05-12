@@ -43,7 +43,7 @@ public class Lexer {
 	}
 
 	public static Tokens lex(final String src, @Nullable final Options options) {
-		final Lexer lexer = new Lexer(options);
+		final var lexer = new Lexer(options);
 		return lexer.lex(src);
 	}
 

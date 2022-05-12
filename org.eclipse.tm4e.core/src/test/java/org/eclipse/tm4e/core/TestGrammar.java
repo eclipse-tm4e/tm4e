@@ -21,7 +21,7 @@ public class TestGrammar {
 
 	public static void main(final String[] args) throws Exception {
 
-		final Registry registry = new Registry();
+		final var registry = new Registry();
 		final IGrammar grammar = castNonNull(registry.loadGrammarFromPathSync("Angular2TypeScript.tmLanguage",
 				TestGrammar.class.getResourceAsStream("Angular2TypeScript.tmLanguage")));
 

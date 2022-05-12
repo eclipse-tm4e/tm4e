@@ -90,9 +90,9 @@ class TMEditorColorTest implements ThemeIdConstants {
 
 	@Test
 	void userDefinedEditorColorTest() throws Exception {
-		final String testColorVal = "255,128,0";
-		final Color testColor = new Color(Display.getCurrent(), 255, 128, 0);
-		final IPreferenceStore prefs = new ScopedPreferenceStore(InstanceScope.INSTANCE, "org.eclipse.ui.editors");
+		final var testColorVal = "255,128,0";
+		final var testColor = new Color(Display.getCurrent(), 255, 128, 0);
+		final var prefs = new ScopedPreferenceStore(InstanceScope.INSTANCE, "org.eclipse.ui.editors");
 		prefs.setValue(AbstractTextEditor.PREFERENCE_COLOR_BACKGROUND, testColorVal);
 		prefs.setValue(AbstractTextEditor.PREFERENCE_COLOR_BACKGROUND_SYSTEM_DEFAULT, false);
 

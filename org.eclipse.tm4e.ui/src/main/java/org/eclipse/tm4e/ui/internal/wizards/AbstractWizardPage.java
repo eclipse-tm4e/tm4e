@@ -46,7 +46,7 @@ abstract class AbstractWizardPage extends WizardPage implements Listener {
 
 		initializeDialogUnits(parent);
 		// top level group
-		final Composite topLevel = new Composite(parent, SWT.NONE);
+		final var topLevel = new Composite(parent, SWT.NONE);
 		topLevel.setLayout(new GridLayout());
 		topLevel.setLayoutData(new GridData(GridData.VERTICAL_ALIGN_FILL | GridData.HORIZONTAL_ALIGN_FILL));
 		topLevel.setFont(parent.getFont());

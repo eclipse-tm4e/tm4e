@@ -30,7 +30,7 @@ public class TMPresentationReconcilerTypeScriptTest {
 	@Test
 	void colorizeTypescript() throws Exception {
 
-		final TMEditor editor = new TMEditor(getGrammar(), getTokenProvider(), "let a = '';\nlet b = 10;\nlet c = true;");
+		final var editor = new TMEditor(getGrammar(), getTokenProvider(), "let a = '';\nlet b = 10;\nlet c = true;");
 		final List<ICommand> commands = editor.execute();
 
 		assertEquals(1, commands.size());
@@ -70,7 +70,7 @@ public class TMPresentationReconcilerTypeScriptTest {
 	@Test
 	void colorizeTypescriptWithInvalidate1() throws Exception {
 
-		final TMEditor editor = new TMEditor(getGrammar(), getTokenProvider(), "let a = '';\nlet b = 10;\nlet c = true;");
+		final var editor = new TMEditor(getGrammar(), getTokenProvider(), "let a = '';\nlet b = 10;\nlet c = true;");
 		editor.invalidateTextPresentation(0, 3);
 		final List<ICommand> commands = editor.execute();
 
@@ -119,7 +119,7 @@ public class TMPresentationReconcilerTypeScriptTest {
 	@Test
 	void colorizeTypescriptWithInvalidate2() throws Exception {
 
-		final TMEditor editor = new TMEditor(getGrammar(), getTokenProvider(), "let a = '';\nlet b = 10;\nlet c = true;");
+		final var editor = new TMEditor(getGrammar(), getTokenProvider(), "let a = '';\nlet b = 10;\nlet c = true;");
 		editor.invalidateTextPresentation(0, 2);
 		final List<ICommand> commands = editor.execute();
 
@@ -168,7 +168,7 @@ public class TMPresentationReconcilerTypeScriptTest {
 	@Test
 	void colorizeTypescriptWithInvalidate3() throws Exception {
 
-		final TMEditor editor = new TMEditor(getGrammar(), getTokenProvider(), "let a = '';\nlet b = 10;\nlet c = true;");
+		final var editor = new TMEditor(getGrammar(), getTokenProvider(), "let a = '';\nlet b = 10;\nlet c = true;");
 		editor.invalidateTextPresentation(1, 2);
 		final List<ICommand> commands = editor.execute();
 
@@ -217,7 +217,7 @@ public class TMPresentationReconcilerTypeScriptTest {
 	@Test
 	void colorizeTypescriptWithInvalidate4() throws Exception {
 
-		final TMEditor editor = new TMEditor(getGrammar(), getTokenProvider(), "let a = '';\nlet b = 10;\nlet c = true;");
+		final var editor = new TMEditor(getGrammar(), getTokenProvider(), "let a = '';\nlet b = 10;\nlet c = true;");
 		editor.invalidateTextPresentation(1, 1);
 		final List<ICommand> commands = editor.execute();
 
@@ -266,7 +266,7 @@ public class TMPresentationReconcilerTypeScriptTest {
 	@Test
 	void colorizeTypescriptWithInvalidate8() throws Exception {
 
-		final TMEditor editor = new TMEditor(getGrammar(), getTokenProvider(), "let a = '';\nlet b = 10;\nlet c = true;");
+		final var editor = new TMEditor(getGrammar(), getTokenProvider(), "let a = '';\nlet b = 10;\nlet c = true;");
 		editor.invalidateTextPresentation(1, 8);
 		final List<ICommand> commands = editor.execute();
 
@@ -315,7 +315,7 @@ public class TMPresentationReconcilerTypeScriptTest {
 	@Test
 	void colorizeTypescriptWithInvalidateAndSeveralLines() throws Exception {
 
-		final TMEditor editor = new TMEditor(getGrammar(), getTokenProvider(), "a\r\n\r\nb");
+		final var editor = new TMEditor(getGrammar(), getTokenProvider(), "a\r\n\r\nb");
 		editor.invalidateTextPresentation(0, 6);
 
 		final List<ICommand> commands = editor.execute();
@@ -338,7 +338,7 @@ public class TMPresentationReconcilerTypeScriptTest {
 	}
 
 	public static IGrammar getGrammar() {
-		final Registry registry = new Registry();
+		final var registry = new Registry();
 		try {
 			return registry.loadGrammarFromPathSync("TypeScript.tmLanguage.json",
 					TMPresentationReconcilerTypeScriptTest.class.getClassLoader().getResourceAsStream("/grammars/TypeScript.tmLanguage.json"));

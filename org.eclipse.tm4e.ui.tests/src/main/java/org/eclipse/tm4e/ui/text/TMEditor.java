@@ -60,7 +60,7 @@ public class TMEditor {
 	}
 
 	private void setAndExecute(final String text) {
-		final Command command = new DocumentSetCommand(text, document);
+		final var command = new DocumentSetCommand(text, document);
 		commands.add(command);
 		collector.setCommand(command);
 	}

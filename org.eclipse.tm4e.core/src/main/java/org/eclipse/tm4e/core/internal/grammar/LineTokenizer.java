@@ -502,7 +502,7 @@ final class LineTokenizer {
 	private WhileCheckResult checkWhileConditions(final Grammar grammar, final OnigString lineText, boolean isFirstLine,
 			int linePos, StackElement stack, final LineTokens lineTokens) {
 		int currentanchorPosition = stack.beginRuleCapturedEOL ? 0 : -1;
-		final List<WhileStack> whileRules = new ArrayList<>();
+		final var whileRules = new ArrayList<WhileStack>();
 		for (StackElement node = stack; node != null; node = node.pop()) {
 			final Rule nodeRule = node.getRule(grammar);
 			if (nodeRule instanceof final BeginWhileRule beginWhileRule) {

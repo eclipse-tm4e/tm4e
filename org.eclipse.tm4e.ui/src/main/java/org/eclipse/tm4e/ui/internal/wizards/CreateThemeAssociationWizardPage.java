@@ -70,13 +70,13 @@ final class CreateThemeAssociationWizardPage extends AbstractWizardPage {
 
 	@Override
 	protected void createBody(final Composite ancestor) {
-		final Composite parent = new Composite(ancestor, SWT.NONE);
+		final var parent = new Composite(ancestor, SWT.NONE);
 		parent.setFont(parent.getFont());
 		parent.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		parent.setLayout(new GridLayout(4, false));
 
 		// TextMate theme
-		Label label = new Label(parent, SWT.NONE);
+		var label = new Label(parent, SWT.NONE);
 		label.setText(TMUIMessages.CreateThemeAssociationWizardPage_theme_text);
 		final var themeViewer = this.themeViewer = new ComboViewer(parent);
 		themeViewer.setLabelProvider(new ThemeLabelProvider());
@@ -100,7 +100,7 @@ final class CreateThemeAssociationWizardPage extends AbstractWizardPage {
 
 		final var whenDarkButton = this.whenDarkButton = new Button(parent, SWT.CHECK);
 		whenDarkButton.setText(TMUIMessages.CreateThemeAssociationWizardPage_whenDark_text);
-		final GridData data = new GridData();
+		final var data = new GridData();
 		data.horizontalSpan = 4;
 		whenDarkButton.setLayoutData(data);
 

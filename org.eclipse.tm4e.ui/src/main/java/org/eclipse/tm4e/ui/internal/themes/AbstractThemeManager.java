@@ -109,7 +109,7 @@ public abstract class AbstractThemeManager implements IThemeManager {
 
 	@Override
 	public IThemeAssociation[] getThemeAssociationsForScope(final String scopeName) {
-		final List<IThemeAssociation> associations = new ArrayList<>();
+		final var associations = new ArrayList<IThemeAssociation>();
 		IThemeAssociation light = themeAssociationRegistry.getThemeAssociationFor(scopeName, false);
 		if (light == null) {
 			light = new ThemeAssociation(getDefaultTheme(false).getId(), scopeName, false);

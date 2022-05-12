@@ -73,10 +73,10 @@ public class Registry {
 
 	@Nullable
 	public IGrammar loadGrammar(final String initialScopeName) {
-		final List<String> remainingScopeNames = new ArrayList<>();
+		final var remainingScopeNames = new ArrayList<String>();
 		remainingScopeNames.add(initialScopeName);
 
-		final List<String> seenScopeNames = new ArrayList<>();
+		final var seenScopeNames = new ArrayList<String>();
 		seenScopeNames.add(initialScopeName);
 
 		while (!remainingScopeNames.isEmpty()) {

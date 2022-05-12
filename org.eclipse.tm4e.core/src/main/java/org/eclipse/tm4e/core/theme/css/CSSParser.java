@@ -43,7 +43,7 @@ public class CSSParser {
 	}
 
 	private static InputSource toSource(final InputStream source) {
-		final InputSource in = new InputSource();
+		final var in = new InputSource();
 		in.setByteStream(source);
 		return in;
 	}

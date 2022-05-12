@@ -56,7 +56,7 @@ public final class TextUtils {
 			}
 		}
 
-		final StringBuilder result = new StringBuilder();
+		final var result = new StringBuilder();
 		if (!insertSpaces) {
 			final long tabsCnt = Math.round(Math.floor(spacesCnt / tabSize));
 			spacesCnt = spacesCnt % tabSize;
@@ -106,7 +106,7 @@ public final class TextUtils {
 	}
 
 	public static String getIndentationFromWhitespace(final String whitespace, final TabSpacesInfo tabSpaces) {
-		final String tab = "\t"; //$NON-NLS-1$
+		final var tab = "\t"; //$NON-NLS-1$
 		int indentOffset = 0;
 		boolean startsWithTab = true;
 		boolean startsWithSpaces = true;

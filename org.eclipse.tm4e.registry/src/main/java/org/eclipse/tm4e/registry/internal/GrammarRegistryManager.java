@@ -46,7 +46,7 @@ public final class GrammarRegistryManager extends AbstractGrammarRegistryManager
 		if (INSTANCE != null) {
 			return INSTANCE;
 		}
-		final GrammarRegistryManager manager = new GrammarRegistryManager();
+		final var manager = new GrammarRegistryManager();
 		manager.load();
 		return manager;
 	}

@@ -64,7 +64,7 @@ public class LanguageConfigurationInfoWidget extends Composite {
 
 	public LanguageConfigurationInfoWidget(final Composite parent, final int style) {
 		super(parent, style);
-		final GridLayout layout = new GridLayout();
+		final var layout = new GridLayout();
 		layout.marginHeight = 0;
 		layout.marginWidth = 0;
 		layout.marginLeft = 0;
@@ -75,9 +75,9 @@ public class LanguageConfigurationInfoWidget extends Composite {
 	}
 
 	private void createUI(final Composite ancestor) {
-		final TabFolder folder = new TabFolder(ancestor, SWT.NONE);
+		final var folder = new TabFolder(ancestor, SWT.NONE);
 
-		final GridData gd = new GridData(GridData.FILL_HORIZONTAL);
+		final var gd = new GridData(GridData.FILL_HORIZONTAL);
 		folder.setLayoutData(gd);
 
 		createCommentsTab(folder);
@@ -200,10 +200,10 @@ public class LanguageConfigurationInfoWidget extends Composite {
 	}
 
 	private Table createTable(final Composite parent) {
-		final Composite tableComposite = new Composite(parent, SWT.NONE);
+		final var tableComposite = new Composite(parent, SWT.NONE);
 		tableComposite.setLayoutData(new GridData(GridData.FILL_BOTH));
 		tableComposite.setLayout(new TableColumnLayout());
-		final Table table = new Table(tableComposite,
+		final var table = new Table(tableComposite,
 				SWT.BORDER | SWT.MULTI | SWT.FULL_SELECTION | SWT.H_SCROLL | SWT.V_SCROLL);
 		table.setHeaderVisible(true);
 		table.setLinesVisible(true);
@@ -211,10 +211,10 @@ public class LanguageConfigurationInfoWidget extends Composite {
 	}
 
 	private TabItem createTab(final TabFolder folder, final String title) {
-		final TabItem tab = new TabItem(folder, SWT.NONE);
+		final var tab = new TabItem(folder, SWT.NONE);
 		tab.setText(title);
 
-		final Composite parent = new Composite(folder, SWT.NONE);
+		final var parent = new Composite(folder, SWT.NONE);
 		parent.setLayout(new GridLayout());
 		parent.setLayoutData(new GridData(GridData.FILL_BOTH));
 		tab.setControl(parent);
@@ -223,10 +223,10 @@ public class LanguageConfigurationInfoWidget extends Composite {
 	}
 
 	private Text createText(final Composite parent, final String s) {
-		final Label label = new Label(parent, SWT.NONE);
+		final var label = new Label(parent, SWT.NONE);
 		label.setText(s);
 
-		final Text text = new Text(parent, SWT.BORDER);
+		final var text = new Text(parent, SWT.BORDER);
 		text.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		text.setEditable(false);
 		return text;

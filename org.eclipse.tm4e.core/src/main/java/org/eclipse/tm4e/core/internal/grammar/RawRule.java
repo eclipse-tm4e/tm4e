@@ -95,9 +95,9 @@ public class RawRule extends HashMap<String, @Nullable Object>
 	private void updateCaptures(final String name) {
 		final Object captures = get(name);
 		if (captures instanceof final List<?> capturesList) {
-			final RawRule rawCaptures = new RawRule();
+			final var rawCaptures = new RawRule();
 			int i = 0;
-			for (final Object capture : capturesList) {
+			for (final var capture : capturesList) {
 				i++;
 				rawCaptures.put(Integer.toString(i), capture);
 			}

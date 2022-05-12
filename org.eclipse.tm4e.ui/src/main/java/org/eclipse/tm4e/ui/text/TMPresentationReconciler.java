@@ -206,7 +206,7 @@ public class TMPresentationReconciler implements IPresentationReconciler {
 		@Override
 		public void inputDocumentAboutToBeChanged(@Nullable final IDocument oldDocument,
 				@Nullable final IDocument newDocument) {
-			if (oldDocument == null) 
+			if (oldDocument == null)
 			   return;
 
 			final var viewer = TMPresentationReconciler.this.viewer;
@@ -417,7 +417,7 @@ public class TMPresentationReconciler implements IPresentationReconciler {
 						final int length = document.getLineOffset(range.toLineNumber - 1)
 								+ document.getLineLength(range.toLineNumber - 1)
 								- document.getLineOffset(range.fromLineNumber - 1);
-						final IRegion region = new Region(document.getLineOffset(range.fromLineNumber - 1), length);
+						final var region = new Region(document.getLineOffset(range.fromLineNumber - 1), length);
 						TMPresentationReconciler.this.colorize(region, docModel);
 					} catch (final BadLocationException ex) {
 						TMUIPlugin.log(new Status(IStatus.ERROR, TMUIPlugin.PLUGIN_ID, ex.getMessage(), ex));
@@ -702,7 +702,7 @@ public class TMPresentationReconciler implements IPresentationReconciler {
 		if (attr != null) {
 			final int style = attr.getStyle();
 			final int fontStyle = style & (SWT.ITALIC | SWT.BOLD | SWT.NORMAL);
-			final StyleRange styleRange = new StyleRange(offset, length, attr.getForeground(), attr.getBackground(),
+			final var styleRange = new StyleRange(offset, length, attr.getForeground(), attr.getBackground(),
 					fontStyle);
 			styleRange.strikeout = (style & TextAttribute.STRIKETHROUGH) != 0;
 			styleRange.underline = (style & TextAttribute.UNDERLINE) != 0;
@@ -788,7 +788,7 @@ public class TMPresentationReconciler implements IPresentationReconciler {
 				field.trySetAccessible();
 				final Object presentationReconciler = field.get(textViewer);
 				// field is IPresentationRecounciler, looking for TMPresentationReconciler implementation
-				return presentationReconciler instanceof final TMPresentationReconciler tmPresentationReconciler 
+				return presentationReconciler instanceof final TMPresentationReconciler tmPresentationReconciler
 						? tmPresentationReconciler
 						: null;
 			}

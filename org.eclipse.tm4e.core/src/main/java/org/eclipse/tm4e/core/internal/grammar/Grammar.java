@@ -299,7 +299,7 @@ public final class Grammar implements IGrammar, IRuleFactoryHelper {
 			final var rawRootMetadata = this.scopeMetadataProvider.getMetadataForScope(rootScopeName);
 			final int rootMetadata = ScopeListElement.mergeMetadata(defaultMetadata, null, rawRootMetadata);
 
-			final ScopeListElement scopeList = new ScopeListElement(null,
+			final var scopeList = new ScopeListElement(null,
 					rootScopeName == null ? "unknown" : rootScopeName, rootMetadata);
 
 			prevState = new StackElement(null, this.rootId, -1, -1, false, null, scopeList, scopeList);

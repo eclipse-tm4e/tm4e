@@ -14,7 +14,6 @@ package org.eclipse.tm4e.languageconfiguration.internal;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
-import java.util.Set;
 
 import org.eclipse.core.runtime.content.IContentType;
 import org.eclipse.jdt.annotation.Nullable;
@@ -29,7 +28,7 @@ public abstract class AbstractLanguageConfigurationRegistryManager implements IL
 
 	@Override
 	public ILanguageConfigurationDefinition[] getDefinitions() {
-		final Set<ILanguageConfigurationDefinition> definitions = new HashSet<>();
+		final var definitions = new HashSet<ILanguageConfigurationDefinition>();
 		userDefinitions.values().forEach(definitions::add);
 		pluginDefinitions.values().forEach(definitions::add);
 		return definitions.toArray(ILanguageConfigurationDefinition[]::new);

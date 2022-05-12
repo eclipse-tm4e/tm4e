@@ -67,22 +67,22 @@ public class BlockRules {
 	}
 
 	private static BlockRules block() {
-		final RegExp newline = new RegExp("^\\n+");
-		final RegExp code = new RegExp("^( {4}[^\\n]+\\n*)+/");
-		final RegExp fences = new RegExp("");
-		final RegExp hr = new RegExp("^( *[-*_]){3,} *(?:\\n+|$)");
-		final RegExp heading = new RegExp("^ *(#{1,6}) *([^\\n]+?) *#* *(?:\\n+|$)");
-		final RegExp nptable = new RegExp("");
-		final RegExp lheading = new RegExp("^([^\\n]+)\\n *(=|-){2,} *(?:\\n+|$)");
-		final RegExp blockquote = new RegExp("^( *>[^\\n]+(\\n(?!def)[^\\n]+)*\\n*)+");
-		final RegExp list = new RegExp("^( *)(bull) [\\s\\S]+?(?:hr|def|\\n{2,}(?! )(?!\\1bull )\\n*|\\s*$)");
-		final RegExp html = new RegExp("^ *(?:comment *(?:\\n|\\s*$)|closed *(?:\\n{2,}|\\s*$)|closing *(?:\\n{2,}|\\s*$))");
-		final RegExp def = new RegExp("^ *\\[([^\\]]+)\\]: *<?([^\\s>]+)>?(?: +[\"(]([^\\n]+)[\")])? *(?:\\n+|$)");
-		final RegExp table = RegExp.noop();
-		final RegExp paragraph = new RegExp("^((?:[^\\n]+\\n?(?!hr|heading|lheading|blockquote|tag|def))+)\\n*");
-		final RegExp text = new RegExp("^[^\\n]+");
-		final RegExp bullet = new RegExp("(?:[*+-]|\\d+\\.)");
-		final RegExp item = new RegExp("^( *)(bull) [^\\n]*(?:\\n(?!\\1bull )[^\\n]*)*");
+		final var newline = new RegExp("^\\n+");
+		final var code = new RegExp("^( {4}[^\\n]+\\n*)+/");
+		final var fences = new RegExp("");
+		final var hr = new RegExp("^( *[-*_]){3,} *(?:\\n+|$)");
+		final var heading = new RegExp("^ *(#{1,6}) *([^\\n]+?) *#* *(?:\\n+|$)");
+		final var nptable = new RegExp("");
+		final var lheading = new RegExp("^([^\\n]+)\\n *(=|-){2,} *(?:\\n+|$)");
+		final var blockquote = new RegExp("^( *>[^\\n]+(\\n(?!def)[^\\n]+)*\\n*)+");
+		final var list = new RegExp("^( *)(bull) [\\s\\S]+?(?:hr|def|\\n{2,}(?! )(?!\\1bull )\\n*|\\s*$)");
+		final var html = new RegExp("^ *(?:comment *(?:\\n|\\s*$)|closed *(?:\\n{2,}|\\s*$)|closing *(?:\\n{2,}|\\s*$))");
+		final var def = new RegExp("^ *\\[([^\\]]+)\\]: *<?([^\\s>]+)>?(?: +[\"(]([^\\n]+)[\")])? *(?:\\n+|$)");
+		final var table = RegExp.noop();
+		final var paragraph = new RegExp("^((?:[^\\n]+\\n?(?!hr|heading|lheading|blockquote|tag|def))+)\\n*");
+		final var text = new RegExp("^[^\\n]+");
+		final var bullet = new RegExp("(?:[*+-]|\\d+\\.)");
+		final var item = new RegExp("^( *)(bull) [^\\n]*(?:\\n(?!\\1bull )[^\\n]*)*");
 
 		item.replaceAll("bull", bullet);
 		list.replaceAll("bull", bullet).replace("hr", "\\n+(?=\\1?(?:[-*_] *){3,}(?:\\n+|$))").replace("def",
@@ -104,7 +104,7 @@ public class BlockRules {
 		gfm.fences.source = source;
 		// gfm.paragraph.source = "^";
 		gfm.heading.source = "^ *(#{1,6}) +([^\\n]+?) *#* *(?:\\n+|$)";
-		final String pattern = "(?!"
+		final var pattern = "(?!"
 				+ source.replaceFirst("\\\\1", "\\\\2") + "|"
 				+ source.replaceFirst("\\\\1", "\\\\3")
 				+ "|";

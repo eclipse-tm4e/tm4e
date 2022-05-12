@@ -93,7 +93,7 @@ public class Theme {
 			return Collections.emptyList();
 		}
 
-		final List<ParsedThemeRule> result = new ArrayList<>();
+		final var result = new ArrayList<ParsedThemeRule>();
 		int i = -1;
 		for (final IRawThemeSetting entry : settings) {
 			final var entrySetting = entry.getSetting();

@@ -99,7 +99,7 @@ public class TMResource implements ITMResource {
 	}
 
 	private static String convertStreamToString(final InputStream is) {
-		try (Scanner s = new Scanner(is)) {
+		try (var s = new Scanner(is)) {
 			s.useDelimiter("\\A");
 			return s.hasNext() ? s.next() : "";
 		}

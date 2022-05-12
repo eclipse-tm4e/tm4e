@@ -21,7 +21,7 @@ class OnigScannerTest {
 
 	@Test
 	void testOnigScanner() {
-		OnigScanner scanner = new OnigScanner(Arrays.asList("c", "a(b)?"));
+		var scanner = new OnigScanner(Arrays.asList("c", "a(b)?"));
 		OnigNextMatchResult result = scanner.findNextMatchSync("abc", 0);
 		assertNotNull(result);
 		assertEquals(1, result.getIndex());

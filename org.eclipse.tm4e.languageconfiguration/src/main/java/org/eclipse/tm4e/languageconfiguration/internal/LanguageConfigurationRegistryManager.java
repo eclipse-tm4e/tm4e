@@ -57,7 +57,7 @@ public final class LanguageConfigurationRegistryManager extends AbstractLanguage
 		if (INSTANCE != null) {
 			return INSTANCE;
 		}
-		final LanguageConfigurationRegistryManager manager = new LanguageConfigurationRegistryManager();
+		final var manager = new LanguageConfigurationRegistryManager();
 		manager.load();
 		return manager;
 	}

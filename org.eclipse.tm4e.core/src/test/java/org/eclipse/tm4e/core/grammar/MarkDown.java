@@ -24,12 +24,12 @@ import org.eclipse.tm4e.core.registry.Registry;
 public class MarkDown {
 
 	public static void main(final String[] args) throws Exception {
-		final Registry registry = new Registry();
-		final String path = "Markdown.tmLanguage";
+		final var registry = new Registry();
+		final var path = "Markdown.tmLanguage";
 		final IGrammar grammar = castNonNull(registry.loadGrammarFromPathSync(path, Data.class.getResourceAsStream(path)));
 
-		final List<String> lines = new ArrayList<>();
-		try (BufferedReader reader = new BufferedReader(new InputStreamReader(Data.class.getResourceAsStream("test.md.txt")))) {
+		final var lines = new ArrayList<String>();
+		try (var reader = new BufferedReader(new InputStreamReader(Data.class.getResourceAsStream("test.md.txt")))) {
 			String line = null;
 			while ((line = reader.readLine()) != null) {
 				lines.add(line);
@@ -58,7 +58,7 @@ public class MarkDown {
 	}
 
 	static String convertStreamToString(final java.io.InputStream is) {
-	    try (java.util.Scanner s = new java.util.Scanner(is).useDelimiter("\\A")) {
+	    try (var s = new java.util.Scanner(is).useDelimiter("\\A")) {
 	    	return s.hasNext() ? s.next() : "";
 	    }
 	}

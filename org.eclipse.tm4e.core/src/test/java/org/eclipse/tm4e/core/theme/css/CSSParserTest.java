@@ -16,7 +16,7 @@ import org.eclipse.tm4e.core.theme.IStyle;
 public class CSSParserTest {
 
 	public static void main(final String[] args) throws Exception {
-		final CSSParser parser = new CSSParser(".comment {color:rgb(0,1,2)} .comment.ts {color:rgb(0,1,2)}");
+		final var parser = new CSSParser(".comment {color:rgb(0,1,2)} .comment.ts {color:rgb(0,1,2)}");
 		String[] names = "comment".split("[.]");
 		parser.getBestStyle(names);
 

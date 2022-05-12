@@ -105,7 +105,7 @@ public final class ContentTypeHelper {
 	private static ContentTypeInfo getContentTypes(final ITextFileBuffer buffer) throws CoreException {
 		try {
 			final String fileName = buffer.getFileStore().getName();
-			final Collection<IContentType> contentTypes = new LinkedHashSet<>();
+			final var contentTypes = new LinkedHashSet<IContentType>();
 			final IContentType bufferContentType = buffer.getContentType();
 			if (bufferContentType != null) {
 				contentTypes.add(bufferContentType);
@@ -113,7 +113,7 @@ public final class ContentTypeHelper {
 			if (buffer.isDirty()) {
 				// Buffer is dirty (content of the filesystem is not synch with
 				// the editor content), use IDocument content.
-				try (InputStream input = new DocumentInputStream(buffer.getDocument())) {
+				try (var input = new DocumentInputStream(buffer.getDocument())) {
 					final IContentType[] contentTypesForInput = Platform.getContentTypeManager().findContentTypesFor(input, fileName);
 					if (contentTypesForInput != null) {
 						contentTypes.addAll(Arrays.asList(contentTypesForInput));

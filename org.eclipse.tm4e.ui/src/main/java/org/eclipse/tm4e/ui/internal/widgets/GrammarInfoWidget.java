@@ -36,7 +36,7 @@ public final class GrammarInfoWidget extends Composite {
 
 	public GrammarInfoWidget(final Composite parent, final int style) {
 		super(parent, style);
-		final GridLayout layout = new GridLayout();
+		final var layout = new GridLayout();
 		layout.marginHeight = 0;
 		layout.marginWidth = 0;
 		layout.marginLeft = 0;
@@ -44,8 +44,8 @@ public final class GrammarInfoWidget extends Composite {
 		super.setLayout(layout);
 		super.setLayoutData(new GridData(GridData.FILL_BOTH));
 
-		final Composite container = new Composite(this, SWT.NONE);
-		final GridLayout containerLayout = new GridLayout(2, false);
+		final var container = new Composite(this, SWT.NONE);
+		final var containerLayout = new GridLayout(2, false);
 		containerLayout.marginHeight = 0;
 		containerLayout.marginWidth = 0;
 		containerLayout.marginLeft = 0;
@@ -53,17 +53,17 @@ public final class GrammarInfoWidget extends Composite {
 		container.setLayout(containerLayout);
 		container.setLayoutData(new GridData(GridData.FILL_BOTH));
 
-		final Label grammarNameLabel = new Label(container, SWT.NONE);
+		final var grammarNameLabel = new Label(container, SWT.NONE);
 		grammarNameLabel.setText(TMUIMessages.GrammarInfoWidget_name_text);
 		nameText = new Text(container, SWT.BORDER | SWT.READ_ONLY);
 		nameText.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 
-		final Label grammarScopeNameLabel = new Label(container, SWT.NONE);
+		final var grammarScopeNameLabel = new Label(container, SWT.NONE);
 		grammarScopeNameLabel.setText(TMUIMessages.GrammarInfoWidget_scopeName_text);
 		scopeNameText = new Text(container, SWT.BORDER | SWT.READ_ONLY);
 		scopeNameText.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 
-		final Label grammarFileTypesLabel = new Label(container, SWT.NONE);
+		final var grammarFileTypesLabel = new Label(container, SWT.NONE);
 		grammarFileTypesLabel.setText(TMUIMessages.GrammarInfoWidget_fileTypes_text);
 		fileTypesText = new Text(container, SWT.BORDER | SWT.READ_ONLY);
 		fileTypesText.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));

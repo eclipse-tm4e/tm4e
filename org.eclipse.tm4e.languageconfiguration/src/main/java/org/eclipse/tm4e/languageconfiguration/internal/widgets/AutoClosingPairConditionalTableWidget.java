@@ -30,9 +30,9 @@ final class AutoClosingPairConditionalTableWidget extends CharacterPairsTableWid
 
 		final GC gc = new GC(table.getShell());
 		gc.setFont(JFaceResources.getDialogFont());
-		final TableColumnLayout columnLayout = new TableColumnLayout();
+		final var columnLayout = new TableColumnLayout();
 
-		final TableColumn column2 = new TableColumn(table, SWT.NONE);
+		final var column2 = new TableColumn(table, SWT.NONE);
 		column2.setText(LanguageConfigurationMessages.AutoClosingPairConditionalTableWidget_notIn);
 		final int minWidth = computeMinimumColumnWidth(gc,
 				LanguageConfigurationMessages.AutoClosingPairConditionalTableWidget_notIn);

@@ -120,7 +120,7 @@ public final class LanguageConfiguration implements ILanguageConfiguration {
 						})
 				.registerTypeAdapter(AutoClosingPairConditional.class,
 						(JsonDeserializer<@Nullable AutoClosingPairConditional>) (json, typeOfT, context) -> {
-							final List<String> notInList = new ArrayList<>();
+							final var notInList = new ArrayList<String>();
 							String open = null;
 							String close = null;
 							if (json.isJsonArray()) {

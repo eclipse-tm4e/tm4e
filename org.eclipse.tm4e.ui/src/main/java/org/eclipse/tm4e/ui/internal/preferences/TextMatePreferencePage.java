@@ -32,8 +32,8 @@ public final class TextMatePreferencePage extends PreferencePage implements IWor
 
 	@Override
 	protected Control createContents(@Nullable final Composite parent) {
-		final Composite composite = new Composite(parent, SWT.NONE);
-		final GridLayout layout = new GridLayout(1, false);
+		final var composite = new Composite(parent, SWT.NONE);
+		final var layout = new GridLayout(1, false);
 		layout.marginHeight = layout.marginWidth = 0;
 		composite.setLayout(layout);
 
@@ -55,10 +55,10 @@ public final class TextMatePreferencePage extends PreferencePage implements IWor
 	}
 
 	private void addRelatedLink(final Composite parent, final String pageId, final String message) {
-		final PreferenceLinkArea contentTypeArea = new PreferenceLinkArea(parent, SWT.NONE, pageId, message,
+		final var contentTypeArea = new PreferenceLinkArea(parent, SWT.NONE, pageId, message,
 				(IWorkbenchPreferenceContainer) getContainer(), null);
 
-		final GridData data = new GridData(GridData.FILL_HORIZONTAL | GridData.GRAB_HORIZONTAL);
+		final var data = new GridData(GridData.FILL_HORIZONTAL | GridData.GRAB_HORIZONTAL);
 		contentTypeArea.getControl().setLayoutData(data);
 	}
 

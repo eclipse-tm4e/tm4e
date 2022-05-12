@@ -61,8 +61,8 @@ public class GrammarTest {
 
 	@Test
 	public void tokenizeLine() throws Exception {
-		final Registry registry = new Registry();
-		final String path = "JavaScript.tmLanguage";
+		final var registry = new Registry();
+		final var path = "JavaScript.tmLanguage";
 		final IGrammar grammar = registry.loadGrammarFromPathSync(path, Data.class.getResourceAsStream(path));
 		final ITokenizeLineResult lineTokens = castNonNull(grammar).tokenizeLine("function add(a,b) { return a+b; }");
 		for (int i = 0; i < lineTokens.getTokens().length; i++) {
@@ -75,8 +75,8 @@ public class GrammarTest {
 
 	@Test
 	public void tokenizeLines() throws Exception {
-		final Registry registry = new Registry();
-		final String path = "JavaScript.tmLanguage";
+		final var registry = new Registry();
+		final var path = "JavaScript.tmLanguage";
 		final IGrammar grammar = registry.loadGrammarFromPathSync(path, Data.class.getResourceAsStream(path));
 
 		IStackElement ruleStack = null;

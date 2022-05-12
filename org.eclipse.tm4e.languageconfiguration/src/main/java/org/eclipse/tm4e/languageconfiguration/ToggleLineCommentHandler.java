@@ -67,12 +67,12 @@ public class ToggleLineCommentHandler extends AbstractHandler {
 			if (docProvider == null || input == null) {
 				return null;
 			}
-	
+
 			final var document = docProvider.getDocument(input);
 			if (document == null) {
 				return null;
 			}
-	
+
 			final ContentTypeInfo info;
 			try {
 				info = ContentTypeHelper.findContentTypes(document);
@@ -91,7 +91,7 @@ public class ToggleLineCommentHandler extends AbstractHandler {
 			if (!isValid(commentSupport, command)) {
 				return null;
 			}
-	
+
 			final var target = adapt(editor, IRewriteTarget.class);
 			if (target != null) {
 				target.beginCompoundChange();
@@ -109,7 +109,7 @@ public class ToggleLineCommentHandler extends AbstractHandler {
 							for (final int line : lines) {
 								final int lineOffset = document.getLineOffset(line);
 								final int lineLength = document.getLineLength(line);
-								final ITextSelection range = new TextSelection(lineOffset,
+								final var range = new TextSelection(lineOffset,
 										line == document.getNumberOfLines() - 1 ? lineLength : lineLength - 1);
 								toggleBlockComment(document, range, commentSupport, editor);
 							}
@@ -117,7 +117,7 @@ public class ToggleLineCommentHandler extends AbstractHandler {
 					}
 					break;
 				}
-	
+
 				case ADD_BLOCK_COMMENT_COMMAND_ID: {
 					final IRegion existingBlock = getBlockComment(document, textSelection, commentSupport);
 					final var blockComment = commentSupport.getBlockComment();
@@ -126,7 +126,7 @@ public class ToggleLineCommentHandler extends AbstractHandler {
 					}
 					break;
 				}
-	
+
 				case REMOVE_BLOCK_COMMENT_COMMAND_ID: {
 					final IRegion existingBlock = getBlockComment(document, textSelection, commentSupport);
 					final var blockComment = commentSupport.getBlockComment();
@@ -323,7 +323,7 @@ public class ToggleLineCommentHandler extends AbstractHandler {
 			document.replace(document.getLineOffset(lineNumber), 0, comment);
 			insertedChars += comment.length();
 		}
-		final ITextSelection newSelection = new TextSelection(selection.getOffset() + comment.length(),
+		final var newSelection = new TextSelection(selection.getOffset() + comment.length(),
 				selection.getLength() + insertedChars);
 		editor.selectAndReveal(newSelection.getOffset(), newSelection.getLength());
 	}

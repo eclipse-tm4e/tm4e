@@ -97,8 +97,8 @@ class ThemeMatchingTest {
 		"}");
 
 
-		final ScopeListElement root = new ScopeListElement(null, "text.html.cshtml", 0);
-		final ScopeListElement parent = new ScopeListElement(root, "meta.tag.structure.any.html", 0);
+		final var root = new ScopeListElement(null, "text.html.cshtml", 0);
+		final var parent = new ScopeListElement(root, "meta.tag.structure.any.html", 0);
 		final int r = ScopeListElement.mergeMetadata(0, parent, new ScopeMetadata("entity.name.tag.structure.any.html", 0, 0,
 				theme.match("entity.name.tag.structure.any.html")));
 		final String color = theme.getColor(StackElementMetadata.getForeground(r));
@@ -238,9 +238,9 @@ class ThemeMatchingTest {
 			new ThemeTrieElementRule(0, null, FontStyle.NotSet, _NOT_SET, _NOT_SET)
 		});
 
-		final ScopeListElement parent3 = new ScopeListElement(null, "source.json", 0);
-		final ScopeListElement parent2 = new ScopeListElement(parent3, "meta.structure.dictionary.json", 0);
-		final ScopeListElement parent1 = new ScopeListElement(parent2, "meta.structure.dictionary.value.json", 0);
+		final var parent3 = new ScopeListElement(null, "source.json", 0);
+		final var parent2 = new ScopeListElement(parent3, "meta.structure.dictionary.json", 0);
+		final var parent1 = new ScopeListElement(parent2, "meta.structure.dictionary.value.json", 0);
 
 		final int r = ScopeListElement.mergeMetadata(
 			0,

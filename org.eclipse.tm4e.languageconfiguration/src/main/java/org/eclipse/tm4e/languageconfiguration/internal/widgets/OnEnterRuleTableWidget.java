@@ -44,29 +44,29 @@ final class OnEnterRuleTableWidget extends TableViewer {
 
 		final GC gc = new GC(table.getShell());
 		gc.setFont(JFaceResources.getDialogFont());
-		final TableColumnLayout columnLayout = new TableColumnLayout();
+		final var columnLayout = new TableColumnLayout();
 
-		final TableColumn column1 = new TableColumn(table, SWT.NONE);
+		final var column1 = new TableColumn(table, SWT.NONE);
 		column1.setText(LanguageConfigurationMessages.OnEnterRuleTableWidget_beforeText);
 		int minWidth = computeMinimumColumnWidth(gc, LanguageConfigurationMessages.OnEnterRuleTableWidget_beforeText);
 		columnLayout.setColumnData(column1, new ColumnWeightData(2, minWidth, true));
 
-		final TableColumn column2 = new TableColumn(table, SWT.NONE);
+		final var column2 = new TableColumn(table, SWT.NONE);
 		column2.setText(LanguageConfigurationMessages.OnEnterRuleTableWidget_afterText);
 		minWidth = computeMinimumColumnWidth(gc, LanguageConfigurationMessages.OnEnterRuleTableWidget_afterText);
 		columnLayout.setColumnData(column2, new ColumnWeightData(2, minWidth, true));
 
-		final TableColumn column3 = new TableColumn(table, SWT.NONE);
+		final var column3 = new TableColumn(table, SWT.NONE);
 		column3.setText(LanguageConfigurationMessages.OnEnterRuleTableWidget_indentAction);
 		minWidth = computeMinimumColumnWidth(gc, LanguageConfigurationMessages.OnEnterRuleTableWidget_indentAction);
 		columnLayout.setColumnData(column3, new ColumnWeightData(1, minWidth, true));
 
-		final TableColumn column4 = new TableColumn(table, SWT.NONE);
+		final var column4 = new TableColumn(table, SWT.NONE);
 		column4.setText(LanguageConfigurationMessages.OnEnterRuleTableWidget_appendText);
 		minWidth = computeMinimumColumnWidth(gc, LanguageConfigurationMessages.OnEnterRuleTableWidget_appendText);
 		columnLayout.setColumnData(column4, new ColumnWeightData(1, minWidth, true));
 
-		final TableColumn column5 = new TableColumn(table, SWT.NONE);
+		final var column5 = new TableColumn(table, SWT.NONE);
 		column5.setText(LanguageConfigurationMessages.OnEnterRuleTableWidget_removeText);
 		minWidth = computeMinimumColumnWidth(gc, LanguageConfigurationMessages.OnEnterRuleTableWidget_removeText);
 		columnLayout.setColumnData(column5, new ColumnWeightData(1, minWidth, true));
@@ -137,7 +137,7 @@ final class OnEnterRuleTableWidget extends TableViewer {
 			};
 		}
 	}
-	
+
 	private static <T> @NonNull T nonNull(final @Nullable T obj) {
 		if (obj != null) {
 			return obj;

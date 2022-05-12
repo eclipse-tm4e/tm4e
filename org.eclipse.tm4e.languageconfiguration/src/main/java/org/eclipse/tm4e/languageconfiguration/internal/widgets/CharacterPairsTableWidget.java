@@ -40,14 +40,14 @@ class CharacterPairsTableWidget extends TableViewer {
 
 		final GC gc = new GC(table.getShell());
 		gc.setFont(JFaceResources.getDialogFont());
-		final TableColumnLayout columnLayout = new TableColumnLayout();
+		final var columnLayout = new TableColumnLayout();
 
-		final TableColumn column1 = new TableColumn(table, SWT.NONE);
+		final var column1 = new TableColumn(table, SWT.NONE);
 		column1.setText(LanguageConfigurationMessages.CharacterPairsTableWidget_start);
 		int minWidth = computeMinimumColumnWidth(gc, LanguageConfigurationMessages.CharacterPairsTableWidget_start);
 		columnLayout.setColumnData(column1, new ColumnWeightData(2, minWidth, true));
 
-		final TableColumn column2 = new TableColumn(table, SWT.NONE);
+		final var column2 = new TableColumn(table, SWT.NONE);
 		column2.setText(LanguageConfigurationMessages.CharacterPairsTableWidget_end);
 		minWidth = computeMinimumColumnWidth(gc, LanguageConfigurationMessages.CharacterPairsTableWidget_end);
 		columnLayout.setColumnData(column2, new ColumnWeightData(2, minWidth, true));

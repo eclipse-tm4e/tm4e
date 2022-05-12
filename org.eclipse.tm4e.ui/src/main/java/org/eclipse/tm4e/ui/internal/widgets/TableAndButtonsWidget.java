@@ -37,7 +37,7 @@ public abstract class TableAndButtonsWidget extends Composite {
 
 	protected TableAndButtonsWidget(final Composite parent, final int style, final String title) {
 		super(parent, style);
-		final GridLayout layout = new GridLayout();
+		final var layout = new GridLayout();
 		layout.marginHeight = 0;
 		layout.marginWidth = 0;
 		layout.marginLeft = 0;
@@ -47,8 +47,8 @@ public abstract class TableAndButtonsWidget extends Composite {
 	}
 
 	private void createUI(final String title, final Composite ancestor) {
-		final Composite parent = new Composite(ancestor, SWT.NONE);
-		GridLayout layout = new GridLayout(2, false);
+		final var parent = new Composite(ancestor, SWT.NONE);
+		var layout = new GridLayout(2, false);
 		layout.marginHeight = 0;
 		layout.marginWidth = 0;
 		layout.marginLeft = 0;
@@ -63,7 +63,7 @@ public abstract class TableAndButtonsWidget extends Composite {
 		createTable(parent);
 
 		// Buttons
-		final Composite buttonsComposite = new Composite(parent, SWT.NONE);
+		final var buttonsComposite = new Composite(parent, SWT.NONE);
 		layout = new GridLayout();
 		layout.marginHeight = 0;
 		layout.marginWidth = 0;
@@ -77,15 +77,15 @@ public abstract class TableAndButtonsWidget extends Composite {
 	protected abstract void createButtons(Composite parent);
 
 	private void createTitle(final String title, final Composite ancestor) {
-		final Label label = new Label(ancestor, SWT.NONE);
+		final var label = new Label(ancestor, SWT.NONE);
 		label.setText(title);
-		final GridData data = new GridData(GridData.FILL_HORIZONTAL);
+		final var data = new GridData(GridData.FILL_HORIZONTAL);
 		data.horizontalSpan = 2;
 		label.setLayoutData(data);
 	}
 
 	private void createTable(final Composite parent) {
-		final Table table = new Table(parent,
+		final var table = new Table(parent,
 				SWT.BORDER | SWT.MULTI | SWT.FULL_SELECTION | SWT.H_SCROLL | SWT.V_SCROLL);
 		table.setHeaderVisible(false);
 		table.setLinesVisible(false);

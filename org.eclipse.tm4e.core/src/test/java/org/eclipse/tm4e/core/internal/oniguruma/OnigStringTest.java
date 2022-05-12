@@ -44,7 +44,7 @@ class OnigStringTest {
 
 	@Test
 	void testEmptyStrings() {
-		final String string = "";
+		final var string = "";
 		final OnigString onigString = verifyBasics(string, OnigString.SingleByteString.class);
 
 		assertEquals(0, onigString.bytesCount);
@@ -52,7 +52,7 @@ class OnigStringTest {
 
 	@Test
 	void testSingleBytesStrings() {
-		final String string = "ab";
+		final var string = "ab";
 		final OnigString onigString = verifyBasics(string, OnigString.SingleByteString.class);
 
 		assertEquals(2, onigString.bytesCount);
@@ -73,7 +73,7 @@ class OnigStringTest {
 
 	@Test
 	void testMultiByteString() {
-		final String string = "áé";
+		final var string = "áé";
 		final OnigString onigString = verifyBasics(string, OnigString.MultiByteString.class);
 
 		assertEquals(4, onigString.bytesCount);
@@ -96,7 +96,7 @@ class OnigStringTest {
 
 	@Test
 	void testMixedMultiByteString() {
-		final String string = "myááçóúôõaab";
+		final var string = "myááçóúôõaab";
 		final OnigString onigString = verifyBasics(string, OnigString.MultiByteString.class);
 
 		assertEquals(19, onigString.bytesCount);

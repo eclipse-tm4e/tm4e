@@ -140,7 +140,7 @@ public class ThemeResolvingTest {
 		final var colorMap = new ColorMap();
 		final int _A = colorMap.getId("#000000");
 		final int _B = colorMap.getId("#ffffff");
-		final Theme expected = new Theme(colorMap,
+		final var expected = new Theme(colorMap,
 				new ThemeTrieElementRule(0, null, FontStyle.None, _A, _B), NOTSET_THEME_TRIE_ELEMENT);
 		assertEquals(actual, expected);
 	}
@@ -208,7 +208,7 @@ public class ThemeResolvingTest {
 		final var map = new HashMap<String, ThemeTrieElement>();
 		map.put("var", new ThemeTrieElement(new ThemeTrieElementRule(1, null, FontStyle.NotSet, _C, NOT_SET)));
 
-		final Theme expected = new Theme(colorMap,
+		final var expected = new Theme(colorMap,
 				new ThemeTrieElementRule(0, null, FontStyle.None, _A, _B),
 				new ThemeTrieElement(NOTSET_THEME_TRIE_ELEMENT_RULE, Collections.emptyList(), map));
 		assertEquals(actual, expected);

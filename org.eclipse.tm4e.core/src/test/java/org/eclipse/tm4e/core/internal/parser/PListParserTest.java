@@ -22,7 +22,7 @@ public class PListParserTest {
 
 	@Test
 	void testParseJSONPList() throws Exception {
-		final PListParser<RawGrammar> parser = new PListParserJSON<>(GrammarReader.OBJECT_FACTORY);
+		final var parser = new PListParserJSON<RawGrammar>(GrammarReader.OBJECT_FACTORY);
 		try (final var is = Data.class.getResourceAsStream("csharp.json")) {
 			final var grammar = parser.parse(is);
 			assertNotNull(grammar);
@@ -33,7 +33,7 @@ public class PListParserTest {
 
 	@Test
 	void testParseYAMLPlist() throws Exception {
-		final PListParser<RawGrammar> parser = new PListParserYAML<>(GrammarReader.OBJECT_FACTORY);
+		final var parser = new PListParserYAML<RawGrammar>(GrammarReader.OBJECT_FACTORY);
 		try (final var is = Data.class.getResourceAsStream("JavaScript.tmLanguage.yaml")) {
 			final var grammar = parser.parse(is);
 			assertNotNull(grammar);
@@ -44,7 +44,7 @@ public class PListParserTest {
 
 	@Test
 	void testParseXMLPlist() throws Exception {
-		final PListParser<RawGrammar> parser = new PListParserXML<>(GrammarReader.OBJECT_FACTORY);
+		final var parser = new PListParserXML<RawGrammar>(GrammarReader.OBJECT_FACTORY);
 		try (final var is = Data.class.getResourceAsStream("JavaScript.tmLanguage")) {
 			final var grammar = parser.parse(is);
 			assertNotNull(grammar);

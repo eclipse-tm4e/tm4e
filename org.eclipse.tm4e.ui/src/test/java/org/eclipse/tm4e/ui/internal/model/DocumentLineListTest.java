@@ -21,8 +21,8 @@ class DocumentLineListTest {
 
 	@Test
 	void testMultiLineChange() {
-		final Document document = new Document();
-		final DocumentLineList lineList = new DocumentLineList(document);
+		final var document = new Document();
+		final var lineList = new DocumentLineList(document);
 
 		document.set("a\nb\nc\nd");
 		assertEquals(4, lineList.getNumberOfLines());

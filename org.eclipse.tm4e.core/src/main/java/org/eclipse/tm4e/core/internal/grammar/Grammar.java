@@ -153,7 +153,7 @@ public final class Grammar implements IGrammar, IRuleFactoryHelper {
 
 		final var result = new ArrayList<Injection>();
 
-		dependencyProcessor.seenFullScopeRequests.forEach((scopeName) -> {
+		dependencyProcessor.seenFullScopeRequests.forEach(scopeName -> {
 			final var grammar = grammarRepository.lookup(scopeName);
 			if (grammar == null) {
 				return;

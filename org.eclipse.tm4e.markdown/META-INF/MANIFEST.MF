@@ -4,7 +4,7 @@ Bundle-Name: %pluginName
 Bundle-Vendor: %providerName
 Bundle-Localization: plugin
 Bundle-SymbolicName: org.eclipse.tm4e.markdown;singleton:=true
-Bundle-Version: 0.3.6.qualifier
+Bundle-Version: 0.3.7.qualifier
 Require-Bundle: org.eclipse.core.runtime,
  org.eclipse.tm4e.core;bundle-version="0.4.4",
  org.eclipse.tm4e.registry;bundle-version="0.5.1",

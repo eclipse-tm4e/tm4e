@@ -145,36 +145,33 @@ public final class LanguageConfigurationPreferencePage extends PreferencePage im
 		final var definitionViewer = new TableViewer(table);
 		this.definitionViewer = definitionViewer;
 
-		final var column1 = new TableColumn(table, SWT.NONE);
-		column1.setText(LanguageConfigurationMessages.LanguageConfigurationPreferencePage_contentType);
-		int minWidth = computeMinimumColumnWidth(gc,
-				LanguageConfigurationMessages.LanguageConfigurationPreferencePage_contentType);
-		columnLayout.setColumnData(column1, new ColumnWeightData(2, minWidth, true));
-		column1.addSelectionListener(new ColumnSelectionAdapter(column1, definitionViewer, 0, viewerComparator));
+		for (int i = 0; i < 4; i++) {
+			final var column = new TableColumn(table, SWT.NONE);
+			final String label = switch (i) {
+			case 0 -> LanguageConfigurationMessages.LanguageConfigurationPreferencePage_contentTypeName;
+			case 1 -> LanguageConfigurationMessages.LanguageConfigurationPreferencePage_contentTypeId;
+			case 2 -> LanguageConfigurationMessages.LanguageConfigurationPreferencePage_pluginId;
+			case 3 -> LanguageConfigurationMessages.LanguageConfigurationPreferencePage_path;
+			default -> throw new IllegalArgumentException("Unexpected value: " + i);
+			};
 
-		final var column2 = new TableColumn(table, SWT.NONE);
-		column2.setText(LanguageConfigurationMessages.LanguageConfigurationPreferencePage_path);
-		minWidth = computeMinimumColumnWidth(gc,
-				LanguageConfigurationMessages.LanguageConfigurationPreferencePage_path);
-		columnLayout.setColumnData(column2, new ColumnWeightData(2, minWidth, true));
-		column2.addSelectionListener(new ColumnSelectionAdapter(column2, definitionViewer, 1, viewerComparator));
+			column.setText(label);
+			int minWidth = computeMinimumColumnWidth(gc, label);
+			columnLayout.setColumnData(column, new ColumnWeightData(2, minWidth, true));
+			column.addSelectionListener(new ColumnSelectionAdapter(column, definitionViewer, i, viewerComparator));
 
-		final var column3 = new TableColumn(table, SWT.NONE);
-		column3.setText(LanguageConfigurationMessages.LanguageConfigurationPreferencePage_pluginId);
-		minWidth = computeMinimumColumnWidth(gc,
-				LanguageConfigurationMessages.LanguageConfigurationPreferencePage_pluginId);
-		columnLayout.setColumnData(column3, new ColumnWeightData(2, minWidth, true));
-		column3.addSelectionListener(new ColumnSelectionAdapter(column3, definitionViewer, 2, viewerComparator));
+			if (i == 0) {
+				// Specify default sorting
+				table.setSortColumn(column);
+				table.setSortDirection(viewerComparator.getDirection());
+			}
+		}
 
 		gc.dispose();
 
 		definitionViewer.setLabelProvider(new LanguageConfigurationLabelProvider());
 		definitionViewer.setContentProvider(new LanguageConfigurationContentProvider());
 		definitionViewer.setComparator(viewerComparator);
-
-		// Specify default sorting
-		table.setSortColumn(column1);
-		table.setSortDirection(viewerComparator.getDirection());
 
 		BidiUtils.applyTextDirection(definitionViewer.getControl(), BidiUtils.BTD_DEFAULT);
 

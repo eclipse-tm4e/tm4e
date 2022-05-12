@@ -37,12 +37,13 @@ final class LanguageConfigurationLabelProvider extends LabelProvider implements 
 		if (element == null)
 			return null;
 
-		final ILanguageConfigurationDefinition definition = (ILanguageConfigurationDefinition) element;
+		final var definition = (ILanguageConfigurationDefinition) element;
 
 		return switch (columnIndex) {
-		case 0 -> definition.getContentType().getId();
-		case 1 -> definition.getPath();
+		case 0 -> definition.getContentType().getName();
+		case 1 -> definition.getContentType().getId();
 		case 2 -> definition.getPluginId();
+		case 3 -> definition.getPath();
 		default -> ""; //$NON-NLS-1$
 		};
 	}

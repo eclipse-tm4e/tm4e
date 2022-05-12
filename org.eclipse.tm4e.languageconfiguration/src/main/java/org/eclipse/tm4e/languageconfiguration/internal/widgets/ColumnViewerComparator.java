@@ -25,6 +25,7 @@ import org.eclipse.swt.SWT;
  */
 public final class ColumnViewerComparator extends ViewerComparator {
 
+
 	private int fSortColumn = 0;
 	private int fSortOrder = 1; // 1 = asc, -1 = desc
 

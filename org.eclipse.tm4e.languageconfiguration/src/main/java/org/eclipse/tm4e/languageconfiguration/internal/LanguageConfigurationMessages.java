@@ -41,7 +41,8 @@ public final class LanguageConfigurationMessages extends NLS {
 	public static String LanguageConfigurationInfoWidget_surroundingPairs;
 	public static String LanguageConfigurationInfoWidget_wordPattern_message;
 	public static String LanguageConfigurationInfoWidget_wordPattern_title;
-	public static String LanguageConfigurationPreferencePage_contentType;
+	public static String LanguageConfigurationPreferencePage_contentTypeName;
+	public static String LanguageConfigurationPreferencePage_contentTypeId;
 	public static String LanguageConfigurationPreferencePage_title;
 	public static String LanguageConfigurationPreferencePage_description;
 	public static String LanguageConfigurationPreferencePage_description2;

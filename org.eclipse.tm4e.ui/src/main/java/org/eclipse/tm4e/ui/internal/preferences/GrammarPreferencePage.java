@@ -308,7 +308,6 @@ public final class GrammarPreferencePage extends PreferencePage implements IWork
 				}
 				final var previewViewer = castNonNull(GrammarPreferencePage.this.previewViewer);
 				previewViewer.setGrammar(grammar);
-
 				// Snippet
 				final ISnippet[] snippets = snippetManager.getSnippets(scopeName);
 				if (snippets.length == 0) {

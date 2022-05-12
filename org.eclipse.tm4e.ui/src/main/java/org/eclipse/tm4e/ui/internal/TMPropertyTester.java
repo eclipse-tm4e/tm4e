@@ -29,7 +29,7 @@ public final class TMPropertyTester extends PropertyTester {
 	public boolean test(@Nullable final Object receiver, @Nullable final String property,
 			final Object @Nullable [] args, @Nullable final Object expectedValue) {
 		if (CAN_SUPPORT_TEXT_MATE.equals(property)) {
-			if (receiver instanceof IEditorPart editorPart) {
+			if (receiver instanceof final IEditorPart editorPart) {
 				final var reconciler = TMPresentationReconciler.getTMPresentationReconciler(editorPart);
 				return reconciler != null && reconciler.isEnabled();
 			}

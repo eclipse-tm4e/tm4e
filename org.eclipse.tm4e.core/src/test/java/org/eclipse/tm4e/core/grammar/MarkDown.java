@@ -23,28 +23,28 @@ import org.eclipse.tm4e.core.registry.Registry;
 
 public class MarkDown {
 
-	public static void main(String[] args) throws Exception {
-		Registry registry = new Registry();
-		String path = "Markdown.tmLanguage";
-		IGrammar grammar = castNonNull(registry.loadGrammarFromPathSync(path, Data.class.getResourceAsStream(path)));
+	public static void main(final String[] args) throws Exception {
+		final Registry registry = new Registry();
+		final String path = "Markdown.tmLanguage";
+		final IGrammar grammar = castNonNull(registry.loadGrammarFromPathSync(path, Data.class.getResourceAsStream(path)));
 
-		List<String> lines = new ArrayList<>();
+		final List<String> lines = new ArrayList<>();
 		try (BufferedReader reader = new BufferedReader(new InputStreamReader(Data.class.getResourceAsStream("test.md.txt")))) {
 			String line = null;
 			while ((line = reader.readLine()) != null) {
 				lines.add(line);
 			}
-		} catch (Exception e) {
+		} catch (final Exception e) {
 			e.printStackTrace();
 		}
 
 
-		long start = System.currentTimeMillis();
+		final long start = System.currentTimeMillis();
 
 		IStackElement ruleStack = null;
 		int i = 0;
-		for (String line : lines) {
-			ITokenizeLineResult lineTokens = grammar.tokenizeLine(line, ruleStack);
+		for (final String line : lines) {
+			final ITokenizeLineResult lineTokens = grammar.tokenizeLine(line, ruleStack);
 			ruleStack = lineTokens.getRuleStack();
 			for (i = 0; i < lineTokens.getTokens().length; i++) {
 //				IToken token = lineTokens.getTokens()[i];
@@ -57,7 +57,7 @@ public class MarkDown {
 		System.err.println(System.currentTimeMillis() - start);
 	}
 
-	static String convertStreamToString(java.io.InputStream is) {
+	static String convertStreamToString(final java.io.InputStream is) {
 	    try (java.util.Scanner s = new java.util.Scanner(is).useDelimiter("\\A")) {
 	    	return s.hasNext() ? s.next() : "";
 	    }

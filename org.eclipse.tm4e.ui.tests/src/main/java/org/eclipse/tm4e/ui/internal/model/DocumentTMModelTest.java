@@ -19,8 +19,8 @@ class DocumentTMModelTest {
 
 	@Test
 	void testMultiLineChange() throws Exception {
-		Document document = new Document();
-		TMDocumentModel model = new TMDocumentModel(document);
+		final Document document = new Document();
+		final TMDocumentModel model = new TMDocumentModel(document);
 		try {
 			model.setGrammar(new Registry().loadGrammarFromPathSync("TypeScript.tmLanguage.json", getClass().getClassLoader().getResourceAsStream("/grammars/TypeScript.tmLanguage.json")));
 			document.set("a\nb\nc\nd");

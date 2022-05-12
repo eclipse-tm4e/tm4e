@@ -41,9 +41,9 @@ public final class ContentTypeLabelProvider extends LabelProvider implements ITa
 		return switch (columnIndex) {
 		case 0 -> {
 			IContentType contentType = null;
-			if(element instanceof IContentType contentTypeElement) {
+			if(element instanceof final IContentType contentTypeElement) {
 				contentType = contentTypeElement;
-			} else if(element instanceof String contentTypeId) {
+			} else if(element instanceof final String contentTypeId) {
 				contentType = Platform.getContentTypeManager().getContentType(contentTypeId);
 				if (contentType == null) {
 					yield contentTypeId;

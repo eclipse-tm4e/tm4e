@@ -19,7 +19,7 @@ public abstract class Command implements ICommand {
 	private String styleRanges;
 	private boolean done;
 
-	protected Command(String name) {
+	protected Command(final String name) {
 		this.name = name;
 		this.done = false;
 	}
@@ -29,7 +29,7 @@ public abstract class Command implements ICommand {
 		return name;
 	}
 
-	public void setStyleRanges(String styleRanges) {
+	public void setStyleRanges(final String styleRanges) {
 		this.styleRanges = styleRanges;
 	}
 
@@ -49,10 +49,10 @@ public abstract class Command implements ICommand {
 
 	protected abstract Integer getLineTo();
 
-	public static String toText(String text) {
+	public static String toText(final String text) {
 		final StringBuilder newText = new StringBuilder();
 		for (int i = 0; i < text.length(); i++) {
-			char c = text.charAt(i);
+			final char c = text.charAt(i);
 			switch (c) {
 			case '\n':
 				newText.append("\\n");

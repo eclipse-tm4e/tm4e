@@ -231,15 +231,15 @@ public final class RuleFactory {
 				}
 				boolean skipRule = false;
 
-				if (rule instanceof IncludeOnlyRule ior) {
+				if (rule instanceof final IncludeOnlyRule ior) {
 					if (ior.hasMissingPatterns && ior.patterns.length == 0) {
 						skipRule = true;
 					}
-				} else if (rule instanceof BeginEndRule ber) {
+				} else if (rule instanceof final BeginEndRule ber) {
 					if (ber.hasMissingPatterns && ber.patterns.length == 0) {
 						skipRule = true;
 					}
-				} else if (rule instanceof BeginWhileRule bwr) {
+				} else if (rule instanceof final BeginWhileRule bwr) {
 					if (bwr.hasMissingPatterns && bwr.patterns.length == 0) {
 						skipRule = true;
 					}

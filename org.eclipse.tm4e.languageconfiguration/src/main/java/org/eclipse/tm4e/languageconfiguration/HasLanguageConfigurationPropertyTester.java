@@ -23,7 +23,7 @@ import org.eclipse.ui.texteditor.ITextEditor;
 public class HasLanguageConfigurationPropertyTester extends PropertyTester {
 
 	@Nullable
-	private static <T> T adapt(@Nullable Object sourceObject, Class<T> adapter) {
+	private static <T> T adapt(@Nullable final Object sourceObject, final Class<T> adapter) {
 		return Adapters.adapt(sourceObject, adapter);
 	}
 

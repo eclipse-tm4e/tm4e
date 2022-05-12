@@ -43,7 +43,7 @@ public class TMUIPlugin extends AbstractUIPlugin {
 	@Nullable
 	private static volatile TMUIPlugin plugin;
 
-	public static void log(IStatus status) {
+	public static void log(final IStatus status) {
 		final var plugin = TMUIPlugin.plugin;
 		if (plugin != null) {
 			plugin.getLog().log(status);

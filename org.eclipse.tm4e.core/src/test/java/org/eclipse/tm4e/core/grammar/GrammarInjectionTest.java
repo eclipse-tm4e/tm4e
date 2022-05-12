@@ -46,23 +46,23 @@ public class GrammarInjectionTest {
 
 	@Test
 	public void angular2TokenizeLine() throws Exception {
-		Registry registry = new Registry(new IRegistryOptions() {
+		final Registry registry = new Registry(new IRegistryOptions() {
 
 			@Nullable
 			@Override
-			public InputStream getInputStream(@Nullable String scopeName) throws IOException {
+			public InputStream getInputStream(@Nullable final String scopeName) throws IOException {
 				return Data.class.getResourceAsStream(getFilePath(scopeName));
 			}
 
 			@Nullable
 			@Override
-			public Collection<String> getInjections(@Nullable String scopeName) {
+			public Collection<String> getInjections(@Nullable final String scopeName) {
 				return List.of("template.ng", "styles.ng");
 			}
 
 			@Nullable
 			@Override
-			public String getFilePath(@Nullable String scopeName) {
+			public String getFilePath(@Nullable final String scopeName) {
 				if (scopeName != null) {
 					return switch (scopeName) {
 					case "source.js" -> "JavaScript.tmLanguage.json";
@@ -76,11 +76,11 @@ public class GrammarInjectionTest {
 				return null;
 			}
 		});
-		IGrammar grammar = registry.loadGrammar("source.ts");
+		final IGrammar grammar = registry.loadGrammar("source.ts");
 		final var lineTokens = castNonNull(grammar).tokenizeLine("@Component({template:`<a href='' ></a>`})");
 		for (int i = 0; i < lineTokens.getTokens().length; i++) {
-			IToken token = lineTokens.getTokens()[i];
-			String s = "Token from " + token.getStartIndex() + " to " + token.getEndIndex() + " with scopes "
+			final IToken token = lineTokens.getTokens()[i];
+			final String s = "Token from " + token.getStartIndex() + " to " + token.getEndIndex() + " with scopes "
 					+ token.getScopes();
 			System.err.println(s);
 			Assertions.assertEquals(EXPECTED_TOKENS[i], s);

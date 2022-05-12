@@ -71,7 +71,7 @@ public final class WorkingCopyThemeManager extends AbstractThemeManager {
 	@Override
 	public void unregisterTheme(final ITheme theme) {
 		super.unregisterTheme(theme);
-		var themeAdded = this.themeAdded;
+		final var themeAdded = this.themeAdded;
 		if (themeAdded != null && themeAdded.contains(theme)) {
 			themeAdded.remove(theme);
 		} else {
@@ -96,7 +96,7 @@ public final class WorkingCopyThemeManager extends AbstractThemeManager {
 	@Override
 	public void unregisterThemeAssociation(final IThemeAssociation association) {
 		super.unregisterThemeAssociation(association);
-		var associationAdded = this.associationAdded;
+		final var associationAdded = this.associationAdded;
 		if (associationAdded != null && associationAdded.contains(association)) {
 			associationAdded.remove(association);
 		} else {

@@ -95,7 +95,7 @@ class TMinGenericEditorTest {
 		f.deleteOnExit();
 		editor = IDE.openEditor(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage(),
 				f.toURI(), editorDescriptor.getId(), true);
-		StyledText text = (StyledText) editor.getAdapter(Control.class);
+		final StyledText text = (StyledText) editor.getAdapter(Control.class);
 		assertTrue(new DisplayHelper() {
 			@Override
 			protected boolean condition() {
@@ -113,14 +113,14 @@ class TMinGenericEditorTest {
 		f.deleteOnExit();
 		editor = IDE.openEditor(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage(),
 				f.toURI(), editorDescriptor.getId(), true);
-		StyledText text = (StyledText) editor.getAdapter(Control.class);
+		final StyledText text = (StyledText) editor.getAdapter(Control.class);
 		assertTrue(new DisplayHelper() {
 			@Override
 			protected boolean condition() {
 				return text.getStyleRanges().length > 1;
 			}
 		}.waitForCondition(text.getDisplay(), 3000));
-		int initialNumberOfRanges = text.getStyleRanges().length;
+		final int initialNumberOfRanges = text.getStyleRanges().length;
 		text.setText("let a = '';\nlet b = 10;\nlet c = true;");
 		assertTrue(new DisplayHelper() {
 			@Override

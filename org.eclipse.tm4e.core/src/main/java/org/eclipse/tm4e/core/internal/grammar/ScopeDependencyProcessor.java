@@ -76,11 +76,11 @@ class ScopeDependencyProcessor {
 		private final Set<String> seenPartial = new HashSet<>();
 
 		void add(final ScopeDependency dep) {
-			if (dep instanceof FullScopeDependency fdep) {
+			if (dep instanceof final FullScopeDependency fdep) {
 				if (!this.seenFull.add(fdep.scopeName)) {
 					this.full.add(fdep);
 				}
-			} else if (dep instanceof PartialScopeDependency pdep) {
+			} else if (dep instanceof final PartialScopeDependency pdep) {
 				if (!this.seenPartial.add(pdep.toKey())) {
 					this.partial.add(pdep);
 				}
@@ -148,9 +148,9 @@ class ScopeDependencyProcessor {
 		}
 
 		final var initialGrammar = repo.lookup(initialScopeName);
-		if (dep instanceof FullScopeDependency fdep) {
+		if (dep instanceof final FullScopeDependency fdep) {
 			collectDependencies(result, castNonNull(initialGrammar), grammar);
-		} else if (dep instanceof PartialScopeDependency pdep){
+		} else if (dep instanceof final PartialScopeDependency pdep){
 			collectSpecificDependencies(result, castNonNull(initialGrammar), grammar, pdep.include, null);
 		}
 

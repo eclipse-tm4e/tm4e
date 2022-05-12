@@ -55,14 +55,14 @@ public class Parser {
 	/**
 	 * Next Token
 	 */
-	private boolean next(Tokens tokens) {
+	private boolean next(final Tokens tokens) {
 		return ((this.token = tokens.pop()) != null);
 	}
 
 	/**
 	 * Parse Current Token
 	 */
-	private void tok(InlineLexer inline) {
+	private void tok(final InlineLexer inline) {
 		final var token = this.token;
 		if (token == null)
 			return;

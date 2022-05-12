@@ -94,7 +94,7 @@ public class RawRule extends HashMap<String, @Nullable Object>
 
 	private void updateCaptures(final String name) {
 		final Object captures = get(name);
-		if (captures instanceof List<?> capturesList) {
+		if (captures instanceof final List<?> capturesList) {
 			final RawRule rawCaptures = new RawRule();
 			int i = 0;
 			for (final Object capture : capturesList) {
@@ -177,10 +177,10 @@ public class RawRule extends HashMap<String, @Nullable Object>
 		if (applyEndPatternLast == null) {
 			return false;
 		}
-		if (applyEndPatternLast instanceof Boolean asBool) {
+		if (applyEndPatternLast instanceof final Boolean asBool) {
 			return asBool;
 		}
-		if (applyEndPatternLast instanceof Integer asInt) {
+		if (applyEndPatternLast instanceof final Integer asInt) {
 			return asInt == 1;
 		}
 		return false;

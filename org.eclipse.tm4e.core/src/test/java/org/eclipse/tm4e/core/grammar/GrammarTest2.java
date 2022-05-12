@@ -50,9 +50,9 @@ class GrammarTest2 {
 
 			int t = 0;
 			boolean stop = false;
-			long start = System.currentTimeMillis();
-			for (String line : lines) {
-				ITokenizeLineResult lineTokens = grammar.tokenizeLine(line, ruleStack);
+			final long start = System.currentTimeMillis();
+			for (final String line : lines) {
+				final ITokenizeLineResult lineTokens = grammar.tokenizeLine(line, ruleStack);
 				if (stop) {
 					t = 1000;
 					Thread.sleep(t);
@@ -60,8 +60,8 @@ class GrammarTest2 {
 				}
 				ruleStack = lineTokens.getRuleStack();
 				for (i = 0; i < lineTokens.getTokens().length; i++) {
-					IToken token = lineTokens.getTokens()[i];
-					String s = "Token from " + token.getStartIndex() + " to " + token.getEndIndex() + " with scopes "
+					final IToken token = lineTokens.getTokens()[i];
+					final String s = "Token from " + token.getStartIndex() + " to " + token.getEndIndex() + " with scopes "
 							+ token.getScopes();
 					// System.err.println(s);
 					// Assert.assertEquals(EXPECTED_MULTI_LINE_TOKENS[i + j], s);
@@ -77,7 +77,7 @@ class GrammarTest2 {
 		final var path = "yaml.tmLanguage.json";
 		try (var in = Data.class.getResourceAsStream(path)) {
 			final var grammar = castNonNull(registry.loadGrammarFromPathSync(path, in));
-			String lines = ">\n should.be.string.unquoted.block.yaml\n should.also.be.string.unquoted.block.yaml";
+			final String lines = ">\n should.be.string.unquoted.block.yaml\n should.also.be.string.unquoted.block.yaml";
 			final var result = TokenizationUtils.tokenizeText(lines, grammar).iterator();
 			assertTrue(Arrays.stream(result.next().getTokens())
 					.anyMatch(t -> t.getScopes().contains("keyword.control.flow.block-scalar.folded.yaml")));

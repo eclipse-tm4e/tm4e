@@ -33,7 +33,7 @@ public final class LanguageConfigurationPlugin extends AbstractUIPlugin {
 		return INSTANCE;
 	}
 
-	public static void log(IStatus status) {
+	public static void log(final IStatus status) {
 		final var plugin = LanguageConfigurationPlugin.INSTANCE;
 		if (plugin != null) {
 			plugin.getLog().log(status);

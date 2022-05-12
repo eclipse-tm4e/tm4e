@@ -47,7 +47,7 @@ public class ThemeAssociation implements IThemeAssociation {
 	private static final String SCOPE_NAME_ATTR = "scopeName"; //$NON-NLS-1$
 	private static final String WHEN_DARK_ATTR = "whenDark"; //$NON-NLS-1$
 
-	private String themeId;
+	private final String themeId;
 
 	@Nullable
 	private String scopeName;
@@ -107,14 +107,14 @@ public class ThemeAssociation implements IThemeAssociation {
 	}
 
 	@Override
-	public boolean equals(@Nullable Object obj) {
+	public boolean equals(@Nullable final Object obj) {
 		if (this == obj)
 			return true;
 		if (obj == null)
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		ThemeAssociation other = (ThemeAssociation) obj;
+		final ThemeAssociation other = (ThemeAssociation) obj;
 		return Objects.equals(pluginId, other.pluginId)
 				&& Objects.equals(scopeName, other.scopeName)
 				&& Objects.equals(themeId, other.themeId)

@@ -20,14 +20,14 @@ public class TextViewerInvalidateTextPresentationCommand extends Command {
 	private final int length;
 	private final TextViewer viewer;
 
-	public TextViewerInvalidateTextPresentationCommand(int offset, int length, TextViewer viewer) {
+	public TextViewerInvalidateTextPresentationCommand(final int offset, final int length, final TextViewer viewer) {
 		super(getName(offset, length));
 		this.offset = offset;
 		this.length = length;
 		this.viewer = viewer;
 	}
 
-	public static String getName(int offset, int length) {
+	public static String getName(final int offset, final int length) {
 		return "viewer.invalidateTextPresentation(" + offset + ", " + length + ");";
 	}
 
@@ -46,7 +46,7 @@ public class TextViewerInvalidateTextPresentationCommand extends Command {
 	protected Integer getLineTo() {
 		try {
 			return viewer.getDocument().getLineOfOffset(offset + length);
-		} catch (BadLocationException e) {
+		} catch (final BadLocationException e) {
 			return null;
 		}
 	}

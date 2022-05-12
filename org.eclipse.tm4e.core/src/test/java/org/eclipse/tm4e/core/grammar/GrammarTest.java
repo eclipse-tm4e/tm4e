@@ -61,13 +61,13 @@ public class GrammarTest {
 
 	@Test
 	public void tokenizeLine() throws Exception {
-		Registry registry = new Registry();
-		String path = "JavaScript.tmLanguage";
-		IGrammar grammar = registry.loadGrammarFromPathSync(path, Data.class.getResourceAsStream(path));
-		ITokenizeLineResult lineTokens = castNonNull(grammar).tokenizeLine("function add(a,b) { return a+b; }");
+		final Registry registry = new Registry();
+		final String path = "JavaScript.tmLanguage";
+		final IGrammar grammar = registry.loadGrammarFromPathSync(path, Data.class.getResourceAsStream(path));
+		final ITokenizeLineResult lineTokens = castNonNull(grammar).tokenizeLine("function add(a,b) { return a+b; }");
 		for (int i = 0; i < lineTokens.getTokens().length; i++) {
-			IToken token = lineTokens.getTokens()[i];
-			String s = "Token from " + token.getStartIndex() + " to " + token.getEndIndex() + " with scopes "
+			final IToken token = lineTokens.getTokens()[i];
+			final String s = "Token from " + token.getStartIndex() + " to " + token.getEndIndex() + " with scopes "
 					+ token.getScopes();
 			Assertions.assertEquals(EXPECTED_TOKENS[i], s);
 		}
@@ -75,20 +75,20 @@ public class GrammarTest {
 
 	@Test
 	public void tokenizeLines() throws Exception {
-		Registry registry = new Registry();
-		String path = "JavaScript.tmLanguage";
-		IGrammar grammar = registry.loadGrammarFromPathSync(path, Data.class.getResourceAsStream(path));
+		final Registry registry = new Registry();
+		final String path = "JavaScript.tmLanguage";
+		final IGrammar grammar = registry.loadGrammarFromPathSync(path, Data.class.getResourceAsStream(path));
 
 		IStackElement ruleStack = null;
 		int i = 0;
 		int j = 0;
-		String[] lines = { "function add(a,b)", "{ return a+b; }" };
+		final String[] lines = { "function add(a,b)", "{ return a+b; }" };
 		for (int l = 0; l < lines.length; l++) {
-			ITokenizeLineResult lineTokens = castNonNull(grammar).tokenizeLine(lines[l], ruleStack);
+			final ITokenizeLineResult lineTokens = castNonNull(grammar).tokenizeLine(lines[l], ruleStack);
 			ruleStack = lineTokens.getRuleStack();
 			for (i = 0; i < lineTokens.getTokens().length; i++) {
-				IToken token = lineTokens.getTokens()[i];
-				String s = "Token from " + token.getStartIndex() + " to " + token.getEndIndex() + " with scopes "
+				final IToken token = lineTokens.getTokens()[i];
+				final String s = "Token from " + token.getStartIndex() + " to " + token.getEndIndex() + " with scopes "
 						+ token.getScopes();
 				Assertions.assertEquals(EXPECTED_MULTI_LINE_TOKENS[i + j], s);
 			}

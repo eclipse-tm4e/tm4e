@@ -22,7 +22,7 @@ import org.junit.jupiter.api.Test;
 public class ParsingTest {
 
 	@Nullable
-	private LanguageConfiguration loadLanguageConfiguration(String path) throws IOException {
+	private LanguageConfiguration loadLanguageConfiguration(final String path) throws IOException {
 		try (InputStream is = getClass().getResourceAsStream(path)) {
 			assertNotNull(is);
 			return LanguageConfiguration.load(new InputStreamReader(is));

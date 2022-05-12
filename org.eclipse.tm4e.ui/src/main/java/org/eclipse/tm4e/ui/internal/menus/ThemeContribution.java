@@ -103,7 +103,7 @@ public final class ThemeContribution extends CompoundContributionItem implements
 			return null;
 
 		final Object activePart = context.getVariable(ISources.ACTIVE_PART_NAME);
-		if (activePart instanceof IEditorPart editorPart) {
+		if (activePart instanceof final IEditorPart editorPart) {
 			return editorPart;
 		}
 

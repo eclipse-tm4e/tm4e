@@ -22,7 +22,7 @@ import org.junit.jupiter.api.Test;
 
 public class GrammarReaderTest {
 
-	private IRawGrammar loadGrammar(String path) throws Exception {
+	private IRawGrammar loadGrammar(final String path) throws Exception {
 		try (InputStream is = Data.class.getResourceAsStream(path)) {
 			return GrammarReader.readGrammarSync(path, is);
 		}
@@ -34,9 +34,9 @@ public class GrammarReaderTest {
 	 */
 	@Test
 	public void testLoadDifferentPlistFormats() throws Exception {
-		IRawGrammar grammarFromXML = loadGrammar("JavaScript.tmLanguage");
-		IRawGrammar grammarFromJSON = loadGrammar("JavaScript.tmLanguage.json");
-		IRawGrammar grammarFromYAML = loadGrammar("JavaScript.tmLanguage.yaml");
+		final IRawGrammar grammarFromXML = loadGrammar("JavaScript.tmLanguage");
+		final IRawGrammar grammarFromJSON = loadGrammar("JavaScript.tmLanguage.json");
+		final IRawGrammar grammarFromYAML = loadGrammar("JavaScript.tmLanguage.yaml");
 
 		assertNotNull(grammarFromXML);
 		assertFalse(grammarFromXML.getFileTypes().isEmpty());

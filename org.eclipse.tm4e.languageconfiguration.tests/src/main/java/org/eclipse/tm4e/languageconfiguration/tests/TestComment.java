@@ -29,21 +29,21 @@ public class TestComment {
 	@AfterEach
 	public void tearDown() throws Exception {
 		PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().closeAllEditors(false);
-		for (IProject p : ResourcesPlugin.getWorkspace().getRoot().getProjects()) {
+		for (final IProject p : ResourcesPlugin.getWorkspace().getRoot().getProjects()) {
 			p.delete(true, null);
 		}
 	}
 
 	@Test
 	public void testIndentOnNewLine() throws Exception {
-		IProject p = ResourcesPlugin.getWorkspace().getRoot().getProject(getClass().getName() + System.currentTimeMillis());
+		final IProject p = ResourcesPlugin.getWorkspace().getRoot().getProject(getClass().getName() + System.currentTimeMillis());
 		p.create(null);
 		p.open(null);
-		IFile file = p.getFile("whatever.noLineComment");
+		final IFile file = p.getFile("whatever.noLineComment");
 		file.create(new ByteArrayInputStream("a\nb\nc".getBytes()), true, null);
-		ITextEditor editor = (ITextEditor) IDE.openEditor(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage(), file, "org.eclipse.ui.genericeditor.GenericEditor");
-		IDocument doc = editor.getDocumentProvider().getDocument(editor.getEditorInput());
-		IHandlerService service = PlatformUI.getWorkbench().getService(IHandlerService.class);
+		final ITextEditor editor = (ITextEditor) IDE.openEditor(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage(), file, "org.eclipse.ui.genericeditor.GenericEditor");
+		final IDocument doc = editor.getDocumentProvider().getDocument(editor.getEditorInput());
+		final IHandlerService service = PlatformUI.getWorkbench().getService(IHandlerService.class);
 		editor.getSelectionProvider().setSelection(new TextSelection(0, 5));
 		service.executeCommand("org.eclipse.tm4e.languageconfiguration.togglelinecommentcommand", null);
 		assertEquals("/*a*/\n/*b*/\n/*c*/", doc.get());

@@ -26,15 +26,15 @@ public interface DeepCloneable {
 
 	@SuppressWarnings("unchecked")
 	public static <T> T deepClone(final T obj) {
-		if (obj instanceof DeepCloneable deepCloneable) {
+		if (obj instanceof final DeepCloneable deepCloneable) {
 			return (T) deepCloneable.deepClone();
 		}
 
 		if (obj instanceof List<?>) {
 			List<@Nullable ?> clone;
-			if (obj instanceof ArrayList<?> source) {
+			if (obj instanceof final ArrayList<?> source) {
 				clone = (ArrayList<@Nullable Object>) source.clone();
-			} else if (obj instanceof LinkedList<?> source) {
+			} else if (obj instanceof final LinkedList<?> source) {
 				clone = (LinkedList<@Nullable Object>) source.clone();
 			} else {
 				final var source = (List<@Nullable Object>) obj;
@@ -47,10 +47,10 @@ public interface DeepCloneable {
 		if (obj instanceof Set) {
 			final Set<@Nullable ?> source;
 			final Set<@Nullable Object> clone;
-			if (obj instanceof TreeSet<?> cloneable) {
+			if (obj instanceof final TreeSet<?> cloneable) {
 				source = cloneable;
 				clone = (Set<@Nullable Object>) cloneable.clone();
-			} else if (obj instanceof HashSet<?> cloneable) {
+			} else if (obj instanceof final HashSet<?> cloneable) {
 				source = cloneable;
 				clone = (Set<@Nullable Object>) cloneable.clone();
 			} else {
@@ -65,17 +65,17 @@ public interface DeepCloneable {
 		}
 
 		if (obj instanceof Map) {
-			if (obj instanceof HashMap<?, ?> source) {
+			if (obj instanceof final HashMap<?, ?> source) {
 				final var clone = (Map<Object, @Nullable Object>) source.clone();
 				clone.replaceAll((k, v) -> deepCloneNullable(v));
 				return (T) clone;
 			}
-			if (obj instanceof IdentityHashMap<?, ?> source) {
+			if (obj instanceof final IdentityHashMap<?, ?> source) {
 				final var clone = (Map<Object, @Nullable Object>) source.clone();
 				clone.replaceAll((k, v) -> deepCloneNullable(v));
 				return (T) clone;
 			}
-			if (obj instanceof TreeMap<?, ?> source) {
+			if (obj instanceof final TreeMap<?, ?> source) {
 				final var clone = (Map<Object, @Nullable Object>) source.clone();
 				clone.replaceAll((k, v) -> deepCloneNullable(v));
 				return (T) clone;

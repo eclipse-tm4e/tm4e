@@ -32,12 +32,12 @@ public class TMEditor {
 	private final TextViewer viewer;
 	private final Document document;
 	private final Shell shell;
-	private StyleRangesCollector collector;
+	private final StyleRangesCollector collector;
 
 	private final List<ICommand> commands;
-	private TMPresentationReconciler reconciler;
+	private final TMPresentationReconciler reconciler;
 
-	public TMEditor(IGrammar grammar, ITokenProvider tokenProvider, String text) {
+	public TMEditor(final IGrammar grammar, final ITokenProvider tokenProvider, final String text) {
 		shell = new Shell();
 		viewer = new TextViewer(shell, SWT.NONE);
 		document = new Document();
@@ -55,17 +55,17 @@ public class TMEditor {
 
 	}
 
-	public void set(String text) {
+	public void set(final String text) {
 		commands.add(new DocumentSetCommand(text, document));
 	}
 
-	private void setAndExecute(String text) {
-		Command command = new DocumentSetCommand(text, document);
+	private void setAndExecute(final String text) {
+		final Command command = new DocumentSetCommand(text, document);
 		commands.add(command);
 		collector.setCommand(command);
 	}
 
-	public void replace(int pos, int length, String text) {
+	public void replace(final int pos, final int length, final String text) {
 		commands.add(new DocumentReplaceCommand(pos, length, text, document));
 	}
 
@@ -78,19 +78,19 @@ public class TMEditor {
 	 *            the length of the range to be invalidated
 	 *
 	 */
-	public void invalidateTextPresentation(int offset, int length) {
+	public void invalidateTextPresentation(final int offset, final int length) {
 		commands.add(new TextViewerInvalidateTextPresentationCommand(offset, length, viewer));
 	}
 
 	public List<ICommand> execute() {
 		new Thread(() -> {
-			for (ICommand command : commands) {
+			for (final ICommand command : commands) {
 				collector.executeCommand((Command) command);
 			}
 			shell.getDisplay().syncExec(shell::dispose);
 		}).start();
 
-		Display display = shell.getDisplay();
+		final Display display = shell.getDisplay();
 		while (!shell.isDisposed()) {
 			if (!display.readAndDispatch()) {
 				display.sleep();

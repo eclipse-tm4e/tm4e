@@ -30,11 +30,11 @@ public class TMPresentationReconcilerTypeScriptTest {
 	@Test
 	void colorizeTypescript() throws Exception {
 
-		TMEditor editor = new TMEditor(getGrammar(), getTokenProvider(), "let a = '';\nlet b = 10;\nlet c = true;");
-		List<ICommand> commands = editor.execute();
+		final TMEditor editor = new TMEditor(getGrammar(), getTokenProvider(), "let a = '';\nlet b = 10;\nlet c = true;");
+		final List<ICommand> commands = editor.execute();
 
 		assertEquals(1, commands.size());
-		ICommand command = commands.get(0);
+		final ICommand command = commands.get(0);
 
 		assertEquals(
 				"["
@@ -70,12 +70,12 @@ public class TMPresentationReconcilerTypeScriptTest {
 	@Test
 	void colorizeTypescriptWithInvalidate1() throws Exception {
 
-		TMEditor editor = new TMEditor(getGrammar(), getTokenProvider(), "let a = '';\nlet b = 10;\nlet c = true;");
+		final TMEditor editor = new TMEditor(getGrammar(), getTokenProvider(), "let a = '';\nlet b = 10;\nlet c = true;");
 		editor.invalidateTextPresentation(0, 3);
-		List<ICommand> commands = editor.execute();
+		final List<ICommand> commands = editor.execute();
 
 		// document.set("let a = '';\nlet b = 10;\nlet c = true;");
-		ICommand command0 = commands.get(0);
+		final ICommand command0 = commands.get(0);
 		assertEquals(
 				"["
 				+ "StyleRange {0, 3, fontStyle=bold, foreground=Color {7, 54, 66, 255}}, "
@@ -106,7 +106,7 @@ public class TMPresentationReconcilerTypeScriptTest {
 				command0.getStyleRanges());
 
 		// viewer.invalidateTextPresentation(0, 3);
-		ICommand command1 = commands.get(1);
+		final ICommand command1 = commands.get(1);
 		assertEquals(
 				"["
 				+ "StyleRange {0, 3, fontStyle=bold, foreground=Color {7, 54, 66, 255}}"
@@ -119,12 +119,12 @@ public class TMPresentationReconcilerTypeScriptTest {
 	@Test
 	void colorizeTypescriptWithInvalidate2() throws Exception {
 
-		TMEditor editor = new TMEditor(getGrammar(), getTokenProvider(), "let a = '';\nlet b = 10;\nlet c = true;");
+		final TMEditor editor = new TMEditor(getGrammar(), getTokenProvider(), "let a = '';\nlet b = 10;\nlet c = true;");
 		editor.invalidateTextPresentation(0, 2);
-		List<ICommand> commands = editor.execute();
+		final List<ICommand> commands = editor.execute();
 
 		// document.set("let a = '';\nlet b = 10;\nlet c = true;");
-		ICommand command0 = commands.get(0);
+		final ICommand command0 = commands.get(0);
 		assertEquals(
 				"["
 				+ "StyleRange {0, 3, fontStyle=bold, foreground=Color {7, 54, 66, 255}}, "
@@ -155,7 +155,7 @@ public class TMPresentationReconcilerTypeScriptTest {
 				command0.getStyleRanges());
 
 		// viewer.invalidateTextPresentation(0, 2);
-		ICommand command1 = commands.get(1);
+		final ICommand command1 = commands.get(1);
 		assertEquals(
 				"["
 				+ "StyleRange {0, 2, fontStyle=bold, foreground=Color {7, 54, 66, 255}}"
@@ -168,12 +168,12 @@ public class TMPresentationReconcilerTypeScriptTest {
 	@Test
 	void colorizeTypescriptWithInvalidate3() throws Exception {
 
-		TMEditor editor = new TMEditor(getGrammar(), getTokenProvider(), "let a = '';\nlet b = 10;\nlet c = true;");
+		final TMEditor editor = new TMEditor(getGrammar(), getTokenProvider(), "let a = '';\nlet b = 10;\nlet c = true;");
 		editor.invalidateTextPresentation(1, 2);
-		List<ICommand> commands = editor.execute();
+		final List<ICommand> commands = editor.execute();
 
 		// document.set("let a = '';\nlet b = 10;\nlet c = true;");
-		ICommand command0 = commands.get(0);
+		final ICommand command0 = commands.get(0);
 		assertEquals(
 				"["
 				+ "StyleRange {0, 3, fontStyle=bold, foreground=Color {7, 54, 66, 255}}, "
@@ -204,7 +204,7 @@ public class TMPresentationReconcilerTypeScriptTest {
 				command0.getStyleRanges());
 
 		// viewer.invalidateTextPresentation(1, 2);
-		ICommand command1 = commands.get(1);
+		final ICommand command1 = commands.get(1);
 		assertEquals(
 				"["
 				+ "StyleRange {1, 2, fontStyle=bold, foreground=Color {7, 54, 66, 255}}"
@@ -217,12 +217,12 @@ public class TMPresentationReconcilerTypeScriptTest {
 	@Test
 	void colorizeTypescriptWithInvalidate4() throws Exception {
 
-		TMEditor editor = new TMEditor(getGrammar(), getTokenProvider(), "let a = '';\nlet b = 10;\nlet c = true;");
+		final TMEditor editor = new TMEditor(getGrammar(), getTokenProvider(), "let a = '';\nlet b = 10;\nlet c = true;");
 		editor.invalidateTextPresentation(1, 1);
-		List<ICommand> commands = editor.execute();
+		final List<ICommand> commands = editor.execute();
 
 		// document.set("let a = '';\nlet b = 10;\nlet c = true;");
-		ICommand command0 = commands.get(0);
+		final ICommand command0 = commands.get(0);
 		assertEquals(
 				"["
 				+ "StyleRange {0, 3, fontStyle=bold, foreground=Color {7, 54, 66, 255}}, "
@@ -253,7 +253,7 @@ public class TMPresentationReconcilerTypeScriptTest {
 				command0.getStyleRanges());
 
 		// viewer.invalidateTextPresentation(1, 1);
-		ICommand command1 = commands.get(1);
+		final ICommand command1 = commands.get(1);
 		assertEquals(
 				"["
 				+ "StyleRange {1, 1, fontStyle=bold, foreground=Color {7, 54, 66, 255}}"
@@ -266,12 +266,12 @@ public class TMPresentationReconcilerTypeScriptTest {
 	@Test
 	void colorizeTypescriptWithInvalidate8() throws Exception {
 
-		TMEditor editor = new TMEditor(getGrammar(), getTokenProvider(), "let a = '';\nlet b = 10;\nlet c = true;");
+		final TMEditor editor = new TMEditor(getGrammar(), getTokenProvider(), "let a = '';\nlet b = 10;\nlet c = true;");
 		editor.invalidateTextPresentation(1, 8);
-		List<ICommand> commands = editor.execute();
+		final List<ICommand> commands = editor.execute();
 
 		// document.set("let a = '';\nlet b = 10;\nlet c = true;");
-		ICommand command0 = commands.get(0);
+		final ICommand command0 = commands.get(0);
 		assertEquals(
 				"["
 				+ "StyleRange {0, 3, fontStyle=bold, foreground=Color {7, 54, 66, 255}}, "
@@ -302,7 +302,7 @@ public class TMPresentationReconcilerTypeScriptTest {
 				command0.getStyleRanges());
 
 		// viewer.invalidateTextPresentation(1, 8);
-		ICommand command1 = commands.get(1);
+		final ICommand command1 = commands.get(1);
 		assertEquals(
 				"["
 				+ "StyleRange {1, 2, fontStyle=bold, foreground=Color {7, 54, 66, 255}}"
@@ -315,14 +315,14 @@ public class TMPresentationReconcilerTypeScriptTest {
 	@Test
 	void colorizeTypescriptWithInvalidateAndSeveralLines() throws Exception {
 
-		TMEditor editor = new TMEditor(getGrammar(), getTokenProvider(), "a\r\n\r\nb");
+		final TMEditor editor = new TMEditor(getGrammar(), getTokenProvider(), "a\r\n\r\nb");
 		editor.invalidateTextPresentation(0, 6);
 
-		List<ICommand> commands = editor.execute();
+		final List<ICommand> commands = editor.execute();
 
 		assertEquals(2, commands.size());
 
-		for (ICommand command : commands) {
+		for (final ICommand command : commands) {
 			assertEquals(
 					"["
 					+ "StyleRange {0, 3, fontStyle=normal, foreground=Color {38, 139, 210, 255}}, "
@@ -338,11 +338,11 @@ public class TMPresentationReconcilerTypeScriptTest {
 	}
 
 	public static IGrammar getGrammar() {
-		Registry registry = new Registry();
+		final Registry registry = new Registry();
 		try {
 			return registry.loadGrammarFromPathSync("TypeScript.tmLanguage.json",
 					TMPresentationReconcilerTypeScriptTest.class.getClassLoader().getResourceAsStream("/grammars/TypeScript.tmLanguage.json"));
-		} catch (Exception e) {
+		} catch (final Exception e) {
 			e.printStackTrace();
 			return null;
 		}

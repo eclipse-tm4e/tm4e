@@ -64,7 +64,7 @@ public class ThemeParsingTest {
 		assertArrayEquals(expected, actual.toArray());
 	}
 
-	private List<ParsedThemeRule> parseTheme(String theme) throws Exception {
+	private List<ParsedThemeRule> parseTheme(final String theme) throws Exception {
 		return Theme.parseTheme(ThemeReader.readThemeSync("theme.json", new ByteArrayInputStream(theme.getBytes())));
 	}
 }

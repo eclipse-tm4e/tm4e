@@ -53,7 +53,7 @@ public class TMState {
 
 	@Override
 	public boolean equals(@Nullable final Object other) {
-		if (other instanceof TMState otherState) {
+		if (other instanceof final TMState otherState) {
 			return Objects.equals(this.parentEmbedderState, otherState.parentEmbedderState)
 					&& Objects.equals(this.ruleStack, otherState.ruleStack);
 		}

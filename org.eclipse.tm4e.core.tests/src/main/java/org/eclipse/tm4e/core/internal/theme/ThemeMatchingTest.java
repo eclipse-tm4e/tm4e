@@ -33,7 +33,7 @@ class ThemeMatchingTest {
 
 	@Test
 	void testGivesHigherPriorityToDeeperMatches() throws Exception {
-		Theme theme = loadTheme("{" +
+		final Theme theme = loadTheme("{" +
 			"\"settings\": ["+
 						"{ \"settings\": { \"foreground\": \"#100000\", \"background\": \"#200000\" } },"+
 						"{ \"scope\": \"punctuation.definition.string.begin.html\", \"settings\": { \"foreground\": \"#300000\" } },"+
@@ -42,14 +42,14 @@ class ThemeMatchingTest {
 		"}");
 
 
-		ColorMap colorMap = new ColorMap();
-		int _NOT_SET = 0;
-		int _A = colorMap.getId("#100000");
-		int _B = colorMap.getId("#200000");
-		int _C = colorMap.getId("#400000");
-		int _D = colorMap.getId("#300000");
+		final ColorMap colorMap = new ColorMap();
+		final int _NOT_SET = 0;
+		final int _A = colorMap.getId("#100000");
+		final int _B = colorMap.getId("#200000");
+		final int _C = colorMap.getId("#400000");
+		final int _D = colorMap.getId("#300000");
 
-		List<ThemeTrieElementRule> actual = theme.match("punctuation.definition.string.begin.html");
+		final List<ThemeTrieElementRule> actual = theme.match("punctuation.definition.string.begin.html");
 
 		assertArrayEquals(
 				new ThemeTrieElementRule[] { new ThemeTrieElementRule(5, null, FontStyle.NotSet, _D, _NOT_SET),
@@ -59,7 +59,7 @@ class ThemeMatchingTest {
 
 	@Test
 	void testGivesHigherPriorityToParentMatches1() throws Exception {
-		Theme theme = loadTheme("{" +
+		final Theme theme = loadTheme("{" +
 			"\"settings\": ["+
 						"{ \"settings\": { \"foreground\": \"#100000\", \"background\": \"#200000\" } },"+
 						"{ \"scope\": \"c a\", \"settings\": { \"foreground\": \"#300000\" } },"+
@@ -69,15 +69,15 @@ class ThemeMatchingTest {
 		"}");
 
 
-		ColorMap colorMap = new ColorMap();
-		int _NOT_SET = 0;
-		int _A = colorMap.getId("#100000");
-		int _B = colorMap.getId("#200000");
-		int _C = colorMap.getId("#500000");
-		int _D = colorMap.getId("#300000");
-		int _E = colorMap.getId("#400000");
+		final ColorMap colorMap = new ColorMap();
+		final int _NOT_SET = 0;
+		final int _A = colorMap.getId("#100000");
+		final int _B = colorMap.getId("#200000");
+		final int _C = colorMap.getId("#500000");
+		final int _D = colorMap.getId("#300000");
+		final int _E = colorMap.getId("#400000");
 
-		List<ThemeTrieElementRule> actual = theme.match("a.b");
+		final List<ThemeTrieElementRule> actual = theme.match("a.b");
 
 		assertArrayEquals(new ThemeTrieElementRule[] {
 				new ThemeTrieElementRule(2, Arrays.asList("d"), FontStyle.NotSet, _E, _NOT_SET),
@@ -87,7 +87,7 @@ class ThemeMatchingTest {
 
 	@Test
 	void testGivesHigherPriorityToParentMatches2() throws Exception {
-		Theme theme = loadTheme("{" +
+		final Theme theme = loadTheme("{" +
 			"\"settings\": ["+
 						"{ \"settings\": { \"foreground\": \"#100000\", \"background\": \"#200000\" } },"+
 						"{ \"scope\": \"meta.tag entity\", \"settings\": { \"foreground\": \"#300000\" } },"+
@@ -97,17 +97,17 @@ class ThemeMatchingTest {
 		"}");
 
 
-		ScopeListElement root = new ScopeListElement(null, "text.html.cshtml", 0);
-		ScopeListElement parent = new ScopeListElement(root, "meta.tag.structure.any.html", 0);
-		int r = ScopeListElement.mergeMetadata(0, parent, new ScopeMetadata("entity.name.tag.structure.any.html", 0, 0,
+		final ScopeListElement root = new ScopeListElement(null, "text.html.cshtml", 0);
+		final ScopeListElement parent = new ScopeListElement(root, "meta.tag.structure.any.html", 0);
+		final int r = ScopeListElement.mergeMetadata(0, parent, new ScopeMetadata("entity.name.tag.structure.any.html", 0, 0,
 				theme.match("entity.name.tag.structure.any.html")));
-		String color = theme.getColor(StackElementMetadata.getForeground(r));
+		final String color = theme.getColor(StackElementMetadata.getForeground(r));
 		assertEquals("#300000", color);
 	}
 
 	@Test
 	void testCanMatch() throws Exception {
-		Theme theme = loadTheme("{" +
+		final Theme theme = loadTheme("{" +
 			"\"settings\": ["+
 				"{ \"settings\": { \"foreground\": \"#F8F8F2\", \"background\": \"#272822\" } },"+
 				"{ \"scope\": \"source, something\", \"settings\": { \"background\": \"#100000\" } },"+
@@ -122,16 +122,16 @@ class ThemeMatchingTest {
 			"]"+
 		"}");
 
-		ColorMap colorMap = new ColorMap();
-		int _NOT_SET = 0;
-		int _A = colorMap.getId("#F8F8F2");
-		int _B = colorMap.getId("#272822");
-		int _C = colorMap.getId("#200000");
-		int _D = colorMap.getId("#300000");
-		int _E = colorMap.getId("#400000");
-		int _F = colorMap.getId("#500000");
-		int _G = colorMap.getId("#100000");
-		int _H = colorMap.getId("#600000");
+		final ColorMap colorMap = new ColorMap();
+		final int _NOT_SET = 0;
+		final int _A = colorMap.getId("#F8F8F2");
+		final int _B = colorMap.getId("#272822");
+		final int _C = colorMap.getId("#200000");
+		final int _D = colorMap.getId("#300000");
+		final int _E = colorMap.getId("#400000");
+		final int _F = colorMap.getId("#500000");
+		final int _G = colorMap.getId("#100000");
+		final int _H = colorMap.getId("#600000");
 
 		// matches defaults
 		assertNoMatch(theme, "");
@@ -193,7 +193,7 @@ class ThemeMatchingTest {
 
 	@Test
 	void testMicrosoft_vscode_23460() throws Exception {
-		Theme theme = loadTheme("{" +
+		final Theme theme = loadTheme("{" +
 			"\"settings\": ["+
 				"{" +
 					"\"settings\": {"+
@@ -221,12 +221,12 @@ class ThemeMatchingTest {
 			"]"+
 		"}");
 
-		ColorMap colorMap = new ColorMap();
-		int _NOT_SET = 0;
-		int _A = colorMap.getId("#aec2e0");
-		int _B = colorMap.getId("#14191f");
-		int _C = colorMap.getId("#FF410D");
-		int _D = colorMap.getId("#ffffff");
+		final ColorMap colorMap = new ColorMap();
+		final int _NOT_SET = 0;
+		final int _A = colorMap.getId("#aec2e0");
+		final int _B = colorMap.getId("#14191f");
+		final int _C = colorMap.getId("#FF410D");
+		final int _D = colorMap.getId("#ffffff");
 
 		// string.quoted.double.json
 		// meta.structure.dictionary.value.json
@@ -238,37 +238,37 @@ class ThemeMatchingTest {
 			new ThemeTrieElementRule(0, null, FontStyle.NotSet, _NOT_SET, _NOT_SET)
 		});
 
-		ScopeListElement parent3 = new ScopeListElement(null, "source.json", 0);
-		ScopeListElement parent2 = new ScopeListElement(parent3, "meta.structure.dictionary.json", 0);
-		ScopeListElement parent1 = new ScopeListElement(parent2, "meta.structure.dictionary.value.json", 0);
+		final ScopeListElement parent3 = new ScopeListElement(null, "source.json", 0);
+		final ScopeListElement parent2 = new ScopeListElement(parent3, "meta.structure.dictionary.json", 0);
+		final ScopeListElement parent1 = new ScopeListElement(parent2, "meta.structure.dictionary.value.json", 0);
 
-		int r = ScopeListElement.mergeMetadata(
+		final int r = ScopeListElement.mergeMetadata(
 			0,
 			parent1,
 			new ScopeMetadata("string.quoted.double.json", 0, 0, theme.match("string.quoted.double.json"))
 		);
-		String color = theme.getColor(StackElementMetadata.getForeground(r));
+		final String color = theme.getColor(StackElementMetadata.getForeground(r));
 		assertEquals("#FF410D", color);
 	}
 
-	private void assertMatch(Theme theme, String scopeName, ThemeTrieElementRule[] expected) {
-		List<ThemeTrieElementRule> actual = theme.match(scopeName);
+	private void assertMatch(final Theme theme, final String scopeName, final ThemeTrieElementRule[] expected) {
+		final List<ThemeTrieElementRule> actual = theme.match(scopeName);
 		assertArrayEquals(expected, actual.toArray(), "when matching <<" + scopeName + ">>");
 	}
 
-	private void assertSimpleMatch(Theme theme, String scopeName, int scopeDepth, int fontStyle, int foreground, int background) {
+	private void assertSimpleMatch(final Theme theme, final String scopeName, final int scopeDepth, final int fontStyle, final int foreground, final int background) {
 		assertMatch(theme, scopeName, new ThemeTrieElementRule [] {
 			new ThemeTrieElementRule(scopeDepth, null, fontStyle, foreground, background)
 		});
 	}
 
-	private void assertNoMatch(Theme theme, String scopeName) {
+	private void assertNoMatch(final Theme theme, final String scopeName) {
 		assertMatch(theme, scopeName, new ThemeTrieElementRule [] {
 			new ThemeTrieElementRule(0, null, FontStyle.NotSet, 0, 0 /*_NOT_SET, _NOT_SET*/)
 		});
 	}
 
-	private Theme loadTheme(String theme) throws Exception {
+	private Theme loadTheme(final String theme) throws Exception {
 		return Theme.createFromRawTheme(ThemeReader.readThemeSync("theme.json", new ByteArrayInputStream(theme.getBytes())), null);
 	}
 }

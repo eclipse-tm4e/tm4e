@@ -34,7 +34,7 @@ public class TokenizationUtils {
 	 *
 	 * @return The stream of {@link ITokenizeLineResult}, each item covering 1 line of the text
 	 */
-	public static Stream<ITokenizeLineResult> tokenizeText(final CharSequence text, IGrammar grammar) {
+	public static Stream<ITokenizeLineResult> tokenizeText(final CharSequence text, final IGrammar grammar) {
 		if (text.length() == 0) {
 			return Stream.empty();
 		}
@@ -44,7 +44,7 @@ public class TokenizationUtils {
 			IStackElement prevStack;
 
 			@Override
-			public ITokenizeLineResult apply(String line) {
+			public ITokenizeLineResult apply(final String line) {
 				final var tokenized = grammar.tokenizeLine(line, prevStack);
 				prevStack = tokenized.getRuleStack();
 				return tokenized;
@@ -61,15 +61,15 @@ public class TokenizationUtils {
 	 *
 	 * @throws IOException
 	 */
-	public static Stream<ITokenizeLineResult> tokenizeText(final InputStream text, IGrammar grammar)
+	public static Stream<ITokenizeLineResult> tokenizeText(final InputStream text, final IGrammar grammar)
 			throws IOException {
-		var reader = new BufferedReader(new InputStreamReader(text));
+		final var reader = new BufferedReader(new InputStreamReader(text));
 		return reader.lines().map(new Function<String, ITokenizeLineResult>() {
 			@Nullable
 			IStackElement prevStack;
 
 			@Override
-			public ITokenizeLineResult apply(String line) {
+			public ITokenizeLineResult apply(final String line) {
 				final var tokenized = grammar.tokenizeLine(line, prevStack);
 				prevStack = tokenized.getRuleStack();
 				return tokenized;

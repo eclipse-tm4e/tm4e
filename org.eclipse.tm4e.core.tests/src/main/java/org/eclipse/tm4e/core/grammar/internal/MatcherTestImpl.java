@@ -30,8 +30,8 @@ public class MatcherTestImpl {
 
 
 	public void executeTest() {
-		Collection<MatcherWithPriority<List<String>>> matcher = Matcher.createMatchers(expression);
-		boolean result = matcher.stream().anyMatch(m -> m.matcher.matches(input));
+		final Collection<MatcherWithPriority<List<String>>> matcher = Matcher.createMatchers(expression);
+		final boolean result = matcher.stream().anyMatch(m -> m.matcher.matches(input));
 		assertEquals(result, this.result);
 	}
 

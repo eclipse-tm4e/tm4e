@@ -39,7 +39,7 @@ class ThemeManagerTest implements ThemeIdConstants {
 	@Test
 	void themes() {
 		// All themes
-		ITheme[] themes = manager.getThemes();
+		final ITheme[] themes = manager.getThemes();
 		assertNotNull(themes);
 		assertEquals(4, themes.length);
 	}
@@ -47,7 +47,7 @@ class ThemeManagerTest implements ThemeIdConstants {
 	@Test
 	void defaultThemeAssociation() {
 		// Default theme
-		ITheme theme = manager.getDefaultTheme();
+		final ITheme theme = manager.getDefaultTheme();
 		assertNotNull(theme);
 		assertEquals(SolarizedLight, theme.getId());
 	}
@@ -55,14 +55,14 @@ class ThemeManagerTest implements ThemeIdConstants {
 	@Test
 	void darkThemes() {
 		// All themes for Dark E4 CSS Theme
-		ITheme[] darkThemes = manager.getThemes(true);
+		final ITheme[] darkThemes = manager.getThemes(true);
 		assertNotNull(darkThemes);
 		assertEquals(2, darkThemes.length);
 		assertEquals(Dark, darkThemes[0].getId());
 		assertEquals(Monokai, darkThemes[1].getId());
 		
 		// All themes for Other E4 CSS Theme
-		ITheme[] otherThemes = manager.getThemes(false);
+		final ITheme[] otherThemes = manager.getThemes(false);
 		assertNotNull(otherThemes);
 		assertEquals(2, otherThemes.length);
 		assertEquals(SolarizedLight, otherThemes[0].getId());

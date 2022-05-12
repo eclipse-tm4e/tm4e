@@ -36,8 +36,8 @@ public class Theme extends TMResource implements ITheme {
 	@Nullable
 	private ITokenProvider tokenProvider;
 
-	private String id;
-	private String name;
+	private final String id;
+	private final String name;
 	private boolean dark;
 	private boolean isDefault;
 

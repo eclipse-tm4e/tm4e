@@ -21,7 +21,7 @@ public class DocumentReplaceCommand extends Command {
 	private final String text;
 	private final Document document;
 
-	public DocumentReplaceCommand(int pos, int length, String text, Document document) {
+	public DocumentReplaceCommand(final int pos, final int length, final String text, final Document document) {
 		super(getName(pos, length, text));
 		this.pos = pos;
 		this.length = length;
@@ -29,7 +29,7 @@ public class DocumentReplaceCommand extends Command {
 		this.document = document;
 	}
 
-	public static String getName(int pos, int length, String text) {
+	public static String getName(final int pos, final int length, final String text) {
 		return "document.replace(" + pos + ", " + length + ", \"" + toText(text) + "\");";
 	}
 
@@ -37,7 +37,7 @@ public class DocumentReplaceCommand extends Command {
 	protected void doExecute() {
 		try {
 			document.replace(pos, length, text);
-		} catch (BadLocationException e) {
+		} catch (final BadLocationException e) {
 			e.printStackTrace();
 		}
 	}
@@ -46,7 +46,7 @@ public class DocumentReplaceCommand extends Command {
 	protected Integer getLineTo() {
 		try {
 			return document.getLineOfOffset(pos + length);
-		} catch (BadLocationException e) {
+		} catch (final BadLocationException e) {
 			return null;
 		}
 	}

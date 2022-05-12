@@ -28,20 +28,20 @@ public class TestIndent {
 	@AfterEach
 	public void tearDown() throws Exception {
 		PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().closeAllEditors(false);
-		for (IProject p : ResourcesPlugin.getWorkspace().getRoot().getProjects()) {
+		for (final IProject p : ResourcesPlugin.getWorkspace().getRoot().getProjects()) {
 			p.delete(true, null);
 		}
 	}
 
 	@Test
 	public void testIndentOnNewLine() throws Exception {
-		IProject p = ResourcesPlugin.getWorkspace().getRoot().getProject(getClass().getName() + System.currentTimeMillis());
+		final IProject p = ResourcesPlugin.getWorkspace().getRoot().getProject(getClass().getName() + System.currentTimeMillis());
 		p.create(null);
 		p.open(null);
-		IFile file = p.getFile("whatever.txt");
+		final IFile file = p.getFile("whatever.txt");
 		file.create(new ByteArrayInputStream(new byte[0]), true, null);
-		ITextEditor editor = (ITextEditor) IDE.openEditor(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage(), file, "org.eclipse.ui.genericeditor.GenericEditor");
-		StyledText text = (StyledText)editor.getAdapter(Control.class);
+		final ITextEditor editor = (ITextEditor) IDE.openEditor(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage(), file, "org.eclipse.ui.genericeditor.GenericEditor");
+		final StyledText text = (StyledText)editor.getAdapter(Control.class);
 		// Tab only
 		text.setText("\t");
 		text.setSelection(text.getText().length());

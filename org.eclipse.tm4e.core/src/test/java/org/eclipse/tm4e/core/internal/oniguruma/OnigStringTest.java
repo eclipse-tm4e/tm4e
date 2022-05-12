@@ -44,16 +44,16 @@ class OnigStringTest {
 
 	@Test
 	void testEmptyStrings() {
-		String string = "";
-		OnigString onigString = verifyBasics(string, OnigString.SingleByteString.class);
+		final String string = "";
+		final OnigString onigString = verifyBasics(string, OnigString.SingleByteString.class);
 
 		assertEquals(0, onigString.bytesCount);
 	}
 
 	@Test
 	void testSingleBytesStrings() {
-		String string = "ab";
-		OnigString onigString = verifyBasics(string, OnigString.SingleByteString.class);
+		final String string = "ab";
+		final OnigString onigString = verifyBasics(string, OnigString.SingleByteString.class);
 
 		assertEquals(2, onigString.bytesCount);
 
@@ -73,8 +73,8 @@ class OnigStringTest {
 
 	@Test
 	void testMultiByteString() {
-		String string = "áé";
-		OnigString onigString = verifyBasics(string, OnigString.MultiByteString.class);
+		final String string = "áé";
+		final OnigString onigString = verifyBasics(string, OnigString.MultiByteString.class);
 
 		assertEquals(4, onigString.bytesCount);
 
@@ -96,8 +96,8 @@ class OnigStringTest {
 
 	@Test
 	void testMixedMultiByteString() {
-		String string = "myááçóúôõaab";
-		OnigString onigString = verifyBasics(string, OnigString.MultiByteString.class);
+		final String string = "myááçóúôõaab";
+		final OnigString onigString = verifyBasics(string, OnigString.MultiByteString.class);
 
 		assertEquals(19, onigString.bytesCount);
 

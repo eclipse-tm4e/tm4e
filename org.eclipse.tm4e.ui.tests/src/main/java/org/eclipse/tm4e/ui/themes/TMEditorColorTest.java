@@ -71,17 +71,17 @@ class TMEditorColorTest implements ThemeIdConstants {
 		editor = IDE.openEditor(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage(), f.toURI(),
 				editorDescriptor.getId(), true);
 
-		StyledText styledText = (StyledText) editor.getAdapter(Control.class);
+		final StyledText styledText = (StyledText) editor.getAdapter(Control.class);
 
-		String themeId = manager.getDefaultTheme().getId();
-		ITheme theme = manager.getThemeById(themeId);
+		final String themeId = manager.getDefaultTheme().getId();
+		final ITheme theme = manager.getThemeById(themeId);
 		assertEquals(SolarizedLight, themeId, "Default light theme isn't set");
 		assertEquals(theme.getEditorBackground(), styledText.getBackground(), "Background colors isn't equals");
 		assertEquals(theme.getEditorForeground(), styledText.getForeground(), "Foreground colors isn't equals");
 		assertNull(theme.getEditorSelectionBackground(), "System default selection background should be null");
 		assertNull(theme.getEditorSelectionForeground(), "System default selection foreground should be null");
 
-		Color lineHighlight = ColorManager.getInstance().getPreferenceEditorColor(EDITOR_CURRENTLINE_HIGHLIGHT);
+		final Color lineHighlight = ColorManager.getInstance().getPreferenceEditorColor(EDITOR_CURRENTLINE_HIGHLIGHT);
 		assertNotNull(theme.getEditorCurrentLineHighlight(), "Highlight shouldn't be a null");
 		assertNotEquals(lineHighlight, theme.getEditorCurrentLineHighlight(),
 				"Default Line highlight should be from TM theme");
@@ -90,9 +90,9 @@ class TMEditorColorTest implements ThemeIdConstants {
 
 	@Test
 	void userDefinedEditorColorTest() throws Exception {
-		String testColorVal = "255,128,0";
-		Color testColor = new Color(Display.getCurrent(), 255, 128, 0);
-		IPreferenceStore prefs = new ScopedPreferenceStore(InstanceScope.INSTANCE, "org.eclipse.ui.editors");
+		final String testColorVal = "255,128,0";
+		final Color testColor = new Color(Display.getCurrent(), 255, 128, 0);
+		final IPreferenceStore prefs = new ScopedPreferenceStore(InstanceScope.INSTANCE, "org.eclipse.ui.editors");
 		prefs.setValue(AbstractTextEditor.PREFERENCE_COLOR_BACKGROUND, testColorVal);
 		prefs.setValue(AbstractTextEditor.PREFERENCE_COLOR_BACKGROUND_SYSTEM_DEFAULT, false);
 
@@ -104,10 +104,10 @@ class TMEditorColorTest implements ThemeIdConstants {
 		editor = IDE.openEditor(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage(), f.toURI(),
 				editorDescriptor.getId(), true);
 
-		StyledText styledText = (StyledText) editor.getAdapter(Control.class);
+		final StyledText styledText = (StyledText) editor.getAdapter(Control.class);
 
-		String themeId = manager.getDefaultTheme().getId();
-		ITheme theme = manager.getThemeById(themeId);
+		final String themeId = manager.getDefaultTheme().getId();
+		final ITheme theme = manager.getThemeById(themeId);
 		assertEquals(SolarizedLight, themeId, "Default light theme isn't set");
 
 		assertEquals(styledText.getBackground(), testColor, "Background color should be user defined");
@@ -116,7 +116,7 @@ class TMEditorColorTest implements ThemeIdConstants {
 				"Selection background color should be user defined");
 		assertNull(theme.getEditorSelectionForeground(), "Selection foreground should be System default (null)");
 
-		Color lineHighlight = ColorManager.getInstance().getPreferenceEditorColor(EDITOR_CURRENTLINE_HIGHLIGHT);
+		final Color lineHighlight = ColorManager.getInstance().getPreferenceEditorColor(EDITOR_CURRENTLINE_HIGHLIGHT);
 		assertNotNull(lineHighlight, "Highlight shouldn't be a null");
 		assertEquals(lineHighlight, theme.getEditorCurrentLineHighlight(),
 				"Line highlight should be from preferences (because of user defined background)");

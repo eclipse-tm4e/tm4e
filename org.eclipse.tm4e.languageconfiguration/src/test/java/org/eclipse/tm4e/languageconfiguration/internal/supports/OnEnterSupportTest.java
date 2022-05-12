@@ -28,7 +28,7 @@ public class OnEnterSupportTest {
 
 	@Test
 	public void useBrackets() {
-		UseBracketsTest support = new UseBracketsTest();
+		final UseBracketsTest support = new UseBracketsTest();
 
 		support.testIndentAction("a", "", IndentAction.None);
 		support.testIndentAction("", "b", IndentAction.None);
@@ -56,8 +56,8 @@ public class OnEnterSupportTest {
 			super(Arrays.asList(new CharacterPair("(", ")"), new CharacterPair("begin", "end")), null);
 		}
 
-		public void testIndentAction(String beforeText, String afterText, IndentAction expected) {
-			EnterAction actual = super.onEnter("", beforeText, afterText);
+		public void testIndentAction(final String beforeText, final String afterText, final IndentAction expected) {
+			final EnterAction actual = super.onEnter("", beforeText, afterText);
 			if (expected == IndentAction.None) {
 				assertNull(actual);
 			} else {
@@ -69,7 +69,7 @@ public class OnEnterSupportTest {
 
 	@Test
 	public void regExpRules() {
-		RegExpRulesTest support = new RegExpRulesTest();
+		final RegExpRulesTest support = new RegExpRulesTest();
 
 		support.testIndentAction("\t/**", " */", IndentAction.IndentOutdent, " * ");
 		support.testIndentAction("\t/**", "", IndentAction.None, " * ");
@@ -127,14 +127,14 @@ public class OnEnterSupportTest {
 									new EnterAction(IndentAction.None).setRemoveText(1))));
 		}
 
-		public void testIndentAction(String beforeText, String afterText, @Nullable IndentAction expectedIndentAction,
-				@Nullable String expectedAppendText) {
+		public void testIndentAction(final String beforeText, final String afterText, @Nullable final IndentAction expectedIndentAction,
+				@Nullable final String expectedAppendText) {
 			testIndentAction(beforeText, afterText, expectedIndentAction, expectedAppendText, 0);
 		}
 
-		public void testIndentAction(String beforeText, String afterText, @Nullable IndentAction expectedIndentAction,
-				@Nullable String expectedAppendText, int removeText) {
-			EnterAction actual = super.onEnter("", beforeText, afterText);
+		public void testIndentAction(final String beforeText, final String afterText, @Nullable final IndentAction expectedIndentAction,
+				@Nullable final String expectedAppendText, final int removeText) {
+			final EnterAction actual = super.onEnter("", beforeText, afterText);
 			if (expectedIndentAction == null) {
 				assertNull(actual, "isNull:" + beforeText);
 			} else {

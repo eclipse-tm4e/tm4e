@@ -66,7 +66,7 @@ public final class LanguageConfigurationRegistryManager extends AbstractLanguage
 	private LanguageConfigurationDefinition getDefinition(final IContentType contentType) {
 		LanguageConfigurationDefinition bestFit = null;
 		for (final var iDefinition : getDefinitions()) {
-			if (iDefinition instanceof LanguageConfigurationDefinition definition) {
+			if (iDefinition instanceof final LanguageConfigurationDefinition definition) {
 				final var definitionContentType = definition.getContentType();
 				if (contentType.isKindOf(definitionContentType)
 						&& (bestFit == null || definitionContentType.isKindOf(bestFit.getContentType()))) {
@@ -257,7 +257,7 @@ public final class LanguageConfigurationRegistryManager extends AbstractLanguage
 				final LanguageConfigurationDefinition delegate;
 				try {
 					delegate = new LanguageConfigurationDefinition(configElem);
-				} catch (CoreException ex) {
+				} catch (final CoreException ex) {
 					LanguageConfigurationPlugin.log(ex.getStatus());
 					continue;
 				}

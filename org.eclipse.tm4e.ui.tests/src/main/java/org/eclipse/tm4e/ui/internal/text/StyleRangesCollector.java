@@ -30,14 +30,14 @@ public class StyleRangesCollector implements ITMPresentationReconcilerListener {
 
 	private StringBuilder currentRanges;
 
-	private Object lock = new Object();
+	private final Object lock = new Object();
 
 	public StyleRangesCollector() {
 
 	}
 
 	@Override
-	public void install(ITextViewer viewer, IDocument document) {
+	public void install(final ITextViewer viewer, final IDocument document) {
 		this.document = document;
 	}
 
@@ -47,16 +47,16 @@ public class StyleRangesCollector implements ITMPresentationReconcilerListener {
 	}
 
 	@Override
-	public void colorize(TextPresentation presentation, Throwable error) {
+	public void colorize(final TextPresentation presentation, final Throwable error) {
 		add(presentation);
 		if (waitForToLineNumber != null) {
-			int offset = presentation.getExtent().getOffset() + presentation.getExtent().getLength();
+			final int offset = presentation.getExtent().getOffset() + presentation.getExtent().getLength();
 			try {
 				if (waitForToLineNumber != document.getLineOfOffset(offset)) {
 					return;
 				}
 				waitForToLineNumber = null;
-			} catch (BadLocationException e) {
+			} catch (final BadLocationException e) {
 				e.printStackTrace();
 			}
 		}
@@ -66,8 +66,8 @@ public class StyleRangesCollector implements ITMPresentationReconcilerListener {
 		}
 	}
 
-	private String add(TextPresentation presentation) {
-		Iterator<StyleRange> ranges = presentation.getAllStyleRangeIterator();
+	private String add(final TextPresentation presentation) {
+		final Iterator<StyleRange> ranges = presentation.getAllStyleRangeIterator();
 		while(ranges.hasNext()) {
 			if (currentRanges.length() > 0) {
 				currentRanges.append(", ");
@@ -77,31 +77,31 @@ public class StyleRangesCollector implements ITMPresentationReconcilerListener {
 		return null;
 	}
 
-	public static String toString(StyleRange[] ranges) {
+	public static String toString(final StyleRange[] ranges) {
 		return Arrays.asList(ranges).toString();
 	}
 
-	public void executeCommand(Command command) {
+	public void executeCommand(final Command command) {
 		setCommand(command);
 		if (command.getStyleRanges() == null) {
 			synchronized (lock) {
 				try {
 					wait(command);
-				} catch (InterruptedException e) {
+				} catch (final InterruptedException e) {
 					e.printStackTrace();
 				}
 			}
 		}
 	}
 
-	public void wait(Command command) throws InterruptedException {
+	public void wait(final Command command) throws InterruptedException {
 		lock.wait();
 		if (command.getStyleRanges() == null) {
 			wait(command);
 		}
 	}
 
-	public void setCommand(Command command) {
+	public void setCommand(final Command command) {
 		this.currentRanges = new StringBuilder();
 		this.command = command;
 		this.waitForToLineNumber = command.getLineTo();

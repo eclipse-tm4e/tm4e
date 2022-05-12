@@ -22,7 +22,7 @@ public class RawToken {
 	public RawToken() {
 	}
 
-	public RawToken(String value, List<String> scopes) {
+	public RawToken(final String value, final List<String> scopes) {
 		this.value = value;
 		this.scopes = scopes;
 	}
@@ -36,8 +36,8 @@ public class RawToken {
 	}
 
 	@Override
-	public boolean equals(Object obj) {
-		return obj instanceof RawToken other ?
+	public boolean equals(final Object obj) {
+		return obj instanceof final RawToken other ?
 			Objects.equals(this.value, other.value) && Objects.equals(this.scopes, other.scopes) :
 			false;
 	}

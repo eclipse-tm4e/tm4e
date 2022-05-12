@@ -45,7 +45,7 @@ public class ToggleLineCommentHandler extends AbstractHandler {
 	public static final String REMOVE_BLOCK_COMMENT_COMMAND_ID = "org.eclipse.tm4e.languageconfiguration.removeblockcommentcommand";
 
 	@Nullable
-	private static <T> T adapt(@Nullable Object sourceObject, Class<T> adapter) {
+	private static <T> T adapt(@Nullable final Object sourceObject, final Class<T> adapter) {
 		return Adapters.adapt(sourceObject, adapter);
 	}
 
@@ -61,7 +61,7 @@ public class ToggleLineCommentHandler extends AbstractHandler {
 			return null;
 		}
 		final var selection = editor.getSelectionProvider().getSelection();
-		if (selection instanceof ITextSelection textSelection) {
+		if (selection instanceof final ITextSelection textSelection) {
 			final var input = editor.getEditorInput();
 			final var docProvider = editor.getDocumentProvider();
 			if (docProvider == null || input == null) {
@@ -149,7 +149,7 @@ public class ToggleLineCommentHandler extends AbstractHandler {
 
 	private Set<Integer> computeLines(final ITextSelection textSelection, final IDocument document)
 			throws BadLocationException {
-		final var regions = textSelection instanceof IMultiTextSelection multiSelection
+		final var regions = textSelection instanceof final IMultiTextSelection multiSelection
 				? multiSelection.getRegions()
 				: new IRegion[] { new Region(textSelection.getOffset(), textSelection.getLength()) };
 		final var lines = new HashSet<Integer>();

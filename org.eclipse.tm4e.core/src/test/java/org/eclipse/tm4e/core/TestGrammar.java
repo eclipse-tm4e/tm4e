@@ -19,13 +19,13 @@ import org.eclipse.tm4e.core.registry.Registry;
 
 public class TestGrammar {
 
-	public static void main(String[] args) throws Exception {
+	public static void main(final String[] args) throws Exception {
 
-		Registry registry = new Registry();
-		IGrammar grammar = castNonNull(registry.loadGrammarFromPathSync("Angular2TypeScript.tmLanguage",
+		final Registry registry = new Registry();
+		final IGrammar grammar = castNonNull(registry.loadGrammarFromPathSync("Angular2TypeScript.tmLanguage",
 				TestGrammar.class.getResourceAsStream("Angular2TypeScript.tmLanguage")));
 
-		ITokenizeLineResult result = grammar.tokenizeLine("/** **/");
+		final ITokenizeLineResult result = grammar.tokenizeLine("/** **/");
 		for (int i = 0; i < result.getTokens().length; i++) {
 			System.err.println(result.getTokens()[i]);
 		}

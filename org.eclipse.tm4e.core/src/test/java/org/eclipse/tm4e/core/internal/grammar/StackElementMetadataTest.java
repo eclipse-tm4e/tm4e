@@ -26,7 +26,7 @@ public class StackElementMetadataTest {
 
 	@Test
 	public void testWorks() {
-		int value = StackElementMetadata.set(0, 1, OptionalStandardTokenType.RegEx, null, Underline | Bold, 101, 102);
+		final int value = StackElementMetadata.set(0, 1, OptionalStandardTokenType.RegEx, null, Underline | Bold, 101, 102);
 		assertEquals(value, 1, StandardTokenType.RegEx, false, Underline | Bold, 101, 102);
 	}
 
@@ -86,21 +86,21 @@ public class StackElementMetadataTest {
 
 	@Test
 	public void testCanWorkAtMaxValues() {
-		int maxLangId = 255;
-		int maxTokenType = StandardTokenType.Comment | StandardTokenType.Other | StandardTokenType.RegEx
+		final int maxLangId = 255;
+		final int maxTokenType = StandardTokenType.Comment | StandardTokenType.Other | StandardTokenType.RegEx
 				| StandardTokenType.String;
-		int maxFontStyle = Bold | Italic | Underline;
-		int maxForeground = 511;
-		int maxBackground = 254;
+		final int maxFontStyle = Bold | Italic | Underline;
+		final int maxForeground = 511;
+		final int maxBackground = 254;
 
-		int value = StackElementMetadata.set(0, maxLangId, maxTokenType, true, maxFontStyle, maxForeground,
+		final int value = StackElementMetadata.set(0, maxLangId, maxTokenType, true, maxFontStyle, maxForeground,
 				maxBackground);
 		assertEquals(value, maxLangId, maxTokenType, true, maxFontStyle, maxForeground, maxBackground);
 	}
 
-	private static void assertEquals(int metadata, int languageId, int /*StandardTokenType*/ tokenType,
-			boolean containsBalancedBrackets, int /*FontStyle*/ fontStyle, int foreground, int background) {
-		String actual = "{\n" +
+	private static void assertEquals(final int metadata, final int languageId, final int /*StandardTokenType*/ tokenType,
+			final boolean containsBalancedBrackets, final int /*FontStyle*/ fontStyle, final int foreground, final int background) {
+		final String actual = "{\n" +
 				"languageId: " + StackElementMetadata.getLanguageId(metadata) + ",\n" +
 				"tokenType: " + StackElementMetadata.getTokenType(metadata) + ",\n" +
 				"containsBalancedBrackets: " + StackElementMetadata.containsBalancedBrackets(metadata) + ",\n" +
@@ -109,7 +109,7 @@ public class StackElementMetadataTest {
 				"background: " + StackElementMetadata.getBackground(metadata) + ",\n" +
 				"}";
 
-		String expected = "{\n" +
+		final String expected = "{\n" +
 				"languageId: " + languageId + ",\n" +
 				"tokenType: " + tokenType + ",\n" +
 				"containsBalancedBrackets: " + containsBalancedBrackets + ",\n" +

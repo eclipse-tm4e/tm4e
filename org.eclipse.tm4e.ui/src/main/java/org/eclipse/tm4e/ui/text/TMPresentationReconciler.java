@@ -381,7 +381,7 @@ public class TMPresentationReconciler implements IPresentationReconciler {
 			final String text = e.getText();
 			final int length = text == null ? 0 : text.length();
 			final var viewer = castNonNull(TMPresentationReconciler.this.viewer);
-			if (viewer instanceof ITextViewerExtension5 extension) {
+			if (viewer instanceof final ITextViewerExtension5 extension) {
 				return extension.widgetRange2ModelRange(new Region(e.getOffset(), length));
 			}
 			final IRegion visible = viewer.getVisibleRegion();
@@ -411,7 +411,7 @@ public class TMPresentationReconciler implements IPresentationReconciler {
 				return;
 			}
 			final ITMModel model = event.model;
-			if (model instanceof TMDocumentModel docModel) {
+			if (model instanceof final TMDocumentModel docModel) {
 				for (final Range range : event.ranges) {
 					try {
 						final int length = document.getLineOffset(range.toLineNumber - 1)
@@ -483,7 +483,7 @@ public class TMPresentationReconciler implements IPresentationReconciler {
 				return;
 			final IDocument document = viewer.getDocument();
 			final ITMModel model = getTMModelManager().connect(document);
-			if (model instanceof TMDocumentModel docModel) {
+			if (model instanceof final TMDocumentModel docModel) {
 				try {
 					colorize(new Region(0, document.getLength()), docModel);
 				} catch (final BadLocationException e) {
@@ -678,7 +678,7 @@ public class TMPresentationReconciler implements IPresentationReconciler {
 	 */
 	protected TextAttribute getTokenTextAttribute(final IToken token) {
 		final Object data = token.getData();
-		if (data instanceof TextAttribute textAttribute) {
+		if (data instanceof final TextAttribute textAttribute) {
 			return textAttribute;
 		}
 		return fDefaultTextAttribute;
@@ -769,7 +769,7 @@ public class TMPresentationReconciler implements IPresentationReconciler {
 		}
 		@Nullable
 		final ITextOperationTarget target = editorPart.getAdapter(ITextOperationTarget.class);
-		if (target instanceof ITextViewer textViewer) {
+		if (target instanceof final ITextViewer textViewer) {
 			return TMPresentationReconciler.getTMPresentationReconciler(textViewer);
 		}
 		return null;
@@ -788,7 +788,7 @@ public class TMPresentationReconciler implements IPresentationReconciler {
 				field.trySetAccessible();
 				final Object presentationReconciler = field.get(textViewer);
 				// field is IPresentationRecounciler, looking for TMPresentationReconciler implementation
-				return presentationReconciler instanceof TMPresentationReconciler tmPresentationReconciler 
+				return presentationReconciler instanceof final TMPresentationReconciler tmPresentationReconciler 
 						? tmPresentationReconciler
 						: null;
 			}
@@ -846,7 +846,7 @@ public class TMPresentationReconciler implements IPresentationReconciler {
 				return;
 			}
 			for (final IPainter painter : painters) {
-				if (painter instanceof CursorLinePainter cursorLinePainter) {
+				if (painter instanceof final CursorLinePainter cursorLinePainter) {
 					// Update current line highlight
 					final Color background = tokenProvider.getEditorCurrentLineHighlight();
 					if (background != null) {

@@ -18,8 +18,8 @@ import org.eclipse.tm4e.ui.snippets.ISnippet;
 
 final class Snippet extends TMResource implements ISnippet {
 
-	private String scopeName;
-	private String name;
+	private final String scopeName;
+	private final String name;
 
 	/**
 	 * Constructor for user preferences (loaded from Json with Gson).

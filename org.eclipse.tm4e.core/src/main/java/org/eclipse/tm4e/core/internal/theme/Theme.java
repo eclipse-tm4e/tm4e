@@ -123,7 +123,7 @@ public class Theme {
 
 			int fontStyle = FontStyle.NotSet;
 			final Object settingsFontStyle = entrySetting.getFontStyle();
-			if (settingsFontStyle instanceof String style) {
+			if (settingsFontStyle instanceof final String style) {
 				fontStyle = FontStyle.None;
 
 				final Iterable<String> segments = BY_SPACE_SPLITTER.split(style);
@@ -147,13 +147,13 @@ public class Theme {
 
 			String foreground = null;
 			final Object settingsForeground = entrySetting.getForeground();
-			if (settingsForeground instanceof String stringSettingsForeground && isValidHexColor(stringSettingsForeground)) {
+			if (settingsForeground instanceof final String stringSettingsForeground && isValidHexColor(stringSettingsForeground)) {
 				foreground = stringSettingsForeground;
 			}
 
 			String background = null;
 			final Object settingsBackground = entrySetting.getBackground();
-			if (settingsBackground instanceof String stringSettingsBackground && isValidHexColor(stringSettingsBackground)) {
+			if (settingsBackground instanceof final String stringSettingsBackground && isValidHexColor(stringSettingsBackground)) {
 				background = stringSettingsBackground;
 			}
 

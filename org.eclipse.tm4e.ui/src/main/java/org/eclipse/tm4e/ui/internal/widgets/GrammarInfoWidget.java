@@ -30,9 +30,9 @@ import org.eclipse.tm4e.ui.internal.TMUIMessages;
  */
 public final class GrammarInfoWidget extends Composite {
 
-	private Text nameText;
-	private Text scopeNameText;
-	private Text fileTypesText;
+	private final Text nameText;
+	private final Text scopeNameText;
+	private final Text fileTypesText;
 
 	public GrammarInfoWidget(final Composite parent, final int style) {
 		super(parent, style);

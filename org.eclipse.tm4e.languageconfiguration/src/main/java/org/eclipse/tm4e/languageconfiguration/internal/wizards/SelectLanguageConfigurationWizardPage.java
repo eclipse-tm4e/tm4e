@@ -79,7 +79,7 @@ final class SelectLanguageConfigurationWizardPage extends WizardPage implements 
 	}
 
 	@Override
-	public final void createControl(@Nullable final Composite parent) {
+	public void createControl(@Nullable final Composite parent) {
 		assert parent != null;
 		initializeDialogUnits(parent);
 		final var topLevel = new Composite(parent, SWT.NONE);

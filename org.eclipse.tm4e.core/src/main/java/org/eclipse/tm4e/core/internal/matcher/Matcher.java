@@ -21,11 +21,11 @@ import java.util.List;
 @FunctionalInterface
 public interface Matcher<T> {
 
-	public static List<MatcherWithPriority<List<String>>> createMatchers(final String selector) {
+	static List<MatcherWithPriority<List<String>>> createMatchers(final String selector) {
 		return createMatchers(selector, NameMatcher.DEFAULT);
 	}
 
-	public static List<MatcherWithPriority<List<String>>> createMatchers(final String selector,
+	static List<MatcherWithPriority<List<String>>> createMatchers(final String selector,
 			final NameMatcher<List<String>> matchesName) {
 		return new MatcherBuilder<>(selector, matchesName).results;
 	}

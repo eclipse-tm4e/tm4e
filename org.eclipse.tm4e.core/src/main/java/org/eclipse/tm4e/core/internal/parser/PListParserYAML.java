@@ -34,7 +34,7 @@ public final class PListParserYAML<T> implements PListParser<T> {
 		this.objectFactory = objectFactory;
 	}
 
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	private void addListToPList(final PListContentHandler<T> pList, final List<Object> list) throws SAXException {
 		pList.startElement(null, "array", null, null);
 
@@ -51,7 +51,7 @@ public final class PListParserYAML<T> implements PListParser<T> {
 		pList.endElement(null, "array", null);
 	}
 
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	private void addMapToPList(final PListContentHandler<T> pList, final Map<String, Object> map)
 			throws SAXException {
 		pList.startElement(null, "dict", null, null);

@@ -94,7 +94,7 @@ final class PListContentHandler<T> extends DefaultHandler {
 			this.values = values;
 		}
 
-		@SuppressWarnings("unchecked")
+		@SuppressWarnings({ "rawtypes", "unchecked" })
 		void addValue(final Object value) {
 			if (values instanceof PropertySettable propertySettable) {
 				propertySettable.setProperty(path.last(), value);

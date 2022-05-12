@@ -35,7 +35,8 @@ public class ThemeResolvingTest {
 	private static final ThemeTrieElement NOTSET_THEME_TRIE_ELEMENT = new ThemeTrieElement(
 			NOTSET_THEME_TRIE_ELEMENT_RULE);
 
-	private static void assertStrArrCmp(final String testCase, final List<String> a, final List<String> b, final int expected) {
+	private static void assertStrArrCmp(final String testCase, final List<String> a, final List<String> b,
+			final int expected) {
 		assertEquals(expected, CompareUtils.strArrCmp(a, b), testCase);
 	}
 
@@ -49,21 +50,20 @@ public class ThemeResolvingTest {
 
 	@Test
 	public void testThemeParsingCanParse() throws Exception {
-		final var actual = parseTheme(("{" +
-				"'settings': [" +
-				"{ 'settings': { 'foreground': '#F8F8F2', 'background': '#272822' } }," +
-				"{ 'scope': 'source, something', 'settings': { 'background': '#100000' } }," +
-				"{ 'scope': ['bar', 'baz'], 'settings': { 'background': '#010000' } }," +
-				"{ 'scope': 'source.css selector bar', 'settings': { 'fontStyle': 'bold' } }," +
-				"{ 'scope': 'constant', 'settings': { 'fontStyle': 'italic', 'foreground': '#ff0000' } }," +
-				"{ 'scope': 'constant.numeric', 'settings': { 'foreground': '#00ff00' } }," +
-				"{ 'scope': 'constant.numeric.hex', 'settings': { 'fontStyle': 'bold' } }," +
-				"{ 'scope': 'constant.numeric.oct', 'settings': { 'fontStyle': 'bold italic underline' } }," +
-				"{ 'scope': 'constant.numeric.bin', 'settings': { 'fontStyle': 'bold strikethrough' } }," +
-				"{ 'scope': 'constant.numeric.dec', 'settings': { 'fontStyle': '', 'foreground': '#0000ff' } }," +
-				"{ 'scope': 'foo', 'settings': { 'fontStyle': '', 'foreground': '#CFA' } }" +
-				"]" +
-				"}").replace('\'', '"'));
+		final var actual = parseTheme("""
+				{ "settings": [
+				{ "settings": { "foreground": "#F8F8F2", "background": "#272822" } },
+				{ "scope": "source, something", "settings": { "background": "#100000" } },
+				{ "scope": ["bar", "baz"], "settings": { "background": "#010000" } },
+				{ "scope": "source.css selector bar", "settings": { "fontStyle": "bold" } },
+				{ "scope": "constant", "settings": { "fontStyle": "italic", "foreground": "#ff0000" } },
+				{ "scope": "constant.numeric", "settings": { "foreground": "#00ff00" } },
+				{ "scope": "constant.numeric.hex", "settings": { "fontStyle": "bold" } },
+				{ "scope": "constant.numeric.oct", "settings": { "fontStyle": "bold italic underline" } },
+				{ "scope": "constant.numeric.bin", "settings": { "fontStyle": "bold strikethrough" } },
+				{ "scope": "constant.numeric.dec", "settings": { "fontStyle": "", "foreground": "#0000ff" } },
+				{ "scope": "foo", "settings": { "fontStyle": "", "foreground": "#CFA" } }
+				]}""");
 
 		final var expected = List.of(
 				new ParsedThemeRule("", null, 0, FontStyle.NotSet, "#F8F8F2", "#272822"),
@@ -339,47 +339,48 @@ public class ThemeResolvingTest {
 
 	@Test
 	public void testIssue_38_ignores_rules_with_invalid_colors() throws Exception {
-		final var actual = parseTheme(("{" +
-				"'settings': [{" +
-				"	'settings': {" +
-				"		'background': '#222222'," +
-				"		'foreground': '#cccccc'" +
-				"	}" +
-				"}, {" +
-				"	'name': 'Variable'," +
-				"	'scope': 'variable'," +
-				"	'settings': {" +
-				"		'fontStyle': ''" +
-				"	}" +
-				"}, {" +
-				"	'name': 'Function argument'," +
-				"	'scope': 'variable.parameter'," +
-				"	'settings': {" +
-				"		'fontStyle': 'italic'," +
-				"		'foreground': ''" +
-				"	}" +
-				"}, {" +
-				"	'name': 'Library variable'," +
-				"	'scope': 'support.other.variable'," +
-				"	'settings': {" +
-				"		'fontStyle': ''" +
-				"	}" +
-				"}, {" +
-				"	'name': 'Function argument'," +
-				"	'scope': 'variable.other'," +
-				"	'settings': {" +
-				"		'foreground': ''," +
-				"		'fontStyle': 'normal'" +
-				"	}" +
-				"}, {" +
-				"	'name': 'Coffeescript Function argument'," +
-				"	'scope': 'variable.parameter.function.coffee'," +
-				"	'settings': {" +
-				"		'foreground': '#F9D423'," +
-				"		'fontStyle': 'italic'" +
-				"	}" +
-				"}]" +
-				"}").replace('\'', '"'));
+		final var actual = parseTheme("""
+				{ "settings": [
+					{
+						"settings": {
+							"background": "#222222",
+							"foreground": "#cccccc"
+						}
+					}, {
+						"name": "Variable",
+						"scope": "variable",
+						"settings": {
+							"fontStyle": ""
+						}
+					}, {
+						"name": "Function argument",
+						"scope": "variable.parameter",
+						"settings": {
+							"fontStyle": "italic",
+							"foreground": ""
+						}
+					}, {
+						"name": "Library variable",
+						"scope": "support.other.variable",
+						"settings": {
+							"fontStyle": ""
+						}
+					}, {
+						"name": "Function argument",
+						"scope": "variable.other",
+						"settings": {
+							"foreground": "",
+							"fontStyle": "normal"
+						}
+					}, {
+						"name": "Coffeescript Function argument",
+						"scope": "variable.parameter.function.coffee",
+						"settings": {
+							"foreground": "#F9D423",
+							"fontStyle": "italic"
+						}
+					}
+				]}""");
 
 		final var expected = List.of(
 				new ParsedThemeRule("", null, 0, FontStyle.NotSet, "#cccccc", "#222222"),
@@ -394,27 +395,27 @@ public class ThemeResolvingTest {
 
 	@Test
 	public void testIssue_35_Trailing_comma_in_a_tmTheme_scope_selector() throws Exception {
-		final var actual = parseTheme(("{" +
-				"'settings': [{" +
-				"	'settings': {" +
-				"		'background': '#25292C'," +
-				"		'foreground': '#EFEFEF'" +
-				"	}" +
-				"}, {" +
-				"	'name': 'CSS at-rule keyword control'," +
-				"	'scope': '" +
-				"		meta.at-rule.return.scss,\n" +
-				"		meta.at-rule.return.scss punctuation.definition,\n" +
-				"		meta.at-rule.else.scss,\n" +
-				"		meta.at-rule.else.scss punctuation.definition,\n" +
-				"		meta.at-rule.if.scss,\n" +
-				"		meta.at-rule.if.scss punctuation.definition\n" +
-				"	'," +
-				"	'settings': {" +
-				"		'foreground': '#CC7832'" +
-				"	}" +
-				"}]" +
-				"}").replace('\'', '"'));
+		final var actual = parseTheme("""
+				{ "settings": [{
+						"settings": {
+							"background": "#25292C",
+							"foreground": "#EFEFEF"
+						}
+					}, {
+						"name": "CSS at-rule keyword control",
+						"scope": "
+							meta.at-rule.return.scss,\n
+							meta.at-rule.return.scss punctuation.definition,\n
+							meta.at-rule.else.scss,\n
+							meta.at-rule.else.scss punctuation.definition,\n
+							meta.at-rule.if.scss,\n
+							meta.at-rule.if.scss punctuation.definition\n
+						",
+						"settings": {
+							"foreground": "#CC7832"
+						}
+					}
+				]}""");
 
 		final var expected = List.of(
 				new ParsedThemeRule("", null, 0, FontStyle.NotSet, "#EFEFEF", "#25292C"),

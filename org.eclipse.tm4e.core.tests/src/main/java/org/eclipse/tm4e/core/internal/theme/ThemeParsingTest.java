@@ -30,19 +30,20 @@ public class ThemeParsingTest {
 
 	@Test
 	public void testCanParse() throws Exception {
-		final var actual = parseTheme(("{'settings': [" +
-				"{ 'settings': { 'foreground': '#F8F8F2', 'background': '#272822' } }," +
-				"{ 'scope': 'source, something', 'settings': { 'background': '#100000' } }," +
-				"{ 'scope': ['bar', 'baz'], 'settings': { 'background': '#010000' } }," +
-				"{ 'scope': 'source.css selector bar', 'settings': { 'fontStyle': 'bold' } }," +
-				"{ 'scope': 'constant', 'settings': { 'fontStyle': 'italic', 'foreground': '#ff0000' } }," +
-				"{ 'scope': 'constant.numeric', 'settings': { 'foreground': '#00ff00' } }," +
-				"{ 'scope': 'constant.numeric.hex', 'settings': { 'fontStyle': 'bold' } }," +
-				"{ 'scope': 'constant.numeric.oct', 'settings': { 'fontStyle': 'bold italic underline' } }," +
-				"{ 'scope': 'constant.numeric.bin', 'settings': { 'fontStyle': 'bold strikethrough' } }," +
-				"{ 'scope': 'constant.numeric.dec', 'settings': { 'fontStyle': '', 'foreground': '#0000ff' } }," +
-				"{ 'scope': 'foo', 'settings': { 'fontStyle': '', 'foreground': '#CFA' } }" +
-				"]}").replace('\'', '"'));
+		final var actual = parseTheme("""
+				{ "settings": [
+				{ "settings": { "foreground": "#F8F8F2", "background": "#272822" } },
+				{ "scope": "source, something", "settings": { "background": "#100000" } },
+				{ "scope": ["bar", "baz"], "settings": { "background": "#010000" } },
+				{ "scope": "source.css selector bar", "settings": { "fontStyle": "bold" } },
+				{ "scope": "constant", "settings": { "fontStyle": "italic", "foreground": "#ff0000" } },
+				{ "scope": "constant.numeric", "settings": { "foreground": "#00ff00" } },
+				{ "scope": "constant.numeric.hex", "settings": { "fontStyle": "bold" } },
+				{ "scope": "constant.numeric.oct", "settings": { "fontStyle": "bold italic underline" } },
+				{ "scope": "constant.numeric.bin", "settings": { "fontStyle": "bold strikethrough" } },
+				{ "scope": "constant.numeric.dec", "settings": { "fontStyle": "", "foreground": "#0000ff" } },
+				{ "scope": "foo", "settings": { "fontStyle": "", "foreground": "#CFA" } }
+				]}""");
 
 		final var expected = new ParsedThemeRule[] {
 				new ParsedThemeRule("", null, 0, FontStyle.NotSet, "#F8F8F2", "#272822"),

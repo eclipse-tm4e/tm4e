@@ -26,12 +26,12 @@ import org.eclipse.jdt.annotation.Nullable;
 final class IncludeOnlyRule extends Rule {
 
 	final boolean hasMissingPatterns;
-	final int[] patterns;
+	final RuleId[] patterns;
 
 	@Nullable
 	private RegExpSourceList cachedCompiledPatterns;
 
-	IncludeOnlyRule(final int id, @Nullable final String name, @Nullable final String contentName,
+	IncludeOnlyRule(final RuleId id, @Nullable final String name, @Nullable final String contentName,
 			final CompilePatternsResult patterns) {
 		super(id, name, contentName);
 		this.patterns = patterns.patterns;
@@ -41,7 +41,7 @@ final class IncludeOnlyRule extends Rule {
 	@Override
 	public void collectPatternsRecursive(final IRuleRegistry grammar, final RegExpSourceList out,
 			final boolean isFirst) {
-		for (final int pattern : this.patterns) {
+		for (final RuleId pattern : this.patterns) {
 			final Rule rule = grammar.getRule(pattern);
 			rule.collectPatternsRecursive(grammar, out, false);
 		}
@@ -53,7 +53,8 @@ final class IncludeOnlyRule extends Rule {
 	}
 
 	@Override
-	public CompiledRule compileAG(final IRuleRegistry grammar, @Nullable final String endRegexSource, final boolean allowA,
+	public CompiledRule compileAG(final IRuleRegistry grammar, @Nullable final String endRegexSource,
+			final boolean allowA,
 			final boolean allowG) {
 		return getCachedCompiledPatterns(grammar).compileAG(allowA, allowG);
 	}

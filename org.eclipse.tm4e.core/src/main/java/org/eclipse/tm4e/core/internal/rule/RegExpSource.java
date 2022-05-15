@@ -36,16 +36,16 @@ final class RegExpSource {
 	private static final Pattern BACK_REFERENCING_END = Pattern.compile("\\\\(\\d+)");
 
 	private String source;
-	final int ruleId;
+	final RuleId ruleId;
 	final boolean hasBackReferences;
 
 	private String @Nullable [][] anchorCache;
 
-	RegExpSource(final String regExpSource, final int ruleId) {
+	RegExpSource(final String regExpSource, final RuleId ruleId) {
 		this(regExpSource, ruleId, true);
 	}
 
-	RegExpSource(final String regExpSource, final int ruleId, final boolean handleAnchors) {
+	RegExpSource(final String regExpSource, final RuleId ruleId, final boolean handleAnchors) {
 		if (handleAnchors && !regExpSource.isEmpty()) {
 			final int len = regExpSource.length();
 			int lastPushedPos = 0;

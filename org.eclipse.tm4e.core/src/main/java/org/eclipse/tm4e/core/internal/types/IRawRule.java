@@ -19,13 +19,14 @@ package org.eclipse.tm4e.core.internal.types;
 import java.util.Collection;
 
 import org.eclipse.jdt.annotation.Nullable;
+import org.eclipse.tm4e.core.internal.rule.RuleId;
 
 public interface IRawRule {
 
 	@Nullable
-	Integer getId();
+	RuleId getId();
 
-	void setId(Integer id);
+	void setId(RuleId id);
 
 	@Nullable
 	String getInclude();

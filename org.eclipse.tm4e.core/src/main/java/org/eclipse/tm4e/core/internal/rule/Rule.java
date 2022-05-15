@@ -27,7 +27,7 @@ import org.eclipse.tm4e.core.internal.utils.RegexSource;
  */
 public abstract class Rule {
 
-	final int id;
+	final RuleId id;
 
 	@Nullable
 	private final String name;
@@ -37,7 +37,7 @@ public abstract class Rule {
 	private final String contentName;
 	private final boolean contentNameIsCapturing;
 
-	Rule(final int id, @Nullable final String name, final @Nullable String contentName) {
+	Rule(final RuleId id, @Nullable final String name, final @Nullable String contentName) {
 		this.id = id;
 		this.name = name;
 		this.nameIsCapturing = RegexSource.hasCaptures(name);

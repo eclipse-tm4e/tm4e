@@ -26,6 +26,7 @@ import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.tm4e.core.grammar.IStackElement;
 import org.eclipse.tm4e.core.internal.rule.IRuleRegistry;
 import org.eclipse.tm4e.core.internal.rule.Rule;
+import org.eclipse.tm4e.core.internal.rule.RuleId;
 
 /**
  * Represents a "pushed" state on the stack (as a linked list element).
@@ -36,7 +37,7 @@ import org.eclipse.tm4e.core.internal.rule.Rule;
  */
 public final class StackElement implements IStackElement {
 
-	public static final StackElement NULL = new StackElement(null, 0, 0, 0, false, null,
+	public static final StackElement NULL = new StackElement(null, RuleId.NO_RULE, 0, 0, false, null,
 			new ScopeListElement(null, "", 0), new ScopeListElement(null, "", 0));
 
 	/**
@@ -67,7 +68,7 @@ public final class StackElement implements IStackElement {
 	/**
 	 * The state (rule) that this element represents.
 	 */
-	final int ruleId;
+	final RuleId ruleId;
 
 	/**
 	 * The state has entered and captured \n. This means that the next line should have an anchorPosition of 0.
@@ -93,7 +94,7 @@ public final class StackElement implements IStackElement {
 
 	StackElement(
 			@Nullable final StackElement parent,
-			final int ruleId,
+			final RuleId ruleId,
 			final int enterPos,
 			final int anchorPos,
 			final boolean beginRuleCapturedEOL,
@@ -130,7 +131,7 @@ public final class StackElement implements IStackElement {
 				return false;
 			}
 
-			if (a.depth != b.depth || a.ruleId != b.ruleId || !Objects.equals(a.endRule, b.endRule)) {
+			if (a.depth != b.depth || !Objects.equals(a.ruleId, b.ruleId) || !Objects.equals(a.endRule, b.endRule)) {
 				return false;
 			}
 
@@ -168,9 +169,8 @@ public final class StackElement implements IStackElement {
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + Objects.hash(endRule, parent, contentNameScopesList);
+		result = prime * result + Objects.hash(endRule, parent, contentNameScopesList, ruleId);
 		result = prime * result + depth;
-		result = prime * result + ruleId;
 		return result;
 	}
 
@@ -194,7 +194,7 @@ public final class StackElement implements IStackElement {
 		return this;
 	}
 
-	StackElement push(final int ruleId,
+	StackElement push(final RuleId ruleId,
 			final int enterPos,
 			final int anchorPos,
 			final boolean beginRuleCapturedEOL,

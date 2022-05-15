@@ -37,19 +37,19 @@ public final class BeginEndRule extends Rule {
 	private final boolean applyEndPatternLast;
 
 	final boolean hasMissingPatterns;
-	final int[] patterns;
+	final RuleId[] patterns;
 
 	@Nullable
 	private RegExpSourceList cachedCompiledPatterns;
 
-	BeginEndRule(final int id, @Nullable final String name, @Nullable final String contentName, final String begin,
-			final List<@Nullable CaptureRule> beginCaptures, @Nullable final String end, final List<@Nullable CaptureRule> endCaptures,
-			final boolean applyEndPatternLast,
+	BeginEndRule(final RuleId id, @Nullable final String name, @Nullable final String contentName, final String begin,
+			final List<@Nullable CaptureRule> beginCaptures, @Nullable final String end,
+			final List<@Nullable CaptureRule> endCaptures, final boolean applyEndPatternLast,
 			final CompilePatternsResult patterns) {
 		super(id, name, contentName);
 		this.begin = new RegExpSource(begin, this.id);
 		this.beginCaptures = beginCaptures;
-		this.end = new RegExpSource(end == null ? "\uFFFF" : end, -1);
+		this.end = new RegExpSource(end == null ? "\uFFFF" : end, RuleId.END_RULE);
 		this.endHasBackReferences = this.end.hasBackReferences;
 		this.endCaptures = endCaptures;
 		this.applyEndPatternLast = applyEndPatternLast;
@@ -65,7 +65,7 @@ public final class BeginEndRule extends Rule {
 	public void collectPatternsRecursive(final IRuleRegistry grammar, final RegExpSourceList out,
 			final boolean isFirst) {
 		if (isFirst) {
-			for (final int pattern : this.patterns) {
+			for (final RuleId pattern : this.patterns) {
 				final Rule rule = grammar.getRule(pattern);
 				rule.collectPatternsRecursive(grammar, out, false);
 			}

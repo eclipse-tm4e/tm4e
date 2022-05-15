@@ -35,6 +35,7 @@ import org.eclipse.tm4e.core.internal.rule.CaptureRule;
 import org.eclipse.tm4e.core.internal.rule.CompiledRule;
 import org.eclipse.tm4e.core.internal.rule.MatchRule;
 import org.eclipse.tm4e.core.internal.rule.Rule;
+import org.eclipse.tm4e.core.internal.rule.RuleId;
 
 /**
  * @see <a href=
@@ -48,7 +49,7 @@ final class LineTokenizer {
 	private interface IMatchResult {
 		OnigCaptureIndex[] getCaptureIndices();
 
-		int getMatchedRuleId();
+		RuleId getMatchedRuleId();
 	}
 
 	private interface IMatchInjectionsResult extends IMatchResult {
@@ -134,11 +135,12 @@ final class LineTokenizer {
 		}
 
 		final OnigCaptureIndex[] captureIndices = r.getCaptureIndices();
-		final int matchedRuleId = r.getMatchedRuleId();
+
+		final RuleId matchedRuleId = r.getMatchedRuleId();
 
 		final boolean hasAdvanced = captureIndices.length > 0 && captureIndices[0].end > linePos;
 
-		if (matchedRuleId == -1) {
+		if (matchedRuleId.equals(RuleId.END_RULE)) {
 			// We matched the `end` for this rule => pop it
 			final BeginEndRule poppedRule = (BeginEndRule) stack.getRule(grammar);
 
@@ -285,7 +287,7 @@ final class LineTokenizer {
 			return new IMatchResult() {
 
 				@Override
-				public int getMatchedRuleId() {
+				public RuleId getMatchedRuleId() {
 					return ruleScanner.rules[r.getIndex()];
 				}
 
@@ -330,7 +332,7 @@ final class LineTokenizer {
 		final int injectionResultScore = injectionResult.getCaptureIndices()[0].start;
 
 		if (injectionResultScore < matchResultScore
-				|| (injectionResult.isPriorityMatch() && injectionResultScore == matchResultScore)) {
+				|| injectionResult.isPriorityMatch() && injectionResultScore == matchResultScore) {
 			// injection won!
 			return injectionResult;
 		}
@@ -345,7 +347,7 @@ final class LineTokenizer {
 		// The lower the better
 		int bestMatchRating = Integer.MAX_VALUE;
 		OnigCaptureIndex[] bestMatchCaptureIndices = null;
-		int bestMatchRuleId = -1;
+		RuleId bestMatchRuleId = RuleId.END_RULE;
 		int bestMatchResultPriority = 0;
 
 		final List<String> scopes = stack.contentNameScopesList.generateScopes();
@@ -388,13 +390,13 @@ final class LineTokenizer {
 		}
 
 		if (bestMatchCaptureIndices != null) {
-			final int matchedRuleId = bestMatchRuleId;
+			final RuleId matchedRuleId = bestMatchRuleId;
 			final OnigCaptureIndex[] matchCaptureIndices = bestMatchCaptureIndices;
 			final boolean matchResultPriority = bestMatchResultPriority == -1;
 			return new IMatchInjectionsResult() {
 
 				@Override
-				public int getMatchedRuleId() {
+				public RuleId getMatchedRuleId() {
 					return matchedRuleId;
 				}
 
@@ -459,7 +461,7 @@ final class LineTokenizer {
 			}
 
 			final var retokenizeCapturedWithRuleId = captureRule.retokenizeCapturedWithRuleId;
-			if (retokenizeCapturedWithRuleId != null) {
+			if (retokenizeCapturedWithRuleId.notEquals(RuleId.NO_RULE)) {
 				// the capture requires additional matching
 				final String scopeName = captureRule.getName(lineText.string, captureIndices);
 				final ScopeListElement nameScopesList = stack.contentNameScopesList.push(grammar, scopeName);
@@ -470,7 +472,7 @@ final class LineTokenizer {
 				final StackElement stackClone = stack.push(retokenizeCapturedWithRuleId, captureIndex.start, -1, false,
 						null, nameScopesList, contentNameScopesList);
 				final var onigSubStr = OnigString.of(lineText.string.substring(0, captureIndex.end));
-				tokenizeString(grammar, onigSubStr, (isFirstLine && captureIndex.start == 0),
+				tokenizeString(grammar, onigSubStr, isFirstLine && captureIndex.start == 0,
 						captureIndex.start, stackClone, lineTokens, false);
 				continue;
 			}
@@ -521,8 +523,8 @@ final class LineTokenizer {
 			}
 
 			if (r != null) {
-				final int matchedRuleId = ruleScanner.rules[r.getIndex()];
-				if (matchedRuleId != -2) {
+				final RuleId matchedRuleId = ruleScanner.rules[r.getIndex()];
+				if (!RuleId.WHILE_RULE.equals(matchedRuleId)) {
 					// we shouldn't end up here
 					stack = castNonNull(whileRule.stack.pop());
 					break;

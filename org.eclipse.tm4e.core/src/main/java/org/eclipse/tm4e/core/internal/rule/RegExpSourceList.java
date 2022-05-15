@@ -75,7 +75,7 @@ final class RegExpSourceList {
 		var cached = this.cached;
 		if (cached == null) {
 			final List<String> regexps = items.stream().map(RegExpSource::getSource).collect(Collectors.toList());
-			cached = this.cached = new CompiledRule(regexps, getRules());
+			cached = this.cached = new CompiledRule(regexps, items.stream().map(e -> e.ruleId).toArray(RuleId[]::new));
 		}
 		return cached;
 	}
@@ -98,14 +98,6 @@ final class RegExpSourceList {
 	private CompiledRule resolveAnchors(final boolean allowA, final boolean allowG) {
 		final List<String> regexps = items.stream().map(e -> e.resolveAnchors(allowA, allowG))
 				.collect(Collectors.toList());
-		return new CompiledRule(regexps, getRules());
-	}
-
-	private int[] getRules() {
-		final var ruleIds = new int[items.size()];
-		for (int i = 0; i < ruleIds.length; i++) {
-			ruleIds[i] = items.get(i).ruleId;
-		}
-		return ruleIds;
+		return new CompiledRule(regexps, items.stream().map(e -> e.ruleId).toArray(RuleId[]::new));
 	}
 }

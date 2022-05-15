@@ -25,17 +25,17 @@ import org.eclipse.jdt.annotation.Nullable;
  */
 public final class CaptureRule extends Rule {
 
-	@Nullable
-	public final Integer retokenizeCapturedWithRuleId;
+	public final RuleId retokenizeCapturedWithRuleId;
 
-	CaptureRule(final int id, @Nullable final String name, @Nullable final String contentName,
-			@Nullable final Integer retokenizeCapturedWithRuleId) {
+	CaptureRule(final RuleId id, @Nullable final String name, @Nullable final String contentName,
+			final RuleId retokenizeCapturedWithRuleId) {
 		super(id, name, contentName);
 		this.retokenizeCapturedWithRuleId = retokenizeCapturedWithRuleId;
 	}
 
 	@Override
-	public void collectPatternsRecursive(final IRuleRegistry grammar, final RegExpSourceList out, final boolean isFirst) {
+	public void collectPatternsRecursive(final IRuleRegistry grammar, final RegExpSourceList out,
+			final boolean isFirst) {
 		throw new UnsupportedOperationException();
 	}
 
@@ -45,7 +45,8 @@ public final class CaptureRule extends Rule {
 	}
 
 	@Override
-	public CompiledRule compileAG(final IRuleRegistry grammar, @Nullable final String endRegexSource, final boolean allowA,
+	public CompiledRule compileAG(final IRuleRegistry grammar, @Nullable final String endRegexSource,
+			final boolean allowA,
 			final boolean allowG) {
 		throw new UnsupportedOperationException();
 	}

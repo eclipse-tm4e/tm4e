@@ -17,8 +17,6 @@
  */
 package org.eclipse.tm4e.core.internal.grammar;
 
-import static org.eclipse.tm4e.core.internal.utils.NullSafetyHelper.*;
-
 import java.lang.System.Logger;
 import java.lang.System.Logger.Level;
 import java.util.ArrayList;
@@ -28,9 +26,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
-import java.util.function.IntFunction;
+import java.util.function.Function;
 
-import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.tm4e.core.grammar.IGrammar;
 import org.eclipse.tm4e.core.grammar.IStackElement;
@@ -42,6 +39,7 @@ import org.eclipse.tm4e.core.internal.registry.IGrammarRepository;
 import org.eclipse.tm4e.core.internal.rule.IRuleFactoryHelper;
 import org.eclipse.tm4e.core.internal.rule.Rule;
 import org.eclipse.tm4e.core.internal.rule.RuleFactory;
+import org.eclipse.tm4e.core.internal.rule.RuleId;
 import org.eclipse.tm4e.core.internal.theme.IThemeProvider;
 import org.eclipse.tm4e.core.internal.types.IRawGrammar;
 import org.eclipse.tm4e.core.internal.types.IRawRepository;
@@ -60,9 +58,10 @@ public final class Grammar implements IGrammar, IRuleFactoryHelper {
 
 	private final String scopeName;
 
-	private int rootId = -1;
+	@Nullable
+	private RuleId rootId = null;
 	private int lastRuleId = 0;
-	private final Map<Integer, @Nullable Rule> ruleId2desc = new HashMap<>();
+	private final Map<RuleId, @Nullable Rule> ruleId2desc = new HashMap<>();
 	private final Map<String, IRawGrammar> includedGrammars = new HashMap<>();
 	private final IGrammarRepository grammarRepository;
 	private final IRawGrammar grammar;
@@ -122,7 +121,7 @@ public final class Grammar implements IGrammar, IRuleFactoryHelper {
 	private void collectInjections(final List<Injection> result, final String selector, final IRawRule rule,
 			final IRuleFactoryHelper ruleFactoryHelper, final IRawGrammar grammar) {
 		final var matchers = Matcher.createMatchers(selector);
-		final int ruleId = RuleFactory.getCompiledRuleId(rule, ruleFactoryHelper, this.grammar.getRepository());
+		final var ruleId = RuleFactory.getCompiledRuleId(rule, ruleFactoryHelper, this.grammar.getRepository());
 
 		for (final var matcher : matchers) {
 			result.add(new Injection(selector, matcher.matcher, ruleId, grammar, matcher.priority));
@@ -205,19 +204,19 @@ public final class Grammar implements IGrammar, IRuleFactoryHelper {
 	}
 
 	@Override
-	public <T extends @NonNull Rule> T registerRule(final IntFunction<T> factory) {
-		final int id = ++this.lastRuleId;
+	public <T extends Rule> T registerRule(final Function<RuleId, T> factory) {
+		final var id = RuleId.of(++this.lastRuleId);
 		final @Nullable T result = factory.apply(id);
 		this.ruleId2desc.put(id, result);
 		return result;
 	}
 
 	@Override
-	public Rule getRule(final int patternId) {
-		final var rule = this.ruleId2desc.get(patternId);
+	public Rule getRule(final RuleId ruleId) {
+		final var rule = this.ruleId2desc.get(ruleId);
 		if (rule == null) {
 			throw new IndexOutOfBoundsException(
-					"No rule with index " + patternId + " found. Possible values: 0.." + this.ruleId2desc.size());
+					"No rule with index " + ruleId.id + " found. Possible values: 0.." + this.ruleId2desc.size());
 		}
 		return rule;
 	}
@@ -279,8 +278,9 @@ public final class Grammar implements IGrammar, IRuleFactoryHelper {
 
 	@SuppressWarnings("unchecked")
 	private <T> T tokenize(String lineText, @Nullable StackElement prevState, final boolean emitBinaryTokens) {
-		if (this.rootId == -1) {
-			this.rootId = RuleFactory.getCompiledRuleId(this.grammar.getRepository().getSelf(), this,
+		var rootId = this.rootId;
+		if (rootId == null) {
+			rootId = this.rootId = RuleFactory.getCompiledRuleId(this.grammar.getRepository().getSelf(), this,
 					this.grammar.getRepository());
 		}
 
@@ -294,7 +294,7 @@ public final class Grammar implements IGrammar, IRuleFactoryHelper {
 					rawDefaultMetadata.tokenType, null, defaultTheme.fontStyle, defaultTheme.foreground,
 					defaultTheme.background);
 
-			final var rootRule = castNonNull(this.getRule(this.rootId));
+			final var rootRule = this.getRule(rootId);
 			final var rootScopeName = rootRule.getName(null, null);
 			final var rawRootMetadata = this.scopeMetadataProvider.getMetadataForScope(rootScopeName);
 			final int rootMetadata = ScopeListElement.mergeMetadata(defaultMetadata, null, rawRootMetadata);
@@ -302,7 +302,7 @@ public final class Grammar implements IGrammar, IRuleFactoryHelper {
 			final var scopeList = new ScopeListElement(null,
 					rootScopeName == null ? "unknown" : rootScopeName, rootMetadata);
 
-			prevState = new StackElement(null, this.rootId, -1, -1, false, null, scopeList, scopeList);
+			prevState = new StackElement(null, rootId, -1, -1, false, null, scopeList, scopeList);
 		} else {
 			isFirstLine = false;
 			prevState.reset();

@@ -17,6 +17,7 @@ import java.util.List;
 
 import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.tm4e.core.internal.parser.PropertySettable;
+import org.eclipse.tm4e.core.internal.rule.RuleId;
 import org.eclipse.tm4e.core.internal.types.IRawCaptures;
 import org.eclipse.tm4e.core.internal.types.IRawRepository;
 import org.eclipse.tm4e.core.internal.types.IRawRule;
@@ -54,12 +55,12 @@ public class RawRule extends HashMap<String, @Nullable Object>
 
 	@Nullable
 	@Override
-	public Integer getId() {
-		return (Integer) get(ID);
+	public RuleId getId() {
+		return (RuleId) get(ID);
 	}
 
 	@Override
-	public void setId(final Integer id) {
+	public void setId(final RuleId id) {
 		super.put(ID, id);
 	}
 

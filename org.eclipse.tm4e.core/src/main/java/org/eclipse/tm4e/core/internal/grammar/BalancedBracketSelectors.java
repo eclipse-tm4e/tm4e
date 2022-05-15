@@ -35,13 +35,13 @@ public class BalancedBracketSelectors {
 						this.allowAny = true;
 						return Stream.empty();
 					}
-					return Matcher.createMatchers(selector).stream();
+					return Matcher.createMatchers(selector).stream().map(m -> m.matcher);
 				})
-				.map(m -> m.matcher).toArray(Matcher[]::new);
+				.toArray(Matcher[]::new);
 
 		this.unbalancedBracketScopes = unbalancedBracketScopes.stream()
-				.flatMap(selector -> Matcher.createMatchers(selector).stream())
-				.map(m -> m.matcher).toArray(Matcher[]::new);
+				.flatMap(selector -> Matcher.createMatchers(selector).stream().map(m -> m.matcher))
+				.toArray(Matcher[]::new);
 	}
 
 	boolean matchesAlways() {

@@ -21,6 +21,8 @@ import java.util.Scanner;
 import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.jdt.annotation.Nullable;
 
+import com.google.common.base.Strings;
+
 /**
  * TextMate Resource.
  */
@@ -38,7 +40,6 @@ public class TMResource implements ITMResource {
 	 * Constructor for user preferences (loaded from Json with Gson).
 	 */
 	public TMResource() {
-
 	}
 
 	/**
@@ -55,7 +56,7 @@ public class TMResource implements ITMResource {
 		this.pluginId = ce.getNamespaceIdentifier();
 	}
 
-	public TMResource(@Nullable final String path, @Nullable final String pluginId) {
+	public TMResource(final String path, @Nullable final String pluginId) {
 		this.path = path;
 		this.pluginId = pluginId;
 	}
@@ -75,10 +76,10 @@ public class TMResource implements ITMResource {
 	@Nullable
 	@Override
 	public InputStream getInputStream() throws IOException {
-		if (path == null || "".equals(path)) {
+		if (Strings.isNullOrEmpty(path)) {
 			return null;
 		}
-		if (pluginId != null) {
+		if (!Strings.isNullOrEmpty(path)) {
 			final URL url = new URL(PLATFORM_PLUGIN + pluginId + "/" + path);
 			return url.openStream();
 		}

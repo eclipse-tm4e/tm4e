@@ -16,14 +16,14 @@
  */
 package org.eclipse.tm4e.core.internal.theme.reader;
 
-import java.io.InputStream;
+import java.io.Reader;
 
-import org.eclipse.tm4e.core.internal.parser.PListPath;
-import org.eclipse.tm4e.core.internal.parser.PropertySettable;
 import org.eclipse.tm4e.core.internal.parser.PListParser;
 import org.eclipse.tm4e.core.internal.parser.PListParserJSON;
 import org.eclipse.tm4e.core.internal.parser.PListParserXML;
 import org.eclipse.tm4e.core.internal.parser.PListParserYAML;
+import org.eclipse.tm4e.core.internal.parser.PListPath;
+import org.eclipse.tm4e.core.internal.parser.PropertySettable;
 import org.eclipse.tm4e.core.internal.theme.IRawTheme;
 import org.eclipse.tm4e.core.internal.theme.ThemeRaw;
 
@@ -39,7 +39,7 @@ public final class ThemeReader {
 	private static final PListParserYAML<ThemeRaw> YAML_PARSER = new PListParserYAML<>(OBJECT_FACTORY);
 	private static final PListParserXML<ThemeRaw> XML_PARSER = new PListParserXML<>(OBJECT_FACTORY);
 
-	public static IRawTheme readThemeSync(final String filePath, final InputStream in) throws Exception {
+	public static IRawTheme readThemeSync(final String filePath, final Reader in) throws Exception {
 		final var reader = new SyncThemeReader(in, getThemeParser(filePath));
 		return reader.load();
 	}

@@ -16,23 +16,22 @@
  */
 package org.eclipse.tm4e.core.internal.theme.reader;
 
-import java.io.InputStream;
-import java.io.InputStreamReader;
+import java.io.Reader;
 
 import org.eclipse.tm4e.core.internal.parser.PListParser;
 import org.eclipse.tm4e.core.internal.theme.IRawTheme;
 
 final class SyncThemeReader {
 
-	private final InputStream in;
+	private final Reader in;
 	private final PListParser<? extends IRawTheme> parser;
 
-	SyncThemeReader(final InputStream in, final PListParser<? extends IRawTheme> parser) {
+	SyncThemeReader(final Reader in, final PListParser<? extends IRawTheme> parser) {
 		this.in = in;
 		this.parser = parser;
 	}
 
 	IRawTheme load() throws Exception {
-		return this.parser.parse(new InputStreamReader(in));
+		return this.parser.parse(in);
 	}
 }

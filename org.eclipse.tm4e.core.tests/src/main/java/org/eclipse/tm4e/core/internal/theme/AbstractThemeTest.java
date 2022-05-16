@@ -17,7 +17,7 @@
  */
 package org.eclipse.tm4e.core.internal.theme;
 
-import java.io.ByteArrayInputStream;
+import java.io.StringReader;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
@@ -61,10 +61,10 @@ public abstract class AbstractThemeTest {
 
 	protected static Theme createTheme(final String themeAsJsonString) throws Exception {
 		return Theme.createFromRawTheme(
-			ThemeReader.readThemeSync("theme.json", new ByteArrayInputStream(themeAsJsonString.getBytes())), null);
+			ThemeReader.readThemeSync("theme.json", new StringReader(themeAsJsonString)), null);
 	}
 
-	protected static List<ParsedThemeRule> parseTheme(final String theme) throws Exception {
-		return Theme.parseTheme(ThemeReader.readThemeSync("theme.json", new ByteArrayInputStream(theme.getBytes())));
+	protected static List<ParsedThemeRule> parseTheme(final String themeAsJsonString) throws Exception {
+		return Theme.parseTheme(ThemeReader.readThemeSync("theme.json", new StringReader(themeAsJsonString)));
 	}
 }

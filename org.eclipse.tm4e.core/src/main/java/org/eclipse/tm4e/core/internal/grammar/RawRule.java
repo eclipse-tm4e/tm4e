@@ -24,7 +24,7 @@ import org.eclipse.tm4e.core.internal.types.IRawRule;
 import org.eclipse.tm4e.core.internal.utils.DeepCloneable;
 
 public class RawRule extends HashMap<String, @Nullable Object>
-		implements IRawRule, DeepCloneable, PropertySettable<Object> {
+	implements IRawRule, DeepCloneable, PropertySettable<Object> {
 
 	private static final String APPLY_END_PATTERN_LAST = "applyEndPatternLast";
 	private static final String BEGIN = "begin";
@@ -70,8 +70,9 @@ public class RawRule extends HashMap<String, @Nullable Object>
 		return (String) get(NAME);
 	}
 
-	public void setName(final String name) {
+	public RawRule setName(final String name) {
 		super.put(NAME, name);
+		return this;
 	}
 
 	@Nullable
@@ -124,8 +125,9 @@ public class RawRule extends HashMap<String, @Nullable Object>
 		return (String) get(INCLUDE);
 	}
 
-	public void setInclude(@Nullable final String include) {
+	public RawRule setInclude(@Nullable final String include) {
 		super.put(INCLUDE, include);
+		return this;
 	}
 
 	@Nullable
@@ -162,8 +164,9 @@ public class RawRule extends HashMap<String, @Nullable Object>
 		return (Collection<IRawRule>) get(PATTERNS);
 	}
 
-	public void setPatterns(final @Nullable Collection<IRawRule> patterns) {
+	public RawRule setPatterns(final @Nullable Collection<IRawRule> patterns) {
 		super.put(PATTERNS, patterns);
+		return this;
 	}
 
 	@Nullable

@@ -67,9 +67,7 @@ public final class RuleFactory {
 							: IRawRepository.merge(repository, desc.getRepository());
 					var patterns = desc.getPatterns();
 					if (patterns == null && desc.getInclude() != null) {
-						final var includeRule = new RawRule();
-						includeRule.setInclude(desc.getInclude());
-						patterns = List.of(includeRule);
+						patterns = List.of(new RawRule().setInclude(desc.getInclude()));
 					}
 					return new IncludeOnlyRule(
 							/* desc.$vscodeTextmateLocation, */

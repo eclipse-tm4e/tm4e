@@ -238,11 +238,10 @@ public final class Grammar implements IGrammar, IRuleFactoryHelper {
 			grammar.setRepository(repo);
 		}
 
-		final var self = new RawRule();
-		self.setPatterns(grammar.getPatterns());
-		self.setName(grammar.getScopeName());
-		repo.setSelf(self);
-		repo.setBase(base != null ? base : self);
+		repo.setSelf(new RawRule()
+			.setName(grammar.getScopeName())
+			.setPatterns(grammar.getPatterns()));
+		repo.setBase(base != null ? base : repo.getSelf());
 		return grammar;
 	}
 

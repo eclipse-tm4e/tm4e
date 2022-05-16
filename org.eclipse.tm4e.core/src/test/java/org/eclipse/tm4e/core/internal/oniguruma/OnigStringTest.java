@@ -9,7 +9,7 @@ class OnigStringTest {
 	private OnigString verifyBasics(final String string, final Class<? extends OnigString> expectedType) {
 		final OnigString onigString = OnigString.of(string);
 		assertInstanceOf(expectedType, onigString);
-		assertEquals(string, onigString.string);
+		assertEquals(string, onigString.content);
 		assertTrue(onigString.toString().contains(string));
 
 		assertEquals(onigString.bytesCount, onigString.bytesUTF8.length);

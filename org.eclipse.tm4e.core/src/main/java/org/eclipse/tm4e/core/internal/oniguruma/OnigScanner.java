@@ -29,8 +29,8 @@ public final class OnigScanner {
 	}
 
 	@Nullable
-	public OnigNextMatchResult findNextMatchSync(final OnigString source, final int charOffset) {
-		final OnigResult bestResult = searcher.search(source, charOffset);
+	public OnigNextMatchResult findNextMatchSync(final OnigString source, final int startPosition) {
+		final OnigResult bestResult = searcher.search(source, startPosition);
 		if (bestResult != null) {
 			return new OnigNextMatchResult(bestResult, source);
 		}
@@ -38,8 +38,7 @@ public final class OnigScanner {
 	}
 
 	@Nullable
-	OnigNextMatchResult findNextMatchSync(final String lin, final int pos) {
-		return findNextMatchSync(OnigString.of(lin), pos);
+	public OnigNextMatchResult findNextMatchSync(final String text, final int startPosition) {
+		return findNextMatchSync(OnigString.of(text), startPosition);
 	}
-
 }

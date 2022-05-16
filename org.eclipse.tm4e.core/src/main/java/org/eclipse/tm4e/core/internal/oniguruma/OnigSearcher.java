@@ -31,8 +31,8 @@ final class OnigSearcher {
 	}
 
 	@Nullable
-	OnigResult search(final OnigString source, final int charOffset) {
-		final int byteOffset = source.getByteIndexOfChar(charOffset);
+	OnigResult search(final OnigString source, final int startPosition) {
+		final int byteOffset = source.getByteIndexOfChar(startPosition);
 
 		int bestLocation = 0;
 		OnigResult bestResult = null;

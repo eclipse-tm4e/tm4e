@@ -155,21 +155,21 @@ public abstract class OnigString {
 		return new MultiByteString(str, bytesUtf8);
 	}
 
-	public final String string;
+	public final String content;
 
 	public final int bytesCount;
 	final byte[] bytesUTF8;
 
-	private OnigString(final String str, final byte[] bytesUTF8) {
-		string = str;
+	private OnigString(final String content, final byte[] bytesUTF8) {
+		this.content = content;
 		this.bytesUTF8 = bytesUTF8;
 		bytesCount = bytesUTF8.length;
 	}
 
 	protected final String throwOutOfBoundsException(final String indexName, final int index, final int minIndex,
-			final int maxIndex) {
+		final int maxIndex) {
 		throw new ArrayIndexOutOfBoundsException(
-				indexName + " index " + index + " is out of range " + minIndex + ".." + maxIndex + " of " + this);
+			indexName + " index " + index + " is out of range " + minIndex + ".." + maxIndex + " of " + this);
 	}
 
 	abstract int getByteIndexOfChar(int charIndex);
@@ -178,6 +178,6 @@ public abstract class OnigString {
 
 	@Override
 	public String toString() {
-		return getClass().getSimpleName() + "[string=\"" + string + "\"]";
+		return getClass().getSimpleName() + "[string=\"" + content + "\"]";
 	}
 }

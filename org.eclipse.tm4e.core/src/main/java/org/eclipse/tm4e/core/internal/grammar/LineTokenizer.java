@@ -122,7 +122,7 @@ final class LineTokenizer {
 	}
 
 	private void scanNext() {
-		LOGGER.log(TRACE, () -> "@@scanNext: |" + lineText.string.replace("\n", "\\n").substring(linePos) + '|');
+		LOGGER.log(TRACE, () -> "@@scanNext: |" + lineText.content.replace("\n", "\\n").substring(linePos) + '|');
 
 		final IMatchResult r = matchRuleOrInjections(grammar, lineText, isFirstLine, linePos, stack, anchorPosition);
 
@@ -180,7 +180,7 @@ final class LineTokenizer {
 
 			final StackElement beforePush = stack;
 			// push it on the stack rule
-			final String scopeName = rule.getName(lineText.string, captureIndices);
+			final String scopeName = rule.getName(lineText.content, captureIndices);
 			final ScopeListElement nameScopesList = stack.contentNameScopesList.push(grammar, scopeName);
 			stack = stack.push(matchedRuleId, linePos, anchorPosition,
 					captureIndices[0].end == lineText.bytesCount, null, nameScopesList, nameScopesList);
@@ -196,13 +196,13 @@ final class LineTokenizer {
 				lineTokens.produce(stack, captureIndices[0].end);
 				anchorPosition = captureIndices[0].end;
 
-				final String contentName = pushedRule.getContentName(lineText.string, captureIndices);
+				final String contentName = pushedRule.getContentName(lineText.content, captureIndices);
 				final ScopeListElement contentNameScopesList = nameScopesList.push(grammar, contentName);
 				stack = stack.setContentNameScopesList(contentNameScopesList);
 
 				if (pushedRule.endHasBackReferences) {
 					stack = stack.setEndRule(
-							pushedRule.getEndWithResolvedBackReferences(lineText.string, captureIndices));
+							pushedRule.getEndWithResolvedBackReferences(lineText.content, captureIndices));
 				}
 
 				if (!hasAdvanced && beforePush.hasSameRuleAs(stack)) {
@@ -224,13 +224,13 @@ final class LineTokenizer {
 				lineTokens.produce(stack, captureIndices[0].end);
 				anchorPosition = captureIndices[0].end;
 
-				final String contentName = pushedRule.getContentName(lineText.string, captureIndices);
+				final String contentName = pushedRule.getContentName(lineText.content, captureIndices);
 				final ScopeListElement contentNameScopesList = nameScopesList.push(grammar, contentName);
 				stack = stack.setContentNameScopesList(contentNameScopesList);
 
 				if (pushedRule.whileHasBackReferences) {
 					stack = stack.setEndRule(
-							pushedRule.getWhileWithResolvedBackReferences(lineText.string, captureIndices));
+							pushedRule.getWhileWithResolvedBackReferences(lineText.content, captureIndices));
 				}
 
 				if (!hasAdvanced && beforePush.hasSameRuleAs(stack)) {
@@ -416,8 +416,7 @@ final class LineTokenizer {
 	}
 
 	private void handleCaptures(final Grammar grammar, final OnigString lineText, final boolean isFirstLine,
-			final StackElement stack,
-			final LineTokens lineTokens, final List<@Nullable CaptureRule> captures,
+			final StackElement stack, final LineTokens lineTokens, final List<@Nullable CaptureRule> captures,
 			final OnigCaptureIndex[] captureIndices) {
 		if (captures.isEmpty()) {
 			return;
@@ -463,22 +462,22 @@ final class LineTokenizer {
 			final var retokenizeCapturedWithRuleId = captureRule.retokenizeCapturedWithRuleId;
 			if (retokenizeCapturedWithRuleId.notEquals(RuleId.NO_RULE)) {
 				// the capture requires additional matching
-				final String scopeName = captureRule.getName(lineText.string, captureIndices);
+				final String scopeName = captureRule.getName(lineText.content, captureIndices);
 				final ScopeListElement nameScopesList = stack.contentNameScopesList.push(grammar, scopeName);
-				final String contentName = captureRule.getContentName(lineText.string, captureIndices);
+				final String contentName = captureRule.getContentName(lineText.content, captureIndices);
 				final ScopeListElement contentNameScopesList = nameScopesList.push(grammar, contentName);
 
 				// the capture requires additional matching
 				final StackElement stackClone = stack.push(retokenizeCapturedWithRuleId, captureIndex.start, -1, false,
 						null, nameScopesList, contentNameScopesList);
-				final var onigSubStr = OnigString.of(lineText.string.substring(0, captureIndex.end));
+				final var onigSubStr = OnigString.of(lineText.content.substring(0, captureIndex.end));
 				tokenizeString(grammar, onigSubStr, isFirstLine && captureIndex.start == 0,
 						captureIndex.start, stackClone, lineTokens, false);
 				continue;
 			}
 
 			// push
-			final String captureRuleScopeName = captureRule.getName(lineText.string, captureIndices);
+			final String captureRuleScopeName = captureRule.getName(lineText.content, captureIndices);
 			if (captureRuleScopeName != null) {
 				// push
 				final ScopeListElement base = localStack.isEmpty()

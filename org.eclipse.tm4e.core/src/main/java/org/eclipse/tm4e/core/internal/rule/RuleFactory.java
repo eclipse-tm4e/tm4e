@@ -29,7 +29,6 @@ import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.tm4e.core.internal.grammar.RawRepository;
 import org.eclipse.tm4e.core.internal.grammar.RawRule;
 import org.eclipse.tm4e.core.internal.types.IRawCaptures;
-import org.eclipse.tm4e.core.internal.types.IRawGrammar;
 import org.eclipse.tm4e.core.internal.types.IRawRepository;
 import org.eclipse.tm4e.core.internal.types.IRawRule;
 
@@ -43,72 +42,71 @@ public final class RuleFactory {
 	private static final Logger LOGGER = System.getLogger(RuleFactory.class.getName());
 
 	private static CaptureRule createCaptureRule(final IRuleFactoryHelper helper, @Nullable final String name,
-			@Nullable final String contentName, final RuleId retokenizeCapturedWithRuleId) {
-		return helper
-				.registerRule(id -> new CaptureRule(id, name, contentName, retokenizeCapturedWithRuleId));
+		@Nullable final String contentName, final RuleId retokenizeCapturedWithRuleId) {
+		return helper.registerRule(id -> new CaptureRule(id, name, contentName, retokenizeCapturedWithRuleId));
 	}
 
 	public static RuleId getCompiledRuleId(final IRawRule desc, final IRuleFactoryHelper helper,
-			final IRawRepository repository) {
+		final IRawRepository repository) {
 		if (desc.getId() == null) {
 			helper.registerRule(ruleId -> {
 				desc.setId(ruleId);
 
 				final var ruleMatch = desc.getMatch();
 				if (ruleMatch != null) {
-					return new MatchRule(ruleId, desc.getName(), ruleMatch,
-							compileCaptures(desc.getCaptures(), helper, repository));
+					return new MatchRule(
+						ruleId,
+						desc.getName(),
+						ruleMatch,
+						_compileCaptures(desc.getCaptures(), helper, repository));
 				}
 
 				final var begin = desc.getBegin();
 				if (begin == null) {
 					final var repository1 = desc.getRepository() == null
-							? repository
-							: IRawRepository.merge(repository, desc.getRepository());
+						? repository
+						: IRawRepository.merge(repository, desc.getRepository());
 					var patterns = desc.getPatterns();
 					if (patterns == null && desc.getInclude() != null) {
 						patterns = List.of(new RawRule().setInclude(desc.getInclude()));
 					}
 					return new IncludeOnlyRule(
-							/* desc.$vscodeTextmateLocation, */
-							ruleId,
-							desc.getName(),
-							desc.getContentName(),
-							compilePatterns(patterns, helper, repository1));
+						ruleId,
+						desc.getName(),
+						desc.getContentName(),
+						_compilePatterns(patterns, helper, repository1));
 				}
 
 				final String ruleWhile = desc.getWhile();
 				if (ruleWhile != null) {
 					return new BeginWhileRule(
-							/* desc.$vscodeTextmateLocation, */
-							ruleId,
-							desc.getName(),
-							desc.getContentName(),
-							begin, compileCaptures(defaultIfNull(desc.getBeginCaptures(), desc.getCaptures()), helper,
-								repository),
-							ruleWhile, compileCaptures(defaultIfNull(desc.getWhileCaptures(), desc.getCaptures()), 
-								helper, repository),
-							compilePatterns(desc.getPatterns(), helper, repository));
-				}
-
-				return new BeginEndRule(
-						/* desc.$vscodeTextmateLocation, */
 						ruleId,
 						desc.getName(),
 						desc.getContentName(),
-						begin, compileCaptures(defaultIfNull(desc.getBeginCaptures(), desc.getCaptures()), helper,
-								repository),
-						desc.getEnd(), compileCaptures(defaultIfNull(desc.getEndCaptures(), desc.getCaptures()),
-								helper, repository),
-						desc.isApplyEndPatternLast(),
-						compilePatterns(desc.getPatterns(), helper, repository));
+						begin, _compileCaptures(defaultIfNull(desc.getBeginCaptures(), desc.getCaptures()), helper,
+							repository),
+						ruleWhile, _compileCaptures(defaultIfNull(desc.getWhileCaptures(), desc.getCaptures()), helper,
+							repository),
+						_compilePatterns(desc.getPatterns(), helper, repository));
+				}
+
+				return new BeginEndRule(
+					ruleId,
+					desc.getName(),
+					desc.getContentName(),
+					begin, _compileCaptures(defaultIfNull(desc.getBeginCaptures(), desc.getCaptures()), helper,
+						repository),
+					desc.getEnd(), _compileCaptures(defaultIfNull(desc.getEndCaptures(), desc.getCaptures()), helper,
+						repository),
+					desc.isApplyEndPatternLast(),
+					_compilePatterns(desc.getPatterns(), helper, repository));
 			});
 		}
 		return castNonNull(desc.getId());
 	}
 
-	private static List<@Nullable CaptureRule> compileCaptures(@Nullable final IRawCaptures captures,
-			final IRuleFactoryHelper helper, final IRawRepository repository) {
+	private static List<@Nullable CaptureRule> _compileCaptures(@Nullable final IRawCaptures captures,
+		final IRuleFactoryHelper helper, final IRawRepository repository) {
 		if (captures == null) {
 			return Collections.emptyList();
 		}
@@ -133,10 +131,10 @@ public final class RuleFactory {
 			final int numericCaptureId = parseInt(captureId, 10);
 			final IRawRule rule = captures.getCapture(captureId);
 			final RuleId retokenizeCapturedWithRuleId = rule.getPatterns() == null
-					? RuleId.NO_RULE
-					: getCompiledRuleId(captures.getCapture(captureId), helper, repository);
+				? RuleId.NO_RULE
+				: getCompiledRuleId(captures.getCapture(captureId), helper, repository);
 			r.set(numericCaptureId, createCaptureRule(helper, rule.getName(), rule.getContentName(),
-					retokenizeCapturedWithRuleId));
+				retokenizeCapturedWithRuleId));
 		}
 		return r;
 	}
@@ -149,8 +147,8 @@ public final class RuleFactory {
 		}
 	}
 
-	private static CompilePatternsResult compilePatterns(@Nullable final Collection<IRawRule> patterns,
-			final IRuleFactoryHelper helper, final IRawRepository repository) {
+	private static CompilePatternsResult _compilePatterns(@Nullable final Collection<IRawRule> patterns,
+		final IRuleFactoryHelper helper, final IRawRepository repository) {
 		if (patterns == null) {
 			return new CompilePatternsResult(new RuleId[0], false);
 		}
@@ -165,8 +163,8 @@ public final class RuleFactory {
 					final IRawRule localIncludedRule = repository.getRule(patternInclude.substring(1));
 					if (localIncludedRule != null) {
 						ruleId = getCompiledRuleId(localIncludedRule, helper, repository);
-					} else if (LOGGER.isLoggable(DEBUG)) {
-						LOGGER.log(DEBUG, "CANNOT find rule for scopeName: %s, I am: %s",
+					} else {
+						LOGGER.log(WARNING, "CANNOT find rule for scopeName [{0}]. I am [{1}]",
 								patternInclude, repository.getBase().getName());
 					}
 				} else if (patternInclude.equals(RawRepository.DOLLAR_BASE)) {
@@ -188,23 +186,24 @@ public final class RuleFactory {
 					}
 
 					// External include
-					final IRawGrammar externalGrammar = helper.getExternalGrammar(externalGrammarName, repository);
+					final var externalGrammar = helper.getExternalGrammar(externalGrammarName, repository);
+
 					if (externalGrammar != null) {
 						final var externalGrammarRepo = externalGrammar.getRepository();
 						if (externalGrammarInclude != null) {
-							final IRawRule externalIncludedRule = externalGrammarRepo.getRule(externalGrammarInclude);
+							final var externalIncludedRule = externalGrammarRepo.getRule(externalGrammarInclude);
 							if (externalIncludedRule != null) {
 								ruleId = getCompiledRuleId(externalIncludedRule, helper, externalGrammarRepo);
-							} else if (LOGGER.isLoggable(DEBUG)) {
-								LOGGER.log(DEBUG, "CANNOT find rule for scopeName: %s, I am: %s",
-										patternInclude, repository.getBase().getName());
+							} else {
+								LOGGER.log(WARNING, "CANNOT find rule for scopeName [{0}]. I am [{1}]",
+									patternInclude, repository.getBase().getName());
 							}
 						} else {
 							ruleId = getCompiledRuleId(externalGrammarRepo.getSelf(), helper, externalGrammarRepo);
 						}
-					} else if (LOGGER.isLoggable(DEBUG)) {
-						LOGGER.log(DEBUG, "CANNOT find grammar for scopeName: %s, I am: %s",
-								patternInclude, repository.getBase().getName());
+					} else {
+						LOGGER.log(WARNING, "CANNOT find grammar for scopeName [{0}]. I am [{1}]",
+							patternInclude, repository.getBase().getName());
 					}
 				}
 			} else {
@@ -241,7 +240,7 @@ public final class RuleFactory {
 				}
 
 				if (skipRule) {
-					LOGGER.log(DEBUG, "REMOVING RULE ENTIRELY DUE TO EMPTY PATTERNS THAT ARE MISSING");
+					LOGGER.log(WARNING, "REMOVING RULE ENTIRELY DUE TO EMPTY PATTERNS THAT ARE MISSING");
 					continue;
 				}
 
@@ -250,8 +249,8 @@ public final class RuleFactory {
 		}
 
 		return new CompilePatternsResult(
-				r.toArray(RuleId[]::new),
-				patterns.size() != r.size());
+			r.toArray(RuleId[]::new),
+			patterns.size() != r.size());
 	}
 
 	private RuleFactory() {

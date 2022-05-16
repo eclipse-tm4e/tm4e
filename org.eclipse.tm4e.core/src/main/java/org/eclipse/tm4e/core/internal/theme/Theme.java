@@ -20,7 +20,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
-import java.util.Set;
 import java.util.regex.Pattern;
 
 import org.eclipse.jdt.annotation.Nullable;
@@ -50,7 +49,8 @@ public class Theme {
 		return createFromParsedTheme(parseTheme(source), colorMap);
 	}
 
-	public static Theme createFromParsedTheme(final List<ParsedThemeRule> source, @Nullable final List<String> colorMap) {
+	public static Theme createFromParsedTheme(final List<ParsedThemeRule> source,
+		@Nullable final List<String> colorMap) {
 		return resolveParsedThemeRules(source, colorMap);
 	}
 
@@ -65,7 +65,7 @@ public class Theme {
 		this.defaults = defaults;
 	}
 
-	public Set<String> getColorMap() {
+	public List<String> getColorMap() {
 		return this.colorMap.getColorMap();
 	}
 
@@ -147,13 +147,15 @@ public class Theme {
 
 			String foreground = null;
 			final Object settingsForeground = entrySetting.getForeground();
-			if (settingsForeground instanceof final String stringSettingsForeground && isValidHexColor(stringSettingsForeground)) {
+			if (settingsForeground instanceof final String stringSettingsForeground
+				&& isValidHexColor(stringSettingsForeground)) {
 				foreground = stringSettingsForeground;
 			}
 
 			String background = null;
 			final Object settingsBackground = entrySetting.getBackground();
-			if (settingsBackground instanceof final String stringSettingsBackground && isValidHexColor(stringSettingsBackground)) {
+			if (settingsBackground instanceof final String stringSettingsBackground
+				&& isValidHexColor(stringSettingsBackground)) {
 				background = stringSettingsBackground;
 			}
 
@@ -180,7 +182,7 @@ public class Theme {
 	 * Resolve rules (i.e. inheritance).
 	 */
 	public static Theme resolveParsedThemeRules(final List<ParsedThemeRule> _parsedThemeRules,
-			@Nullable final List<String> _colorMap) {
+		@Nullable final List<String> _colorMap) {
 
 		// copy the list since we cannot be sure the given list is mutable
 		final var parsedThemeRules = new ArrayList<>(_parsedThemeRules);
@@ -216,13 +218,13 @@ public class Theme {
 		}
 		final var colorMap = new ColorMap(_colorMap);
 		final var defaults = new ThemeTrieElementRule(0, null, defaultFontStyle, colorMap.getId(defaultForeground),
-				colorMap.getId(defaultBackground));
+			colorMap.getId(defaultBackground));
 
 		final var root = new ThemeTrieElement(new ThemeTrieElementRule(0, null, FontStyle.NotSet, 0, 0),
-				Collections.emptyList());
+			Collections.emptyList());
 		for (final var rule : parsedThemeRules) {
 			root.insert(0, rule.scope, rule.parentScopes, rule.fontStyle, colorMap.getId(rule.foreground),
-					colorMap.getId(rule.background));
+				colorMap.getId(rule.background));
 		}
 
 		return new Theme(colorMap, defaults, root);
@@ -282,8 +284,8 @@ public class Theme {
 		}
 		final Theme other = (Theme) obj;
 		return Objects.equals(cache, other.cache)
-				&& Objects.equals(colorMap, other.colorMap)
-				&& Objects.equals(defaults, other.defaults)
-				&& Objects.equals(root, other.root);
+			&& Objects.equals(colorMap, other.colorMap)
+			&& Objects.equals(defaults, other.defaults)
+			&& Objects.equals(root, other.root);
 	}
 }

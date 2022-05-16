@@ -20,8 +20,8 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.tm4e.core.TMException;
@@ -66,7 +66,7 @@ public class Registry {
 	/**
 	 * Returns a lookup array for color ids.
 	 */
-	public Set<String> getColorMap() {
+	public List<String> getColorMap() {
 		return this.syncRegistry.getColorMap();
 	}
 

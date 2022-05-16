@@ -18,7 +18,6 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
-import java.util.Set;
 
 import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.tm4e.core.TMException;
@@ -78,8 +77,8 @@ public class ColorMap {
 		return null;
 	}
 
-	public Set<String> getColorMap() {
-		return color2id.keySet();
+	public List<String> getColorMap() {
+		return new ArrayList<>(color2id.keySet());
 	}
 
 	@Override

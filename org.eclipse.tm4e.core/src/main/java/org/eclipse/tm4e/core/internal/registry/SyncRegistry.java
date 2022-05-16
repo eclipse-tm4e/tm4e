@@ -23,7 +23,6 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.tm4e.core.grammar.IGrammar;
@@ -59,7 +58,7 @@ public final class SyncRegistry implements IGrammarRepository, IThemeProvider {
 		this.grammars.values().forEach(Grammar::onDidChangeTheme);
 	}
 
-	public Set<String> getColorMap() {
+	public List<String> getColorMap() {
 		return this.theme.getColorMap();
 	}
 

@@ -45,9 +45,9 @@ public final class BeginEndRule extends Rule {
 	private RegExpSourceList cachedCompiledPatterns;
 
 	BeginEndRule(final RuleId id, @Nullable final String name, @Nullable final String contentName, final String begin,
-			final List<@Nullable CaptureRule> beginCaptures, @Nullable final String end,
-			final List<@Nullable CaptureRule> endCaptures, final boolean applyEndPatternLast,
-			final CompilePatternsResult patterns) {
+		final List<@Nullable CaptureRule> beginCaptures, @Nullable final String end,
+		final List<@Nullable CaptureRule> endCaptures, final boolean applyEndPatternLast,
+		final CompilePatternsResult patterns) {
 		super(id, name, contentName);
 		this.begin = new RegExpSource(begin, this.id);
 		this.beginCaptures = beginCaptures;
@@ -59,21 +59,21 @@ public final class BeginEndRule extends Rule {
 		this.hasMissingPatterns = patterns.hasMissingPatterns;
 	}
 
+	public String debugBeginRegExp() {
+		return this.begin.getSource();
+	}
+
+	public String debugEndRegExp() {
+		return this.end.getSource();
+	}
+
 	public String getEndWithResolvedBackReferences(final String lineText, final OnigCaptureIndex[] captureIndices) {
 		return this.end.resolveBackReferences(lineText, captureIndices);
 	}
 
 	@Override
-	public void collectPatternsRecursive(final IRuleRegistry grammar, final RegExpSourceList out,
-			final boolean isFirst) {
-		if (isFirst) {
-			for (final RuleId pattern : this.patterns) {
-				final Rule rule = grammar.getRule(pattern);
-				rule.collectPatternsRecursive(grammar, out, false);
-			}
-		} else {
-			out.add(this.begin);
-		}
+	public void collectPatterns(final IRuleRegistry grammar, final RegExpSourceList out) {
+		out.add(this.begin);
 	}
 
 	@Override
@@ -83,17 +83,20 @@ public final class BeginEndRule extends Rule {
 
 	@Override
 	public CompiledRule compileAG(final IRuleRegistry grammar, @Nullable final String endRegexSource,
-			final boolean allowA, final boolean allowG) {
+		final boolean allowA, final boolean allowG) {
 		return getCachedCompiledPatterns(grammar, endRegexSource).compileAG(allowA, allowG);
 	}
 
 	private RegExpSourceList getCachedCompiledPatterns(final IRuleRegistry grammar,
-			@Nullable final String endRegexSource) {
+		@Nullable final String endRegexSource) {
 		var cachedCompiledPatterns = this.cachedCompiledPatterns;
 		if (cachedCompiledPatterns == null) {
 			cachedCompiledPatterns = new RegExpSourceList();
 
-			collectPatternsRecursive(grammar, cachedCompiledPatterns, true);
+			for (final var pattern : this.patterns) {
+				final var rule = grammar.getRule(pattern);
+				rule.collectPatterns(grammar, cachedCompiledPatterns);
+			}
 
 			if (this.applyEndPatternLast) {
 				cachedCompiledPatterns.add(this.endHasBackReferences ? this.end.clone() : this.end);

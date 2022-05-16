@@ -41,8 +41,7 @@ public final class MatchRule extends Rule {
 	}
 
 	@Override
-	public void collectPatternsRecursive(final IRuleRegistry grammar, final RegExpSourceList out,
-			final boolean isFirst) {
+	public void collectPatterns(final IRuleRegistry grammar, final RegExpSourceList out) {
 		out.add(this.match);
 	}
 
@@ -61,7 +60,7 @@ public final class MatchRule extends Rule {
 		var cachedCompiledPatterns = this.cachedCompiledPatterns;
 		if (cachedCompiledPatterns == null) {
 			cachedCompiledPatterns = new RegExpSourceList();
-			this.collectPatternsRecursive(grammar, cachedCompiledPatterns, true);
+			this.collectPatterns(grammar, cachedCompiledPatterns);
 			this.cachedCompiledPatterns = cachedCompiledPatterns;
 		}
 		return cachedCompiledPatterns;

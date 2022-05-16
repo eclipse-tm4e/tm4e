@@ -63,7 +63,7 @@ public abstract class Rule {
 		return RegexSource.replaceCaptures(contentName, lineText, captureIndices);
 	}
 
-	public abstract void collectPatternsRecursive(IRuleRegistry grammar, RegExpSourceList out, boolean isFirst);
+	public abstract void collectPatterns(IRuleRegistry grammar, RegExpSourceList out);
 
 	public abstract CompiledRule compile(IRuleRegistry grammar, @Nullable String endRegexSource);
 

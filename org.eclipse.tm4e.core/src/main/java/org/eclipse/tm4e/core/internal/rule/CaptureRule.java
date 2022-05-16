@@ -34,8 +34,7 @@ public final class CaptureRule extends Rule {
 	}
 
 	@Override
-	public void collectPatternsRecursive(final IRuleRegistry grammar, final RegExpSourceList out,
-			final boolean isFirst) {
+	public void collectPatterns(final IRuleRegistry grammar, final RegExpSourceList out) {
 		throw new UnsupportedOperationException();
 	}
 

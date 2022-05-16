@@ -39,11 +39,10 @@ final class IncludeOnlyRule extends Rule {
 	}
 
 	@Override
-	public void collectPatternsRecursive(final IRuleRegistry grammar, final RegExpSourceList out,
-			final boolean isFirst) {
+	public void collectPatterns(final IRuleRegistry grammar, final RegExpSourceList out) {
 		for (final RuleId pattern : this.patterns) {
 			final Rule rule = grammar.getRule(pattern);
-			rule.collectPatternsRecursive(grammar, out, false);
+			rule.collectPatterns(grammar, out);
 		}
 	}
 
@@ -63,7 +62,7 @@ final class IncludeOnlyRule extends Rule {
 		var cachedCompiledPatterns = this.cachedCompiledPatterns;
 		if (cachedCompiledPatterns == null) {
 			cachedCompiledPatterns = new RegExpSourceList();
-			this.collectPatternsRecursive(grammar, cachedCompiledPatterns, true);
+			this.collectPatterns(grammar, cachedCompiledPatterns);
 			this.cachedCompiledPatterns = cachedCompiledPatterns;
 		}
 		return cachedCompiledPatterns;

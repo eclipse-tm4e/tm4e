@@ -16,13 +16,10 @@
  */
 package org.eclipse.tm4e.core.internal.grammar.reader;
 
-import java.io.InputStream;
-import java.io.InputStreamReader;
-
-import org.eclipse.tm4e.core.internal.grammar.RawRule;
 import org.eclipse.tm4e.core.internal.grammar.RawCaptures;
 import org.eclipse.tm4e.core.internal.grammar.RawGrammar;
 import org.eclipse.tm4e.core.internal.grammar.RawRepository;
+import org.eclipse.tm4e.core.internal.grammar.RawRule;
 import org.eclipse.tm4e.core.internal.parser.PListParser;
 import org.eclipse.tm4e.core.internal.parser.PListParserJSON;
 import org.eclipse.tm4e.core.internal.parser.PListParserXML;
@@ -30,6 +27,7 @@ import org.eclipse.tm4e.core.internal.parser.PListParserYAML;
 import org.eclipse.tm4e.core.internal.parser.PListPath;
 import org.eclipse.tm4e.core.internal.parser.PropertySettable;
 import org.eclipse.tm4e.core.internal.types.IRawGrammar;
+import org.eclipse.tm4e.core.registry.IGrammarSource;
 
 /**
  * TextMate Grammar reader utilities.
@@ -51,8 +49,10 @@ public final class GrammarReader {
 	private static final PListParser<RawGrammar> XML_PARSER = new PListParserXML<>(OBJECT_FACTORY);
 	private static final PListParser<RawGrammar> YAML_PARSER = new PListParserYAML<>(OBJECT_FACTORY);
 
-	public static IRawGrammar readGrammarSync(final String filePath, final InputStream in) throws Exception {
-		return getGrammarParser(filePath).parse(new InputStreamReader(in));
+	public static IRawGrammar readGrammarSync(final IGrammarSource source) throws Exception {
+		try (var reader = source.getReader()) {
+			return getGrammarParser(source.getFilePath()).parse(reader);
+		}
 	}
 
 	private static PListParser<RawGrammar> getGrammarParser(final String filePath) {

@@ -23,6 +23,7 @@ import java.util.List;
 
 import org.eclipse.tm4e.core.grammar.IGrammar;
 import org.eclipse.tm4e.core.grammar.IStackElement;
+import org.eclipse.tm4e.core.registry.IGrammarSource;
 import org.eclipse.tm4e.core.registry.IRegistryOptions;
 import org.eclipse.tm4e.core.registry.Registry;
 
@@ -71,17 +72,6 @@ public class RawTestImpl {
 
 	public void executeTest() throws Exception {
 		final var options = new IRegistryOptions() {
-
-			@Override
-			public String getFilePath(final String scopeName) {
-				return null;
-			}
-
-			@Override
-			public InputStream getInputStream(final String scopeName) throws IOException {
-				return null;
-			}
-
 			@Override
 			public Collection<String> getInjections(final String scopeName) {
 				if (scopeName.equals(getGrammarScopeName())) {
@@ -109,7 +99,8 @@ public class RawTestImpl {
 	private IGrammar getGrammar(final Registry registry, final File testLocation) throws Exception {
 		IGrammar grammar = null;
 		for (final String grammarPath : getGrammars()) {
-			final IGrammar tmpGrammar = registry.loadGrammarFromPathSync(new File(testLocation, grammarPath));
+			final IGrammar tmpGrammar = registry
+				.addGrammar(IGrammarSource.fromFile(new File(testLocation, grammarPath).toPath()));
 			if (grammarPath.equals(getGrammarPath())) {
 				grammar = tmpGrammar;
 			}
@@ -118,17 +109,17 @@ public class RawTestImpl {
 	}
 
 	private static IStackElement assertLineTokenization(final IGrammar grammar, final RawTestLine testCase,
-			final IStackElement prevState) {
+		final IStackElement prevState) {
 		final var line = testCase.line;
 		final var actual = grammar.tokenizeLine(line, prevState);
 
 		final var actualTokens = Arrays.stream(actual.getTokens())
-				.map(token -> new RawToken(
-						line.substring(
-								token.getStartIndex(),
-								Math.min(token.getEndIndex(), line.length())), // TODO Math.min not required in upstream why?
-						token.getScopes()))
-				.collect(toList());
+			.map(token -> new RawToken(
+				line.substring(
+					token.getStartIndex(),
+					Math.min(token.getEndIndex(), line.length())), // TODO Math.min not required in upstream why?
+				token.getScopes()))
+			.collect(toList());
 
 		// TODO@Alex: fix tests instead of working around
 		if (!line.isEmpty()) {
@@ -142,7 +133,7 @@ public class RawTestImpl {
 	}
 
 	private static void deepEqual(final List<RawToken> actualTokens, final List<RawToken> expextedTokens,
-			final String message) {
+		final String message) {
 
 		// compare collection size
 		if (expextedTokens.size() != actualTokens.size()) {
@@ -150,8 +141,8 @@ public class RawTestImpl {
 			final var expextedTokensStr = expextedTokens.stream().map(Object::toString).collect(joining("\n"));
 
 			assertEquals(expextedTokensStr, actualTokensStr,
-					message + " (collection size problem: actual=" + actualTokens.size() + " expected="
-							+ expextedTokens.size() + ")");
+				message + " (collection size problem: actual=" + actualTokens.size() + " expected="
+					+ expextedTokens.size() + ")");
 		}
 
 		// compare item

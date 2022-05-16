@@ -11,19 +11,17 @@
  */
 package org.eclipse.tm4e.core;
 
-import static org.eclipse.tm4e.core.internal.utils.NullSafetyHelper.*;
-
 import org.eclipse.tm4e.core.grammar.IGrammar;
 import org.eclipse.tm4e.core.grammar.ITokenizeLineResult;
+import org.eclipse.tm4e.core.registry.IGrammarSource;
 import org.eclipse.tm4e.core.registry.Registry;
 
 public class TestGrammar {
 
 	public static void main(final String[] args) throws Exception {
-
 		final var registry = new Registry();
-		final IGrammar grammar = castNonNull(registry.loadGrammarFromPathSync("Angular2TypeScript.tmLanguage",
-				TestGrammar.class.getResourceAsStream("Angular2TypeScript.tmLanguage")));
+		final IGrammar grammar = registry.addGrammar(
+			IGrammarSource.fromResource(TestGrammar.class, "Angular2TypeScript.tmLanguage"));
 
 		final ITokenizeLineResult result = grammar.tokenizeLine("/** **/");
 		for (int i = 0; i < result.getTokens().length; i++) {

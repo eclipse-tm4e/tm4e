@@ -123,7 +123,7 @@ public final class Grammar implements IGrammar, IRuleFactoryHelper {
 		}
 	}
 
-	private List<Injection> collectInjections() {
+	private List<Injection> _collectInjections() {
 		final var grammarRepository = new IGrammarRepository() {
 			@Override
 			public @Nullable IRawGrammar lookup(final String scopeName) {
@@ -139,20 +139,12 @@ public final class Grammar implements IGrammar, IRuleFactoryHelper {
 			}
 		};
 
-		final var dependencyProcessor = new ScopeDependencyProcessor(grammarRepository, this.rootScopeName);
-		// TODO: uncomment below to visit all scopes
-		// while (dependencyProcessor.queue.length > 0) {
-		// dependencyProcessor.processQueue();
-		// }
-
 		final var result = new ArrayList<Injection>();
 
-		dependencyProcessor.seenFullScopeRequests.forEach(scopeName -> {
-			final var grammar = grammarRepository.lookup(scopeName);
-			if (grammar == null) {
-				return;
-			}
+		final var scopeName = this.rootScopeName;
 
+		final var grammar = grammarRepository.lookup(scopeName);
+		if (grammar != null) {
 			// add injections from the current grammar
 			final var rawInjections = grammar.getInjections();
 			if (rawInjections != null) {
@@ -184,7 +176,7 @@ public final class Grammar implements IGrammar, IRuleFactoryHelper {
 					}
 				});
 			}
-		});
+		}
 
 		Collections.sort(result, (i1, i2) -> i1.priority - i2.priority); // sort by priority
 
@@ -194,7 +186,7 @@ public final class Grammar implements IGrammar, IRuleFactoryHelper {
 	List<Injection> getInjections() {
 		var injections = this.injections;
 		if (injections == null) {
-			injections = this.injections = this.collectInjections();
+			injections = this.injections = this._collectInjections();
 
 			if (LOGGER.isLoggable(Level.TRACE) && !injections.isEmpty()) {
 				LOGGER.log(Level.TRACE,

@@ -12,6 +12,7 @@
 package org.eclipse.tm4e.ui.internal.model;
 
 import org.eclipse.jface.text.Document;
+import org.eclipse.tm4e.core.registry.IGrammarSource;
 import org.eclipse.tm4e.core.registry.Registry;
 import org.junit.jupiter.api.Test;
 
@@ -22,7 +23,7 @@ class DocumentTMModelTest {
 		final var document = new Document();
 		final var model = new TMDocumentModel(document);
 		try {
-			model.setGrammar(new Registry().loadGrammarFromPathSync("TypeScript.tmLanguage.json", getClass().getClassLoader().getResourceAsStream("/grammars/TypeScript.tmLanguage.json")));
+			model.setGrammar(new Registry().addGrammar(IGrammarSource.fromResource(getClass(), "/grammars/TypeScript.tmLanguage.json")));
 			document.set("a\nb\nc\nd");
 			model.addModelTokensChangedListener(e -> {
 			});

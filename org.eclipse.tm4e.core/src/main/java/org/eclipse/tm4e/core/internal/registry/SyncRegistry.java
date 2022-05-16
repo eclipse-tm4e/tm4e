@@ -16,9 +16,6 @@
  */
 package org.eclipse.tm4e.core.internal.registry;
 
-import static org.eclipse.tm4e.core.internal.utils.NullSafetyHelper.*;
-
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
@@ -28,14 +25,10 @@ import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.tm4e.core.grammar.IGrammar;
 import org.eclipse.tm4e.core.internal.grammar.BalancedBracketSelectors;
 import org.eclipse.tm4e.core.internal.grammar.Grammar;
-import org.eclipse.tm4e.core.internal.grammar.RawRepository;
-import org.eclipse.tm4e.core.internal.grammar.RawRule;
 import org.eclipse.tm4e.core.internal.theme.IThemeProvider;
 import org.eclipse.tm4e.core.internal.theme.Theme;
 import org.eclipse.tm4e.core.internal.theme.ThemeTrieElementRule;
 import org.eclipse.tm4e.core.internal.types.IRawGrammar;
-import org.eclipse.tm4e.core.internal.types.IRawRepository;
-import org.eclipse.tm4e.core.internal.types.IRawRule;
 
 /**
  * @see <a href=
@@ -64,20 +57,14 @@ public final class SyncRegistry implements IGrammarRepository, IThemeProvider {
 
 	/**
 	 * Add `grammar` to registry and return a list of referenced scope names
-	 *
-	 * TODO implementation differs from upstream
 	 */
-	public Collection<String> addGrammar(final IRawGrammar grammar,
-			@Nullable final Collection<String> injectionScopeNames) {
+	public void addGrammar(final IRawGrammar grammar,
+		@Nullable final Collection<String> injectionScopeNames) {
 		this.rawGrammars.put(grammar.getScopeName(), grammar);
-		final Collection<String> includedScopes = new ArrayList<>();
-		collectIncludedScopes(includedScopes, grammar);
 
 		if (injectionScopeNames != null) {
 			this.injectionGrammars.put(grammar.getScopeName(), injectionScopeNames);
-			injectionScopeNames.forEach(scopeName -> addIncludedScope(scopeName, includedScopes));
 		}
-		return includedScopes;
 	}
 
 	@Override
@@ -112,95 +99,20 @@ public final class SyncRegistry implements IGrammarRepository, IThemeProvider {
 	 * Lookup a grammar.
 	 */
 	@Nullable
-	public IGrammar grammarForScopeName(final String scopeName, final int initialLanguage,
-			@Nullable final Map<String, Integer> embeddedLanguages,
-			@Nullable final Map<String, Integer> tokenTypes,
-			@Nullable final BalancedBracketSelectors balancedBracketSelectors) {
+	public IGrammar grammarForScopeName(final String scopeName,
+		final int initialLanguage,
+		@Nullable final Map<String, Integer> embeddedLanguages,
+		@Nullable final Map<String, Integer> tokenTypes,
+		@Nullable final BalancedBracketSelectors balancedBracketSelectors) {
 		if (!this.grammars.containsKey(scopeName)) {
 			final var rawGrammar = lookup(scopeName);
 			if (rawGrammar == null) {
 				return null;
 			}
 			this.grammars.put(scopeName,
-					new Grammar(scopeName, rawGrammar, initialLanguage, embeddedLanguages, tokenTypes,
-							balancedBracketSelectors, this, this));
+				new Grammar(scopeName, rawGrammar, initialLanguage, embeddedLanguages, tokenTypes,
+					balancedBracketSelectors, this, this));
 		}
 		return this.grammars.get(scopeName);
-	}
-
-	private static void collectIncludedScopes(final Collection<String> result, final IRawGrammar grammar) {
-		final var grammarPatterns = grammar.getPatterns();
-		if (grammarPatterns != null) {
-			extractIncludedScopesInPatterns(result, grammarPatterns);
-		}
-
-		if (grammar.isRepositorySet()) {
-			final IRawRepository repository = grammar.getRepository();
-			extractIncludedScopesInRepository(result, repository);
-		}
-
-		// remove references to own scope (avoid recursion)
-		result.remove(grammar.getScopeName());
-	}
-
-	/**
-	 * Fill in `result` all external included scopes in `patterns`
-	 */
-	private static void extractIncludedScopesInPatterns(final Collection<String> result,
-			final Collection<IRawRule> patterns) {
-		for (final IRawRule pattern : patterns) {
-			final Collection<IRawRule> p = pattern.getPatterns();
-			if (p != null) {
-				extractIncludedScopesInPatterns(result, p);
-			}
-
-			final String include = pattern.getInclude();
-			if (include == null) {
-				continue;
-			}
-
-			if (include.equals(RawRepository.DOLLAR_BASE) || include.equals(RawRepository.DOLLAR_SELF)) {
-				// Special includes that can be resolved locally in this grammar
-				continue;
-			}
-
-			if (include.charAt(0) == '#') {
-				// Local include from this grammar
-				continue;
-			}
-
-			final int sharpIndex = include.indexOf('#');
-			if (sharpIndex >= 0) {
-				addIncludedScope(include.substring(0, sharpIndex), result);
-			} else {
-				addIncludedScope(include, result);
-			}
-		}
-	}
-
-	private static void addIncludedScope(final String scopeName, final Collection<String> includedScopes) {
-		if (!includedScopes.contains(scopeName)) {
-			includedScopes.add(scopeName);
-		}
-	}
-
-	/**
-	 * Fill in `result` all external included scopes in `repository`
-	 */
-	private static void extractIncludedScopesInRepository(final Collection<String> result,
-			final IRawRepository repository) {
-		if (repository instanceof final RawRule rawRepository) {
-			for (final var entry : rawRepository.values()) {
-				final IRawRule rule = (IRawRule) castNonNull(entry);
-				final var patterns = rule.getPatterns();
-				if (patterns != null) {
-					extractIncludedScopesInPatterns(result, patterns);
-				}
-				final var repo = rule.getRepository();
-				if (repo != null) {
-					extractIncludedScopesInRepository(result, repo);
-				}
-			}
-		}
 	}
 }

@@ -13,7 +13,7 @@ package org.eclipse.tm4e.ui.internal.wizards;
 
 import static org.eclipse.tm4e.core.internal.utils.NullSafetyHelper.*;
 
-import java.io.FileInputStream;
+import java.nio.file.Paths;
 
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
@@ -31,6 +31,7 @@ import org.eclipse.swt.widgets.FileDialog;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.tm4e.core.grammar.IGrammar;
+import org.eclipse.tm4e.core.registry.IGrammarSource;
 import org.eclipse.tm4e.core.registry.Registry;
 import org.eclipse.tm4e.registry.GrammarDefinition;
 import org.eclipse.tm4e.registry.IGrammarDefinition;
@@ -148,12 +149,8 @@ final class SelectGrammarWizardPage extends AbstractWizardPage {
 					TMUIMessages.SelectGrammarWizardPage_file_error_required);
 		}
 		final var registry = new Registry();
-		try (var is = new FileInputStream(path)) {
-			final IGrammar grammar = registry.loadGrammarFromPathSync(path, is);
-			if (grammar == null) {
-				return new Status(IStatus.ERROR, TMUIPlugin.PLUGIN_ID,
-						TMUIMessages.SelectGrammarWizardPage_file_error_invalid);
-			}
+		try {
+			final IGrammar grammar = registry.addGrammar(IGrammarSource.fromFile(Paths.get(path)));
 			grammarInfoWidget.refresh(grammar);
 		} catch (final Exception e) {
 			return new Status(IStatus.ERROR, TMUIPlugin.PLUGIN_ID,

@@ -16,8 +16,6 @@
  */
 package org.eclipse.tm4e.core.registry;
 
-import java.io.IOException;
-import java.io.InputStream;
 import java.util.Collection;
 import java.util.List;
 
@@ -32,28 +30,6 @@ import org.eclipse.tm4e.core.internal.theme.IRawTheme;
  */
 public interface IRegistryOptions {
 
-	IRegistryOptions DEFAULT_LOCATOR = new IRegistryOptions() {
-
-		@Nullable
-		@Override
-		public String getFilePath(final String scopeName) {
-			return null;
-		}
-
-		@Nullable
-		@Override
-		public InputStream getInputStream(final String scopeName) {
-			return null;
-		}
-
-		@Nullable
-		@Override
-		public Collection<String> getInjections(final String scopeName) {
-			return null;
-		}
-
-	};
-
 	@Nullable
 	default IRawTheme getTheme() {
 		return null;
@@ -65,11 +41,12 @@ public interface IRegistryOptions {
 	}
 
 	@Nullable
-	String getFilePath(String scopeName);
+	default IGrammarSource getGrammarSource(@SuppressWarnings("unused") final String scopeName) {
+		return null;
+	}
 
 	@Nullable
-	InputStream getInputStream(String scopeName) throws IOException;
-
-	@Nullable
-	Collection<@NonNull String> getInjections(String scopeName);
+	default Collection<@NonNull String> getInjections(@SuppressWarnings("unused") final String scopeName) {
+		return null;
+	}
 }

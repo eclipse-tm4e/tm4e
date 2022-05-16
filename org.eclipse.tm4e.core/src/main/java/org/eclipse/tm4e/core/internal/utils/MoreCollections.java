@@ -12,6 +12,7 @@
  */
 package org.eclipse.tm4e.core.internal.utils;
 
+import java.util.Collections;
 import java.util.List;
 
 import org.eclipse.jdt.annotation.Nullable;
@@ -44,6 +45,10 @@ public final class MoreCollections {
 		return list.remove(list.size() - 1);
 	}
 
-   private MoreCollections() {
-   }
+	public static <T> List<T> nullToEmpty(@Nullable final List<T> list) {
+		return list == null ? Collections.emptyList() : list;
+	}
+
+	private MoreCollections() {
+	}
 }

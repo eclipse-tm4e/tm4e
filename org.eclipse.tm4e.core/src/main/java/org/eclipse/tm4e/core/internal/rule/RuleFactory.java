@@ -26,8 +26,8 @@ import java.util.Collections;
 import java.util.List;
 
 import org.eclipse.jdt.annotation.Nullable;
-import org.eclipse.tm4e.core.internal.grammar.RawRepository;
 import org.eclipse.tm4e.core.internal.grammar.RawRule;
+import org.eclipse.tm4e.core.internal.grammar.dependencies.IncludeReference;
 import org.eclipse.tm4e.core.internal.types.IRawCaptures;
 import org.eclipse.tm4e.core.internal.types.IRawRepository;
 import org.eclipse.tm4e.core.internal.types.IRawRule;
@@ -158,32 +158,36 @@ public final class RuleFactory {
 			RuleId ruleId = null;
 			final var patternInclude = pattern.getInclude();
 			if (patternInclude != null) {
-				if (patternInclude.charAt(0) == '#') {
+
+				final var reference = IncludeReference.parseInclude(patternInclude);
+				switch (reference.kind) {
+				case Base:
+					ruleId = getCompiledRuleId(repository.getBase(), helper, repository);
+					break;
+				case Self:
+					ruleId = getCompiledRuleId(repository.getSelf(), helper, repository);
+					break;
+
+				case RelativeReference:
 					// Local include found in `repository`
-					final IRawRule localIncludedRule = repository.getRule(patternInclude.substring(1));
+					final var localIncludedRule = repository.getRule(reference.ruleName);
 					if (localIncludedRule != null) {
 						ruleId = getCompiledRuleId(localIncludedRule, helper, repository);
 					} else {
 						LOGGER.log(WARNING, "CANNOT find rule for scopeName [{0}]. I am [{1}]",
-								patternInclude, repository.getBase().getName());
+							patternInclude, repository.getBase().getName());
 					}
-				} else if (patternInclude.equals(RawRepository.DOLLAR_BASE)) {
-					// Special include also found in `repository`
-					ruleId = getCompiledRuleId(repository.getBase(), helper, repository);
-				} else if (patternInclude.equals(RawRepository.DOLLAR_SELF)) {
-					// Special include also found in `repository`
-					ruleId = getCompiledRuleId(repository.getSelf(), helper, repository);
-				} else {
-					final String externalGrammarName;
-					final String externalGrammarInclude;
-					final int sharpIndex = patternInclude.indexOf('#');
-					if (sharpIndex >= 0) {
-						externalGrammarName = patternInclude.substring(0, sharpIndex);
-						externalGrammarInclude = patternInclude.substring(sharpIndex + 1);
-					} else {
-						externalGrammarName = patternInclude;
-						externalGrammarInclude = null;
-					}
+					break;
+
+				case TopLevelReference:
+				case TopLevelRepositoryReference:
+
+					final var externalGrammarName = reference.scopeName;
+
+					@Nullable
+					final String externalGrammarInclude = reference.kind == IncludeReference.Kind.TopLevelRepositoryReference
+						? reference.ruleName
+						: null;
 
 					// External include
 					final var externalGrammar = helper.getExternalGrammar(externalGrammarName, repository);
@@ -205,6 +209,7 @@ public final class RuleFactory {
 						LOGGER.log(WARNING, "CANNOT find grammar for scopeName [{0}]. I am [{1}]",
 							patternInclude, repository.getBase().getName());
 					}
+					break;
 				}
 			} else {
 				ruleId = getCompiledRuleId(pattern, helper, repository);

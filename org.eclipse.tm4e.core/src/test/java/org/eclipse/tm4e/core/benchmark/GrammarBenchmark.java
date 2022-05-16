@@ -16,6 +16,7 @@ import java.util.Arrays;
 
 import org.eclipse.tm4e.core.grammar.IGrammar;
 import org.eclipse.tm4e.core.grammar.IStackElement;
+import org.eclipse.tm4e.core.registry.IGrammarSource;
 import org.eclipse.tm4e.core.registry.Registry;
 
 public final class GrammarBenchmark implements Runnable {
@@ -35,20 +36,19 @@ public final class GrammarBenchmark implements Runnable {
 		/*
 		 * load the grammar
 		 */
-		try (var grammarFileIS = GrammarBenchmark.class.getResourceAsStream("GrammarBenchmark.Java.tmLanguage.json")) {
-			grammar = new Registry().loadGrammarFromPathSync("GrammarBenchmark.Java.tmLanguage.json", grammarFileIS);
-		}
+		grammar = new Registry().addGrammar(
+			IGrammarSource.fromResource(GrammarBenchmark.class, "GrammarBenchmark.Java.tmLanguage.json"));
 
 		/*
 		 * load the file to be parsed
 		 */
 		try (var sourceFileIS = GrammarBenchmark.class.getResourceAsStream("GrammarBenchmark.JavaFile.txt")) {
 			sourceCode = new BufferedReader(new InputStreamReader(sourceFileIS, StandardCharsets.UTF_8))
-					.lines()
-					.toArray(String[]::new);
+				.lines()
+				.toArray(String[]::new);
 		}
 		System.out.println(
-				String.format("Source Code chars: %,d", Arrays.stream(sourceCode).mapToInt(String::length).sum()));
+			String.format("Source Code chars: %,d", Arrays.stream(sourceCode).mapToInt(String::length).sum()));
 		System.out.println(String.format("Source Code lines: %,d", sourceCode.length));
 	}
 

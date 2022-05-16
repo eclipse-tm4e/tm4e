@@ -12,15 +12,19 @@
  */
 package org.eclipse.tm4e.registry.internal;
 
+import static org.eclipse.tm4e.core.internal.utils.NullSafetyHelper.*;
+
 import java.io.IOException;
-import java.io.InputStream;
-import java.util.ArrayList;
+import java.io.InputStreamReader;
+import java.io.Reader;
 import java.util.Collection;
 import java.util.List;
+import java.util.stream.Stream;
 
 import org.eclipse.core.runtime.content.IContentType;
 import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.tm4e.core.grammar.IGrammar;
+import org.eclipse.tm4e.core.registry.IGrammarSource;
 import org.eclipse.tm4e.core.registry.IRegistryOptions;
 import org.eclipse.tm4e.core.registry.Registry;
 import org.eclipse.tm4e.registry.IGrammarDefinition;
@@ -28,69 +32,74 @@ import org.eclipse.tm4e.registry.IGrammarRegistryManager;
 
 /**
  * Eclipse grammar registry.
- *
  */
-public abstract class AbstractGrammarRegistryManager extends Registry implements IGrammarRegistryManager {
+public abstract class AbstractGrammarRegistryManager implements IGrammarRegistryManager {
 
-	private final GrammarCache pluginCache;
-	final GrammarCache userCache;
+	private final GrammarCache pluginCache = new GrammarCache();
+	protected final GrammarCache userCache = new GrammarCache();
 
 	private static final class EclipseRegistryOptions implements IRegistryOptions {
 
 		@Nullable
-		private AbstractGrammarRegistryManager registry;
+		private AbstractGrammarRegistryManager registryManager;
 
-		private void setRegistry(final AbstractGrammarRegistryManager registry) {
-			this.registry = registry;
+		private void setRegistry(final AbstractGrammarRegistryManager registryManager) {
+			this.registryManager = registryManager;
 		}
 
 		@Nullable
 		@Override
 		public Collection<String> getInjections(final String scopeName) {
-			final var registry = this.registry;
-			if (registry == null) {
+			final var registryManager = this.registryManager;
+			if (registryManager == null) {
 				return null;
 			}
-			return registry.getInjections(scopeName);
+			return registryManager.getInjections(scopeName);
 		}
 
-		@Nullable
 		@Override
-		public String getFilePath(final String scopeName) {
+		public @Nullable IGrammarSource getGrammarSource(String scopeName) {
 			final IGrammarDefinition info = getDefinition(scopeName);
-			return info != null ? info.getPath() : null;
-		}
+			if (info == null)
+				return null;
 
-		@Nullable
-		@Override
-		public InputStream getInputStream(final String scopeName) throws IOException {
-			final IGrammarDefinition info = getDefinition(scopeName);
-			return info != null ? info.getInputStream() : null;
+			return new IGrammarSource() {
+				@Override
+				public Reader getReader() throws IOException {
+					return new InputStreamReader(info.getInputStream());
+				}
+
+				@Override
+				public String getFilePath() {
+					return defaultIfNull(info.getPath(), "unknown");
+				}
+			};
 		}
 
 		@Nullable
 		private IGrammarDefinition getDefinition(final String scopeName) {
-			final var registry = this.registry;
-			if (registry == null) {
+			final var registryManager = this.registryManager;
+			if (registryManager == null) {
 				return null;
 			}
-			final IGrammarDefinition definition = registry.userCache.getDefinition(scopeName);
+			final var definition = registryManager.userCache.getDefinition(scopeName);
 			if (definition != null) {
 				return definition;
 			}
-			return registry.pluginCache.getDefinition(scopeName);
+			return registryManager.pluginCache.getDefinition(scopeName);
 		}
 	}
 
+	private final Registry registry;
+
 	protected AbstractGrammarRegistryManager() {
-		this(new EclipseRegistryOptions());
-		((EclipseRegistryOptions) getLocator()).setRegistry(this);
+		final var options = new EclipseRegistryOptions();
+		options.setRegistry(this);
+		registry = new Registry(options);
 	}
 
-	protected AbstractGrammarRegistryManager(final IRegistryOptions locator) {
-		super(locator);
-		this.pluginCache = new GrammarCache();
-		this.userCache = new GrammarCache();
+	protected AbstractGrammarRegistryManager(final IRegistryOptions options) {
+		registry = new Registry(options);
 	}
 
 	@Nullable
@@ -100,10 +109,10 @@ public abstract class AbstractGrammarRegistryManager extends Registry implements
 			return null;
 		}
 		// Find grammar by content type
-		for (final IContentType contentType : contentTypes) {
+		for (final var contentType : contentTypes) {
 			final String scopeName = getScopeNameForContentType(contentType);
 			if (scopeName != null) {
-				final IGrammar grammar = getGrammarForScope(scopeName);
+				final var grammar = getGrammarForScope(scopeName);
 				if (grammar != null) {
 					return grammar;
 				}
@@ -127,12 +136,11 @@ public abstract class AbstractGrammarRegistryManager extends Registry implements
 		if (fileType.startsWith(".")) {
 			fileType = fileType.substring(1);
 		}
-		for (final IGrammarDefinition definition : definitions) {
-			// Not very optimized because it forces the load of the whole
-			// grammar.
+		for (final var definition : definitions) {
+			// Not very optimized because it forces the load of the whole grammar.
 			// Extension Point grammar should perhaps stores file type bindings
 			// like content type/scope binding?
-			final IGrammar grammar = getGrammarForScope(definition.getScopeName());
+			final var grammar = getGrammarForScope(definition.getScopeName());
 			if (grammar != null) {
 				final Collection<String> fileTypes = grammar.getFileTypes();
 				if (fileTypes.contains(fileType)) {
@@ -146,11 +154,10 @@ public abstract class AbstractGrammarRegistryManager extends Registry implements
 	@Nullable
 	@Override
 	public IGrammarDefinition[] getDefinitions() {
-		final Collection<IGrammarDefinition> pluginDefinitions = pluginCache.getDefinitions();
-		final Collection<IGrammarDefinition> userDefinitions = userCache.getDefinitions();
-		final var definitions = new ArrayList<>(pluginDefinitions);
-		definitions.addAll(userDefinitions);
-		return definitions.toArray(IGrammarDefinition[]::new);
+		return Stream.concat(
+				pluginCache.getDefinitions().stream(),
+				userCache.getDefinitions().stream())
+				.toArray(IGrammarDefinition[]::new);
 	}
 
 	/**
@@ -163,11 +170,11 @@ public abstract class AbstractGrammarRegistryManager extends Registry implements
 		if (scopeName == null) {
 			return null;
 		}
-		final IGrammar grammar = super.grammarForScopeName(scopeName);
+		final var grammar = registry.grammarForScopeName(scopeName);
 		if (grammar != null) {
 			return grammar;
 		}
-		return super.loadGrammar(scopeName);
+		return registry.loadGrammar(scopeName);
 	}
 
 	@Nullable

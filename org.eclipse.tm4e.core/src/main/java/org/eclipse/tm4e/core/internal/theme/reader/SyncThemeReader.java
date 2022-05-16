@@ -17,6 +17,7 @@
 package org.eclipse.tm4e.core.internal.theme.reader;
 
 import java.io.InputStream;
+import java.io.InputStreamReader;
 
 import org.eclipse.tm4e.core.internal.parser.PListParser;
 import org.eclipse.tm4e.core.internal.theme.IRawTheme;
@@ -32,6 +33,6 @@ final class SyncThemeReader {
 	}
 
 	IRawTheme load() throws Exception {
-		return this.parser.parse(in);
+		return this.parser.parse(new InputStreamReader(in));
 	}
 }

@@ -17,6 +17,7 @@
 package org.eclipse.tm4e.core.internal.grammar.reader;
 
 import java.io.InputStream;
+import java.io.InputStreamReader;
 
 import org.eclipse.tm4e.core.internal.grammar.RawRule;
 import org.eclipse.tm4e.core.internal.grammar.RawCaptures;
@@ -41,10 +42,7 @@ public final class GrammarReader {
 		}
 		return switch (path.last()) {
 		case RawRule.REPOSITORY -> new RawRepository();
-		case RawRule.BEGIN_CAPTURES,
-			RawRule.CAPTURES,
-			RawRule.END_CAPTURES,
-			RawRule.WHILE_CAPTURES -> new RawCaptures();
+		case RawRule.BEGIN_CAPTURES, RawRule.CAPTURES, RawRule.END_CAPTURES, RawRule.WHILE_CAPTURES -> new RawCaptures();
 		default -> new RawRule();
 		};
 	};
@@ -54,7 +52,7 @@ public final class GrammarReader {
 	private static final PListParser<RawGrammar> YAML_PARSER = new PListParserYAML<>(OBJECT_FACTORY);
 
 	public static IRawGrammar readGrammarSync(final String filePath, final InputStream in) throws Exception {
-		return getGrammarParser(filePath).parse(in);
+		return getGrammarParser(filePath).parse(new InputStreamReader(in));
 	}
 
 	private static PListParser<RawGrammar> getGrammarParser(final String filePath) {

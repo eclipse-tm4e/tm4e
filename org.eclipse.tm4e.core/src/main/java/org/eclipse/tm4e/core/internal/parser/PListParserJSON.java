@@ -12,9 +12,7 @@
 package org.eclipse.tm4e.core.internal.parser;
 
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.nio.charset.StandardCharsets;
+import java.io.Reader;
 
 import org.xml.sax.SAXException;
 
@@ -29,9 +27,9 @@ public final class PListParserJSON<T> implements PListParser<T> {
 	}
 
 	@Override
-	public T parse(final InputStream contents) throws IOException, SAXException {
+	public T parse(final Reader contents) throws IOException, SAXException {
 		final var pList = new PListContentHandler<T>(objectFactory);
-		try (final var reader = new JsonReader(new InputStreamReader(contents, StandardCharsets.UTF_8))) {
+		try (final var reader = new JsonReader(contents)) {
 			// reader.setLenient(true);
 			boolean parsing = true;
 			pList.startElement(null, "plist", null, null);

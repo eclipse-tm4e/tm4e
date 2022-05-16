@@ -14,7 +14,7 @@ package org.eclipse.tm4e.core.internal.parser;
 
 import static org.eclipse.tm4e.core.internal.utils.NullSafetyHelper.*;
 
-import java.io.InputStream;
+import java.io.Reader;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -53,7 +53,7 @@ public final class PListParserYAML<T> implements PListParser<T> {
 
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	private void addMapToPList(final PListContentHandler<T> pList, final Map<String, Object> map)
-			throws SAXException {
+		throws SAXException {
 		pList.startElement(null, "dict", null, null);
 
 		for (final Entry<String, Object> entry : map.entrySet()) {
@@ -79,7 +79,7 @@ public final class PListParserYAML<T> implements PListParser<T> {
 	}
 
 	@Override
-	public T parse(final InputStream contents) throws SAXException, YAMLException {
+	public T parse(final Reader contents) throws SAXException, YAMLException {
 		final var pList = new PListContentHandler<T>(objectFactory);
 		pList.startElement(null, "plist", null, null);
 		addMapToPList(pList, new Yaml().loadAs(contents, Map.class));

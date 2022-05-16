@@ -13,7 +13,7 @@ package org.eclipse.tm4e.core.internal.parser;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
-import java.io.InputStream;
+import java.io.Reader;
 
 import javax.xml.XMLConstants;
 import javax.xml.parsers.ParserConfigurationException;
@@ -32,7 +32,7 @@ public final class PListParserXML<T> implements PListParser<T> {
 	}
 
 	@Override
-	public T parse(final InputStream contents) throws IOException, ParserConfigurationException, SAXException {
+	public T parse(final Reader contents) throws IOException, ParserConfigurationException, SAXException {
 		final var spf = SAXParserFactory.newInstance();
 		spf.setNamespaceAware(true);
 
@@ -48,7 +48,7 @@ public final class PListParserXML<T> implements PListParser<T> {
 
 		final XMLReader xmlReader = saxParser.getXMLReader();
 		xmlReader.setEntityResolver((publicId, systemId) -> new InputSource(
-				new ByteArrayInputStream("<?xml version='1.0' encoding='UTF-8'?>".getBytes())));
+			new ByteArrayInputStream("<?xml version='1.0' encoding='UTF-8'?>".getBytes())));
 		final var result = new PListContentHandler<T>(objectFactory);
 		xmlReader.setContentHandler(result);
 		xmlReader.parse(new InputSource(contents));

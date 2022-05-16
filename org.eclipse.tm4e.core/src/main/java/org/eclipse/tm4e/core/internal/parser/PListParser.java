@@ -12,8 +12,8 @@
  */
 package org.eclipse.tm4e.core.internal.parser;
 
-import java.io.InputStream;
+import java.io.Reader;
 
 public interface PListParser<T> {
-	T parse(InputStream contents) throws Exception;
+	T parse(Reader contents) throws Exception;
 }

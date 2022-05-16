@@ -86,12 +86,10 @@ public final class RuleFactory {
 							ruleId,
 							desc.getName(),
 							desc.getContentName(),
-							begin, compileCaptures(
-									desc.getBeginCaptures() != null ? desc.getBeginCaptures() : desc.getCaptures(),
-									helper, repository),
-							ruleWhile, compileCaptures(
-									desc.getWhileCaptures() != null ? desc.getWhileCaptures() : desc.getCaptures(),
-									helper, repository),
+							begin, compileCaptures(defaultIfNull(desc.getBeginCaptures(), desc.getCaptures()), helper,
+								repository),
+							ruleWhile, compileCaptures(defaultIfNull(desc.getWhileCaptures(), desc.getCaptures()), 
+								helper, repository),
 							compilePatterns(desc.getPatterns(), helper, repository));
 				}
 
@@ -100,12 +98,10 @@ public final class RuleFactory {
 						ruleId,
 						desc.getName(),
 						desc.getContentName(),
-						begin, compileCaptures(
-								desc.getBeginCaptures() != null ? desc.getBeginCaptures() : desc.getCaptures(),
-								helper, repository),
-						desc.getEnd(), compileCaptures(
-								desc.getEndCaptures() != null ? desc.getEndCaptures() : desc.getCaptures(), helper,
+						begin, compileCaptures(defaultIfNull(desc.getBeginCaptures(), desc.getCaptures()), helper,
 								repository),
+						desc.getEnd(), compileCaptures(defaultIfNull(desc.getEndCaptures(), desc.getCaptures()),
+								helper, repository),
 						desc.isApplyEndPatternLast(),
 						compilePatterns(desc.getPatterns(), helper, repository));
 			});

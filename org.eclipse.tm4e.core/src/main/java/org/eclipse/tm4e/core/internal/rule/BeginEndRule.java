@@ -16,6 +16,8 @@
  */
 package org.eclipse.tm4e.core.internal.rule;
 
+import static org.eclipse.tm4e.core.internal.utils.NullSafetyHelper.*;
+
 import java.util.List;
 
 import org.eclipse.jdt.annotation.Nullable;
@@ -49,7 +51,7 @@ public final class BeginEndRule extends Rule {
 		super(id, name, contentName);
 		this.begin = new RegExpSource(begin, this.id);
 		this.beginCaptures = beginCaptures;
-		this.end = new RegExpSource(end == null ? "\uFFFF" : end, RuleId.END_RULE);
+		this.end = new RegExpSource(defaultIfNull(end, "\uFFFF"), RuleId.END_RULE);
 		this.endHasBackReferences = this.end.hasBackReferences;
 		this.endCaptures = endCaptures;
 		this.applyEndPatternLast = applyEndPatternLast;

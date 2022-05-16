@@ -16,6 +16,8 @@
  */
 package org.eclipse.tm4e.core.internal.rule;
 
+import static org.eclipse.tm4e.core.internal.utils.NullSafetyHelper.*;
+
 import java.util.List;
 
 import org.eclipse.jdt.annotation.Nullable;
@@ -109,10 +111,10 @@ public final class BeginWhileRule extends Rule {
 		if (cachedCompiledWhilePatterns == null) {
 			cachedCompiledWhilePatterns = new RegExpSourceList();
 			cachedCompiledWhilePatterns.add(this.whileHasBackReferences ? this._while.clone() : this._while);
-			if (whileHasBackReferences) {
-				cachedCompiledWhilePatterns.setSource(0, endRegexSource != null ? endRegexSource : "\uFFFF");
-			}
 			this.cachedCompiledWhilePatterns = cachedCompiledWhilePatterns;
+		}
+		if (whileHasBackReferences) {
+			cachedCompiledWhilePatterns.setSource(0, defaultIfNull(endRegexSource, "\uFFFF"));
 		}
 		return cachedCompiledWhilePatterns;
 	}

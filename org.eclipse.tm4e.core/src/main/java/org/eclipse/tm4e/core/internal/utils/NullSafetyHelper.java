@@ -12,6 +12,8 @@
  */
 package org.eclipse.tm4e.core.internal.utils;
 
+import java.util.function.Supplier;
+
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 
@@ -30,6 +32,20 @@ public final class NullSafetyHelper {
 	public static <T> T castNonNull(@Nullable final T value) {
 		assert value != null;
 		return value;
+	}
+
+	public static <T> T defaultIfNull(@Nullable final T object, final T defaultValue) {
+		if (object == null) {
+			return defaultValue;
+		}
+		return object;
+	}
+
+	public static <T> T defaultIfNull(@Nullable final T object, final Supplier<T> defaultValue) {
+		if (object == null) {
+			return defaultValue.get();
+		}
+		return object;
 	}
 
 	private NullSafetyHelper() {

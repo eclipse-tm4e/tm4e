@@ -94,16 +94,16 @@ final class LineTokens {
 				containsBalancedBrackets = true;
 			}
 
-			if (!tokenTypeOverrides.isEmpty() || (balancedBracketSelectors != null
-					&& !balancedBracketSelectors.matchesAlways() && !balancedBracketSelectors.matchesNever())) {
+			if (!tokenTypeOverrides.isEmpty() || balancedBracketSelectors != null
+				&& !balancedBracketSelectors.matchesAlways() && !balancedBracketSelectors.matchesNever()) {
 				// Only generate scope array when required to improve performance
 				final var scopes = scopesList.generateScopes();
 				for (final var tokenType : tokenTypeOverrides) {
-					if (tokenType.getMatcher().matches(scopes)) {
+					if (tokenType.matcher.matches(scopes)) {
 						metadata = StackElementMetadata.set(
 								metadata,
 								0,
-								tokenType.getType(), // toOptionalTokenType(tokenType.type),
+							tokenType.type, // toOptionalTokenType(tokenType.type),
 								null,
 								FontStyle.NotSet,
 								0,

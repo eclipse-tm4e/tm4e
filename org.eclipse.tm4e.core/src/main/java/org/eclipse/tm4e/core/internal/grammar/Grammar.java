@@ -94,17 +94,7 @@ public final class Grammar implements IGrammar, IRuleFactoryHelper {
 				final var selector = entry.getKey();
 				final var type = entry.getValue().intValue();
 				for (final var matcher : Matcher.createMatchers(selector)) {
-					tokenTypeMatchers.add(new TokenTypeMatcher() {
-						@Override
-						public int getType() {
-							return type;
-						}
-
-						@Override
-						public Matcher<List<String>> getMatcher() {
-							return matcher.matcher;
-						}
-					});
+					tokenTypeMatchers.add(new TokenTypeMatcher(matcher.matcher, type));
 				}
 			}
 		}

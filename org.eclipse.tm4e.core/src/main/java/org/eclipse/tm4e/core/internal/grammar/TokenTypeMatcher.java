@@ -21,9 +21,13 @@ import java.util.List;
 
 import org.eclipse.tm4e.core.internal.matcher.Matcher;
 
-public interface TokenTypeMatcher {
+final class TokenTypeMatcher {
 
-	Matcher<List<String>> getMatcher();
+	final Matcher<List<String>> matcher;
+	final int /*StandardTokenType*/ type;
 
-	int /*StandardTokenType*/ getType();
+	TokenTypeMatcher(final Matcher<List<String>> matcher, final int type) {
+		this.matcher = matcher;
+		this.type = type;
+	}
 }

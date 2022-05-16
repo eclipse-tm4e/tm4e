@@ -63,7 +63,7 @@ final class LineTokens {
 	private final BalancedBracketSelectors balancedBracketSelectors;
 
 	LineTokens(final boolean emitBinaryTokens, final String lineText, final List<TokenTypeMatcher> tokenTypeOverrides,
-			@Nullable final BalancedBracketSelectors balancedBracketSelectors) {
+		@Nullable final BalancedBracketSelectors balancedBracketSelectors) {
 		this.emitBinaryTokens = emitBinaryTokens;
 		this.lineText = LOGGER.isLoggable(TRACE) ? lineText : null; // store line only if it's logged
 		if (this.emitBinaryTokens) {
@@ -101,13 +101,13 @@ final class LineTokens {
 				for (final var tokenType : tokenTypeOverrides) {
 					if (tokenType.matcher.matches(scopes)) {
 						metadata = StackElementMetadata.set(
-								metadata,
-								0,
+							metadata,
+							0,
 							tokenType.type, // toOptionalTokenType(tokenType.type),
-								null,
-								FontStyle.NotSet,
-								0,
-								0);
+							null,
+							FontStyle.NotSet,
+							0,
+							0);
 					}
 				}
 				if (balancedBracketSelectors != null) {
@@ -117,13 +117,13 @@ final class LineTokens {
 
 			if (containsBalancedBrackets) {
 				metadata = StackElementMetadata.set(
-						metadata,
-						0,
-						OptionalStandardTokenType.NotSet,
-						containsBalancedBrackets,
-						FontStyle.NotSet,
-						0,
-						0);
+					metadata,
+					0,
+					OptionalStandardTokenType.NotSet,
+					containsBalancedBrackets,
+					FontStyle.NotSet,
+					0,
+					0);
 			}
 
 			if (!this.binaryTokens.isEmpty() && getLastElement(this.binaryTokens) == metadata) {
@@ -135,10 +135,10 @@ final class LineTokens {
 			if (LOGGER.isLoggable(TRACE)) {
 				final List<String> scopes = scopesList.generateScopes();
 				LOGGER.log(TRACE, "  token: |" +
-						castNonNull(this.lineText)
-								.substring(this.lastTokenEndIndex >= 0 ? this.lastTokenEndIndex : 0, endIndex)
-								.replace("\n", "\\n")
-						+ '|');
+					castNonNull(this.lineText)
+						.substring(this.lastTokenEndIndex >= 0 ? this.lastTokenEndIndex : 0, endIndex)
+						.replace("\n", "\\n")
+					+ '|');
 				for (final String scope : scopes) {
 					LOGGER.log(TRACE, "      * " + scope);
 				}
@@ -155,19 +155,19 @@ final class LineTokens {
 
 		if (LOGGER.isLoggable(TRACE)) {
 			LOGGER.log(TRACE, "  token: |" +
-					castNonNull(this.lineText)
-							.substring(this.lastTokenEndIndex >= 0 ? this.lastTokenEndIndex : 0, endIndex)
-							.replace("\n", "\\n")
-					+ '|');
+				castNonNull(this.lineText)
+					.substring(this.lastTokenEndIndex >= 0 ? this.lastTokenEndIndex : 0, endIndex)
+					.replace("\n", "\\n")
+				+ '|');
 			for (final String scope : scopes) {
 				LOGGER.log(TRACE, "      * " + scope);
 			}
 		}
 
 		this.tokens.add(new Token(
-				this.lastTokenEndIndex >= 0 ? this.lastTokenEndIndex : 0,
-				endIndex,
-				scopes));
+			this.lastTokenEndIndex >= 0 ? this.lastTokenEndIndex : 0,
+			endIndex,
+			scopes));
 
 		this.lastTokenEndIndex = endIndex;
 	}

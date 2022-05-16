@@ -65,6 +65,7 @@ public class GrammarInjectionTest {
          public String getFilePath(@Nullable final String scopeName) {
             if (scopeName != null) {
                return switch (scopeName) {
+                  case "css.json" -> "css.json";
                   case "source.js" -> "JavaScript.tmLanguage.json";
                   case "text.html.basic" -> "html.json";
                   case "source.ts" -> "TypeScript.tmLanguage.json";

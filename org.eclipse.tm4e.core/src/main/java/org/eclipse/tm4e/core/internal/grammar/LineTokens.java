@@ -161,20 +161,45 @@ final class LineTokens {
 		final List<String> scopes = scopesList.getScopeNames();
 
 		if (LOGGER.isLoggable(TRACE)) {
-			LOGGER.log(TRACE, "  token: |" +
-				castNonNull(this._lineText)
-					.substring(this._lastTokenEndIndex >= 0 ? this._lastTokenEndIndex : 0, endIndex)
-					.replace("\n", "\\n")
-				+ '|');
+			LOGGER.log(TRACE, "  token: |"
+				+ castNonNull(this._lineText).substring(this._lastTokenEndIndex, endIndex).replace("\n", "\\n") + '|');
 			for (final String scope : scopes) {
 				LOGGER.log(TRACE, "      * " + scope);
 			}
 		}
 
-		this._tokens.add(new Token(
-			this._lastTokenEndIndex >= 0 ? this._lastTokenEndIndex : 0,
-			endIndex,
-			scopes));
+		this._tokens.add(new IToken() {
+			private int startIndex = _lastTokenEndIndex;
+
+			@Override
+			public int getStartIndex() {
+				return startIndex;
+			}
+
+			@Override
+			public void setStartIndex(final int startIndex) {
+				this.startIndex = startIndex;
+			}
+
+			@Override
+			public int getEndIndex() {
+				return endIndex;
+			}
+
+			@Override
+			public List<String> getScopes() {
+				return scopes;
+			}
+
+			@Override
+			public String toString() {
+				return "{" +
+					"startIndex: " + startIndex +
+					", endIndex: " + endIndex +
+					", scopes: " + scopes +
+					"}";
+			}
+		});
 
 		this._lastTokenEndIndex = endIndex;
 	}

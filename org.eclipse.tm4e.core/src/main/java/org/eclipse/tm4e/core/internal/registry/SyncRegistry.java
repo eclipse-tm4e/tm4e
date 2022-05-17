@@ -37,46 +37,45 @@ import org.eclipse.tm4e.core.internal.types.IRawGrammar;
  */
 public final class SyncRegistry implements IGrammarRepository, IThemeProvider {
 
-	private final Map<String, Grammar> grammars = new HashMap<>();
-	private final Map<String, IRawGrammar> rawGrammars = new HashMap<>();
-	private final Map<String, Collection<String>> injectionGrammars = new HashMap<>();
-	private Theme theme;
+	private final Map<String, Grammar> _grammars = new HashMap<>();
+	private final Map<String, IRawGrammar> _rawGrammars = new HashMap<>();
+	private final Map<String, Collection<String>> _injectionGrammars = new HashMap<>();
+	private Theme _theme;
 
 	public SyncRegistry(final Theme theme) {
-		this.theme = theme;
+		this._theme = theme;
 	}
 
 	public void setTheme(final Theme theme) {
-		this.theme = theme;
-		this.grammars.values().forEach(Grammar::onDidChangeTheme);
+		this._theme = theme;
+		this._grammars.values().forEach(Grammar::onDidChangeTheme);
 	}
 
 	public List<String> getColorMap() {
-		return this.theme.getColorMap();
+		return this._theme.getColorMap();
 	}
 
 	/**
 	 * Add `grammar` to registry and return a list of referenced scope names
 	 */
-	public void addGrammar(final IRawGrammar grammar,
-		@Nullable final Collection<String> injectionScopeNames) {
-		this.rawGrammars.put(grammar.getScopeName(), grammar);
+	public void addGrammar(final IRawGrammar grammar, @Nullable final Collection<String> injectionScopeNames) {
+		this._rawGrammars.put(grammar.getScopeName(), grammar);
 
 		if (injectionScopeNames != null) {
-			this.injectionGrammars.put(grammar.getScopeName(), injectionScopeNames);
+			this._injectionGrammars.put(grammar.getScopeName(), injectionScopeNames);
 		}
 	}
 
 	@Override
 	@Nullable
 	public IRawGrammar lookup(final String scopeName) {
-		return this.rawGrammars.get(scopeName);
+		return this._rawGrammars.get(scopeName);
 	}
 
 	@Override
 	@Nullable
 	public Collection<String> injections(final String targetScope) {
-		return this.injectionGrammars.get(targetScope);
+		return this._injectionGrammars.get(targetScope);
 	}
 
 	/**
@@ -84,7 +83,7 @@ public final class SyncRegistry implements IGrammarRepository, IThemeProvider {
 	 */
 	@Override
 	public ThemeTrieElementRule getDefaults() {
-		return this.theme.getDefaults();
+		return this._theme.getDefaults();
 	}
 
 	/**
@@ -92,27 +91,34 @@ public final class SyncRegistry implements IGrammarRepository, IThemeProvider {
 	 */
 	@Override
 	public List<ThemeTrieElementRule> themeMatch(final String scopeName) {
-		return this.theme.match(scopeName);
+		return this._theme.match(scopeName);
 	}
 
 	/**
 	 * Lookup a grammar.
 	 */
 	@Nullable
-	public IGrammar grammarForScopeName(final String scopeName,
+	public IGrammar grammarForScopeName(
+		final String scopeName,
 		final int initialLanguage,
 		@Nullable final Map<String, Integer> embeddedLanguages,
 		@Nullable final Map<String, Integer> tokenTypes,
 		@Nullable final BalancedBracketSelectors balancedBracketSelectors) {
-		if (!this.grammars.containsKey(scopeName)) {
+		if (!this._grammars.containsKey(scopeName)) {
 			final var rawGrammar = lookup(scopeName);
 			if (rawGrammar == null) {
 				return null;
 			}
-			this.grammars.put(scopeName,
-				new Grammar(scopeName, rawGrammar, initialLanguage, embeddedLanguages, tokenTypes,
-					balancedBracketSelectors, this, this));
+			this._grammars.put(scopeName, new Grammar(
+				scopeName,
+				rawGrammar,
+				initialLanguage,
+				embeddedLanguages,
+				tokenTypes,
+				balancedBracketSelectors,
+				this,
+				this));
 		}
-		return this.grammars.get(scopeName);
+		return this._grammars.get(scopeName);
 	}
 }

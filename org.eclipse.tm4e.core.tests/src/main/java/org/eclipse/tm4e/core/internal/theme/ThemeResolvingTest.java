@@ -16,7 +16,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.List;
 
-import org.eclipse.tm4e.core.internal.utils.CompareUtils;
+import org.eclipse.tm4e.core.internal.utils.StringUtils;
 import org.junit.jupiter.api.Test;
 
 /**
@@ -32,7 +32,7 @@ public class ThemeResolvingTest extends AbstractThemeTest {
 
 	private static void assertStrArrCmp(final String testCase, final List<String> a, final List<String> b,
 		final int expected) {
-		assertEquals(expected, CompareUtils.strArrCmp(a, b), testCase);
+		assertEquals(expected, StringUtils.strArrCmp(a, b), testCase);
 	}
 
 	/**
@@ -79,7 +79,7 @@ public class ThemeResolvingTest extends AbstractThemeTest {
 	@Test
 	public void testStrcmpWorks() {
 		final var actual = list("bar", "z", "zu", "a", "ab", "");
-		actual.sort(CompareUtils::strcmp);
+		actual.sort(StringUtils::strcmp);
 
 		final var expected = list("", "a", "ab", "bar", "z", "zu");
 		assertArrayEquals(expected.toArray(), actual.toArray());

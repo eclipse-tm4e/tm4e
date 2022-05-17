@@ -11,50 +11,57 @@
  */
 package org.eclipse.tm4e.core.internal.theme;
 
+import static org.eclipse.tm4e.core.internal.utils.MoreCollections.*;
+import static org.eclipse.tm4e.core.internal.utils.StringUtils.*;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import org.eclipse.jdt.annotation.Nullable;
-import org.eclipse.tm4e.core.internal.utils.CompareUtils;
 
 /**
  * @see <a href=
  *      "https://github.com/microsoft/vscode-textmate/blob/9157c7f869219dbaf9a5a5607f099c00fe694a29/src/theme.ts#L304">
  *      github.com/Microsoft/vscode-textmate/blob/master/src/theme.ts</a>
  */
-public class ThemeTrieElement {
+public final class ThemeTrieElement {
 
-	private final ThemeTrieElementRule mainRule;
-	private final List<ThemeTrieElementRule> rulesWithParentScopes;
-	private final Map<String /* segment */, ThemeTrieElement> children;
+	private final ThemeTrieElementRule _mainRule;
+	private final List<ThemeTrieElementRule> _rulesWithParentScopes;
+	private final Map<String /*segment*/, ThemeTrieElement> _children;
 
 	public ThemeTrieElement(final ThemeTrieElementRule mainRule) {
 		this(mainRule, new ArrayList<>(), new HashMap<>());
 	}
 
-	public ThemeTrieElement(final ThemeTrieElementRule mainRule,
-			final List<ThemeTrieElementRule> rulesWithParentScopes) {
+	public ThemeTrieElement(
+		final ThemeTrieElementRule mainRule,
+		final List<ThemeTrieElementRule> rulesWithParentScopes) {
+
 		this(mainRule, rulesWithParentScopes, new HashMap<>());
 	}
 
-	public ThemeTrieElement(final ThemeTrieElementRule mainRule, final List<ThemeTrieElementRule> rulesWithParentScopes,
-			final Map<String /* segment */, ThemeTrieElement> children) {
-		this.mainRule = mainRule;
-		this.rulesWithParentScopes = rulesWithParentScopes;
-		this.children = children;
+	public ThemeTrieElement(
+		final ThemeTrieElementRule mainRule,
+		final List<ThemeTrieElementRule> rulesWithParentScopes,
+		final Map<String /*segment*/, ThemeTrieElement> children) {
+
+		this._mainRule = mainRule;
+		this._rulesWithParentScopes = rulesWithParentScopes;
+		this._children = children;
 	}
 
-	private static List<ThemeTrieElementRule> sortBySpecificity(final List<ThemeTrieElementRule> arr) {
+	private static List<ThemeTrieElementRule> _sortBySpecificity(final List<ThemeTrieElementRule> arr) {
 		if (arr.size() == 1) {
 			return arr;
 		}
-		arr.sort(ThemeTrieElement::cmpBySpecificity);
+		arr.sort(ThemeTrieElement::_cmpBySpecificity);
 		return arr;
 	}
 
-	private static int cmpBySpecificity(final ThemeTrieElementRule a, final ThemeTrieElementRule b) {
+	private static int _cmpBySpecificity(final ThemeTrieElementRule a, final ThemeTrieElementRule b) {
 		if (a.scopeDepth == b.scopeDepth) {
 			final var aParentScopes = a.parentScopes;
 			final var bParentScopes = b.parentScopes;
@@ -80,10 +87,7 @@ public class ThemeTrieElement {
 
 	public List<ThemeTrieElementRule> match(final String scope) {
 		if ("".equals(scope)) {
-			final var arr = new ArrayList<ThemeTrieElementRule>();
-			arr.add(this.mainRule);
-			arr.addAll(this.rulesWithParentScopes);
-			return ThemeTrieElement.sortBySpecificity(arr);
+			return ThemeTrieElement._sortBySpecificity(asArrayList(this._mainRule, this._rulesWithParentScopes));
 		}
 
 		final int dotIndex = scope.indexOf('.');
@@ -97,18 +101,15 @@ public class ThemeTrieElement {
 			tail = scope.substring(dotIndex + 1);
 		}
 
-		if (this.children.containsKey(head)) {
-			return this.children.get(head).match(tail);
+		if (this._children.containsKey(head)) {
+			return this._children.get(head).match(tail);
 		}
 
-		final var arr = new ArrayList<ThemeTrieElementRule>();
-		arr.add(this.mainRule);
-		arr.addAll(this.rulesWithParentScopes);
-		return ThemeTrieElement.sortBySpecificity(arr);
+		return ThemeTrieElement._sortBySpecificity(asArrayList(this._mainRule, this._rulesWithParentScopes));
 	}
 
 	public void insert(final int scopeDepth, final String scope, @Nullable final List<String> parentScopes,
-			final int fontStyle, final int foreground, final int background) {
+		final int fontStyle, final int foreground, final int background) {
 		if (scope.isEmpty()) {
 			this.doInsertHere(scopeDepth, parentScopes, fontStyle, foreground, background);
 			return;
@@ -126,29 +127,29 @@ public class ThemeTrieElement {
 		}
 
 		ThemeTrieElement child;
-		if (this.children.containsKey(head)) {
-			child = this.children.get(head);
+		if (this._children.containsKey(head)) {
+			child = this._children.get(head);
 		} else {
-			child = new ThemeTrieElement(this.mainRule.clone(),
-					ThemeTrieElementRule.cloneArr(this.rulesWithParentScopes));
-			this.children.put(head, child);
+			child = new ThemeTrieElement(this._mainRule.clone(),
+				ThemeTrieElementRule.cloneArr(this._rulesWithParentScopes));
+			this._children.put(head, child);
 		}
 
 		child.insert(scopeDepth + 1, tail, parentScopes, fontStyle, foreground, background);
 	}
 
 	private void doInsertHere(final int scopeDepth, @Nullable final List<String> parentScopes, int fontStyle,
-			int foreground, int background) {
+		int foreground, int background) {
 
 		if (parentScopes == null) {
 			// Merge into the main rule
-			this.mainRule.acceptOverwrite(scopeDepth, fontStyle, foreground, background);
+			this._mainRule.acceptOverwrite(scopeDepth, fontStyle, foreground, background);
 			return;
 		}
 
 		// Try to merge into existing rule
-		for (final ThemeTrieElementRule rule : this.rulesWithParentScopes) {
-			if (CompareUtils.strArrCmp(rule.parentScopes, parentScopes) == 0) {
+		for (final ThemeTrieElementRule rule : this._rulesWithParentScopes) {
+			if (strArrCmp(rule.parentScopes, parentScopes) == 0) {
 				// bingo! => we get to merge this into an existing one
 				rule.acceptOverwrite(scopeDepth, fontStyle, foreground, background);
 				return;
@@ -159,26 +160,26 @@ public class ThemeTrieElement {
 
 		// Inherit from main rule
 		if (fontStyle == FontStyle.NotSet) {
-			fontStyle = this.mainRule.fontStyle;
+			fontStyle = this._mainRule.fontStyle;
 		}
 		if (foreground == 0) {
-			foreground = this.mainRule.foreground;
+			foreground = this._mainRule.foreground;
 		}
 		if (background == 0) {
-			background = this.mainRule.background;
+			background = this._mainRule.background;
 		}
 
-		this.rulesWithParentScopes.add(
-				new ThemeTrieElementRule(scopeDepth, parentScopes, fontStyle, foreground, background));
+		this._rulesWithParentScopes.add(
+			new ThemeTrieElementRule(scopeDepth, parentScopes, fontStyle, foreground, background));
 	}
 
 	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + children.hashCode();
-		result = prime * result + mainRule.hashCode();
-		result = prime * result + rulesWithParentScopes.hashCode();
+		result = prime * result + _children.hashCode();
+		result = prime * result + _mainRule.hashCode();
+		result = prime * result + _rulesWithParentScopes.hashCode();
 		return result;
 	}
 
@@ -189,8 +190,8 @@ public class ThemeTrieElement {
 		if (obj == null || getClass() != obj.getClass())
 			return false;
 		final ThemeTrieElement other = (ThemeTrieElement) obj;
-		return children.equals(other.children)
-				&& mainRule.equals(other.mainRule)
-				&& rulesWithParentScopes.equals(other.rulesWithParentScopes);
+		return _children.equals(other._children)
+			&& _mainRule.equals(other._mainRule)
+			&& _rulesWithParentScopes.equals(other._rulesWithParentScopes);
 	}
 }

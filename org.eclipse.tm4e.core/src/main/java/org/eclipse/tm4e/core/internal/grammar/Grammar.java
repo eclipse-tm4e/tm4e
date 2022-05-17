@@ -66,10 +66,11 @@ public final class Grammar implements IGrammar, IRuleFactoryHelper {
 	private final Map<String /*scopeName*/, IRawGrammar> includedGrammars = new HashMap<>();
 	private final IGrammarRepository _grammarRepository;
 	private final IRawGrammar _grammar;
+	final IThemeProvider themeProvider;
 
 	@Nullable
 	private List<Injection> _injections;
-	private final BasicScopeAttributesProvider _scopeMetadataProvider;
+	private final BasicScopeAttributesProvider _basicScopeAttributesProvider;
 	private final List<TokenTypeMatcher> _tokenTypeMatchers = new ArrayList<>();
 
 	@Nullable
@@ -86,11 +87,14 @@ public final class Grammar implements IGrammar, IRuleFactoryHelper {
 		final IThemeProvider themeProvider) {
 
 		this.rootScopeName = rootScopeName;
-		this._scopeMetadataProvider = new BasicScopeAttributesProvider(initialLanguage, themeProvider,
+		this._basicScopeAttributesProvider = new BasicScopeAttributesProvider(
+			initialLanguage,
+			themeProvider,
 			embeddedLanguages);
 		this._grammarRepository = grammarRepository;
 		this._grammar = initGrammar(grammar, null);
 		this.balancedBracketSelectors = balancedBracketSelectors;
+		this.themeProvider = themeProvider;
 
 		if (tokenTypes != null) {
 			for (final var entry : tokenTypes.entrySet()) {
@@ -104,11 +108,11 @@ public final class Grammar implements IGrammar, IRuleFactoryHelper {
 	}
 
 	public void onDidChangeTheme() {
-		this._scopeMetadataProvider.onDidChangeTheme();
+		this._basicScopeAttributesProvider.onDidChangeTheme();
 	}
 
 	BasicScopeAttributes getMetadataForScope(final String scope) {
-		return this._scopeMetadataProvider.getMetadataForScope(scope);
+		return this._basicScopeAttributesProvider.getBasicScopeAttributes(scope);
 	}
 
 	private void collectInjections(final List<Injection> result, final String selector, final IRawRule rule,
@@ -287,7 +291,7 @@ public final class Grammar implements IGrammar, IRuleFactoryHelper {
 		boolean isFirstLine;
 		if (prevState == null || prevState.equals(StateStack.NULL)) {
 			isFirstLine = true;
-			final var rawDefaultMetadata = this._scopeMetadataProvider.getDefaultMetadata();
+			final var rawDefaultMetadata = this._basicScopeAttributesProvider.getDefaultAttributes();
 			final var themeData = rawDefaultMetadata.themeData;
 			final var defaultTheme = themeData == null ? null : themeData.get(0);
 			final int defaultMetadata = EncodedTokenAttributes.set(
@@ -299,9 +303,11 @@ public final class Grammar implements IGrammar, IRuleFactoryHelper {
 				defaultTheme.foreground,
 				defaultTheme.background);
 
-			final var rootScopeName = this.getRule(rootId).getName(null, null);
+			final var rootScopeName = this.getRule(rootId).getName(
+				null,
+				null);
 
-			final var rawRootMetadata = this._scopeMetadataProvider.getMetadataForScope(rootScopeName);
+			final var rawRootMetadata = this._basicScopeAttributesProvider.getBasicScopeAttributes(rootScopeName);
 			final int rootMetadata = AttributedScopeStack.mergeAttributes(defaultMetadata, null, rawRootMetadata);
 
 			final var scopeList = new AttributedScopeStack(

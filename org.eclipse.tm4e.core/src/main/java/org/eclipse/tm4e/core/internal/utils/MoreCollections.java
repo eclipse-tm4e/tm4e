@@ -12,12 +12,20 @@
  */
 package org.eclipse.tm4e.core.internal.utils;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
 import org.eclipse.jdt.annotation.Nullable;
 
 public final class MoreCollections {
+
+	public static <T> List<T> asArrayList(final T firstItem, final List<T> moreItems) {
+		final var list = new ArrayList<T>();
+		list.add(firstItem);
+		list.addAll(moreItems);
+		return list;
+	}
 
 	@Nullable
 	public static <T> T findLastElement(@Nullable final List<T> list) {

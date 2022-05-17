@@ -32,26 +32,23 @@ import org.eclipse.tm4e.core.internal.utils.RegexSource;
  */
 final class BasicScopeAttributesProvider {
 
-	private static final BasicScopeAttributes NULL_SCOPE_METADATA = new BasicScopeAttributes(0, 0, null);
-
-	private static final Pattern STANDARD_TOKEN_TYPE_REGEXP = Pattern.compile("\\b(comment|string|regex)\\b");
-
 	private final int initialLanguage;
 	private final IThemeProvider themeProvider;
 	private final Map<String, @Nullable BasicScopeAttributes> cache = new HashMap<>();
 
-	private BasicScopeAttributes defaultMetaData;
-
-	private final Map<String, Integer> embeddedLanguages = new HashMap<>();
+	private BasicScopeAttributes _defaultAttributes;
+	private final Map<String, Integer /* languageId */> _embeddedLanguages = new HashMap<>();
 
 	@Nullable
 	private Pattern embeddedLanguagesRegex;
 
-	BasicScopeAttributesProvider(final int initialLanguage, final IThemeProvider themeProvider,
+	BasicScopeAttributesProvider(
+		final int initialLanguage,
+		final IThemeProvider themeProvider,
 		@Nullable final Map<String, Integer> embeddedLanguages) {
 		this.initialLanguage = initialLanguage;
 		this.themeProvider = themeProvider;
-		this.defaultMetaData = new BasicScopeAttributes(
+		this._defaultAttributes = new BasicScopeAttributes(
 			this.initialLanguage,
 			OptionalStandardTokenType.NotSet,
 			List.of(this.themeProvider.getDefaults()));
@@ -59,11 +56,11 @@ final class BasicScopeAttributesProvider {
 		// embeddedLanguages handling
 		if (embeddedLanguages != null) {
 			// If embeddedLanguages are configured, fill in `this.embeddedLanguages`
-			this.embeddedLanguages.putAll(embeddedLanguages);
+			this._embeddedLanguages.putAll(embeddedLanguages);
 		}
 
 		// create the regex
-		final var escapedScopes = this.embeddedLanguages.keySet().stream()
+		final var escapedScopes = this._embeddedLanguages.keySet().stream()
 			.map(RegexSource::escapeRegExpCharacters)
 			.collect(Collectors.toList());
 		if (escapedScopes.isEmpty()) {
@@ -78,19 +75,19 @@ final class BasicScopeAttributesProvider {
 
 	void onDidChangeTheme() {
 		this.cache.clear();
-		this.defaultMetaData = new BasicScopeAttributes(
+		this._defaultAttributes = new BasicScopeAttributes(
 			this.initialLanguage,
 			OptionalStandardTokenType.NotSet,
 			List.of(this.themeProvider.getDefaults()));
 	}
 
-	BasicScopeAttributes getDefaultMetadata() {
-		return this.defaultMetaData;
+	BasicScopeAttributes getDefaultAttributes() {
+		return this._defaultAttributes;
 	}
 
-	BasicScopeAttributes getMetadataForScope(@Nullable final String scopeName) {
+	BasicScopeAttributes getBasicScopeAttributes(@Nullable final String scopeName) {
 		if (scopeName == null) {
-			return BasicScopeAttributesProvider.NULL_SCOPE_METADATA;
+			return BasicScopeAttributesProvider._NULL_SCOPE_METADATA;
 		}
 		var value = this.cache.get(scopeName);
 		if (value != null) {
@@ -102,35 +99,33 @@ final class BasicScopeAttributesProvider {
 	}
 
 	private BasicScopeAttributes doGetMetadataForScope(final String scopeName) {
-		final int languageId = this.scopeToLanguage(scopeName);
+		final int languageId = this._scopeToLanguage(scopeName);
 		final int standardTokenType = BasicScopeAttributesProvider._toStandardTokenType(scopeName);
 		final List<ThemeTrieElementRule> themeData = this.themeProvider.themeMatch(scopeName);
 
 		return new BasicScopeAttributes(languageId, standardTokenType, themeData);
 	}
 
+	private static final BasicScopeAttributes _NULL_SCOPE_METADATA = new BasicScopeAttributes(0, 0, null);
+
 	/**
 	 * Given a produced TM scope, return the language that token describes or null if unknown.
 	 * e.g. source.html => html, source.css.embedded.html => css, punctuation.definition.tag.html => null
 	 */
-	private int scopeToLanguage(@Nullable final String scope) {
-		if (scope == null) {
-			return 0;
-		}
-
+	private int _scopeToLanguage(final String scopeName) {
 		final var embeddedLanguagesRegex = this.embeddedLanguagesRegex;
 		if (embeddedLanguagesRegex == null) {
 			// no scopes registered
 			return 0;
 		}
 
-		final var m = embeddedLanguagesRegex.matcher(scope);
+		final var m = embeddedLanguagesRegex.matcher(scopeName);
 		if (!m.find()) {
 			// no scopes matched
 			return 0;
 		}
 
-		return embeddedLanguages.getOrDefault(m.group(1), 0);
+		return _embeddedLanguages.getOrDefault(m.group(1), 0);
 	}
 
 	private static int /*OptionalStandardTokenType*/ _toStandardTokenType(final String scopeName) {
@@ -147,4 +142,7 @@ final class BasicScopeAttributesProvider {
 		default -> throw new TMException("Unexpected match for standard token type: " + group);
 		};
 	}
+
+	private static final Pattern STANDARD_TOKEN_TYPE_REGEXP = Pattern
+		.compile("\\b(comment|string|regex|meta\\.embedded)\\b");
 }

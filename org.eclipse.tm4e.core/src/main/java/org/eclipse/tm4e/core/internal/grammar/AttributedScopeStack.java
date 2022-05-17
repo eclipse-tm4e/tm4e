@@ -115,8 +115,8 @@ public final class AttributedScopeStack {
 	public static int mergeAttributes(
 		final int existingTokenAttributes,
 		@Nullable final AttributedScopeStack scopesList,
-		@Nullable final BasicScopeAttributes source) {
-		if (source == null) {
+		@Nullable final BasicScopeAttributes basicScopeAttributes) {
+		if (basicScopeAttributes == null) {
 			return existingTokenAttributes;
 		}
 
@@ -124,9 +124,9 @@ public final class AttributedScopeStack {
 		int foreground = 0;
 		int background = 0;
 
-		if (source.themeData != null) {
+		if (basicScopeAttributes.themeData != null) {
 			// Find the first themeData that matches
-			for (final ThemeTrieElementRule themeData : source.themeData) {
+			for (final ThemeTrieElementRule themeData : basicScopeAttributes.themeData) {
 				if (matches(scopesList, themeData.parentScopes)) {
 					fontStyle = themeData.fontStyle;
 					foreground = themeData.foreground;
@@ -136,7 +136,8 @@ public final class AttributedScopeStack {
 			}
 		}
 
-		return EncodedTokenAttributes.set(existingTokenAttributes, source.languageId, source.tokenType, null, fontStyle,
+		return EncodedTokenAttributes.set(existingTokenAttributes, basicScopeAttributes.languageId,
+			basicScopeAttributes.tokenType, null, fontStyle,
 			foreground,
 			background);
 	}
@@ -145,7 +146,7 @@ public final class AttributedScopeStack {
 		final Iterable<String> scopes) {
 		for (final String scope : scopes) {
 			final var rawMetadata = grammar.getMetadataForScope(scope);
-			final int metadata = AttributedScopeStack.mergeAttributes(target.tokenAttributes, target, rawMetadata);
+			final int metadata = mergeAttributes(target.tokenAttributes, target, rawMetadata);
 			target = new AttributedScopeStack(target, scope, metadata);
 		}
 		return target;

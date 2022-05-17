@@ -11,65 +11,67 @@
  */
 package org.eclipse.tm4e.core.internal.theme;
 
-import static org.eclipse.tm4e.core.internal.utils.NullSafetyHelper.*;
-
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 
 import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.tm4e.core.TMException;
 
-public class ColorMap {
+/**
+ * @see <a href=
+ *      "https://github.com/microsoft/vscode-textmate/blob/e8d1fc5d04b2fc91384c7a895f6c9ff296a38ac8/src/theme.ts#L358">
+ *      https://github.com/Microsoft/vscode-textmate/blob/main/src/theme.ts</a>
+ */
+public final class ColorMap {
 
-	private boolean isFrozen;
-	private int lastColorId = 0;
-	private final List<String> id2color = new ArrayList<>();
-	private final Map<String /* color */, @Nullable Integer /* ID color */ > color2id = new LinkedHashMap<>();
+	private boolean _isFrozen;
+	private int _lastColorId = 0;
+	private final List<String> _id2color = new ArrayList<>();
+	private final Map<String /*color*/, @Nullable Integer /*ID color*/> _color2id = new LinkedHashMap<>();
 
 	public ColorMap() {
 		this(null);
 	}
 
-	public ColorMap(@Nullable final List<String> colorMap) {
-		if (colorMap != null) {
-			this.isFrozen = true;
-			for (int i = 0, len = colorMap.size(); i < len; i++) {
-				this.color2id.put(colorMap.get(i), i);
-				this.id2color.add(colorMap.get(i));
+	public ColorMap(@Nullable final List<String> _colorMap) {
+		if (_colorMap != null) {
+			this._isFrozen = true;
+			for (int i = 0, len = _colorMap.size(); i < len; i++) {
+				this._color2id.put(_colorMap.get(i), i);
+				this._id2color.add(_colorMap.get(i));
 			}
 		} else {
-			this.isFrozen = false;
+			this._isFrozen = false;
 		}
 	}
 
-	public int getId(@Nullable String color) {
-		if (color == null) {
+	public int getId(@Nullable final String _color) {
+		if (_color == null) {
 			return 0;
 		}
-		color = color.toUpperCase();
-		Integer value = color2id.get(color);
+		final var color = _color.toUpperCase();
+		Integer value = _color2id.get(color);
 		if (value != null) {
 			return value;
 		}
-		if (this.isFrozen) {
+		if (this._isFrozen) {
 			throw new TMException("Missing color in color map - " + color);
 		}
-		value = ++lastColorId;
-		color2id.put(castNonNull(color), value);
-		if (value >= id2color.size()) {
-			id2color.add(castNonNull(color));
+		value = ++this._lastColorId;
+		_color2id.put(color, value);
+		if (value >= _id2color.size()) {
+			_id2color.add(color);
 		} else {
-			id2color.set(value, castNonNull(color));
+			_id2color.set(value, color);
 		}
 		return value;
 	}
 
 	@Nullable
 	public String getColor(final int id) {
-		for (final var entry : color2id.entrySet()) {
+		for (final var entry : _color2id.entrySet()) {
 			if (id == entry.getValue()) {
 				return entry.getKey();
 			}
@@ -78,16 +80,7 @@ public class ColorMap {
 	}
 
 	public List<String> getColorMap() {
-		return new ArrayList<>(color2id.keySet());
-	}
-
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + color2id.hashCode();
-		result = prime * result + lastColorId;
-		return result;
+		return new ArrayList<>(_color2id.keySet());
 	}
 
 	@Override
@@ -102,6 +95,16 @@ public class ColorMap {
 			return false;
 		}
 		final ColorMap other = (ColorMap) obj;
-		return Objects.equals(color2id, other.color2id) && lastColorId == other.lastColorId;
+		return _lastColorId == other._lastColorId
+			&& _color2id.equals(other._color2id);
+	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + _lastColorId;
+		result = prime * result + _color2id.hashCode();
+		return result;
 	}
 }

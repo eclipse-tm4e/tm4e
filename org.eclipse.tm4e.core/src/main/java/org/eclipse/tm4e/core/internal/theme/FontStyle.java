@@ -15,7 +15,7 @@ package org.eclipse.tm4e.core.internal.theme;
  * Font style definitions.
  *
  * @see <a href=
- *      "https://github.com/microsoft/vscode-textmate/blob/9157c7f869219dbaf9a5a5607f099c00fe694a29/src/theme.ts#L153">
+ *      "https://github.com/microsoft/vscode-textmate/blob/f4e28ea43bacb883afa78a466e95a6bdd7b92129/src/theme.ts#L153">
  *      github.com/microsoft/vscode-textmate/blob/master/src/theme.ts</a>
  */
 public final class FontStyle {
@@ -28,6 +28,34 @@ public final class FontStyle {
 	public static final int Bold = 2;
 	public static final int Underline = 4;
 	public static final int Strikethrough = 8;
+
+	public static String fontStyleToString(final int fontStyle) {
+		if (fontStyle == NotSet) {
+			return "not set";
+		}
+		if (fontStyle == None) {
+			return "none";
+		}
+
+		final var style = new StringBuilder();
+		if ((fontStyle & Italic) == Italic) {
+			style.append("italic ");
+		}
+		if ((fontStyle & Bold) == Bold) {
+			style.append("bold ");
+		}
+		if ((fontStyle & Underline) == Underline) {
+			style.append("underline ");
+		}
+		if ((fontStyle & Strikethrough) == Strikethrough) {
+			style.append("strikethrough ");
+		}
+		if (style.isEmpty()) {
+			return "none";
+		}
+		style.setLength(style.length() - 1);
+		return style.toString();
+	}
 
 	private FontStyle() {
 	}

@@ -39,21 +39,31 @@ import org.eclipse.tm4e.core.internal.rule.RuleId;
 
 /**
  * @see <a href=
- *      "https://github.com/microsoft/vscode-textmate/blob/9157c7f869219dbaf9a5a5607f099c00fe694a29/src/grammar.ts#L1028">
- *      github.com/Microsoft/vscode-textmate/blob/master/src/grammar.ts</a>
+ *      "https://github.com/microsoft/vscode-textmate/blob/9157c7f869219dbaf9a5a5607f099c00fe694a29/src/tokenizeString.ts#L1028">
+ *      github.com/Microsoft/vscode-textmate/blob/master/src/tokenizeString.ts</a>
  */
 final class LineTokenizer {
 
 	private static final Logger LOGGER = System.getLogger(LineTokenizer.class.getName());
 
-	private interface IMatchResult {
-		OnigCaptureIndex[] getCaptureIndices();
+	private static class MatchResult {
+		final OnigCaptureIndex[] captureIndices;
+		final RuleId matchedRuleId;
 
-		RuleId getMatchedRuleId();
+		MatchResult(final RuleId matchedRuleId, final OnigCaptureIndex[] captureIndices) {
+			this.matchedRuleId = matchedRuleId;
+			this.captureIndices = captureIndices;
+		}
 	}
 
-	private interface IMatchInjectionsResult extends IMatchResult {
-		boolean isPriorityMatch();
+	private static final class MatchInjectionsResult extends MatchResult {
+		boolean isPriorityMatch;
+
+		MatchInjectionsResult(final RuleId matchedRuleId, final OnigCaptureIndex[] captureIndices,
+			final boolean isPriorityMatch) {
+			super(matchedRuleId, captureIndices);
+			this.isPriorityMatch = isPriorityMatch;
+		}
 	}
 
 	private static final class WhileCheckResult {
@@ -113,7 +123,7 @@ final class LineTokenizer {
 	private void scanNext() {
 		LOGGER.log(TRACE, () -> "@@scanNext: |" + lineText.content.replace("\n", "\\n").substring(linePos) + '|');
 
-		final IMatchResult r = matchRuleOrInjections(grammar, lineText, isFirstLine, linePos, stack, anchorPosition);
+		final MatchResult r = matchRuleOrInjections(grammar, lineText, isFirstLine, linePos, stack, anchorPosition);
 
 		if (r == null) {
 			LOGGER.log(TRACE, " no more matches.");
@@ -123,9 +133,9 @@ final class LineTokenizer {
 			return;
 		}
 
-		final OnigCaptureIndex[] captureIndices = r.getCaptureIndices();
+		final OnigCaptureIndex[] captureIndices = r.captureIndices;
 
-		final RuleId matchedRuleId = r.getMatchedRuleId();
+		final RuleId matchedRuleId = r.matchedRuleId;
 
 		final boolean hasAdvanced = captureIndices.length > 0 && captureIndices[0].end > linePos;
 
@@ -301,7 +311,7 @@ final class LineTokenizer {
 	}
 
 	@Nullable
-	private IMatchResult matchRule(final Grammar grammar, final OnigString lineText, final boolean isFirstLine,
+	private MatchResult matchRule(final Grammar grammar, final OnigString lineText, final boolean isFirstLine,
 		final int linePos, final StateStack stack, final int anchorPosition) {
 		final var rule = stack.getRule(grammar);
 		final var ruleScanner = rule.compileAG(grammar, stack.endRule, isFirstLine, linePos == anchorPosition);
@@ -309,28 +319,17 @@ final class LineTokenizer {
 		final OnigNextMatchResult r = ruleScanner.scanner.findNextMatchSync(lineText, linePos);
 
 		if (r != null) {
-			return new IMatchResult() {
-
-				@Override
-				public RuleId getMatchedRuleId() {
-					return ruleScanner.rules[r.getIndex()];
-				}
-
-				@Override
-				public OnigCaptureIndex[] getCaptureIndices() {
-					return r.getCaptureIndices();
-				}
-			};
+			return new MatchResult(ruleScanner.rules[r.getIndex()], r.getCaptureIndices());
 		}
 		return null;
 	}
 
 	@Nullable
-	private IMatchResult matchRuleOrInjections(final Grammar grammar, final OnigString lineText,
+	private MatchResult matchRuleOrInjections(final Grammar grammar, final OnigString lineText,
 		final boolean isFirstLine,
 		final int linePos, final StateStack stack, final int anchorPosition) {
 		// Look for normal grammar rule
-		final IMatchResult matchResult = matchRule(grammar, lineText, isFirstLine, linePos, stack, anchorPosition);
+		final MatchResult matchResult = matchRule(grammar, lineText, isFirstLine, linePos, stack, anchorPosition);
 
 		// Look for injected rules
 		final List<Injection> injections = grammar.getInjections();
@@ -339,7 +338,7 @@ final class LineTokenizer {
 			return matchResult;
 		}
 
-		final IMatchInjectionsResult injectionResult = matchInjections(injections, grammar, lineText, isFirstLine,
+		final MatchInjectionsResult injectionResult = matchInjections(injections, grammar, lineText, isFirstLine,
 			linePos,
 			stack, anchorPosition);
 		if (injectionResult == null) {
@@ -353,11 +352,11 @@ final class LineTokenizer {
 		}
 
 		// Decide if `matchResult` or `injectionResult` should win
-		final int matchResultScore = matchResult.getCaptureIndices()[0].start;
-		final int injectionResultScore = injectionResult.getCaptureIndices()[0].start;
+		final int matchResultScore = matchResult.captureIndices[0].start;
+		final int injectionResultScore = injectionResult.captureIndices[0].start;
 
 		if (injectionResultScore < matchResultScore
-			|| injectionResult.isPriorityMatch() && injectionResultScore == matchResultScore) {
+			|| injectionResult.isPriorityMatch && injectionResultScore == matchResultScore) {
 			// injection won!
 			return injectionResult;
 		}
@@ -366,9 +365,10 @@ final class LineTokenizer {
 	}
 
 	@Nullable
-	private IMatchInjectionsResult matchInjections(final List<Injection> injections, final Grammar grammar,
-		final OnigString lineText,
-		final boolean isFirstLine, final int linePos, final StateStack stack, final int anchorPosition) {
+	private MatchInjectionsResult matchInjections(final List<Injection> injections, final Grammar grammar,
+		final OnigString lineText, final boolean isFirstLine, final int linePos, final StateStack stack,
+		final int anchorPosition) {
+
 		// The lower the better
 		var bestMatchRating = Integer.MAX_VALUE;
 		OnigCaptureIndex[] bestMatchCaptureIndices = null;
@@ -377,7 +377,8 @@ final class LineTokenizer {
 
 		final var scopes = stack.contentNameScopesList.getScopeNames();
 
-		for (final Injection injection : injections) {
+		for (int i = 0, len = injections.size(); i < len; i++) {
+			final var injection = injections.get(i);
 			if (!injection.matches(scopes)) {
 				// injection selector doesn't match stack
 				continue;
@@ -413,26 +414,10 @@ final class LineTokenizer {
 		}
 
 		if (bestMatchCaptureIndices != null) {
-			final RuleId matchedRuleId = bestMatchRuleId;
-			final OnigCaptureIndex[] matchCaptureIndices = bestMatchCaptureIndices;
-			final boolean matchResultPriority = bestMatchResultPriority == -1;
-			return new IMatchInjectionsResult() {
-
-				@Override
-				public RuleId getMatchedRuleId() {
-					return matchedRuleId;
-				}
-
-				@Override
-				public OnigCaptureIndex[] getCaptureIndices() {
-					return matchCaptureIndices;
-				}
-
-				@Override
-				public boolean isPriorityMatch() {
-					return matchResultPriority;
-				}
-			};
+			return new MatchInjectionsResult(
+				bestMatchRuleId,
+				bestMatchCaptureIndices,
+				bestMatchResultPriority == -1);
 		}
 
 		return null;

@@ -30,6 +30,24 @@ public final class EncodedTokenAttributes {
 	private EncodedTokenAttributes() {
 	}
 
+	public static String toString(final int encodedTokenAttributes) {
+		final var languageId = getLanguageId(encodedTokenAttributes);
+		final var tokenType = getTokenType(encodedTokenAttributes);
+		final var fontStyle = getFontStyle(encodedTokenAttributes);
+		final var foreground = getForeground(encodedTokenAttributes);
+		final var background = getBackground(encodedTokenAttributes);
+		final var containsBalancedBrackets = containsBalancedBrackets(encodedTokenAttributes);
+
+		return "{\n" +
+			"  languageId: " + languageId + ",\n" +
+			"  tokenType: " + tokenType + ",\n" +
+			"  fontStyle: " + fontStyle + ",\n" +
+			"  foreground: " + foreground + ",\n" +
+			"  background: " + background + "\n," +
+			"  containsBalancedBrackets: " + containsBalancedBrackets + "\n" +
+			"}";
+	}
+
 	public static String toBinaryStr(final int metadata) {
 		return new StringBuilder(Integer.toBinaryString(metadata))
 			.insert(0, "0".repeat(Integer.numberOfLeadingZeros(metadata)))

@@ -18,17 +18,15 @@ import org.eclipse.tm4e.core.internal.theme.ThemeTrieElementRule;
 
 public final class BasicScopeAttributes {
 
-	final String scopeName;
 	final int languageId;
 	final int /*OptionalStandardTokenType*/ tokenType;
 
 	@Nullable
 	final List<ThemeTrieElementRule> themeData;
 
-	public BasicScopeAttributes(final String scopeName, final int languageId,
-			final int /*OptionalStandardTokenType*/ tokenType,
-			@Nullable final List<ThemeTrieElementRule> themeData) {
-		this.scopeName = scopeName;
+	public BasicScopeAttributes(final int languageId,
+		final int /*OptionalStandardTokenType*/ tokenType,
+		@Nullable final List<ThemeTrieElementRule> themeData) {
 		this.languageId = languageId;
 		this.tokenType = tokenType;
 		this.themeData = themeData;

@@ -32,7 +32,7 @@ import org.eclipse.tm4e.core.internal.utils.RegexSource;
  */
 final class BasicScopeAttributesProvider {
 
-	private static final BasicScopeAttributes NULL_SCOPE_METADATA = new BasicScopeAttributes("", 0, 0, null);
+	private static final BasicScopeAttributes NULL_SCOPE_METADATA = new BasicScopeAttributes(0, 0, null);
 
 	private static final Pattern STANDARD_TOKEN_TYPE_REGEXP = Pattern.compile("\\b(comment|string|regex)\\b");
 
@@ -52,7 +52,6 @@ final class BasicScopeAttributesProvider {
 		this.initialLanguage = initialLanguage;
 		this.themeProvider = themeProvider;
 		this.defaultMetaData = new BasicScopeAttributes(
-			"",
 			this.initialLanguage,
 			OptionalStandardTokenType.NotSet,
 			List.of(this.themeProvider.getDefaults()));
@@ -80,7 +79,6 @@ final class BasicScopeAttributesProvider {
 	void onDidChangeTheme() {
 		this.cache.clear();
 		this.defaultMetaData = new BasicScopeAttributes(
-			"",
 			this.initialLanguage,
 			OptionalStandardTokenType.NotSet,
 			List.of(this.themeProvider.getDefaults()));
@@ -108,7 +106,7 @@ final class BasicScopeAttributesProvider {
 		final int standardTokenType = BasicScopeAttributesProvider._toStandardTokenType(scopeName);
 		final List<ThemeTrieElementRule> themeData = this.themeProvider.themeMatch(scopeName);
 
-		return new BasicScopeAttributes(scopeName, languageId, standardTokenType, themeData);
+		return new BasicScopeAttributes(languageId, standardTokenType, themeData);
 	}
 
 	/**

@@ -14,7 +14,6 @@ package org.eclipse.tm4e.core.internal.theme;
 import static org.eclipse.tm4e.core.internal.utils.MoreCollections.*;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -118,7 +117,7 @@ public class Theme {
 				final var settingScopes = (List<String>) settingScope;
 				scopes = settingScopes;
 			} else {
-				scopes = Arrays.asList("");
+				scopes = List.of("");
 			}
 
 			int fontStyle = FontStyle.NotSet;
@@ -267,7 +266,6 @@ public class Theme {
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + cache.hashCode();
 		result = prime * result + colorMap.hashCode();
 		result = prime * result + defaults.hashCode();
 		result = prime * result + root.hashCode();
@@ -283,8 +281,7 @@ public class Theme {
 			return false;
 		}
 		final Theme other = (Theme) obj;
-		return Objects.equals(cache, other.cache)
-			&& Objects.equals(colorMap, other.colorMap)
+		return Objects.equals(colorMap, other.colorMap)
 			&& Objects.equals(defaults, other.defaults)
 			&& Objects.equals(root, other.root);
 	}

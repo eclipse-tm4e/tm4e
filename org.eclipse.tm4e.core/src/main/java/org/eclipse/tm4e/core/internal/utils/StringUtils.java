@@ -8,7 +8,7 @@ import org.eclipse.jdt.annotation.Nullable;
 /**
  * @see <a href=
  *      "https://github.com/microsoft/vscode-textmate/blob/e8d1fc5d04b2fc91384c7a895f6c9ff296a38ac8/src/utils.ts">
- *      https://github.com/Microsoft/vscode-textmate/blob/main/src/utils.ts</a>
+ *      https://github.com/microsoft/vscode-textmate/blob/main/src/utils.ts</a>
  */
 public final class StringUtils {
 

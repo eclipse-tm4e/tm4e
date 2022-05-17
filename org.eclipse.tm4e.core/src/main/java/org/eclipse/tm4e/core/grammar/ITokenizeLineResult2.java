@@ -6,7 +6,7 @@
  *
  * SPDX-License-Identifier: EPL-2.0
  *
- * Initial code from https://github.com/Microsoft/vscode-textmate/
+ * Initial code from https://github.com/microsoft/vscode-textmate/
  * Initial copyright Copyright (C) Microsoft Corporation. All rights reserved.
  * Initial license: MIT
  *
@@ -19,8 +19,8 @@ package org.eclipse.tm4e.core.grammar;
 /**
  * Result of the line tokenization2 API.
  *
- * @see <a href="https://github.com/Microsoft/vscode-textmate/blob/master/src/main.ts">
- *      github.com/Microsoft/vscode-textmate/blob/master/src/main.ts</a>
+ * @see <a href="https://github.com/microsoft/vscode-textmate/blob/main/src/main.ts">
+ *      github.com/microsoft/vscode-textmate/blob/main/src/main.ts</a>
  */
 public interface ITokenizeLineResult2 {
 

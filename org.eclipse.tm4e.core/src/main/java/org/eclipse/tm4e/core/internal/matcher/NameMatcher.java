@@ -6,7 +6,7 @@
  *
  * SPDX-License-Identifier: EPL-2.0
  *
- * Initial code from https://github.com/Microsoft/vscode-textmate/
+ * Initial code from https://github.com/microsoft/vscode-textmate/
  * Initial copyright Copyright (C) Microsoft Corporation. All rights reserved.
  * Initial license: MIT
  *
@@ -23,8 +23,8 @@ import org.eclipse.jdt.annotation.Nullable;
 
 /**
  * @see <a href=
- *      "https://github.com/microsoft/vscode-textmate/blob/9157c7f869219dbaf9a5a5607f099c00fe694a29/src/grammar.ts#L276">
- *      github.com/Microsoft/vscode-textmate/blob/master/src/grammar.ts</a>
+ *      "https://github.com/microsoft/vscode-textmate/blob/e8d1fc5d04b2fc91384c7a895f6c9ff296a38ac8/src/grammar.ts#L72">
+ *      github.com/microsoft/vscode-textmate/blob/main/src/grammar.ts</a>
  */
 public interface NameMatcher<T> {
 
@@ -56,8 +56,8 @@ public interface NameMatcher<T> {
 			}
 			final int len = scopeName.length();
 			return thisScopeName.length() > len
-					&& thisScopeName.substring(0, len).equals(scopeName)
-					&& thisScopeName.charAt(len) == '.';
+				&& thisScopeName.substring(0, len).equals(scopeName)
+				&& thisScopeName.charAt(len) == '.';
 		}
 	};
 

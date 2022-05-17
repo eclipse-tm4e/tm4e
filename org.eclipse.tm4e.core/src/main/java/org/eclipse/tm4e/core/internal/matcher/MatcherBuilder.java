@@ -6,7 +6,7 @@
  *
  * SPDX-License-Identifier: EPL-2.0
  *
- * Initial code from https://github.com/Microsoft/vscode-textmate/
+ * Initial code from https://github.com/microsoft/vscode-textmate/
  * Initial copyright Copyright (C) Microsoft Corporation. All rights reserved.
  * Initial license: MIT
  *
@@ -28,8 +28,8 @@ import org.eclipse.jdt.annotation.Nullable;
 /**
  * Matcher utilities.
  *
- * @see <a href="https://github.com/Microsoft/vscode-textmate/blob/master/src/matcher.ts">
- *      github.com/Microsoft/vscode-textmate/blob/master/src/matcher.ts</a>
+ * @see <a href="https://github.com/microsoft/vscode-textmate/blob/main/src/matcher.ts">
+ *      github.com/microsoft/vscode-textmate/blob/main/src/matcher.ts</a>
  */
 final class MatcherBuilder<T> {
 
@@ -150,7 +150,7 @@ final class MatcherBuilder<T> {
 	}
 
 	/**
-	 * https://github.com/microsoft/vscode-textmate/blob/master/src/matcher.ts#L89
+	 * https://github.com/microsoft/vscode-textmate/blob/main/src/matcher.ts#L89
 	 */
 	private boolean isIdentifier(final String token) {
 		if (token.isEmpty())
@@ -178,7 +178,7 @@ final class MatcherBuilder<T> {
 	private static final class Tokenizer {
 
 		/**
-		 * https://github.com/microsoft/vscode-textmate/blob/master/src/matcher.ts#L94
+		 * https://github.com/microsoft/vscode-textmate/blob/main/src/matcher.ts#L94
 		 */
 		static final Pattern TOKEN_PATTERN = Pattern.compile("([LR]:|[\\w\\.:][\\w\\.:\\-]*|[\\,\\|\\-\\(\\)])");
 

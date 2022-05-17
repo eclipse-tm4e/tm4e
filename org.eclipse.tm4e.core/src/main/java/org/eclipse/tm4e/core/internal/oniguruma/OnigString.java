@@ -27,8 +27,8 @@ import org.jcodings.specific.UTF8Encoding;
 /**
  * Oniguruma string.
  *
- * @see <a href="https://github.com/atom/node-oniguruma/blob/master/src/onig-string.cc">
- *      github.com/atom/node-oniguruma/blob/master/src/onig-string.cc</a>
+ * @see <a href="https://github.com/atom/node-oniguruma/blob/main/src/onig-string.cc">
+ *      github.com/atom/node-oniguruma/blob/main/src/onig-string.cc</a>
  *
  */
 public abstract class OnigString {

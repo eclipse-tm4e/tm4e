@@ -6,7 +6,7 @@
  *
  * SPDX-License-Identifier: EPL-2.0
  *
- * Initial code from https://github.com/Microsoft/vscode-textmate/
+ * Initial code from https://github.com/microsoft/vscode-textmate/
  * Initial copyright Copyright (C) Microsoft Corporation. All rights reserved.
  * Initial license: MIT
  *
@@ -22,6 +22,11 @@ import java.util.regex.Pattern;
 import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.tm4e.core.internal.oniguruma.OnigCaptureIndex;
 
+/**
+ * @see <a href=
+ *      "https://github.com/microsoft/vscode-textmate/blob/e8d1fc5d04b2fc91384c7a895f6c9ff296a38ac8/src/utils.ts#L59">
+ *      github.com/microsoft/vscode-textmate/blob/main/src/utils.ts</a>
+ */
 public final class RegexSource {
 
 	/**
@@ -31,13 +36,13 @@ public final class RegexSource {
 	}
 
 	private static final Pattern CAPTURING_REGEX_SOURCE = Pattern
-			.compile("\\$(\\d+)|\\$\\{(\\d+):\\/(downcase|upcase)}");
+		.compile("\\$(\\d+)|\\$\\{(\\d+):\\/(downcase|upcase)}");
 
 	/**
 	 * Escapes/prefixes RegEx meta characters with a backslash in the given string.
 	 *
 	 * It is a non-regex based faster alternative to the <a href=
-	 * "https://github.com/microsoft/vscode-textmate/blob/9157c7f869219dbaf9a5a5607f099c00fe694a29/src/rule.ts#L500">TypeScript
+	 * "https://github.com/microsoft/vscode-textmate/blob/e8d1fc5d04b2fc91384c7a895f6c9ff296a38ac8/src/rule.ts#L159">TypeScript
 	 * implementation</a>:
 	 *
 	 * <pre>
@@ -71,14 +76,14 @@ public final class RegexSource {
 			case '(':
 			case ')':
 			case '#':
-			/* escaping white space chars is actually not necessary:
-			case ' ':
-			case '\t':
-			case '\n':
-			case '\f':
-			case '\r':
-			case 0x0B: // vertical tab \v
-			*/
+				/* escaping white space chars is actually not necessary:
+				case ' ':
+				case '\t':
+				case '\n':
+				case '\f':
+				case '\r':
+				case 0x0B: // vertical tab \v
+				*/
 				sb.append('\\');
 			}
 			sb.append(ch);
@@ -94,7 +99,7 @@ public final class RegexSource {
 	}
 
 	public static String replaceCaptures(final String regexSource, final String captureSource,
-			final OnigCaptureIndex[] captureIndices) {
+		final OnigCaptureIndex[] captureIndices) {
 		final Matcher m = CAPTURING_REGEX_SOURCE.matcher(regexSource);
 		final StringBuilder result = new StringBuilder();
 		while (m.find()) {
@@ -107,7 +112,7 @@ public final class RegexSource {
 	}
 
 	private static String getReplacement(final String match, final String captureSource,
-			final OnigCaptureIndex[] captureIndices) {
+		final OnigCaptureIndex[] captureIndices) {
 		final int index;
 		final String command;
 		final int doublePointIndex = match.indexOf(':');

@@ -1,3 +1,8 @@
+/**
+ * Types in this package are modeled after <a href=
+ * "https://github.com/microsoft/vscode-textmate/blob/main/src/grammar.ts">
+ * github.com/microsoft/vscode-textmate/blob/main/src/grammar.ts</a>
+ */
 @NonNullByDefault
 package org.eclipse.tm4e.core.internal.grammar;
 

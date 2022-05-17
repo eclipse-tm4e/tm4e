@@ -6,7 +6,7 @@
  *
  * SPDX-License-Identifier: EPL-2.0
  *
- * Initial code from https://github.com/Microsoft/vscode-textmate/
+ * Initial code from https://github.com/microsoft/vscode-textmate/
  * Initial copyright Copyright (C) Microsoft Corporation. All rights reserved.
  * Initial license: MIT
  *
@@ -39,8 +39,8 @@ import org.eclipse.tm4e.core.internal.rule.RuleId;
 
 /**
  * @see <a href=
- *      "https://github.com/microsoft/vscode-textmate/blob/9157c7f869219dbaf9a5a5607f099c00fe694a29/src/tokenizeString.ts#L1028">
- *      github.com/Microsoft/vscode-textmate/blob/master/src/tokenizeString.ts</a>
+ *      "https://github.com/microsoft/vscode-textmate/blob/e8d1fc5d04b2fc91384c7a895f6c9ff296a38ac8/src/tokenizeString.ts">
+ *      github.com/microsoft/vscode-textmate/blob/main/src/tokenizeString.ts</a>
  */
 final class LineTokenizer {
 
@@ -162,7 +162,7 @@ final class LineTokenizer {
 				// Grammar pushed & popped a rule without advancing
 				LOGGER.log(INFO,
 					"[1] - Grammar is in an endless loop - Grammar pushed & popped a rule without advancing");
-				// See https://github.com/Microsoft/vscode-textmate/issues/12
+				// See https://github.com/microsoft/vscode-textmate/issues/12
 				// Let's assume this was a mistake by the grammar author and the
 				// intent was to continue in this state
 				stack = popped;

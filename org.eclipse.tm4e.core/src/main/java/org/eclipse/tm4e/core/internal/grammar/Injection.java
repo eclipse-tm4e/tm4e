@@ -6,7 +6,7 @@
  *
  * SPDX-License-Identifier: EPL-2.0
  *
- * Initial code from https://github.com/Microsoft/vscode-textmate/
+ * Initial code from https://github.com/microsoft/vscode-textmate/
  * Initial copyright Copyright (C) Microsoft Corporation. All rights reserved.
  * Initial license: MIT
  *
@@ -22,6 +22,11 @@ import org.eclipse.tm4e.core.internal.matcher.Matcher;
 import org.eclipse.tm4e.core.internal.rule.RuleId;
 import org.eclipse.tm4e.core.internal.types.IRawGrammar;
 
+/**
+ * @see <a href=
+ *      "https://github.com/microsoft/vscode-textmate/blob/e8d1fc5d04b2fc91384c7a895f6c9ff296a38ac8/src/grammar.ts#L50">
+ *      github.com/microsoft/vscode-textmate/blob/main/src/grammar.ts</a>
+ */
 final class Injection {
 
 	final String debugSelector;
@@ -31,7 +36,7 @@ final class Injection {
 	final IRawGrammar grammar;
 
 	Injection(final String debugSelector, final Matcher<List<String>> matcher, final RuleId ruleId,
-			final IRawGrammar grammar, final int priority) {
+		final IRawGrammar grammar, final int priority) {
 		this.debugSelector = debugSelector;
 		this.matcher = matcher;
 		this.ruleId = ruleId;

@@ -6,7 +6,7 @@
  *
  * SPDX-License-Identifier: EPL-2.0
  *
- * Initial code from https://github.com/Microsoft/vscode-textmate/
+ * Initial code from https://github.com/microsoft/vscode-textmate/
  * Initial copyright Copyright (C) Microsoft Corporation. All rights reserved.
  * Initial license: MIT
  *
@@ -21,9 +21,8 @@ import org.eclipse.tm4e.core.internal.grammar.StateStack;
 /**
  * Represents a "pushed" state on the stack (as a linked list element).
  *
- * @see <a href=
- *      "https://github.com/microsoft/vscode-textmate/blob/9157c7f869219dbaf9a5a5607f099c00fe694a29/src/main.ts#L244">
- *      github.com/Microsoft/vscode-textmate/blob/master/src/main.ts</a>
+ * @see <a href="https://github.com/microsoft/vscode-textmate/blob/main/src/main.ts">
+ *      github.com/microsoft/vscode-textmate/blob/main/src/main.ts</a>
  */
 public interface IStateStack {
 	IStateStack INITIAL = StateStack.NULL;

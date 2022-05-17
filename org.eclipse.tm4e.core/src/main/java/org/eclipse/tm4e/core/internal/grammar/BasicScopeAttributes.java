@@ -6,6 +6,10 @@
  *
  * SPDX-License-Identifier: EPL-2.0
  *
+ * Initial code from https://github.com/microsoft/vscode-textmate/
+ * Initial copyright Copyright (C) Microsoft Corporation. All rights reserved.
+ * Initial license: MIT
+ *
  * Contributors:
  * Angelo Zerr <angelo.zerr@gmail.com> - initial API and implementation
  */

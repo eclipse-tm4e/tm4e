@@ -15,8 +15,8 @@ package org.eclipse.tm4e.core.internal.theme;
  * Font style definitions.
  *
  * @see <a href=
- *      "https://github.com/microsoft/vscode-textmate/blob/f4e28ea43bacb883afa78a466e95a6bdd7b92129/src/theme.ts#L153">
- *      github.com/microsoft/vscode-textmate/blob/master/src/theme.ts</a>
+ *      "https://github.com/microsoft/vscode-textmate/blob/e8d1fc5d04b2fc91384c7a895f6c9ff296a38ac8/src/theme.ts#L279">
+ *      https://github.com/microsoft/vscode-textmate/blob/main/src/theme.ts</a>
  */
 public final class FontStyle {
 

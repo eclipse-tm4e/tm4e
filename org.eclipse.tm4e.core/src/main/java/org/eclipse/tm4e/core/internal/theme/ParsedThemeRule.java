@@ -18,8 +18,8 @@ import org.eclipse.jdt.annotation.Nullable;
 
 /**
  * @see <a href=
- *      "https://github.com/microsoft/vscode-textmate/blob/9157c7f869219dbaf9a5a5607f099c00fe694a29/src/theme.ts#L141">
- *      github.com/Microsoft/vscode-textmate/blob/master/src/theme.ts</a>
+ *      "https://github.com/microsoft/vscode-textmate/blob/e8d1fc5d04b2fc91384c7a895f6c9ff296a38ac8/src/theme.ts#L267">
+ *      github.com/microsoft/vscode-textmate/blob/main/src/theme.ts</a>
  */
 public class ParsedThemeRule {
 
@@ -42,7 +42,7 @@ public class ParsedThemeRule {
 	public final String background;
 
 	public ParsedThemeRule(final String scope, @Nullable final List<String> parentScopes, final int index,
-			final int fontStyle, @Nullable final String foreground, @Nullable final String background) {
+		final int fontStyle, @Nullable final String foreground, @Nullable final String background) {
 		this.scope = scope;
 		this.parentScopes = parentScopes;
 		this.index = index;
@@ -71,13 +71,13 @@ public class ParsedThemeRule {
 			return false;
 		final ParsedThemeRule other = (ParsedThemeRule) obj;
 		return Objects.equals(background, other.background) && fontStyle == other.fontStyle
-				&& Objects.equals(foreground, other.foreground) && index == other.index
-				&& Objects.equals(parentScopes, other.parentScopes) && Objects.equals(scope, other.scope);
+			&& Objects.equals(foreground, other.foreground) && index == other.index
+			&& Objects.equals(parentScopes, other.parentScopes) && Objects.equals(scope, other.scope);
 	}
 
 	@Override
 	public String toString() {
 		return "ParsedThemeRule [scope=" + scope + ", parentScopes=" + parentScopes + ", index=" + index
-				+ ", fontStyle=" + fontStyle + ", foreground=" + foreground + ", background=" + background + "]";
+			+ ", fontStyle=" + fontStyle + ", foreground=" + foreground + ", background=" + background + "]";
 	}
 }

@@ -34,8 +34,8 @@ import org.joni.exception.SyntaxException;
 
 /**
  *
- * @see <a href="https://github.com/atom/node-oniguruma/blob/master/src/onig-reg-exp.cc">
- *      github.com/atom/node-oniguruma/blob/master/src/onig-reg-exp.cc</a> *
+ * @see <a href="https://github.com/atom/node-oniguruma/blob/main/src/onig-reg-exp.cc">
+ *      github.com/atom/node-oniguruma/blob/main/src/onig-reg-exp.cc</a> *
  */
 final class OnigRegExp {
 

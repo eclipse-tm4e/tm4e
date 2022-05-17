@@ -6,7 +6,7 @@
  *
  * SPDX-License-Identifier: EPL-2.0
  *
- * Initial code from https://github.com/Microsoft/vscode-textmate/
+ * Initial code from https://github.com/microsoft/vscode-textmate/
  * Initial copyright Copyright (C) Microsoft Corporation. All rights reserved.
  * Initial license: MIT
  *
@@ -23,14 +23,15 @@ import org.eclipse.jdt.annotation.Nullable;
 
 /**
  * @see <a href=
- *      "https://github.com/microsoft/vscode-textmate/blob/9157c7f869219dbaf9a5a5607f099c00fe694a29/src/rawGrammar.ts#L15">
- *      github.com/Microsoft/vscode-textmate/blob/master/src/rawGrammar.ts</a>
+ *      "https://github.com/microsoft/vscode-textmate/blob/e8d1fc5d04b2fc91384c7a895f6c9ff296a38ac8/src/rawGrammar.ts">
+ *      github.com/microsoft/vscode-textmate/blob/main/src/rawGrammar.ts</a>
  */
 public interface IRawGrammar {
 
 	IRawGrammar deepClone();
 
 	boolean isRepositorySet();
+
 	IRawRepository getRepository();
 
 	String getScopeName();

@@ -7,7 +7,7 @@
  *
  * SPDX-License-Identifier: EPL-2.0
  *
- * Initial code from https://github.com/Microsoft/vscode-textmate/
+ * Initial code from https://github.com/microsoft/vscode-textmate/
  * Initial copyright Copyright (C) Microsoft Corporation. All rights reserved.
  * Initial license: MIT
  *
@@ -17,6 +17,11 @@
  */
 package org.eclipse.tm4e.core.internal.grammar.dependencies;
 
+/**
+ * @see <a href=
+ *      "https://github.com/microsoft/vscode-textmate/blob/e8d1fc5d04b2fc91384c7a895f6c9ff296a38ac8/src/grammarDependencies.ts#L247">
+ *      github.com/microsoft/vscode-textmate/blob/main/src/grammarDependencies.ts</a>
+ */
 public class IncludeReference {
 	public enum Kind {
 		Base,

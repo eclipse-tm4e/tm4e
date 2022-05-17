@@ -7,7 +7,7 @@
  *
  * SPDX-License-Identifier: EPL-2.0
  *
- * Initial code from https://github.com/Microsoft/vscode-textmate/
+ * Initial code from https://github.com/microsoft/vscode-textmate/
  * Initial copyright Copyright (C) Microsoft Corporation. All rights reserved.
  * Initial license: MIT
  *
@@ -22,6 +22,11 @@ import java.util.stream.Stream;
 
 import org.eclipse.tm4e.core.internal.matcher.Matcher;
 
+/**
+ * @see <a href=
+ *      "https://github.com/microsoft/vscode-textmate/blob/e8d1fc5d04b2fc91384c7a895f6c9ff296a38ac8/src/grammar.ts#L808">
+ *      github.com/microsoft/vscode-textmate/blob/main/src/grammar.ts</a>
+ */
 public class BalancedBracketSelectors {
 	private final Matcher<List<String>>[] balancedBracketScopes;
 	private final Matcher<List<String>>[] unbalancedBracketScopes;

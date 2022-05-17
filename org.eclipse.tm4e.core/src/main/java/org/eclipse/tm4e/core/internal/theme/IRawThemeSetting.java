@@ -16,8 +16,8 @@ import org.eclipse.jdt.annotation.Nullable;
 /**
  * A single theme setting.
  *
- * @see <a href="https://github.com/Microsoft/vscode-textmate/blob/master/src/main.ts">
- *      github.com/Microsoft/vscode-textmate/blob/master/src/main.ts</a>
+ * @see <a href="https://github.com/microsoft/vscode-textmate/blob/main/src/main.ts">
+ *      github.com/microsoft/vscode-textmate/blob/main/src/main.ts</a>
  */
 public interface IRawThemeSetting {
 

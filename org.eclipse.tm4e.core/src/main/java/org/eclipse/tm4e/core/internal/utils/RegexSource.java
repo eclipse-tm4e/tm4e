@@ -29,12 +29,6 @@ import org.eclipse.tm4e.core.internal.oniguruma.OnigCaptureIndex;
  */
 public final class RegexSource {
 
-	/**
-	 * Helper class, access members statically
-	 */
-	private RegexSource() {
-	}
-
 	private static final Pattern CAPTURING_REGEX_SOURCE = Pattern
 		.compile("\\$(\\d+)|\\$\\{(\\d+):\\/(downcase|upcase)}");
 
@@ -139,5 +133,11 @@ public final class RegexSource {
 			return result;
 		}
 		return match;
+	}
+
+	/**
+	 * Helper class, access members statically
+	 */
+	private RegexSource() {
 	}
 }

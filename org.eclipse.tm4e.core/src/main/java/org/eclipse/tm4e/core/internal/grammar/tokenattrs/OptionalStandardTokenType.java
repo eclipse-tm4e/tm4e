@@ -24,12 +24,7 @@ package org.eclipse.tm4e.core.internal.grammar.tokenattrs;
  */
 public final class OptionalStandardTokenType {
 
-	/**
-	 * Content should be accessed statically
-	 */
-	private OptionalStandardTokenType() {
-	}
-
+	// Must have the same values as `StandardTokenType`!
 	public static final int Other = StandardTokenType.Other;
 	public static final int Comment = StandardTokenType.Comment;
 	public static final int String = StandardTokenType.String;
@@ -39,4 +34,11 @@ public final class OptionalStandardTokenType {
 	 * Indicates that no token type is set.
 	 */
 	public static final int NotSet = 8;
+
+	/**
+	 * Content should be accessed statically
+	 */
+	private OptionalStandardTokenType() {
+	}
+
 }

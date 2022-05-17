@@ -38,12 +38,6 @@ package org.eclipse.tm4e.core.internal.grammar.tokenattrs;
  */
 final class EncodedTokenDataConsts {
 
-	/**
-	 * content should be accessed statically
-	 */
-	private EncodedTokenDataConsts() {
-	}
-
 	static final int LANGUAGEID_MASK = 0b00000000000000000000000011111111;
 	static final int TOKEN_TYPE_MASK = 0b00000000000000000000001100000000;
 	static final int BALANCED_BRACKETS_MASK = 0b00000000000000000000010000000000;
@@ -57,4 +51,11 @@ final class EncodedTokenDataConsts {
 	static final int FONT_STYLE_OFFSET = 11;
 	static final int FOREGROUND_OFFSET = 15;
 	static final int BACKGROUND_OFFSET = 24;
+
+	/**
+	 * content should be accessed statically
+	 */
+	private EncodedTokenDataConsts() {
+	}
+
 }

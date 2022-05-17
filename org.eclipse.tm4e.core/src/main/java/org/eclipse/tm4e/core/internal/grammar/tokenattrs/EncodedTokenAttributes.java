@@ -12,22 +12,19 @@
 package org.eclipse.tm4e.core.internal.grammar.tokenattrs;
 
 import org.eclipse.jdt.annotation.Nullable;
-import org.eclipse.tm4e.core.internal.grammar.StateStack;
 import org.eclipse.tm4e.core.internal.theme.FontStyle;
 
 /**
- * Metadata for {@link StateStack}.
- *
  * @see <a href=
- *      "https://github.com/microsoft/vscode-textmate/blob/master/src/metadata.ts">
- *      github.com/Microsoft/vscode-textmate/blob/master/src/metadata.ts</a>
+ *      "https://github.com/microsoft/vscode-textmate/blob/e8d1fc5d04b2fc91384c7a895f6c9ff296a38ac8/src/encodedTokenAttributes.ts">
+ *      github.com/microsoft/vscode-textmate/blob/main/src/encodedTokenAttributes.ts</a>
  */
 public final class EncodedTokenAttributes {
 
-	/**
-	 * Content should be referenced statically
-	 */
-	private EncodedTokenAttributes() {
+	public static String toBinaryStr(final int encodedTokenAttributes) {
+		return new StringBuilder(Integer.toBinaryString(encodedTokenAttributes))
+			.insert(0, "0".repeat(Integer.numberOfLeadingZeros(encodedTokenAttributes)))
+			.toString();
 	}
 
 	public static String toString(final int encodedTokenAttributes) {
@@ -46,12 +43,6 @@ public final class EncodedTokenAttributes {
 			"  background: " + background + "\n," +
 			"  containsBalancedBrackets: " + containsBalancedBrackets + "\n" +
 			"}";
-	}
-
-	public static String toBinaryStr(final int metadata) {
-		return new StringBuilder(Integer.toBinaryString(metadata))
-			.insert(0, "0".repeat(Integer.numberOfLeadingZeros(metadata)))
-			.toString();
 	}
 
 	public static int getLanguageId(final int metadata) {
@@ -99,5 +90,11 @@ public final class EncodedTokenAttributes {
 			| _fontStyle << EncodedTokenDataConsts.FONT_STYLE_OFFSET
 			| _foreground << EncodedTokenDataConsts.FOREGROUND_OFFSET
 			| _background << EncodedTokenDataConsts.BACKGROUND_OFFSET) >>> 0;
+	}
+
+	/**
+	 * Content should be referenced statically
+	 */
+	private EncodedTokenAttributes() {
 	}
 }

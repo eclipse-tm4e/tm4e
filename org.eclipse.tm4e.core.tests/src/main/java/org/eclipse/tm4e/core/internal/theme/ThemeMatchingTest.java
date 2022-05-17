@@ -11,24 +11,26 @@
  */
 package org.eclipse.tm4e.core.internal.theme;
 
-import static org.eclipse.tm4e.core.internal.theme.FontStyle.*;
-import static org.junit.jupiter.api.Assertions.*;
+import java.util.Map;
 
-import org.eclipse.tm4e.core.internal.grammar.AttributedScopeStack;
-import org.eclipse.tm4e.core.internal.grammar.BasicScopeAttributes;
-import org.eclipse.tm4e.core.internal.grammar.tokenattrs.EncodedTokenAttributes;
+import org.eclipse.tm4e.core.internal.grammar.ScopeStack;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.MethodOrderer;
+import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestMethodOrder;
 
 /**
- * @see <a href="https://github.com/Microsoft/vscode-textmate/blob/master/src/tests/themes.test.ts">
+ * @see <a href=
+ *      "https://github.com/Microsoft/vscode-textmate/blob/e8d1fc5d04b2fc91384c7a895f6c9ff296a38ac8/src/tests/themes.test.ts#L126">
  *      github.com/Microsoft/vscode-textmate/blob/master/src/tests/themes.test.ts</a>
  */
+@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 class ThemeMatchingTest extends AbstractThemeTest {
 
-	/**
-	 * test: Theme matching gives higher priority to deeper matches
-	 */
 	@Test
+	@Order(1)
+	@DisplayName("Theme matching gives higher priority to deeper matches")
 	void testGivesHigherPriorityToDeeperMatches() throws Exception {
 		final Theme theme = createTheme("""
 			{"settings": [
@@ -37,21 +39,13 @@ class ThemeMatchingTest extends AbstractThemeTest {
 				{ "scope": "meta.tag punctuation.definition.string", "settings": { "foreground": "#400000" } }
 			]}""");
 
-		final ColorMap colorMap = new ColorMap();
-		final int _A = colorMap.getId("#100000");
-		final int _B = colorMap.getId("#200000");
-		final int _C = colorMap.getId("#400000");
-		final int _D = colorMap.getId("#300000");
-
-		assertMatch(theme, "punctuation.definition.string.begin.html",
-			new ThemeTrieElementRule(5, null, NotSet, _D, _NOT_SET),
-			new ThemeTrieElementRule(3, list("meta.tag"), NotSet, _C, _NOT_SET));
+		final var actual = theme.match(ScopeStack.from("punctuation.definition.string.begin.html"));
+		assertEquals(theme.getColorMap().get(actual.foregroundId), "#300000");
 	}
 
-	/**
-	 * test: Theme matching gives higher priority to parent matches 1
-	 */
 	@Test
+	@Order(2)
+	@DisplayName("Theme matching gives higher priority to parent matches 1")
 	void testGivesHigherPriorityToParentMatches1() throws Exception {
 		final Theme theme = createTheme("""
 			{"settings": [
@@ -61,23 +55,16 @@ class ThemeMatchingTest extends AbstractThemeTest {
 				{ "scope": "a", "settings": { "foreground": "#500000" } }
 			]}""");
 
-		final ColorMap colorMap = new ColorMap();
-		final int _A = colorMap.getId("#100000");
-		final int _B = colorMap.getId("#200000");
-		final int _C = colorMap.getId("#500000");
-		final int _D = colorMap.getId("#300000");
-		final int _E = colorMap.getId("#400000");
+		final var map = theme.getColorMap();
 
-		assertMatch(theme, "a.b",
-			new ThemeTrieElementRule(2, list("d"), NotSet, _E, _NOT_SET),
-			new ThemeTrieElementRule(1, list("c"), NotSet, _D, _NOT_SET),
-			new ThemeTrieElementRule(1, null, NotSet, _C, _NOT_SET));
+		assertEquals(
+			map.get(theme.match(ScopeStack.from("d", "a.b")).foregroundId),
+			"#400000");
 	}
 
-	/**
-	 * test: Theme matching gives higher priority to parent matches 2
-	 */
 	@Test
+	@Order(3)
+	@DisplayName("Theme matching gives higher priority to parent matches 2")
 	void testGivesHigherPriorityToParentMatches2() throws Exception {
 		final Theme theme = createTheme("""
 			{"settings": [
@@ -87,18 +74,35 @@ class ThemeMatchingTest extends AbstractThemeTest {
 				{ "scope": "entity", "settings": { "foreground": "#500000" } }
 			]}""");
 
-		final var root = new AttributedScopeStack(null, "text.html.cshtml", 0);
-		final var parent = new AttributedScopeStack(root, "meta.tag.structure.any.html", 0);
-		final int r = AttributedScopeStack.mergeAttributes(0, parent,
-			new BasicScopeAttributes(0, 0, theme.match("entity.name.tag.structure.any.html")));
-		final String color = theme.getColor(EncodedTokenAttributes.getForeground(r));
-		assertEquals("#300000", color);
+		final var result = theme.match(
+			ScopeStack.from(
+				"text.html.cshtml",
+				"meta.tag.structure.any.html",
+				"entity.name.tag.structure.any.html"));
+
+		final var colorMap = theme.getColorMap();
+		assertEquals(colorMap.get(result.foregroundId), "#300000");
 	}
 
-	/**
-	 * test: Theme matching can match
-	 */
+	private final Map<String, String> match(Theme theme, String... path) {
+		final var map = theme.getColorMap();
+		final var result = theme.match(ScopeStack.from(path));
+		if (result == null) {
+			return null;
+		}
+		final var obj = map("fontStyle", FontStyle.fontStyleToString(result.fontStyle));
+		if (result.foregroundId != 0) {
+			obj.put("foreground", map.get(result.foregroundId));
+		}
+		if (result.backgroundId != 0) {
+			obj.put("background", map.get(result.backgroundId));
+		}
+		return obj;
+	}
+
 	@Test
+	@Order(4)
+	@DisplayName("Theme matching can match")
 	void testCanMatch() throws Exception {
 		final Theme theme = createTheme("""
 			{"settings": [
@@ -114,75 +118,50 @@ class ThemeMatchingTest extends AbstractThemeTest {
 				{ "scope": "storage.object.bar", "settings": { "fontStyle": "", "foreground": "#600000" } }
 			]}""");
 
-		final ColorMap colorMap = new ColorMap();
-		final int _A = colorMap.getId("#F8F8F2");
-		final int _B = colorMap.getId("#272822");
-		final int _C = colorMap.getId("#200000");
-		final int _D = colorMap.getId("#300000");
-		final int _E = colorMap.getId("#400000");
-		final int _F = colorMap.getId("#500000");
-		final int _G = colorMap.getId("#100000");
-		final int _H = colorMap.getId("#600000");
+		// simpleMatch1..25
+		assertEquals(match(theme, "source"), map("background", "#100000", "fontStyle", "not set"));
+		assertEquals(match(theme, "source"), map("background", "#100000", "fontStyle", "not set"));
+		assertEquals(match(theme, "source.ts"), map("background", "#100000", "fontStyle", "not set"));
+		assertEquals(match(theme, "source.tss"), map("background", "#100000", "fontStyle", "not set"));
+		assertEquals(match(theme, "something"), map("background", "#100000", "fontStyle", "not set"));
+		assertEquals(match(theme, "something.ts"), map("background", "#100000", "fontStyle", "not set"));
+		assertEquals(match(theme, "something.tss"), map("background", "#100000", "fontStyle", "not set"));
+		assertEquals(match(theme, "baz"), map("background", "#200000", "fontStyle", "not set"));
+		assertEquals(match(theme, "baz.ts"), map("background", "#200000", "fontStyle", "not set"));
+		assertEquals(match(theme, "baz.tss"), map("background", "#200000", "fontStyle", "not set"));
+		assertEquals(match(theme, "constant"), map("foreground", "#300000", "fontStyle", "italic"));
+		assertEquals(match(theme, "constant.string"), map("foreground", "#300000", "fontStyle", "italic"));
+		assertEquals(match(theme, "constant.hex"), map("foreground", "#300000", "fontStyle", "italic"));
+		assertEquals(match(theme, "constant.numeric"), map("foreground", "#400000", "fontStyle", "italic"));
+		assertEquals(match(theme, "constant.numeric.baz"), map("foreground", "#400000", "fontStyle", "italic"));
+		assertEquals(match(theme, "constant.numeric.hex"), map("foreground", "#400000", "fontStyle", "bold"));
+		assertEquals(match(theme, "constant.numeric.hex.baz"), map("foreground", "#400000", "fontStyle", "bold"));
+		assertEquals(match(theme, "constant.numeric.oct"),
+			map("foreground", "#400000", "fontStyle", "italic bold underline"));
+		assertEquals(match(theme, "constant.numeric.oct.baz"),
+			map("foreground", "#400000", "fontStyle", "italic bold underline"));
+		assertEquals(match(theme, "constant.numeric.dec"), map("foreground", "#500000", "fontStyle", "none"));
+		assertEquals(match(theme, "constant.numeric.dec.baz"), map("foreground", "#500000", "fontStyle", "none"));
+		assertEquals(match(theme, "storage.object.bar"), map("foreground", "#600000", "fontStyle", "none"));
+		assertEquals(match(theme, "storage.object.bar.baz"), map("foreground", "#600000", "fontStyle", "none"));
+		assertEquals(match(theme, "storage.object.bart"), map("fontStyle", "not set"));
+		assertEquals(match(theme, "storage.object"), map("fontStyle", "not set"));
+		assertEquals(match(theme, "storage"), map("fontStyle", "not set"));
 
-		// matches defaults
-		assertNoMatch(theme, "");
-		assertNoMatch(theme, "bazz");
-		assertNoMatch(theme, "asdfg");
+		// defaultMatch1..3
+		assertEquals(match(theme, ""), map("fontStyle", "not set"));
+		assertEquals(match(theme, "bazz"), map("fontStyle", "not set"));
+		assertEquals(match(theme, "asdfg"), map("fontStyle", "not set"));
 
-		// matches source
-		assertSimpleMatch(theme, "source", 1, NotSet, _NOT_SET, _G);
-		assertSimpleMatch(theme, "source.ts", 1, NotSet, _NOT_SET, _G);
-		assertSimpleMatch(theme, "source.tss", 1, NotSet, _NOT_SET, _G);
-
-		// matches something
-		assertSimpleMatch(theme, "something", 1, NotSet, _NOT_SET, _G);
-		assertSimpleMatch(theme, "something.ts", 1, NotSet, _NOT_SET, _G);
-		assertSimpleMatch(theme, "something.tss", 1, NotSet, _NOT_SET, _G);
-
-		// matches baz
-		assertSimpleMatch(theme, "baz", 1, NotSet, _NOT_SET, _C);
-		assertSimpleMatch(theme, "baz.ts", 1, NotSet, _NOT_SET, _C);
-		assertSimpleMatch(theme, "baz.tss", 1, NotSet, _NOT_SET, _C);
-
-		// matches constant
-		assertSimpleMatch(theme, "constant", 1, Italic, _D, _NOT_SET);
-		assertSimpleMatch(theme, "constant.string", 1, Italic, _D, _NOT_SET);
-		assertSimpleMatch(theme, "constant.hex", 1, Italic, _D, _NOT_SET);
-
-		// matches constant.numeric
-		assertSimpleMatch(theme, "constant.numeric", 2, Italic, _E, _NOT_SET);
-		assertSimpleMatch(theme, "constant.numeric.baz", 2, Italic, _E, _NOT_SET);
-
-		// matches constant.numeric.hex
-		assertSimpleMatch(theme, "constant.numeric.hex", 3, Bold, _E, _NOT_SET);
-		assertSimpleMatch(theme, "constant.numeric.hex.baz", 3, Bold, _E, _NOT_SET);
-
-		// matches constant.numeric.oct
-		assertSimpleMatch(theme, "constant.numeric.oct", 3, Bold | Italic | Underline, _E, _NOT_SET);
-		assertSimpleMatch(theme, "constant.numeric.oct.baz", 3, Bold | Italic | Underline, _E, _NOT_SET);
-
-		// matches constant.numeric.dec
-		assertSimpleMatch(theme, "constant.numeric.dec", 3, None, _F, _NOT_SET);
-		assertSimpleMatch(theme, "constant.numeric.dec.baz", 3, None, _F, _NOT_SET);
-
-		// matches storage.object.bar
-		assertSimpleMatch(theme, "storage.object.bar", 3, None, _H, _NOT_SET);
-		assertSimpleMatch(theme, "storage.object.bar.baz", 3, None, _H, _NOT_SET);
-
-		// does not match storage.object.bar
-		assertSimpleMatch(theme, "storage.object.bart", 0, NotSet, _NOT_SET, _NOT_SET);
-		assertSimpleMatch(theme, "storage.object", 0, NotSet, _NOT_SET, _NOT_SET);
-		assertSimpleMatch(theme, "storage", 0, NotSet, _NOT_SET, _NOT_SET);
-
-		assertMatch(theme, "bar",
-			new ThemeTrieElementRule(1, list("selector", "source.css"), Bold, _NOT_SET, _C),
-			new ThemeTrieElementRule(1, null, NotSet, _NOT_SET, _C));
+		// multiMatch1..2
+		assertEquals(match(theme, "bar"), map("background", "#200000", "fontStyle", "not set"));
+		assertEquals(match(theme, "source.css", "selector", "bar"),
+			map("background", "#200000", "fontStyle", "bold"));
 	}
 
-	/**
-	 * test: theme matching Microsoft/vscode#23460
-	 */
 	@Test
+	@Order(5)
+	@DisplayName("Theme matching Microsoft/vscode#23460")
 	void testMicrosoft_vscode_23460() throws Exception {
 		final Theme theme = createTheme("""
 			{"settings": [
@@ -210,47 +189,12 @@ class ThemeMatchingTest extends AbstractThemeTest {
 				}
 			]}""");
 
-		final ColorMap colorMap = new ColorMap();
-		final int _NOT_SET = 0;
-		final int _A = colorMap.getId("#aec2e0");
-		final int _B = colorMap.getId("#14191f");
-		final int _C = colorMap.getId("#FF410D");
-		final int _D = colorMap.getId("#ffffff");
-
-		// string.quoted.double.json
-		// meta.structure.dictionary.value.json
-		// meta.structure.dictionary.json
-		// source.json
-		assertMatch(theme, "string.quoted.double.json",
-			new ThemeTrieElementRule(4, list("meta.structure.dictionary.value.json"), NotSet, _C, _NOT_SET),
-			new ThemeTrieElementRule(4, list("meta.structure.dictionary.json"), NotSet, _D, _NOT_SET),
-			new ThemeTrieElementRule(0, null, NotSet, _NOT_SET, _NOT_SET));
-
-		final var parent3 = new AttributedScopeStack(null, "source.json", 0);
-		final var parent2 = new AttributedScopeStack(parent3, "meta.structure.dictionary.json", 0);
-		final var parent1 = new AttributedScopeStack(parent2, "meta.structure.dictionary.value.json", 0);
-
-		final int r = AttributedScopeStack.mergeAttributes(
-			0,
-			parent1,
-			new BasicScopeAttributes(0, 0, theme.match("string.quoted.double.json")));
-		final String color = theme.getColor(EncodedTokenAttributes.getForeground(r));
-		assertEquals("#FF410D", color);
-	}
-
-	private void assertMatch(final Theme theme, final String scopeName, final ThemeTrieElementRule... expected) {
-		final var actual = theme.match(scopeName);
-		assertArrayEquals(expected, actual.toArray(), "when matching <<" + scopeName + ">>");
-	}
-
-	private void assertSimpleMatch(final Theme theme, final String scopeName, final int scopeDepth, final int fontStyle,
-		final int foreground, final int background) {
-		assertMatch(theme, scopeName,
-			new ThemeTrieElementRule(scopeDepth, null, fontStyle, foreground, background));
-	}
-
-	private void assertNoMatch(final Theme theme, final String scopeName) {
-		assertMatch(theme, scopeName,
-			new ThemeTrieElementRule(0, null, NotSet, 0, 0 /*_NOT_SET, _NOT_SET*/));
+		final var path = ScopeStack.from(
+			"source.json",
+			"meta.structure.dictionary.json",
+			"meta.structure.dictionary.value.json",
+			"string.quoted.double.json");
+		final var result = theme.match(path);
+		assertEquals(theme.getColorMap().get(result.foregroundId), "#FF410D");
 	}
 }

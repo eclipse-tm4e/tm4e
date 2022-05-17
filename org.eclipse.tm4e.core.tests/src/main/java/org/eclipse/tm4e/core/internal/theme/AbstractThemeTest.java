@@ -25,8 +25,9 @@ import java.util.List;
 import java.util.Map;
 
 import org.eclipse.tm4e.core.internal.theme.reader.ThemeReader;
+import org.junit.jupiter.api.Assertions;
 
-public abstract class AbstractThemeTest {
+public abstract class AbstractThemeTest extends Assertions {
 
 	protected static final int _NOT_SET = 0;
 

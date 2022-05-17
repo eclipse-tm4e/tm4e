@@ -32,8 +32,8 @@ import org.eclipse.tm4e.core.internal.rule.RuleId;
  * Represents a "pushed" state on the stack (as a linked list element).
  *
  * @see <a href=
- *      "https://github.com/microsoft/vscode-textmate/blob/9157c7f869219dbaf9a5a5607f099c00fe694a29/src/grammar.ts#L1347">
- *      github.com/Microsoft/vscode-textmate/blob/master/src/grammar.ts</a>
+ *      "https://github.com/microsoft/vscode-textmate/blob/e8d1fc5d04b2fc91384c7a895f6c9ff296a38ac8/src/grammar.ts#L550">
+ *      github.com/microsoft/vscode-textmate/blob/main/src/grammar.ts</a>
  */
 public final class StateStack implements IStateStack {
 
@@ -44,8 +44,8 @@ public final class StateStack implements IStateStack {
 		0,
 		false,
 		null,
-		new AttributedScopeStack(null, "", 0),
-		new AttributedScopeStack(null, "", 0));
+		AttributedScopeStack.createRoot("", 0),
+		AttributedScopeStack.createRoot("", 0));
 
 	/**
 	 * The position on the current line where this state was pushed.

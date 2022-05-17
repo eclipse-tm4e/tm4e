@@ -25,15 +25,15 @@ import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.tm4e.core.grammar.IGrammar;
 import org.eclipse.tm4e.core.internal.grammar.BalancedBracketSelectors;
 import org.eclipse.tm4e.core.internal.grammar.Grammar;
-import org.eclipse.tm4e.core.internal.theme.IThemeProvider;
+import org.eclipse.tm4e.core.internal.grammar.ScopeStack;
+import org.eclipse.tm4e.core.internal.theme.StyleAttributes;
 import org.eclipse.tm4e.core.internal.theme.Theme;
-import org.eclipse.tm4e.core.internal.theme.ThemeTrieElementRule;
 import org.eclipse.tm4e.core.internal.types.IRawGrammar;
 
 /**
  * @see <a href=
- *      "https://github.com/microsoft/vscode-textmate/blob/9157c7f869219dbaf9a5a5607f099c00fe694a29/src/registry.ts#L11">
- *      github.com/Microsoft/vscode-textmate/blob/master/src/registry.ts</a>
+ *      "https://github.com/microsoft/vscode-textmate/blob/e8d1fc5d04b2fc91384c7a895f6c9ff296a38ac8/src/registry.ts">
+ *      github.com/microsoft/vscode-textmate/blob/main/src/registry.ts</a>
  */
 public final class SyncRegistry implements IGrammarRepository, IThemeProvider {
 
@@ -48,7 +48,6 @@ public final class SyncRegistry implements IGrammarRepository, IThemeProvider {
 
 	public void setTheme(final Theme theme) {
 		this._theme = theme;
-		this._grammars.values().forEach(Grammar::onDidChangeTheme);
 	}
 
 	public List<String> getColorMap() {
@@ -82,16 +81,17 @@ public final class SyncRegistry implements IGrammarRepository, IThemeProvider {
 	 * Get the default theme settings
 	 */
 	@Override
-	public ThemeTrieElementRule getDefaults() {
+	public StyleAttributes getDefaults() {
 		return this._theme.getDefaults();
 	}
 
 	/**
 	 * Match a scope in the theme.
 	 */
+	@Nullable
 	@Override
-	public List<ThemeTrieElementRule> themeMatch(final String scopeName) {
-		return this._theme.match(scopeName);
+	public StyleAttributes themeMatch(final ScopeStack scopePath) {
+		return this._theme.match(scopePath);
 	}
 
 	/**

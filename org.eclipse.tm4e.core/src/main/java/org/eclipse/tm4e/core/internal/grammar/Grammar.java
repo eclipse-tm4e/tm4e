@@ -37,11 +37,11 @@ import org.eclipse.tm4e.core.internal.grammar.tokenattrs.EncodedTokenAttributes;
 import org.eclipse.tm4e.core.internal.matcher.Matcher;
 import org.eclipse.tm4e.core.internal.oniguruma.OnigString;
 import org.eclipse.tm4e.core.internal.registry.IGrammarRepository;
+import org.eclipse.tm4e.core.internal.registry.IThemeProvider;
 import org.eclipse.tm4e.core.internal.rule.IRuleFactoryHelper;
 import org.eclipse.tm4e.core.internal.rule.Rule;
 import org.eclipse.tm4e.core.internal.rule.RuleFactory;
 import org.eclipse.tm4e.core.internal.rule.RuleId;
-import org.eclipse.tm4e.core.internal.theme.IThemeProvider;
 import org.eclipse.tm4e.core.internal.types.IRawGrammar;
 import org.eclipse.tm4e.core.internal.types.IRawRepository;
 import org.eclipse.tm4e.core.internal.types.IRawRule;
@@ -50,8 +50,8 @@ import org.eclipse.tm4e.core.internal.types.IRawRule;
  * TextMate grammar implementation.
  *
  * @see <a href=
- *      "https://github.com/microsoft/vscode-textmate/blob/9157c7f869219dbaf9a5a5607f099c00fe694a29/src/grammar.ts#L459">
- *      github.com/Microsoft/vscode-textmate/blob/master/src/grammar.ts</a>
+ *      "https://github.com/microsoft/vscode-textmate/blob/e8d1fc5d04b2fc91384c7a895f6c9ff296a38ac8/src/grammar.ts#L99">
+ *      github.com/microsoft/vscode-textmate/blob/main/src/grammar.ts</a>
  */
 public final class Grammar implements IGrammar, IRuleFactoryHelper {
 
@@ -89,7 +89,6 @@ public final class Grammar implements IGrammar, IRuleFactoryHelper {
 		this.rootScopeName = rootScopeName;
 		this._basicScopeAttributesProvider = new BasicScopeAttributesProvider(
 			initialLanguage,
-			themeProvider,
 			embeddedLanguages);
 		this._grammarRepository = grammarRepository;
 		this._grammar = initGrammar(grammar, null);
@@ -105,10 +104,6 @@ public final class Grammar implements IGrammar, IRuleFactoryHelper {
 				}
 			}
 		}
-	}
-
-	public void onDidChangeTheme() {
-		this._basicScopeAttributesProvider.onDidChangeTheme();
 	}
 
 	BasicScopeAttributes getMetadataForScope(final String scope) {
@@ -292,30 +287,31 @@ public final class Grammar implements IGrammar, IRuleFactoryHelper {
 		if (prevState == null || prevState.equals(StateStack.NULL)) {
 			isFirstLine = true;
 			final var rawDefaultMetadata = this._basicScopeAttributesProvider.getDefaultAttributes();
-			final var themeData = rawDefaultMetadata.themeData;
-			final var defaultTheme = themeData == null ? null : themeData.get(0);
+			final var defaultTheme = this.themeProvider.getDefaults();
 			final int defaultMetadata = EncodedTokenAttributes.set(
 				0,
 				rawDefaultMetadata.languageId,
 				rawDefaultMetadata.tokenType,
 				null,
 				defaultTheme.fontStyle,
-				defaultTheme.foreground,
-				defaultTheme.background);
+				defaultTheme.foregroundId,
+				defaultTheme.backgroundId);
 
 			final var rootScopeName = this.getRule(rootId).getName(
 				null,
 				null);
 
-			final var rawRootMetadata = this._basicScopeAttributesProvider.getBasicScopeAttributes(rootScopeName);
-			final int rootMetadata = AttributedScopeStack.mergeAttributes(defaultMetadata, null, rawRootMetadata);
-
-			final var scopeList = new AttributedScopeStack(
-				null,
-				rootScopeName == null
-					? "unknown"
-					: rootScopeName,
-				rootMetadata);
+			AttributedScopeStack scopeList;
+			if (rootScopeName != null) {
+				scopeList = AttributedScopeStack.createRootAndLookUpScopeName(
+					rootScopeName,
+					defaultMetadata,
+					this);
+			} else {
+				scopeList = AttributedScopeStack.createRoot(
+					"unknown",
+					defaultMetadata);
+			}
 
 			prevState = new StateStack(
 				null,

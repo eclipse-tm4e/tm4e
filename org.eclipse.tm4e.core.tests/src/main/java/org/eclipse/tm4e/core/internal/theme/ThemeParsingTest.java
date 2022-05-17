@@ -12,20 +12,24 @@
 package org.eclipse.tm4e.core.internal.theme;
 
 import static org.eclipse.tm4e.core.internal.theme.FontStyle.*;
-import static org.junit.jupiter.api.Assertions.*;
 
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.MethodOrderer;
+import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestMethodOrder;
 
 /**
- * @see <a href="https://github.com/Microsoft/vscode-textmate/blob/master/src/tests/themes.test.ts">
+ * @see <a href=
+ *      "https://github.com/Microsoft/vscode-textmate/blob/e8d1fc5d04b2fc91384c7a895f6c9ff296a38ac8/src/tests/themes.test.ts#L286">
  *      github.com/Microsoft/vscode-textmate/blob/master/src/tests/themes.test.ts</a>
  */
+@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class ThemeParsingTest extends AbstractThemeTest {
 
-	/**
-	 * test: Theme parsing can parse
-	 */
 	@Test
+	@Order(1)
+	@DisplayName("Theme parsing can parse")
 	public void testCanParse() throws Exception {
 		final var actual = parseTheme("""
 			{ "settings": [

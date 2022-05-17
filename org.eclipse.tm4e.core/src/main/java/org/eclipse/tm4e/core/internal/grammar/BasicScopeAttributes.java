@@ -15,24 +15,18 @@
  */
 package org.eclipse.tm4e.core.internal.grammar;
 
-import java.util.List;
-
-import org.eclipse.jdt.annotation.Nullable;
-import org.eclipse.tm4e.core.internal.theme.ThemeTrieElementRule;
-
-public final class BasicScopeAttributes {
+/**
+ * @see <a href=
+ *      "https://github.com/microsoft/vscode-textmate/blob/e8d1fc5d04b2fc91384c7a895f6c9ff296a38ac8/src/basicScopesAttributeProvider.ts#L10">
+ *      github.com/microsoft/vscode-textmate/blob/main/src/basicScopesAttributeProvider.ts</a>
+ */
+final class BasicScopeAttributes {
 
 	final int languageId;
 	final int /*OptionalStandardTokenType*/ tokenType;
 
-	@Nullable
-	final List<ThemeTrieElementRule> themeData;
-
-	public BasicScopeAttributes(final int languageId,
-		final int /*OptionalStandardTokenType*/ tokenType,
-		@Nullable final List<ThemeTrieElementRule> themeData) {
+	BasicScopeAttributes(final int languageId, final int /*OptionalStandardTokenType*/ tokenType) {
 		this.languageId = languageId;
 		this.tokenType = tokenType;
-		this.themeData = themeData;
 	}
 }

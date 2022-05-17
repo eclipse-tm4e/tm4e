@@ -15,6 +15,7 @@ package org.eclipse.tm4e.core.internal.utils;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.function.Predicate;
 
 import org.eclipse.jdt.annotation.Nullable;
 
@@ -25,6 +26,15 @@ public final class MoreCollections {
 		list.add(firstItem);
 		list.addAll(moreItems);
 		return list;
+	}
+
+	@Nullable
+	public static <T> T findFirstMatching(final List<T> list, final Predicate<T> filter) {
+		for (final T e : list) {
+			if (filter.test(e))
+				return e;
+		}
+		return null;
 	}
 
 	@Nullable

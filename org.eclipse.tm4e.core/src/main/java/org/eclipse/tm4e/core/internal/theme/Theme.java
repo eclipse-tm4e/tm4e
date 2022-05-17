@@ -22,6 +22,7 @@ import java.util.Map;
 import java.util.Objects;
 
 import org.eclipse.jdt.annotation.Nullable;
+import org.eclipse.tm4e.core.internal.grammar.ScopeStack;
 
 import com.google.common.base.Splitter;
 import com.google.common.collect.Lists;
@@ -30,8 +31,8 @@ import com.google.common.collect.Lists;
  * TextMate theme.
  *
  * @see <a href=
- *      "https://github.com/microsoft/vscode-textmate/blob/9157c7f869219dbaf9a5a5607f099c00fe694a29/src/theme.ts#L8">
- *      github.com/Microsoft/vscode-textmate/blob/master/src/theme.ts</a>
+ *      "https://github.com/microsoft/vscode-textmate/blob/e8d1fc5d04b2fc91384c7a895f6c9ff296a38ac8/src/theme.ts#L7">
+ *      github.com/microsoft/vscode-textmate/blob/main/src/theme.ts</a>
  */
 public final class Theme {
 
@@ -53,10 +54,10 @@ public final class Theme {
 	private final Map<String /* scopeName */, List<ThemeTrieElementRule>> _cachedMatchRoot = new HashMap<>();
 
 	private final ColorMap _colorMap;
-	private final ThemeTrieElementRule _defaults;
+	private final StyleAttributes _defaults;
 	private final ThemeTrieElement _root;
 
-	public Theme(final ColorMap colorMap, final ThemeTrieElementRule defaults, final ThemeTrieElement root) {
+	public Theme(final ColorMap colorMap, final StyleAttributes defaults, final ThemeTrieElement root) {
 		this._colorMap = colorMap;
 		this._root = root;
 		this._defaults = defaults;
@@ -66,15 +67,59 @@ public final class Theme {
 		return this._colorMap.getColorMap();
 	}
 
-	public ThemeTrieElementRule getDefaults() {
+	public StyleAttributes getDefaults() {
 		return this._defaults;
 	}
 
-	public List<ThemeTrieElementRule> match(final String scopeName) {
-		if (!this._cachedMatchRoot.containsKey(scopeName)) {
-			this._cachedMatchRoot.put(scopeName, this._root.match(scopeName));
+	@Nullable
+	public StyleAttributes match(@Nullable final ScopeStack scopePath) {
+		if (scopePath == null) {
+			return this._defaults;
 		}
-		return this._cachedMatchRoot.get(scopeName);
+		final var scopeName = scopePath.scopeName;
+
+		final var matchingTrieElements = this._cachedMatchRoot.computeIfAbsent(
+			scopeName,
+			k -> this._root.match(k));
+
+		final var effectiveRule = findFirstMatching(matchingTrieElements,
+			v -> _scopePathMatchesParentScopes(scopePath.parent, v.parentScopes));
+		if (effectiveRule == null) {
+			return null;
+		}
+
+		return new StyleAttributes(
+			effectiveRule.fontStyle,
+			effectiveRule.foreground,
+			effectiveRule.background);
+	}
+
+	private boolean _scopePathMatchesParentScopes(@Nullable ScopeStack scopePath,
+		@Nullable final List<String> parentScopeNames) {
+		if (parentScopeNames == null) {
+			return true;
+		}
+
+		var index = 0;
+		var scopePattern = parentScopeNames.get(index);
+
+		while (scopePath != null) {
+			if (_matchesScope(scopePath.scopeName, scopePattern)) {
+				index++;
+				if (index == parentScopeNames.size()) {
+					return true;
+				}
+				scopePattern = parentScopeNames.get(index);
+			}
+			scopePath = scopePath.parent;
+		}
+
+		return false;
+	}
+
+	private boolean _matchesScope(final String scopeName, final String scopeNamePattern) {
+		return scopeNamePattern.equals(scopeName)
+			|| scopeName.startsWith(scopeNamePattern) && scopeName.charAt(scopeNamePattern.length()) == '.';
 	}
 
 	/**
@@ -220,7 +265,7 @@ public final class Theme {
 			}
 		}
 		final var colorMap = new ColorMap(_colorMap);
-		final var defaults = new ThemeTrieElementRule(0, null, defaultFontStyle, colorMap.getId(defaultForeground),
+		final var defaults = new StyleAttributes(defaultFontStyle, colorMap.getId(defaultForeground),
 			colorMap.getId(defaultBackground));
 
 		final var root = new ThemeTrieElement(new ThemeTrieElementRule(0, null, FontStyle.NotSet, 0, 0),
@@ -232,11 +277,6 @@ public final class Theme {
 		}
 
 		return new Theme(colorMap, defaults, root);
-	}
-
-	@Nullable
-	public String getColor(final int id) {
-		return this._colorMap.getColor(id);
 	}
 
 	@Override

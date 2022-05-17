@@ -11,35 +11,56 @@
  */
 package org.eclipse.tm4e.core.internal.grammar;
 
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 
 import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.tm4e.core.internal.grammar.tokenattrs.EncodedTokenAttributes;
 import org.eclipse.tm4e.core.internal.theme.FontStyle;
-import org.eclipse.tm4e.core.internal.theme.ThemeTrieElementRule;
+import org.eclipse.tm4e.core.internal.theme.StyleAttributes;
 
 import com.google.common.base.Splitter;
 
 /**
  * @see <a href=
- *      "https://github.com/microsoft/vscode-textmate/blob/9157c7f869219dbaf9a5a5607f099c00fe694a29/src/grammar.ts#L1209">
- *      https://github.com/Microsoft/vscode-textmate/blob/main/src/grammar.ts</a>
+ *      "https://github.com/microsoft/vscode-textmate/blob/e8d1fc5d04b2fc91384c7a895f6c9ff296a38ac8/src/grammar.ts#L417">
+ *      github.com/microsoft/vscode-textmate/blob/main/src/grammar.ts</a>
  */
 public final class AttributedScopeStack {
 
 	private static final Splitter BY_SPACE_SPLITTER = Splitter.on(' ');
 
+	public static AttributedScopeStack createRoot(final String scopeName,
+		final int /*EncodedTokenAttributes*/ tokenAttributes) {
+		return new AttributedScopeStack(null, new ScopeStack(null, scopeName), tokenAttributes);
+	}
+
+	public static AttributedScopeStack createRootAndLookUpScopeName(final String scopeName,
+		final int encodedTokenAttributes, final Grammar grammar) {
+		final var rawRootMetadata = grammar.getMetadataForScope(scopeName);
+		final var scopePath = new ScopeStack(null, scopeName);
+		final var rootStyle = grammar.themeProvider.themeMatch(scopePath);
+
+		final var resolvedTokenAttributes = AttributedScopeStack.mergeAttributes(
+			encodedTokenAttributes,
+			rawRootMetadata,
+			rootStyle);
+
+		return new AttributedScopeStack(null, scopePath, resolvedTokenAttributes);
+	}
+
+	public String scopeName() {
+		return this.scopePath.scopeName;
+	}
+
 	@Nullable
 	private final AttributedScopeStack parent;
-	private final String scopePath;
+	private final ScopeStack scopePath;
 	final int tokenAttributes;
 
 	public AttributedScopeStack(
 		@Nullable final AttributedScopeStack parent,
-		final String scopePath,
+		final ScopeStack scopePath,
 		final int tokenAttributes) {
 		this.parent = parent;
 		this.scopePath = scopePath;
@@ -68,7 +89,7 @@ public final class AttributedScopeStack {
 				return false;
 			}
 
-			if (!Objects.equals(a.scopePath, b.scopePath) || a.tokenAttributes != b.tokenAttributes) {
+			if (!Objects.equals(a.scopeName(), b.scopeName()) || a.tokenAttributes != b.tokenAttributes) {
 				return false;
 			}
 
@@ -78,78 +99,28 @@ public final class AttributedScopeStack {
 		} while (true);
 	}
 
-	private static boolean matchesScope(final String scope, final String selector, final String selectorWithDot) {
-		return selector.equals(scope) || scope.startsWith(selectorWithDot);
-	}
-
-	/**
-	 * implementation differs from upstream in that it is prevents potential NPEs/IndexOutOfBoundExceptions
-	 */
-	private static boolean matches(@Nullable AttributedScopeStack target, @Nullable final List<String> parentScopes) {
-		if (parentScopes == null || parentScopes.isEmpty()) {
-			return true;
-		}
-
-		if (target == null) {
-			return false;
-		}
-
-		parent_scopes_loop: for (final String selector : parentScopes) {
-			final var selectorWithDot = selector + '.';
-
-			while (target != null) {
-				if (matchesScope(target.scopePath, selector, selectorWithDot)) {
-					// match for current parent scope found, continue with checking next parent scope
-					continue parent_scopes_loop;
-				}
-				target = target.parent;
-			}
-			// no match for current parent scope found, early exit
-			return false;
-		}
-
-		// matches for all parent scopes found
-		return true;
-	}
-
 	public static int mergeAttributes(
 		final int existingTokenAttributes,
-		@Nullable final AttributedScopeStack scopesList,
-		@Nullable final BasicScopeAttributes basicScopeAttributes) {
-		if (basicScopeAttributes == null) {
-			return existingTokenAttributes;
+		final BasicScopeAttributes basicScopeAttributes,
+		@Nullable final StyleAttributes styleAttributes) {
+		var fontStyle = FontStyle.NotSet;
+		var foreground = 0;
+		var background = 0;
+
+		if (styleAttributes != null) {
+			fontStyle = styleAttributes.fontStyle;
+			foreground = styleAttributes.foregroundId;
+			background = styleAttributes.backgroundId;
 		}
 
-		int fontStyle = FontStyle.NotSet;
-		int foreground = 0;
-		int background = 0;
-
-		if (basicScopeAttributes.themeData != null) {
-			// Find the first themeData that matches
-			for (final ThemeTrieElementRule themeData : basicScopeAttributes.themeData) {
-				if (matches(scopesList, themeData.parentScopes)) {
-					fontStyle = themeData.fontStyle;
-					foreground = themeData.foreground;
-					background = themeData.background;
-					break;
-				}
-			}
-		}
-
-		return EncodedTokenAttributes.set(existingTokenAttributes, basicScopeAttributes.languageId,
-			basicScopeAttributes.tokenType, null, fontStyle,
+		return EncodedTokenAttributes.set(
+			existingTokenAttributes,
+			basicScopeAttributes.languageId,
+			basicScopeAttributes.tokenType,
+			null,
+			fontStyle,
 			foreground,
 			background);
-	}
-
-	private static AttributedScopeStack push(AttributedScopeStack target, final Grammar grammar,
-		final Iterable<String> scopes) {
-		for (final String scope : scopes) {
-			final var rawMetadata = grammar.getMetadataForScope(scope);
-			final int metadata = mergeAttributes(target.tokenAttributes, target, rawMetadata);
-			target = new AttributedScopeStack(target, scope, metadata);
-		}
-		return target;
 	}
 
 	AttributedScopeStack pushAttributed(@Nullable final String scopePath, final Grammar grammar) {
@@ -157,20 +128,35 @@ public final class AttributedScopeStack {
 			return this;
 		}
 
-		return AttributedScopeStack.push(this, grammar, BY_SPACE_SPLITTER.split(scopePath));
-	}
-
-	private static List<String> generateScopes(@Nullable AttributedScopeStack scopesList) {
-		final var result = new ArrayList<String>();
-		while (scopesList != null) {
-			result.add(scopesList.scopePath);
-			scopesList = scopesList.parent;
+		if (scopePath.indexOf(' ') == -1) {
+			// This is the common case and much faster
+			return _pushAttributed(this, scopePath, grammar);
 		}
-		Collections.reverse(result);
+
+		final var scopes = BY_SPACE_SPLITTER.split(scopePath);
+		var result = this;
+		for (final var scope : scopes) {
+			result = _pushAttributed(result, scope, grammar);
+		}
 		return result;
 	}
 
+	private AttributedScopeStack _pushAttributed(
+		final AttributedScopeStack target,
+		final String scopeName,
+		final Grammar grammar) {
+		final var rawMetadata = grammar.getMetadataForScope(scopeName);
+
+		final var newPath = target.scopePath.push(scopeName);
+		final var scopeThemeMatchResult = grammar.themeProvider.themeMatch(newPath);
+		final var metadata = mergeAttributes(
+			target.tokenAttributes,
+			rawMetadata,
+			scopeThemeMatchResult);
+		return new AttributedScopeStack(target, newPath, metadata);
+	}
+
 	List<String> getScopeNames() {
-		return AttributedScopeStack.generateScopes(this);
+		return this.scopePath.getSegments();
 	}
 }

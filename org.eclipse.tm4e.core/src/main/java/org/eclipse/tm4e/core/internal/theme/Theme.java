@@ -56,7 +56,7 @@ public class Theme {
 	private final ColorMap colorMap;
 	private final ThemeTrieElement root;
 	private final ThemeTrieElementRule defaults;
-	private final Map<String /* scopeName */, List<ThemeTrieElementRule>> cache = new HashMap<>();
+	private final Map<String /* scopeName */, List<ThemeTrieElementRule>> _cachedMatchRoot = new HashMap<>();
 
 	public Theme(final ColorMap colorMap, final ThemeTrieElementRule defaults, final ThemeTrieElement root) {
 		this.colorMap = colorMap;
@@ -73,10 +73,10 @@ public class Theme {
 	}
 
 	public List<ThemeTrieElementRule> match(final String scopeName) {
-		if (!this.cache.containsKey(scopeName)) {
-			this.cache.put(scopeName, this.root.match(scopeName));
+		if (!this._cachedMatchRoot.containsKey(scopeName)) {
+			this._cachedMatchRoot.put(scopeName, this.root.match(scopeName));
 		}
-		return this.cache.get(scopeName);
+		return this._cachedMatchRoot.get(scopeName);
 	}
 
 	/**
@@ -104,14 +104,14 @@ public class Theme {
 
 			final Object settingScope = entry.getScope();
 			List<String> scopes;
-			if (settingScope instanceof String scope) {
+			if (settingScope instanceof String _scope) {
 				// remove leading commas
-				scope = scope.replaceAll("^[,]+", "");
+				_scope = _scope.replaceAll("^[,]+", "");
 
 				// remove trailing commas
-				scope = scope.replaceAll("[,]+$", "");
+				_scope = _scope.replaceAll("[,]+$", "");
 
-				scopes = BY_COMMA_SPLITTER.splitToList(scope);
+				scopes = BY_COMMA_SPLITTER.splitToList(_scope);
 			} else if (settingScope instanceof List) {
 				@SuppressWarnings("unchecked")
 				final var settingScopes = (List<String>) settingScope;
@@ -159,18 +159,24 @@ public class Theme {
 			}
 
 			for (int j = 0, lenJ = scopes.size(); j < lenJ; j++) {
-				final String _scope = scopes.get(j).trim();
+				final var _scope = scopes.get(j).trim();
 
-				final List<String> segments = BY_SPACE_SPLITTER.splitToList(_scope);
+				final var segments = BY_SPACE_SPLITTER.splitToList(_scope);
 
-				final String scope = getLastElement(segments);
+				final var scope = getLastElement(segments);
 				List<String> parentScopes = null;
 				if (segments.size() > 1) {
 					parentScopes = segments.subList(0, segments.size() - 1);
 					parentScopes = Lists.reverse(parentScopes);
 				}
 
-				result.add(new ParsedThemeRule(scope, parentScopes, i, fontStyle, foreground, background));
+				result.add(new ParsedThemeRule(
+					scope,
+					parentScopes,
+					i,
+					fontStyle,
+					foreground,
+					background));
 			}
 		}
 

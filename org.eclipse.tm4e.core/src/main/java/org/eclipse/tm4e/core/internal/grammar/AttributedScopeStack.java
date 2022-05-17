@@ -27,7 +27,6 @@ import com.google.common.base.Splitter;
  * @see <a href=
  *      "https://github.com/microsoft/vscode-textmate/blob/9157c7f869219dbaf9a5a5607f099c00fe694a29/src/grammar.ts#L1209">
  *      https://github.com/Microsoft/vscode-textmate/blob/main/src/grammar.ts</a>
- *
  */
 public final class AttributedScopeStack {
 
@@ -35,13 +34,16 @@ public final class AttributedScopeStack {
 
 	@Nullable
 	private final AttributedScopeStack parent;
-	private final String scope;
-	final int metadata;
+	private final String scopePath;
+	final int tokenAttributes;
 
-	public AttributedScopeStack(@Nullable final AttributedScopeStack parent, final String scope, final int metadata) {
+	public AttributedScopeStack(
+		@Nullable final AttributedScopeStack parent,
+		final String scopePath,
+		final int tokenAttributes) {
 		this.parent = parent;
-		this.scope = scope;
-		this.metadata = metadata;
+		this.scopePath = scopePath;
+		this.tokenAttributes = tokenAttributes;
 	}
 
 	private static boolean structuralEquals(@Nullable AttributedScopeStack a, @Nullable AttributedScopeStack b) {
@@ -60,7 +62,7 @@ public final class AttributedScopeStack {
 				return false;
 			}
 
-			if (!Objects.equals(a.scope, b.scope) || a.metadata != b.metadata) {
+			if (!Objects.equals(a.scopePath, b.scopePath) || a.tokenAttributes != b.tokenAttributes) {
 				return false;
 			}
 
@@ -90,11 +92,11 @@ public final class AttributedScopeStack {
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(parent, scope, metadata);
+		return Objects.hash(parent, scopePath, tokenAttributes);
 	}
 
 	private static boolean matchesScope(final String scope, final String selector, final String selectorWithDot) {
-		return (selector.equals(scope) || scope.startsWith(selectorWithDot));
+		return selector.equals(scope) || scope.startsWith(selectorWithDot);
 	}
 
 	/**
@@ -113,7 +115,7 @@ public final class AttributedScopeStack {
 			final var selectorWithDot = selector + '.';
 
 			while (target != null) {
-				if (matchesScope(target.scope, selector, selectorWithDot)) {
+				if (matchesScope(target.scopePath, selector, selectorWithDot)) {
 					// match for current parent scope found, continue with checking next parent scope
 					continue parent_scopes_loop;
 				}
@@ -127,10 +129,12 @@ public final class AttributedScopeStack {
 		return true;
 	}
 
-	public static int mergeMetadata(final int metadata, @Nullable final AttributedScopeStack scopesList,
-			@Nullable final BasicScopeAttributes source) {
+	public static int mergeAttributes(
+		final int existingTokenAttributes,
+		@Nullable final AttributedScopeStack scopesList,
+		@Nullable final BasicScopeAttributes source) {
 		if (source == null) {
-			return metadata;
+			return existingTokenAttributes;
 		}
 
 		int fontStyle = FontStyle.NotSet;
@@ -149,39 +153,40 @@ public final class AttributedScopeStack {
 			}
 		}
 
-		return EncodedTokenAttributes.set(metadata, source.languageId, source.tokenType, null, fontStyle, foreground,
-				background);
+		return EncodedTokenAttributes.set(existingTokenAttributes, source.languageId, source.tokenType, null, fontStyle,
+			foreground,
+			background);
 	}
 
 	private static AttributedScopeStack push(AttributedScopeStack target, final Grammar grammar,
-			final Iterable<String> scopes) {
+		final Iterable<String> scopes) {
 		for (final String scope : scopes) {
 			final var rawMetadata = grammar.getMetadataForScope(scope);
-			final int metadata = AttributedScopeStack.mergeMetadata(target.metadata, target, rawMetadata);
+			final int metadata = AttributedScopeStack.mergeAttributes(target.tokenAttributes, target, rawMetadata);
 			target = new AttributedScopeStack(target, scope, metadata);
 		}
 		return target;
 	}
 
-	AttributedScopeStack push(final Grammar grammar, @Nullable final String scope) {
-		if (scope == null) {
+	AttributedScopeStack pushAttributed(@Nullable final String scopePath, final Grammar grammar) {
+		if (scopePath == null) {
 			return this;
 		}
 
-		return AttributedScopeStack.push(this, grammar, BY_SPACE_SPLITTER.split(scope));
+		return AttributedScopeStack.push(this, grammar, BY_SPACE_SPLITTER.split(scopePath));
 	}
 
 	private static List<String> generateScopes(@Nullable AttributedScopeStack scopesList) {
 		final var result = new ArrayList<String>();
 		while (scopesList != null) {
-			result.add(scopesList.scope);
+			result.add(scopesList.scopePath);
 			scopesList = scopesList.parent;
 		}
 		Collections.reverse(result);
 		return result;
 	}
 
-	List<String> generateScopes() {
+	List<String> getScopeNames() {
 		return AttributedScopeStack.generateScopes(this);
 	}
 }

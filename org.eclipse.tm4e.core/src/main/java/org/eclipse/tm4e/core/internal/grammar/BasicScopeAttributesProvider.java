@@ -35,10 +35,6 @@ final class BasicScopeAttributesProvider {
 	private static final BasicScopeAttributes NULL_SCOPE_METADATA = new BasicScopeAttributes("", 0, 0, null);
 
 	private static final Pattern STANDARD_TOKEN_TYPE_REGEXP = Pattern.compile("\\b(comment|string|regex)\\b");
-	private static final String COMMENT_TOKEN_TYPE = "comment";
-	private static final String STRING_TOKEN_TYPE = "string";
-	private static final String REGEX_TOKEN_TYPE = "regex";
-	private static final String META_EMBEDDED_TOKEN_TYPE = "meta.embedded";
 
 	private final int initialLanguage;
 	private final IThemeProvider themeProvider;
@@ -52,14 +48,14 @@ final class BasicScopeAttributesProvider {
 	private Pattern embeddedLanguagesRegex;
 
 	BasicScopeAttributesProvider(final int initialLanguage, final IThemeProvider themeProvider,
-			@Nullable final Map<String, Integer> embeddedLanguages) {
+		@Nullable final Map<String, Integer> embeddedLanguages) {
 		this.initialLanguage = initialLanguage;
 		this.themeProvider = themeProvider;
 		this.defaultMetaData = new BasicScopeAttributes(
-				"",
-				this.initialLanguage,
-				OptionalStandardTokenType.NotSet,
-				List.of(this.themeProvider.getDefaults()));
+			"",
+			this.initialLanguage,
+			OptionalStandardTokenType.NotSet,
+			List.of(this.themeProvider.getDefaults()));
 
 		// embeddedLanguages handling
 		if (embeddedLanguages != null) {
@@ -69,25 +65,25 @@ final class BasicScopeAttributesProvider {
 
 		// create the regex
 		final var escapedScopes = this.embeddedLanguages.keySet().stream()
-				.map(RegexSource::escapeRegExpCharacters)
-				.collect(Collectors.toList());
+			.map(RegexSource::escapeRegExpCharacters)
+			.collect(Collectors.toList());
 		if (escapedScopes.isEmpty()) {
 			// no scopes registered
 			this.embeddedLanguagesRegex = null;
 		} else {
 			this.embeddedLanguagesRegex = Pattern.compile("^(("
-					+ escapedScopes.stream().sorted(Collections.reverseOrder()).collect(Collectors.joining(")|("))
-					+ "))($|\\.)");
+				+ escapedScopes.stream().sorted(Collections.reverseOrder()).collect(Collectors.joining(")|("))
+				+ "))($|\\.)");
 		}
 	}
 
 	void onDidChangeTheme() {
 		this.cache.clear();
 		this.defaultMetaData = new BasicScopeAttributes(
-				"",
-				this.initialLanguage,
-				OptionalStandardTokenType.NotSet,
-				List.of(this.themeProvider.getDefaults()));
+			"",
+			this.initialLanguage,
+			OptionalStandardTokenType.NotSet,
+			List.of(this.themeProvider.getDefaults()));
 	}
 
 	BasicScopeAttributes getDefaultMetadata() {
@@ -109,7 +105,7 @@ final class BasicScopeAttributesProvider {
 
 	private BasicScopeAttributes doGetMetadataForScope(final String scopeName) {
 		final int languageId = this.scopeToLanguage(scopeName);
-		final int standardTokenType = BasicScopeAttributesProvider.toStandardTokenType(scopeName);
+		final int standardTokenType = BasicScopeAttributesProvider._toStandardTokenType(scopeName);
 		final List<ThemeTrieElementRule> themeData = this.themeProvider.themeMatch(scopeName);
 
 		return new BasicScopeAttributes(scopeName, languageId, standardTokenType, themeData);
@@ -139,17 +135,17 @@ final class BasicScopeAttributesProvider {
 		return embeddedLanguages.getOrDefault(m.group(1), 0);
 	}
 
-	private static int /*OptionalStandardTokenType*/ toStandardTokenType(final String tokenType) {
-		final var m = STANDARD_TOKEN_TYPE_REGEXP.matcher(tokenType);
+	private static int /*OptionalStandardTokenType*/ _toStandardTokenType(final String scopeName) {
+		final var m = STANDARD_TOKEN_TYPE_REGEXP.matcher(scopeName);
 		if (!m.find()) {
 			return OptionalStandardTokenType.NotSet;
 		}
 		final String group = m.group(1);
 		return switch (group) {
-		case COMMENT_TOKEN_TYPE -> OptionalStandardTokenType.Comment;
-		case STRING_TOKEN_TYPE -> OptionalStandardTokenType.String;
-		case REGEX_TOKEN_TYPE -> OptionalStandardTokenType.RegEx;
-		case META_EMBEDDED_TOKEN_TYPE -> OptionalStandardTokenType.Other;
+		case "comment" -> OptionalStandardTokenType.Comment;
+		case "string" -> OptionalStandardTokenType.String;
+		case "regex" -> OptionalStandardTokenType.RegEx;
+		case "meta.embedded" -> OptionalStandardTokenType.Other;
 		default -> throw new TMException("Unexpected match for standard token type: " + group);
 		};
 	}

@@ -39,43 +39,43 @@ final class LineTokens {
 
 	private static final Deque<IToken> EMPTY_DEQUE = new ArrayDeque<>(0);
 
+	private final boolean _emitBinaryTokens;
+
 	/**
 	 * defined only if `LOGGER.isLoggable(TRACE)`.
 	 */
 	@Nullable
-	private final String lineText;
+	private final String _lineText;
 
 	/**
 	 * used only if `emitBinaryTokens` is false.
 	 */
-	private final Deque<IToken> tokens;
-
-	private final boolean emitBinaryTokens;
+	private final Deque<IToken> _tokens;
 
 	/**
 	 * used only if `emitBinaryTokens` is true.
 	 */
-	private final List<Integer> binaryTokens;
+	private final List<Integer> _binaryTokens;
 
-	private int lastTokenEndIndex = 0;
+	private int _lastTokenEndIndex = 0;
 
-	private final List<TokenTypeMatcher> tokenTypeOverrides;
+	private final List<TokenTypeMatcher> _tokenTypeOverrides;
 
 	@Nullable
 	private final BalancedBracketSelectors balancedBracketSelectors;
 
 	LineTokens(final boolean emitBinaryTokens, final String lineText, final List<TokenTypeMatcher> tokenTypeOverrides,
 		@Nullable final BalancedBracketSelectors balancedBracketSelectors) {
-		this.emitBinaryTokens = emitBinaryTokens;
-		this.lineText = LOGGER.isLoggable(TRACE) ? lineText : null; // store line only if it's logged
-		if (this.emitBinaryTokens) {
-			this.tokens = EMPTY_DEQUE;
-			this.binaryTokens = new ArrayList<>();
+		this._emitBinaryTokens = emitBinaryTokens;
+		this._lineText = LOGGER.isLoggable(TRACE) ? lineText : null; // store line only if it's logged
+		if (this._emitBinaryTokens) {
+			this._tokens = EMPTY_DEQUE;
+			this._binaryTokens = new ArrayList<>();
 		} else {
-			this.tokens = new ArrayDeque<>();
-			this.binaryTokens = Collections.emptyList();
+			this._tokens = new ArrayDeque<>();
+			this._binaryTokens = Collections.emptyList();
 		}
-		this.tokenTypeOverrides = tokenTypeOverrides;
+		this._tokenTypeOverrides = tokenTypeOverrides;
 		this.balancedBracketSelectors = balancedBracketSelectors;
 	}
 
@@ -84,23 +84,23 @@ final class LineTokens {
 	}
 
 	void produceFromScopes(final AttributedScopeStack scopesList, final int endIndex) {
-		if (this.lastTokenEndIndex >= endIndex) {
+		if (this._lastTokenEndIndex >= endIndex) {
 			return;
 		}
 
-		if (this.emitBinaryTokens) {
-			int metadata = scopesList.metadata;
+		if (this._emitBinaryTokens) {
+			int metadata = scopesList.tokenAttributes;
 			var containsBalancedBrackets = false;
 			final var balancedBracketSelectors = this.balancedBracketSelectors;
 			if (balancedBracketSelectors != null && balancedBracketSelectors.matchesAlways()) {
 				containsBalancedBrackets = true;
 			}
 
-			if (!tokenTypeOverrides.isEmpty() || balancedBracketSelectors != null
+			if (!_tokenTypeOverrides.isEmpty() || balancedBracketSelectors != null
 				&& !balancedBracketSelectors.matchesAlways() && !balancedBracketSelectors.matchesNever()) {
 				// Only generate scope array when required to improve performance
-				final var scopes = scopesList.generateScopes();
-				for (final var tokenType : tokenTypeOverrides) {
+				final var scopes = scopesList.getScopeNames();
+				for (final var tokenType : _tokenTypeOverrides) {
 					if (tokenType.matcher.matches(scopes)) {
 						metadata = EncodedTokenAttributes.set(
 							metadata,
@@ -128,17 +128,17 @@ final class LineTokens {
 					0);
 			}
 
-			if (!this.binaryTokens.isEmpty() && getLastElement(this.binaryTokens) == metadata) {
+			if (!this._binaryTokens.isEmpty() && getLastElement(this._binaryTokens) == metadata) {
 				// no need to push a token with the same metadata
-				this.lastTokenEndIndex = endIndex;
+				this._lastTokenEndIndex = endIndex;
 				return;
 			}
 
 			if (LOGGER.isLoggable(TRACE)) {
-				final List<String> scopes = scopesList.generateScopes();
+				final var scopes = scopesList.getScopeNames();
 				LOGGER.log(TRACE, "  token: |" +
-					castNonNull(this.lineText)
-						.substring(this.lastTokenEndIndex >= 0 ? this.lastTokenEndIndex : 0, endIndex)
+					castNonNull(this._lineText)
+						.substring(this._lastTokenEndIndex >= 0 ? this._lastTokenEndIndex : 0, endIndex)
 						.replace("\n", "\\n")
 					+ '|');
 				for (final String scope : scopes) {
@@ -146,19 +146,19 @@ final class LineTokens {
 				}
 			}
 
-			this.binaryTokens.add(this.lastTokenEndIndex);
-			this.binaryTokens.add(metadata);
+			this._binaryTokens.add(this._lastTokenEndIndex);
+			this._binaryTokens.add(metadata);
 
-			this.lastTokenEndIndex = endIndex;
+			this._lastTokenEndIndex = endIndex;
 			return;
 		}
 
-		final List<String> scopes = scopesList.generateScopes();
+		final List<String> scopes = scopesList.getScopeNames();
 
 		if (LOGGER.isLoggable(TRACE)) {
 			LOGGER.log(TRACE, "  token: |" +
-				castNonNull(this.lineText)
-					.substring(this.lastTokenEndIndex >= 0 ? this.lastTokenEndIndex : 0, endIndex)
+				castNonNull(this._lineText)
+					.substring(this._lastTokenEndIndex >= 0 ? this._lastTokenEndIndex : 0, endIndex)
 					.replace("\n", "\\n")
 				+ '|');
 			for (final String scope : scopes) {
@@ -166,42 +166,42 @@ final class LineTokens {
 			}
 		}
 
-		this.tokens.add(new Token(
-			this.lastTokenEndIndex >= 0 ? this.lastTokenEndIndex : 0,
+		this._tokens.add(new Token(
+			this._lastTokenEndIndex >= 0 ? this._lastTokenEndIndex : 0,
 			endIndex,
 			scopes));
 
-		this.lastTokenEndIndex = endIndex;
+		this._lastTokenEndIndex = endIndex;
 	}
 
 	IToken[] getResult(final StateStack stack, final int lineLength) {
-		if (!this.tokens.isEmpty() && this.tokens.getLast().getStartIndex() == lineLength - 1) {
+		if (!this._tokens.isEmpty() && this._tokens.getLast().getStartIndex() == lineLength - 1) {
 			// pop produced token for newline
-			this.tokens.removeLast();
+			this._tokens.removeLast();
 		}
 
-		if (this.tokens.isEmpty()) {
-			this.lastTokenEndIndex = -1;
+		if (this._tokens.isEmpty()) {
+			this._lastTokenEndIndex = -1;
 			this.produce(stack, lineLength);
-			this.tokens.getLast().setStartIndex(0);
+			this._tokens.getLast().setStartIndex(0);
 		}
 
-		return this.tokens.toArray(IToken[]::new);
+		return this._tokens.toArray(IToken[]::new);
 	}
 
 	int[] getBinaryResult(final StateStack stack, final int lineLength) {
-		if (!this.binaryTokens.isEmpty() && this.binaryTokens.get(binaryTokens.size() - 2) == lineLength - 1) {
+		if (!this._binaryTokens.isEmpty() && this._binaryTokens.get(_binaryTokens.size() - 2) == lineLength - 1) {
 			// pop produced token for newline
-			removeLastElement(this.binaryTokens);
-			removeLastElement(this.binaryTokens);
+			removeLastElement(this._binaryTokens);
+			removeLastElement(this._binaryTokens);
 		}
 
-		if (this.binaryTokens.isEmpty()) {
-			this.lastTokenEndIndex = -1;
+		if (this._binaryTokens.isEmpty()) {
+			this._lastTokenEndIndex = -1;
 			this.produce(stack, lineLength);
-			this.binaryTokens.set(binaryTokens.size() - 2, 0);
+			this._binaryTokens.set(_binaryTokens.size() - 2, 0);
 		}
 
-		return binaryTokens.stream().mapToInt(Integer::intValue).toArray();
+		return _binaryTokens.stream().mapToInt(Integer::intValue).toArray();
 	}
 }

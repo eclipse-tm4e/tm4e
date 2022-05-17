@@ -139,7 +139,7 @@ final class LineTokenizer {
 			 */
 
 			lineTokens.produce(stack, captureIndices[0].start);
-			stack = stack.setContentNameScopesList(stack.nameScopesList);
+			stack = stack.withContentNameScopesList(stack.nameScopesList);
 			handleCaptures(grammar, lineText, isFirstLine, stack, lineTokens, poppedRule.endCaptures, captureIndices);
 			lineTokens.produce(stack, captureIndices[0].end);
 
@@ -169,29 +169,48 @@ final class LineTokenizer {
 
 			final StateStack beforePush = stack;
 			// push it on the stack rule
-			final String scopeName = rule.getName(lineText.content, captureIndices);
-			final AttributedScopeStack nameScopesList = stack.contentNameScopesList.push(grammar, scopeName);
-			stack = stack.push(matchedRuleId, linePos, anchorPosition,
-				captureIndices[0].end == lineText.bytesCount, null, nameScopesList, nameScopesList);
+			final var scopeName = rule.getName(lineText.content, captureIndices);
+			final var nameScopesList = stack.contentNameScopesList.pushAttributed(
+				scopeName,
+				grammar);
+			stack = stack.push(
+				matchedRuleId,
+				linePos,
+				anchorPosition,
+				captureIndices[0].end == lineText.bytesCount,
+				null,
+				nameScopesList,
+				nameScopesList);
 
 			if (rule instanceof final BeginEndRule pushedRule) {
-				// if (IN_DEBUG_MODE) {
-				// console.log(' pushing ' + pushedRule.debugName + ' - ' +
-				// pushedRule.debugBeginRegExp);
-				// }
+				/*if(LOGGER.isLoggable(DEBUG)) {
+					LOGGER.log(DEBUG, " pushing " + pushedRule.debugName + " - " + pushedRule.debugBeginRegExp);
+				}*/
 
-				handleCaptures(grammar, lineText, isFirstLine, stack, lineTokens, pushedRule.beginCaptures,
+				handleCaptures(
+					grammar,
+					lineText,
+					isFirstLine,
+					stack,
+					lineTokens,
+					pushedRule.beginCaptures,
 					captureIndices);
 				lineTokens.produce(stack, captureIndices[0].end);
 				anchorPosition = captureIndices[0].end;
 
-				final String contentName = pushedRule.getContentName(lineText.content, captureIndices);
-				final AttributedScopeStack contentNameScopesList = nameScopesList.push(grammar, contentName);
-				stack = stack.setContentNameScopesList(contentNameScopesList);
+				final var contentName = pushedRule.getContentName(
+					lineText.content,
+					captureIndices);
+				final var contentNameScopesList = nameScopesList.pushAttributed(
+					contentName,
+					grammar);
+				stack = stack.withContentNameScopesList(contentNameScopesList);
 
 				if (pushedRule.endHasBackReferences) {
-					stack = stack.setEndRule(
-						pushedRule.getEndWithResolvedBackReferences(lineText.content, captureIndices));
+					stack = stack.withEndRule(
+						pushedRule.getEndWithResolvedBackReferences(
+							lineText.content,
+							captureIndices));
 				}
 
 				if (!hasAdvanced && beforePush.hasSameRuleAs(stack)) {
@@ -204,22 +223,33 @@ final class LineTokenizer {
 					return;
 				}
 			} else if (rule instanceof final BeginWhileRule pushedRule) {
-				// if (IN_DEBUG_MODE) {
-				// console.log(' pushing ' + pushedRule.debugName);
+				// if (DebugFlags.InDebugMode) {
+				// console.log(" pushing " + pushedRule.debugName);
 				// }
 
-				handleCaptures(grammar, lineText, isFirstLine, stack, lineTokens, pushedRule.beginCaptures,
+				handleCaptures(
+					grammar,
+					lineText,
+					isFirstLine,
+					stack,
+					lineTokens,
+					pushedRule.beginCaptures,
 					captureIndices);
 				lineTokens.produce(stack, captureIndices[0].end);
 				anchorPosition = captureIndices[0].end;
-
-				final String contentName = pushedRule.getContentName(lineText.content, captureIndices);
-				final AttributedScopeStack contentNameScopesList = nameScopesList.push(grammar, contentName);
-				stack = stack.setContentNameScopesList(contentNameScopesList);
+				final var contentName = pushedRule.getContentName(
+					lineText.content,
+					captureIndices);
+				final var contentNameScopesList = nameScopesList.pushAttributed(
+					contentName,
+					grammar);
+				stack = stack.withContentNameScopesList(contentNameScopesList);
 
 				if (pushedRule.whileHasBackReferences) {
-					stack = stack.setEndRule(
-						pushedRule.getWhileWithResolvedBackReferences(lineText.content, captureIndices));
+					stack = stack.withEndRule(
+						pushedRule.getWhileWithResolvedBackReferences(
+							lineText.content,
+							captureIndices));
 				}
 
 				if (!hasAdvanced && beforePush.hasSameRuleAs(stack)) {
@@ -233,12 +263,18 @@ final class LineTokenizer {
 				}
 			} else {
 				final MatchRule matchingRule = (MatchRule) rule;
-				// if (IN_DEBUG_MODE) {
+				// if (DebugFlags.InDebugMode) {
 				// console.log(' matched ' + matchingRule.debugName + ' - ' +
 				// matchingRule.debugMatchRegExp);
 				// }
 
-				handleCaptures(grammar, lineText, isFirstLine, stack, lineTokens, matchingRule.captures,
+				handleCaptures(
+					grammar,
+					lineText,
+					isFirstLine,
+					stack,
+					lineTokens,
+					matchingRule.captures,
 					captureIndices);
 				lineTokens.produce(stack, captureIndices[0].end);
 
@@ -267,8 +303,8 @@ final class LineTokenizer {
 	@Nullable
 	private IMatchResult matchRule(final Grammar grammar, final OnigString lineText, final boolean isFirstLine,
 		final int linePos, final StateStack stack, final int anchorPosition) {
-		final Rule rule = stack.getRule(grammar);
-		final CompiledRule ruleScanner = rule.compileAG(grammar, stack.endRule, isFirstLine, linePos == anchorPosition);
+		final var rule = stack.getRule(grammar);
+		final var ruleScanner = rule.compileAG(grammar, stack.endRule, isFirstLine, linePos == anchorPosition);
 
 		final OnigNextMatchResult r = ruleScanner.scanner.findNextMatchSync(lineText, linePos);
 
@@ -334,12 +370,12 @@ final class LineTokenizer {
 		final OnigString lineText,
 		final boolean isFirstLine, final int linePos, final StateStack stack, final int anchorPosition) {
 		// The lower the better
-		int bestMatchRating = Integer.MAX_VALUE;
+		var bestMatchRating = Integer.MAX_VALUE;
 		OnigCaptureIndex[] bestMatchCaptureIndices = null;
-		RuleId bestMatchRuleId = RuleId.END_RULE;
-		int bestMatchResultPriority = 0;
+		var bestMatchRuleId = RuleId.END_RULE;
+		var bestMatchResultPriority = 0;
 
-		final List<String> scopes = stack.contentNameScopesList.generateScopes();
+		final var scopes = stack.contentNameScopesList.getScopeNames();
 
 		for (final Injection injection : injections) {
 			if (!injection.matches(scopes)) {
@@ -347,10 +383,9 @@ final class LineTokenizer {
 				continue;
 			}
 
-			final CompiledRule ruleScanner = grammar.getRule(injection.ruleId).compileAG(grammar, null, isFirstLine,
-				linePos == anchorPosition);
-			final OnigNextMatchResult matchResult = ruleScanner.scanner.findNextMatchSync(lineText, linePos);
-
+			final var rule = grammar.getRule(injection.ruleId);
+			final var ruleScanner = rule.compileAG(grammar, null, isFirstLine, linePos == anchorPosition);
+			final var matchResult = ruleScanner.scanner.findNextMatchSync(lineText, linePos);
 			if (matchResult == null) {
 				continue;
 			}
@@ -359,11 +394,10 @@ final class LineTokenizer {
 				LOGGER.log(Level.TRACE, "  matched injection: " + injection.debugSelector);
 				LOGGER.log(Level.TRACE, debugCompiledRuleToString(ruleScanner));
 			}
-			final int matchRating = matchResult.getCaptureIndices()[0].start;
 
+			final int matchRating = matchResult.getCaptureIndices()[0].start;
 			if (matchRating > bestMatchRating) {
-				// Injections are sorted by priority, so the previous injection had a better or
-				// equal priority
+				// Injections are sorted by priority, so the previous injection had a better or equal priority
 				continue;
 			}
 
@@ -453,9 +487,9 @@ final class LineTokenizer {
 			if (retokenizeCapturedWithRuleId.notEquals(RuleId.NO_RULE)) {
 				// the capture requires additional matching
 				final var scopeName = captureRule.getName(lineTextContent, captureIndices);
-				final var nameScopesList = stack.contentNameScopesList.push(grammar, scopeName);
+				final var nameScopesList = stack.contentNameScopesList.pushAttributed(scopeName, grammar);
 				final var contentName = captureRule.getContentName(lineTextContent, captureIndices);
-				final var contentNameScopesList = nameScopesList.push(grammar, contentName);
+				final var contentNameScopesList = nameScopesList.pushAttributed(contentName, grammar);
 
 				// the capture requires additional matching
 				final var stackClone = stack.push(retokenizeCapturedWithRuleId, captureIndex.start, -1, false, null,
@@ -470,7 +504,7 @@ final class LineTokenizer {
 			if (captureRuleScopeName != null) {
 				// push
 				final var base = localStack.isEmpty() ? stack.contentNameScopesList : localStack.getLast().scopes;
-				final var captureRuleScopesList = base.push(grammar, captureRuleScopeName);
+				final var captureRuleScopesList = base.pushAttributed(captureRuleScopeName, grammar);
 				localStack.add(new LocalStackElement(captureRuleScopesList, captureIndex.end));
 			}
 		}

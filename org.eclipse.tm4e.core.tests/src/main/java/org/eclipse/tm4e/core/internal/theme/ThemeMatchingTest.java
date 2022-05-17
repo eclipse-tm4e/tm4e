@@ -89,7 +89,7 @@ class ThemeMatchingTest extends AbstractThemeTest {
 
 		final var root = new AttributedScopeStack(null, "text.html.cshtml", 0);
 		final var parent = new AttributedScopeStack(root, "meta.tag.structure.any.html", 0);
-		final int r = AttributedScopeStack.mergeMetadata(0, parent,
+		final int r = AttributedScopeStack.mergeAttributes(0, parent,
 			new BasicScopeAttributes("entity.name.tag.structure.any.html", 0, 0,
 				theme.match("entity.name.tag.structure.any.html")));
 		final String color = theme.getColor(EncodedTokenAttributes.getForeground(r));
@@ -231,7 +231,7 @@ class ThemeMatchingTest extends AbstractThemeTest {
 		final var parent2 = new AttributedScopeStack(parent3, "meta.structure.dictionary.json", 0);
 		final var parent1 = new AttributedScopeStack(parent2, "meta.structure.dictionary.value.json", 0);
 
-		final int r = AttributedScopeStack.mergeMetadata(
+		final int r = AttributedScopeStack.mergeAttributes(
 			0,
 			parent1,
 			new BasicScopeAttributes("string.quoted.double.json", 0, 0, theme.match("string.quoted.double.json")));

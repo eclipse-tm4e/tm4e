@@ -38,7 +38,7 @@ import org.eclipse.tm4e.core.internal.rule.RuleId;
 public final class StateStack implements IStateStack {
 
 	public static final StateStack NULL = new StateStack(null, RuleId.NO_RULE, 0, 0, false, null,
-			new AttributedScopeStack(null, "", 0), new AttributedScopeStack(null, "", 0));
+		new AttributedScopeStack(null, "", 0), new AttributedScopeStack(null, "", 0));
 
 	/**
 	 * The position on the current line where this state was pushed.
@@ -93,14 +93,14 @@ public final class StateStack implements IStateStack {
 	final AttributedScopeStack contentNameScopesList;
 
 	StateStack(
-			@Nullable final StateStack parent,
-			final RuleId ruleId,
-			final int enterPos,
-			final int anchorPos,
-			final boolean beginRuleCapturedEOL,
-			@Nullable final String endRule,
-			final AttributedScopeStack nameScopesList,
-			final AttributedScopeStack contentNameScopesList) {
+		@Nullable final StateStack parent,
+		final RuleId ruleId,
+		final int enterPos,
+		final int anchorPos,
+		final boolean beginRuleCapturedEOL,
+		@Nullable final String endRule,
+		final AttributedScopeStack nameScopesList,
+		final AttributedScopeStack contentNameScopesList) {
 		this.parent = parent;
 		depth = this.parent != null ? this.parent.depth + 1 : 1;
 		this.ruleId = ruleId;
@@ -195,20 +195,20 @@ public final class StateStack implements IStateStack {
 	}
 
 	StateStack push(final RuleId ruleId,
-			final int enterPos,
-			final int anchorPos,
-			final boolean beginRuleCapturedEOL,
-			@Nullable final String endRule,
-			final AttributedScopeStack nameScopesList,
-			final AttributedScopeStack contentNameScopesList) {
+		final int enterPos,
+		final int anchorPos,
+		final boolean beginRuleCapturedEOL,
+		@Nullable final String endRule,
+		final AttributedScopeStack nameScopesList,
+		final AttributedScopeStack contentNameScopesList) {
 		return new StateStack(this,
-				ruleId,
-				enterPos,
-				anchorPos,
-				beginRuleCapturedEOL,
-				endRule,
-				nameScopesList,
-				contentNameScopesList);
+			ruleId,
+			enterPos,
+			anchorPos,
+			beginRuleCapturedEOL,
+			endRule,
+			nameScopesList,
+			contentNameScopesList);
 	}
 
 	int getAnchorPos() {
@@ -238,31 +238,31 @@ public final class StateStack implements IStateStack {
 		return '[' + String.join(", ", r) + ']';
 	}
 
-	StateStack setContentNameScopesList(final AttributedScopeStack contentNameScopesList) {
+	StateStack withContentNameScopesList(final AttributedScopeStack contentNameScopesList) {
 		if (this.contentNameScopesList.equals(contentNameScopesList)) {
 			return this;
 		}
 		return castNonNull(this.parent).push(this.ruleId,
-				this.enterPosition,
-				this.anchorPos,
-				this.beginRuleCapturedEOL,
-				this.endRule,
-				this.nameScopesList,
-				contentNameScopesList);
+			this.enterPosition,
+			this.anchorPos,
+			this.beginRuleCapturedEOL,
+			this.endRule,
+			this.nameScopesList,
+			contentNameScopesList);
 	}
 
-	StateStack setEndRule(final String endRule) {
+	StateStack withEndRule(final String endRule) {
 		if (this.endRule != null && this.endRule.equals(endRule)) {
 			return this;
 		}
 		return new StateStack(this.parent,
-				this.ruleId,
-				this.enterPosition,
-				this.anchorPos,
-				this.beginRuleCapturedEOL,
-				endRule,
-				this.nameScopesList,
-				this.contentNameScopesList);
+			this.ruleId,
+			this.enterPosition,
+			this.anchorPos,
+			this.beginRuleCapturedEOL,
+			endRule,
+			this.nameScopesList,
+			this.contentNameScopesList);
 	}
 
 	boolean hasSameRuleAs(final StateStack other) {

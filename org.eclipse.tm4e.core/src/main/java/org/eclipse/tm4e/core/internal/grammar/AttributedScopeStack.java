@@ -46,7 +46,13 @@ public final class AttributedScopeStack {
 		this.tokenAttributes = tokenAttributes;
 	}
 
-	private static boolean structuralEquals(@Nullable AttributedScopeStack a, @Nullable AttributedScopeStack b) {
+	public boolean equals(final AttributedScopeStack other) {
+		return _equals(this, other);
+	}
+
+	private static boolean _equals(
+		@Nullable AttributedScopeStack a,
+		@Nullable AttributedScopeStack b) {
 		do {
 			if (a == b) {
 				return true;
@@ -70,29 +76,6 @@ public final class AttributedScopeStack {
 			a = a.parent;
 			b = b.parent;
 		} while (true);
-	}
-
-	private static boolean equals(@Nullable final AttributedScopeStack a, @Nullable final AttributedScopeStack b) {
-		if (a == b) {
-			return true;
-		}
-		if (a == null || b == null) {
-			return false;
-		}
-		return structuralEquals(a, b);
-	}
-
-	@Override
-	public boolean equals(@Nullable final Object other) {
-		if (other == null || other.getClass() != AttributedScopeStack.class) {
-			return false;
-		}
-		return equals(this, (AttributedScopeStack) other);
-	}
-
-	@Override
-	public int hashCode() {
-		return Objects.hash(parent, scopePath, tokenAttributes);
 	}
 
 	private static boolean matchesScope(final String scope, final String selector, final String selectorWithDot) {

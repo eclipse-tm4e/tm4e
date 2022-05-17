@@ -16,8 +16,6 @@
  */
 package org.eclipse.tm4e.core.grammar;
 
-import org.eclipse.tm4e.core.internal.grammar.StateStack;
-
 /**
  * Represents a "pushed" state on the stack (as a linked list element).
  *
@@ -25,7 +23,5 @@ import org.eclipse.tm4e.core.internal.grammar.StateStack;
  *      github.com/microsoft/vscode-textmate/blob/main/src/main.ts</a>
  */
 public interface IStateStack {
-	IStateStack INITIAL = StateStack.NULL;
-
 	int getDepth();
 }

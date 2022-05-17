@@ -5,7 +5,7 @@ Bundle-Vendor: %providerName
 Bundle-SymbolicName: org.eclipse.tm4e.registry;singleton:=true
 Bundle-Version: 0.5.2.qualifier
 Bundle-RequiredExecutionEnvironment: JavaSE-17
-Require-Bundle: org.eclipse.tm4e.core;bundle-version="0.4.4",
+Require-Bundle: org.eclipse.tm4e.core;bundle-version="0.4.6",
  org.eclipse.core.runtime,
  com.google.gson;bundle-version="2.9.0",
  com.google.guava;bundle-version="30.1.0",

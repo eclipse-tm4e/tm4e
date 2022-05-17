@@ -23,7 +23,7 @@ import java.util.List;
 import java.util.Objects;
 
 import org.eclipse.jdt.annotation.Nullable;
-import org.eclipse.tm4e.core.grammar.IStackElement;
+import org.eclipse.tm4e.core.grammar.IStateStack;
 import org.eclipse.tm4e.core.internal.rule.IRuleRegistry;
 import org.eclipse.tm4e.core.internal.rule.Rule;
 import org.eclipse.tm4e.core.internal.rule.RuleId;
@@ -35,10 +35,10 @@ import org.eclipse.tm4e.core.internal.rule.RuleId;
  *      "https://github.com/microsoft/vscode-textmate/blob/9157c7f869219dbaf9a5a5607f099c00fe694a29/src/grammar.ts#L1347">
  *      github.com/Microsoft/vscode-textmate/blob/master/src/grammar.ts</a>
  */
-public final class StackElement implements IStackElement {
+public final class StateStack implements IStateStack {
 
-	public static final StackElement NULL = new StackElement(null, RuleId.NO_RULE, 0, 0, false, null,
-			new ScopeListElement(null, "", 0), new ScopeListElement(null, "", 0));
+	public static final StateStack NULL = new StateStack(null, RuleId.NO_RULE, 0, 0, false, null,
+			new AttributedScopeStack(null, "", 0), new AttributedScopeStack(null, "", 0));
 
 	/**
 	 * The position on the current line where this state was pushed.
@@ -58,7 +58,7 @@ public final class StackElement implements IStackElement {
 	 * The previous state on the stack (or null for the root state).
 	 */
 	@Nullable
-	final StackElement parent;
+	final StateStack parent;
 
 	/**
 	 * The depth of the stack.
@@ -84,23 +84,23 @@ public final class StackElement implements IStackElement {
 	/**
 	 * The list of scopes containing the "name" for this state.
 	 */
-	final ScopeListElement nameScopesList;
+	final AttributedScopeStack nameScopesList;
 
 	/**
 	 * The list of scopes containing the "contentName" (besides "name") for this state.
 	 * This list **must** contain as an element `scopeName`.
 	 */
-	final ScopeListElement contentNameScopesList;
+	final AttributedScopeStack contentNameScopesList;
 
-	StackElement(
-			@Nullable final StackElement parent,
+	StateStack(
+			@Nullable final StateStack parent,
 			final RuleId ruleId,
 			final int enterPos,
 			final int anchorPos,
 			final boolean beginRuleCapturedEOL,
 			@Nullable final String endRule,
-			final ScopeListElement nameScopesList,
-			final ScopeListElement contentNameScopesList) {
+			final AttributedScopeStack nameScopesList,
+			final AttributedScopeStack contentNameScopesList) {
 		this.parent = parent;
 		depth = this.parent != null ? this.parent.depth + 1 : 1;
 		this.ruleId = ruleId;
@@ -115,7 +115,7 @@ public final class StackElement implements IStackElement {
 	/**
 	 * A structural equals check. Does not take into account `scopes`.
 	 */
-	private static boolean structuralEquals(@Nullable StackElement a, @Nullable StackElement b) {
+	private static boolean structuralEquals(@Nullable StateStack a, @Nullable StateStack b) {
 		do {
 			if (a == b) {
 				return true;
@@ -142,7 +142,7 @@ public final class StackElement implements IStackElement {
 	}
 
 	@SuppressWarnings("null")
-	private static boolean equals(@Nullable final StackElement a, @Nullable final StackElement b) {
+	private static boolean equals(@Nullable final StateStack a, @Nullable final StateStack b) {
 		if (a == b) {
 			return true;
 		}
@@ -154,10 +154,10 @@ public final class StackElement implements IStackElement {
 
 	@Override
 	public boolean equals(@Nullable final Object other) {
-		if (other == null || other.getClass() != StackElement.class) {
+		if (other == null || other.getClass() != StateStack.class) {
 			return false;
 		}
-		return equals(this, (StackElement) other);
+		return equals(this, (StateStack) other);
 	}
 
 	@Override
@@ -175,7 +175,7 @@ public final class StackElement implements IStackElement {
 	}
 
 	void reset() {
-		StackElement el = this;
+		StateStack el = this;
 		while (el != null) {
 			el.enterPosition = -1;
 			el.anchorPos = -1;
@@ -184,24 +184,24 @@ public final class StackElement implements IStackElement {
 	}
 
 	@Nullable
-	StackElement pop() {
+	StateStack pop() {
 		return parent;
 	}
 
-	StackElement safePop() {
+	StateStack safePop() {
 		if (parent != null)
 			return parent;
 		return this;
 	}
 
-	StackElement push(final RuleId ruleId,
+	StateStack push(final RuleId ruleId,
 			final int enterPos,
 			final int anchorPos,
 			final boolean beginRuleCapturedEOL,
 			@Nullable final String endRule,
-			final ScopeListElement nameScopesList,
-			final ScopeListElement contentNameScopesList) {
-		return new StackElement(this,
+			final AttributedScopeStack nameScopesList,
+			final AttributedScopeStack contentNameScopesList) {
+		return new StateStack(this,
 				ruleId,
 				enterPos,
 				anchorPos,
@@ -238,7 +238,7 @@ public final class StackElement implements IStackElement {
 		return '[' + String.join(", ", r) + ']';
 	}
 
-	StackElement setContentNameScopesList(final ScopeListElement contentNameScopesList) {
+	StateStack setContentNameScopesList(final AttributedScopeStack contentNameScopesList) {
 		if (this.contentNameScopesList.equals(contentNameScopesList)) {
 			return this;
 		}
@@ -251,11 +251,11 @@ public final class StackElement implements IStackElement {
 				contentNameScopesList);
 	}
 
-	StackElement setEndRule(final String endRule) {
+	StateStack setEndRule(final String endRule) {
 		if (this.endRule != null && this.endRule.equals(endRule)) {
 			return this;
 		}
-		return new StackElement(this.parent,
+		return new StateStack(this.parent,
 				this.ruleId,
 				this.enterPosition,
 				this.anchorPos,
@@ -265,7 +265,7 @@ public final class StackElement implements IStackElement {
 				this.contentNameScopesList);
 	}
 
-	boolean hasSameRuleAs(final StackElement other) {
+	boolean hasSameRuleAs(final StateStack other) {
 		var el = this;
 		while (el != null && el.enterPosition == other.enterPosition) {
 			if (el.ruleId == other.ruleId) {

@@ -14,9 +14,9 @@ package org.eclipse.tm4e.core.internal.theme;
 import static org.eclipse.tm4e.core.internal.theme.FontStyle.*;
 import static org.junit.jupiter.api.Assertions.*;
 
-import org.eclipse.tm4e.core.internal.grammar.ScopeListElement;
-import org.eclipse.tm4e.core.internal.grammar.ScopeMetadata;
-import org.eclipse.tm4e.core.internal.grammar.StackElementMetadata;
+import org.eclipse.tm4e.core.internal.grammar.AttributedScopeStack;
+import org.eclipse.tm4e.core.internal.grammar.BasicScopeAttributes;
+import org.eclipse.tm4e.core.internal.grammar.tokenattrs.EncodedTokenAttributes;
 import org.junit.jupiter.api.Test;
 
 /**
@@ -87,12 +87,12 @@ class ThemeMatchingTest extends AbstractThemeTest {
 				{ "scope": "entity", "settings": { "foreground": "#500000" } }
 			]}""");
 
-		final var root = new ScopeListElement(null, "text.html.cshtml", 0);
-		final var parent = new ScopeListElement(root, "meta.tag.structure.any.html", 0);
-		final int r = ScopeListElement.mergeMetadata(0, parent,
-			new ScopeMetadata("entity.name.tag.structure.any.html", 0, 0,
+		final var root = new AttributedScopeStack(null, "text.html.cshtml", 0);
+		final var parent = new AttributedScopeStack(root, "meta.tag.structure.any.html", 0);
+		final int r = AttributedScopeStack.mergeMetadata(0, parent,
+			new BasicScopeAttributes("entity.name.tag.structure.any.html", 0, 0,
 				theme.match("entity.name.tag.structure.any.html")));
-		final String color = theme.getColor(StackElementMetadata.getForeground(r));
+		final String color = theme.getColor(EncodedTokenAttributes.getForeground(r));
 		assertEquals("#300000", color);
 	}
 
@@ -227,15 +227,15 @@ class ThemeMatchingTest extends AbstractThemeTest {
 			new ThemeTrieElementRule(4, list("meta.structure.dictionary.json"), NotSet, _D, _NOT_SET),
 			new ThemeTrieElementRule(0, null, NotSet, _NOT_SET, _NOT_SET));
 
-		final var parent3 = new ScopeListElement(null, "source.json", 0);
-		final var parent2 = new ScopeListElement(parent3, "meta.structure.dictionary.json", 0);
-		final var parent1 = new ScopeListElement(parent2, "meta.structure.dictionary.value.json", 0);
+		final var parent3 = new AttributedScopeStack(null, "source.json", 0);
+		final var parent2 = new AttributedScopeStack(parent3, "meta.structure.dictionary.json", 0);
+		final var parent1 = new AttributedScopeStack(parent2, "meta.structure.dictionary.value.json", 0);
 
-		final int r = ScopeListElement.mergeMetadata(
+		final int r = AttributedScopeStack.mergeMetadata(
 			0,
 			parent1,
-			new ScopeMetadata("string.quoted.double.json", 0, 0, theme.match("string.quoted.double.json")));
-		final String color = theme.getColor(StackElementMetadata.getForeground(r));
+			new BasicScopeAttributes("string.quoted.double.json", 0, 0, theme.match("string.quoted.double.json")));
+		final String color = theme.getColor(EncodedTokenAttributes.getForeground(r));
 		assertEquals("#FF410D", color);
 	}
 

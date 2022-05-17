@@ -34,7 +34,7 @@ class GrammarTest2 {
 		final var registry = new Registry();
 		final var grammar = registry.addGrammar(IGrammarSource.fromResource(Data.class, "JavaScript.tmLanguage"));
 
-		IStackElement ruleStack = null;
+		IStateStack ruleStack = null;
 		int i = 0;
 
 		final var lines = new ArrayList<String>();

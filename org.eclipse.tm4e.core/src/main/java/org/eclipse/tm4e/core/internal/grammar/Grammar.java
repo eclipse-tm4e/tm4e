@@ -30,9 +30,10 @@ import java.util.function.Function;
 
 import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.tm4e.core.grammar.IGrammar;
-import org.eclipse.tm4e.core.grammar.IStackElement;
+import org.eclipse.tm4e.core.grammar.IStateStack;
 import org.eclipse.tm4e.core.grammar.ITokenizeLineResult;
 import org.eclipse.tm4e.core.grammar.ITokenizeLineResult2;
+import org.eclipse.tm4e.core.internal.grammar.tokenattrs.EncodedTokenAttributes;
 import org.eclipse.tm4e.core.internal.matcher.Matcher;
 import org.eclipse.tm4e.core.internal.oniguruma.OnigString;
 import org.eclipse.tm4e.core.internal.registry.IGrammarRepository;
@@ -68,7 +69,7 @@ public final class Grammar implements IGrammar, IRuleFactoryHelper {
 
 	@Nullable
 	private List<Injection> injections;
-	private final ScopeMetadataProvider scopeMetadataProvider;
+	private final BasicScopeAttributesProvider scopeMetadataProvider;
 	private final List<TokenTypeMatcher> tokenTypeMatchers = new ArrayList<>();
 
 	@Nullable
@@ -85,7 +86,7 @@ public final class Grammar implements IGrammar, IRuleFactoryHelper {
 		final IThemeProvider themeProvider) {
 
 		this.rootScopeName = rootScopeName;
-		this.scopeMetadataProvider = new ScopeMetadataProvider(initialLanguage, themeProvider, embeddedLanguages);
+		this.scopeMetadataProvider = new BasicScopeAttributesProvider(initialLanguage, themeProvider, embeddedLanguages);
 		this.grammarRepository = grammarRepository;
 		this.grammar = initGrammar(grammar, null);
 		this.balancedBracketSelectors = balancedBracketSelectors;
@@ -105,7 +106,7 @@ public final class Grammar implements IGrammar, IRuleFactoryHelper {
 		this.scopeMetadataProvider.onDidChangeTheme();
 	}
 
-	ScopeMetadata getMetadataForScope(final String scope) {
+	BasicScopeAttributes getMetadataForScope(final String scope) {
 		return this.scopeMetadataProvider.getMetadataForScope(scope);
 	}
 
@@ -255,8 +256,8 @@ public final class Grammar implements IGrammar, IRuleFactoryHelper {
 	}
 
 	@Override
-	public ITokenizeLineResult tokenizeLine(final String lineText, @Nullable final IStackElement prevState) {
-		return _tokenize(lineText, (StackElement) prevState, false);
+	public ITokenizeLineResult tokenizeLine(final String lineText, @Nullable final IStateStack prevState) {
+		return _tokenize(lineText, (StateStack) prevState, false);
 	}
 
 	@Override
@@ -265,14 +266,14 @@ public final class Grammar implements IGrammar, IRuleFactoryHelper {
 	}
 
 	@Override
-	public ITokenizeLineResult2 tokenizeLine2(final String lineText, @Nullable final IStackElement prevState) {
-		return _tokenize(lineText, (StackElement) prevState, true);
+	public ITokenizeLineResult2 tokenizeLine2(final String lineText, @Nullable final IStateStack prevState) {
+		return _tokenize(lineText, (StateStack) prevState, true);
 	}
 
 	@SuppressWarnings("unchecked")
 	private <T> T _tokenize(
 		String lineText,
-		@Nullable StackElement prevState,
+		@Nullable StateStack prevState,
 		final boolean emitBinaryTokens) {
 		var rootId = this.rootId;
 		if (rootId == null) {
@@ -283,12 +284,12 @@ public final class Grammar implements IGrammar, IRuleFactoryHelper {
 		}
 
 		boolean isFirstLine;
-		if (prevState == null || prevState.equals(StackElement.NULL)) {
+		if (prevState == null || prevState.equals(StateStack.NULL)) {
 			isFirstLine = true;
 			final var rawDefaultMetadata = this.scopeMetadataProvider.getDefaultMetadata();
 			final var themeData = rawDefaultMetadata.themeData;
 			final var defaultTheme = themeData == null ? null : themeData.get(0);
-			final int defaultMetadata = StackElementMetadata.set(
+			final int defaultMetadata = EncodedTokenAttributes.set(
 				0,
 				rawDefaultMetadata.languageId,
 				rawDefaultMetadata.tokenType,
@@ -300,16 +301,16 @@ public final class Grammar implements IGrammar, IRuleFactoryHelper {
 			final var rootScopeName = this.getRule(rootId).getName(null, null);
 
 			final var rawRootMetadata = this.scopeMetadataProvider.getMetadataForScope(rootScopeName);
-			final int rootMetadata = ScopeListElement.mergeMetadata(defaultMetadata, null, rawRootMetadata);
+			final int rootMetadata = AttributedScopeStack.mergeMetadata(defaultMetadata, null, rawRootMetadata);
 
-			final var scopeList = new ScopeListElement(
+			final var scopeList = new AttributedScopeStack(
 				null,
 				rootScopeName == null
 					? "unknown"
 					: rootScopeName,
 				rootMetadata);
 
-			prevState = new StackElement(
+			prevState = new StateStack(
 				null,
 				rootId,
 				-1,

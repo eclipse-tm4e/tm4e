@@ -25,9 +25,9 @@ import org.eclipse.tm4e.core.grammar.ITokenizeLineResult;
 final class TokenizeLineResult implements ITokenizeLineResult {
 
 	private final IToken[] tokens;
-	private final StackElement ruleStack;
+	private final StateStack ruleStack;
 
-	TokenizeLineResult(final IToken[] tokens, final StackElement ruleStack) {
+	TokenizeLineResult(final IToken[] tokens, final StateStack ruleStack) {
 		this.tokens = tokens;
 		this.ruleStack = ruleStack;
 	}
@@ -38,7 +38,7 @@ final class TokenizeLineResult implements ITokenizeLineResult {
 	}
 
 	@Override
-	public StackElement getRuleStack() {
+	public StateStack getRuleStack() {
 		return ruleStack;
 	}
 }

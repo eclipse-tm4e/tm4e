@@ -20,6 +20,7 @@ import java.util.stream.Collectors;
 
 import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.tm4e.core.TMException;
+import org.eclipse.tm4e.core.internal.grammar.tokenattrs.OptionalStandardTokenType;
 import org.eclipse.tm4e.core.internal.theme.IThemeProvider;
 import org.eclipse.tm4e.core.internal.theme.ThemeTrieElementRule;
 import org.eclipse.tm4e.core.internal.utils.RegexSource;
@@ -29,9 +30,9 @@ import org.eclipse.tm4e.core.internal.utils.RegexSource;
  *      "https://github.com/microsoft/vscode-textmate/blob/9157c7f869219dbaf9a5a5607f099c00fe694a29/src/grammar.ts#L320">
  *      github.com/Microsoft/vscode-textmate/blob/master/src/grammar.ts</a>
  */
-final class ScopeMetadataProvider {
+final class BasicScopeAttributesProvider {
 
-	private static final ScopeMetadata NULL_SCOPE_METADATA = new ScopeMetadata("", 0, 0, null);
+	private static final BasicScopeAttributes NULL_SCOPE_METADATA = new BasicScopeAttributes("", 0, 0, null);
 
 	private static final Pattern STANDARD_TOKEN_TYPE_REGEXP = Pattern.compile("\\b(comment|string|regex)\\b");
 	private static final String COMMENT_TOKEN_TYPE = "comment";
@@ -41,20 +42,20 @@ final class ScopeMetadataProvider {
 
 	private final int initialLanguage;
 	private final IThemeProvider themeProvider;
-	private final Map<String, @Nullable ScopeMetadata> cache = new HashMap<>();
+	private final Map<String, @Nullable BasicScopeAttributes> cache = new HashMap<>();
 
-	private ScopeMetadata defaultMetaData;
+	private BasicScopeAttributes defaultMetaData;
 
 	private final Map<String, Integer> embeddedLanguages = new HashMap<>();
 
 	@Nullable
 	private Pattern embeddedLanguagesRegex;
 
-	ScopeMetadataProvider(final int initialLanguage, final IThemeProvider themeProvider,
+	BasicScopeAttributesProvider(final int initialLanguage, final IThemeProvider themeProvider,
 			@Nullable final Map<String, Integer> embeddedLanguages) {
 		this.initialLanguage = initialLanguage;
 		this.themeProvider = themeProvider;
-		this.defaultMetaData = new ScopeMetadata(
+		this.defaultMetaData = new BasicScopeAttributes(
 				"",
 				this.initialLanguage,
 				OptionalStandardTokenType.NotSet,
@@ -82,20 +83,20 @@ final class ScopeMetadataProvider {
 
 	void onDidChangeTheme() {
 		this.cache.clear();
-		this.defaultMetaData = new ScopeMetadata(
+		this.defaultMetaData = new BasicScopeAttributes(
 				"",
 				this.initialLanguage,
 				OptionalStandardTokenType.NotSet,
 				List.of(this.themeProvider.getDefaults()));
 	}
 
-	ScopeMetadata getDefaultMetadata() {
+	BasicScopeAttributes getDefaultMetadata() {
 		return this.defaultMetaData;
 	}
 
-	ScopeMetadata getMetadataForScope(@Nullable final String scopeName) {
+	BasicScopeAttributes getMetadataForScope(@Nullable final String scopeName) {
 		if (scopeName == null) {
-			return ScopeMetadataProvider.NULL_SCOPE_METADATA;
+			return BasicScopeAttributesProvider.NULL_SCOPE_METADATA;
 		}
 		var value = this.cache.get(scopeName);
 		if (value != null) {
@@ -106,12 +107,12 @@ final class ScopeMetadataProvider {
 		return value;
 	}
 
-	private ScopeMetadata doGetMetadataForScope(final String scopeName) {
+	private BasicScopeAttributes doGetMetadataForScope(final String scopeName) {
 		final int languageId = this.scopeToLanguage(scopeName);
-		final int standardTokenType = ScopeMetadataProvider.toStandardTokenType(scopeName);
+		final int standardTokenType = BasicScopeAttributesProvider.toStandardTokenType(scopeName);
 		final List<ThemeTrieElementRule> themeData = this.themeProvider.themeMatch(scopeName);
 
-		return new ScopeMetadata(scopeName, languageId, standardTokenType, themeData);
+		return new BasicScopeAttributes(scopeName, languageId, standardTokenType, themeData);
 	}
 
 	/**

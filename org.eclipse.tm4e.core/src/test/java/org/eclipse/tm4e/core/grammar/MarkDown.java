@@ -37,7 +37,7 @@ public class MarkDown {
 
 		final long start = System.currentTimeMillis();
 
-		IStackElement ruleStack = null;
+		IStateStack ruleStack = null;
 		int i = 0;
 		for (final String line : lines) {
 			final ITokenizeLineResult lineTokens = grammar.tokenizeLine(line, ruleStack);

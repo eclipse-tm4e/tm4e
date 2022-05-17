@@ -78,7 +78,7 @@ public class GrammarTest {
 		final var registry = new Registry();
 		final IGrammar grammar = registry.addGrammar(IGrammarSource.fromResource(Data.class, "JavaScript.tmLanguage"));
 
-		IStackElement ruleStack = null;
+		IStateStack ruleStack = null;
 		int i = 0;
 		int j = 0;
 		final String[] lines = { "function add(a,b)", "{ return a+b; }" };

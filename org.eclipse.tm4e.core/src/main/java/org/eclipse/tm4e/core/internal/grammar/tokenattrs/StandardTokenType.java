@@ -9,7 +9,7 @@
  *  Contributors:
  *  Angelo Zerr <angelo.zerr@gmail.com> - initial API and implementation
  */
-package org.eclipse.tm4e.core.internal.grammar;
+package org.eclipse.tm4e.core.internal.grammar.tokenattrs;
 
 /**
  * Standard TextMate token type.

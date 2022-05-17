@@ -9,7 +9,7 @@
  * Contributors:
  * Angelo Zerr <angelo.zerr@gmail.com> - initial API and implementation
  */
-package org.eclipse.tm4e.core.internal.grammar;
+package org.eclipse.tm4e.core.internal.grammar.tokenattrs;
 
 /**
  * Helpers to manage the "collapsed" metadata of an entire StackElement stack.
@@ -36,12 +36,12 @@ package org.eclipse.tm4e.core.internal.grammar;
  *      "https://github.com/microsoft/vscode-textmate/blob/master/src/metadata.ts">
  *      github.com/Microsoft/vscode-textmate/blob/master/src/metadata.ts</a>
  */
-final class MetadataConsts {
+final class EncodedTokenDataConsts {
 
 	/**
 	 * content should be accessed statically
 	 */
-	private MetadataConsts() {
+	private EncodedTokenDataConsts() {
 	}
 
 	static final int LANGUAGEID_MASK = 0b00000000000000000000000011111111;

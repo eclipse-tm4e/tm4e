@@ -17,6 +17,7 @@ import java.util.List;
 import java.util.Objects;
 
 import org.eclipse.jdt.annotation.Nullable;
+import org.eclipse.tm4e.core.internal.grammar.tokenattrs.EncodedTokenAttributes;
 import org.eclipse.tm4e.core.internal.theme.FontStyle;
 import org.eclipse.tm4e.core.internal.theme.ThemeTrieElementRule;
 
@@ -28,22 +29,22 @@ import com.google.common.base.Splitter;
  *      https://github.com/Microsoft/vscode-textmate/blob/main/src/grammar.ts</a>
  *
  */
-public final class ScopeListElement {
+public final class AttributedScopeStack {
 
 	private static final Splitter BY_SPACE_SPLITTER = Splitter.on(' ');
 
 	@Nullable
-	private final ScopeListElement parent;
+	private final AttributedScopeStack parent;
 	private final String scope;
 	final int metadata;
 
-	public ScopeListElement(@Nullable final ScopeListElement parent, final String scope, final int metadata) {
+	public AttributedScopeStack(@Nullable final AttributedScopeStack parent, final String scope, final int metadata) {
 		this.parent = parent;
 		this.scope = scope;
 		this.metadata = metadata;
 	}
 
-	private static boolean structuralEquals(@Nullable ScopeListElement a, @Nullable ScopeListElement b) {
+	private static boolean structuralEquals(@Nullable AttributedScopeStack a, @Nullable AttributedScopeStack b) {
 		do {
 			if (a == b) {
 				return true;
@@ -69,7 +70,7 @@ public final class ScopeListElement {
 		} while (true);
 	}
 
-	private static boolean equals(@Nullable final ScopeListElement a, @Nullable final ScopeListElement b) {
+	private static boolean equals(@Nullable final AttributedScopeStack a, @Nullable final AttributedScopeStack b) {
 		if (a == b) {
 			return true;
 		}
@@ -81,10 +82,10 @@ public final class ScopeListElement {
 
 	@Override
 	public boolean equals(@Nullable final Object other) {
-		if (other == null || other.getClass() != ScopeListElement.class) {
+		if (other == null || other.getClass() != AttributedScopeStack.class) {
 			return false;
 		}
-		return equals(this, (ScopeListElement) other);
+		return equals(this, (AttributedScopeStack) other);
 	}
 
 	@Override
@@ -99,7 +100,7 @@ public final class ScopeListElement {
 	/**
 	 * implementation differs from upstream in that it is prevents potential NPEs/IndexOutOfBoundExceptions
 	 */
-	private static boolean matches(@Nullable ScopeListElement target, @Nullable final List<String> parentScopes) {
+	private static boolean matches(@Nullable AttributedScopeStack target, @Nullable final List<String> parentScopes) {
 		if (parentScopes == null || parentScopes.isEmpty()) {
 			return true;
 		}
@@ -126,8 +127,8 @@ public final class ScopeListElement {
 		return true;
 	}
 
-	public static int mergeMetadata(final int metadata, @Nullable final ScopeListElement scopesList,
-			@Nullable final ScopeMetadata source) {
+	public static int mergeMetadata(final int metadata, @Nullable final AttributedScopeStack scopesList,
+			@Nullable final BasicScopeAttributes source) {
 		if (source == null) {
 			return metadata;
 		}
@@ -148,29 +149,29 @@ public final class ScopeListElement {
 			}
 		}
 
-		return StackElementMetadata.set(metadata, source.languageId, source.tokenType, null, fontStyle, foreground,
+		return EncodedTokenAttributes.set(metadata, source.languageId, source.tokenType, null, fontStyle, foreground,
 				background);
 	}
 
-	private static ScopeListElement push(ScopeListElement target, final Grammar grammar,
+	private static AttributedScopeStack push(AttributedScopeStack target, final Grammar grammar,
 			final Iterable<String> scopes) {
 		for (final String scope : scopes) {
 			final var rawMetadata = grammar.getMetadataForScope(scope);
-			final int metadata = ScopeListElement.mergeMetadata(target.metadata, target, rawMetadata);
-			target = new ScopeListElement(target, scope, metadata);
+			final int metadata = AttributedScopeStack.mergeMetadata(target.metadata, target, rawMetadata);
+			target = new AttributedScopeStack(target, scope, metadata);
 		}
 		return target;
 	}
 
-	ScopeListElement push(final Grammar grammar, @Nullable final String scope) {
+	AttributedScopeStack push(final Grammar grammar, @Nullable final String scope) {
 		if (scope == null) {
 			return this;
 		}
 
-		return ScopeListElement.push(this, grammar, BY_SPACE_SPLITTER.split(scope));
+		return AttributedScopeStack.push(this, grammar, BY_SPACE_SPLITTER.split(scope));
 	}
 
-	private static List<String> generateScopes(@Nullable ScopeListElement scopesList) {
+	private static List<String> generateScopes(@Nullable AttributedScopeStack scopesList) {
 		final var result = new ArrayList<String>();
 		while (scopesList != null) {
 			result.add(scopesList.scope);
@@ -181,6 +182,6 @@ public final class ScopeListElement {
 	}
 
 	List<String> generateScopes() {
-		return ScopeListElement.generateScopes(this);
+		return AttributedScopeStack.generateScopes(this);
 	}
 }

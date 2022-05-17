@@ -19,7 +19,7 @@ package org.eclipse.tm4e.core.model;
 import java.util.Objects;
 
 import org.eclipse.jdt.annotation.Nullable;
-import org.eclipse.tm4e.core.grammar.IStackElement;
+import org.eclipse.tm4e.core.grammar.IStateStack;
 
 public class TMState {
 
@@ -27,19 +27,19 @@ public class TMState {
 	private final TMState parentEmbedderState;
 
 	@Nullable
-	private IStackElement ruleStack;
+	private IStateStack ruleStack;
 
-	public TMState(@Nullable final TMState parentEmbedderState, @Nullable final IStackElement ruleStatck) {
+	public TMState(@Nullable final TMState parentEmbedderState, @Nullable final IStateStack ruleStatck) {
 		this.parentEmbedderState = parentEmbedderState;
 		this.ruleStack = ruleStatck;
 	}
 
-	public void setRuleStack(final IStackElement ruleStack) {
+	public void setRuleStack(final IStateStack ruleStack) {
 		this.ruleStack = ruleStack;
 	}
 
 	@Nullable
-	public IStackElement getRuleStack() {
+	public IStateStack getRuleStack() {
 		return ruleStack;
 	}
 

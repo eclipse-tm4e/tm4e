@@ -15,12 +15,12 @@
  * - Microsoft Corporation: Initial code, written in TypeScript, licensed under MIT license
  * - Sebastian Thomschke - translation and adaptation to Java
  */
-package org.eclipse.tm4e.core.internal.grammar;
+package org.eclipse.tm4e.core.internal.grammar.tokenattrs;
 
 /**
  * Standard TextMate token type.
  */
-final class OptionalStandardTokenType {
+public final class OptionalStandardTokenType {
 
 	/**
 	 * Content should be accessed statically
@@ -28,13 +28,13 @@ final class OptionalStandardTokenType {
 	private OptionalStandardTokenType() {
 	}
 
-	static final int Other = StandardTokenType.Other;
-	static final int Comment = StandardTokenType.Comment;
-	static final int String =  StandardTokenType.String;
-	static final int RegEx =  StandardTokenType.RegEx;
+	public static final int Other = StandardTokenType.Other;
+	public static final int Comment = StandardTokenType.Comment;
+	public static final int String = StandardTokenType.String;
+	public static final int RegEx = StandardTokenType.RegEx;
 
 	/**
 	 * Indicates that no token type is set.
 	 */
-	static final int NotSet = 8;
+	public static final int NotSet = 8;
 }

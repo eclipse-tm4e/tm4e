@@ -15,7 +15,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 
 import org.eclipse.tm4e.core.grammar.IGrammar;
-import org.eclipse.tm4e.core.grammar.IStackElement;
+import org.eclipse.tm4e.core.grammar.IStateStack;
 import org.eclipse.tm4e.core.registry.IGrammarSource;
 import org.eclipse.tm4e.core.registry.Registry;
 
@@ -57,7 +57,7 @@ public final class GrammarBenchmark implements Runnable {
 	 */
 	@Override
 	public void run() {
-		IStackElement state = null;
+		IStateStack state = null;
 		for (final var line : sourceCode) {
 			state = grammar.tokenizeLine(line, state).getRuleStack();
 		}

@@ -41,7 +41,7 @@ public class TokenizationUtils {
 
 		return BY_LINE_SPLITTER.splitToStream(text).map(new Function<String, ITokenizeLineResult>() {
 			@Nullable
-			IStackElement prevStack;
+			IStateStack prevStack;
 
 			@Override
 			public ITokenizeLineResult apply(final String line) {
@@ -66,7 +66,7 @@ public class TokenizationUtils {
 		final var reader = new BufferedReader(new InputStreamReader(text));
 		return reader.lines().map(new Function<String, ITokenizeLineResult>() {
 			@Nullable
-			IStackElement prevStack;
+			IStateStack prevStack;
 
 			@Override
 			public ITokenizeLineResult apply(final String line) {

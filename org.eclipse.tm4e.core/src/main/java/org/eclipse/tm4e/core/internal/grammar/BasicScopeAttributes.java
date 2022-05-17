@@ -16,7 +16,7 @@ import java.util.List;
 import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.tm4e.core.internal.theme.ThemeTrieElementRule;
 
-public final class ScopeMetadata {
+public final class BasicScopeAttributes {
 
 	final String scopeName;
 	final int languageId;
@@ -25,7 +25,7 @@ public final class ScopeMetadata {
 	@Nullable
 	final List<ThemeTrieElementRule> themeData;
 
-	public ScopeMetadata(final String scopeName, final int languageId,
+	public BasicScopeAttributes(final String scopeName, final int languageId,
 			final int /*OptionalStandardTokenType*/ tokenType,
 			@Nullable final List<ThemeTrieElementRule> themeData) {
 		this.scopeName = scopeName;

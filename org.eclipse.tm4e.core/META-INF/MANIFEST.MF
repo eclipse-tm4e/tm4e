@@ -19,6 +19,7 @@ Bundle-RequiredExecutionEnvironment: JavaSE-17
 Export-Package: org.eclipse.tm4e.core,
  org.eclipse.tm4e.core.grammar,
  org.eclipse.tm4e.core.internal.grammar;x-friends:="org.eclipse.tm4e.core.tests",
+ org.eclipse.tm4e.core.internal.grammar.tokenattrs;x-friends:="org.eclipse.tm4e.core.tests",
  org.eclipse.tm4e.core.internal.matcher;x-friends:="org.eclipse.tm4e.core.tests",
  org.eclipse.tm4e.core.internal.theme;x-friends:="org.eclipse.tm4e.core.tests",
  org.eclipse.tm4e.core.internal.theme.reader;x-friends:="org.eclipse.tm4e.core.tests",

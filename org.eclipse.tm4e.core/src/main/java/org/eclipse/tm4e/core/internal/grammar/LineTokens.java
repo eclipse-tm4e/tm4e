@@ -29,6 +29,8 @@ import java.util.List;
 
 import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.tm4e.core.grammar.IToken;
+import org.eclipse.tm4e.core.internal.grammar.tokenattrs.EncodedTokenAttributes;
+import org.eclipse.tm4e.core.internal.grammar.tokenattrs.OptionalStandardTokenType;
 import org.eclipse.tm4e.core.internal.theme.FontStyle;
 
 final class LineTokens {
@@ -77,11 +79,11 @@ final class LineTokens {
 		this.balancedBracketSelectors = balancedBracketSelectors;
 	}
 
-	void produce(final StackElement stack, final int endIndex) {
+	void produce(final StateStack stack, final int endIndex) {
 		this.produceFromScopes(stack.contentNameScopesList, endIndex);
 	}
 
-	void produceFromScopes(final ScopeListElement scopesList, final int endIndex) {
+	void produceFromScopes(final AttributedScopeStack scopesList, final int endIndex) {
 		if (this.lastTokenEndIndex >= endIndex) {
 			return;
 		}
@@ -100,7 +102,7 @@ final class LineTokens {
 				final var scopes = scopesList.generateScopes();
 				for (final var tokenType : tokenTypeOverrides) {
 					if (tokenType.matcher.matches(scopes)) {
-						metadata = StackElementMetadata.set(
+						metadata = EncodedTokenAttributes.set(
 							metadata,
 							0,
 							tokenType.type, // toOptionalTokenType(tokenType.type),
@@ -116,7 +118,7 @@ final class LineTokens {
 			}
 
 			if (containsBalancedBrackets) {
-				metadata = StackElementMetadata.set(
+				metadata = EncodedTokenAttributes.set(
 					metadata,
 					0,
 					OptionalStandardTokenType.NotSet,
@@ -172,7 +174,7 @@ final class LineTokens {
 		this.lastTokenEndIndex = endIndex;
 	}
 
-	IToken[] getResult(final StackElement stack, final int lineLength) {
+	IToken[] getResult(final StateStack stack, final int lineLength) {
 		if (!this.tokens.isEmpty() && this.tokens.getLast().getStartIndex() == lineLength - 1) {
 			// pop produced token for newline
 			this.tokens.removeLast();
@@ -187,7 +189,7 @@ final class LineTokens {
 		return this.tokens.toArray(IToken[]::new);
 	}
 
-	int[] getBinaryResult(final StackElement stack, final int lineLength) {
+	int[] getBinaryResult(final StateStack stack, final int lineLength) {
 		if (!this.binaryTokens.isEmpty() && this.binaryTokens.get(binaryTokens.size() - 2) == lineLength - 1) {
 			// pop produced token for newline
 			removeLastElement(this.binaryTokens);

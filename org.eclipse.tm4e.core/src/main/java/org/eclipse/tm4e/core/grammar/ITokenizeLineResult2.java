@@ -36,5 +36,5 @@ public interface ITokenizeLineResult2 {
 	 *
 	 * @return the `prevState` to be passed on to the next line tokenization.
 	 */
-	IStackElement getRuleStack();
+	IStateStack getRuleStack();
 }

@@ -14,12 +14,17 @@ package org.eclipse.tm4e.core.internal.parser;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.io.InputStreamReader;
+import java.util.List;
+import java.util.Set;
 
 import org.eclipse.tm4e.core.Data;
 import org.eclipse.tm4e.core.internal.grammar.RawGrammar;
 import org.eclipse.tm4e.core.internal.grammar.reader.GrammarReader;
+import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestMethodOrder;
 
+@TestMethodOrder(MethodOrderer.MethodName.class)
 public class PListParserTest {
 
 	@Test
@@ -28,8 +33,15 @@ public class PListParserTest {
 		try (final var is = Data.class.getResourceAsStream("csharp.json")) {
 			final var grammar = parser.parse(new InputStreamReader(is));
 			assertNotNull(grammar);
+			assertNotNull(grammar.getRepository());
 			assertFalse(grammar.getFileTypes().isEmpty());
-			System.out.println(grammar);
+			assertEquals(List.of("cs"), grammar.getFileTypes());
+			assertEquals("C#", grammar.getName());
+			assertEquals("source.cs", grammar.getScopeName());
+			assertEquals(List.of("cs"), grammar.getFileTypes());
+			assertEquals(Set.of(
+				"fileTypes", "foldingStartMarker", "foldingStopMarker", "name", "patterns", "repository", "scopeName"),
+				grammar.keySet());
 		}
 	}
 
@@ -39,8 +51,14 @@ public class PListParserTest {
 		try (final var is = Data.class.getResourceAsStream("JavaScript.tmLanguage.yaml")) {
 			final var grammar = parser.parse(new InputStreamReader(is));
 			assertNotNull(grammar);
+			assertNotNull(grammar.getRepository());
 			assertFalse(grammar.getFileTypes().isEmpty());
-			System.out.println(grammar);
+			assertEquals(List.of("js", "jsx"), grammar.getFileTypes());
+			assertEquals("JavaScript (with React support)", grammar.getName());
+			assertEquals("source.js", grammar.getScopeName());
+			assertEquals(Set.of(
+				"fileTypes", "name", "patterns", "repository", "scopeName", "uuid"),
+				grammar.keySet());
 		}
 	}
 
@@ -50,8 +68,14 @@ public class PListParserTest {
 		try (final var is = Data.class.getResourceAsStream("JavaScript.tmLanguage")) {
 			final var grammar = parser.parse(new InputStreamReader(is));
 			assertNotNull(grammar);
+			assertNotNull(grammar.getRepository());
 			assertFalse(grammar.getFileTypes().isEmpty());
-			System.out.println(grammar);
+			assertEquals(List.of("js", "jsx"), grammar.getFileTypes());
+			assertEquals("JavaScript (with React support)", grammar.getName());
+			assertEquals("source.js", grammar.getScopeName());
+			assertEquals(Set.of(
+				"fileTypes", "name", "patterns", "repository", "scopeName", "uuid"),
+				grammar.keySet());
 		}
 	}
 }

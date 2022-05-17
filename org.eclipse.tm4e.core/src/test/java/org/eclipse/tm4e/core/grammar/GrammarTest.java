@@ -12,16 +12,27 @@
 package org.eclipse.tm4e.core.grammar;
 
 import static org.eclipse.tm4e.core.internal.utils.NullSafetyHelper.*;
+import static org.junit.jupiter.api.Assertions.*;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.Reader;
+import java.io.StringReader;
+import java.nio.charset.StandardCharsets;
+import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
 
 import org.eclipse.tm4e.core.Data;
 import org.eclipse.tm4e.core.registry.IGrammarSource;
 import org.eclipse.tm4e.core.registry.Registry;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 /**
  * Test for grammar tokenizer.
- *
  */
 public class GrammarTest {
 
@@ -61,7 +72,7 @@ public class GrammarTest {
 		"Token from 14 to 15 with scopes [source.js, meta.function.js, meta.decl.block.js, meta.brace.curly.js]" };
 
 	@Test
-	public void tokenizeLine() throws Exception {
+	public void tokenizeSingleLineExpression() throws Exception {
 		final var registry = new Registry();
 		final IGrammar grammar = registry.addGrammar(IGrammarSource.fromResource(Data.class, "JavaScript.tmLanguage"));
 		final ITokenizeLineResult lineTokens = castNonNull(grammar).tokenizeLine("function add(a,b) { return a+b; }");
@@ -74,7 +85,7 @@ public class GrammarTest {
 	}
 
 	@Test
-	public void tokenizeLines() throws Exception {
+	public void tokenizeMultilineExpression() throws Exception {
 		final var registry = new Registry();
 		final IGrammar grammar = registry.addGrammar(IGrammarSource.fromResource(Data.class, "JavaScript.tmLanguage"));
 
@@ -93,6 +104,105 @@ public class GrammarTest {
 			}
 			j = i;
 		}
+	}
 
+	@Test
+	public void tokenizeMultilineYaml() throws Exception {
+		final var registry = new Registry();
+		final var grammar = registry.addGrammar(IGrammarSource.fromResource(Data.class, "yaml.tmLanguage.json"));
+		final var lines = ">\n should.be.string.unquoted.block.yaml\n should.also.be.string.unquoted.block.yaml";
+		final var result = TokenizationUtils.tokenizeText(lines, grammar).iterator();
+		assertTrue(Arrays.stream(result.next().getTokens()).anyMatch(t -> t.getScopes().contains(
+			"keyword.control.flow.block-scalar.folded.yaml")));
+		assertTrue(Arrays.stream(result.next().getTokens())
+			.anyMatch(t -> t.getScopes().contains("string.unquoted.block.yaml")));
+		assertTrue(Arrays.stream(result.next().getTokens())
+			.anyMatch(t -> t.getScopes().contains("string.unquoted.block.yaml")));
+	}
+
+	@Test
+	void tokenizeTypeScriptFile() throws Exception {
+
+		final var grammar = new Registry()
+			.addGrammar(IGrammarSource.fromResource(Data.class, "TypeScript.tmLanguage.json"));
+
+		final List<String> expectedTokens;
+		try (var resource = Data.class.getResourceAsStream("raytracer_tokens.txt")) {
+			expectedTokens = new BufferedReader(new InputStreamReader(resource, StandardCharsets.UTF_8))
+				.lines()
+				.collect(Collectors.toList());
+		}
+
+		IStateStack stateStack = null;
+		int tokenIndex = -1;
+		try (var reader = new BufferedReader(new InputStreamReader(Data.class.getResourceAsStream("raytracer.ts")))) {
+			while (reader.ready()) {
+				final var lineTokens = grammar.tokenizeLine(reader.readLine(), stateStack);
+				stateStack = lineTokens.getRuleStack();
+				for (int i = 0; i < lineTokens.getTokens().length; i++) {
+					tokenIndex++;
+					final var token = lineTokens.getTokens()[i];
+					Assertions.assertEquals(
+						expectedTokens.get(tokenIndex),
+						"Token from " + token.getStartIndex() + " to " + token.getEndIndex() + " with scopes "
+							+ token.getScopes());
+				}
+			}
+		}
+	}
+
+	// TODO see https://github.com/microsoft/vscode-textmate/issues/173
+	@Disabled
+	@Test
+	void testShadowedRulesAreResolvedCorrectly() {
+		final var registry = new Registry();
+		final var grammar = registry.addGrammar(new IGrammarSource() {
+
+			@Override
+			public Reader getReader() throws IOException {
+				return new StringReader("""
+					{
+						"scopeName": "source.test",
+						"repository": {
+							"foo": {
+								"include": "#bar"
+							},
+							"bar": {
+								"match": "bar1",
+								"name": "outer"
+							}
+						},
+						"patterns": [{
+								"patterns": [{
+									"include": "#foo"
+								}],
+								"repository": {
+									"bar": {
+										"match": "bar1",
+										"name": "inner"
+									}
+								}
+							},
+							{
+								"begin": "begin",
+								"patterns": [{
+									"include": "#foo"
+								}],
+								"end": "end"
+							}
+						]
+					}
+					""");
+			}
+
+			@Override
+			public String getFilePath() {
+				return "test-grammar.json";
+			}
+		});
+
+		final var result = grammar.tokenizeLine("bar1");
+		assertEquals("[{startIndex: 0, endIndex: 4, scopes: [source.test, outer]}]",
+			Arrays.toString(result.getTokens()));
 	}
 }

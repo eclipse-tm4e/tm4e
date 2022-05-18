@@ -39,10 +39,6 @@ public class LineTokens {
 		return endState;
 	}
 
-	public void setEndState(@Nullable  final TMState endState) {
-		this.endState = endState;
-	}
-
 	public List<TMToken> getTokens() {
 		return tokens;
 	}

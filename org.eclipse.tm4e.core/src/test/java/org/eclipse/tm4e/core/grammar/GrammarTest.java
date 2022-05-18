@@ -15,10 +15,7 @@ import static org.eclipse.tm4e.core.internal.utils.NullSafetyHelper.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.io.BufferedReader;
-import java.io.IOException;
 import java.io.InputStreamReader;
-import java.io.Reader;
-import java.io.StringReader;
 import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 import java.util.List;
@@ -34,7 +31,7 @@ import org.junit.jupiter.api.Test;
 /**
  * Test for grammar tokenizer.
  */
-public class GrammarTest {
+class GrammarTest {
 
 	private static final String[] EXPECTED_TOKENS = {
 		"Token from 0 to 8 with scopes [source.js, meta.function.js, storage.type.function.js]",
@@ -72,7 +69,7 @@ public class GrammarTest {
 		"Token from 14 to 15 with scopes [source.js, meta.function.js, meta.decl.block.js, meta.brace.curly.js]" };
 
 	@Test
-	public void tokenizeSingleLineExpression() throws Exception {
+	void tokenizeSingleLineExpression() throws Exception {
 		final var registry = new Registry();
 		final IGrammar grammar = registry.addGrammar(IGrammarSource.fromResource(Data.class, "JavaScript.tmLanguage"));
 		final ITokenizeLineResult lineTokens = castNonNull(grammar).tokenizeLine("function add(a,b) { return a+b; }");
@@ -85,7 +82,7 @@ public class GrammarTest {
 	}
 
 	@Test
-	public void tokenizeMultilineExpression() throws Exception {
+	void tokenizeMultilineExpression() throws Exception {
 		final var registry = new Registry();
 		final IGrammar grammar = registry.addGrammar(IGrammarSource.fromResource(Data.class, "JavaScript.tmLanguage"));
 
@@ -107,7 +104,7 @@ public class GrammarTest {
 	}
 
 	@Test
-	public void tokenizeMultilineYaml() throws Exception {
+	void tokenizeMultilineYaml() throws Exception {
 		final var registry = new Registry();
 		final var grammar = registry.addGrammar(IGrammarSource.fromResource(Data.class, "yaml.tmLanguage.json"));
 		final var lines = ">\n should.be.string.unquoted.block.yaml\n should.also.be.string.unquoted.block.yaml";
@@ -156,50 +153,39 @@ public class GrammarTest {
 	@Test
 	void testShadowedRulesAreResolvedCorrectly() {
 		final var registry = new Registry();
-		final var grammar = registry.addGrammar(new IGrammarSource() {
-
-			@Override
-			public Reader getReader() throws IOException {
-				return new StringReader("""
-					{
-						"scopeName": "source.test",
+		final var grammar = registry.addGrammar(IGrammarSource.fromString(IGrammarSource.ContentType.JSON, """
+			{
+				"scopeName": "source.test",
+				"repository": {
+					"foo": {
+						"include": "#bar"
+					},
+					"bar": {
+						"match": "bar1",
+						"name": "outer"
+					}
+				},
+				"patterns": [{
+						"patterns": [{
+							"include": "#foo"
+						}],
 						"repository": {
-							"foo": {
-								"include": "#bar"
-							},
 							"bar": {
 								"match": "bar1",
-								"name": "outer"
+								"name": "inner"
 							}
-						},
+						}
+					},
+					{
+						"begin": "begin",
 						"patterns": [{
-								"patterns": [{
-									"include": "#foo"
-								}],
-								"repository": {
-									"bar": {
-										"match": "bar1",
-										"name": "inner"
-									}
-								}
-							},
-							{
-								"begin": "begin",
-								"patterns": [{
-									"include": "#foo"
-								}],
-								"end": "end"
-							}
-						]
+							"include": "#foo"
+						}],
+						"end": "end"
 					}
-					""");
+				]
 			}
-
-			@Override
-			public String getFilePath() {
-				return "test-grammar.json";
-			}
-		});
+			"""));
 
 		final var result = grammar.tokenizeLine("bar1");
 		assertEquals("[{startIndex: 0, endIndex: 4, scopes: [source.test, outer]}]",

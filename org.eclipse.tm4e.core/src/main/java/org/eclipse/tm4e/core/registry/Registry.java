@@ -29,11 +29,11 @@ import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.tm4e.core.TMException;
 import org.eclipse.tm4e.core.grammar.IGrammar;
 import org.eclipse.tm4e.core.internal.grammar.BalancedBracketSelectors;
+import org.eclipse.tm4e.core.internal.grammar.GrammarReader;
 import org.eclipse.tm4e.core.internal.grammar.dependencies.ScopeDependencyProcessor;
-import org.eclipse.tm4e.core.internal.grammar.reader.GrammarReader;
 import org.eclipse.tm4e.core.internal.registry.SyncRegistry;
-import org.eclipse.tm4e.core.internal.theme.IRawTheme;
 import org.eclipse.tm4e.core.internal.theme.Theme;
+import org.eclipse.tm4e.core.internal.theme.ThemeReader;
 
 /**
  * The registry that will hold all grammars.
@@ -66,8 +66,14 @@ public final class Registry {
 	/**
 	 * Change the theme. Once called, no previous `ruleStack` should be used anymore.
 	 */
-	public void setTheme(final IRawTheme theme) {
-		this._syncRegistry.setTheme(Theme.createFromRawTheme(theme, _options.getColorMap()));
+	public void setTheme(final IThemeSource source) throws TMException {
+		try {
+			this._syncRegistry.setTheme(Theme.createFromRawTheme(
+				ThemeReader.readTheme(source),
+				_options.getColorMap()));
+		} catch (final Exception ex) {
+			throw new TMException("Loading theme from '" + source.getFilePath() + "' failed: " + ex.getMessage(), ex);
+		}
 	}
 
 	/**
@@ -154,7 +160,7 @@ public final class Registry {
 			return false;
 		}
 		try {
-			final var grammar = GrammarReader.readGrammarSync(grammarSource);
+			final var grammar = GrammarReader.readGrammar(grammarSource);
 			this._syncRegistry.addGrammar(grammar, this._options.getInjections(scopeName));
 		} catch (final Exception ex) {
 			LOGGER.log(ERROR, "Loading grammar for scope [{0}] failed: {1}", scopeName, ex.getMessage(), ex);
@@ -173,7 +179,7 @@ public final class Registry {
 		@Nullable final Integer initialLanguage,
 		@Nullable final Map<String, Integer> embeddedLanguages) throws TMException {
 		try {
-			final var rawGrammar = GrammarReader.readGrammarSync(source);
+			final var rawGrammar = GrammarReader.readGrammar(source);
 			this._syncRegistry.addGrammar(rawGrammar,
 				injections == null || injections.isEmpty()
 					? this._options.getInjections(rawGrammar.getScopeName())

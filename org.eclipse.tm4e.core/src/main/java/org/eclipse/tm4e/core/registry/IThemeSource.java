@@ -21,10 +21,10 @@ import java.nio.file.Path;
 
 import org.eclipse.jdt.annotation.Nullable;
 
-public interface IGrammarSource {
+public interface IThemeSource {
 
 	/**
-	 * Supported grammar content types
+	 * Supported theme content types
 	 */
 	enum ContentType {
 		JSON,
@@ -37,22 +37,22 @@ public interface IGrammarSource {
 
 		return switch (extension) {
 		case "json" -> ContentType.JSON;
-		case "yaml", "yaml-tmlanguage", "yml" -> ContentType.YAML;
-		case "plist", "tmlanguage", "xml" -> ContentType.XML;
+		case "yaml", "yaml-tmtheme", "yml" -> ContentType.YAML;
+		case "plist", "tmtheme", "xml" -> ContentType.XML;
 		default -> throw new IllegalArgumentException("Unsupported file type: " + fileName);
 		};
 	}
 
-	static IGrammarSource fromFile(final Path file) {
+	static IThemeSource fromFile(final Path file) {
 		return fromFile(file, null, null);
 	}
 
-	static IGrammarSource fromFile(final Path file, @Nullable final ContentType contentType,
+	static IThemeSource fromFile(final Path file, @Nullable final ContentType contentType,
 		@Nullable final Charset charset) {
 
 		final var filePath = file.toString();
 		final var contentType1 = contentType == null ? guessFileFormat(filePath) : contentType;
-		return new IGrammarSource() {
+		return new IThemeSource() {
 			@Override
 			public Reader getReader() throws IOException {
 				return Files.newBufferedReader(file, charset == null ? StandardCharsets.UTF_8 : charset);
@@ -73,18 +73,18 @@ public interface IGrammarSource {
 	/**
 	 * @throws IllegalArgumentException if the content type is unsupported or cannot be determined
 	 */
-	static IGrammarSource fromResource(final Class<?> clazz, final String resourceName) {
+	static IThemeSource fromResource(final Class<?> clazz, final String resourceName) {
 		return fromResource(clazz, resourceName, null, null);
 	}
 
 	/**
 	 * @throws IllegalArgumentException if the content type is unsupported or cannot be determined
 	 */
-	static IGrammarSource fromResource(final Class<?> clazz, final String resourceName,
+	static IThemeSource fromResource(final Class<?> clazz, final String resourceName,
 		@Nullable final ContentType contentType, @Nullable final Charset charset) {
 
 		final var contentType1 = contentType == null ? guessFileFormat(resourceName) : contentType;
-		return new IGrammarSource() {
+		return new IThemeSource() {
 			@Override
 			public Reader getReader() throws IOException {
 				return new BufferedReader(new InputStreamReader(
@@ -104,9 +104,9 @@ public interface IGrammarSource {
 		};
 	}
 
-	static IGrammarSource fromString(final ContentType contentType, final String content) {
+	static IThemeSource fromString(final ContentType contentType, final String content) {
 
-		return new IGrammarSource() {
+		return new IThemeSource() {
 			@Override
 			public Reader getReader() throws IOException {
 				return new StringReader(content);

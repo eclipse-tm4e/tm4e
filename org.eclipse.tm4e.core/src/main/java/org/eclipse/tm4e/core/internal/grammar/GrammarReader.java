@@ -14,12 +14,8 @@
  * - Microsoft Corporation: Initial code, written in TypeScript, licensed under MIT license
  * - Angelo Zerr <angelo.zerr@gmail.com> - translation and adaptation to Java
  */
-package org.eclipse.tm4e.core.internal.grammar.reader;
+package org.eclipse.tm4e.core.internal.grammar;
 
-import org.eclipse.tm4e.core.internal.grammar.RawCaptures;
-import org.eclipse.tm4e.core.internal.grammar.RawGrammar;
-import org.eclipse.tm4e.core.internal.grammar.RawRepository;
-import org.eclipse.tm4e.core.internal.grammar.RawRule;
 import org.eclipse.tm4e.core.internal.parser.PListParser;
 import org.eclipse.tm4e.core.internal.parser.PListParserJSON;
 import org.eclipse.tm4e.core.internal.parser.PListParserXML;
@@ -49,20 +45,18 @@ public final class GrammarReader {
 	private static final PListParser<RawGrammar> XML_PARSER = new PListParserXML<>(OBJECT_FACTORY);
 	private static final PListParser<RawGrammar> YAML_PARSER = new PListParserYAML<>(OBJECT_FACTORY);
 
-	public static IRawGrammar readGrammarSync(final IGrammarSource source) throws Exception {
+	public static IRawGrammar readGrammar(final IGrammarSource source) throws Exception {
 		try (var reader = source.getReader()) {
-			return getGrammarParser(source.getFilePath()).parse(reader);
+			switch (source.getContentType()) {
+			case JSON:
+				return JSON_PARSER.parse(reader);
+			case YAML:
+				return YAML_PARSER.parse(reader);
+			case XML:
+			default:
+				return XML_PARSER.parse(reader);
+			}
 		}
-	}
-
-	private static PListParser<RawGrammar> getGrammarParser(final String filePath) {
-		final String extension = filePath.substring(filePath.lastIndexOf('.') + 1).trim().toLowerCase();
-
-		return switch (extension) {
-		case "json" -> JSON_PARSER;
-		case "yaml", "yaml-tmlanguage", "yml" -> YAML_PARSER;
-		default -> XML_PARSER;
-		};
 	}
 
 	/**

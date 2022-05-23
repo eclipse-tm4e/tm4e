@@ -16,6 +16,7 @@
  */
 package org.eclipse.tm4e.core.model;
 
+import java.time.Duration;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.LinkedHashMap;
@@ -63,39 +64,38 @@ public class TMTokenization implements ITokenizationSupport {
 	public TokenizationResult tokenize(final String line,
 		@Nullable final IStateStack state,
 		@Nullable final Integer offsetDeltaOrNull,
-		@Nullable final Integer stopAtOffset) {
-		/*
-		 Do not attempt to tokenize if a line has over 20k or
-		 if the rule stack contains more than 100 rules (indicator of broken grammar that forgets to pop rules)
-		
-		 if (line.length >= 20000 || depth(state.ruleStack) > 100) {
-		   return new RawLineTokens(
-		     [new Token(offsetDelta, '')],
-		     [new ModeTransition(offsetDelta, this._modeId)],
-		     offsetDelta,
-		     state
-		   );
-		 }
-		*/
+		@Nullable final Duration timeLimit) {
+
 		final int offsetDelta = offsetDeltaOrNull == null ? 0 : offsetDeltaOrNull;
-		final var tokenizationResult = _grammar.tokenizeLine(line, state, null);
+		final var tokenizationResult = _grammar.tokenizeLine(line, state, timeLimit);
+		final var tokens = tokenizationResult.getTokens();
 
 		// Create the result early and fill in the tokens later
-		final var tokens = new ArrayList<TMToken>();
+		final var tmTokens = new ArrayList<TMToken>(tokens.length < 10 ? tokens.length : 10);
 		String lastTokenType = null;
-		for (int tokenIndex = 0, len = tokenizationResult.getTokens().length; tokenIndex < len; tokenIndex++) {
-			final var token = tokenizationResult.getTokens()[tokenIndex];
+		for (final var token : tokens) {
 			final int tokenStartIndex = token.getStartIndex();
 			final var tokenType = decodeTextMateToken(this.decodeMap, token.getScopes());
 
 			// do not push a new token if the type is exactly the same (also helps with ligatures)
 			if (!tokenType.equals(lastTokenType)) {
-				tokens.add(new TMToken(tokenStartIndex + offsetDelta, tokenType));
+				tmTokens.add(new TMToken(tokenStartIndex + offsetDelta, tokenType));
 				lastTokenType = tokenType;
 			}
 		}
-		return new TokenizationResult(tokens, offsetDelta + line.length(), tokenizationResult.getRuleStack());
 
+		final var lastToken = tokens[tokens.length - 1];
+
+		return new TokenizationResult(
+			tmTokens,
+
+			// TODO Math.min() is a temporary workaround because currently in some cases lastToken.getEndIndex()
+			// incorrectly returns larger values than line.length() for some reasons.
+			// See for example GrammarTest#testTokenize1IllegalToken()
+			offsetDelta + Math.min(line.length(), lastToken.getEndIndex()),
+
+			tokenizationResult.getRuleStack(),
+			tokenizationResult.isStoppedEarly());
 	}
 
 	private String decodeTextMateToken(final DecodeMap decodeMap, final List<String> scopes) {

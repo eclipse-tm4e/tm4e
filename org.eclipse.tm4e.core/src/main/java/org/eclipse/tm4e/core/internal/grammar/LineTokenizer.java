@@ -21,6 +21,7 @@ import static org.eclipse.tm4e.core.internal.utils.NullSafetyHelper.*;
 
 import java.lang.System.Logger;
 import java.lang.System.Logger.Level;
+import java.time.Duration;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.List;
@@ -111,7 +112,7 @@ final class LineTokenizer {
 		this.lineTokens = lineTokens;
 	}
 
-	private TokenizeStringResult scan(final boolean checkWhileConditions, final int timeLimit) {
+	private TokenizeStringResult scan(final boolean checkWhileConditions, final long timeLimit) {
 		stop = false;
 
 		if (checkWhileConditions) {
@@ -498,7 +499,7 @@ final class LineTokenizer {
 					nameScopesList, contentNameScopesList);
 				final var onigSubStr = OnigString.of(lineTextContent.substring(0, captureIndex.end));
 				tokenizeString(grammar, onigSubStr, isFirstLine && captureIndex.start == 0,
-					captureIndex.start, stackClone, lineTokens, false, /* no time limit */0);
+					captureIndex.start, stackClone, lineTokens, false, Duration.ZERO /* no time limit */);
 				continue;
 			}
 
@@ -586,9 +587,9 @@ final class LineTokenizer {
 	static TokenizeStringResult tokenizeString(final Grammar grammar, final OnigString lineText,
 		final boolean isFirstLine,
 		final int linePos, final StateStack stack, final LineTokens lineTokens,
-		final boolean checkWhileConditions, final int timeLimit) {
+		final boolean checkWhileConditions, final Duration timeLimit) {
 		return new LineTokenizer(grammar, lineText, isFirstLine, linePos, stack, lineTokens)
-			.scan(checkWhileConditions, timeLimit);
+			.scan(checkWhileConditions, timeLimit.toMillis());
 	}
 
 	static String debugCompiledRuleToString(final CompiledRule ruleScanner) {

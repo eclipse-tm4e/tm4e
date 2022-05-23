@@ -19,6 +19,7 @@ package org.eclipse.tm4e.core.internal.grammar;
 
 import java.lang.System.Logger;
 import java.lang.System.Logger.Level;
+import java.time.Duration;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -256,8 +257,9 @@ public final class Grammar implements IGrammar, IRuleFactoryHelper {
 	}
 
 	@Override
-	public ITokenizeLineResult<IToken[]> tokenizeLine(final String lineText, @Nullable final IStateStack prevState,
-		@Nullable final Integer timeLimit) {
+	public ITokenizeLineResult<IToken[]> tokenizeLine(final String lineText,
+		@Nullable final IStateStack prevState,
+		@Nullable final Duration timeLimit) {
 		return _tokenize(lineText, (StateStack) prevState, false, timeLimit);
 	}
 
@@ -268,7 +270,7 @@ public final class Grammar implements IGrammar, IRuleFactoryHelper {
 
 	@Override
 	public ITokenizeLineResult<int[]> tokenizeLine2(final String lineText, @Nullable final IStateStack prevState,
-		@Nullable final Integer timeLimit) {
+		@Nullable final Duration timeLimit) {
 		return _tokenize(lineText, (StateStack) prevState, true, timeLimit);
 	}
 
@@ -277,7 +279,7 @@ public final class Grammar implements IGrammar, IRuleFactoryHelper {
 		String lineText,
 		@Nullable StateStack prevState,
 		final boolean emitBinaryTokens,
-		@Nullable final Integer timeLimit) {
+		@Nullable final Duration timeLimit) {
 		var rootId = this._rootId;
 		if (rootId == null) {
 			rootId = this._rootId = RuleFactory.getCompiledRuleId(
@@ -349,7 +351,7 @@ public final class Grammar implements IGrammar, IRuleFactoryHelper {
 			prevState,
 			lineTokens,
 			true,
-			timeLimit == null ? 0 : timeLimit);
+			timeLimit == null ? Duration.ZERO : timeLimit);
 
 		if (emitBinaryTokens) {
 			return (T) new TokenizeLineResult<>(lineTokens.getBinaryResult(tokenizeResult.stack, lineLength),

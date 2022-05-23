@@ -16,6 +16,7 @@
  */
 package org.eclipse.tm4e.core.grammar;
 
+import java.time.Duration;
 import java.util.Collection;
 
 import org.eclipse.jdt.annotation.Nullable;
@@ -65,13 +66,13 @@ public interface IGrammar {
 	 *
 	 * @param lineText the line text to tokenize.
 	 * @param prevState previous line state.
-	 * @param timeLimit duration in milliseconds after which tokenization is aborted, in which case the returned result
+	 * @param timeLimit duration after which tokenization is aborted, in which case the returned result
 	 *        will have {@link ITokenizeLineResult#isStoppedEarly()} set to <code>true</code>
 	 *
 	 * @return the result of the tokenization.
 	 */
 	ITokenizeLineResult<IToken[]> tokenizeLine(String lineText, @Nullable IStateStack prevState,
-		@Nullable Integer timeLimit);
+		@Nullable Duration timeLimit);
 
 	/**
 	 * Tokenize `lineText` using previous line state `prevState`.
@@ -107,9 +108,9 @@ public interface IGrammar {
 	 *
 	 * @param lineText the line text to tokenize.
 	 * @param prevState previous line state.
-	 * @param timeLimit duration in milliseconds after which tokenization is aborted, in which case the returned result
+	 * @param timeLimit duration after which tokenization is aborted, in which case the returned result
 	 *        will have {@link ITokenizeLineResult#isStoppedEarly()} set to <code>true</code>
 	 */
 	ITokenizeLineResult<int[]> tokenizeLine2(String lineText, @Nullable IStateStack prevState,
-		@Nullable Integer timeLimit);
+		@Nullable Duration timeLimit);
 }

@@ -25,7 +25,7 @@ import org.eclipse.tm4e.core.grammar.IStateStack;
  * @see <a href="https://github.com/microsoft/vscode/blob/main/src/vs/editor//common/languages.ts">
  *      github.com/microsoft/vscode/blob/main/src/vs/editor//common/languages.ts</a>
  */
-public class TokenizationResult {
+public final class TokenizationResult {
 
 	final List<TMToken> tokens;
 	int actualStopOffset;
@@ -33,10 +33,14 @@ public class TokenizationResult {
 	@Nullable
 	IStateStack endState;
 
-	public TokenizationResult(final List<TMToken> tokens, final int actualStopOffset, @Nullable final IStateStack endState) {
+	final boolean stoppedEarly;
+
+	public TokenizationResult(final List<TMToken> tokens, final int actualStopOffset,
+		@Nullable final IStateStack endState, final boolean stoppedEarly) {
 		this.tokens = tokens;
 		this.actualStopOffset = actualStopOffset;
 		this.endState = endState;
+		this.stoppedEarly = stoppedEarly;
 	}
 
 	@Nullable
@@ -46,5 +50,12 @@ public class TokenizationResult {
 
 	public List<TMToken> getTokens() {
 		return tokens;
+	}
+
+	/**
+	 * Did tokenization stop early due to reaching the time limit.
+	 */
+	public boolean isStoppedEarly() {
+		return stoppedEarly;
 	}
 }

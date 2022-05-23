@@ -16,6 +16,8 @@
  */
 package org.eclipse.tm4e.core.model;
 
+import java.time.Duration;
+
 import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.tm4e.core.grammar.IStateStack;
 
@@ -29,9 +31,10 @@ public interface ITokenizationSupport {
 
 	TokenizationResult tokenize(String line, @Nullable IStateStack state);
 
-	// add offsetDelta to each of the returned indices
-	// stop tokenizing at absolute value stopAtOffset (i.e. stream.pos() +
-	// offsetDelta > stopAtOffset)
-	TokenizationResult tokenize(String line, @Nullable IStateStack state, Integer offsetDelta, Integer stopAtOffset);
-
+	/**
+	 * @param offsetDelta adds offsetDelta to each of the returned indices
+	 * @param timeLimit duration after which tokenization is stopped
+	 */
+	TokenizationResult tokenize(String line, @Nullable IStateStack state, @Nullable Integer offsetDelta,
+		@Nullable Duration timeLimit);
 }

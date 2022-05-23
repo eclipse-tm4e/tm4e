@@ -16,6 +16,7 @@ import static org.eclipse.tm4e.core.internal.utils.MoreCollections.*;
 import static org.eclipse.tm4e.core.internal.utils.NullSafetyHelper.*;
 
 import java.lang.System.Logger;
+import java.time.Duration;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -179,8 +180,8 @@ public class TMModel implements ITMModel {
 		 */
 		private int updateTokensInRange(final ModelTokensChangedEventBuilder eventBuilder, final int startIndex,
 			final int endLineIndex) {
-			final int stopLineTokenizationAfter = 1_000_000_000; // 1 billion, if a line is so long, you have other
-																 // trouble :)
+			final var stopLineTokenizationAfter = Duration.ofMillis(1_000_000_000); // 1 billion, if a line is so long,
+																					 // you have other trouble :)
 
 			// Validate all states up to and including endLineIndex
 			int nextInvalidLineIndex = startIndex;

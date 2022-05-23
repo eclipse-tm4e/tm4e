@@ -19,6 +19,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
+import java.time.Duration;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -246,7 +247,7 @@ class GrammarTest {
 			assertFalse(result1.isStoppedEarly());
 			final var lastToken1 = result1.getTokens()[result1.getTokens().length - 1];
 
-			final var result2 = grammar.tokenizeLine(veryLongLine, null, 10 /*ms timeLimit*/);
+			final var result2 = grammar.tokenizeLine(veryLongLine, null, Duration.ofMillis(10));
 			assertTrue(result2.isStoppedEarly());
 			assertNotEquals(result1.getTokens().length, result2.getTokens().length);
 			final var lastToken2 = result2.getTokens()[result2.getTokens().length - 1];

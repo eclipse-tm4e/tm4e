@@ -11,27 +11,21 @@
  */
 package org.eclipse.tm4e.core.model;
 
-import static java.lang.System.Logger.Level.*;
-
-import java.lang.System.Logger;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
 import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.tm4e.core.grammar.IStateStack;
+import org.eclipse.tm4e.core.internal.grammar.StateStack;
 import org.eclipse.tm4e.core.internal.utils.StringUtils;
 
 /**
- * Abstract class for Model lines used by the TextMate model.
- *
- * Implementation class must:
- * <ul>
- * <li>synchronizes lines with the lines of the editor content when it changed.</li>
- * <li>call {@link AbstractModelLines#invalidateLine(int)} with the first changed line.</li>
- * </ul>
+ * Abstract class for Model lines used by {@link TMModel}.
+ * <p>
+ * Implementation class must synchronize lines with the lines of the editor content when it changed.
  */
-public abstract class AbstractModelLines implements IModelLines {
+public abstract class AbstractModelLines {
 
 	static final class ModelLine {
 		/**
@@ -39,90 +33,150 @@ public abstract class AbstractModelLines implements IModelLines {
 		 * represent the current content of the related line in the editor
 		 */
 		volatile boolean isInvalid = true;
-		@Nullable
-		IStateStack startState;
+		IStateStack startState = StateStack.NULL;
 		List<TMToken> tokens = Collections.emptyList();
 	}
 
-	private static final Logger LOGGER = System.getLogger(AbstractModelLines.class.getName());
-
-	private final List<ModelLine> list = Collections.synchronizedList(new LinkedList<>());
+	private final List<ModelLine> list = new LinkedList<>();
 
 	@Nullable
 	private TMModel model;
 
-	protected void setModel(@Nullable final TMModel model) {
+	void setModel(@Nullable final TMModel model) {
 		this.model = model;
-		list.forEach(line -> line.isInvalid = true);
-	}
-
-	@Override
-	public void addLine(final int line) {
-		try {
-			this.list.add(line, new ModelLine());
-		} catch (final Exception e) {
-			e.printStackTrace();
+		synchronized (list) {
+			list.forEach(line -> line.isInvalid = true);
 		}
 	}
 
-	@Override
-	public void removeLine(final int line) {
-		this.list.remove(line);
-	}
+	protected void addLines(final int lineIndex, final int count) {
+		if (count < 1)
+			return;
 
-	@Override
-	public void updateLine(final int line) {
-		try {
-			// TODO this.list.get(line).text = this.lineToTextResolver.apply(line);
-		} catch (final Exception ex) {
-			LOGGER.log(ERROR, ex.getMessage(), ex);
+		synchronized (list) {
+			final var firstLine = getOrNull(lineIndex);
+			for (int i = 0; i < count; i++) {
+				list.add(lineIndex, new ModelLine());
+			}
+			if (firstLine != null) {
+				list.get(lineIndex).startState = firstLine.startState;
+			}
+			updateLine(lineIndex);
 		}
-	}
-
-	ModelLine get(final int index) {
-		return list.get(index);
-	}
-
-	@Nullable
-	ModelLine getOrNull(final int index) {
-		try {
-			return list.get(index);
-		} catch (final IndexOutOfBoundsException ex) {
-			return null;
-		}
-	}
-
-	@Override
-	public int getNumberOfLines() {
-		return list.size();
-	}
-
-	@Override
-	public boolean hasLine(final int lineIndex) {
-		return lineIndex > -1 && lineIndex < list.size();
 	}
 
 	/**
-	 * Marks the given line as out-of-date resulting in async re-parsing
+	 * Removes one or more lines at the given index.
+	 *
+	 * @param lineIndex (0-based)
+	 * @param count number of lines to remove
+	 *
+	 * @throws IndexOutOfBoundsException if <code>lineIndex < 0 || lineIndex >= {@link #getNumberOfLines()}</code>
 	 */
-	protected void invalidateLine(final int lineIndex) {
+	protected void removeLines(final int lineIndex, final int count) {
+		if (count < 1)
+			return;
+
+		synchronized (list) {
+			for (int i = 0; i < count; i++) {
+				list.remove(lineIndex);
+			}
+			updateLine(lineIndex);
+		}
+	}
+
+	/**
+	 * Replaces lines at the given index
+	 *
+	 * @param lineIndex (0-based)
+	 * @param linesReplaced number of lines that are replaced
+	 * @param linesAdded number of lines that are replacing the replaced lines
+	 *
+	 * @throws IndexOutOfBoundsException if <code>lineIndex < 0 || lineIndex >= {@link #getNumberOfLines()}</code>
+	 */
+	protected void replaceLines(final int lineIndex, final int linesReplaced, final int linesAdded) {
+		if (linesReplaced == 0 && linesAdded == 0)
+			return;
+
+		// check if operation single line update
+		if (linesReplaced == 1 && linesAdded == 1) {
+			updateLine(lineIndex);
+			return;
+		}
+
+		synchronized (list) {
+			final var firstLine = getOrNull(lineIndex);
+			for (int i = 0; i < linesReplaced; i++) {
+				list.remove(lineIndex);
+			}
+			for (int i = 0; i < linesAdded; i++) {
+				list.add(lineIndex, new ModelLine());
+			}
+
+			if (firstLine != null) {
+				list.get(lineIndex).startState = firstLine.startState;
+			}
+			updateLine(lineIndex);
+		}
+	}
+
+	/**
+	 * Marks a line as updated.
+	 *
+	 * @param lineIndex (0-based)
+	 */
+	protected void updateLine(final int lineIndex) {
 		if (model != null) {
 			model.invalidateLine(lineIndex);
 		}
 	}
 
+	/**
+	 * @throws IndexOutOfBoundsException if <code>lineIndex < 0 || lineIndex >= {@link #getNumberOfLines()}</code>
+	 */
+	ModelLine get(final int lineIndex) {
+		synchronized (list) {
+			return list.get(lineIndex);
+		}
+	}
+
+	@Nullable
+	ModelLine getOrNull(final int lineIndex) {
+		synchronized (list) {
+			if (lineIndex > -1 && lineIndex < list.size())
+				return list.get(lineIndex);
+		}
+		return null;
+	}
+
+	public int getNumberOfLines() {
+		synchronized (list) {
+			return list.size();
+		}
+	}
+
+	/**
+	 * @param lineIndex (0-based)
+	 */
+	public abstract String getLineText(int lineIndex) throws Exception;
+
+	public void dispose() {
+	}
+
 	@Override
 	public String toString() {
-		return StringUtils.toString(this, sb -> {
-			if (!list.isEmpty()) {
-				for (int i = 0; i < list.size(); i++) {
-					sb.append(i)
-						.append(": isInvalid=")
-						.append(list.get(i).isInvalid)
-						.append(", ");
+		synchronized (list) {
+			return StringUtils.toString(this, sb -> {
+				if (!list.isEmpty()) {
+					for (int i = 0; i < list.size(); i++) {
+						sb.append(i)
+							.append(": isInvalid=")
+							.append(list.get(i).isInvalid)
+							.append(", ");
+					}
+					sb.setLength(sb.length() - 2);
 				}
-				sb.setLength(sb.length() - 2);
-			}
-		});
+			});
+		}
 	}
 }

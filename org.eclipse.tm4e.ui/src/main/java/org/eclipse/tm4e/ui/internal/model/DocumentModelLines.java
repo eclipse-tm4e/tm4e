@@ -11,6 +11,9 @@
  */
 package org.eclipse.tm4e.ui.internal.model;
 
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.jdt.annotation.Nullable;
@@ -29,13 +32,12 @@ import org.eclipse.tm4e.ui.TMUIPlugin;
 final class DocumentModelLines extends AbstractModelLines implements IDocumentListener {
 
 	private final IDocument document;
+	private final Map<DocumentEvent, Integer> removeEndLineIndexes = new ConcurrentHashMap<>();
 
 	DocumentModelLines(final IDocument document) {
 		this.document = document;
 		document.addDocumentListener(this);
-		for (int i = 0; i < document.getNumberOfLines(); i++) {
-			addLine(i);
-		}
+		addLines(0, document.getNumberOfLines());
 	}
 
 	@Override
@@ -43,16 +45,15 @@ final class DocumentModelLines extends AbstractModelLines implements IDocumentLi
 		if (event == null)
 			return;
 		try {
-			if (!DocumentHelper.isInsert(event)) {
-				// Remove or Replace (Remove + Insert)
-				final int startLine = DocumentHelper.getStartLine(event);
-				final int endLine = DocumentHelper.getEndLine(event, true);
-				for (int i = endLine; i > startLine; i--) {
-					DocumentModelLines.this.removeLine(i);
-				}
+			switch (DocumentHelper.getEventType(event)) {
+			case REMOVE, REPLACE /*= Remove + Insert */:
+				removeEndLineIndexes.put(event, DocumentHelper.getEndLineIndexOfRemovedText(event));
+				// => cannot be calculated in documentChanged() where it will result in BadLocationException
+				break;
+			default:
 			}
-		} catch (final BadLocationException e) {
-			e.printStackTrace();
+		} catch (final BadLocationException ex) {
+			TMUIPlugin.log(new Status(IStatus.ERROR, TMUIPlugin.PLUGIN_ID, ex.getMessage(), ex));
 		}
 	}
 
@@ -61,39 +62,35 @@ final class DocumentModelLines extends AbstractModelLines implements IDocumentLi
 		if (event == null)
 			return;
 		try {
-			final int startLine = DocumentHelper.getStartLine(event);
-			if (!DocumentHelper.isRemove(event)) {
-				final int endLine = DocumentHelper.getEndLine(event, false);
-				// Insert new lines
-				for (int i = startLine; i < endLine; i++) {
-					DocumentModelLines.this.addLine(i + 1);
-				}
-				if (startLine == endLine) {
-					DocumentModelLines.this.updateLine(startLine);
-				}
-			} else {
-				// Update line
-				DocumentModelLines.this.updateLine(startLine);
+			final int startLineIndex = DocumentHelper.getStartLineIndex(event);
+			switch (DocumentHelper.getEventType(event)) {
+			case INSERT: {
+				final var endLineIndex = DocumentHelper.getEndLineIndexOfAddedText(event);
+				replaceLines(startLineIndex, 1, 1 + (endLineIndex - startLineIndex));
+				break;
 			}
-			invalidateLine(startLine);
-		} catch (final BadLocationException e) {
-			TMUIPlugin.log(new Status(IStatus.ERROR, TMUIPlugin.PLUGIN_ID, e.getMessage(), e));
+			case REMOVE: {
+				final var endLineIndex = removeEndLineIndexes.remove(event).intValue();
+				replaceLines(startLineIndex, 1 + (endLineIndex - startLineIndex), 1);
+				break;
+			}
+			case REPLACE: {
+				final var endLineRemovedIndex = removeEndLineIndexes.remove(event).intValue();
+				final var endLineAddedIndex = DocumentHelper.getEndLineIndexOfAddedText(event);
+				replaceLines(startLineIndex,
+						1 + (endLineRemovedIndex - startLineIndex),
+						1 + (endLineAddedIndex - startLineIndex));
+				break;
+			}
+			}
+		} catch (final BadLocationException ex) {
+			TMUIPlugin.log(new Status(IStatus.ERROR, TMUIPlugin.PLUGIN_ID, ex.getMessage(), ex));
 		}
-	}
-
-	@Override
-	public int getNumberOfLines() {
-		return document.getNumberOfLines();
 	}
 
 	@Override
 	public String getLineText(final int line) throws Exception {
 		return DocumentHelper.getLineText(document, line, false);
-	}
-
-	@Override
-	public int getLineLength(final int line) throws Exception {
-		return document.getLineLength(line);
 	}
 
 	@Override

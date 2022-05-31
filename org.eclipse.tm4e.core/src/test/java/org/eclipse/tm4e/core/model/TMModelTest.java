@@ -36,19 +36,9 @@ class TMModelTest {
 			public String getLineText(final int lineIndex) throws Exception {
 				return lines[lineIndex];
 			}
-
-			@Override
-			public int getLineLength(final int lineIndex) throws Exception {
-				return lines[lineIndex].length();
-			}
-
-			@Override
-			public void dispose() {
-			}
 		};
-		for (int i = 0; i < lines.length; i++) {
-			modelLines.addLine(i);
-		}
+
+		modelLines.addLines(0, lines.length);
 
 		final var tmModel = new TMModel(modelLines);
 		try {

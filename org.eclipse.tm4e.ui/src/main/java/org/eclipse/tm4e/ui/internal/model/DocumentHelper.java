@@ -1,43 +1,67 @@
 /**
- *  Copyright (c) 2015-2017 Angelo ZERR.
+ * Copyright (c) 2015-2017 Angelo ZERR.
  * This program and the accompanying materials are made
  * available under the terms of the Eclipse Public License 2.0
  * which is available at https://www.eclipse.org/legal/epl-2.0/
  *
  * SPDX-License-Identifier: EPL-2.0
  *
- *  Contributors:
- *  Angelo Zerr <angelo.zerr@gmail.com> - initial API and implementation
+ * Contributors:
+ * Angelo Zerr <angelo.zerr@gmail.com> - initial API and implementation
  */
 package org.eclipse.tm4e.ui.internal.model;
 
 import org.eclipse.jface.text.BadLocationException;
 import org.eclipse.jface.text.DocumentEvent;
 import org.eclipse.jface.text.IDocument;
+import org.eclipse.jface.text.IDocumentListener;
 import org.eclipse.jface.text.IRegion;
 import org.eclipse.jface.text.Region;
 
+import com.google.common.base.Strings;
+
 /**
  * Utilities class for {@link IDocument}.
- *
  */
 final class DocumentHelper {
 
-	static int getStartLine(final DocumentEvent event) throws BadLocationException {
+	enum DocumentEventType {
+		INSERT,
+		REPLACE,
+		REMOVE
+	}
+
+	static DocumentEventType getEventType(final DocumentEvent event) {
+		if (Strings.isNullOrEmpty(event.getText())) {
+			return DocumentEventType.REMOVE;
+		}
+		return event.getLength() == 0
+				? DocumentEventType.INSERT
+				: DocumentEventType.REPLACE;
+	}
+
+	/**
+	 * @return the index of the first char that has been modified of the start line
+	 */
+	static int getStartLineCharIndex(final DocumentEvent event) throws BadLocationException {
+		return event.getOffset() - event.getDocument().getLineOffset(getStartLineIndex(event));
+	}
+
+	static int getStartLineIndex(final DocumentEvent event) throws BadLocationException {
 		return event.getDocument().getLineOfOffset(event.getOffset());
 	}
 
-	static int getEndLine(final DocumentEvent event, final boolean documentAboutToBeChanged) throws BadLocationException {
-		final int length = documentAboutToBeChanged ? event.getLength() : event.getText().length();
-		return event.getDocument().getLineOfOffset(event.getOffset() + length);
+	static int getEndLineIndexOfAddedText(final DocumentEvent event) throws BadLocationException {
+		return event.getDocument().getLineOfOffset(event.getOffset() + event.getText().length() - 1);
 	}
 
-	static boolean isRemove(final DocumentEvent event) {
-		return event.getText() == null || event.getText().isEmpty();
-	}
-
-	static boolean isInsert(final DocumentEvent event) {
-		return event.getLength() == 0 && event.getText() != null;
+	/**
+	 * Must only be called in {@link IDocumentListener#documentAboutToBeChanged(DocumentEvent)} and not
+	 * {@link IDocumentListener#documentChanged(DocumentEvent)} where it might result in a {@link BadLocationException}
+	 * exception
+	 */
+	static int getEndLineIndexOfRemovedText(final DocumentEvent event) throws BadLocationException {
+		return event.getDocument().getLineOfOffset(event.getOffset() + event.getLength());
 	}
 
 	static String getLineText(final IDocument document, final int line, final boolean withLineDelimiter)
@@ -51,7 +75,8 @@ final class DocumentHelper {
 		return document.get(lo, ll);
 	}
 
-	private static IRegion getRegion(final IDocument document, final int fromLine, final int toLine) throws BadLocationException {
+	private static IRegion getRegion(final IDocument document, final int fromLine, final int toLine)
+			throws BadLocationException {
 		final int startOffset = document.getLineOffset(fromLine);
 		final int endOffset = document.getLineOffset(toLine) + document.getLineLength(toLine);
 		return new Region(startOffset, endOffset - startOffset);

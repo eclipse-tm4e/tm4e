@@ -27,9 +27,7 @@ import java.util.function.Consumer;
 
 import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.tm4e.core.grammar.IGrammar;
-import org.eclipse.tm4e.core.grammar.IStateStack;
 import org.eclipse.tm4e.core.internal.utils.StringUtils;
-import org.eclipse.tm4e.core.model.AbstractModelLines.ModelLine;
 
 /**
  * TextMate model class.
@@ -95,11 +93,12 @@ public class TMModel implements ITMModel {
 					final int lineIndexToProcess = invalidLines.take();
 
 					// skip if the queued line is not invalid anymore
-					if (!modelLines.get(lineIndexToProcess).isInvalid)
+					final var modelLine = modelLines.getOrNull(lineIndexToProcess);
+					if (modelLine == null || !modelLine.isInvalid)
 						continue;
 
 					try {
-						revalidateTokensNow(lineIndexToProcess);
+						revalidateTokens(lineIndexToProcess);
 					} catch (final Exception ex) {
 						LOGGER.log(ERROR, ex.getMessage());
 						invalidateLine(lineIndexToProcess);
@@ -110,132 +109,94 @@ public class TMModel implements ITMModel {
 			}
 		}
 
-		/**
-		 * @param startLine 0-based
-		 * @param toLineIndexOrNull 0-based
-		 */
-		private void revalidateTokensNow(final int startLine) {
-			buildAndEmitEvent(eventBuilder -> {
-				long tokenizedChars = 0;
-				long currentCharsToTokenize = 0;
-				final long MAX_ALLOWED_TIME = 20;
-				long currentEstimatedTimeToTokenize = 0;
-				long elapsedTime;
-				final long startTime = System.currentTimeMillis();
-				// Tokenize at most 1000 lines. Estimate the tokenization speed per character and stop when:
-				// - MAX_ALLOWED_TIME is reached
-				// - tokenizing the next line would go above MAX_ALLOWED_TIME
+		private final int MAX_LOOP_TIME = 200; // process follow-up lines until this limit is reached
+		private final Duration MAX_TIME_PER_LINE = Duration.ofSeconds(1); // max time a single line can be processed
 
-				int lineIndex = startLine;
+		/**
+		 * @param startLineIndex 0-based
+		 */
+		private void revalidateTokens(final int startLineIndex) {
+			buildAndEmitEvent(eventBuilder -> {
+				int lineIndex = startLineIndex;
+				final long startTime = System.currentTimeMillis();
 				while (lineIndex < modelLines.getNumberOfLines()) {
-					elapsedTime = System.currentTimeMillis() - startTime;
-					if (elapsedTime > MAX_ALLOWED_TIME) {
-						// Stop if MAX_ALLOWED_TIME is reached
+					switch (updateTokensOfLine(eventBuilder, lineIndex, MAX_TIME_PER_LINE)) {
+					case DONE:
+						return;
+					case UPDATE_FAILED:
+						// mark the current line as invalid and add it to the end of the queue
 						invalidateLine(lineIndex);
 						return;
-					}
-
-					// Compute how many characters will be tokenized for this line
-					try {
-						currentCharsToTokenize = modelLines.getLineLength(lineIndex);
-					} catch (final Exception ex) {
-						LOGGER.log(ERROR, ex.getMessage());
-					}
-
-					if (tokenizedChars > 0) {
-						// If we have enough history, estimate how long tokenizing this line would take
-						currentEstimatedTimeToTokenize = (long) ((double) elapsedTime / tokenizedChars)
-							* currentCharsToTokenize;
-						if (elapsedTime + currentEstimatedTimeToTokenize > MAX_ALLOWED_TIME) {
-							// Tokenizing this line will go above MAX_ALLOWED_TIME
-							invalidateLine(lineIndex);
+					case NEXT_LINE_IS_OUTDATED:
+						if (System.currentTimeMillis() - startTime >= MAX_LOOP_TIME) {
+							// mark the next line as invalid and add it to the end of the queue
+							invalidateLine(lineIndex + 1);
 							return;
 						}
+						lineIndex++;
+						break;
 					}
-
-					lineIndex = updateTokensInRange(eventBuilder, lineIndex, lineIndex) + 1;
-					tokenizedChars += currentCharsToTokenize;
 				}
 			});
-
 		}
 	}
 
-	@Nullable
-	private IStateStack lastState;
+	private enum UpdateTokensOfLineResult {
+		DONE,
+		UPDATE_FAILED,
+		NEXT_LINE_IS_OUTDATED,
+	}
 
 	/**
-	 * @param startIndex 0-based
-	 * @param endLineIndex 0-based
-	 *
-	 * @return the first line index (0-based) that was NOT processed by this operation
+	 * @param lineIndex 0-based
 	 */
-	private int updateTokensInRange(final ModelTokensChangedEventBuilder eventBuilder, final int startIndex,
-		final int endLineIndex) {
-		final var stopLineTokenizationAfter = Duration.ofMillis(1_000_000_000); // 1 billion, if a line is so long,
-																				 // you have other trouble :)
+	private UpdateTokensOfLineResult updateTokensOfLine(final ModelTokensChangedEventBuilder eventBuilder,
+		final int lineIndex, final Duration timeLimit) {
 
-		// Validate all states up to and including endLineIndex
-		int nextInvalidLineIndex = startIndex;
-		int lineIndex = startIndex;
-		while (lineIndex <= endLineIndex && lineIndex < modelLines.getNumberOfLines()) {
-			final int endStateIndex = lineIndex + 1;
-			TokenizationResult r = null;
-			String text = null;
-			final ModelLine modelLine = modelLines.get(lineIndex);
-			try {
-				text = modelLines.getLineText(lineIndex);
-				// Tokenize only the first X characters
-				r = castNonNull(tokenizer).tokenize(text, modelLine.startState, 0, stopLineTokenizationAfter);
-			} catch (final Exception ex) {
-				LOGGER.log(ERROR, ex.toString());
-				return nextInvalidLineIndex;
-			}
-
-			if (!r.tokens.isEmpty()) {
-				// Cannot have a stop offset before the last token
-				r.actualStopOffset = Math.max(r.actualStopOffset, getLastElement(r.tokens).startIndex + 1);
-			}
-
-			if (r.actualStopOffset < text.length()) {
-				// Treat the rest of the line (if above limit) as one default token
-				r.tokens.add(new TMToken(r.actualStopOffset, ""));
-				// Use as end state the starting state
-				r.endState = modelLine.startState;
-			}
-
-			modelLine.tokens = r.tokens;
-			eventBuilder.registerChangedTokens(lineIndex + 1);
-			modelLine.isInvalid = false;
-
-			if (endStateIndex < modelLines.getNumberOfLines()) {
-				final ModelLine endStateLine = castNonNull(modelLines.get(endStateIndex));
-				if (endStateLine.startState != null && Objects.equals(endStateLine.startState, r.endState)) {
-					// The end state of this line remains the same
-					nextInvalidLineIndex = lineIndex + 1;
-					while (nextInvalidLineIndex < modelLines.getNumberOfLines()) {
-						if (modelLines.get(nextInvalidLineIndex).isInvalid) {
-							break;
-						}
-						final var isLastLine = nextInvalidLineIndex + 1 >= modelLines.getNumberOfLines();
-						if (isLastLine
-							? lastState == null
-							: modelLines.get(nextInvalidLineIndex + 1).startState == null) {
-							break;
-						}
-						nextInvalidLineIndex++;
-					}
-					lineIndex = nextInvalidLineIndex;
-				} else {
-					endStateLine.startState = r.endState;
-					lineIndex++;
-				}
-			} else {
-				lastState = r.endState;
-				lineIndex++;
-			}
+		final var modelLine = modelLines.getOrNull(lineIndex);
+		if (modelLine == null) {
+			return UpdateTokensOfLineResult.DONE; // line does not exist anymore
 		}
-		return nextInvalidLineIndex;
+
+		/*
+		 * (re-)tokenize the requested line
+		 */
+		final TokenizationResult r;
+		final String lineText;
+		try {
+			lineText = modelLines.getLineText(lineIndex);
+			r = castNonNull(tokenizer).tokenize(lineText, modelLine.startState, 0, timeLimit);
+		} catch (final Exception ex) {
+			LOGGER.log(ERROR, ex.toString());
+			return UpdateTokensOfLineResult.UPDATE_FAILED;
+		}
+
+		if (r.stoppedEarly) {
+			// treat the rest of the line as one default token
+			r.tokens.add(new TMToken(r.actualStopOffset, ""));
+			// Use the line's starting state as end state in case of incomplete tokenization
+			r.endState = modelLine.startState;
+		}
+
+		modelLine.tokens = r.tokens;
+		eventBuilder.registerChangedTokens(lineIndex + 1);
+		modelLine.isInvalid = false;
+
+		/*
+		 * check if the next line now requires a token update too
+		 */
+		final var nextModelLine = modelLines.getOrNull(lineIndex + 1);
+		if (nextModelLine == null) {
+			return UpdateTokensOfLineResult.DONE; // next line does not exist
+		}
+
+		if (!nextModelLine.isInvalid && nextModelLine.startState.equals(r.endState)) {
+			return UpdateTokensOfLineResult.DONE; // next line is valid and has matching start state
+		}
+
+		// next line is out of date
+		nextModelLine.startState = r.endState;
+		return UpdateTokensOfLineResult.NEXT_LINE_IS_OUTDATED;
 	}
 
 	@Nullable
@@ -316,13 +277,6 @@ public class TMModel implements ITMModel {
 	public List<TMToken> getLineTokens(final int lineNumber) {
 		final var modelLine = modelLines.getOrNull(lineNumber);
 		return modelLine == null ? null : modelLine.tokens;
-	}
-
-	/**
-	 * @throws IndexOutOfBoundsException
-	 */
-	public boolean isLineInvalid(final int lineNumber) {
-		return modelLines.get(lineNumber).isInvalid;
 	}
 
 	/**

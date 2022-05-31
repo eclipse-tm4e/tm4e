@@ -35,7 +35,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
-import org.opentest4j.AssertionFailedError;
 
 @TestMethodOrder(value = MethodOrderer.MethodName.class)
 class DocumentTMModelTest {
@@ -101,6 +100,26 @@ class DocumentTMModelTest {
 	}
 
 	/**
+	 * Tests inserting some chars into a line
+	 */
+	@Test
+	void testInsertText() throws Throwable {
+		final var initialLines = List.of(
+				"//comment1",
+				"//comment2",
+				"//comment3");
+
+		final var event = awaitModelChangedEvent(model, initialLines,
+				() -> doc.replace(doc.getLineOffset(1) + 2, 0, "XY"));
+
+		final var expectedLines = new ArrayList<>(initialLines);
+		expectedLines.set(1, "//XYcomment2");
+		assertDocHasLines(expectedLines);
+
+		assertRange(event, 2, 2);
+	}
+
+	/**
 	 * Tests inserting a line after the first line
 	 */
 	@Test
@@ -117,16 +136,7 @@ class DocumentTMModelTest {
 		expectedLines.add(1, "//commentX");
 		assertDocHasLines(expectedLines);
 
-		try {
-			assertRange(event, 2,
-					3 /* TODO nice to have: if DocumentModelLines would only invalidate the inserted line */);
-		} catch (AssertionFailedError ex) {
-			if ("true".equals(System.getenv("GITHUB_ACTIONS"))) {
-				assertRange(event, 2, 4 /* TODO no idea why */);
-			} else {
-				throw ex;
-			}
-		}
+		assertRange(event, 2, 2);
 	}
 
 	/**
@@ -147,8 +157,28 @@ class DocumentTMModelTest {
 		expectedLines.add(2, "//commentY");
 		assertDocHasLines(expectedLines);
 
-		assertRange(event, 2,
-				4 /* TODO nice to have: if DocumentModelLines would only invalidate the inserted lines */);
+		assertRange(event, 2, 3);
+	}
+
+	/**
+	 * Tests inserting a line after the first line
+	 */
+	@Test
+	void testInsert2LinesPartially() throws Throwable {
+		final var initialLines = List.of(
+				"//comment1",
+				"//comment2",
+				"//comment3");
+
+		final var event = awaitModelChangedEvent(model, initialLines,
+				() -> doc.replace(doc.getLineOffset(1) + 2, 0, "X" + LF + "//Y"));
+
+		final var expectedLines = new ArrayList<>(initialLines);
+		expectedLines.add(1, "//X");
+		expectedLines.set(2, "//Ycomment2");
+		assertDocHasLines(expectedLines);
+
+		assertRange(event, 2, 3);
 	}
 
 	/**
@@ -239,7 +269,7 @@ class DocumentTMModelTest {
 		expectedLines.set(1, "//commentX");
 		assertDocHasLines(expectedLines);
 
-		assertRange(event, 2, 3 /* TODO nice to have: if DocumentModelLines would only invalidate the replaced line */);
+		assertRange(event, 2, 2);
 	}
 
 	/**
@@ -262,7 +292,7 @@ class DocumentTMModelTest {
 		expectedLines.set(1, "/*commentX");
 		assertDocHasLines(expectedLines);
 
-		assertRange(event, 2, doc.getNumberOfLines());
+		assertRange(event, 2, 3);
 	}
 
 	/**
@@ -287,7 +317,7 @@ class DocumentTMModelTest {
 		expectedLines.remove(2);
 		assertDocHasLines(expectedLines);
 
-		assertRange(event, 2, 3 /* TODO nice to have: if DocumentModelLines would only invalidate the replaced line */);
+		assertRange(event, 2, 2);
 	}
 
 	@Test

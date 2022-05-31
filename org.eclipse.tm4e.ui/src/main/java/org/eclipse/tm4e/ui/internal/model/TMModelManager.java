@@ -17,12 +17,11 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.eclipse.jface.text.IDocument;
-import org.eclipse.tm4e.core.model.ITMModel;
 import org.eclipse.tm4e.ui.model.ITMModelManager;
 
 /**
  * TextMate model manager which connect/disconnect a TextModel model
- * {@link ITMModel} with an Eclipse {@link IDocument}.
+ * {@link TMDocumentModel} with an Eclipse {@link IDocument}.
  */
 public final class TMModelManager implements ITMModelManager {
 

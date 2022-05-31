@@ -23,10 +23,9 @@ class DocumentModelLinesTest {
 		final var document = new Document();
 		final var lines = new DocumentModelLines(document);
 
-		assertFalse(lines.hasLine(3));
+		assertEquals(1, lines.getNumberOfLines());
 		document.set("a\nb\nc\nd");
 		assertEquals(4, lines.getNumberOfLines());
-		assertTrue(lines.hasLine(3));
 
 		document.set("a\nb");
 		assertEquals(2, lines.getNumberOfLines());

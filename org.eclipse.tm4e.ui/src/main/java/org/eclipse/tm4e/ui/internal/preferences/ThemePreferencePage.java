@@ -32,6 +32,7 @@ import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.custom.SashForm;
 import org.eclipse.swt.graphics.GC;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.GridData;
@@ -104,7 +105,8 @@ public final class ThemePreferencePage extends PreferencePage implements IWorkbe
 
 	@Override
 	protected Control createContents(@Nullable final Composite ancestor) {
-		final var parent = new Composite(ancestor, SWT.NONE);
+		final var parent = new SashForm(ancestor, SWT.VERTICAL | SWT.SMOOTH);
+		parent.setBackground(parent.getDisplay().getSystemColor(SWT.COLOR_GRAY));
 		parent.setLayout(new FillLayout());
 
 		final var innerParent = new Composite(parent, SWT.NONE);
@@ -116,7 +118,10 @@ public final class ThemePreferencePage extends PreferencePage implements IWorkbe
 
 		createThemesTableContent(innerParent);
 		createThemeDetailContent(innerParent);
-		createThemePreviewContent(innerParent);
+		createThemePreviewContent(parent);
+
+		parent.setSashWidth(3);
+		parent.setWeights(new int[] { 2, 1 });
 
 		castNonNull(themesTable).setInput(themeManager);
 
@@ -277,18 +282,14 @@ public final class ThemePreferencePage extends PreferencePage implements IWorkbe
 	 */
 	private void createThemePreviewContent(final Composite ancestor) {
 		final var parent = new Composite(ancestor, SWT.NONE);
-		var data = new GridData(GridData.FILL_HORIZONTAL);
-		data.horizontalSpan = 2;
-		parent.setLayoutData(data);
-
 		final var layout = new GridLayout(2, false);
-		layout.marginHeight = 0;
+		layout.marginHeight = 2;
 		layout.marginWidth = 0;
 		parent.setLayout(layout);
 
 		final var label = new Label(parent, SWT.NONE);
 		label.setText(TMUIMessages.ThemePreferencePage_preview);
-		data = new GridData();
+		var data = new GridData();
 		label.setLayoutData(data);
 
 		final var grammarsCombo = this.grammarsCombo = new ComboViewer(parent);

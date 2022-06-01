@@ -58,6 +58,7 @@ import org.eclipse.tm4e.ui.internal.widgets.GrammarDefinitionLabelProvider;
 import org.eclipse.tm4e.ui.internal.widgets.TMViewer;
 import org.eclipse.tm4e.ui.internal.widgets.ThemeContentProvider;
 import org.eclipse.tm4e.ui.internal.widgets.ThemeLabelProvider;
+import org.eclipse.tm4e.ui.snippets.ISnippet;
 import org.eclipse.tm4e.ui.themes.ITheme;
 import org.eclipse.tm4e.ui.themes.IThemeManager;
 import org.eclipse.tm4e.ui.themes.Theme;
@@ -359,6 +360,15 @@ public final class ThemePreferencePage extends PreferencePage implements IWorkbe
 		final var previewViewer = castNonNull(this.previewViewer);
 		previewViewer.setTheme(theme);
 		previewViewer.setGrammar(grammar);
+
+		// Snippet
+		final ISnippet[] snippets = TMUIPlugin.getSnippetManager().getSnippets(definition.getScopeName());
+		if (snippets.length == 0) {
+			previewViewer.setText("");
+		} else {
+			// TODO: manage list of snippet for the given scope.
+			previewViewer.setText(snippets[0].getContent());
+		}
 	}
 
 	@Override

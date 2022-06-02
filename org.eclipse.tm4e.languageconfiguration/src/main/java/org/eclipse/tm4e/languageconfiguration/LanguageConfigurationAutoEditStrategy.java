@@ -22,11 +22,13 @@ import org.eclipse.jface.text.DocumentCommand;
 import org.eclipse.jface.text.IAutoEditStrategy;
 import org.eclipse.jface.text.IDocument;
 import org.eclipse.jface.text.ITextViewer;
+import org.eclipse.tm4e.core.model.TMToken;
 import org.eclipse.tm4e.languageconfiguration.internal.LanguageConfigurationRegistryManager;
-import org.eclipse.tm4e.languageconfiguration.internal.supports.CharacterPair;
+import org.eclipse.tm4e.languageconfiguration.internal.supports.AutoClosingPairConditional;
 import org.eclipse.tm4e.languageconfiguration.internal.supports.EnterAction;
 import org.eclipse.tm4e.languageconfiguration.internal.utils.TabSpacesInfo;
 import org.eclipse.tm4e.languageconfiguration.internal.utils.TextUtils;
+import org.eclipse.tm4e.ui.internal.model.TMModelManager;
 import org.eclipse.tm4e.ui.internal.utils.ContentTypeHelper;
 import org.eclipse.tm4e.ui.internal.utils.ContentTypeInfo;
 import org.eclipse.ui.IEditorPart;
@@ -35,7 +37,6 @@ import org.eclipse.ui.PlatformUI;
 
 /**
  * {@link IAutoEditStrategy} which uses VSCode language-configuration.json.
- *
  */
 public class LanguageConfigurationAutoEditStrategy implements IAutoEditStrategy {
 
@@ -70,9 +71,8 @@ public class LanguageConfigurationAutoEditStrategy implements IAutoEditStrategy 
 		// Auto close pair
 		final LanguageConfigurationRegistryManager registry = LanguageConfigurationRegistryManager.getInstance();
 		for (final IContentType contentType : contentTypes) {
-			final CharacterPair autoClosingPair = registry.getAutoClosePair(document.get(), command.offset,
-					command.text,
-					contentType);
+			final var autoClosingPair = registry.getAutoClosePair(document.get(), command.offset,
+					command.text, contentType);
 			if (autoClosingPair == null) {
 				continue;
 			}
@@ -84,7 +84,7 @@ public class LanguageConfigurationAutoEditStrategy implements IAutoEditStrategy 
 			} else if (command.text.equals(autoClosingPair.close)
 					&& isFollowedBy(document, command.offset, autoClosingPair.close)) {
 				command.text = "";
-			} else {
+			} else if (isAutoClosingAllowed(document, command.offset, autoClosingPair)) {
 				command.text += autoClosingPair.close;
 			}
 			return;
@@ -102,6 +102,39 @@ public class LanguageConfigurationAutoEditStrategy implements IAutoEditStrategy 
 					command.text = "";
 				});
 
+	}
+
+	/**
+	 * @return true if auto closing is enabled for the given {@link AutoClosingPairConditional} at the given offset
+	 */
+	private boolean isAutoClosingAllowed(final IDocument document, final int offset,
+			final AutoClosingPairConditional pair) {
+		if (!pair.notIn.isEmpty()) {
+			final var docModel = TMModelManager.INSTANCE.connect(document);
+			try {
+				final var lineIndex = document.getLineOfOffset(offset);
+				final var lineCharOffset = offset - document.getLineOffset(lineIndex) - 1;
+				final var tokens = docModel.getLineTokens(lineIndex);
+				if (tokens != null) {
+					TMToken tokenAtOffset = null;
+					for (var token : tokens) {
+						if (token.startIndex > lineCharOffset)
+							break;
+						tokenAtOffset = token;
+					}
+					if (tokenAtOffset != null) {
+						for (var notIn : pair.notIn) {
+							if (tokenAtOffset.type.contains(notIn)) {
+								return false;
+							}
+						}
+					}
+				}
+			} catch (BadLocationException ex) {
+				// ignore
+			}
+		}
+		return true;
 	}
 
 	/**

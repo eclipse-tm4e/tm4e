@@ -11,7 +11,7 @@
  */
 package org.eclipse.tm4e.languageconfiguration.internal.supports;
 
-import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -23,36 +23,38 @@ import org.eclipse.jdt.annotation.Nullable;
  */
 public final class CharacterPairSupport {
 
-	public final List<CharacterPair> autoClosingPairs;
+	public final List<AutoClosingPairConditional> autoClosingPairs;
 	public final List<CharacterPair> surroundingPairs;
 
+	@SuppressWarnings("unchecked")
 	public CharacterPairSupport(@Nullable final List<CharacterPair> brackets,
 			@Nullable final List<AutoClosingPairConditional> autoClosingPairs,
 			@Nullable final List<CharacterPair> surroundingPairs) {
+
 		if (autoClosingPairs != null) {
 			this.autoClosingPairs = autoClosingPairs.stream().filter(Objects::nonNull)
 					.map(el -> new AutoClosingPairConditional(el.open, el.close, el.notIn))
 					.collect(Collectors.toList());
 		} else if (brackets != null) {
 			this.autoClosingPairs = brackets.stream().filter(Objects::nonNull)
-					.map(el -> new AutoClosingPairConditional(el.open, el.close, null))
+					.map(el -> new AutoClosingPairConditional(el.open, el.close, Collections.emptyList()))
 					.collect(Collectors.toList());
 		} else {
-			this.autoClosingPairs = new ArrayList<>();
+			this.autoClosingPairs = Collections.emptyList();
 		}
 
 		this.surroundingPairs = surroundingPairs != null
 				? surroundingPairs.stream().filter(Objects::nonNull).collect(Collectors.toList())
-				: this.autoClosingPairs;
+				: (List<CharacterPair>) (List<?>) this.autoClosingPairs;
 	}
 
 	@Nullable
-	public CharacterPair getAutoClosePair(final String text, final int offset,
+	public AutoClosingPairConditional getAutoClosePair(final String text, final int offset,
 			final String newCharacter/* : string, context: ScopedLineTokens, column: number */) {
 		if (newCharacter.isEmpty()) {
 			return null;
 		}
-		for (final CharacterPair autoClosingPair : autoClosingPairs) {
+		for (final AutoClosingPairConditional autoClosingPair : autoClosingPairs) {
 			final String opening = autoClosingPair.open;
 			if (!opening.endsWith(newCharacter)) {
 				continue;

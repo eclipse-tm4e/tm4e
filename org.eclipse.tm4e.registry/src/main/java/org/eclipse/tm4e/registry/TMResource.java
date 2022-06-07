@@ -76,14 +76,9 @@ public class TMResource implements ITMResource {
 	@Nullable
 	@Override
 	public InputStream getInputStream() throws IOException {
-		if (Strings.isNullOrEmpty(path)) {
-			return null;
-		}
-		if (!Strings.isNullOrEmpty(path)) {
-			final URL url = new URL(PLATFORM_PLUGIN + pluginId + "/" + path);
-			return url.openStream();
-		}
-		return new FileInputStream(new File(path));
+		return pluginId != null ?
+			new URL(PLATFORM_PLUGIN + pluginId + "/" + path).openStream() : //
+			new FileInputStream(new File(path));
 	}
 
 	@Nullable

@@ -35,5 +35,13 @@
             contentType="org.eclipse.tm4e.ui.tests.testContentType">
       </presentationReconciler>
    </extension>
+   <extension
+         point="org.eclipse.tm4e.ui.snippets">
+      <snippet
+            name="org.eclipse.tm4e.ui.tests.snippet1"
+            path="grammars/snippet.ts"
+            scopeName="source.ts">
+      </snippet>
+   </extension>
 
 </plugin>

@@ -116,4 +116,19 @@
              contentType="org.eclipse.core.runtime.text" />
    </extension>
 
+   <extension id="textmarker" point="org.eclipse.core.resources.markers">
+      <super type="org.eclipse.core.resources.textmarker"/>
+   </extension>
+
+   <extension id="problemmarker" name="%problemmarkerName" point="org.eclipse.core.resources.markers">
+      <super type="org.eclipse.core.resources.problemmarker"/>
+      <super type="org.eclipse.tm4e.ui.textmarker"/>
+      <persistent value="true"/>
+   </extension>
+
+   <extension id="taskmarker" name="%taskmarkerName" point="org.eclipse.core.resources.markers">
+      <super type="org.eclipse.core.resources.taskmarker"/>
+      <super type="org.eclipse.tm4e.ui.textmarker"/>
+      <persistent value="true"/>
+   </extension>
 </plugin>

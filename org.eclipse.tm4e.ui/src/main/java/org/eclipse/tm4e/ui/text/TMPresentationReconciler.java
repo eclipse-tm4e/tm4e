@@ -73,6 +73,7 @@ import org.eclipse.tm4e.ui.internal.themes.ThemeManager;
 import org.eclipse.tm4e.ui.internal.utils.ClassHelper;
 import org.eclipse.tm4e.ui.internal.utils.ContentTypeHelper;
 import org.eclipse.tm4e.ui.internal.utils.ContentTypeInfo;
+import org.eclipse.tm4e.ui.internal.utils.MarkerUtils;
 import org.eclipse.tm4e.ui.internal.utils.PreferenceUtils;
 import org.eclipse.tm4e.ui.themes.ITheme;
 import org.eclipse.tm4e.ui.themes.IThemeManager;
@@ -385,6 +386,8 @@ public class TMPresentationReconciler implements IPresentationReconciler {
 					control.getDisplay().asyncExec(() -> colorize(event));
 				}
 			}
+
+			MarkerUtils.updateTextMarkers(event);
 		}
 
 		void colorize(final ModelTokensChangedEvent event) {

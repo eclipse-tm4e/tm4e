@@ -69,7 +69,7 @@ public class LanguageConfigurationAutoEditStrategy implements IAutoEditStrategy 
 		}
 
 		// Auto close pair
-		final LanguageConfigurationRegistryManager registry = LanguageConfigurationRegistryManager.getInstance();
+		final var registry = LanguageConfigurationRegistryManager.getInstance();
 		for (final IContentType contentType : contentTypes) {
 			final var autoClosingPair = registry.getAutoClosePair(document.get(), command.offset,
 					command.text, contentType);
@@ -84,7 +84,7 @@ public class LanguageConfigurationAutoEditStrategy implements IAutoEditStrategy 
 			} else if (command.text.equals(autoClosingPair.close)
 					&& isFollowedBy(document, command.offset, autoClosingPair.close)) {
 				command.text = "";
-			} else if (isAutoClosingAllowed(document, command.offset, autoClosingPair)) {
+			} else if (isAutoClosingAllowed(document, contentType, command.offset, autoClosingPair)) {
 				command.text += autoClosingPair.close;
 			}
 			return;
@@ -105,10 +105,26 @@ public class LanguageConfigurationAutoEditStrategy implements IAutoEditStrategy 
 	}
 
 	/**
-	 * @return true if auto closing is enabled for the given {@link StandardAutoClosingPairConditional} at the given offset
+	 * @return true if auto closing is enabled for the given {@link StandardAutoClosingPairConditional} at the given
+	 *         offset
 	 */
-	private boolean isAutoClosingAllowed(final IDocument document, final int offset,
+	private boolean isAutoClosingAllowed(final IDocument document, final IContentType contentType, final int offset,
 			final StandardAutoClosingPairConditional pair) {
+
+		// only consider auto-closing if the next char is a white-space OR the closing char of another auto-closing pair
+		try {
+			final var ch = document.getChar(offset);
+			if (!Character.isWhitespace(ch)) {
+				final var registry = LanguageConfigurationRegistryManager.getInstance();
+				final var chStr = Character.toString(ch);
+				if (!registry.getEnabledAutoClosingPairs(contentType).stream()
+						.anyMatch(p -> chStr.equals(p.close) && !chStr.equals(p.open)))
+					return false;
+			}
+		} catch (Exception ex) {
+			// ignore
+		}
+
 		if (!pair.notIn.isEmpty()) {
 			final var docModel = TMModelManager.INSTANCE.connect(document);
 			try {
@@ -166,7 +182,7 @@ public class LanguageConfigurationAutoEditStrategy implements IAutoEditStrategy 
 	}
 
 	private void onEnter(final IDocument document, final DocumentCommand command) {
-		final LanguageConfigurationRegistryManager registry = LanguageConfigurationRegistryManager.getInstance();
+		final var registry = LanguageConfigurationRegistryManager.getInstance();
 		if (contentTypes != null) {
 			for (final IContentType contentType : contentTypes) {
 				if (!registry.shouldEnterAction(document, command.offset, contentType)) {

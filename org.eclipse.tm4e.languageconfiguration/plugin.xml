@@ -9,31 +9,31 @@
 # http://www.eclipse.org/legal/epl-v10.html
 #
 # Contributors:
-#     Angelo Zerr <angelo.zerr@gmail.com> - Initial API and implementation 
+#     Angelo Zerr <angelo.zerr@gmail.com> - Initial API and implementation
 ###############################################################################
  -->
 <plugin>
 
-   <extension-point id="languageConfigurations" 
+   <extension-point id="languageConfigurations"
    					name="%LanguageConfigurations.extension.name"
 					schema="schema/languageConfigurations.exsd" />
 					   					
    <!-- Preference Pages -->
    <extension
-         point="org.eclipse.ui.preferencePages">              
+         point="org.eclipse.ui.preferencePages">
       <page
-            name="%LanguageConfigurationPage.name"        
+            name="%LanguageConfigurationPage.name"
             class="org.eclipse.tm4e.languageconfiguration.internal.preferences.LanguageConfigurationPreferencePage"
             id="org.eclipse.tm4e.languageconfiguration.preferences.LanguageConfigurationPreferencePage"
             category="org.eclipse.tm4e.ui.preferences.TextMatePreferencePage">
       </page>
    </extension>
   
-  <!-- Generic Editor auto edit stragies for language configuration --> 
+  <!-- Generic Editor auto edit stragies for language configuration -->
   <extension
 	      point="org.eclipse.ui.genericeditor.autoEditStrategies">
       <autoEditStrategy
-          class="org.eclipse.tm4e.languageconfiguration.LanguageConfigurationAutoEditStrategy"
+          class="org.eclipse.tm4e.languageconfiguration.internal.LanguageConfigurationAutoEditStrategy"
           contentType="org.eclipse.core.runtime.text">
       </autoEditStrategy>
   </extension>
@@ -42,7 +42,7 @@
   <extension
         point="org.eclipse.ui.genericeditor.characterPairMatchers">
      <characterPairMatcher
-           class="org.eclipse.tm4e.languageconfiguration.LanguageConfigurationCharacterPairMatcher"
+           class="org.eclipse.tm4e.languageconfiguration.internal.LanguageConfigurationCharacterPairMatcher"
            contentType="org.eclipse.core.runtime.text">
      </characterPairMatcher>
   </extension>
@@ -116,21 +116,21 @@
   <extension
         point="org.eclipse.ui.handlers">
      <handler
-           class="org.eclipse.tm4e.languageconfiguration.ToggleLineCommentHandler"
+           class="org.eclipse.tm4e.languageconfiguration.internal.ToggleLineCommentHandler"
            commandId="org.eclipse.tm4e.languageconfiguration.togglelinecommentcommand">
         <enabledWhen>
            <reference definitionId="org.eclipse.tm4e.languageconfiguration.hasLanguageConfiguration"/>
         </enabledWhen>
      </handler>
      <handler
-           class="org.eclipse.tm4e.languageconfiguration.ToggleLineCommentHandler"
+           class="org.eclipse.tm4e.languageconfiguration.internal.ToggleLineCommentHandler"
            commandId="org.eclipse.tm4e.languageconfiguration.addblockcommentcommand">
         <enabledWhen>
            <reference definitionId="org.eclipse.tm4e.languageconfiguration.hasLanguageConfiguration"/>
         </enabledWhen>
      </handler>
      <handler
-           class="org.eclipse.tm4e.languageconfiguration.ToggleLineCommentHandler"
+           class="org.eclipse.tm4e.languageconfiguration.internal.ToggleLineCommentHandler"
            commandId="org.eclipse.tm4e.languageconfiguration.removeblockcommentcommand">
         <enabledWhen>
            <reference definitionId="org.eclipse.tm4e.languageconfiguration.hasLanguageConfiguration"/>
@@ -140,7 +140,7 @@
   <extension
         point="org.eclipse.core.expressions.propertyTesters">
      <propertyTester
-           class="org.eclipse.tm4e.languageconfiguration.HasLanguageConfigurationPropertyTester"
+           class="org.eclipse.tm4e.languageconfiguration.internal.HasLanguageConfigurationPropertyTester"
            id="org.eclipse.tm4e.languageconfiguration.hasLanguageConfigurationPropertyTester"
            namespace="org.eclipse.tm4e.languageconfiguration"
            properties="hasLanguageConfiguration"

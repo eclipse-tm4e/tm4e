@@ -9,7 +9,7 @@
  * Contributors:
  * Angelo Zerr <angelo.zerr@gmail.com> - initial API and implementation
  */
-package org.eclipse.tm4e.languageconfiguration;
+package org.eclipse.tm4e.languageconfiguration.internal;
 
 import java.util.Arrays;
 
@@ -23,7 +23,6 @@ import org.eclipse.jface.text.IAutoEditStrategy;
 import org.eclipse.jface.text.IDocument;
 import org.eclipse.jface.text.ITextViewer;
 import org.eclipse.tm4e.core.model.TMToken;
-import org.eclipse.tm4e.languageconfiguration.internal.LanguageConfigurationRegistryManager;
 import org.eclipse.tm4e.languageconfiguration.internal.supports.StandardAutoClosingPairConditional;
 import org.eclipse.tm4e.languageconfiguration.internal.supports.EnterAction;
 import org.eclipse.tm4e.languageconfiguration.internal.utils.TabSpacesInfo;

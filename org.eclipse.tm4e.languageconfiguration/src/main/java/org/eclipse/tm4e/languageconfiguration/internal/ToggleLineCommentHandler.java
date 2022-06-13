@@ -9,7 +9,7 @@
  * Contributors:
  * Lucas Bullen (Red Hat Inc.) - initial API and implementation
  */
-package org.eclipse.tm4e.languageconfiguration;
+package org.eclipse.tm4e.languageconfiguration.internal;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -30,7 +30,6 @@ import org.eclipse.jface.text.IRewriteTarget;
 import org.eclipse.jface.text.ITextSelection;
 import org.eclipse.jface.text.Region;
 import org.eclipse.jface.text.TextSelection;
-import org.eclipse.tm4e.languageconfiguration.internal.LanguageConfigurationRegistryManager;
 import org.eclipse.tm4e.languageconfiguration.internal.supports.CharacterPair;
 import org.eclipse.tm4e.languageconfiguration.internal.supports.CommentSupport;
 import org.eclipse.tm4e.languageconfiguration.internal.utils.TextUtils;

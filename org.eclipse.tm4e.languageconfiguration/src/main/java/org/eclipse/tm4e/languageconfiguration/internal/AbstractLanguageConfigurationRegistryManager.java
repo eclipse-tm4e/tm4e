@@ -17,9 +17,6 @@ import java.util.Map;
 
 import org.eclipse.core.runtime.content.IContentType;
 import org.eclipse.jdt.annotation.Nullable;
-import org.eclipse.tm4e.languageconfiguration.ILanguageConfiguration;
-import org.eclipse.tm4e.languageconfiguration.ILanguageConfigurationDefinition;
-import org.eclipse.tm4e.languageconfiguration.ILanguageConfigurationRegistryManager;
 
 public abstract class AbstractLanguageConfigurationRegistryManager implements ILanguageConfigurationRegistryManager {
 

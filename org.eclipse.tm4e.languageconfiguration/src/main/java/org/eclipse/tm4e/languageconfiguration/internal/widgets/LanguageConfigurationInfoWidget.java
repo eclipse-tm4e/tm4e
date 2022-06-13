@@ -29,7 +29,7 @@ import org.eclipse.swt.widgets.TabFolder;
 import org.eclipse.swt.widgets.TabItem;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.Text;
-import org.eclipse.tm4e.languageconfiguration.ILanguageConfiguration;
+import org.eclipse.tm4e.languageconfiguration.internal.ILanguageConfiguration;
 import org.eclipse.tm4e.languageconfiguration.internal.supports.CharacterPair;
 import org.eclipse.tm4e.languageconfiguration.internal.supports.CommentRule;
 import org.eclipse.tm4e.languageconfiguration.internal.supports.FoldingRule;

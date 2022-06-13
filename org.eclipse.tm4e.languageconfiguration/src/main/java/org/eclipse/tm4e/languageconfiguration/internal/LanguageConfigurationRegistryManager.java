@@ -24,7 +24,7 @@ import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.jface.text.BadLocationException;
 import org.eclipse.jface.text.IDocument;
 import org.eclipse.jface.text.IRegion;
-import org.eclipse.tm4e.languageconfiguration.ILanguageConfigurationDefinition;
+import org.eclipse.tm4e.languageconfiguration.LanguageConfigurationPlugin;
 import org.eclipse.tm4e.languageconfiguration.internal.preferences.PreferenceConstants;
 import org.eclipse.tm4e.languageconfiguration.internal.preferences.PreferenceHelper;
 import org.eclipse.tm4e.languageconfiguration.internal.supports.StandardAutoClosingPairConditional;

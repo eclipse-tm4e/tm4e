@@ -9,7 +9,7 @@
  * Contributors:
  * Lucas Bullen (Red Hat Inc.) - initial API and implementation
  */
-package org.eclipse.tm4e.languageconfiguration;
+package org.eclipse.tm4e.languageconfiguration.internal;
 
 import java.util.List;
 

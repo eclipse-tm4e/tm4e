@@ -9,7 +9,7 @@
  * Contributors:
  * Angelo Zerr <angelo.zerr@gmail.com> - initial API and implementation
  */
-package org.eclipse.tm4e.languageconfiguration;
+package org.eclipse.tm4e.languageconfiguration.internal;
 
 import java.util.List;
 
@@ -21,7 +21,6 @@ import org.eclipse.jface.text.IRegion;
 import org.eclipse.jface.text.source.DefaultCharacterPairMatcher;
 import org.eclipse.jface.text.source.ICharacterPairMatcher;
 import org.eclipse.jface.text.source.ICharacterPairMatcherExtension;
-import org.eclipse.tm4e.languageconfiguration.internal.LanguageConfigurationRegistryManager;
 import org.eclipse.tm4e.languageconfiguration.internal.supports.CharacterPair;
 import org.eclipse.tm4e.ui.internal.utils.ContentTypeHelper;
 import org.eclipse.tm4e.ui.internal.utils.ContentTypeInfo;

@@ -21,8 +21,7 @@ import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.content.IContentType;
 import org.eclipse.jdt.annotation.Nullable;
-import org.eclipse.tm4e.languageconfiguration.ILanguageConfiguration;
-import org.eclipse.tm4e.languageconfiguration.ILanguageConfigurationDefinition;
+import org.eclipse.tm4e.languageconfiguration.LanguageConfigurationPlugin;
 import org.eclipse.tm4e.languageconfiguration.internal.supports.CharacterPairSupport;
 import org.eclipse.tm4e.languageconfiguration.internal.supports.CommentSupport;
 import org.eclipse.tm4e.languageconfiguration.internal.supports.OnEnterSupport;
@@ -139,7 +138,7 @@ public final class LanguageConfigurationDefinition extends TMResource implements
 		try (var in = getInputStream()) {
 			return LanguageConfiguration.load(new InputStreamReader(in, Charset.defaultCharset()));
 		} catch (final IOException e) {
-			final var plugin = LanguageConfigurationPlugin.getInstance();
+			final var plugin = LanguageConfigurationPlugin.getDefault();
 			if (plugin != null) {
 				plugin.getLog().log(
 						new Status(IStatus.ERROR, LanguageConfigurationPlugin.PLUGIN_ID, e.getMessage(), e));

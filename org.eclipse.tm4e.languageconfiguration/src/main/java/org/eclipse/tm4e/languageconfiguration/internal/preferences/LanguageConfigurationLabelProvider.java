@@ -15,7 +15,7 @@ import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.jface.viewers.ITableLabelProvider;
 import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.swt.graphics.Image;
-import org.eclipse.tm4e.languageconfiguration.ILanguageConfigurationDefinition;
+import org.eclipse.tm4e.languageconfiguration.internal.ILanguageConfigurationDefinition;
 
 final class LanguageConfigurationLabelProvider extends LabelProvider implements ITableLabelProvider {
 

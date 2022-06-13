@@ -21,8 +21,8 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.TabFolder;
-import org.eclipse.tm4e.languageconfiguration.ILanguageConfigurationDefinition;
-import org.eclipse.tm4e.languageconfiguration.ILanguageConfigurationRegistryManager;
+import org.eclipse.tm4e.languageconfiguration.internal.ILanguageConfigurationDefinition;
+import org.eclipse.tm4e.languageconfiguration.internal.ILanguageConfigurationRegistryManager;
 
 @NonNullByDefault({})
 public final class LanguageConfigurationPreferencesWidget extends LanguageConfigurationInfoWidget {

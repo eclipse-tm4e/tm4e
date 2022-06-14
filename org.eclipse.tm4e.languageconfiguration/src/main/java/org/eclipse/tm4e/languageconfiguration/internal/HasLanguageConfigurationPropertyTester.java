@@ -11,6 +11,8 @@
  */
 package org.eclipse.tm4e.languageconfiguration.internal;
 
+import static org.eclipse.tm4e.core.internal.utils.NullSafetyHelper.*;
+
 import org.eclipse.core.expressions.PropertyTester;
 import org.eclipse.core.runtime.Adapters;
 import org.eclipse.core.runtime.CoreException;
@@ -20,17 +22,13 @@ import org.eclipse.tm4e.ui.internal.utils.ContentTypeHelper;
 import org.eclipse.tm4e.ui.internal.utils.ContentTypeInfo;
 import org.eclipse.ui.texteditor.ITextEditor;
 
-public class HasLanguageConfigurationPropertyTester extends PropertyTester {
-
-	@Nullable
-	private static <T> T adapt(@Nullable final Object sourceObject, final Class<T> adapter) {
-		return Adapters.adapt(sourceObject, adapter);
-	}
+public final class HasLanguageConfigurationPropertyTester extends PropertyTester {
 
 	@Override
 	public boolean test(@Nullable final Object receiver, @Nullable final String property,
 			final Object @Nullable [] args, @Nullable final Object expectedValue) {
-		final var editor = adapt(receiver, ITextEditor.class);
+
+		final var editor = castNullable(Adapters.adapt(receiver, ITextEditor.class));
 		if (editor == null) {
 			return false;
 		}

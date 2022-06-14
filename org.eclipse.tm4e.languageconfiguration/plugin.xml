@@ -14,177 +14,168 @@
  -->
 <plugin>
 
-   <extension-point id="languageConfigurations"
-   					name="%LanguageConfigurations.extension.name"
-					schema="schema/languageConfigurations.exsd" />
-					   					
+   <extension-point id="languageConfigurations" name="%LanguageConfigurations.extension.name" schema="schema/languageConfigurations.exsd" />
+
    <!-- Preference Pages -->
-   <extension
-         point="org.eclipse.ui.preferencePages">
-      <page
-            name="%LanguageConfigurationPage.name"
+   <extension point="org.eclipse.ui.preferencePages">
+      <page name="%LanguageConfigurationPage.name"
             class="org.eclipse.tm4e.languageconfiguration.internal.preferences.LanguageConfigurationPreferencePage"
             id="org.eclipse.tm4e.languageconfiguration.preferences.LanguageConfigurationPreferencePage"
-            category="org.eclipse.tm4e.ui.preferences.TextMatePreferencePage">
-      </page>
+            category="org.eclipse.tm4e.ui.preferences.TextMatePreferencePage" />
    </extension>
-  
-  <!-- Generic Editor auto edit stragies for language configuration -->
-  <extension
-	      point="org.eclipse.ui.genericeditor.autoEditStrategies">
+
+   <!-- Generic Editor auto edit stragies for language configuration -->
+   <extension point="org.eclipse.ui.genericeditor.autoEditStrategies">
       <autoEditStrategy
-          class="org.eclipse.tm4e.languageconfiguration.internal.LanguageConfigurationAutoEditStrategy"
-          contentType="org.eclipse.core.runtime.text">
-      </autoEditStrategy>
-  </extension>
+            class="org.eclipse.tm4e.languageconfiguration.internal.LanguageConfigurationAutoEditStrategy"
+            contentType="org.eclipse.core.runtime.text" />
+   </extension>
 
-  <!-- Matching brackets based on language configuration -->
-  <extension
-        point="org.eclipse.ui.genericeditor.characterPairMatchers">
-     <characterPairMatcher
-           class="org.eclipse.tm4e.languageconfiguration.internal.LanguageConfigurationCharacterPairMatcher"
-           contentType="org.eclipse.core.runtime.text">
-     </characterPairMatcher>
-  </extension>
+   <!-- Matching brackets based on language configuration -->
+   <extension point="org.eclipse.ui.genericeditor.characterPairMatchers">
+      <characterPairMatcher
+            class="org.eclipse.tm4e.languageconfiguration.internal.LanguageConfigurationCharacterPairMatcher"
+            contentType="org.eclipse.core.runtime.text" />
+   </extension>
 
-  <extension
-        point="org.eclipse.e4.ui.css.swt.theme">
-     <stylesheet
-           uri="resources/css/dark.css">
-        <themeid
-              refid="org.eclipse.e4.ui.css.theme.e4_dark">
-        </themeid>
-     </stylesheet>
-  </extension>
-  <extension
-        point="org.eclipse.ui.bindings">
-     <key
-           commandId="org.eclipse.tm4e.languageconfiguration.addblockcommentcommand"
+   <extension point="org.eclipse.e4.ui.css.swt.theme">
+      <stylesheet uri="resources/css/dark.css">
+         <themeid refid="org.eclipse.e4.ui.css.theme.e4_dark" />
+      </stylesheet>
+   </extension>
+
+   <!-- define commands -->
+   <extension point="org.eclipse.ui.commands">
+      <category id="org.eclipse.tm4e.languageconfiguration.category" name="%LanguageConfiguration.category.name" />
+      <command categoryId="org.eclipse.tm4e.languageconfiguration.category"
+            id="org.eclipse.tm4e.languageconfiguration.toggleLineCommentCommand"
+            name="%LanguageConfiguration.toggleLineComment.name" />
+      <command categoryId="org.eclipse.tm4e.languageconfiguration.category"
+            id="org.eclipse.tm4e.languageconfiguration.addBlockCommentCommand"
+            name="%LanguageConfiguration.addBlockComment.name" />
+      <command categoryId="org.eclipse.tm4e.languageconfiguration.category"
+            id="org.eclipse.tm4e.languageconfiguration.removeBlockCommentCommand"
+            name="%LanguageConfiguration.removeBlockComment.name" />
+   </extension>
+
+   <!-- define handlers for commands -->
+   <extension point="org.eclipse.ui.handlers">
+      <handler commandId="org.eclipse.tm4e.languageconfiguration.toggleLineCommentCommand"
+            class="org.eclipse.tm4e.languageconfiguration.internal.ToggleLineCommentHandler">
+         <enabledWhen>
+            <reference definitionId="org.eclipse.tm4e.languageconfiguration.hasLanguageConfiguration" />
+         </enabledWhen>
+      </handler>
+      <handler commandId="org.eclipse.tm4e.languageconfiguration.addBlockCommentCommand"
+            class="org.eclipse.tm4e.languageconfiguration.internal.ToggleLineCommentHandler">
+         <enabledWhen>
+            <reference definitionId="org.eclipse.tm4e.languageconfiguration.hasLanguageConfiguration" />
+         </enabledWhen>
+      </handler>
+      <handler commandId="org.eclipse.tm4e.languageconfiguration.removeBlockCommentCommand"
+            class="org.eclipse.tm4e.languageconfiguration.internal.ToggleLineCommentHandler">
+         <enabledWhen>
+            <reference definitionId="org.eclipse.tm4e.languageconfiguration.hasLanguageConfiguration" />
+         </enabledWhen>
+      </handler>
+   </extension>
+
+   <!-- define key shortcuts for commands -->
+   <extension point="org.eclipse.ui.bindings">
+      <!-- add block comment with [CTRL]+[SHIFT]+[/] -->
+      <key commandId="org.eclipse.tm4e.languageconfiguration.addBlockCommentCommand"
            contextId="org.eclipse.ui.textEditorScope"
            schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
-           sequence="M1+M2+/">
-     </key>
-     <key
-           commandId="org.eclipse.tm4e.languageconfiguration.addblockcommentcommand"
+           sequence="M1+M2+/" />
+      <key commandId="org.eclipse.tm4e.languageconfiguration.addBlockCommentCommand"
            contextId="org.eclipse.ui.textEditorScope"
            schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
            platform="carbon"
-           sequence="M1+M4+/">
-     </key>
-     <key
-           commandId="org.eclipse.tm4e.languageconfiguration.removeblockcommentcommand"
+           sequence="M1+M4+/" />
+
+      <!-- remove block comment with [CTRL]+[SHIFT]+[\] -->
+      <key commandId="org.eclipse.tm4e.languageconfiguration.removeBlockCommentCommand"
            contextId="org.eclipse.ui.textEditorScope"
            schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
-           sequence="M1+M2+\">
-     </key>
-     <key
-           commandId="org.eclipse.tm4e.languageconfiguration.removeblockcommentcommand"
+           sequence="M1+M2+\" />
+      <key commandId="org.eclipse.tm4e.languageconfiguration.removeBlockCommentCommand"
            contextId="org.eclipse.ui.textEditorScope"
            schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
            platform="carbon"
-           sequence="M1+M4+\">
-     </key>
-     <key
-           contextId="org.eclipse.ui.textEditorScope"
-           commandId="org.eclipse.tm4e.languageconfiguration.togglelinecommentcommand"
+           sequence="M1+M4+\" />
+
+      <!-- toggle line comment with [CTRL]+[SHIFT]+[c] -->
+      <key contextId="org.eclipse.ui.textEditorScope"
+           commandId="org.eclipse.tm4e.languageconfiguration.toggleLineCommentCommand"
            schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
-           sequence="M1+M2+C">
-     </key>
-  </extension>
-  <extension
-        point="org.eclipse.ui.commands">
-     <category
-           id="org.eclipse.tm4e.languageconfiguration.category"
-           name="%LangaugeConfiguration.category.name">
-     </category>
-     <command
-           categoryId="org.eclipse.tm4e.languageconfiguration.category"
-           id="org.eclipse.tm4e.languageconfiguration.togglelinecommentcommand"
-           name="%LanguageConfiguration.toggleLineComment.name">
-     </command>
-     <command
-           categoryId="org.eclipse.tm4e.languageconfiguration.category"
-           id="org.eclipse.tm4e.languageconfiguration.addblockcommentcommand"
-           name="%LanguageConfiguration.addBlockComment.name">
-     </command>
-     <command
-           categoryId="org.eclipse.tm4e.languageconfiguration.category"
-           id="org.eclipse.tm4e.languageconfiguration.removeblockcommentcommand"
-           name="%LanguageConfiguration.removeBlockComment.name">
-     </command>
-  </extension>
-  <extension
-        point="org.eclipse.ui.handlers">
-     <handler
-           class="org.eclipse.tm4e.languageconfiguration.internal.ToggleLineCommentHandler"
-           commandId="org.eclipse.tm4e.languageconfiguration.togglelinecommentcommand">
-        <enabledWhen>
-           <reference definitionId="org.eclipse.tm4e.languageconfiguration.hasLanguageConfiguration"/>
-        </enabledWhen>
-     </handler>
-     <handler
-           class="org.eclipse.tm4e.languageconfiguration.internal.ToggleLineCommentHandler"
-           commandId="org.eclipse.tm4e.languageconfiguration.addblockcommentcommand">
-        <enabledWhen>
-           <reference definitionId="org.eclipse.tm4e.languageconfiguration.hasLanguageConfiguration"/>
-        </enabledWhen>
-     </handler>
-     <handler
-           class="org.eclipse.tm4e.languageconfiguration.internal.ToggleLineCommentHandler"
-           commandId="org.eclipse.tm4e.languageconfiguration.removeblockcommentcommand">
-        <enabledWhen>
-           <reference definitionId="org.eclipse.tm4e.languageconfiguration.hasLanguageConfiguration"/>
-        </enabledWhen>
-     </handler>
-  </extension>
-  <extension
-        point="org.eclipse.core.expressions.propertyTesters">
-     <propertyTester
-           class="org.eclipse.tm4e.languageconfiguration.internal.HasLanguageConfigurationPropertyTester"
-           id="org.eclipse.tm4e.languageconfiguration.hasLanguageConfigurationPropertyTester"
-           namespace="org.eclipse.tm4e.languageconfiguration"
-           properties="hasLanguageConfiguration"
-           type="java.lang.Object">
-     </propertyTester>
-  </extension>
-  <extension
-        point="org.eclipse.ui.menus">
-     <menuContribution
-           allPopups="true"
-       locationURI="popup:org.eclipse.ui.genericeditor.source.menu?after=additions">
-       <command
-             commandId="org.eclipse.tm4e.languageconfiguration.togglelinecommentcommand"
-             style="push">
-          <visibleWhen>
-             <reference definitionId="org.eclipse.tm4e.languageconfiguration.hasLanguageConfiguration"/>
-          </visibleWhen>
-       </command>
-       <command
-             commandId="org.eclipse.tm4e.languageconfiguration.addblockcommentcommand"
-             style="push">
-          <visibleWhen>
-             <reference definitionId="org.eclipse.tm4e.languageconfiguration.hasLanguageConfiguration"/>
-          </visibleWhen>
-       </command>
-       <command
-             commandId="org.eclipse.tm4e.languageconfiguration.removeblockcommentcommand"
-             style="push">
-          <visibleWhen>
-             <reference definitionId="org.eclipse.tm4e.languageconfiguration.hasLanguageConfiguration"/>
-          </visibleWhen>
-       </command>
-     </menuContribution>
-  </extension>
-   <extension
-         point="org.eclipse.core.expressions.definitions">
-      <definition
-            id="org.eclipse.tm4e.languageconfiguration.hasLanguageConfiguration">
-         <with
-               variable="activeEditor">
-            <test
-                  property="org.eclipse.tm4e.languageconfiguration.hasLanguageConfiguration"
-                  forcePluginActivation="true">
-            </test>
+           sequence="M1+M2+c" />
+   </extension>
+
+   <!-- register commands  menu entries -->
+   <extension point="org.eclipse.ui.menus">
+
+      <!-- register commands as entries in main window menu -->
+      <menuContribution locationURI="menu:org.eclipse.ui.main.menu?after=edit">
+         <menu id="org.eclipse.tm4e.source.menu" label="%LanguageConfiguration.menu.source.name" mnemonic="S">
+            <command commandId="org.eclipse.tm4e.languageconfiguration.toggleLineCommentCommand" >
+               <visibleWhen>
+                  <reference definitionId="org.eclipse.tm4e.languageconfiguration.hasLanguageConfiguration"/>
+               </visibleWhen>
+             </command>
+             <command commandId="org.eclipse.tm4e.languageconfiguration.addBlockCommentCommand">
+                <visibleWhen>
+                   <reference definitionId="org.eclipse.tm4e.languageconfiguration.hasLanguageConfiguration"/>
+                </visibleWhen>
+             </command>
+             <command commandId="org.eclipse.tm4e.languageconfiguration.removeBlockCommentCommand">
+                <visibleWhen>
+                   <reference definitionId="org.eclipse.tm4e.languageconfiguration.hasLanguageConfiguration"/>
+                </visibleWhen>
+             </command>
+          </menu>
+      </menuContribution>
+
+      <!-- register commands as entries in editor context menu -->
+      <!--popup:org.eclipse.ui.genericeditor.source.menu?after=additions-->
+      <menuContribution allPopups="true" locationURI="popup:org.eclipse.ui.genericeditor.source.menu?after=additions">
+         <!-- because of an eclipse bug, the "label" attribute needs to be explicitly set, otherwise entries don't show up in popup menu -->
+         <command commandId="org.eclipse.tm4e.languageconfiguration.toggleLineCommentCommand"
+               label="%LanguageConfiguration.toggleLineComment.name">
+            <visibleWhen>
+               <reference definitionId="org.eclipse.tm4e.languageconfiguration.hasLanguageConfiguration"/>
+             </visibleWhen>
+          </command>
+          <command commandId="org.eclipse.tm4e.languageconfiguration.addBlockCommentCommand"
+                label="%LanguageConfiguration.addBlockComment.name">
+             <visibleWhen>
+                <reference definitionId="org.eclipse.tm4e.languageconfiguration.hasLanguageConfiguration"/>
+             </visibleWhen>
+          </command>
+          <command commandId="org.eclipse.tm4e.languageconfiguration.removeBlockCommentCommand"
+                label="%LanguageConfiguration.removeBlockComment.name">
+             <visibleWhen>
+                <reference definitionId="org.eclipse.tm4e.languageconfiguration.hasLanguageConfiguration"/>
+             </visibleWhen>
+          </command>
+          <separator name="org.eclipse.tm4e.languageconfiguration.separator" visible="true" />
+      </menuContribution>
+   </extension>
+
+   <!-- https://wiki.eclipse.org/Platform_Expression_Framework -->
+   <extension point="org.eclipse.core.expressions.propertyTesters">
+      <!-- provide a testable property 'org.eclipse.tm4e.languageconfiguration.hasLanguageConfiguration' -->
+      <propertyTester
+            class="org.eclipse.tm4e.languageconfiguration.internal.HasLanguageConfigurationPropertyTester"
+            id="org.eclipse.tm4e.languageconfiguration.hasLanguageConfigurationPropertyTester"
+            namespace="org.eclipse.tm4e.languageconfiguration"
+            properties="hasLanguageConfiguration"
+            type="java.lang.Object" />
+   </extension>
+   <extension point="org.eclipse.core.expressions.definitions">
+      <!-- provide a expression based on the testable property 'org.eclipse.tm4e.languageconfiguration.hasLanguageConfiguration' -->
+      <definition id="org.eclipse.tm4e.languageconfiguration.hasLanguageConfiguration">
+         <with variable="activeEditor">
+            <test property="org.eclipse.tm4e.languageconfiguration.hasLanguageConfiguration" forcePluginActivation="true" />
          </with>
       </definition>
    </extension>

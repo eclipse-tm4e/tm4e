@@ -8,21 +8,21 @@
  */
 package org.eclipse.tm4e.languageconfiguration.tests;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.*;
 
 import java.io.ByteArrayInputStream;
 
-import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.ResourcesPlugin;
-import org.eclipse.jface.text.IDocument;
 import org.eclipse.jface.text.TextSelection;
+import org.eclipse.tm4e.languageconfiguration.internal.ToggleLineCommentHandler;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.handlers.IHandlerService;
 import org.eclipse.ui.ide.IDE;
 import org.eclipse.ui.texteditor.ITextEditor;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
+
 
 public class TestComment {
 
@@ -36,16 +36,19 @@ public class TestComment {
 
 	@Test
 	public void testIndentOnNewLine() throws Exception {
-		final IProject p = ResourcesPlugin.getWorkspace().getRoot().getProject(getClass().getName() + System.currentTimeMillis());
-		p.create(null);
-		p.open(null);
-		final IFile file = p.getFile("whatever.noLineComment");
+		final var now = System.currentTimeMillis();
+		final var proj = ResourcesPlugin.getWorkspace().getRoot().getProject(getClass().getName() + now);
+		proj.create(null);
+		proj.open(null);
+		final var file = proj.getFile("whatever.noLineComment");
 		file.create(new ByteArrayInputStream("a\nb\nc".getBytes()), true, null);
-		final ITextEditor editor = (ITextEditor) IDE.openEditor(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage(), file, "org.eclipse.ui.genericeditor.GenericEditor");
-		final IDocument doc = editor.getDocumentProvider().getDocument(editor.getEditorInput());
-		final IHandlerService service = PlatformUI.getWorkbench().getService(IHandlerService.class);
+		final var editor = (ITextEditor) IDE.openEditor(
+				PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage(), file,
+				"org.eclipse.ui.genericeditor.GenericEditor");
+		final var doc = editor.getDocumentProvider().getDocument(editor.getEditorInput());
+		final var service = PlatformUI.getWorkbench().getService(IHandlerService.class);
 		editor.getSelectionProvider().setSelection(new TextSelection(0, 5));
-		service.executeCommand("org.eclipse.tm4e.languageconfiguration.togglelinecommentcommand", null);
+		service.executeCommand(ToggleLineCommentHandler.TOGGLE_LINE_COMMENT_COMMAND_ID, null);
 		assertEquals("/*a*/\n/*b*/\n/*c*/", doc.get());
 	}
 }

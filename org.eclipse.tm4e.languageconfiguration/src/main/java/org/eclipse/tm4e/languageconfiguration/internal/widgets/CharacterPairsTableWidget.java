@@ -30,7 +30,7 @@ import org.eclipse.swt.graphics.GC;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
-import org.eclipse.tm4e.languageconfiguration.internal.supports.CharacterPair;
+import org.eclipse.tm4e.languageconfiguration.internal.model.CharacterPair;
 
 class CharacterPairsTableWidget extends TableViewer {
 

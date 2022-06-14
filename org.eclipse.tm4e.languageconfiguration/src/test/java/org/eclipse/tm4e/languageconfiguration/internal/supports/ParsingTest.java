@@ -16,7 +16,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 
 import org.eclipse.jdt.annotation.Nullable;
-import org.eclipse.tm4e.languageconfiguration.internal.LanguageConfiguration;
+import org.eclipse.tm4e.languageconfiguration.internal.registry.LanguageConfiguration;
 import org.junit.jupiter.api.Test;
 
 public class ParsingTest {

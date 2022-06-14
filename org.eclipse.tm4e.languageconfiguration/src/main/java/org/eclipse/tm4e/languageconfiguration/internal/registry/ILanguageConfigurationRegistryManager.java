@@ -9,10 +9,11 @@
  *  Contributors:
  *  Lucas Bullen (Red Hat Inc.) - initial API and implementation
  */
-package org.eclipse.tm4e.languageconfiguration.internal;
+package org.eclipse.tm4e.languageconfiguration.internal.registry;
 
 import org.eclipse.core.runtime.content.IContentType;
 import org.eclipse.jdt.annotation.Nullable;
+import org.eclipse.tm4e.languageconfiguration.internal.model.ILanguageConfiguration;
 import org.osgi.service.prefs.BackingStoreException;
 
 /**

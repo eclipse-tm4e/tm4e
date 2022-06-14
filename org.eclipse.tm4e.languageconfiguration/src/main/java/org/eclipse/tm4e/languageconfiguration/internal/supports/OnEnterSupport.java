@@ -18,7 +18,10 @@ import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 import org.eclipse.jdt.annotation.Nullable;
-import org.eclipse.tm4e.languageconfiguration.internal.supports.EnterAction.IndentAction;
+import org.eclipse.tm4e.languageconfiguration.internal.model.CharacterPair;
+import org.eclipse.tm4e.languageconfiguration.internal.model.EnterAction;
+import org.eclipse.tm4e.languageconfiguration.internal.model.OnEnterRule;
+import org.eclipse.tm4e.languageconfiguration.internal.model.EnterAction.IndentAction;
 import org.eclipse.tm4e.languageconfiguration.internal.utils.RegExpUtils;
 
 /**

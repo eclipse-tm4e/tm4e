@@ -21,7 +21,7 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.GC;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
-import org.eclipse.tm4e.languageconfiguration.internal.supports.StandardAutoClosingPairConditional;
+import org.eclipse.tm4e.languageconfiguration.internal.model.StandardAutoClosingPairConditional;
 
 final class AutoClosingPairConditionalTableWidget extends CharacterPairsTableWidget {
 

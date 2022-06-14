@@ -10,7 +10,7 @@
  * Angelo Zerr <angelo.zerr@gmail.com> - initial API and implementation
  * Lucas Bullen (Red Hat Inc.) - language configuration preferences
  */
-package org.eclipse.tm4e.languageconfiguration.internal;
+package org.eclipse.tm4e.languageconfiguration.internal.registry;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -25,15 +25,15 @@ import org.eclipse.jface.text.BadLocationException;
 import org.eclipse.jface.text.IDocument;
 import org.eclipse.jface.text.IRegion;
 import org.eclipse.tm4e.languageconfiguration.LanguageConfigurationPlugin;
+import org.eclipse.tm4e.languageconfiguration.internal.model.CharacterPair;
+import org.eclipse.tm4e.languageconfiguration.internal.model.EnterAction;
+import org.eclipse.tm4e.languageconfiguration.internal.model.EnterActionAndIndent;
+import org.eclipse.tm4e.languageconfiguration.internal.model.StandardAutoClosingPairConditional;
+import org.eclipse.tm4e.languageconfiguration.internal.model.EnterAction.IndentAction;
 import org.eclipse.tm4e.languageconfiguration.internal.preferences.PreferenceConstants;
 import org.eclipse.tm4e.languageconfiguration.internal.preferences.PreferenceHelper;
-import org.eclipse.tm4e.languageconfiguration.internal.supports.StandardAutoClosingPairConditional;
-import org.eclipse.tm4e.languageconfiguration.internal.supports.CharacterPair;
 import org.eclipse.tm4e.languageconfiguration.internal.supports.CharacterPairSupport;
 import org.eclipse.tm4e.languageconfiguration.internal.supports.CommentSupport;
-import org.eclipse.tm4e.languageconfiguration.internal.supports.EnterAction;
-import org.eclipse.tm4e.languageconfiguration.internal.supports.EnterAction.IndentAction;
-import org.eclipse.tm4e.languageconfiguration.internal.supports.EnterActionAndIndent;
 import org.eclipse.tm4e.languageconfiguration.internal.supports.OnEnterSupport;
 import org.eclipse.tm4e.languageconfiguration.internal.utils.TextUtils;
 import org.osgi.service.prefs.BackingStoreException;

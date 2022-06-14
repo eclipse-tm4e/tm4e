@@ -14,6 +14,8 @@ package org.eclipse.tm4e.languageconfiguration.internal.supports;
 import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.jface.text.BadLocationException;
 import org.eclipse.jface.text.IDocument;
+import org.eclipse.tm4e.languageconfiguration.internal.model.CharacterPair;
+import org.eclipse.tm4e.languageconfiguration.internal.model.CommentRule;
 
 public final class CommentSupport {
 

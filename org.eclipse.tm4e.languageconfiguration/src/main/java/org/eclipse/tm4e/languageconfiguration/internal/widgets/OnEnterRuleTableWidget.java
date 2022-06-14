@@ -33,8 +33,8 @@ import org.eclipse.swt.graphics.GC;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
-import org.eclipse.tm4e.languageconfiguration.internal.supports.EnterAction;
-import org.eclipse.tm4e.languageconfiguration.internal.supports.OnEnterRule;
+import org.eclipse.tm4e.languageconfiguration.internal.model.EnterAction;
+import org.eclipse.tm4e.languageconfiguration.internal.model.OnEnterRule;
 
 final class OnEnterRuleTableWidget extends TableViewer {
 

@@ -17,10 +17,10 @@ import java.util.Objects;
 
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
-import org.eclipse.jdt.annotation.Nullable;
+import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.eclipse.tm4e.languageconfiguration.LanguageConfigurationPlugin;
-import org.eclipse.tm4e.languageconfiguration.internal.ILanguageConfigurationDefinition;
-import org.eclipse.tm4e.languageconfiguration.internal.LanguageConfigurationDefinition;
+import org.eclipse.tm4e.languageconfiguration.internal.registry.ILanguageConfigurationDefinition;
+import org.eclipse.tm4e.languageconfiguration.internal.registry.LanguageConfigurationDefinition;
 import org.eclipse.tm4e.ui.internal.utils.ContentTypeHelper;
 
 import com.google.gson.Gson;
@@ -35,9 +35,10 @@ import com.google.gson.JsonSerializer;
  */
 public final class PreferenceHelper {
 
+	@NonNullByDefault({})
 	private static final Gson DEFAULT_GSON = new GsonBuilder()
 			.registerTypeAdapter(LanguageConfigurationDefinition.class,
-					(JsonDeserializer<@Nullable LanguageConfigurationDefinition>) (json, typeOfT, context) -> {
+					(JsonDeserializer<LanguageConfigurationDefinition>) (json, typeOfT, context) -> {
 						final JsonObject object = json.getAsJsonObject();
 						final JsonElement pluginId = object.get("pluginId");
 						final var contentTypeId = object.get("contentTypeId").getAsString();

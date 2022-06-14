@@ -14,7 +14,7 @@ package org.eclipse.tm4e.languageconfiguration.internal.preferences;
 import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.jface.viewers.IStructuredContentProvider;
 import org.eclipse.jface.viewers.Viewer;
-import org.eclipse.tm4e.languageconfiguration.internal.ILanguageConfigurationRegistryManager;
+import org.eclipse.tm4e.languageconfiguration.internal.registry.ILanguageConfigurationRegistryManager;
 
 final class LanguageConfigurationContentProvider implements IStructuredContentProvider {
 

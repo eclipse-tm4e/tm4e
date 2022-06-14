@@ -29,10 +29,10 @@ import org.eclipse.swt.widgets.TabFolder;
 import org.eclipse.swt.widgets.TabItem;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.Text;
-import org.eclipse.tm4e.languageconfiguration.internal.ILanguageConfiguration;
-import org.eclipse.tm4e.languageconfiguration.internal.supports.CharacterPair;
-import org.eclipse.tm4e.languageconfiguration.internal.supports.CommentRule;
-import org.eclipse.tm4e.languageconfiguration.internal.supports.FoldingRule;
+import org.eclipse.tm4e.languageconfiguration.internal.model.CharacterPair;
+import org.eclipse.tm4e.languageconfiguration.internal.model.CommentRule;
+import org.eclipse.tm4e.languageconfiguration.internal.model.FoldingRule;
+import org.eclipse.tm4e.languageconfiguration.internal.model.ILanguageConfiguration;
 
 @NonNullByDefault({})
 public class LanguageConfigurationInfoWidget extends Composite {

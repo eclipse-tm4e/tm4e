@@ -9,7 +9,7 @@
  * Contributors:
  * Angelo Zerr <angelo.zerr@gmail.com> - initial API and implementation
  */
-package org.eclipse.tm4e.languageconfiguration.internal;
+package org.eclipse.tm4e.languageconfiguration.internal.registry;
 
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -22,6 +22,7 @@ import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.content.IContentType;
 import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.tm4e.languageconfiguration.LanguageConfigurationPlugin;
+import org.eclipse.tm4e.languageconfiguration.internal.model.ILanguageConfiguration;
 import org.eclipse.tm4e.languageconfiguration.internal.supports.CharacterPairSupport;
 import org.eclipse.tm4e.languageconfiguration.internal.supports.CommentSupport;
 import org.eclipse.tm4e.languageconfiguration.internal.supports.OnEnterSupport;

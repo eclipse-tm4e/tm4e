@@ -9,7 +9,7 @@
  * Contributors:
  * Angelo Zerr <angelo.zerr@gmail.com> - initial API and implementation
  */
-package org.eclipse.tm4e.languageconfiguration.internal.supports;
+package org.eclipse.tm4e.languageconfiguration.internal.model;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -17,7 +17,11 @@ import java.util.Arrays;
 import java.util.List;
 
 import org.eclipse.jdt.annotation.Nullable;
-import org.eclipse.tm4e.languageconfiguration.internal.supports.EnterAction.IndentAction;
+import org.eclipse.tm4e.languageconfiguration.internal.model.CharacterPair;
+import org.eclipse.tm4e.languageconfiguration.internal.model.EnterAction;
+import org.eclipse.tm4e.languageconfiguration.internal.model.OnEnterRule;
+import org.eclipse.tm4e.languageconfiguration.internal.model.EnterAction.IndentAction;
+import org.eclipse.tm4e.languageconfiguration.internal.supports.OnEnterSupport;
 import org.junit.jupiter.api.Test;
 
 /**

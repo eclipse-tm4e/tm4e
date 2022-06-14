@@ -17,6 +17,8 @@ import java.util.Objects;
 import java.util.stream.Collectors;
 
 import org.eclipse.jdt.annotation.Nullable;
+import org.eclipse.tm4e.languageconfiguration.internal.model.CharacterPair;
+import org.eclipse.tm4e.languageconfiguration.internal.model.StandardAutoClosingPairConditional;
 
 /**
  * The "character pair" support.

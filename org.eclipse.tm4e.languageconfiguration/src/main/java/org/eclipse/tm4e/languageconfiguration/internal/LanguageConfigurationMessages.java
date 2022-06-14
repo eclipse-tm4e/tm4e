@@ -26,6 +26,8 @@ public final class LanguageConfigurationMessages extends NLS {
 	public static String CharacterPairsTableWidget_end;
 	public static String CharacterPairsTableWidget_start;
 	public static String LanguageConfigurationInfoWidget_autoClosingPairs;
+	public static String LanguageConfigurationInfoWidget_autoCloseBefore_message;
+	public static String LanguageConfigurationInfoWidget_autoCloseBefore_title;
 	public static String LanguageConfigurationInfoWidget_blockCommentsEnd;
 	public static String LanguageConfigurationInfoWidget_blockCommentsStart;
 	public static String LanguageConfigurationInfoWidget_brackets;

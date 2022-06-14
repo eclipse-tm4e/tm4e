@@ -33,11 +33,34 @@ public class ParsingTest {
 	public void testCanLoadPhpLanguageConfig() throws Exception {
 		final var languageConfiguration = loadLanguageConfiguration("/php-language-configuration.json");
 		assertNotNull(languageConfiguration);
+		final var comments = languageConfiguration.getComments();
+		assertNotNull(comments);
+		assertNotNull(comments.blockComment);
+		assertEquals(comments.lineComment, "//");
+		assertNotNull(languageConfiguration.getBrackets());
+		assertNotNull(languageConfiguration.getAutoClosingPairs());
+		assertEquals(";:.,=}])>` \n\t", languageConfiguration.getAutoCloseBefore());
+		assertNotNull(languageConfiguration.getWordPattern());
+		assertNotNull(languageConfiguration.getOnEnterRules());
+
+		assertNotNull(languageConfiguration.getSurroundingPairs());
+		assertNotNull(languageConfiguration.getFolding());
 	}
 
 	@Test
 	public void testCanLoadRustLanguageConfig() throws Exception {
 		final var languageConfiguration = loadLanguageConfiguration("/rust-language-configuration.json");
 		assertNotNull(languageConfiguration);
+		final var comments = languageConfiguration.getComments();
+		assertNotNull(comments);
+		assertNotNull(comments.blockComment);
+		assertEquals(comments.lineComment, "//");
+		assertNotNull(languageConfiguration.getBrackets());
+		assertNotNull(languageConfiguration.getAutoClosingPairs());
+		assertNull(languageConfiguration.getAutoCloseBefore());
+		assertNull(languageConfiguration.getWordPattern());
+		assertNotNull(languageConfiguration.getOnEnterRules());
+		assertNotNull(languageConfiguration.getSurroundingPairs());
+		assertNull(languageConfiguration.getFolding());
 	}
 }

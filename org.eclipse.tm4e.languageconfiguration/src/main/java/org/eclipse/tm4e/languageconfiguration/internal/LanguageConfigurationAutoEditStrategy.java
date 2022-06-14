@@ -70,7 +70,7 @@ public class LanguageConfigurationAutoEditStrategy implements IAutoEditStrategy 
 		// Auto close pair
 		final var registry = LanguageConfigurationRegistryManager.getInstance();
 		for (final IContentType contentType : contentTypes) {
-			final var autoClosingPair = registry.getAutoClosePair(document.get(), command.offset,
+			final var autoClosingPair = registry.getAutoClosingPair(document.get(), command.offset,
 					command.text, contentType);
 			if (autoClosingPair == null) {
 				continue;
@@ -110,14 +110,12 @@ public class LanguageConfigurationAutoEditStrategy implements IAutoEditStrategy 
 	private boolean isAutoClosingAllowed(final IDocument document, final IContentType contentType, final int offset,
 			final AutoClosingPairConditional pair) {
 
-		// only consider auto-closing if the next char is a white-space OR the closing char of another auto-closing pair
+		// only consider auto-closing if the next char is configured in autoCloseBefore
 		try {
 			final var ch = document.getChar(offset);
 			if (!Character.isWhitespace(ch)) {
 				final var registry = LanguageConfigurationRegistryManager.getInstance();
-				final var chStr = Character.toString(ch);
-				if (!registry.getEnabledAutoClosingPairs(contentType).stream()
-						.anyMatch(p -> chStr.equals(p.close) && !chStr.equals(p.open)))
+				if (registry.getAutoCloseBefore(contentType).indexOf(ch) < 0)
 					return false;
 			}
 		} catch (Exception ex) {

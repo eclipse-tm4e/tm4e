@@ -73,14 +73,26 @@ public final class LanguageConfigurationRegistryManager extends AbstractLanguage
 	}
 
 	@Nullable
-	public AutoClosingPairConditional getAutoClosePair(final String text, final int offset,
+	public AutoClosingPairConditional getAutoClosingPair(final String text, final int offset,
 			final String newCharacter, final IContentType contentType) {
 		final var definition = getDefinition(contentType);
 		if (definition == null || !definition.isBracketAutoClosingEnabled()) {
 			return null;
 		}
-		final var characterPairSupport = this._getCharacterPairSupport(contentType);
-		return characterPairSupport == null ? null : characterPairSupport.getAutoClosePair(text, offset, newCharacter);
+		final var charPairSupport = this._getCharacterPairSupport(contentType);
+		return charPairSupport == null ? null
+				: charPairSupport.getAutoClosingPair(text, offset, newCharacter);
+	}
+
+	public String getAutoCloseBefore(final IContentType contentType) {
+		final var definition = getDefinition(contentType);
+		if (definition == null) {
+			return CharacterPairSupport.DEFAULT_AUTOCLOSE_BEFORE_LANGUAGE_DEFINED;
+		}
+		final var charPairSupport = this._getCharacterPairSupport(contentType);
+		return charPairSupport == null
+				? CharacterPairSupport.DEFAULT_AUTOCLOSE_BEFORE_LANGUAGE_DEFINED
+				: charPairSupport.autoCloseBefore;
 	}
 
 	public boolean shouldSurroundingPairs(final IDocument document, final int offset, final IContentType contentType) {

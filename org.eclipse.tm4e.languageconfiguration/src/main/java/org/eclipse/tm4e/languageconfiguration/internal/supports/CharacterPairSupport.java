@@ -35,9 +35,12 @@ import org.eclipse.tm4e.languageconfiguration.internal.model.LanguageConfigurati
  */
 public final class CharacterPairSupport {
 
+	public static final String DEFAULT_AUTOCLOSE_BEFORE_LANGUAGE_DEFINED = ";:.,=}])> \r\n\t";
+	public static final String DEFAULT_AUTOCLOSE_BEFORE_WHITESPACE = " \r\n\t";
+
 	public final List<AutoClosingPairConditional> autoClosingPairs;
 	public final List<AutoClosingPair> surroundingPairs;
-	// TODO public final String autoCloseBefore;
+	public final String autoCloseBefore;
 
 	@SuppressWarnings("unchecked")
 	public CharacterPairSupport(LanguageConfiguration config) {
@@ -56,6 +59,11 @@ public final class CharacterPairSupport {
 			this.autoClosingPairs = Collections.emptyList();
 		}
 
+		final var autoCloseBefore = config.getAutoCloseBefore();
+		this.autoCloseBefore = autoCloseBefore != null
+				? autoCloseBefore
+				: CharacterPairSupport.DEFAULT_AUTOCLOSE_BEFORE_LANGUAGE_DEFINED;
+
 		final var surroundingPairs = config.getSurroundingPairs();
 		this.surroundingPairs = surroundingPairs != null
 				? surroundingPairs.stream().filter(Objects::nonNull).collect(Collectors.toList())
@@ -63,11 +71,11 @@ public final class CharacterPairSupport {
 	}
 
 	/**
-	 * TODO not in upstream project
+	 * TODO not declared in upstream project
 	 */
 	@Nullable
-	public AutoClosingPairConditional getAutoClosePair(final String text, final int offset,
-			final String newCharacter/* : string, context: ScopedLineTokens, column: number */) {
+	public AutoClosingPairConditional getAutoClosingPair(final String text, final int offset,
+			final String newCharacter) {
 		if (newCharacter.isEmpty()) {
 			return null;
 		}

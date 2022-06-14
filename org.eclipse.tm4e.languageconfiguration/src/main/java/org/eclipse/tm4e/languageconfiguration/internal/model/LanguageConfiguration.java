@@ -320,7 +320,13 @@ public class LanguageConfiguration {
 
 	// TODO @Nullable List<CharacterPair> getColorizedBracketPairs();
 
-	// TODO @Nullable String getAutoCloseBefore();
+	@Nullable
+	private String autoCloseBefore;
+
+	@Nullable
+	public String getAutoCloseBefore() {
+		return autoCloseBefore;
+	}
 
 	@Nullable
 	private FoldingRules folding;

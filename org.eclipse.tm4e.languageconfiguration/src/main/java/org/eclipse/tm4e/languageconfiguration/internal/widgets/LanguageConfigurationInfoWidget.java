@@ -48,6 +48,9 @@ public class LanguageConfigurationInfoWidget extends Composite {
 	protected TabItem autoClosingPairsTab;
 	private AutoClosingPairConditionalTableWidget autoClosingPairsTable;
 
+	private TabItem autoCloseBeforeTab;
+	private Text autoCloseBeforeText;
+
 	protected TabItem surroundingPairsTab;
 	private CharacterPairsTableWidget surroundingPairsTable;
 
@@ -57,7 +60,6 @@ public class LanguageConfigurationInfoWidget extends Composite {
 	private Text markersEndText;
 
 	private TabItem wordPatternTab;
-
 	private Text wordPatternText;
 
 	protected TabItem onEnterRulesTab;
@@ -84,6 +86,7 @@ public class LanguageConfigurationInfoWidget extends Composite {
 		createCommentsTab(folder);
 		createBracketsTab(folder);
 		createAutoClosingPairsTab(folder);
+		createAutoCloseBeforeTab(folder);
 		createSurroundingPairsTab(folder);
 		createFoldingTab(folder);
 		createWordPatternTab(folder);
@@ -96,6 +99,7 @@ public class LanguageConfigurationInfoWidget extends Composite {
 		blockCommentEndText.setText(""); //$NON-NLS-1$
 		bracketsTable.setInput(null);
 		autoClosingPairsTable.setInput(null);
+		autoCloseBeforeText.setText(""); //$NON-NLS-1$
 		surroundingPairsTable.setInput(null);
 		offsideText.setText(""); //$NON-NLS-1$
 		markersStartText.setText(""); //$NON-NLS-1$
@@ -118,7 +122,14 @@ public class LanguageConfigurationInfoWidget extends Composite {
 		}
 
 		bracketsTable.setInput(removeNullElements(configuration.getBrackets()));
+
 		autoClosingPairsTable.setInput(removeNullElements(configuration.getAutoClosingPairs()));
+
+		final String autoCloseBefore = configuration.getAutoCloseBefore();
+		if (autoCloseBefore != null) {
+			autoCloseBeforeText.setText(autoCloseBefore);
+		}
+
 		surroundingPairsTable.setInput(removeNullElements(configuration.getSurroundingPairs()));
 
 		final FoldingRules folding = configuration.getFolding();
@@ -163,6 +174,13 @@ public class LanguageConfigurationInfoWidget extends Composite {
 				LanguageConfigurationInfoWidget_autoClosingPairs);
 		autoClosingPairsTable = new AutoClosingPairConditionalTableWidget(
 				createTable((Composite) autoClosingPairsTab.getControl()));
+	}
+
+	private void createAutoCloseBeforeTab(final TabFolder folder) {
+		autoCloseBeforeTab = createTab(folder, LanguageConfigurationInfoWidget_autoCloseBefore_title);
+		final Composite parent = (Composite) autoCloseBeforeTab.getControl();
+
+		autoCloseBeforeText = createText(parent, LanguageConfigurationInfoWidget_autoCloseBefore_message);
 	}
 
 	protected void createSurroundingPairsTab(final TabFolder folder) {

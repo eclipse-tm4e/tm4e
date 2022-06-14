@@ -66,7 +66,7 @@ public interface ILanguageConfiguration {
 	 *         is surrounded by the open and close characters. If not set, the autoclosing pairs settings will be used.
 	 */
 	@Nullable
-	List<CharacterPair> getSurroundingPairs();
+	List<AutoClosingPair> getSurroundingPairs();
 
 	/**
 	 * Returns the language's folding rules.

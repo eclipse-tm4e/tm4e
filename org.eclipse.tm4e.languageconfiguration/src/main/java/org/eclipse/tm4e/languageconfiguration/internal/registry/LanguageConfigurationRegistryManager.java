@@ -25,10 +25,10 @@ import org.eclipse.jface.text.BadLocationException;
 import org.eclipse.jface.text.IDocument;
 import org.eclipse.jface.text.IRegion;
 import org.eclipse.tm4e.languageconfiguration.LanguageConfigurationPlugin;
-import org.eclipse.tm4e.languageconfiguration.internal.model.CharacterPair;
-import org.eclipse.tm4e.languageconfiguration.internal.model.EnterAction;
-import org.eclipse.tm4e.languageconfiguration.internal.model.CompleteEnterAction;
+import org.eclipse.tm4e.languageconfiguration.internal.model.AutoClosingPair;
 import org.eclipse.tm4e.languageconfiguration.internal.model.AutoClosingPairConditional;
+import org.eclipse.tm4e.languageconfiguration.internal.model.CompleteEnterAction;
+import org.eclipse.tm4e.languageconfiguration.internal.model.EnterAction;
 import org.eclipse.tm4e.languageconfiguration.internal.model.EnterAction.IndentAction;
 import org.eclipse.tm4e.languageconfiguration.internal.preferences.PreferenceConstants;
 import org.eclipse.tm4e.languageconfiguration.internal.preferences.PreferenceHelper;
@@ -121,7 +121,7 @@ public final class LanguageConfigurationRegistryManager extends AbstractLanguage
 				: characterPairSupport.autoClosingPairs;
 	}
 
-	public List<CharacterPair> getSurroundingPairs(final IContentType contentType) {
+	public List<AutoClosingPair> getSurroundingPairs(final IContentType contentType) {
 		final var characterPairSupport = this._getCharacterPairSupport(contentType);
 		return characterPairSupport == null
 				? Collections.emptyList()
@@ -244,7 +244,6 @@ public final class LanguageConfigurationRegistryManager extends AbstractLanguage
 				}
 			}
 		}
-
 	}
 
 	private void loadFromPreferences() {

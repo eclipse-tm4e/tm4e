@@ -11,8 +11,6 @@
  */
 package org.eclipse.tm4e.languageconfiguration.internal;
 
-import java.util.List;
-
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.content.IContentType;
 import org.eclipse.jdt.annotation.Nullable;
@@ -21,7 +19,6 @@ import org.eclipse.jface.text.IRegion;
 import org.eclipse.jface.text.source.DefaultCharacterPairMatcher;
 import org.eclipse.jface.text.source.ICharacterPairMatcher;
 import org.eclipse.jface.text.source.ICharacterPairMatcherExtension;
-import org.eclipse.tm4e.languageconfiguration.internal.model.CharacterPair;
 import org.eclipse.tm4e.languageconfiguration.internal.registry.LanguageConfigurationRegistryManager;
 import org.eclipse.tm4e.ui.internal.utils.ContentTypeHelper;
 import org.eclipse.tm4e.ui.internal.utils.ContentTypeInfo;
@@ -123,8 +120,8 @@ public class LanguageConfigurationCharacterPairMatcher
 					if (!registry.shouldSurroundingPairs(document, -1, contentType)) {
 						continue;
 					}
-					final List<CharacterPair> surroundingPairs = registry.getSurroundingPairs(contentType);
-					for (final CharacterPair surroundingPair : surroundingPairs) {
+					final var surroundingPairs = registry.getSurroundingPairs(contentType);
+					for (final var surroundingPair : surroundingPairs) {
 						sb.append(surroundingPair.open);
 						sb.append(surroundingPair.close);
 					}

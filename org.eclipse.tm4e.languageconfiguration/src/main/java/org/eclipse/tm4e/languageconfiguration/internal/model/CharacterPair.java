@@ -15,8 +15,8 @@ package org.eclipse.tm4e.languageconfiguration.internal.model;
  * A tuple of two characters, like a pair of opening and closing brackets.
  *
  * @see <a href=
- *      "https://github.com/microsoft/vscode/blob/d79132281222cdab77abeacca1af700e34c2f30b/src/vs/editor/common/languages/languageConfiguration.ts#L196">
- *      github.com/microsoft/vscode/blob/main/src/vs/editor/common/languages/languageConfiguration.ts#L196</a>
+ *      "https://github.com/microsoft/vscode/blob/d79132281222cdab77abeacca1af700e34c2f30b/src/vs/editor/common/languages/languageConfiguration.ts#L194">
+ *      github.com/microsoft/vscode/blob/main/src/vs/editor/common/languages/languageConfiguration.ts#L194</a>
  */
 public class CharacterPair {
 

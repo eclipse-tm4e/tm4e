@@ -89,8 +89,7 @@ public final class LanguageConfigurationDefinition extends TMResource implements
 		if (this.characterPair == null) {
 			final ILanguageConfiguration conf = getLanguageConfiguration();
 			if (conf != null) {
-				this.characterPair = new CharacterPairSupport(conf.getBrackets(), conf.getAutoClosingPairs(),
-						conf.getSurroundingPairs());
+				this.characterPair = new CharacterPairSupport(conf);
 			}
 		}
 		return characterPair;

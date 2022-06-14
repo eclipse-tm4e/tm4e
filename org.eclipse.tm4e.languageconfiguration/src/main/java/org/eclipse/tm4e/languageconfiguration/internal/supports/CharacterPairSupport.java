@@ -6,8 +6,13 @@
  *
  * SPDX-License-Identifier: EPL-2.0
  *
+ * Initial code from https://github.com/microsoft/vscode/
+ * Initial copyright Copyright (C) Microsoft Corporation. All rights reserved.
+ * Initial license: MIT
+ *
  * Contributors:
- * Angelo Zerr <angelo.zerr@gmail.com> - initial API and implementation
+ * - Microsoft Corporation: Initial code, written in TypeScript, licensed under MIT license
+ * - Angelo Zerr <angelo.zerr@gmail.com> - translation and adaptation to Java
  */
 package org.eclipse.tm4e.languageconfiguration.internal.supports;
 
@@ -17,8 +22,9 @@ import java.util.Objects;
 import java.util.stream.Collectors;
 
 import org.eclipse.jdt.annotation.Nullable;
-import org.eclipse.tm4e.languageconfiguration.internal.model.CharacterPair;
+import org.eclipse.tm4e.languageconfiguration.internal.model.AutoClosingPair;
 import org.eclipse.tm4e.languageconfiguration.internal.model.AutoClosingPairConditional;
+import org.eclipse.tm4e.languageconfiguration.internal.model.ILanguageConfiguration;
 
 /**
  * The "character pair" support.
@@ -30,12 +36,13 @@ import org.eclipse.tm4e.languageconfiguration.internal.model.AutoClosingPairCond
 public final class CharacterPairSupport {
 
 	public final List<AutoClosingPairConditional> autoClosingPairs;
-	public final List<CharacterPair> surroundingPairs;
+	public final List<AutoClosingPair> surroundingPairs;
+	// TODO public final String autoCloseBefore;
 
 	@SuppressWarnings("unchecked")
-	public CharacterPairSupport(@Nullable final List<CharacterPair> brackets,
-			@Nullable final List<AutoClosingPairConditional> autoClosingPairs,
-			@Nullable final List<CharacterPair> surroundingPairs) {
+	public CharacterPairSupport(ILanguageConfiguration config) {
+		final var autoClosingPairs = config.getAutoClosingPairs();
+		final var brackets = config.getBrackets();
 
 		if (autoClosingPairs != null) {
 			this.autoClosingPairs = autoClosingPairs.stream().filter(Objects::nonNull)
@@ -49,11 +56,15 @@ public final class CharacterPairSupport {
 			this.autoClosingPairs = Collections.emptyList();
 		}
 
+		final var surroundingPairs = config.getSurroundingPairs();
 		this.surroundingPairs = surroundingPairs != null
 				? surroundingPairs.stream().filter(Objects::nonNull).collect(Collectors.toList())
-				: (List<CharacterPair>) (List<?>) this.autoClosingPairs;
+				: (List<AutoClosingPair>) (List<?>) this.autoClosingPairs;
 	}
 
+	/**
+	 * TODO not in upstream project
+	 */
 	@Nullable
 	public AutoClosingPairConditional getAutoClosePair(final String text, final int offset,
 			final String newCharacter/* : string, context: ScopedLineTokens, column: number */) {

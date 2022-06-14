@@ -18,6 +18,8 @@ import java.util.List;
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.eclipse.jdt.annotation.Nullable;
+import org.eclipse.tm4e.languageconfiguration.internal.model.AutoClosingPair;
+import org.eclipse.tm4e.languageconfiguration.internal.model.AutoClosingPairConditional;
 import org.eclipse.tm4e.languageconfiguration.internal.model.CharacterPair;
 import org.eclipse.tm4e.languageconfiguration.internal.model.CommentRule;
 import org.eclipse.tm4e.languageconfiguration.internal.model.EnterAction;
@@ -25,7 +27,6 @@ import org.eclipse.tm4e.languageconfiguration.internal.model.EnterAction.IndentA
 import org.eclipse.tm4e.languageconfiguration.internal.model.FoldingRules;
 import org.eclipse.tm4e.languageconfiguration.internal.model.ILanguageConfiguration;
 import org.eclipse.tm4e.languageconfiguration.internal.model.OnEnterRule;
-import org.eclipse.tm4e.languageconfiguration.internal.model.AutoClosingPairConditional;
 
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonArray;
@@ -129,6 +130,26 @@ public final class LanguageConfiguration implements ILanguageConfiguration {
 					return open == null || close == null
 							? null
 							: new CharacterPair(open, close);
+				})
+
+				.registerTypeAdapter(AutoClosingPair.class, (JsonDeserializer<AutoClosingPair>) (json, typeOfT,
+						context) -> {
+					if (!json.isJsonArray()) {
+						return null;
+					}
+
+					// ex: ["{","}"]
+					final JsonArray characterPairs = json.getAsJsonArray();
+					if (characterPairs.size() != 2) {
+						return null;
+					}
+
+					final String open = getAsString(characterPairs.get(0));
+					final String close = getAsString(characterPairs.get(1));
+
+					return open == null || close == null
+							? null
+							: new AutoClosingPair(open, close);
 				})
 
 				.registerTypeAdapter(AutoClosingPairConditional.class, (JsonDeserializer<AutoClosingPairConditional>) (
@@ -254,7 +275,7 @@ public final class LanguageConfiguration implements ILanguageConfiguration {
 	 * characters. If not set, the autoclosing pairs settings will be used.
 	 */
 	@Nullable
-	private List<CharacterPair> surroundingPairs;
+	private List<AutoClosingPair> surroundingPairs;
 
 	/**
 	 * Defines when and how code should be folded in the editor
@@ -294,7 +315,7 @@ public final class LanguageConfiguration implements ILanguageConfiguration {
 
 	@Nullable
 	@Override
-	public List<CharacterPair> getSurroundingPairs() {
+	public List<AutoClosingPair> getSurroundingPairs() {
 		return surroundingPairs;
 	}
 

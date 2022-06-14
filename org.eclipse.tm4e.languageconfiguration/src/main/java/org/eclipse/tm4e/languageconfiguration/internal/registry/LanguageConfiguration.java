@@ -64,9 +64,8 @@ public final class LanguageConfiguration implements ILanguageConfiguration {
 					if (beforeText == null) {
 						return null;
 					}
-					final var afterText = getAsString(object.get("afterText")); //$NON-NLS-1$
 
-					EnterAction action = null;
+					final var afterText = getAsString(object.get("afterText")); //$NON-NLS-1$
 					final JsonElement actionElement = object.get("action"); //$NON-NLS-1$
 					if (actionElement != null && actionElement.isJsonObject()) {
 						final JsonObject actionObject = actionElement.getAsJsonObject();
@@ -75,15 +74,13 @@ public final class LanguageConfiguration implements ILanguageConfiguration {
 							final IndentAction indentAction = IndentAction.valueOf(indentActionString);
 							final Integer removeText = getAsInteger(actionObject.get("removeText")); //$NON-NLS-1$
 							final String appendText = getAsString(actionObject.get("appendText")); //$NON-NLS-1$
-							action = new EnterAction(indentAction);
+							final var action = new EnterAction(indentAction);
 							action.appendText = appendText;
 							action.removeText = removeText;
+							return new OnEnterRule(beforeText, afterText, action);
 						}
 					}
-
-					return action == null
-							? null
-							: new OnEnterRule(beforeText, afterText, action);
+					return null;
 				})
 
 				.registerTypeAdapter(CommentRule.class, (JsonDeserializer<CommentRule>) (json, typeOfT, context) -> {

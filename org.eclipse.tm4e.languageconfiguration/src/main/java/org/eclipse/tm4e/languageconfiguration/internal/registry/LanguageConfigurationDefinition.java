@@ -32,7 +32,6 @@ import org.eclipse.tm4e.ui.internal.utils.ContentTypeHelper;
 
 /**
  * Language configuration definition.
- *
  */
 public final class LanguageConfigurationDefinition extends TMResource implements ILanguageConfigurationDefinition {
 

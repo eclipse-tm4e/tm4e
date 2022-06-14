@@ -14,15 +14,23 @@ package org.eclipse.tm4e.languageconfiguration.internal.model;
 import org.eclipse.jdt.annotation.Nullable;
 
 /**
+ * Describes how comments for a language work.
+ *
  * @see <a href=
  *      "https://github.com/microsoft/vscode/blob/d79132281222cdab77abeacca1af700e34c2f30b/src/vs/editor/common/languages/languageConfiguration.ts#L13">
  *      github.com/microsoft/vscode/blob/main/src/vs/editor/common/languages/languageConfiguration.ts#L13</a>
  */
 public final class CommentRule {
 
+	/**
+	 * The line comment token, like `// this is a comment`
+	 */
 	@Nullable
 	public final String lineComment;
 
+	/**
+	 * The block comment character pair, like `/* block comment *&#47;`
+	 */
 	@Nullable
 	public final CharacterPair blockComment;
 

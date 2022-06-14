@@ -178,14 +178,9 @@ public class ToggleLineCommentHandler extends AbstractHandler {
 	}
 
 	/**
-	 * Returns true if comment support is valid according the command to do and
-	 * false otherwise.
+	 * Returns true if comment support is valid according the command to do and false otherwise.
 	 *
-	 * @param commentSupport
-	 * @param command
-	 *
-	 * @return true if comment support is valid according the command to do and
-	 *         false otherwise.
+	 * @return true if comment support is valid according the command to do and false otherwise.
 	 */
 	private boolean isValid(final CommentSupport commentSupport, final Command command) {
 		final var lineComment = commentSupport.getLineComment();
@@ -202,8 +197,6 @@ public class ToggleLineCommentHandler extends AbstractHandler {
 
 	/**
 	 * Returns the comment support from the given list of content types and null otherwise.
-	 *
-	 * @param contentTypes
 	 *
 	 * @return the comment support from the given list of content types and null otherwise.
 	 */

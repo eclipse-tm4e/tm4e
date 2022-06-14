@@ -12,12 +12,19 @@
 package org.eclipse.tm4e.languageconfiguration.internal.model;
 
 /**
+ * Describes folding rules for a language.
+ *
  * @see <a href=
  *      "https://github.com/microsoft/vscode/blob/d79132281222cdab77abeacca1af700e34c2f30b/src/vs/editor/common/languages/languageConfiguration.ts#L139">
  *      github.com/microsoft/vscode/blob/main/src/vs/editor/common/languages/languageConfiguration.ts#L139</a>
  */
 public final class FoldingRules {
 
+	/**
+	 * Used by the indentation based strategy to decide whether empty lines belong to the previous or the next block.
+	 * A language adheres to the off-side rule if blocks in that language are expressed by their indentation.
+	 * See [wikipedia](https://en.wikipedia.org/wiki/Off-side_rule) for more information.
+	 */
 	public final boolean offSide;
 	public final String markersStart;
 	public final String markersEnd;

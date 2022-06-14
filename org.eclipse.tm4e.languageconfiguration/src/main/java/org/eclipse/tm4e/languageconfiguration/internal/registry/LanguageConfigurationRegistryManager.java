@@ -151,14 +151,13 @@ public final class LanguageConfigurationRegistryManager extends AbstractLanguage
 
 			// selection support
 			// if (range.isEmpty()) {
-			afterEnterText = document.get(offset, lineInfo.getLength() - (offset - lineInfo.getOffset())); // scopedLineText.substr(range.startColumn
-																											 // - 1 -
-																											 // scopedLineTokens.firstCharOffset);
+			afterEnterText = document.get(offset, lineInfo.getLength() - (offset - lineInfo.getOffset()));
+			// afterEnterText = scopedLineText.substr(range.startColumn - 1 - scopedLineTokens.firstCharOffset);
 			// } else {
 			// const endScopedLineTokens = this.getScopedLineTokens(model,
 			// range.endLineNumber, range.endColumn);
-			// afterEnterText = endScopedLineTokens.getLineContent().substr(range.endColumn
-			// - 1 - scopedLineTokens.firstCharOffset);
+			// afterEnterText = endScopedLineTokens.getLineContent().substr(range.endColumn - 1 -
+			// scopedLineTokens.firstCharOffset);
 			// }
 
 			/*

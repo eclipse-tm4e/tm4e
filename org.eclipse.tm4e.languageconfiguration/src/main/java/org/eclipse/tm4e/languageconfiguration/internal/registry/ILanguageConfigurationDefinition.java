@@ -1,13 +1,13 @@
 /**
- *  Copyright (c) 2018 Red Hat Inc. and others.
+ * Copyright (c) 2018 Red Hat Inc. and others.
  * This program and the accompanying materials are made
  * available under the terms of the Eclipse Public License 2.0
  * which is available at https://www.eclipse.org/legal/epl-2.0/
  *
  * SPDX-License-Identifier: EPL-2.0
  *
- *  Contributors:
- *  Lucas Bullen (Red Hat Inc.) - initial API and implementation
+ * Contributors:
+ * Lucas Bullen (Red Hat Inc.) - initial API and implementation
  */
 package org.eclipse.tm4e.languageconfiguration.internal.registry;
 
@@ -34,48 +34,38 @@ public interface ILanguageConfigurationDefinition extends ITMResource {
 	ILanguageConfiguration getLanguageConfiguration();
 
 	/**
-	 * Returns whether on-enter actions are enabled for this language configuration
-	 * content type pair
+	 * Returns whether on-enter actions are enabled for this language configuration content type pair
 	 *
-	 * @return <code>true</code> if on enter is enabled, <code>false</code>
-	 *         otherwise
+	 * @return <code>true</code> if on enter is enabled, <code>false</code> otherwise
 	 */
 	boolean isOnEnterEnabled();
 
 	/**
-	 * Set whether on-enter actions are enabled for this language configuration
-	 * content type pair
+	 * Set whether on-enter actions are enabled for this language configuration content type pair
 	 */
 	void setOnEnterEnabled(boolean onEnterEnabled);
 
 	/**
-	 * Returns whether the bracket auto closing action is enabled for this language
-	 * configuration content type pair
+	 * Returns whether the bracket auto closing action is enabled for this language configuration content type pair
 	 *
-	 * @return <code>true</code> if bracket auto closing is enabled,
-	 *         <code>false</code> otherwise
+	 * @return <code>true</code> if bracket auto closing is enabled, <code>false</code> otherwise
 	 */
 	boolean isBracketAutoClosingEnabled();
 
 	/**
-	 * Set whether the bracket auto closing action is enabled for this language
-	 * configuration content type pair
+	 * Set whether the bracket auto closing action is enabled for this language configuration content type pair
 	 */
 	void setBracketAutoClosingEnabled(boolean bracketAutoClosingEnabled);
 
 	/**
-	 * Returns whether the highlighting of matching pairs is enabled for this
-	 * language configuration content type pair
+	 * Returns whether the highlighting of matching pairs is enabled for this language configuration content type pair
 	 *
-	 * @return <code>true</code> if highlighting of matching pairs is enabled,
-	 *         <code>false</code> otherwise
+	 * @return <code>true</code> if highlighting of matching pairs is enabled, <code>false</code> otherwise
 	 */
 	boolean isMatchingPairsEnabled();
 
 	/**
-	 * Set whether the highlighting of matching pairs is enabled for this language
-	 * configuration content type pair
+	 * Set whether the highlighting of matching pairs is enabled for this language configuration content type pair
 	 */
 	void setMatchingPairsEnabled(boolean matchingPairsEnabled);
-
 }

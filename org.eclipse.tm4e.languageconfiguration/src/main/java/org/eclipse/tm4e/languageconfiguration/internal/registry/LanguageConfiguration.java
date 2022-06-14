@@ -43,11 +43,11 @@ import com.google.gson.JsonObject;
 public final class LanguageConfiguration implements ILanguageConfiguration {
 
 	/**
-	 * Returns an instance of {@link LanguageConfiguration} loaded from the VSCode
-	 * language-configuration.json file reader.
+	 * Returns an instance of {@link LanguageConfiguration} loaded from the VSCode language-configuration.json file
+	 * reader.
 	 *
-	 * @return an instance of {@link LanguageConfiguration} loaded from the VSCode
-	 *         language-configuration.json file reader.
+	 * @return an instance of {@link LanguageConfiguration} loaded from the VSCode language-configuration.json file
+	 *         reader.
 	 */
 	@NonNullByDefault({})
 	@Nullable

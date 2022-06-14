@@ -1,13 +1,13 @@
 /**
- *  Copyright (c) 2018 Red Hat Inc. and others.
+ * Copyright (c) 2018 Red Hat Inc. and others.
  * This program and the accompanying materials are made
  * available under the terms of the Eclipse Public License 2.0
  * which is available at https://www.eclipse.org/legal/epl-2.0/
  *
  * SPDX-License-Identifier: EPL-2.0
  *
- *  Contributors:
- *  Lucas Bullen (Red Hat Inc.) - initial API and implementation
+ * Contributors:
+ * Lucas Bullen (Red Hat Inc.) - initial API and implementation
  */
 package org.eclipse.tm4e.languageconfiguration.internal.registry;
 
@@ -17,9 +17,7 @@ import org.eclipse.tm4e.languageconfiguration.internal.model.ILanguageConfigurat
 import org.osgi.service.prefs.BackingStoreException;
 
 /**
- *
  * Language Configuration registry manager API.
- *
  */
 public interface ILanguageConfigurationRegistryManager {
 
@@ -60,12 +58,11 @@ public interface ILanguageConfigurationRegistryManager {
 	// --------------- Language configuration queries methods.
 
 	/**
-	 * Returns the {@link ILanguageConfiguration} for the given content types and
-	 * null otherwise.
+	 * Returns the {@link ILanguageConfiguration} for the given content types and null otherwise.
 	 *
 	 * @param contentTypes the content type.
-	 * @return the {@link ILanguageConfiguration} for the given content type and
-	 *         null otherwise.
+	 *
+	 * @return the {@link ILanguageConfiguration} for the given content type and null otherwise.
 	 */
 	@Nullable
 	ILanguageConfiguration getLanguageConfigurationFor(IContentType... contentTypes);

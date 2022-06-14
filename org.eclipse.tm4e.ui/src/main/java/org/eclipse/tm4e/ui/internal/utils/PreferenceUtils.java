@@ -11,6 +11,7 @@
  */
 package org.eclipse.tm4e.ui.internal.utils;
 
+import org.eclipse.core.runtime.Platform;
 import org.eclipse.core.runtime.preferences.IEclipsePreferences;
 import org.eclipse.core.runtime.preferences.InstanceScope;
 import org.eclipse.jdt.annotation.Nullable;
@@ -23,7 +24,12 @@ public final class PreferenceUtils {
 	private static final String E4_CSS_PREFERENCE_NAME = "org.eclipse.e4.ui.css.swt.theme"; //$NON-NLS-1$
 	private static final String EDITORS_PREFERENCE_NAME = "org.eclipse.ui.editors"; //$NON-NLS-1$
 
-	private PreferenceUtils() {
+	public static boolean isDebugGenerateTest() {
+		return Boolean.parseBoolean(Platform.getDebugOption(TMUIPlugin.PLUGIN_ID + "/debug/log/GenerateTest"));
+	}
+
+	public static boolean isDebugThrowError() {
+		return Boolean.parseBoolean(Platform.getDebugOption(TMUIPlugin.PLUGIN_ID + "/debug/log/ThrowError"));
 	}
 
 	/**
@@ -66,5 +72,8 @@ public final class PreferenceUtils {
 	public static IPreferenceStore getTM4EPreferencesStore() {
 		final var plugin = TMUIPlugin.getDefault();
 		return plugin == null ? null : plugin.getPreferenceStore();
+	}
+
+	private PreferenceUtils() {
 	}
 }

@@ -44,35 +44,42 @@ public class TMUIPlugin extends AbstractUIPlugin {
 	private static volatile TMUIPlugin plugin;
 
 	public static void log(final IStatus status) {
-		final var plugin = TMUIPlugin.plugin;
-		if (plugin != null) {
-			plugin.getLog().log(status);
+		final var p = plugin;
+		if (p != null) {
+			p.getLog().log(status);
+		} else {
+			System.out.println(status);
 		}
 	}
 
-	public static void trace(final String message) {
-		if (Boolean.parseBoolean(Platform.getDebugOption(TRACE_ID))) {
+	public static void logError(Exception ex) {
+		log(new Status(IStatus.ERROR, PLUGIN_ID, ex.getMessage(), ex));
+	}
+
+	public static void logTrace(final String message) {
+		if (isLogTraceEnabled()) {
 			log(new Status(IStatus.INFO, PLUGIN_ID, message));
 		}
+	}
+
+	public static boolean isLogTraceEnabled() {
+		return Boolean.parseBoolean(Platform.getDebugOption(TRACE_ID));
 	}
 
 	@Override
 	public void start(@Nullable final BundleContext context) throws Exception {
 		super.start(context);
 		plugin = this;
-		final boolean isDebugOn = Boolean.parseBoolean(Platform.getDebugOption(TRACE_ID));
-		if (isDebugOn) {
-			final Logger tm4eCoreLogger = Logger.getLogger("org.eclipse.tm4e");
+		if (isLogTraceEnabled()) {
+			// if the trace option is enabled publish all TM4E CORE JDK logging output to the Eclipse Error Log
+			final var tm4eCorePluginId = "org.eclipse.tm4e.core";
+			final var tm4eCoreLogger = Logger.getLogger(tm4eCorePluginId);
 			tm4eCoreLogger.setLevel(Level.FINEST);
 			tm4eCoreLogger.addHandler(new Handler() {
-
 				@Override
-				public void publish(@Nullable final LogRecord record) {
-					if (record != null) {
-						log(new Status(
-								toSeverity(record.getLevel()),
-								"org.eclipse.tm4e.core",
-								record.getMessage()));
+				public void publish(@Nullable final LogRecord entry) {
+					if (entry != null) {
+						log(new Status(toSeverity(entry.getLevel()), tm4eCorePluginId, entry.getMessage()));
 					}
 				}
 

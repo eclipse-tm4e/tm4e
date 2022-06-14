@@ -1,45 +1,72 @@
 /**
- *  Copyright (c) 2015-2017 Angelo ZERR.
+ * Copyright (c) 2015-2017 Angelo ZERR.
  * This program and the accompanying materials are made
  * available under the terms of the Eclipse Public License 2.0
  * which is available at https://www.eclipse.org/legal/epl-2.0/
  *
  * SPDX-License-Identifier: EPL-2.0
  *
- *  Contributors:
- *  Angelo Zerr <angelo.zerr@gmail.com> - initial API and implementation
+ * Contributors:
+ * Angelo Zerr <angelo.zerr@gmail.com> - initial API and implementation
  */
 package org.eclipse.tm4e.registry;
 
-import org.eclipse.core.runtime.Platform;
+import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Plugin;
+import org.eclipse.core.runtime.Status;
 import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.tm4e.registry.internal.GrammarRegistryManager;
-import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
 
 /**
  * OSGi Activator for TextMate Eclipse registry bundle.
  */
-public class TMEclipseRegistryPlugin implements BundleActivator {
+public class TMEclipseRegistryPlugin extends Plugin {
 
+	/** The plug-in ID */
 	public static final String PLUGIN_ID = "org.eclipse.tm4e.registry";
 
+	/** The shared instance */
 	@Nullable
-	private static BundleContext context;
+	private static volatile TMEclipseRegistryPlugin plugin;
 
+	/**
+	 * Returns the shared instance
+	 *
+	 * @return the shared instance
+	 */
 	@Nullable
-	static BundleContext getContext() {
-		return context;
+	public static TMEclipseRegistryPlugin getDefault() {
+		return plugin;
+	}
+
+	public static void log(final IStatus status) {
+		final var p = plugin;
+		if (p != null) {
+			p.getLog().log(status);
+		} else {
+			System.out.println(status);
+		}
+	}
+
+	public static void logError(final Exception ex) {
+		log(new Status(IStatus.ERROR, PLUGIN_ID, ex.getMessage(), ex));
+	}
+
+	public static void logError(final String message, @Nullable final Exception ex) {
+		log(new Status(IStatus.ERROR, PLUGIN_ID, message, ex));
 	}
 
 	@Override
 	public void start(@Nullable final BundleContext bundleContext) throws Exception {
-		TMEclipseRegistryPlugin.context = bundleContext;
+		super.start(bundleContext);
+		plugin = this;
 	}
 
 	@Override
 	public void stop(@Nullable final BundleContext bundleContext) throws Exception {
-		TMEclipseRegistryPlugin.context = null;
+		plugin = null;
+		super.stop(bundleContext);
 	}
 
 	/**
@@ -49,17 +76,5 @@ public class TMEclipseRegistryPlugin implements BundleActivator {
 	 */
 	public static IGrammarRegistryManager getGrammarRegistryManager() {
 		return GrammarRegistryManager.getInstance();
-	}
-
-	/**
-	 * Returns true if the debug option is enabled and false otherwise.
-	 *
-	 * @param option
-	 *            the option name
-	 * @return true if the debug option is enabled and false otherwise.
-	 */
-	public static boolean isDebugOptionEnabled(final String option) {
-		final String enabled = Platform.getDebugOption(option);
-		return enabled != null && Boolean.parseBoolean(enabled);
 	}
 }

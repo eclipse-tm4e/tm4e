@@ -43,6 +43,7 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
+import org.eclipse.tm4e.languageconfiguration.LanguageConfigurationPlugin;
 import org.eclipse.tm4e.languageconfiguration.internal.registry.ILanguageConfigurationDefinition;
 import org.eclipse.tm4e.languageconfiguration.internal.registry.ILanguageConfigurationRegistryManager;
 import org.eclipse.tm4e.languageconfiguration.internal.registry.LanguageConfigurationRegistryManager;
@@ -279,8 +280,8 @@ public final class LanguageConfigurationPreferencePage extends PreferencePage im
 	public boolean performOk() {
 		try {
 			manager.save();
-		} catch (final BackingStoreException e) {
-			// TODO: Log
+		} catch (final BackingStoreException ex) {
+			LanguageConfigurationPlugin.logError(ex);
 		}
 		return super.performOk();
 	}

@@ -11,8 +11,6 @@
  */
 package org.eclipse.tm4e.ui.internal.model;
 
-import org.eclipse.core.runtime.IStatus;
-import org.eclipse.core.runtime.Status;
 import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.jface.text.BadLocationException;
 import org.eclipse.jface.text.DocumentEvent;
@@ -50,7 +48,7 @@ final class DocumentModelLines extends AbstractModelLines implements IDocumentLi
 			default:
 			}
 		} catch (final BadLocationException ex) {
-			TMUIPlugin.log(new Status(IStatus.ERROR, TMUIPlugin.PLUGIN_ID, ex.getMessage(), ex));
+			TMUIPlugin.logError(ex);
 		}
 	}
 
@@ -86,7 +84,7 @@ final class DocumentModelLines extends AbstractModelLines implements IDocumentLi
 			}
 			}
 		} catch (final BadLocationException ex) {
-			TMUIPlugin.log(new Status(IStatus.ERROR, TMUIPlugin.PLUGIN_ID, ex.getMessage(), ex));
+			TMUIPlugin.logError(ex);
 		}
 	}
 

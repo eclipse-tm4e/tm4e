@@ -128,10 +128,10 @@ public class TMPresentationReconciler implements IPresentationReconciler {
 		this.defaultToken = new Token(null);
 		this.internalListener = new InternalListener();
 		this.fDefaultTextAttribute = new TextAttribute(null);
-		if (TMEclipseRegistryPlugin.isDebugOptionEnabled("org.eclipse.tm4e.ui/debug/log/GenerateTest")) {
+		if (PreferenceUtils.isDebugGenerateTest()) {
 			addTMPresentationReconcilerListener(new TMPresentationReconcilerTestGenerator());
 		}
-		setThrowError(TMEclipseRegistryPlugin.isDebugOptionEnabled("org.eclipse.tm4e.ui/debug/log/ThrowError"));
+		setThrowError(PreferenceUtils.isDebugThrowError());
 	}
 
 	/**
@@ -335,7 +335,7 @@ public class TMPresentationReconciler implements IPresentationReconciler {
 				try {
 					TMPresentationReconciler.this.colorize(region, docModel);
 				} catch (final BadLocationException ex) {
-					TMUIPlugin.log(new Status(IStatus.ERROR, TMUIPlugin.PLUGIN_ID, ex.getMessage(), ex));
+					TMUIPlugin.logError(ex);
 				}
 			} else {
 				// case where there is no grammar & theme -> update text presentation with the
@@ -409,7 +409,7 @@ public class TMPresentationReconciler implements IPresentationReconciler {
 						final var region = new Region(document.getLineOffset(range.fromLineNumber - 1), length);
 						TMPresentationReconciler.this.colorize(region, docModel);
 					} catch (final BadLocationException ex) {
-						TMUIPlugin.log(new Status(IStatus.ERROR, TMUIPlugin.PLUGIN_ID, ex.getMessage(), ex));
+						TMUIPlugin.logError(ex);
 					}
 				}
 			}
@@ -474,8 +474,8 @@ public class TMPresentationReconciler implements IPresentationReconciler {
 			final var docModel = TMModelManager.INSTANCE.connect(document);
 			try {
 				colorize(new Region(0, document.getLength()), docModel);
-			} catch (final BadLocationException e) {
-				TMUIPlugin.log(new Status(IStatus.ERROR, TMUIPlugin.PLUGIN_ID, e.getMessage(), e));
+			} catch (final BadLocationException ex) {
+				TMUIPlugin.logError(ex);
 			}
 		}
 	}
@@ -524,7 +524,8 @@ public class TMPresentationReconciler implements IPresentationReconciler {
 		final int toLineIndex = doc.getLineOfOffset(damage.getOffset() + damage.getLength());
 		applyThemeEditorIfNeeded();
 		// Refresh the UI Presentation
-		TMUIPlugin.trace("Render from: " + fromLineIndex + " to: " + toLineIndex);
+		if (TMUIPlugin.isLogTraceEnabled())
+			TMUIPlugin.logTrace("Render from: " + fromLineIndex + " to: " + toLineIndex);
 		final var presentation = new TextPresentation(damage, 1000);
 		Exception error = null;
 		try {
@@ -538,11 +539,11 @@ public class TMPresentationReconciler implements IPresentationReconciler {
 			for (int lineIndex = fromLineIndex; lineIndex <= toLineIndex; lineIndex++) {
 				tokens = model.getLineTokens(lineIndex);
 				if (tokens == null) {
-					// TextMate tokens was not computed for this line.
-					// This case comes from when the viewer is invalidated (by
-					// validation for instance) and textChanged is called.
+					// TextMate tokens was not computed for this line. This happens when the viewer is invalidated
+					// (by validation for instance) and textChanged is called.
 					// see https://github.com/eclipse/tm4e/issues/78
-					TMUIPlugin.trace("TextMate tokens not available for line " + lineIndex);
+					if (TMUIPlugin.isLogTraceEnabled())
+						TMUIPlugin.logTrace("TextMate tokens not available for line " + lineIndex);
 					break;
 				}
 				final int startLineOffset = doc.getLineOffset(lineIndex);
@@ -595,7 +596,7 @@ public class TMPresentationReconciler implements IPresentationReconciler {
 			applyTextRegionCollection(presentation);
 		} catch (final Exception ex) {
 			error = ex;
-			TMUIPlugin.log(new Status(IStatus.ERROR, TMUIPlugin.PLUGIN_ID, ex.getMessage(), ex));
+			TMUIPlugin.logError(ex);
 		} finally {
 			fireColorize(presentation, error);
 		}
@@ -759,9 +760,9 @@ public class TMPresentationReconciler implements IPresentationReconciler {
 						? tmPresentationReconciler
 						: null;
 			}
-		} catch (SecurityException | NoSuchFieldException e) {
+		} catch (SecurityException | NoSuchFieldException ex) {
 			// if SourceViewer class no longer has fPresentationReconciler or changes access level
-			TMUIPlugin.log(new Status(IStatus.ERROR, TMUIPlugin.PLUGIN_ID, e.getMessage(), e));
+			TMUIPlugin.logError(ex);
 		} catch (IllegalArgumentException | IllegalAccessException | NullPointerException
 				| ExceptionInInitializerError iae) {
 			// This should not be logged as an error. This is an expected possible outcome of field.get(textViewer).
@@ -823,7 +824,7 @@ public class TMPresentationReconciler implements IPresentationReconciler {
 				}
 			}
 		} catch (final Exception ex) {
-			TMUIPlugin.log(new Status(IStatus.ERROR, TMUIPlugin.PLUGIN_ID, ex.getMessage(), ex));
+			TMUIPlugin.logError(ex);
 		}
 	}
 

@@ -18,8 +18,6 @@ import static org.eclipse.tm4e.core.internal.utils.NullSafetyHelper.*;
 
 import java.io.File;
 
-import org.eclipse.core.runtime.IStatus;
-import org.eclipse.core.runtime.Status;
 import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.layout.TableColumnLayout;
@@ -378,8 +376,8 @@ public final class ThemePreferencePage extends PreferencePage implements IWorkbe
 			themeManager.save();
 			grammarRegistryManager.save();
 			return true;
-		} catch (final BackingStoreException e) {
-			TMUIPlugin.log(new Status(IStatus.ERROR, TMUIPlugin.PLUGIN_ID, e.getMessage(), e));
+		} catch (final BackingStoreException ex) {
+			TMUIPlugin.logError(ex);
 			return false;
 		}
 	}

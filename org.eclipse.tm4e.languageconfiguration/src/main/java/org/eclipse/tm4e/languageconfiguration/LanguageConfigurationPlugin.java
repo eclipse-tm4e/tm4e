@@ -12,6 +12,7 @@
 package org.eclipse.tm4e.languageconfiguration;
 
 import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Status;
 import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.framework.BundleContext;
@@ -39,10 +40,20 @@ public final class LanguageConfigurationPlugin extends AbstractUIPlugin {
 	}
 
 	public static void log(final IStatus status) {
-		final var plugin = LanguageConfigurationPlugin.plugin;
-		if (plugin != null) {
-			plugin.getLog().log(status);
+		final var p = plugin;
+		if (p != null) {
+			p.getLog().log(status);
+		} else {
+			System.out.println(status);
 		}
+	}
+
+	public static void logError(final Exception ex) {
+		log(new Status(IStatus.ERROR, PLUGIN_ID, ex.getMessage(), ex));
+	}
+
+	public static void logError(final String message, @Nullable final Exception ex) {
+		log(new Status(IStatus.ERROR, PLUGIN_ID, message, ex));
 	}
 
 	@Override

@@ -136,12 +136,8 @@ public final class LanguageConfigurationDefinition extends TMResource implements
 	public ILanguageConfiguration getLanguageConfiguration() {
 		try (var in = getInputStream()) {
 			return LanguageConfiguration.load(new InputStreamReader(in, Charset.defaultCharset()));
-		} catch (final IOException e) {
-			final var plugin = LanguageConfigurationPlugin.getDefault();
-			if (plugin != null) {
-				plugin.getLog().log(
-						new Status(IStatus.ERROR, LanguageConfigurationPlugin.PLUGIN_ID, e.getMessage(), e));
-			}
+		} catch (final IOException ex) {
+			LanguageConfigurationPlugin.logError(ex);
 			return null;
 		}
 	}

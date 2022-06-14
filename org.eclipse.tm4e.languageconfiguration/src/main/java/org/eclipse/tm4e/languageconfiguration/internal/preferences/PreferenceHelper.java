@@ -15,8 +15,6 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Objects;
 
-import org.eclipse.core.runtime.IStatus;
-import org.eclipse.core.runtime.Status;
 import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.eclipse.tm4e.languageconfiguration.LanguageConfigurationPlugin;
 import org.eclipse.tm4e.languageconfiguration.internal.registry.ILanguageConfigurationDefinition;
@@ -44,9 +42,9 @@ public final class PreferenceHelper {
 						final var contentTypeId = object.get("contentTypeId").getAsString();
 						final var contentType = ContentTypeHelper.getContentTypeById(contentTypeId);
 						if (contentType == null) {
-							LanguageConfigurationPlugin.log(new Status(IStatus.ERROR, PreferenceHelper.class,
-									"Cannot load language configuration with unknown content type ID "
-											+ contentTypeId));
+							LanguageConfigurationPlugin.logError(
+									"Cannot load language configuration with unknown content type ID " + contentTypeId,
+									null);
 							return null;
 						}
 						return new LanguageConfigurationDefinition(contentType, // $NON-NLS-1$

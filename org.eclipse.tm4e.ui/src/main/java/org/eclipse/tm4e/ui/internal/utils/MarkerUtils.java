@@ -73,7 +73,7 @@ public final class MarkerUtils {
 			try {
 				updateTextMarkers(docModel, event.ranges.get(0).fromLineNumber);
 			} catch (final CoreException ex) {
-				TMUIPlugin.log(new Status(IStatus.ERROR, TMUIPlugin.PLUGIN_ID, ex.getMessage(), ex));
+				TMUIPlugin.logError(ex);
 			}
 		}
 	}
@@ -164,7 +164,7 @@ public final class MarkerUtils {
 						res.createMarker(markerConfig.type, attrs);
 					}
 				} catch (final Exception ex) {
-					TMUIPlugin.log(new Status(IStatus.ERROR, TMUIPlugin.PLUGIN_ID, ex.getMessage(), ex));
+					TMUIPlugin.logError(ex);
 				}
 			}
 
@@ -184,7 +184,7 @@ public final class MarkerUtils {
 			if (lineNumberAttr instanceof final Integer lineNumber)
 				return lineNumber;
 		} catch (final CoreException ex) {
-			TMUIPlugin.log(new Status(IStatus.ERROR, TMUIPlugin.PLUGIN_ID, ex.getMessage(), ex));
+			TMUIPlugin.logError(ex);
 		}
 		return null;
 	}

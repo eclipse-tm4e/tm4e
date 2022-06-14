@@ -15,8 +15,6 @@ import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.eclipse.core.runtime.IStatus;
-import org.eclipse.core.runtime.Status;
 import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.jface.text.TextAttribute;
 import org.eclipse.jface.text.rules.IToken;
@@ -64,8 +62,8 @@ public class CSSTokenProvider extends AbstractTokenProvider {
 							new Token(new TextAttribute(ColorManager.getInstance().getColor(color), null, s)));
 				}
 			}
-		} catch (final Exception e) {
-			TMUIPlugin.log(new Status(IStatus.ERROR, TMUIPlugin.PLUGIN_ID, e.getMessage(), e));
+		} catch (final Exception ex) {
+			TMUIPlugin.logError(ex);
 		}
 	}
 

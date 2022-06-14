@@ -23,7 +23,6 @@ import org.eclipse.jface.text.IAutoEditStrategy;
 import org.eclipse.jface.text.IDocument;
 import org.eclipse.jface.text.ITextViewer;
 import org.eclipse.tm4e.core.model.TMToken;
-import org.eclipse.tm4e.languageconfiguration.internal.model.EnterAction;
 import org.eclipse.tm4e.languageconfiguration.internal.model.AutoClosingPairConditional;
 import org.eclipse.tm4e.languageconfiguration.internal.registry.LanguageConfigurationRegistryManager;
 import org.eclipse.tm4e.languageconfiguration.internal.utils.TabSpacesInfo;
@@ -188,10 +187,9 @@ public class LanguageConfigurationAutoEditStrategy implements IAutoEditStrategy 
 				if (!registry.shouldEnterAction(document, command.offset, contentType)) {
 					continue;
 				}
-				final var enterIndent = registry.getEnterAction(document, command.offset, contentType);
-				if (enterIndent != null) {
-					final EnterAction enterAction = enterIndent.enterAction;
-					final String indentation = TextUtils.getIndentationFromWhitespace(enterIndent.indentation,
+				final var enterAction = registry.getEnterAction(document, command.offset, contentType);
+				if (enterAction != null) {
+					final String indentation = TextUtils.getIndentationFromWhitespace(enterAction.indentation,
 							getTabSpaces());
 					final String delim = command.text;
 					switch (enterAction.indentAction) {

@@ -51,7 +51,10 @@ public class OnEnterSupport {
 	}
 
 	@Nullable
-	public EnterAction onEnter(final String oneLineAboveText, final String beforeEnterText,
+	public EnterAction onEnter(
+			// TODO autoIndent: EditorAutoIndentStrategy,
+			// TODO final String previousLineText,
+			final String beforeEnterText,
 			final String afterEnterText) {
 		// (1): `regExpRules`
 		for (final OnEnterRule rule : regExpRules) {

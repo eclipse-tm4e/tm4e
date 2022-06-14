@@ -17,9 +17,6 @@ import java.util.Arrays;
 import java.util.List;
 
 import org.eclipse.jdt.annotation.Nullable;
-import org.eclipse.tm4e.languageconfiguration.internal.model.CharacterPair;
-import org.eclipse.tm4e.languageconfiguration.internal.model.EnterAction;
-import org.eclipse.tm4e.languageconfiguration.internal.model.OnEnterRule;
 import org.eclipse.tm4e.languageconfiguration.internal.model.EnterAction.IndentAction;
 import org.eclipse.tm4e.languageconfiguration.internal.supports.OnEnterSupport;
 import org.junit.jupiter.api.Test;
@@ -60,7 +57,7 @@ public class OnEnterSupportTest {
 		}
 
 		public void testIndentAction(final String beforeText, final String afterText, final IndentAction expected) {
-			final EnterAction actual = super.onEnter("", beforeText, afterText);
+			final EnterAction actual = super.onEnter(beforeText, afterText);
 			if (expected == IndentAction.None) {
 				assertNull(actual);
 			} else {
@@ -137,7 +134,7 @@ public class OnEnterSupportTest {
 		void testIndentAction(final String beforeText, final String afterText,
 				@Nullable final IndentAction expectedIndentAction, @Nullable final String expectedAppendText,
 				final int removeText) {
-			final EnterAction actual = super.onEnter("", beforeText, afterText);
+			final EnterAction actual = super.onEnter(beforeText, afterText);
 			if (expectedIndentAction == null) {
 				assertNull(actual, "isNull:" + beforeText);
 			} else {

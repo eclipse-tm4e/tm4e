@@ -20,7 +20,7 @@ import org.eclipse.jdt.annotation.Nullable;
  *      "https://github.com/microsoft/vscode/blob/d79132281222cdab77abeacca1af700e34c2f30b/src/vs/editor/common/languages/languageConfiguration.ts#L232">
  *      github.com/microsoft/vscode/blob/main/src/vs/editor/common/languages/languageConfiguration.ts#L232</a>
  */
-public final class EnterAction {
+public class EnterAction {
 
 	public enum IndentAction {
 		/**
@@ -50,12 +50,6 @@ public final class EnterAction {
 	public final IndentAction indentAction;
 
 	/**
-	 * Describe whether to outdent current line.
-	 */
-	@Nullable
-	public Boolean outdentCurrentLine;
-
-	/**
 	 * Describes text to be appended after the new line and after the indentation.
 	 */
 	@Nullable
@@ -69,14 +63,6 @@ public final class EnterAction {
 
 	public EnterAction(final IndentAction indentAction) {
 		this.indentAction = indentAction;
-	}
-
-	/**
-	 * @param outdentCurrentLine the outdentCurrentLine to set
-	 */
-	EnterAction withOutdentCurrentLine(final Boolean outdentCurrentLine) {
-		this.outdentCurrentLine = outdentCurrentLine;
-		return this;
 	}
 
 	/**
@@ -94,5 +80,4 @@ public final class EnterAction {
 		this.removeText = removeText;
 		return this;
 	}
-
 }

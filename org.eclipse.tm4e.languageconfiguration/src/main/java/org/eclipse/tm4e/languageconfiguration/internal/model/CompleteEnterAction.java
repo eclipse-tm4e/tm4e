@@ -11,13 +11,22 @@
  */
 package org.eclipse.tm4e.languageconfiguration.internal.model;
 
-public final class CompleteEnterAction {
+/**
+ * @see <a href=
+ *      "https://github.com/microsoft/vscode/blob/d79132281222cdab77abeacca1af700e34c2f30b/src/vs/editor/common/languages/languageConfiguration.ts#L250">
+ *      github.com/microsoft/vscode/blob/main/src/vs/editor/common/languages/languageConfiguration.ts#L250</a>
+ */
+public final class CompleteEnterAction extends EnterAction {
 
-	public final EnterAction enterAction;
+	/**
+	 * The line's indentation minus removeText
+	 */
 	public final String indentation;
 
-	public CompleteEnterAction(final EnterAction enterAction, final String indentation) {
-		this.enterAction = enterAction;
+	public CompleteEnterAction(final EnterAction action, final String indentation) {
+		super(action.indentAction);
 		this.indentation = indentation;
+		this.appendText = action.appendText;
+		this.removeText = action.removeText;
 	}
 }

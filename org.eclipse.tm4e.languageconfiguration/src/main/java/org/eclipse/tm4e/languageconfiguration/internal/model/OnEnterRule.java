@@ -37,6 +37,8 @@ public final class OnEnterRule {
 	@Nullable
 	public final Pattern afterText;
 
+	// TODO @Nullable public final Pattern previousLineText;
+
 	/**
 	 * The action to execute.
 	 */

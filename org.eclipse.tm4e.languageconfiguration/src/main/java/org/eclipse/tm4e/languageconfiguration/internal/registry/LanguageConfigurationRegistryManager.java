@@ -161,7 +161,6 @@ public final class LanguageConfigurationRegistryManager extends AbstractLanguage
 			// - 1 - scopedLineTokens.firstCharOffset);
 			// }
 
-			final String oneLineAboveText = ""; //$NON-NLS-1$
 			/*
 			 * let lineNumber = range.startLineNumber; let oneLineAboveText = '';
 			 *
@@ -176,7 +175,7 @@ public final class LanguageConfigurationRegistryManager extends AbstractLanguage
 
 			EnterAction enterResult = null;
 			try {
-				enterResult = onEnterSupport.onEnter(oneLineAboveText, beforeEnterText, afterEnterText);
+				enterResult = onEnterSupport.onEnter(beforeEnterText, afterEnterText);
 			} catch (final Exception e) {
 				// onUnexpectedError(e);
 			}

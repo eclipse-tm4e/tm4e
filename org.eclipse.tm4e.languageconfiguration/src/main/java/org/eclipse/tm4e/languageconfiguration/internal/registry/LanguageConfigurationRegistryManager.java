@@ -27,8 +27,8 @@ import org.eclipse.jface.text.IRegion;
 import org.eclipse.tm4e.languageconfiguration.LanguageConfigurationPlugin;
 import org.eclipse.tm4e.languageconfiguration.internal.model.CharacterPair;
 import org.eclipse.tm4e.languageconfiguration.internal.model.EnterAction;
-import org.eclipse.tm4e.languageconfiguration.internal.model.EnterActionAndIndent;
-import org.eclipse.tm4e.languageconfiguration.internal.model.StandardAutoClosingPairConditional;
+import org.eclipse.tm4e.languageconfiguration.internal.model.CompleteEnterAction;
+import org.eclipse.tm4e.languageconfiguration.internal.model.AutoClosingPairConditional;
 import org.eclipse.tm4e.languageconfiguration.internal.model.EnterAction.IndentAction;
 import org.eclipse.tm4e.languageconfiguration.internal.preferences.PreferenceConstants;
 import org.eclipse.tm4e.languageconfiguration.internal.preferences.PreferenceHelper;
@@ -73,7 +73,7 @@ public final class LanguageConfigurationRegistryManager extends AbstractLanguage
 	}
 
 	@Nullable
-	public StandardAutoClosingPairConditional getAutoClosePair(final String text, final int offset,
+	public AutoClosingPairConditional getAutoClosePair(final String text, final int offset,
 			final String newCharacter, final IContentType contentType) {
 		final var definition = getDefinition(contentType);
 		if (definition == null || !definition.isBracketAutoClosingEnabled()) {
@@ -110,7 +110,7 @@ public final class LanguageConfigurationRegistryManager extends AbstractLanguage
 		return commentSupport != null;
 	}
 
-	public List<StandardAutoClosingPairConditional> getEnabledAutoClosingPairs(final IContentType contentType) {
+	public List<AutoClosingPairConditional> getEnabledAutoClosingPairs(final IContentType contentType) {
 		final var definition = getDefinition(contentType);
 		if (definition == null || !definition.isBracketAutoClosingEnabled()) {
 			return Collections.emptyList();
@@ -133,7 +133,7 @@ public final class LanguageConfigurationRegistryManager extends AbstractLanguage
 	 *      https://github.com/microsoft/vscode/blob/main/src/vs/editor/common/languages/enterAction.ts</a>
 	 */
 	@Nullable
-	public EnterActionAndIndent getEnterAction(final IDocument document, final int offset,
+	public CompleteEnterAction getEnterAction(final IDocument document, final int offset,
 			final IContentType contentType) {
 		String indentation = TextUtils.getLinePrefixingWhitespaceAtPosition(document, offset);
 		// let scopedLineTokens = this.getScopedLineTokens(model, range.startLineNumber, range.startColumn);
@@ -201,7 +201,7 @@ public final class LanguageConfigurationRegistryManager extends AbstractLanguage
 				indentation = indentation.substring(0, indentation.length() - removeText);
 			}
 
-			return new EnterActionAndIndent(enterResult, indentation);
+			return new CompleteEnterAction(enterResult, indentation);
 		} catch (final BadLocationException e1) {
 		}
 		return null;

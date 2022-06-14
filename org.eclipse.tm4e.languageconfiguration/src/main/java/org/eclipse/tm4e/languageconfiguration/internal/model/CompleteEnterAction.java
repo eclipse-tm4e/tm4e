@@ -11,12 +11,12 @@
  */
 package org.eclipse.tm4e.languageconfiguration.internal.model;
 
-public final class EnterActionAndIndent {
+public final class CompleteEnterAction {
 
 	public final EnterAction enterAction;
 	public final String indentation;
 
-	public EnterActionAndIndent(final EnterAction enterAction, final String indentation) {
+	public CompleteEnterAction(final EnterAction enterAction, final String indentation) {
 		this.enterAction = enterAction;
 		this.indentation = indentation;
 	}

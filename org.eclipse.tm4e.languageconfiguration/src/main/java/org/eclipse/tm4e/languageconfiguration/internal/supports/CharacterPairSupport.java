@@ -18,7 +18,7 @@ import java.util.stream.Collectors;
 
 import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.tm4e.languageconfiguration.internal.model.CharacterPair;
-import org.eclipse.tm4e.languageconfiguration.internal.model.StandardAutoClosingPairConditional;
+import org.eclipse.tm4e.languageconfiguration.internal.model.AutoClosingPairConditional;
 
 /**
  * The "character pair" support.
@@ -29,21 +29,21 @@ import org.eclipse.tm4e.languageconfiguration.internal.model.StandardAutoClosing
  */
 public final class CharacterPairSupport {
 
-	public final List<StandardAutoClosingPairConditional> autoClosingPairs;
+	public final List<AutoClosingPairConditional> autoClosingPairs;
 	public final List<CharacterPair> surroundingPairs;
 
 	@SuppressWarnings("unchecked")
 	public CharacterPairSupport(@Nullable final List<CharacterPair> brackets,
-			@Nullable final List<StandardAutoClosingPairConditional> autoClosingPairs,
+			@Nullable final List<AutoClosingPairConditional> autoClosingPairs,
 			@Nullable final List<CharacterPair> surroundingPairs) {
 
 		if (autoClosingPairs != null) {
 			this.autoClosingPairs = autoClosingPairs.stream().filter(Objects::nonNull)
-					.map(el -> new StandardAutoClosingPairConditional(el.open, el.close, el.notIn))
+					.map(el -> new AutoClosingPairConditional(el.open, el.close, el.notIn))
 					.collect(Collectors.toList());
 		} else if (brackets != null) {
 			this.autoClosingPairs = brackets.stream().filter(Objects::nonNull)
-					.map(el -> new StandardAutoClosingPairConditional(el.open, el.close, Collections.emptyList()))
+					.map(el -> new AutoClosingPairConditional(el.open, el.close, Collections.emptyList()))
 					.collect(Collectors.toList());
 		} else {
 			this.autoClosingPairs = Collections.emptyList();
@@ -55,12 +55,12 @@ public final class CharacterPairSupport {
 	}
 
 	@Nullable
-	public StandardAutoClosingPairConditional getAutoClosePair(final String text, final int offset,
+	public AutoClosingPairConditional getAutoClosePair(final String text, final int offset,
 			final String newCharacter/* : string, context: ScopedLineTokens, column: number */) {
 		if (newCharacter.isEmpty()) {
 			return null;
 		}
-		for (final StandardAutoClosingPairConditional autoClosingPair : autoClosingPairs) {
+		for (final AutoClosingPairConditional autoClosingPair : autoClosingPairs) {
 			final String opening = autoClosingPair.open;
 			if (!opening.endsWith(newCharacter)) {
 				continue;

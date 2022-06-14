@@ -15,16 +15,17 @@ import java.io.Reader;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.tm4e.languageconfiguration.internal.model.CharacterPair;
 import org.eclipse.tm4e.languageconfiguration.internal.model.CommentRule;
 import org.eclipse.tm4e.languageconfiguration.internal.model.EnterAction;
 import org.eclipse.tm4e.languageconfiguration.internal.model.EnterAction.IndentAction;
-import org.eclipse.tm4e.languageconfiguration.internal.model.FoldingRule;
+import org.eclipse.tm4e.languageconfiguration.internal.model.FoldingRules;
 import org.eclipse.tm4e.languageconfiguration.internal.model.ILanguageConfiguration;
 import org.eclipse.tm4e.languageconfiguration.internal.model.OnEnterRule;
-import org.eclipse.tm4e.languageconfiguration.internal.model.StandardAutoClosingPairConditional;
+import org.eclipse.tm4e.languageconfiguration.internal.model.AutoClosingPairConditional;
 
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonArray;
@@ -49,7 +50,7 @@ public final class LanguageConfiguration implements ILanguageConfiguration {
 	 */
 	@NonNullByDefault({})
 	@Nullable
-	public static LanguageConfiguration load(final Reader reader) {
+	public static LanguageConfiguration load(@NonNull final Reader reader) {
 		return new GsonBuilder()
 
 				.registerTypeAdapter(OnEnterRule.class, (JsonDeserializer<OnEnterRule>) (json, typeOfT, context) -> {
@@ -130,41 +131,40 @@ public final class LanguageConfiguration implements ILanguageConfiguration {
 							: new CharacterPair(open, close);
 				})
 
-				.registerTypeAdapter(StandardAutoClosingPairConditional.class,
-						(JsonDeserializer<StandardAutoClosingPairConditional>) (json, typeOfT, context) -> {
-							final var notInList = new ArrayList<String>();
-							String open = null;
-							String close = null;
-							if (json.isJsonArray()) {
-								// ex: ["{","}"]
-								final JsonArray characterPairs = json.getAsJsonArray();
-								if (characterPairs.size() == 2) {
-									open = getAsString(characterPairs.get(0));
-									close = getAsString(characterPairs.get(1));
+				.registerTypeAdapter(AutoClosingPairConditional.class, (JsonDeserializer<AutoClosingPairConditional>) (
+						json, typeOfT, context) -> {
+					final var notInList = new ArrayList<String>();
+					String open = null;
+					String close = null;
+					if (json.isJsonArray()) {
+						// ex: ["{","}"]
+						final JsonArray characterPairs = json.getAsJsonArray();
+						if (characterPairs.size() == 2) {
+							open = getAsString(characterPairs.get(0));
+							close = getAsString(characterPairs.get(1));
+						}
+					} else if (json.isJsonObject()) {
+						// ex: {"open":"'","close":"'", "notIn": ["string", "comment"]}
+						final JsonObject object = json.getAsJsonObject();
+						open = getAsString(object.get("open")); //$NON-NLS-1$
+						close = getAsString(object.get("close")); //$NON-NLS-1$
+						final JsonElement notInElement = object.get("notIn"); //$NON-NLS-1$
+						if (notInElement != null && notInElement.isJsonArray()) {
+							notInElement.getAsJsonArray().forEach(element -> {
+								final String string = getAsString(element);
+								if (string != null) {
+									notInList.add(string);
 								}
-							} else if (json.isJsonObject()) {
-								// ex: {"open":"'","close":"'", "notIn": ["string", "comment"]}
-								final JsonObject object = json.getAsJsonObject();
-								open = getAsString(object.get("open")); //$NON-NLS-1$
-								close = getAsString(object.get("close")); //$NON-NLS-1$
-								final JsonElement notInElement = object.get("notIn"); //$NON-NLS-1$
-								if (notInElement != null && notInElement.isJsonArray()) {
-									notInElement.getAsJsonArray().forEach(element -> {
-										final String string = getAsString(element);
-										if (string != null) {
-											notInList.add(string);
-										}
-									});
-								}
-							}
+							});
+						}
+					}
 
-							return open == null || close == null
-									? null
-									: new StandardAutoClosingPairConditional(open, close, notInList);
-						})
+					return open == null || close == null
+							? null
+							: new AutoClosingPairConditional(open, close, notInList);
+				})
 
-				.registerTypeAdapter(FoldingRule.class, (JsonDeserializer<FoldingRule>) (json,
-						typeOfT, context) -> {
+				.registerTypeAdapter(FoldingRules.class, (JsonDeserializer<FoldingRules>) (json, typeOfT, context) -> {
 					if (!json.isJsonObject()) {
 						return null;
 					}
@@ -178,7 +178,7 @@ public final class LanguageConfiguration implements ILanguageConfiguration {
 						final String startMarker = getAsString(markersObject.get("start")); //$NON-NLS-1$
 						final String endMarker = getAsString(markersObject.get("end")); //$NON-NLS-1$
 						if (startMarker != null && endMarker != null) {
-							return new FoldingRule(offSide, startMarker, endMarker);
+							return new FoldingRules(offSide, startMarker, endMarker);
 						}
 					}
 					return null;
@@ -246,7 +246,7 @@ public final class LanguageConfiguration implements ILanguageConfiguration {
 	 * brackets will be used.
 	 */
 	@Nullable
-	private List<StandardAutoClosingPairConditional> autoClosingPairs;
+	private List<AutoClosingPairConditional> autoClosingPairs;
 
 	/**
 	 * The language's surrounding pairs. When the 'open' character is typed on a
@@ -260,7 +260,7 @@ public final class LanguageConfiguration implements ILanguageConfiguration {
 	 * Defines when and how code should be folded in the editor
 	 */
 	@Nullable
-	private FoldingRule folding;
+	private FoldingRules folding;
 
 	/**
 	 * Regex which defines what is considered to be a word in the programming language.
@@ -282,7 +282,7 @@ public final class LanguageConfiguration implements ILanguageConfiguration {
 
 	@Nullable
 	@Override
-	public List<StandardAutoClosingPairConditional> getAutoClosingPairs() {
+	public List<AutoClosingPairConditional> getAutoClosingPairs() {
 		return autoClosingPairs;
 	}
 
@@ -300,7 +300,7 @@ public final class LanguageConfiguration implements ILanguageConfiguration {
 
 	@Nullable
 	@Override
-	public FoldingRule getFolding() {
+	public FoldingRules getFolding() {
 		return folding;
 	}
 

@@ -31,7 +31,7 @@ import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.tm4e.languageconfiguration.internal.model.CharacterPair;
 import org.eclipse.tm4e.languageconfiguration.internal.model.CommentRule;
-import org.eclipse.tm4e.languageconfiguration.internal.model.FoldingRule;
+import org.eclipse.tm4e.languageconfiguration.internal.model.FoldingRules;
 import org.eclipse.tm4e.languageconfiguration.internal.model.ILanguageConfiguration;
 
 @NonNullByDefault({})
@@ -121,7 +121,7 @@ public class LanguageConfigurationInfoWidget extends Composite {
 		autoClosingPairsTable.setInput(removeNullElements(configuration.getAutoClosingPairs()));
 		surroundingPairsTable.setInput(removeNullElements(configuration.getSurroundingPairs()));
 
-		final FoldingRule folding = configuration.getFolding();
+		final FoldingRules folding = configuration.getFolding();
 		if (folding != null) {
 			offsideText.setText(Boolean.toString(folding.offSide));
 			markersStartText.setText(folding.markersStart);

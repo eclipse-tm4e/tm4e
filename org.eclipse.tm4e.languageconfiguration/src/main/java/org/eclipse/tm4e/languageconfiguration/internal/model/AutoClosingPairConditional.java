@@ -18,11 +18,11 @@ import java.util.List;
  *      "https://github.com/microsoft/vscode/blob/d79132281222cdab77abeacca1af700e34c2f30b/src/vs/editor/common/languages/languageConfiguration.ts#L201">
  *      github.com/microsoft/vscode/blob/main/src/vs/editor/common/languages/languageConfiguration.ts#L201</a>
  */
-public final class StandardAutoClosingPairConditional extends CharacterPair {
+public final class AutoClosingPairConditional extends CharacterPair {
 
 	public final List<String> notIn;
 
-	public StandardAutoClosingPairConditional(final String open, final String close, final List<String> notIn) {
+	public AutoClosingPairConditional(final String open, final String close, final List<String> notIn) {
 		super(open, close);
 		this.notIn = notIn;
 	}

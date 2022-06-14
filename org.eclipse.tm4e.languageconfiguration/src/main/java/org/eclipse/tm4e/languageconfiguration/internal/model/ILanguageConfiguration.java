@@ -23,7 +23,7 @@ import org.eclipse.jdt.annotation.Nullable;
 public interface ILanguageConfiguration {
 
 	/**
-	 * Returns the language's comments. The comments are used by {@link StandardAutoClosingPairConditional} when
+	 * Returns the language's comments. The comments are used by {@link AutoClosingPairConditional} when
 	 * <code>notIn</code> contains <code>comment</code>
 	 *
 	 * @return the language's comments or <code>null</code> if not set
@@ -48,7 +48,7 @@ public interface ILanguageConfiguration {
 	 *         set, the configured brackets will be used.
 	 */
 	@Nullable
-	List<StandardAutoClosingPairConditional> getAutoClosingPairs();
+	List<AutoClosingPairConditional> getAutoClosingPairs();
 
 	/**
 	 * Returns the language's rules to be evaluated when pressing Enter.
@@ -74,7 +74,7 @@ public interface ILanguageConfiguration {
 	 * @return the language's folding or <code>null</code> if not set
 	 */
 	@Nullable
-	FoldingRule getFolding();
+	FoldingRules getFolding();
 
 	/**
 	 * Returns the language's definition of a word. This is the regex used when referring to a word.

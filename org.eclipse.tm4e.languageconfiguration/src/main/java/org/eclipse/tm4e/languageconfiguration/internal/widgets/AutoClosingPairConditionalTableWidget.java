@@ -21,7 +21,7 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.GC;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
-import org.eclipse.tm4e.languageconfiguration.internal.model.StandardAutoClosingPairConditional;
+import org.eclipse.tm4e.languageconfiguration.internal.model.AutoClosingPairConditional;
 
 final class AutoClosingPairConditionalTableWidget extends CharacterPairsTableWidget {
 
@@ -47,7 +47,7 @@ final class AutoClosingPairConditionalTableWidget extends CharacterPairsTableWid
 		@Override
 		public String getColumnText(@Nullable final Object element, final int columnIndex) {
 			if (columnIndex == 2) {
-				if (element instanceof final StandardAutoClosingPairConditional conditionalPair) {
+				if (element instanceof final AutoClosingPairConditional conditionalPair) {
 					return String.join(", ", conditionalPair.notIn); //$NON-NLS-1$
 				}
 				return ""; //$NON-NLS-1$

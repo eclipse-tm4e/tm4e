@@ -24,7 +24,7 @@ import org.eclipse.jface.text.IDocument;
 import org.eclipse.jface.text.ITextViewer;
 import org.eclipse.tm4e.core.model.TMToken;
 import org.eclipse.tm4e.languageconfiguration.internal.model.EnterAction;
-import org.eclipse.tm4e.languageconfiguration.internal.model.StandardAutoClosingPairConditional;
+import org.eclipse.tm4e.languageconfiguration.internal.model.AutoClosingPairConditional;
 import org.eclipse.tm4e.languageconfiguration.internal.registry.LanguageConfigurationRegistryManager;
 import org.eclipse.tm4e.languageconfiguration.internal.utils.TabSpacesInfo;
 import org.eclipse.tm4e.languageconfiguration.internal.utils.TextUtils;
@@ -105,11 +105,11 @@ public class LanguageConfigurationAutoEditStrategy implements IAutoEditStrategy 
 	}
 
 	/**
-	 * @return true if auto closing is enabled for the given {@link StandardAutoClosingPairConditional} at the given
+	 * @return true if auto closing is enabled for the given {@link AutoClosingPairConditional} at the given
 	 *         offset
 	 */
 	private boolean isAutoClosingAllowed(final IDocument document, final IContentType contentType, final int offset,
-			final StandardAutoClosingPairConditional pair) {
+			final AutoClosingPairConditional pair) {
 
 		// only consider auto-closing if the next char is a white-space OR the closing char of another auto-closing pair
 		try {

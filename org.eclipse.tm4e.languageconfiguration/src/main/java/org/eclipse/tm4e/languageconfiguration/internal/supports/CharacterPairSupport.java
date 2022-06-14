@@ -24,7 +24,7 @@ import java.util.stream.Collectors;
 import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.tm4e.languageconfiguration.internal.model.AutoClosingPair;
 import org.eclipse.tm4e.languageconfiguration.internal.model.AutoClosingPairConditional;
-import org.eclipse.tm4e.languageconfiguration.internal.model.ILanguageConfiguration;
+import org.eclipse.tm4e.languageconfiguration.internal.model.LanguageConfiguration;
 
 /**
  * The "character pair" support.
@@ -40,7 +40,7 @@ public final class CharacterPairSupport {
 	// TODO public final String autoCloseBefore;
 
 	@SuppressWarnings("unchecked")
-	public CharacterPairSupport(ILanguageConfiguration config) {
+	public CharacterPairSupport(LanguageConfiguration config) {
 		final var autoClosingPairs = config.getAutoClosingPairs();
 		final var brackets = config.getBrackets();
 

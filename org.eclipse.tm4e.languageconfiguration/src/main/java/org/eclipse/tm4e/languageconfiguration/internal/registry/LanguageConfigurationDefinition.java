@@ -22,7 +22,7 @@ import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.content.IContentType;
 import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.tm4e.languageconfiguration.LanguageConfigurationPlugin;
-import org.eclipse.tm4e.languageconfiguration.internal.model.ILanguageConfiguration;
+import org.eclipse.tm4e.languageconfiguration.internal.model.LanguageConfiguration;
 import org.eclipse.tm4e.languageconfiguration.internal.supports.CharacterPairSupport;
 import org.eclipse.tm4e.languageconfiguration.internal.supports.CommentSupport;
 import org.eclipse.tm4e.languageconfiguration.internal.supports.OnEnterSupport;
@@ -86,7 +86,7 @@ public final class LanguageConfigurationDefinition extends TMResource implements
 	@Nullable
 	CharacterPairSupport getCharacterPair() {
 		if (this.characterPair == null) {
-			final ILanguageConfiguration conf = getLanguageConfiguration();
+			final LanguageConfiguration conf = getLanguageConfiguration();
 			if (conf != null) {
 				this.characterPair = new CharacterPairSupport(conf);
 			}
@@ -102,7 +102,7 @@ public final class LanguageConfigurationDefinition extends TMResource implements
 	@Nullable
 	OnEnterSupport getOnEnter() {
 		if (this.onEnter == null) {
-			final ILanguageConfiguration conf = getLanguageConfiguration();
+			final LanguageConfiguration conf = getLanguageConfiguration();
 			if (conf != null && (conf.getBrackets() != null || conf.getOnEnterRules() != null)) {
 				this.onEnter = new OnEnterSupport(conf.getBrackets(), conf.getOnEnterRules());
 			}
@@ -118,7 +118,7 @@ public final class LanguageConfigurationDefinition extends TMResource implements
 	@Nullable
 	CommentSupport getCommentSupport() {
 		if (this.comment == null) {
-			final ILanguageConfiguration conf = getLanguageConfiguration();
+			final LanguageConfiguration conf = getLanguageConfiguration();
 			if (conf != null) {
 				this.comment = new CommentSupport(conf.getComments());
 			}
@@ -133,7 +133,7 @@ public final class LanguageConfigurationDefinition extends TMResource implements
 
 	@Nullable
 	@Override
-	public ILanguageConfiguration getLanguageConfiguration() {
+	public LanguageConfiguration getLanguageConfiguration() {
 		try (var in = getInputStream()) {
 			return LanguageConfiguration.load(new InputStreamReader(in, Charset.defaultCharset()));
 		} catch (final IOException ex) {

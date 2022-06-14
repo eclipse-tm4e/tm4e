@@ -32,7 +32,7 @@ import org.eclipse.swt.widgets.Text;
 import org.eclipse.tm4e.languageconfiguration.internal.model.CharacterPair;
 import org.eclipse.tm4e.languageconfiguration.internal.model.CommentRule;
 import org.eclipse.tm4e.languageconfiguration.internal.model.FoldingRules;
-import org.eclipse.tm4e.languageconfiguration.internal.model.ILanguageConfiguration;
+import org.eclipse.tm4e.languageconfiguration.internal.model.LanguageConfiguration;
 
 @NonNullByDefault({})
 public class LanguageConfigurationInfoWidget extends Composite {
@@ -90,7 +90,7 @@ public class LanguageConfigurationInfoWidget extends Composite {
 		createOnEnterRulesTab(folder);
 	}
 
-	public void refresh(@Nullable final ILanguageConfiguration configuration) {
+	public void refresh(@Nullable final LanguageConfiguration configuration) {
 		lineCommentText.setText(""); //$NON-NLS-1$
 		blockCommentStartText.setText(""); //$NON-NLS-1$
 		blockCommentEndText.setText(""); //$NON-NLS-1$

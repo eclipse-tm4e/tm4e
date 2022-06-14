@@ -13,7 +13,7 @@ package org.eclipse.tm4e.languageconfiguration.internal.registry;
 
 import org.eclipse.core.runtime.content.IContentType;
 import org.eclipse.jdt.annotation.Nullable;
-import org.eclipse.tm4e.languageconfiguration.internal.model.ILanguageConfiguration;
+import org.eclipse.tm4e.languageconfiguration.internal.model.LanguageConfiguration;
 import org.eclipse.tm4e.registry.ITMResource;
 
 public interface ILanguageConfigurationDefinition extends ITMResource {
@@ -31,7 +31,7 @@ public interface ILanguageConfigurationDefinition extends ITMResource {
 	 * @return the language configuration.
 	 */
 	@Nullable
-	ILanguageConfiguration getLanguageConfiguration();
+	LanguageConfiguration getLanguageConfiguration();
 
 	/**
 	 * Returns whether on-enter actions are enabled for this language configuration content type pair

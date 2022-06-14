@@ -17,7 +17,7 @@ import java.util.Map;
 
 import org.eclipse.core.runtime.content.IContentType;
 import org.eclipse.jdt.annotation.Nullable;
-import org.eclipse.tm4e.languageconfiguration.internal.model.ILanguageConfiguration;
+import org.eclipse.tm4e.languageconfiguration.internal.model.LanguageConfiguration;
 
 public abstract class AbstractLanguageConfigurationRegistryManager implements ILanguageConfigurationRegistryManager {
 
@@ -52,7 +52,7 @@ public abstract class AbstractLanguageConfigurationRegistryManager implements IL
 
 	@Nullable
 	@Override
-	public ILanguageConfiguration getLanguageConfigurationFor(final IContentType... contentTypes) {
+	public LanguageConfiguration getLanguageConfigurationFor(final IContentType... contentTypes) {
 		for (final IContentType contentType : contentTypes) {
 			if (userDefinitions.containsKey(contentType)) {
 				return userDefinitions.get(contentType).getLanguageConfiguration();

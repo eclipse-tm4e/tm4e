@@ -2,14 +2,31 @@
 
 This page describes the noteworthy improvements provided by each release of Eclipse TM4E.
 
-### Next release...
+### Latest release
 
-## 0.4.6
+## 0.6.0
 
-* 📅 Release Date (tentative): ?
+* 📅 Release Date: June 23th 2022
 * All changes: https://github.com/eclipse/tm4e/compare/0.4.5...master
 
-### Latest release
+#### Move to Java 17
+
+TM4E now requires Java 17 to run.
+
+#### Added a language pack feature
+
+A "language pack" feature can now be installed. It adds some support for about all possible code files. More details at [org.eclipse.tm4e.language_pack/README.md](org.eclipse.tm4e.language_pack/README.md).
+
+#### Task markers in comments
+
+Marker tasks are now created for each occurrence of BUG,NOTE,FIXME,HACK,TODO,XXX in comments.
+
+#### Improve existing features
+
+Toggling comment, auto-closing pairs... got improved so they now feel more natural.
+
+#### Many bugfixes and code improvement
+
 
 ## 0.4.5
 

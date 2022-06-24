@@ -19,7 +19,7 @@ Require-Bundle: org.eclipse.tm4e.core,
  org.eclipse.ui.genericeditor;resolution:=optional,
  org.eclipse.ui.ide,
  org.eclipse.ui.tests.harness;bundle-version="1.4.0",
- org.eclipse.tm4e.registry;bundle-version="0.1.0",
+ org.eclipse.tm4e.registry,
  org.eclipse.ui.editors
 Bundle-RequiredExecutionEnvironment: JavaSE-17
 Bundle-ActivationPolicy: lazy

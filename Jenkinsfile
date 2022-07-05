@@ -1,13 +1,14 @@
 pipeline {
+	options {
+		timeout(time: 20, unit: 'MINUTES')
+		buildDiscarder(logRotator(numToKeepStr: '10'))
+	}
 	agent {
 		label 'centos-latest'
 	}
 	tools {
 		maven 'apache-maven-latest'
 		jdk 'openjdk-jdk17-latest'
-	}
-	options {
-		buildDiscarder(logRotator(numToKeepStr:'10'))
 	}
 	stages {
 		stage('initialize PGP') {
@@ -20,37 +21,37 @@ pipeline {
 		}
 		stage('Build') {
 			steps {
-				withMaven(maven:'apache-maven-latest', mavenLocalRepo: '$WORKSPACE/.m2') {
+				withMaven(maven:'apache-maven-latest', mavenLocalRepo: '$WORKSPACE/.m2/repository') {
 				withCredentials([string(credentialsId: 'gpg-passphrase', variable: 'KEYRING_PASSPHRASE')]) {
 				wrap([$class: 'Xvnc', useXauthority: true]) {
 					sh 'mvn clean verify \
-						-Dmaven.test.error.ignore=true -Dmaven.test.failure.ignore=true \
+						-Dmaven.test.failure.ignore=true \
 						-Psign -Dgpg.passphrase="${KEYRING_PASSPHRASE}"'
-
-				}
-				}
-				}
+				}}}
 			}
 			post {
 				always {
 					junit '*/target/surefire-reports/TEST-*.xml'
-					archiveArtifacts artifacts: '*/target/work/data/.metadata/.log'
+					archiveArtifacts artifacts: 'org.eclipse.tm4e.repository/target/repository/**/*,org.eclipse.tm4e.repository/target/*.zip,*/target/work/data/.metadata/.log'
 				}
 			}
 		}
-		stage('Deploy') {
+		stage('Deploy Snapshot') {
 			when {
 				branch 'master'
 				// TODO deploy all branch from Eclipse.org Git repo
 			}
 			steps {
-				sshagent ( ['projects-storage.eclipse.org-bot-ssh']) {
+				sshagent (['projects-storage.eclipse.org-bot-ssh']) {
 					// TODO compute the target URL (snapshots) according to branch name (0.5-snapshots...)
 					sh '''
-						ssh genie.tm4e@projects-storage.eclipse.org rm -rf /home/data/httpd/download.eclipse.org/tm4e/snapshots
-						ssh genie.tm4e@projects-storage.eclipse.org mkdir -p /home/data/httpd/download.eclipse.org/tm4e/snapshots
-						scp -r org.eclipse.tm4e.repository/target/repository/* genie.tm4e@projects-storage.eclipse.org:/home/data/httpd/download.eclipse.org/tm4e/snapshots
-						scp org.eclipse.tm4e.repository/target/org.eclipse.tm4e.repository-*-SNAPSHOT.zip genie.tm4e@projects-storage.eclipse.org:/home/data/httpd/download.eclipse.org/tm4e/snapshots/repository.zip
+						DOWNLOAD_AREA=/home/data/httpd/download.eclipse.org/tm4e/snapshots/
+						echo DOWNLOAD_AREA=$DOWNLOAD_AREA
+						ssh genie.tm4e@projects-storage.eclipse.org "\
+							rm -rf ${DOWNLOAD_AREA}/* && \
+							mkdir -p ${DOWNLOAD_AREA}"
+						scp -r org.eclipse.tm4e.repository/target/repository/* genie.tm4e@projects-storage.eclipse.org:${DOWNLOAD_AREA}
+						scp org.eclipse.tm4e.repository/target/org.eclipse.tm4e.repository-*-SNAPSHOT.zip genie.tm4e@projects-storage.eclipse.org:${DOWNLOAD_AREA}/repository.zip
 					'''
 				}
 			}

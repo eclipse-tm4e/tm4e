@@ -108,7 +108,7 @@
       <key contextId="org.eclipse.ui.textEditorScope"
            commandId="org.eclipse.tm4e.languageconfiguration.toggleLineCommentCommand"
            schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
-           sequence="M1+M2+c" />
+           sequence="M1+M2+C" />
    </extension>
 
    <!-- register commands  menu entries -->

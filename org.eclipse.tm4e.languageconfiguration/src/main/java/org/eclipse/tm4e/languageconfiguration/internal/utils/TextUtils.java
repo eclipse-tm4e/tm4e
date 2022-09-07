@@ -179,7 +179,7 @@ public final class TextUtils {
 				return new TabSpacesInfo(tabSize, true);
 			}
 		}
-		return new TabSpacesInfo(-1, false);
+		return new TabSpacesInfo(4, false);
 	}
 
 }

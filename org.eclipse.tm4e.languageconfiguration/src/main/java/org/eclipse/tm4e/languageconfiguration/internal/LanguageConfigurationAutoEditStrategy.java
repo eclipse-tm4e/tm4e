@@ -185,15 +185,14 @@ public class LanguageConfigurationAutoEditStrategy implements IAutoEditStrategy 
 				if (!registry.shouldEnterAction(document, command.offset, contentType)) {
 					continue;
 				}
+				// https://github.com/microsoft/vscode/blob/bf63ea1932dd253745f38a4cbe26bb9be01801b1/src/vs/editor/common/cursor/cursorTypeOperations.ts#L309
 				final var enterAction = registry.getEnterAction(document, command.offset, contentType);
 				if (enterAction != null) {
-					final String indentation = TextUtils.getIndentationFromWhitespace(enterAction.indentation,
-							getTabSpaces());
 					final String delim = command.text;
 					switch (enterAction.indentAction) {
 					case None: {
 						// Nothing special
-						final String increasedIndent = normalizeIndentation(indentation + enterAction.appendText);
+						final String increasedIndent = normalizeIndentation(enterAction.indentation + enterAction.appendText);
 						final String typeText = delim + increasedIndent;
 
 						command.text = typeText;
@@ -203,7 +202,7 @@ public class LanguageConfigurationAutoEditStrategy implements IAutoEditStrategy 
 					}
 					case Indent: {
 						// Indent once
-						final String increasedIndent = normalizeIndentation(indentation + enterAction.appendText);
+						final String increasedIndent = normalizeIndentation(enterAction.indentation + enterAction.appendText);
 						final String typeText = delim + increasedIndent;
 
 						command.text = typeText;
@@ -213,8 +212,8 @@ public class LanguageConfigurationAutoEditStrategy implements IAutoEditStrategy 
 					}
 					case IndentOutdent: {
 						// Ultra special
-						final String normalIndent = normalizeIndentation(indentation);
-						final String increasedIndent = normalizeIndentation(indentation + enterAction.appendText);
+						final String normalIndent = normalizeIndentation(enterAction.indentation);
+						final String increasedIndent = normalizeIndentation(enterAction.indentation + enterAction.appendText);
 						final String typeText = delim + increasedIndent + delim + normalIndent;
 
 						command.text = typeText;
@@ -223,6 +222,8 @@ public class LanguageConfigurationAutoEditStrategy implements IAutoEditStrategy 
 						break;
 					}
 					case Outdent:
+						final String indentation = TextUtils.getIndentationFromWhitespace(enterAction.indentation,
+								getTabSpaces());
 						final String outdentedText = outdentString(
 								normalizeIndentation(indentation + enterAction.appendText));
 

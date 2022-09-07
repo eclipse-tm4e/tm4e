@@ -26,6 +26,7 @@ import org.eclipse.tm4e.languageconfiguration.internal.utils.RegExpUtils;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonDeserializer;
 import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
 
 /**
  * The language configuration interface defines the contract between extensions and various editor features, like
@@ -62,10 +63,10 @@ public class LanguageConfiguration {
 					final var actionElem = jsonObj.get("action"); //$NON-NLS-1$
 					if (actionElem != null && actionElem.isJsonObject()) {
 						final var actionJsonObj = actionElem.getAsJsonObject();
-						final var indentActionString = getAsString(actionJsonObj.get("indentAction")); //$NON-NLS-1$
+						final var indentActionString = getAsString(actionJsonObj.get("indent")); //$NON-NLS-1$
 						if (indentActionString != null) {
 							final var afterText = getAsPattern(jsonObj.get("afterText")); //$NON-NLS-1$
-							final var indentAction = IndentAction.valueOf(indentActionString);
+							final var indentAction = IndentAction.get(indentActionString);
 							final var removeText = getAsInteger(actionJsonObj.get("removeText")); //$NON-NLS-1$
 							final var appendText = getAsString(actionJsonObj.get("appendText")); //$NON-NLS-1$
 							final var action = new EnterAction(indentAction);
@@ -206,8 +207,26 @@ public class LanguageConfiguration {
 
 	@Nullable
 	private static Pattern getAsPattern(@Nullable final JsonElement element) {
-		final var pattern = getAsString(element);
+		final var pattern = getPattern(element);
 		return pattern == null ? null : RegExpUtils.create(pattern);
+	}
+
+	@Nullable
+	private static String getPattern(@Nullable final JsonElement element) {
+		if (element == null) {
+			return null;
+		}
+		if (element.isJsonObject()) {
+			// ex : { "pattern": "^<\\/([_:\\w][_:\\w-.\\d]*)\\s*>", "flags": "i" }
+			var pattern = getAsString(((JsonObject) element).get("pattern"));
+			if (pattern == null) {
+				return null;
+			}
+			var flags = getAsString(((JsonObject) element).get("flags"));
+			return flags != null ? pattern + "(?" + flags + ")" : pattern;
+		}
+		// ex : "^<\\/([_:\\w][_:\\w-.\\d]*)\\s*>"
+		return getAsString(element);
 	}
 
 	@Nullable

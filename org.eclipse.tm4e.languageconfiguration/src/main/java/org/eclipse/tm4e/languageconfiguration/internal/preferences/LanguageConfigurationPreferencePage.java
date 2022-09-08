@@ -97,12 +97,12 @@ public final class LanguageConfigurationPreferencePage extends PreferencePage im
 		gd.horizontalSpan = 2;
 		innerParent.setLayoutData(gd);
 
-		createDefinitionsListContent(parent);
+		createDefinitionsListContent(innerParent);
 
 		assert definitionViewer != null;
 		definitionViewer.setInput(manager);
 
-		final var infoWidget = new LanguageConfigurationPreferencesWidget(parent, SWT.NONE);
+		final var infoWidget = new LanguageConfigurationPreferencesWidget(innerParent, SWT.NONE);
 		this.infoWidget = infoWidget;
 
 		final var data = new GridData(GridData.FILL_HORIZONTAL);

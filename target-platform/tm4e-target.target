@@ -22,16 +22,16 @@
             <unit id="org.eclipse.ui.trace" version="0.0.0"/>
             <repository location="https://download.eclipse.org/eclipse/updates/4.25/"/>
         </location>
-        <location includeDependencyDepth="direct" includeDependencyScopes="compile" includeSource="true" missingManifest="generate" type="Maven">
-            <dependencies>
-                <dependency>
-                    <groupId>com.google.code.gson</groupId>
-                    <artifactId>gson</artifactId>
-                    <version>2.9.0</version>
-                    <type>jar</type>
-                </dependency>
-            </dependencies>
-        </location>
+	    <location includeDependencyDepth="direct" includeDependencyScopes="compile" includeSource="true" missingManifest="generate" type="Maven">
+		    <dependencies>
+			    <dependency>
+				    <groupId>com.google.code.gson</groupId>
+				    <artifactId>gson</artifactId>
+				    <version>2.9.1</version>
+				    <type>jar</type>
+			    </dependency>
+		    </dependencies>
+	    </location>
 	    <location includeDependencyDepth="direct" includeDependencyScopes="compile" includeSource="true" missingManifest="generate" type="Maven">
 		    <dependencies>
 			    <dependency>

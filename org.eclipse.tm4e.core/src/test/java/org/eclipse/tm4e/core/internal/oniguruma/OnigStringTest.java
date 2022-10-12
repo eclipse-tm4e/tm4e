@@ -37,7 +37,7 @@ class OnigStringTest {
 		assertEquals(string.length(), onigString.getCharIndexOfByte(onigString.bytesCount));
 
 		assertThrows(ArrayIndexOutOfBoundsException.class,
-				() -> onigString.getCharIndexOfByte(onigString.bytesCount + 1));
+			() -> onigString.getCharIndexOfByte(onigString.bytesCount + 1));
 
 		return onigString;
 	}
@@ -60,14 +60,17 @@ class OnigStringTest {
 		/*
 		 * getByteIndexOfChar tests
 		 */
+		assertEquals(0, onigString.getByteIndexOfChar(0));
 		assertEquals(1, onigString.getByteIndexOfChar(1));
-		assertEquals(string.length() - 1, onigString.getByteIndexOfChar(string.length() - 1));
+		assertEquals(2, onigString.getByteIndexOfChar(2)); // does not throw exception, because of internal workaround
+		assertThrows(ArrayIndexOutOfBoundsException.class, () -> onigString.getByteIndexOfChar(3));
 
 		/*
 		 * getCharIndexOfByte tests
 		 */
+		assertEquals(0, onigString.getCharIndexOfByte(0)); // a
 		assertEquals(1, onigString.getCharIndexOfByte(1)); // b
-		assertEquals(2, onigString.getCharIndexOfByte(2)); // does not throws exception, because of internal workaround
+		assertEquals(2, onigString.getCharIndexOfByte(2)); // does not throw exception, because of internal workaround
 		assertThrows(ArrayIndexOutOfBoundsException.class, () -> onigString.getCharIndexOfByte(3));
 	}
 
@@ -81,8 +84,10 @@ class OnigStringTest {
 		/*
 		 * getByteIndexOfChar tests
 		 */
-		assertEquals(2, onigString.getByteIndexOfChar(1));
-		assertEquals(4, onigString.getByteIndexOfChar(2)); // this is an internal workaround
+		assertEquals(0, onigString.getByteIndexOfChar(0)); // á
+		assertEquals(2, onigString.getByteIndexOfChar(1)); // é
+		assertEquals(4, onigString.getByteIndexOfChar(2)); // does not throw exception, because of internal workaround
+		assertThrows(ArrayIndexOutOfBoundsException.class, () -> onigString.getByteIndexOfChar(3));
 
 		/*
 		 * getCharIndexOfByte tests
@@ -90,47 +95,54 @@ class OnigStringTest {
 		assertEquals(0, onigString.getCharIndexOfByte(1)); // á
 		assertEquals(1, onigString.getCharIndexOfByte(2)); // é
 		assertEquals(1, onigString.getCharIndexOfByte(3)); // é
-		assertEquals(2, onigString.getCharIndexOfByte(4)); // explicit test for an internal workaround
+		assertEquals(2, onigString.getCharIndexOfByte(4)); // does not throw exception, because of internal workaround
 		assertThrows(ArrayIndexOutOfBoundsException.class, () -> onigString.getCharIndexOfByte(5));
 
 	}
 
 	@Test
 	void testMixedMultiByteString() {
-		final var string = "myááçóúôõaab";
+		final var string = "myáçóúôõab";
 		final OnigString onigString = verifyBasics(string, OnigString.MultiByteString.class);
 
-		assertEquals(19, onigString.bytesCount);
+		assertEquals(16, onigString.bytesCount);
 
 		/*
 		 * getByteIndexOfChar tests
 		 */
-		assertEquals(1, onigString.getByteIndexOfChar(1));
-		assertEquals(2, onigString.getByteIndexOfChar(2));
-		assertEquals(4, onigString.getByteIndexOfChar(3));
-		assertEquals(6, onigString.getByteIndexOfChar(4));
-		assertEquals(8, onigString.getByteIndexOfChar(5));
-		assertEquals(10, onigString.getByteIndexOfChar(6));
-		assertEquals(12, onigString.getByteIndexOfChar(7));
-		assertEquals(19, onigString.getByteIndexOfChar(12)); // this is an internal workaround
+		assertEquals(0, onigString.getByteIndexOfChar(0)); // m
+		assertEquals(1, onigString.getByteIndexOfChar(1)); // y
+		assertEquals(2, onigString.getByteIndexOfChar(2)); // á
+		assertEquals(4, onigString.getByteIndexOfChar(3)); // ç
+		assertEquals(6, onigString.getByteIndexOfChar(4)); // ó
+		assertEquals(8, onigString.getByteIndexOfChar(5)); // ú
+		assertEquals(10, onigString.getByteIndexOfChar(6)); // ô
+		assertEquals(12, onigString.getByteIndexOfChar(7)); // õ
+		assertEquals(14, onigString.getByteIndexOfChar(8)); // a
+		assertEquals(15, onigString.getByteIndexOfChar(9)); // b
+		assertEquals(16, onigString.getByteIndexOfChar(10)); // does not throw exception, because of internal workaround
+		assertThrows(ArrayIndexOutOfBoundsException.class, () -> onigString.getByteIndexOfChar(string.length() + 1));
 
 		/*
 		 * getCharIndexOfByte tests
 		 */
-		assertEquals(1, onigString.getCharIndexOfByte(1));
-		assertEquals(2, onigString.getCharIndexOfByte(2));
-		assertEquals(2, onigString.getCharIndexOfByte(3));
-		assertEquals(3, onigString.getCharIndexOfByte(4));
-		assertEquals(3, onigString.getCharIndexOfByte(5));
-		assertEquals(4, onigString.getCharIndexOfByte(6));
-		assertEquals(4, onigString.getCharIndexOfByte(7));
-		assertEquals(5, onigString.getCharIndexOfByte(8));
-		assertEquals(6, onigString.getCharIndexOfByte(10));
-		assertEquals(7, onigString.getCharIndexOfByte(12));
-		assertEquals(10, onigString.getCharIndexOfByte(17)); // a
-		assertEquals(11, onigString.getCharIndexOfByte(18)); // b
-
-		assertEquals(12, onigString.getCharIndexOfByte(19)); // explicit test for an internal workaround
-		assertThrows(ArrayIndexOutOfBoundsException.class, () -> onigString.getCharIndexOfByte(20));
+		assertEquals(0, onigString.getCharIndexOfByte(0)); // m
+		assertEquals(1, onigString.getCharIndexOfByte(1)); // y
+		assertEquals(2, onigString.getCharIndexOfByte(2)); // á
+		assertEquals(2, onigString.getCharIndexOfByte(3)); // á
+		assertEquals(3, onigString.getCharIndexOfByte(4)); // ç
+		assertEquals(3, onigString.getCharIndexOfByte(5)); // ç
+		assertEquals(4, onigString.getCharIndexOfByte(6)); // ó
+		assertEquals(4, onigString.getCharIndexOfByte(7)); // ó
+		assertEquals(5, onigString.getCharIndexOfByte(8)); // ú
+		assertEquals(5, onigString.getCharIndexOfByte(9)); // ú
+		assertEquals(6, onigString.getCharIndexOfByte(10)); // ô
+		assertEquals(6, onigString.getCharIndexOfByte(11)); // ô
+		assertEquals(7, onigString.getCharIndexOfByte(12)); // õ
+		assertEquals(7, onigString.getCharIndexOfByte(13)); // õ
+		assertEquals(8, onigString.getCharIndexOfByte(14)); // a
+		assertEquals(9, onigString.getCharIndexOfByte(15)); // b
+		assertEquals(10, onigString.getCharIndexOfByte(16)); // does not throw exception, because of internal workaround
+		assertThrows(ArrayIndexOutOfBoundsException.class, () -> onigString.getCharIndexOfByte(17));
 	}
 }

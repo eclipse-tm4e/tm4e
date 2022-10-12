@@ -29,8 +29,7 @@ import org.osgi.service.prefs.BackingStoreException;
  */
 public final class TextMateGrammarImportWizard extends Wizard implements IImportWizard {
 
-	@Nullable
-	private SelectGrammarWizardPage mainPage;
+	private SelectGrammarWizardPage mainPage = lazyNonNull();
 
 	@Nullable
 	private IGrammarDefinition createdDefinition;
@@ -60,7 +59,7 @@ public final class TextMateGrammarImportWizard extends Wizard implements IImport
 
 	@Override
 	public boolean performFinish() {
-		final IGrammarDefinition definition = castNonNull(mainPage).getGrammarDefinition();
+		final IGrammarDefinition definition = mainPage.getGrammarDefinition();
 		grammarRegistryManager.registerGrammarDefinition(definition);
 		if (save) {
 			try {
@@ -83,5 +82,4 @@ public final class TextMateGrammarImportWizard extends Wizard implements IImport
 	public IGrammarDefinition getCreatedDefinition() {
 		return createdDefinition;
 	}
-
 }

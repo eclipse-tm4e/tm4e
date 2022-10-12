@@ -44,11 +44,8 @@ final class CreateThemeAssociationWizardPage extends AbstractWizardPage {
 
 	private static final String PAGE_NAME = CreateThemeAssociationWizardPage.class.getName();
 
-	@Nullable
-	private ComboViewer themeViewer;
-
-	@Nullable
-	private ComboViewer grammarViewer;
+	private ComboViewer themeViewer = lazyNonNull();
+	private ComboViewer grammarViewer = lazyNonNull();
 
 	@Nullable
 	private final IGrammarDefinition initialDefinition;
@@ -56,8 +53,7 @@ final class CreateThemeAssociationWizardPage extends AbstractWizardPage {
 	@Nullable
 	private final IThemeAssociation initialAssociation;
 
-	@Nullable
-	private Button whenDarkButton;
+	private Button whenDarkButton = lazyNonNull();
 
 	protected CreateThemeAssociationWizardPage(@Nullable final IGrammarDefinition initialDefinition,
 			@Nullable final IThemeAssociation initialAssociation) {
@@ -78,7 +74,7 @@ final class CreateThemeAssociationWizardPage extends AbstractWizardPage {
 		// TextMate theme
 		var label = new Label(parent, SWT.NONE);
 		label.setText(TMUIMessages.CreateThemeAssociationWizardPage_theme_text);
-		final var themeViewer = this.themeViewer = new ComboViewer(parent);
+		themeViewer = new ComboViewer(parent);
 		themeViewer.setLabelProvider(new ThemeLabelProvider());
 		themeViewer.setContentProvider(new ThemeContentProvider());
 		themeViewer.setInput(TMUIPlugin.getThemeManager());
@@ -87,7 +83,7 @@ final class CreateThemeAssociationWizardPage extends AbstractWizardPage {
 
 		label = new Label(parent, SWT.NONE);
 		label.setText(TMUIMessages.CreateThemeAssociationWizardPage_grammar_text);
-		final var grammarViewer = this.grammarViewer = new ComboViewer(parent);
+		grammarViewer = new ComboViewer(parent);
 		grammarViewer.setLabelProvider(new GrammarDefinitionLabelProvider());
 		grammarViewer.setContentProvider(new GrammarDefinitionContentProvider());
 		grammarViewer.setInput(TMEclipseRegistryPlugin.getGrammarRegistryManager());
@@ -98,7 +94,7 @@ final class CreateThemeAssociationWizardPage extends AbstractWizardPage {
 			grammarViewer.setSelection(new StructuredSelection(initialDefinition));
 		}
 
-		final var whenDarkButton = this.whenDarkButton = new Button(parent, SWT.CHECK);
+		whenDarkButton = new Button(parent, SWT.CHECK);
 		whenDarkButton.setText(TMUIMessages.CreateThemeAssociationWizardPage_whenDark_text);
 		final var data = new GridData();
 		data.horizontalSpan = 4;
@@ -122,14 +118,12 @@ final class CreateThemeAssociationWizardPage extends AbstractWizardPage {
 	@Nullable
 	@Override
 	protected IStatus validatePage(final Event event) {
-		final var themeViewer = this.themeViewer;
-		if (themeViewer == null || themeViewer.getSelection().isEmpty()) {
+		if (themeViewer.getSelection().isEmpty()) {
 			return new Status(IStatus.ERROR, TMUIPlugin.PLUGIN_ID,
 					TMUIMessages.CreateThemeAssociationWizardPage_theme_error_required);
 		}
 
-		final var grammarViewer = this.grammarViewer;
-		if (grammarViewer == null || grammarViewer.getSelection().isEmpty()) {
+		if (grammarViewer.getSelection().isEmpty()) {
 			return new Status(IStatus.ERROR, TMUIPlugin.PLUGIN_ID,
 					TMUIMessages.CreateThemeAssociationWizardPage_grammar_error_required);
 		}
@@ -137,10 +131,10 @@ final class CreateThemeAssociationWizardPage extends AbstractWizardPage {
 	}
 
 	IThemeAssociation getThemeAssociation() {
-		final String themeId = ((ITheme) castNonNull(themeViewer).getStructuredSelection().getFirstElement()).getId();
-		final String scopeName = ((IGrammarDefinition) castNonNull(grammarViewer).getStructuredSelection()
+		final String themeId = ((ITheme) themeViewer.getStructuredSelection().getFirstElement()).getId();
+		final String scopeName = ((IGrammarDefinition) grammarViewer.getStructuredSelection()
 				.getFirstElement()).getScopeName();
-		final boolean whenDark = castNonNull(whenDarkButton).getSelection();
+		final boolean whenDark = whenDarkButton.getSelection();
 		return new ThemeAssociation(themeId, scopeName, whenDark);
 	}
 

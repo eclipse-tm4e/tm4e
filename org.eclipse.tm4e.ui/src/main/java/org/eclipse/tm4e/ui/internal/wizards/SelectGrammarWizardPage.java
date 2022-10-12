@@ -55,11 +55,8 @@ final class SelectGrammarWizardPage extends AbstractWizardPage {
 			"*.yaml",
 			"*.yml" };
 
-	@Nullable
-	private Text grammarFileText;
-
-	@Nullable
-	private GrammarInfoWidget grammarInfoWidget;
+	private Text grammarFileText = lazyNonNull();
+	private GrammarInfoWidget grammarInfoWidget = lazyNonNull();
 
 	// private ContentTypesBindingWidget contentTypesWidget;
 
@@ -77,8 +74,7 @@ final class SelectGrammarWizardPage extends AbstractWizardPage {
 		parent.setLayout(new GridLayout(2, false));
 
 		// Text Field
-		final var grammarFileText = this.grammarFileText = createText(parent,
-				TMUIMessages.SelectGrammarWizardPage_file_label);
+		grammarFileText = createText(parent, TMUIMessages.SelectGrammarWizardPage_file_label);
 		grammarFileText.addListener(SWT.Modify, this);
 
 		// Buttons
@@ -136,12 +132,6 @@ final class SelectGrammarWizardPage extends AbstractWizardPage {
 	@Nullable
 	@Override
 	protected IStatus validatePage(final Event event) {
-		final var grammarInfoWidget = this.grammarInfoWidget;
-		final var grammarFileText = this.grammarFileText;
-		if (grammarInfoWidget == null || grammarFileText == null)
-			return new Status(IStatus.ERROR, TMUIPlugin.PLUGIN_ID,
-					TMUIMessages.SelectGrammarWizardPage_file_error_required);
-
 		grammarInfoWidget.refresh(null);
 		final String path = grammarFileText.getText();
 		if (path.isEmpty()) {
@@ -160,8 +150,6 @@ final class SelectGrammarWizardPage extends AbstractWizardPage {
 	}
 
 	IGrammarDefinition getGrammarDefinition() {
-		return new GrammarDefinition(
-				castNonNull(grammarInfoWidget).getScopeNameText().getText(),
-				castNonNull(grammarFileText).getText());
+		return new GrammarDefinition(grammarInfoWidget.getScopeNameText().getText(), grammarFileText.getText());
 	}
 }

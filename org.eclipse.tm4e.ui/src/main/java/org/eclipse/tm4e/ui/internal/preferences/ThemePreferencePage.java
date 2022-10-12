@@ -74,25 +74,18 @@ public final class ThemePreferencePage extends PreferencePage implements IWorkbe
 	static final String PAGE_ID = "org.eclipse.tm4e.ui.preferences.ThemePreferencePage";
 
 	// Theme content
-	@Nullable
-	private TableViewer themesTable;
-	@Nullable
-	private Button themeRemoveButton;
+	private TableViewer themesTable = lazyNonNull();
+	private Button themeRemoveButton = lazyNonNull();
 
 	// Preview content
-	@Nullable
-	private ComboViewer grammarsCombo;
-	@Nullable
-	private TMViewer previewViewer;
+	private ComboViewer grammarsCombo = lazyNonNull();
+	private TMViewer previewViewer = lazyNonNull();
 
 	private final IGrammarRegistryManager grammarRegistryManager = TMEclipseRegistryPlugin.getGrammarRegistryManager();
 	private final IThemeManager themeManager = TMUIPlugin.getThemeManager();
 
-	@Nullable
-	private Button darkThemeButton;
-
-	@Nullable
-	private Button defaultThemeButton;
+	private Button darkThemeButton = lazyNonNull();
+	private Button defaultThemeButton = lazyNonNull();
 
 	@Nullable
 	private ITheme selectedTheme;
@@ -121,7 +114,7 @@ public final class ThemePreferencePage extends PreferencePage implements IWorkbe
 		parent.setSashWidth(3);
 		parent.setWeights(new int[] { 2, 1 });
 
-		castNonNull(themesTable).setInput(themeManager);
+		themesTable.setInput(themeManager);
 
 		Dialog.applyDialogFont(parent);
 		innerParent.layout();
@@ -155,7 +148,7 @@ public final class ThemePreferencePage extends PreferencePage implements IWorkbe
 
 		final var viewerComparator = new ColumnViewerComparator();
 
-		final var themesTable = this.themesTable = new TableViewer(table);
+		themesTable = new TableViewer(table);
 
 		final var column1 = new TableColumn(table, SWT.NONE);
 		column1.setText(TMUIMessages.ThemePreferencePage_column_name);
@@ -185,9 +178,9 @@ public final class ThemePreferencePage extends PreferencePage implements IWorkbe
 			final var selectedTheme = ThemePreferencePage.this.selectedTheme = ((ITheme) ((IStructuredSelection) themesTable
 					.getSelection()).getFirstElement());
 			if (selectedTheme != null) {
-				castNonNull(darkThemeButton).setSelection(selectedTheme.isDark());
-				castNonNull(defaultThemeButton).setSelection(selectedTheme.isDefault());
-				castNonNull(themeRemoveButton).setEnabled(selectedTheme.getPluginId() == null);
+				darkThemeButton.setSelection(selectedTheme.isDark());
+				defaultThemeButton.setSelection(selectedTheme.isDefault());
+				themeRemoveButton.setEnabled(selectedTheme.getPluginId() == null);
 			}
 			preview();
 		});
@@ -235,7 +228,7 @@ public final class ThemePreferencePage extends PreferencePage implements IWorkbe
 			}
 		});
 
-		final var themeRemoveButton = this.themeRemoveButton = new Button(buttons, SWT.PUSH);
+		themeRemoveButton = new Button(buttons, SWT.PUSH);
 		themeRemoveButton.setText(TMUIMessages.Button_remove);
 		themeRemoveButton.setLayoutData(getButtonGridData(themeRemoveButton));
 		themeRemoveButton.addListener(SWT.Selection, e -> {
@@ -264,11 +257,11 @@ public final class ThemePreferencePage extends PreferencePage implements IWorkbe
 		layout.marginRight = 0;
 		parent.setLayout(layout);
 
-		final var darkThemeButton = this.darkThemeButton = new Button(parent, SWT.CHECK);
+		darkThemeButton = new Button(parent, SWT.CHECK);
 		darkThemeButton.setText(TMUIMessages.ThemePreferencePage_darkThemeButton_label);
 		darkThemeButton.setEnabled(false);
 
-		final var defaultThemeButton = this.defaultThemeButton = new Button(parent, SWT.CHECK);
+		defaultThemeButton = new Button(parent, SWT.CHECK);
 		defaultThemeButton.setText(TMUIMessages.ThemePreferencePage_defaultThemeButton_label);
 		defaultThemeButton.setEnabled(false);
 	}
@@ -290,7 +283,7 @@ public final class ThemePreferencePage extends PreferencePage implements IWorkbe
 		var data = new GridData();
 		label.setLayoutData(data);
 
-		final var grammarsCombo = this.grammarsCombo = new ComboViewer(parent);
+		grammarsCombo = new ComboViewer(parent);
 		grammarsCombo.setContentProvider(new GrammarDefinitionContentProvider());
 		grammarsCombo.setLabelProvider(new GrammarDefinitionLabelProvider());
 		grammarsCombo.addSelectionChangedListener(e -> preview());
@@ -300,13 +293,12 @@ public final class ThemePreferencePage extends PreferencePage implements IWorkbe
 			grammarsCombo.getCombo().select(0);
 		}
 
-		final var viewer = this.previewViewer = new TMViewer(parent, null, null, false,
-				SWT.BORDER | SWT.V_SCROLL | SWT.H_SCROLL);
+		previewViewer = new TMViewer(parent, null, null, false, SWT.BORDER | SWT.V_SCROLL | SWT.H_SCROLL);
 
 		// Don't set caret to 'null' as this causes https://bugs.eclipse.org/293263
 		// viewer.getTextWidget().setCaret(null);
 
-		final var control = viewer.getControl();
+		final var control = previewViewer.getControl();
 		data = new GridData(GridData.FILL_BOTH);
 		data.horizontalSpan = 2;
 		data.heightHint = convertHeightInCharsToPixels(5);
@@ -341,13 +333,13 @@ public final class ThemePreferencePage extends PreferencePage implements IWorkbe
 	}
 
 	private void preview() {
-		IStructuredSelection selection = (IStructuredSelection) castNonNull(themesTable).getSelection();
+		var selection = (IStructuredSelection) themesTable.getSelection();
 		if (selection.isEmpty()) {
 			return;
 		}
 		final ITheme theme = (ITheme) selection.getFirstElement();
 
-		selection = (IStructuredSelection) castNonNull(grammarsCombo).getSelection();
+		selection = (IStructuredSelection) grammarsCombo.getSelection();
 		if (selection.isEmpty()) {
 			return;
 		}
@@ -356,7 +348,6 @@ public final class ThemePreferencePage extends PreferencePage implements IWorkbe
 
 		// Preview the grammar
 		final IGrammar grammar = grammarRegistryManager.getGrammarForScope(definition.getScopeName());
-		final var previewViewer = castNonNull(this.previewViewer);
 		previewViewer.setTheme(theme);
 		previewViewer.setGrammar(grammar);
 

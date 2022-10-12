@@ -32,8 +32,7 @@ import org.eclipse.swt.widgets.Table;
  */
 public abstract class TableAndButtonsWidget extends Composite {
 
-	@Nullable
-	private TableViewer viewer;
+	private TableViewer viewer = lazyNonNull();
 
 	protected TableAndButtonsWidget(final Composite parent, final int style, final String title) {
 		super(parent, style);
@@ -92,35 +91,33 @@ public abstract class TableAndButtonsWidget extends Composite {
 
 		viewer = new TableViewer(table);
 		table.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-
 	}
 
 	public void setInput(@Nullable final Object input) {
-		castNonNull(viewer).setInput(input);
+		viewer.setInput(input);
 	}
 
-	@Nullable
 	public TableViewer getViewer() {
 		return viewer;
 	}
 
 	public void setLabelProvider(final IBaseLabelProvider labelProvider) {
-		castNonNull(viewer).setLabelProvider(labelProvider);
+		viewer.setLabelProvider(labelProvider);
 	}
 
 	public void setContentProvider(final IContentProvider provider) {
-		castNonNull(viewer).setContentProvider(provider);
+		viewer.setContentProvider(provider);
 	}
 
 	public void addSelectionChangedListener(final ISelectionChangedListener listener) {
-		castNonNull(viewer).addSelectionChangedListener(listener);
+		viewer.addSelectionChangedListener(listener);
 	}
 
 	public void setSelection(final IStructuredSelection selection) {
-		castNonNull(viewer).setSelection(selection);
+		viewer.setSelection(selection);
 	}
 
 	public IStructuredSelection getSelection() {
-		return castNonNull(viewer).getStructuredSelection();
+		return viewer.getStructuredSelection();
 	}
 }

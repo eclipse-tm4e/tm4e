@@ -41,10 +41,9 @@ public final class ThemeAssociationsWidget extends TableAndButtonsWidget {
 
 	private final IThemeManager themeManager;
 
-	@Nullable
-	private Button editButton;
-	@Nullable
-	private Button removeButton;
+	private Button editButton = lazyNonNull();
+	private Button removeButton = lazyNonNull();
+
 	@Nullable
 	private IGrammarDefinition definition;
 
@@ -57,7 +56,7 @@ public final class ThemeAssociationsWidget extends TableAndButtonsWidget {
 
 	@Override
 	protected void createButtons(final Composite parent) {
-		final var editButton = this.editButton = new Button(parent, SWT.PUSH);
+		editButton = new Button(parent, SWT.PUSH);
 		editButton.setText(TMUIMessages.Button_edit);
 		editButton.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		editButton.addListener(SWT.Selection, e -> {
@@ -75,7 +74,7 @@ public final class ThemeAssociationsWidget extends TableAndButtonsWidget {
 		});
 		editButton.setEnabled(false);
 
-		final var removeButton = this.removeButton = new Button(parent, SWT.PUSH);
+		removeButton = new Button(parent, SWT.PUSH);
 		removeButton.setText(TMUIMessages.Button_remove);
 		removeButton.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		removeButton.addListener(SWT.Selection, e -> {
@@ -95,11 +94,11 @@ public final class ThemeAssociationsWidget extends TableAndButtonsWidget {
 	}
 
 	public Button getNewButton() {
-		return castNonNull(editButton);
+		return editButton;
 	}
 
 	public Button getRemoveButton() {
-		return castNonNull(removeButton);
+		return removeButton;
 	}
 
 	public IThemeAssociation[] setGrammarDefinition(final IGrammarDefinition definition) {

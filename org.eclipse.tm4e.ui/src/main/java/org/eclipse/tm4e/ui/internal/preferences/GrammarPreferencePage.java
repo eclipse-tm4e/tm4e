@@ -88,24 +88,17 @@ public final class GrammarPreferencePage extends PreferencePage implements IWork
 	private ISnippetManager snippetManager = TMUIPlugin.getSnippetManager();
 
 	// Grammar list
-	@Nullable
-	private TableViewer grammarViewer;
-
-	@Nullable
-	private Button grammarRemoveButton;
+	private TableViewer grammarViewer = lazyNonNull();
+	private Button grammarRemoveButton = lazyNonNull();
 
 	// General tab
-	@Nullable
-	private GrammarInfoWidget grammarInfoWidget;
+	private GrammarInfoWidget grammarInfoWidget = lazyNonNull();
 	// Content type tab
-	@Nullable
-	private ContentTypesBindingWidget contentTypesWidget;
+	private ContentTypesBindingWidget contentTypesWidget = lazyNonNull();
 	// Theme associations tab
-	@Nullable
-	private ThemeAssociationsWidget themeAssociationsWidget;
+	private ThemeAssociationsWidget themeAssociationsWidget = lazyNonNull();
 	// Preview
-	@Nullable
-	private TMViewer previewViewer;
+	private TMViewer previewViewer = lazyNonNull();
 
 	public GrammarPreferencePage() {
 		setDescription(TMUIMessages.GrammarPreferencePage_description);
@@ -178,7 +171,7 @@ public final class GrammarPreferencePage extends PreferencePage implements IWork
 		createGrammarDetailContent(innerParent);
 
 		previewViewer = doCreateViewer(innerParent);
-		castNonNull(grammarViewer).setInput(grammarRegistryManager);
+		grammarViewer.setInput(grammarRegistryManager);
 
 		updateButtons();
 		Dialog.applyDialogFont(parent);
@@ -210,7 +203,7 @@ public final class GrammarPreferencePage extends PreferencePage implements IWork
 
 		final var viewerComparator = new ColumnViewerComparator();
 
-		final var grammarViewer = this.grammarViewer = new TableViewer(table);
+		grammarViewer = new TableViewer(table);
 
 		final var column1 = new TableColumn(table, SWT.NONE);
 		column1.setText(TMUIMessages.GrammarPreferencePage_column_scopeName);
@@ -247,9 +240,9 @@ public final class GrammarPreferencePage extends PreferencePage implements IWork
 				final IGrammarDefinition definition = (IGrammarDefinition) (selection).getFirstElement();
 
 				// Update button
-				castNonNull(grammarRemoveButton).setEnabled(definition.getPluginId() == null);
-				castNonNull(themeAssociationsWidget).getNewButton().setEnabled(false);
-				castNonNull(themeAssociationsWidget).getRemoveButton().setEnabled(false);
+				grammarRemoveButton.setEnabled(definition.getPluginId() == null);
+				themeAssociationsWidget.getNewButton().setEnabled(false);
+				themeAssociationsWidget.getRemoveButton().setEnabled(false);
 
 				// Select grammar
 				selectGrammar(definition);
@@ -269,18 +262,17 @@ public final class GrammarPreferencePage extends PreferencePage implements IWork
 
 			private void fillGeneralTab(final String scopeName) {
 				final IGrammar grammar = grammarRegistryManager.getGrammarForScope(scopeName);
-				castNonNull(grammarInfoWidget).refresh(grammar);
+				grammarInfoWidget.refresh(grammar);
 			}
 
 			private void fillContentTypeTab(final String scopeName) {
 				// Load the content type binding for the given grammar
-				castNonNull(contentTypesWidget).setInput(grammarRegistryManager.getContentTypesForScope(scopeName));
+				contentTypesWidget.setInput(grammarRegistryManager.getContentTypesForScope(scopeName));
 			}
 
 			@Nullable
 			private IThemeAssociation fillThemeTab(final IGrammarDefinition definition) {
 				IThemeAssociation selectedAssociation = null;
-				final var themeAssociationsWidget = castNonNull(GrammarPreferencePage.this.themeAssociationsWidget);
 				final IStructuredSelection oldSelection = themeAssociationsWidget.getSelection();
 				// Load the theme associations for the given grammar
 				final IThemeAssociation[] themeAssociations = themeAssociationsWidget.setGrammarDefinition(definition);
@@ -306,7 +298,6 @@ public final class GrammarPreferencePage extends PreferencePage implements IWork
 				if (selectedAssociation != null) {
 					setPreviewTheme(selectedAssociation.getThemeId());
 				}
-				final var previewViewer = castNonNull(GrammarPreferencePage.this.previewViewer);
 				previewViewer.setGrammar(grammar);
 				// Snippet
 				final ISnippet[] snippets = snippetManager.getSnippets(scopeName);
@@ -314,7 +305,7 @@ public final class GrammarPreferencePage extends PreferencePage implements IWork
 					previewViewer.setText("");
 				} else {
 					// TODO: manage list of snippet for the given scope.
-				   previewViewer.setText(snippets[0].getContent());
+					previewViewer.setText(snippets[0].getContent());
 				}
 			}
 		});
@@ -357,7 +348,7 @@ public final class GrammarPreferencePage extends PreferencePage implements IWork
 			}
 		});
 
-		final var grammarRemoveButton = this.grammarRemoveButton = new Button(buttons, SWT.PUSH);
+		grammarRemoveButton = new Button(buttons, SWT.PUSH);
 		grammarRemoveButton.setText(TMUIMessages.Button_remove);
 		grammarRemoveButton.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		grammarRemoveButton.addListener(SWT.Selection, new Listener() {
@@ -437,8 +428,7 @@ public final class GrammarPreferencePage extends PreferencePage implements IWork
 		parent.setLayout(new GridLayout());
 		parent.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 
-		final var themeAssociationsWidget = this.themeAssociationsWidget = new ThemeAssociationsWidget(themeManager,
-				parent, SWT.NONE);
+		themeAssociationsWidget = new ThemeAssociationsWidget(themeManager, parent, SWT.NONE);
 		final var data = new GridData(GridData.FILL_HORIZONTAL);
 		data.horizontalSpan = 2;
 		themeAssociationsWidget.setLayoutData(data);
@@ -468,7 +458,7 @@ public final class GrammarPreferencePage extends PreferencePage implements IWork
 
 	private void setPreviewTheme(final String themeId) {
 		final ITheme theme = themeManager.getThemeById(themeId);
-		if (theme != null && previewViewer != null) {
+		if (theme != null) {
 			previewViewer.setTheme(theme);
 		}
 	}
@@ -496,9 +486,7 @@ public final class GrammarPreferencePage extends PreferencePage implements IWork
 	}
 
 	private void updateButtons() {
-		if (grammarRemoveButton != null)
-			grammarRemoveButton.setEnabled(false);
-
+		grammarRemoveButton.setEnabled(false);
 	}
 
 	@Override

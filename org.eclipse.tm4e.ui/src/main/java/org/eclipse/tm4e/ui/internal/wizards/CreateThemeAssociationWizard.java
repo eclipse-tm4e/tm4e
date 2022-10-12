@@ -27,8 +27,7 @@ import org.osgi.service.prefs.BackingStoreException;
  */
 public final class CreateThemeAssociationWizard extends Wizard {
 
-	@Nullable
-	private CreateThemeAssociationWizardPage mainPage;
+	private CreateThemeAssociationWizardPage mainPage = lazyNonNull();
 
 	@Nullable
 	private IThemeAssociation createdThemeAssociation;
@@ -62,7 +61,7 @@ public final class CreateThemeAssociationWizard extends Wizard {
 
 	@Override
 	public boolean performFinish() {
-		final IThemeAssociation association = castNonNull(mainPage).getThemeAssociation();
+		final IThemeAssociation association = mainPage.getThemeAssociation();
 		themeManager.registerThemeAssociation(association);
 		if (save) {
 			try {

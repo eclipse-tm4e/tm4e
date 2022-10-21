@@ -8,7 +8,7 @@
         </location>
         <location includeAllPlatforms="false" includeConfigurePhase="true" includeMode="planner" includeSource="true" type="InstallableUnit">
             <unit id="com.google.guava" version="30.1.0.v20210127-2300"/>
-            <unit id="org.apache.batik.css" version="1.14.0.v20210324-0332"/>
+            <unit id="org.apache.batik.css" version="1.15.0.v20221018-0736"/>
             <unit id="org.yaml.snakeyaml" version="1.27.0.v20201111-1638"/>
             <repository location="https://download.eclipse.org/tools/orbit/downloads/latest-S/"/>
         </location>

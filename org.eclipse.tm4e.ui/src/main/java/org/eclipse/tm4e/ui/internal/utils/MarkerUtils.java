@@ -48,7 +48,7 @@ public final class MarkerUtils {
 		}
 	}
 
-	private static final Map<String, MarkerConfig> MARKERCONIG_BY_TAG = Map.of(
+	private static final Map<String, MarkerConfig> MARKERCONFIG_BY_TAG = Map.of(
 			// problem markers:
 			"BUG", MarkerConfig.forProblem(IMarker.SEVERITY_ERROR),
 			"NOTE", MarkerConfig.forProblem(IMarker.SEVERITY_INFO),
@@ -59,7 +59,7 @@ public final class MarkerUtils {
 			"XXX", MarkerConfig.forTask(IMarker.PRIORITY_NORMAL));
 
 	private static final Pattern TAG_SELECTOR_PATTERN = Pattern.compile(
-			"\\b(" + MARKERCONIG_BY_TAG.keySet().stream().collect(Collectors.joining("|")) + ")\\b");
+			"\\b(" + MARKERCONFIG_BY_TAG.keySet().stream().collect(Collectors.joining("|")) + ")\\b");
 
 	/**
 	 * Updates all TM4E text markers of the corresponding document starting from
@@ -143,7 +143,7 @@ public final class MarkerUtils {
 					if (!matcher.find())
 						continue;
 
-					final var markerConfig = MarkerUtils.MARKERCONIG_BY_TAG.get(matcher.group());
+					final var markerConfig = MarkerUtils.MARKERCONFIG_BY_TAG.get(matcher.group());
 					final var markerText = commentText.substring(matcher.start()).trim();
 					final var markerTextStartOffset = lineOffset + token.startIndex + matcher.start();
 

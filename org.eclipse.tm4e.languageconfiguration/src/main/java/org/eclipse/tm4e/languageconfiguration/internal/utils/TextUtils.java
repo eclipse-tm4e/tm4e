@@ -175,6 +175,7 @@ public final class TextUtils {
 			final TabsToSpacesConverter converter = ClassHelper.getFieldValue(viewer, "fTabsToSpacesConverter", //$NON-NLS-1$
 					TextViewer.class);
 			if (converter != null) {
+				@SuppressWarnings("null")
 				final int tabSize = ClassHelper.getFieldValue(converter, "fTabRatio", TabsToSpacesConverter.class); //$NON-NLS-1$
 				return new TabSpacesInfo(tabSize, true);
 			}
@@ -188,7 +189,7 @@ public final class TextUtils {
 	 * @param document the document to search in
 	 * @param line zero-based document line number
 	 *
-	 * @return  <code>true</code>  if all the characters of the specified document range are the whitespace 
+	 * @return  <code>true</code>  if all the characters of the specified document range are the whitespace
 	 * 				characters, otherwise returns <code>false</code>
 	 */
 	public static boolean isBlankLine(final IDocument document, int line) {

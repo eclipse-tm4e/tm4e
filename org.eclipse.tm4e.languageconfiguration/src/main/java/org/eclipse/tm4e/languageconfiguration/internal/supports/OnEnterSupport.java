@@ -15,7 +15,6 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 import java.util.regex.Pattern;
-import java.util.stream.Collectors;
 
 import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.tm4e.languageconfiguration.internal.model.CharacterPair;
@@ -45,7 +44,7 @@ public class OnEnterSupport {
 				.stream()
 				.filter(Objects::nonNull)
 				.map(ProcessedBracketPair::new)
-				.collect(Collectors.toList());
+				.toList();
 
 		this.regExpRules = regExpRules != null ? regExpRules : Collections.emptyList();
 	}

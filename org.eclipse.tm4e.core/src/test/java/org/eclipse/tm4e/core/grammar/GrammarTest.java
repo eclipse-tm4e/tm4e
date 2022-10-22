@@ -215,8 +215,7 @@ class GrammarTest {
 		final List<String> expectedTokens;
 		try (var resource = Data.class.getResourceAsStream("raytracer_tokens.txt")) {
 			expectedTokens = new BufferedReader(new InputStreamReader(resource, StandardCharsets.UTF_8))
-				.lines()
-				.collect(Collectors.toList());
+				.lines().toList();
 		}
 
 		IStateStack stateStack = null;

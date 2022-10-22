@@ -19,7 +19,6 @@ package org.eclipse.tm4e.languageconfiguration.internal.supports;
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
-import java.util.stream.Collectors;
 
 import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.tm4e.languageconfiguration.internal.model.AutoClosingPair;
@@ -50,11 +49,11 @@ public final class CharacterPairSupport {
 		if (autoClosingPairs != null) {
 			this.autoClosingPairs = autoClosingPairs.stream().filter(Objects::nonNull)
 					.map(el -> new AutoClosingPairConditional(el.open, el.close, el.notIn))
-					.collect(Collectors.toList());
+					.toList();
 		} else if (brackets != null) {
 			this.autoClosingPairs = brackets.stream().filter(Objects::nonNull)
 					.map(el -> new AutoClosingPairConditional(el.open, el.close, Collections.emptyList()))
-					.collect(Collectors.toList());
+					.toList();
 		} else {
 			this.autoClosingPairs = Collections.emptyList();
 		}
@@ -66,7 +65,7 @@ public final class CharacterPairSupport {
 
 		final var surroundingPairs = config.getSurroundingPairs();
 		this.surroundingPairs = surroundingPairs != null
-				? surroundingPairs.stream().filter(Objects::nonNull).collect(Collectors.toList())
+				? surroundingPairs.stream().filter(Objects::nonNull).toList()
 				: (List<AutoClosingPair>) (List<?>) this.autoClosingPairs;
 	}
 

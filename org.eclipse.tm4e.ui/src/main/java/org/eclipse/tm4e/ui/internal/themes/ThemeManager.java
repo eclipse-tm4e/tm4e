@@ -12,7 +12,6 @@
 package org.eclipse.tm4e.ui.internal.themes;
 
 import java.util.Arrays;
-import java.util.stream.Collectors;
 
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.core.runtime.preferences.IEclipsePreferences.IPreferenceChangeListener;
@@ -135,7 +134,7 @@ public final class ThemeManager extends AbstractThemeManager {
 		// Save Theme associations in the
 		// "${workspace_loc}/metadata/.plugins/org.eclipse.core.runtime/.settings/org.eclipse.tm4e.ui.prefs"
 		final String json = PreferenceHelper.toJsonThemeAssociations(Arrays.stream(getAllThemeAssociations())
-				.filter(t -> t.getPluginId() == null).collect(Collectors.toList()));
+				.filter(t -> t.getPluginId() == null).toList());
 		prefs.put(PreferenceConstants.THEME_ASSOCIATIONS, json);
 
 		// Save preferences

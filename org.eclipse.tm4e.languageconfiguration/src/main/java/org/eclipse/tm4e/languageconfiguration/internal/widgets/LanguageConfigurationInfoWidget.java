@@ -15,7 +15,6 @@ import static org.eclipse.tm4e.languageconfiguration.internal.LanguageConfigurat
 
 import java.util.List;
 import java.util.Objects;
-import java.util.stream.Collectors;
 
 import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.eclipse.jdt.annotation.Nullable;
@@ -152,7 +151,7 @@ public class LanguageConfigurationInfoWidget extends Composite {
 		if (list == null) {
 			return null;
 		}
-		return list.stream().filter(Objects::nonNull).collect(Collectors.toList());
+		return list.stream().filter(Objects::nonNull).toList();
 	}
 
 	private void createCommentsTab(final TabFolder folder) {

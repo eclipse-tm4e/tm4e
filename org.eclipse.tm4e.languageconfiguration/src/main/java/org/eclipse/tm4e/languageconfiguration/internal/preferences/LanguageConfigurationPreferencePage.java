@@ -16,7 +16,6 @@ import static org.eclipse.tm4e.languageconfiguration.internal.LanguageConfigurat
 
 import java.util.Collection;
 import java.util.Collections;
-import java.util.stream.Collectors;
 
 import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.jface.dialogs.Dialog;
@@ -265,7 +264,7 @@ public final class LanguageConfigurationPreferencePage extends PreferencePage im
 			return Collections.emptyList();
 		}
 		return ((Collection<ILanguageConfigurationDefinition>) selection.toList()).stream()
-				.filter(definition -> definition.getPluginId() == null).collect(Collectors.toList());
+				.filter(definition -> definition.getPluginId() == null).toList();
 	}
 
 	@Override

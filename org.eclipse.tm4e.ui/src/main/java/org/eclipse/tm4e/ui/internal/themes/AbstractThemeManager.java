@@ -16,7 +16,6 @@ import java.util.Collection;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.swt.graphics.RGB;
@@ -75,8 +74,7 @@ public abstract class AbstractThemeManager implements IThemeManager {
 
 	@Override
 	public ITheme[] getThemes(final boolean dark) {
-		return themes.values().stream().filter(theme -> theme.isDark() == dark)
-				.collect(Collectors.toList()).toArray(ITheme[]::new);
+		return themes.values().stream().filter(theme -> theme.isDark() == dark).toArray(ITheme[]::new);
 	}
 
 	@Override

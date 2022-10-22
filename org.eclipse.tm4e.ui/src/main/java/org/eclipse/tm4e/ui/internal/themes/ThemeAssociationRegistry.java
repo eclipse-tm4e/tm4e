@@ -101,7 +101,7 @@ final class ThemeAssociationRegistry {
 	// // Get the default associations (from plugin)
 	// /*List<IThemeAssociation> defaultAssociations =
 	// getThemeAssociations().stream()
-	// .filter().collect(Collectors.toList());
+	// .filter().toList();
 	// // Add default association if user associations doesn't define it.
 	// for (IThemeAssociation defaultAssociation : defaultAssociations) {
 	// if (!(contains(userAssociations, defaultAssociation))) {

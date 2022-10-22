@@ -15,7 +15,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.tm4e.ui.themes.IThemeAssociation;
@@ -85,8 +84,7 @@ final class BaseThemeAssociationRegistry {
 
 	IThemeAssociation[] getThemeAssociations(final boolean isDefault) {
 		/*if (isDefault) {
-			return getThemeAssociations().stream().filter(theme -> theme.isDefault()).collect(Collectors.toList())
-					.toArray(IThemeAssociation[]::new);
+			return getThemeAssociations().stream().filter(theme -> theme.isDefault()).toArray(IThemeAssociation[]::new);
 		}*/
 		return getThemeAssociations().toArray(IThemeAssociation[]::new);
 	}
@@ -98,7 +96,7 @@ final class BaseThemeAssociationRegistry {
 
 	IThemeAssociation[] getThemeAssociationsForTheme(final String themeId) {
 		return getThemeAssociations().stream().filter(themeAssociation -> themeId.equals(themeAssociation.getThemeId()))
-				.collect(Collectors.toList()).toArray(IThemeAssociation[]::new);
+				.toArray(IThemeAssociation[]::new);
 	}
 
 	boolean hasThemeAssociationsForTheme(final String themeId, final String eclipseThemeId) {

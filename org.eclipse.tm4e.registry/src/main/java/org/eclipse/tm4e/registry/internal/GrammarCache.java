@@ -18,7 +18,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.stream.Collectors;
 
 import org.eclipse.core.runtime.content.IContentType;
 import org.eclipse.jdt.annotation.Nullable;
@@ -103,7 +102,7 @@ final class GrammarCache {
 		}
 
 		return scopeNameBindings.entrySet().stream().filter(map -> scopeName.equals(map.getValue()))
-				.map(Entry::getKey).collect(Collectors.toList());
+				.map(Entry::getKey).toList();
 	}
 
 	void registerContentTypeBinding(final IContentType contentType, final String scopeName) {

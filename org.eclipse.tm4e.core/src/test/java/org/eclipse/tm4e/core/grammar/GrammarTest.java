@@ -11,7 +11,6 @@
  */
 package org.eclipse.tm4e.core.grammar;
 
-import static org.eclipse.tm4e.core.internal.utils.NullSafetyHelper.*;
 import static org.eclipse.tm4e.core.registry.IGrammarSource.*;
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -78,7 +77,7 @@ class GrammarTest {
 	void testTokenizeSingleLineExpression() throws Exception {
 		final var registry = new Registry();
 		final IGrammar grammar = registry.addGrammar(fromResource(Data.class, "JavaScript.tmLanguage"));
-		final var lineTokens = castNonNull(grammar).tokenizeLine("function add(a,b) { return a+b; }");
+		final var lineTokens = grammar.tokenizeLine("function add(a,b) { return a+b; }");
 		assertFalse(lineTokens.isStoppedEarly());
 		for (int i = 0; i < lineTokens.getTokens().length; i++) {
 			final IToken token = lineTokens.getTokens()[i];
@@ -98,7 +97,7 @@ class GrammarTest {
 		int j = 0;
 		final String[] lines = { "function add(a,b)", "{ return a+b; }" };
 		for (final String line : lines) {
-			final var lineTokens = castNonNull(grammar).tokenizeLine(line, ruleStack, null);
+			final var lineTokens = grammar.tokenizeLine(line, ruleStack, null);
 			assertFalse(lineTokens.isStoppedEarly());
 			ruleStack = lineTokens.getRuleStack();
 			for (i = 0; i < lineTokens.getTokens().length; i++) {
@@ -116,7 +115,7 @@ class GrammarTest {
 		final var registry = new Registry();
 		final IGrammar grammar = registry.addGrammar(fromResource(Data.class, "JavaScript.tmLanguage"));
 		final String lineText = "";
-		final var lineTokens = castNonNull(grammar).tokenizeLine(lineText);
+		final var lineTokens = grammar.tokenizeLine(lineText);
 		assertFalse(lineTokens.isStoppedEarly());
 
 		final var endIndexOffset = 1; // IToken's end-indexes are exclusive
@@ -132,7 +131,7 @@ class GrammarTest {
 		final var registry = new Registry();
 		final IGrammar grammar = registry.addGrammar(fromResource(Data.class, "JavaScript.tmLanguage"));
 		final String lineText = "true";
-		final var lineTokens = castNonNull(grammar).tokenizeLine(lineText);
+		final var lineTokens = grammar.tokenizeLine(lineText);
 		assertFalse(lineTokens.isStoppedEarly());
 
 		final var endIndexOffset = 1; // IToken's end-indexes are exclusive
@@ -148,7 +147,7 @@ class GrammarTest {
 		final var registry = new Registry();
 		final IGrammar grammar = registry.addGrammar(fromResource(Data.class, "JavaScript.tmLanguage"));
 		final String lineText = "true\n";
-		final var lineTokens = castNonNull(grammar).tokenizeLine(lineText);
+		final var lineTokens = grammar.tokenizeLine(lineText);
 		assertFalse(lineTokens.isStoppedEarly());
 
 		final var endIndexOffset = 1; // IToken's end-indexes are exclusive
@@ -165,7 +164,7 @@ class GrammarTest {
 		final var registry = new Registry();
 		final IGrammar grammar = registry.addGrammar(fromResource(Data.class, "JavaScript.tmLanguage"));
 		final String lineText = "@"; // Uncaught SyntaxError: illegal character U+0040
-		final var lineTokens = castNonNull(grammar).tokenizeLine(lineText);
+		final var lineTokens = grammar.tokenizeLine(lineText);
 		assertFalse(lineTokens.isStoppedEarly());
 		final var endIndexOffset = 1; // IToken's end-indexes are exclusive
 
@@ -181,7 +180,7 @@ class GrammarTest {
 		final IGrammar grammar = registry.addGrammar(fromResource(Data.class, "JavaScript.tmLanguage"));
 
 		final String lineText = "{}";
-		final var lineTokens = castNonNull(grammar).tokenizeLine(lineText);
+		final var lineTokens = grammar.tokenizeLine(lineText);
 		assertFalse(lineTokens.isStoppedEarly());
 
 		final var endIndexOffset = 1; // IToken's end-indexes are exclusive

@@ -26,11 +26,8 @@ import org.eclipse.tm4e.ui.text.ITMPresentationReconcilerListener;
 public final class TMPresentationReconcilerTestGenerator
 		implements ITMPresentationReconcilerListener, IDocumentListener, ITextListener {
 
-	@Nullable
-	private ITextViewer viewer;
-
-	@Nullable
-	private IDocument document;
+	private ITextViewer viewer = lazyNonNull();
+	private IDocument document = lazyNonNull();
 
 	private final StringBuilder code = new StringBuilder();
 
@@ -150,8 +147,8 @@ public final class TMPresentationReconcilerTestGenerator
 		write("}");
 
 		System.err.println(code.toString());
-		castNonNull(document).removeDocumentListener(this);
-		castNonNull(viewer).removeTextListener(this);
+		document.removeDocumentListener(this);
+		viewer.removeTextListener(this);
 		// commands.clear();
 	}
 

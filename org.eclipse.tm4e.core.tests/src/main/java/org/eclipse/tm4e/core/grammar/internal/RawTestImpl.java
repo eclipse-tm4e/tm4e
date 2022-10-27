@@ -117,12 +117,12 @@ public class RawTestImpl {
 					token.getStartIndex(),
 					Math.min(token.getEndIndex(), line.length())), // TODO Math.min not required in upstream why?
 				token.getScopes()))
-			.collect(toList());
+			.toList();
 
 		// TODO@Alex: fix tests instead of working around
 		if (!line.isEmpty()) {
 			// Remove empty tokens...
-			testCase.tokens = testCase.tokens.stream().filter(token -> !token.getValue().isEmpty()).collect(toList());
+			testCase.tokens = testCase.tokens.stream().filter(token -> !token.getValue().isEmpty()).toList();
 		}
 
 		deepEqual(actualTokens, testCase.tokens, "Tokenizing line '" + line + "'");

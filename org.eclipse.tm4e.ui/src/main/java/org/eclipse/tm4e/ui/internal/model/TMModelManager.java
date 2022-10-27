@@ -11,7 +11,7 @@
  */
 package org.eclipse.tm4e.ui.internal.model;
 
-import static org.eclipse.tm4e.core.internal.utils.NullSafetyHelper.*;
+import static org.eclipse.tm4e.core.internal.utils.NullSafetyHelper.castNullable;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -34,7 +34,7 @@ public final class TMModelManager implements ITMModelManager {
 
 	@Override
 	public TMDocumentModel connect(final IDocument document) {
-		return models.computeIfAbsent(document, doc -> new TMDocumentModel(doc));
+		return models.computeIfAbsent(document, TMDocumentModel::new);
 	}
 
 	@Override

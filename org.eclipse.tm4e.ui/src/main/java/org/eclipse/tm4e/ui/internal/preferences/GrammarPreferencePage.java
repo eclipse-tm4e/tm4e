@@ -14,7 +14,7 @@
  *******************************************************************************/
 package org.eclipse.tm4e.ui.internal.preferences;
 
-import static org.eclipse.tm4e.core.internal.utils.NullSafetyHelper.*;
+import static org.eclipse.tm4e.core.internal.utils.NullSafetyHelper.lazyNonNull;
 
 import java.util.Arrays;
 
@@ -41,7 +41,6 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Label;
-import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.TabFolder;
 import org.eclipse.swt.widgets.TabItem;
 import org.eclipse.swt.widgets.Table;
@@ -326,44 +325,28 @@ public final class GrammarPreferencePage extends PreferencePage implements IWork
 		final var grammarNewButton = new Button(buttons, SWT.PUSH);
 		grammarNewButton.setText(TMUIMessages.Button_new);
 		grammarNewButton.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-		grammarNewButton.addListener(SWT.Selection, new Listener() {
-
-			@Override
-			public void handleEvent(@Nullable final Event e) {
-				add();
-			}
-
-			private void add() {
-				// Open import wizard for TextMate grammar.
-				final var wizard = new TextMateGrammarImportWizard(false);
-				wizard.setGrammarRegistryManager(grammarRegistryManager);
-				final var dialog = new WizardDialog(getShell(), wizard);
-				if (dialog.open() == Window.OK) {
-					// User grammar was saved, refresh the list of grammar and
-					// select the created grammar.
-					final IGrammarDefinition created = wizard.getCreatedDefinition();
-					grammarViewer.refresh();
-					grammarViewer.setSelection(new StructuredSelection(created));
-				}
+		grammarNewButton.addListener(SWT.Selection, (@Nullable final Event e) -> {
+			// Open import wizard for TextMate grammar.
+			final var wizard = new TextMateGrammarImportWizard(false);
+			wizard.setGrammarRegistryManager(grammarRegistryManager);
+			final var dialog = new WizardDialog(getShell(), wizard);
+			if (dialog.open() == Window.OK) {
+				// User grammar was saved, refresh the list of grammar and
+				// select the created grammar.
+				final IGrammarDefinition created = wizard.getCreatedDefinition();
+				grammarViewer.refresh();
+				grammarViewer.setSelection(new StructuredSelection(created));
 			}
 		});
 
 		grammarRemoveButton = new Button(buttons, SWT.PUSH);
 		grammarRemoveButton.setText(TMUIMessages.Button_remove);
 		grammarRemoveButton.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-		grammarRemoveButton.addListener(SWT.Selection, new Listener() {
-
-			@Override
-			public void handleEvent(@Nullable final Event e) {
-				remove();
-			}
-
-			private void remove() {
-				final var definition = (IGrammarDefinition) ((IStructuredSelection) grammarViewer
-						.getSelection()).getFirstElement();
-				grammarRegistryManager.unregisterGrammarDefinition(definition);
-				grammarViewer.refresh();
-			}
+		grammarRemoveButton.addListener(SWT.Selection, (@Nullable final Event e) -> {
+			final var definition = (IGrammarDefinition) ((IStructuredSelection) grammarViewer
+					.getSelection()).getFirstElement();
+			grammarRegistryManager.unregisterGrammarDefinition(definition);
+			grammarViewer.refresh();
 		});
 	}
 

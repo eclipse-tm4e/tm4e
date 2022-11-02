@@ -52,11 +52,11 @@ public final class ThemeAssociationsWidget extends TableAndButtonsWidget {
 		this.themeManager = themeManager;
 		super.setContentProvider(ArrayContentProvider.getInstance());
 		super.setLabelProvider(new ThemeAssociationLabelProvider());
+		createButtons();
 	}
 
-	@Override
-	protected void createButtons(final Composite parent) {
-		editButton = new Button(parent, SWT.PUSH);
+	private void createButtons() {
+		editButton = new Button(getButtonsArea(), SWT.PUSH);
 		editButton.setText(TMUIMessages.Button_edit);
 		editButton.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		editButton.addListener(SWT.Selection, e -> {
@@ -74,7 +74,7 @@ public final class ThemeAssociationsWidget extends TableAndButtonsWidget {
 		});
 		editButton.setEnabled(false);
 
-		removeButton = new Button(parent, SWT.PUSH);
+		removeButton = new Button(getButtonsArea(), SWT.PUSH);
 		removeButton.setText(TMUIMessages.Button_remove);
 		removeButton.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		removeButton.addListener(SWT.Selection, e -> {

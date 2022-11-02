@@ -28,11 +28,11 @@ import org.eclipse.swt.widgets.Table;
 
 /**
  * Widget which display a table on the left and buttons on the right.
- *
  */
 public abstract class TableAndButtonsWidget extends Composite {
 
 	private TableViewer viewer = lazyNonNull();
+	private Composite buttonsArea = lazyNonNull();
 
 	protected TableAndButtonsWidget(final Composite parent, final int style, final String title) {
 		super(parent, style);
@@ -62,18 +62,15 @@ public abstract class TableAndButtonsWidget extends Composite {
 		createTable(parent);
 
 		// Buttons
-		final var buttonsComposite = new Composite(parent, SWT.NONE);
+		buttonsArea = new Composite(parent, SWT.NONE);
 		layout = new GridLayout();
 		layout.marginHeight = 0;
 		layout.marginWidth = 0;
 		layout.marginLeft = 0;
 		layout.marginRight = 0;
-		buttonsComposite.setLayout(layout);
-		buttonsComposite.setLayoutData(new GridData(GridData.VERTICAL_ALIGN_BEGINNING | GridData.FILL_VERTICAL));
-		createButtons(buttonsComposite);
+		buttonsArea.setLayout(layout);
+		buttonsArea.setLayoutData(new GridData(GridData.VERTICAL_ALIGN_BEGINNING | GridData.FILL_VERTICAL));
 	}
-
-	protected abstract void createButtons(Composite parent);
 
 	private void createTitle(final String title, final Composite ancestor) {
 		final var label = new Label(ancestor, SWT.NONE);
@@ -91,6 +88,10 @@ public abstract class TableAndButtonsWidget extends Composite {
 
 		viewer = new TableViewer(table);
 		table.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+	}
+
+	protected Composite getButtonsArea() {
+		return buttonsArea;
 	}
 
 	public void setInput(@Nullable final Object input) {

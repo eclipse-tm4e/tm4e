@@ -27,8 +27,4 @@ public final class ContentTypesBindingWidget extends TableAndButtonsWidget {
 		super.setContentProvider(ArrayContentProvider.getInstance());
 		super.setLabelProvider(new ContentTypeLabelProvider());
 	}
-
-	@Override
-	protected void createButtons(final Composite parent) {
-	}
 }

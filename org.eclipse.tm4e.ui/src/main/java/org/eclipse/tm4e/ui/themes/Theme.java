@@ -22,6 +22,7 @@ import org.eclipse.tm4e.registry.TMResource;
 import org.eclipse.tm4e.registry.XMLConstants;
 import org.eclipse.tm4e.ui.TMUIPlugin;
 import org.eclipse.tm4e.ui.internal.preferences.PreferenceConstants;
+import org.eclipse.tm4e.ui.internal.themes.ThemeManager;
 import org.eclipse.tm4e.ui.themes.css.CSSTokenProvider;
 import org.eclipse.ui.texteditor.AbstractTextEditor;
 
@@ -41,6 +42,13 @@ public class Theme extends TMResource implements ITheme {
 	private final String name;
 	private boolean dark;
 	private boolean isDefault;
+
+	/**
+	 * Gets the default theme.
+	 */
+	public static ITheme getDefaultTheme() {
+		return ThemeManager.getInstance().getDefaultTheme();
+	}
 
 	/**
 	 * Constructor for user preferences (loaded from Json with Gson).

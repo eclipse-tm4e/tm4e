@@ -1,13 +1,13 @@
 /**
- *  Copyright (c) 2015-2017 Angelo ZERR.
+ * Copyright (c) 2015-2017 Angelo ZERR.
  * This program and the accompanying materials are made
  * available under the terms of the Eclipse Public License 2.0
  * which is available at https://www.eclipse.org/legal/epl-2.0/
  *
  * SPDX-License-Identifier: EPL-2.0
  *
- *  Contributors:
- *  Angelo Zerr <angelo.zerr@gmail.com> - initial API and implementation
+ * Contributors:
+ * Angelo Zerr <angelo.zerr@gmail.com> - initial API and implementation
  */
 package org.eclipse.tm4e.core.theme.css;
 
@@ -74,11 +74,10 @@ public class CSSParser {
 				final Selector selector = list.item(i);
 				if (selector instanceof final ExtendedSelector s) {
 					final int nbMatch = s.nbMatch(names);
-					if (nbMatch > 0 && nbMatch == s.nbClass()) {
-						if (bestStyle == null || (nbMatch >= bestSpecificity)) {
-							bestStyle = style;
-							bestSpecificity = nbMatch;
-						}
+					if (nbMatch > 0 && nbMatch == s.nbClass() //
+						&& (bestStyle == null || nbMatch >= bestSpecificity)) {
+						bestStyle = style;
+						bestSpecificity = nbMatch;
 					}
 				}
 			}

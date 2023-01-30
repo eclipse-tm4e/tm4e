@@ -11,9 +11,9 @@
  */
 package org.eclipse.tm4e.core.model;
 
-import static java.lang.System.Logger.Level.*;
-import static org.eclipse.tm4e.core.internal.utils.MoreCollections.*;
-import static org.eclipse.tm4e.core.internal.utils.NullSafetyHelper.*;
+import static java.lang.System.Logger.Level.ERROR;
+import static org.eclipse.tm4e.core.internal.utils.MoreCollections.findLastElement;
+import static org.eclipse.tm4e.core.internal.utils.NullSafetyHelper.castNonNull;
 
 import java.lang.System.Logger;
 import java.time.Duration;
@@ -109,8 +109,10 @@ public class TMModel implements ITMModel {
 			}
 		}
 
-		private final int MAX_LOOP_TIME = 200; // process follow-up lines until this limit is reached
-		private final Duration MAX_TIME_PER_LINE = Duration.ofSeconds(1); // max time a single line can be processed
+		/** process follow-up lines until this limit is reached */
+		private static final int MAX_LOOP_TIME = 200;
+		/** max time a single line can be processed */
+		private static final Duration MAX_TIME_PER_LINE = Duration.ofSeconds(1);
 
 		/**
 		 * @param startLineIndex 0-based

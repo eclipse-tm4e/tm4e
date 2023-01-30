@@ -68,7 +68,7 @@ public final class CSSDocumentHandler implements DocumentHandler {
 
 	@Override
 	public void importStyle(@Nullable final String arg0, @Nullable final SACMediaList arg1, @Nullable final String arg2)
-			throws CSSException {
+		throws CSSException {
 		// TODO Auto-generated method stub
 	}
 
@@ -79,7 +79,7 @@ public final class CSSDocumentHandler implements DocumentHandler {
 
 	@Override
 	public void property(@Nullable final String name, @Nullable final LexicalUnit value, final boolean arg2)
-			throws CSSException {
+		throws CSSException {
 		final var currentStyle = this.currentStyle;
 		if (currentStyle != null && name != null && value != null) {
 			switch (name) {
@@ -110,9 +110,9 @@ public final class CSSDocumentHandler implements DocumentHandler {
 
 	private RGB createRGB(final LexicalUnit value) {
 		final var rgbColor = new RGBColorImpl(value);
-		final int green = ((int) rgbColor.getGreen().getFloatValue(CSSPrimitiveValue.CSS_NUMBER));
-		final int red = ((int) rgbColor.getRed().getFloatValue(CSSPrimitiveValue.CSS_NUMBER));
-		final int blue = ((int) rgbColor.getBlue().getFloatValue(CSSPrimitiveValue.CSS_NUMBER));
+		final int green = (int) rgbColor.getGreen().getFloatValue(CSSPrimitiveValue.CSS_NUMBER);
+		final int red = (int) rgbColor.getRed().getFloatValue(CSSPrimitiveValue.CSS_NUMBER);
+		final int blue = (int) rgbColor.getBlue().getFloatValue(CSSPrimitiveValue.CSS_NUMBER);
 		return new RGB(red, green, blue);
 	}
 

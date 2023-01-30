@@ -53,30 +53,10 @@ public final class RegexSource {
 		for (int i = 0; i < valueLen; i++) {
 			final char ch = value.charAt(i);
 			switch (ch) {
-			case '-':
-			case '\\':
-			case '{':
-			case '}':
-			case '*':
-			case '+':
-			case '?':
-			case '|':
-			case '^':
-			case '$':
-			case '.':
-			case ',':
-			case '[':
-			case ']':
-			case '(':
-			case ')':
-			case '#':
+			case '-', '\\', '{', '}', '*', '+', '?', '|', '^', '$', '.', ',', '[', ']', '(', ')', '#':
 				/* escaping white space chars is actually not necessary:
-				case ' ':
-				case '\t':
-				case '\n':
-				case '\f':
-				case '\r':
-				case 0x0B: // vertical tab \v
+				' ', '\t', '\n', '\f', '\r',
+				0x0B: // vertical tab \v
 				*/
 				sb.append('\\');
 			}

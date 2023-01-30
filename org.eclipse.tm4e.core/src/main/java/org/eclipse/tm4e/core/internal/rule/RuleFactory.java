@@ -16,7 +16,7 @@
  */
 package org.eclipse.tm4e.core.internal.rule;
 
-import static java.lang.System.Logger.Level.*;
+import static java.lang.System.Logger.Level.WARNING;
 import static org.eclipse.tm4e.core.internal.utils.NullSafetyHelper.*;
 
 import java.lang.System.Logger;
@@ -178,9 +178,7 @@ public final class RuleFactory {
 							patternInclude, repository.getBase().getName());
 					}
 					break;
-
-				case TopLevelReference:
-				case TopLevelRepositoryReference:
+				case TopLevelReference, TopLevelRepositoryReference:
 
 					final var externalGrammarName = reference.scopeName;
 

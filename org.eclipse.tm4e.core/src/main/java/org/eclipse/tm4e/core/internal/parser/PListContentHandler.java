@@ -11,7 +11,7 @@
  */
 package org.eclipse.tm4e.core.internal.parser;
 
-import static java.lang.System.Logger.Level.*;
+import static java.lang.System.Logger.Level.WARNING;
 
 import java.lang.System.Logger;
 import java.time.ZonedDateTime;
@@ -123,7 +123,7 @@ final class PListContentHandler<T> extends DefaultHandler {
 	@SuppressWarnings("unchecked")
 	@Override
 	public void startElement(@Nullable final String uri, @Nullable final String localName, @Nullable final String qName,
-			@Nullable final Attributes attributes) throws SAXException {
+		@Nullable final Attributes attributes) throws SAXException {
 		assert localName != null;
 
 		path.depth++;
@@ -152,7 +152,7 @@ final class PListContentHandler<T> extends DefaultHandler {
 
 	@Override
 	public void endElement(@Nullable final String uri, @Nullable final String localName, @Nullable final String qName)
-			throws SAXException {
+		throws SAXException {
 		assert localName != null;
 
 		final var currObject = this.currObject;
@@ -171,16 +171,14 @@ final class PListContentHandler<T> extends DefaultHandler {
 			}
 			path.add(text.toString());
 			break;
-		case "dict":
-		case "array":
+		case "array", "dict":
 			final var parent = currObject.parent;
 			if (parent != null) {
 				parent.addValue(currObject.values);
 				this.currObject = parent;
 			}
 			break;
-		case "string":
-		case "data":
+		case "data", "string":
 			currObject.addValue(text.toString());
 			break;
 		case "date": // e.g. <date>2007-10-25T12:36:35Z</date>

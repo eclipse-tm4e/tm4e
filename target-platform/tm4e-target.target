@@ -20,7 +20,7 @@
             <unit id="junit-jupiter-api" version="0.0.0"/>
             <unit id="org.eclipse.jdt.junit5.runtime" version="0.0.0"/>
             <unit id="org.eclipse.ui.trace" version="0.0.0"/>
-            <repository location="https://download.eclipse.org/eclipse/updates/4.25/"/>
+            <repository location="https://download.eclipse.org/eclipse/updates/4.26/"/>
         </location>
 	    <location includeDependencyDepth="direct" includeDependencyScopes="compile" includeSource="true" missingManifest="generate" type="Maven">
 		    <dependencies>

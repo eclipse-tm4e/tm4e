@@ -112,7 +112,7 @@ public final class ThemePreferencePage extends PreferencePage implements IWorkbe
 		createThemePreviewContent(parent);
 
 		parent.setSashWidth(3);
-		parent.setWeights(new int[] { 2, 1 });
+		parent.setWeights(2, 1);
 
 		themesTable.setInput(themeManager);
 

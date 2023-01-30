@@ -78,9 +78,7 @@ public final class Theme {
 		}
 		final var scopeName = scopePath.scopeName;
 
-		final var matchingTrieElements = this._cachedMatchRoot.computeIfAbsent(
-			scopeName,
-			k -> this._root.match(k));
+		final var matchingTrieElements = this._cachedMatchRoot.computeIfAbsent(scopeName, _root::match);
 
 		final var effectiveRule = findFirstMatching(matchingTrieElements,
 			v -> _scopePathMatchesParentScopes(scopePath.parent, v.parentScopes));
@@ -149,10 +147,10 @@ public final class Theme {
 			List<String> scopes;
 			if (settingScope instanceof String _scope) {
 				// remove leading commas
-				_scope = _scope.replaceAll("^[,]+", "");
+				_scope = _scope.replaceAll("^,+", "");
 
 				// remove trailing commas
-				_scope = _scope.replaceAll("[,]+$", "");
+				_scope = _scope.replaceAll(",+$", "");
 
 				scopes = BY_COMMA_SPLITTER.splitToList(_scope);
 			} else if (settingScope instanceof List) {

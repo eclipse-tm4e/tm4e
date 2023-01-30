@@ -27,12 +27,12 @@ import org.junit.jupiter.api.TestMethodOrder;
  *      github.com/Microsoft/vscode-textmate/blob/master/src/tests/grammar.test.ts</a>
  */
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-public class EncodedTokenAttributesTest {
+class EncodedTokenAttributesTest {
 
 	@Test
 	@Order(1)
 	@DisplayName("StackElementMetadata works")
-	public void testWorks() {
+	void testWorks() {
 		final int value = EncodedTokenAttributes.set(0, 1, OptionalStandardTokenType.RegEx, false, Underline | Bold,
 			101,
 			102);
@@ -42,7 +42,7 @@ public class EncodedTokenAttributesTest {
 	@Test
 	@Order(2)
 	@DisplayName("StackElementMetadata can overwrite languageId")
-	public void testCanOverwriteLanguageId() {
+	void testCanOverwriteLanguageId() {
 		int value = EncodedTokenAttributes.set(0, 1, OptionalStandardTokenType.RegEx, false, Underline | Bold, 101,
 			102);
 		assertEquals(value, 1, StandardTokenType.RegEx, false, Underline | Bold, 101, 102);
@@ -54,7 +54,7 @@ public class EncodedTokenAttributesTest {
 	@Test
 	@Order(3)
 	@DisplayName("StackElementMetadata can overwrite tokenType")
-	public void testCanOverwriteTokenType() {
+	void testCanOverwriteTokenType() {
 		int value = EncodedTokenAttributes.set(0, 1, OptionalStandardTokenType.RegEx, false, Underline | Bold, 101,
 			102);
 		assertEquals(value, 1, StandardTokenType.RegEx, false, Underline | Bold, 101, 102);
@@ -66,7 +66,7 @@ public class EncodedTokenAttributesTest {
 	@Test
 	@Order(4)
 	@DisplayName("StackElementMetadata can overwrite font style")
-	public void testCanOverwriteFontStyle() {
+	void testCanOverwriteFontStyle() {
 		int value = EncodedTokenAttributes.set(0, 1, OptionalStandardTokenType.RegEx, false, Underline | Bold, 101,
 			102);
 		assertEquals(value, 1, StandardTokenType.RegEx, false, Underline | Bold, 101, 102);
@@ -78,7 +78,7 @@ public class EncodedTokenAttributesTest {
 	@Test
 	@Order(5)
 	@DisplayName("StackElementMetadata can overwrite font style with strikethrough")
-	public void testCanOverwriteFontStyleWithStrikethrough() {
+	void testCanOverwriteFontStyleWithStrikethrough() {
 		int value = EncodedTokenAttributes.set(0, 1, OptionalStandardTokenType.RegEx, false, Strikethrough, 101, 102);
 		assertEquals(value, 1, StandardTokenType.RegEx, false, Strikethrough, 101, 102);
 
@@ -89,7 +89,7 @@ public class EncodedTokenAttributesTest {
 	@Test
 	@Order(6)
 	@DisplayName("StackElementMetadata can overwrite foreground")
-	public void testCanOverwriteForeground() {
+	void testCanOverwriteForeground() {
 		int value = EncodedTokenAttributes.set(0, 1, OptionalStandardTokenType.RegEx, false, Underline | Bold, 101,
 			102);
 		assertEquals(value, 1, StandardTokenType.RegEx, false, Underline | Bold, 101, 102);
@@ -101,7 +101,7 @@ public class EncodedTokenAttributesTest {
 	@Test
 	@Order(7)
 	@DisplayName("StackElementMetadata can overwrite background")
-	public void testCanOverwriteBackground() {
+	void testCanOverwriteBackground() {
 		int value = EncodedTokenAttributes.set(0, 1, OptionalStandardTokenType.RegEx, false, Underline | Bold, 101,
 			102);
 		assertEquals(value, 1, StandardTokenType.RegEx, false, Underline | Bold, 101, 102);
@@ -113,7 +113,7 @@ public class EncodedTokenAttributesTest {
 	@Test
 	@Order(8)
 	@DisplayName("StackElementMetadata can overwrite balanced bracket bit")
-	public void testCanOverwriteBalancedBracketBit() {
+	void testCanOverwriteBalancedBracketBit() {
 		int value = EncodedTokenAttributes.set(0, 1, OptionalStandardTokenType.RegEx, false, Underline | Bold, 101,
 			102);
 		assertEquals(value, 1, StandardTokenType.RegEx, false, Underline | Bold, 101, 102);
@@ -128,7 +128,7 @@ public class EncodedTokenAttributesTest {
 	@Test
 	@Order(9)
 	@DisplayName("StackElementMetadata can work at max values")
-	public void testCanWorkAtMaxValues() {
+	void testCanWorkAtMaxValues() {
 		final int maxLangId = 255;
 		final int maxTokenType = StandardTokenType.Comment | StandardTokenType.Other | StandardTokenType.RegEx
 			| StandardTokenType.String;

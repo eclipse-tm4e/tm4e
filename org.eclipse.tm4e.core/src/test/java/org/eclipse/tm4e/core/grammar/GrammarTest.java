@@ -220,8 +220,9 @@ class GrammarTest {
 		IStateStack stateStack = null;
 		int tokenIndex = -1;
 		try (var reader = new BufferedReader(new InputStreamReader(Data.class.getResourceAsStream("raytracer.ts")))) {
-			while (reader.ready()) {
-				final var lineTokens = grammar.tokenizeLine(reader.readLine(), stateStack, null);
+			String line;
+			while ((line = reader.readLine()) != null) {
+				final var lineTokens = grammar.tokenizeLine(line, stateStack, null);
 				stateStack = lineTokens.getRuleStack();
 				for (int i = 0; i < lineTokens.getTokens().length; i++) {
 					tokenIndex++;

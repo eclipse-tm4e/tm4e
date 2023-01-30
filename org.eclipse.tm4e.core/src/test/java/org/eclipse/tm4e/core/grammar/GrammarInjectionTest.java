@@ -25,7 +25,7 @@ import org.junit.jupiter.api.Test;
 /**
  * Test for grammar tokenizer.
  */
-public class GrammarInjectionTest {
+class GrammarInjectionTest {
 
 	private static final String[] EXPECTED_TOKENS = {
 		"Token from 0 to 1 with scopes [source.ts, meta.decorator.ts, punctuation.decorator.ts]",
@@ -41,7 +41,7 @@ public class GrammarInjectionTest {
 		"Token from 40 to 41 with scopes [source.ts, meta.decorator.ts, meta.brace.round.ts]" };
 
 	@Test
-	public void angular2TokenizeLine() throws Exception {
+	void angular2TokenizeLine() throws Exception {
 		final var registry = new Registry(new IRegistryOptions() {
 
 			@Nullable

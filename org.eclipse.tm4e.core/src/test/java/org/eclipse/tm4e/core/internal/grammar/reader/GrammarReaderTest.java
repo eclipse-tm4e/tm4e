@@ -20,14 +20,14 @@ import org.eclipse.tm4e.core.internal.types.IRawGrammar;
 import org.eclipse.tm4e.core.registry.IGrammarSource;
 import org.junit.jupiter.api.Test;
 
-public class GrammarReaderTest {
+class GrammarReaderTest {
 
 	/**
 	 * Loads the same TextMate grammar in different formats and checks
 	 * loading them results in equal IRawGrammar objects.
 	 */
 	@Test
-	public void testLoadDifferentPlistFormats() throws Exception {
+	void testLoadDifferentPlistFormats() throws Exception {
 		final IRawGrammar grammarFromXML = GrammarReader
 			.readGrammar(IGrammarSource.fromResource(Data.class, "JavaScript.tmLanguage"));
 

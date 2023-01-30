@@ -125,11 +125,11 @@ public final class ContentTypeHelper {
 			try (InputStream contents = getContents(buffer)) {
 				contentTypes.addAll(Arrays.asList(Platform.getContentTypeManager().findContentTypesFor(contents, fileName)));
 				return new ContentTypeInfo(fileName, contentTypes.toArray(IContentType[]::new));
-			} catch (final Throwable e) {
+			} catch (final Exception e) {
 				return null;
 			}
-		} catch (final IOException x) {
-			x.printStackTrace();
+		} catch (final IOException ex) {
+			ex.printStackTrace();
 			return null;
 		}
 	}
@@ -214,14 +214,14 @@ public final class ContentTypeHelper {
 						/* The element for which the info is stored */
 						final Object input = ClassHelper.getFieldValue(info, "fElement");
 						if (input instanceof final IEditorInput editorInput) {
-							return (IEditorInput) input;
+							return editorInput;
 						}
-					} catch (final Exception e) {
-
+					} catch (final RuntimeException e) {
+						e.printStackTrace();
 					}
 				}
 			}
-		} catch (final Exception e) {
+		} catch (final RuntimeException e) {
 			e.printStackTrace();
 		}
 		return null;

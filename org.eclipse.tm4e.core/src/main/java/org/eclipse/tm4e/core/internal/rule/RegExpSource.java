@@ -140,27 +140,25 @@ final class RegExpSource {
 			A1_G0_result.append(ch);
 			A1_G1_result.append(ch);
 
-			if (ch == '\\') {
-				if (pos + 1 < len) {
-					final char nextCh = source.charAt(pos + 1);
-					if (nextCh == 'A') {
-						A0_G0_result.append('\uFFFF');
-						A0_G1_result.append('\uFFFF');
-						A1_G0_result.append('A');
-						A1_G1_result.append('A');
-					} else if (nextCh == 'G') {
-						A0_G0_result.append('\uFFFF');
-						A0_G1_result.append('G');
-						A1_G0_result.append('\uFFFF');
-						A1_G1_result.append('G');
-					} else {
-						A0_G0_result.append(nextCh);
-						A0_G1_result.append(nextCh);
-						A1_G0_result.append(nextCh);
-						A1_G1_result.append(nextCh);
-					}
-					pos++;
+			if (ch == '\\' && pos + 1 < len) {
+				final char nextCh = source.charAt(pos + 1);
+				if (nextCh == 'A') {
+					A0_G0_result.append('\uFFFF');
+					A0_G1_result.append('\uFFFF');
+					A1_G0_result.append('A');
+					A1_G1_result.append('A');
+				} else if (nextCh == 'G') {
+					A0_G0_result.append('\uFFFF');
+					A0_G1_result.append('G');
+					A1_G0_result.append('\uFFFF');
+					A1_G1_result.append('G');
+				} else {
+					A0_G0_result.append(nextCh);
+					A0_G1_result.append(nextCh);
+					A1_G0_result.append(nextCh);
+					A1_G1_result.append(nextCh);
 				}
+				pos++;
 			}
 		}
 

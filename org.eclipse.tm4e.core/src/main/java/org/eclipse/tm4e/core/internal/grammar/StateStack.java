@@ -19,9 +19,11 @@ package org.eclipse.tm4e.core.internal.grammar;
 import static org.eclipse.tm4e.core.internal.utils.NullSafetyHelper.*;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 
+import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.tm4e.core.grammar.IStateStack;
 import org.eclipse.tm4e.core.internal.rule.IRuleRegistry;
@@ -32,10 +34,22 @@ import org.eclipse.tm4e.core.internal.rule.RuleId;
  * Represents a "pushed" state on the stack (as a linked list element).
  *
  * @see <a href=
- *      "https://github.com/microsoft/vscode-textmate/blob/e8d1fc5d04b2fc91384c7a895f6c9ff296a38ac8/src/grammar.ts#L550">
- *      github.com/microsoft/vscode-textmate/blob/main/src/grammar.ts</a>
+ *      "https://github.com/microsoft/vscode-textmate/blob/5c3f08bea898b354a60a37900a33c5437aa72f5a/src/grammar/grammar.ts#L592">
+ *      github.com/microsoft/vscode-textmate/blob/main/src/grammar/grammar.ts</a>
  */
 public final class StateStack implements IStateStack {
+
+	@NonNullByDefault({}) // https://github.com/eclipse-jdt/eclipse.jdt.core/issues/233
+	record Frame(
+		RuleId ruleId,
+		int enterPos,
+		int anchorPos,
+		boolean beginRuleCapturedEOL,
+		@Nullable String endRule,
+		List<AttributedScopeStack.Frame> nameScopesList,
+		/** on top of nameScopesList */
+		List<AttributedScopeStack.Frame> contentNameScopesList) {
+	}
 
 	public static final StateStack NULL = new StateStack(
 		null,
@@ -44,8 +58,8 @@ public final class StateStack implements IStateStack {
 		0,
 		false,
 		null,
-		AttributedScopeStack.createRoot("", 0),
-		AttributedScopeStack.createRoot("", 0));
+		null,
+		null);
 
 	/**
 	 * The position on the current line where this state was pushed.
@@ -91,12 +105,14 @@ public final class StateStack implements IStateStack {
 	/**
 	 * The list of scopes containing the "name" for this state.
 	 */
+	@Nullable
 	final AttributedScopeStack nameScopesList;
 
 	/**
 	 * The list of scopes containing the "contentName" (besides "name") for this state.
 	 * This list **must** contain as an element `scopeName`.
 	 */
+	@Nullable
 	final AttributedScopeStack contentNameScopesList;
 
 	StateStack(
@@ -106,8 +122,8 @@ public final class StateStack implements IStateStack {
 		final int anchorPos,
 		final boolean beginRuleCapturedEOL,
 		@Nullable final String endRule,
-		final AttributedScopeStack nameScopesList,
-		final AttributedScopeStack contentNameScopesList) {
+		@Nullable final AttributedScopeStack nameScopesList,
+		@Nullable final AttributedScopeStack contentNameScopesList) {
 
 		this.parent = parent;
 		this.ruleId = ruleId;
@@ -135,7 +151,7 @@ public final class StateStack implements IStateStack {
 		if (!_structuralEquals(a, b)) {
 			return false;
 		}
-		return a.contentNameScopesList.equals(b.contentNameScopesList);
+		return AttributedScopeStack.equals(a.contentNameScopesList, b.contentNameScopesList);
 	}
 
 	/**
@@ -211,8 +227,8 @@ public final class StateStack implements IStateStack {
 		final int anchorPos,
 		final boolean beginRuleCapturedEOL,
 		@Nullable final String endRule,
-		final AttributedScopeStack nameScopesList,
-		final AttributedScopeStack contentNameScopesList) {
+		@Nullable final AttributedScopeStack nameScopesList,
+		@Nullable final AttributedScopeStack contentNameScopesList) {
 		return new StateStack(
 			this,
 			ruleId,
@@ -251,8 +267,8 @@ public final class StateStack implements IStateStack {
 		res.add("(" + ruleId + ")");
 	}
 
-	StateStack withContentNameScopesList(final AttributedScopeStack contentNameScopesList) {
-		if (this.contentNameScopesList.equals(contentNameScopesList)) {
+	StateStack withContentNameScopesList(final @Nullable AttributedScopeStack contentNameScopesList) {
+		if (Objects.equals(this.contentNameScopesList, contentNameScopesList)) {
 			return this;
 		}
 		return castNonNull(this.parent).push(this.ruleId,
@@ -291,5 +307,37 @@ public final class StateStack implements IStateStack {
 			el = el.parent;
 		}
 		return false;
+	}
+
+	public Frame toStateStackFrame() {
+		final var nameScopesList = this.nameScopesList;
+		final var contentNameScopesList = this.contentNameScopesList;
+		final var parent = this.parent;
+		return new Frame(
+			this.ruleId,
+			this._enterPos,
+			this._anchorPos,
+			this.beginRuleCapturedEOL,
+			this.endRule,
+			nameScopesList != null
+				? nameScopesList.getExtensionIfDefined(parent != null ? parent.nameScopesList : null)
+				: Collections.emptyList(),
+			contentNameScopesList != null
+				? contentNameScopesList.getExtensionIfDefined(this.nameScopesList)
+				: Collections.emptyList());
+	}
+
+	public static StateStack pushFrame(@Nullable final StateStack self, final Frame frame) {
+		final var namesScopeList = AttributedScopeStack.fromExtension(self == null ? null : self.nameScopesList,
+			frame.nameScopesList);
+		return new StateStack(
+			self,
+			frame.ruleId,
+			frame.enterPos,
+			frame.anchorPos,
+			frame.beginRuleCapturedEOL,
+			frame.endRule,
+			namesScopeList,
+			AttributedScopeStack.fromExtension(namesScopeList, frame.contentNameScopesList));
 	}
 }

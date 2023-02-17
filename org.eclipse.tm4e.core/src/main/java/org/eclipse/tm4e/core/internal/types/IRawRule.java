@@ -23,11 +23,12 @@ import org.eclipse.tm4e.core.internal.rule.RuleId;
 
 /**
  * @see <a href=
- *      "https://github.com/microsoft/vscode-textmate/blob/e8d1fc5d04b2fc91384c7a895f6c9ff296a38ac8/src/rawGrammar.ts">
+ *      "https://github.com/microsoft/vscode-textmate/blob/a05a1c5d3552b5dddad4cf740e80973638e59a29/src/rawGrammar.ts">
  *      github.com/microsoft/vscode-textmate/blob/main/src/rawGrammar.ts</a>
  */
 public interface IRawRule {
 
+	/** This is not part of the spec only used internally */
 	@Nullable
 	RuleId getId();
 

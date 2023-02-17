@@ -34,8 +34,8 @@ import org.eclipse.tm4e.core.internal.theme.FontStyle;
 
 /**
  * @see <a href=
- *      "https://github.com/microsoft/vscode-textmate/blob/e8d1fc5d04b2fc91384c7a895f6c9ff296a38ac8/src/grammar.ts#L855">
- *      github.com/microsoft/vscode-textmate/blob/main/src/grammar.ts</a>
+ *      "https://github.com/microsoft/vscode-textmate/blob/5c3f08bea898b354a60a37900a33c5437aa72f5a/src/grammar/grammar.ts#L945">
+ *      github.com/microsoft/vscode-textmate/blob/main/src/grammar/grammar.ts</a>
  */
 final class LineTokens {
 
@@ -89,13 +89,13 @@ final class LineTokens {
 		this.produceFromScopes(stack.contentNameScopesList, endIndex);
 	}
 
-	void produceFromScopes(final AttributedScopeStack scopesList, final int endIndex) {
+	void produceFromScopes(@Nullable final AttributedScopeStack scopesList, final int endIndex) {
 		if (this._lastTokenEndIndex >= endIndex) {
 			return;
 		}
 
 		if (this._emitBinaryTokens) {
-			int metadata = scopesList.tokenAttributes;
+			int metadata = scopesList != null ? scopesList.tokenAttributes : 0;
 			var containsBalancedBrackets = false;
 			final var balancedBracketSelectors = this.balancedBracketSelectors;
 			if (balancedBracketSelectors != null && balancedBracketSelectors.matchesAlways()) {
@@ -106,7 +106,7 @@ final class LineTokens {
 				|| balancedBracketSelectors != null
 					&& !balancedBracketSelectors.matchesAlways() && !balancedBracketSelectors.matchesNever()) {
 				// Only generate scope array when required to improve performance
-				final var scopes = scopesList.getScopeNames();
+				final List<String> scopes = scopesList != null ? scopesList.getScopeNames() : Collections.emptyList();
 				for (final var tokenType : _tokenTypeOverrides) {
 					if (tokenType.matcher.matches(scopes)) {
 						metadata = EncodedTokenAttributes.set(
@@ -142,7 +142,7 @@ final class LineTokens {
 			}
 
 			if (LOGGER.isLoggable(TRACE)) {
-				final var scopes = scopesList.getScopeNames();
+				final List<String> scopes = scopesList != null ? scopesList.getScopeNames() : Collections.emptyList();
 				LOGGER.log(TRACE, "  token: |" + this._lineText
 					.substring(this._lastTokenEndIndex >= 0 ? this._lastTokenEndIndex : 0, endIndex)
 					.replace("\n", "\\n")
@@ -159,7 +159,7 @@ final class LineTokens {
 			return;
 		}
 
-		final List<String> scopes = scopesList.getScopeNames();
+		final List<String> scopes = scopesList != null ? scopesList.getScopeNames() : Collections.emptyList();
 
 		if (LOGGER.isLoggable(TRACE)) {
 			LOGGER.log(TRACE, "  token: |" +

@@ -17,13 +17,14 @@
 package org.eclipse.tm4e.core.internal.grammar;
 
 import static java.lang.System.Logger.Level.*;
-import static org.eclipse.tm4e.core.internal.utils.NullSafetyHelper.*;
+import static org.eclipse.tm4e.core.internal.utils.NullSafetyHelper.castNonNull;
 
 import java.lang.System.Logger;
 import java.lang.System.Logger.Level;
 import java.time.Duration;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import org.eclipse.jdt.annotation.NonNull;
@@ -192,7 +193,7 @@ final class LineTokenizer {
 			final StateStack beforePush = stack;
 			// push it on the stack rule
 			final var scopeName = rule.getName(lineText.content, captureIndices);
-			final var nameScopesList = stack.contentNameScopesList.pushAttributed(
+			final var nameScopesList = castNonNull(stack.contentNameScopesList).pushAttributed(
 				scopeName,
 				grammar);
 			stack = stack.push(
@@ -387,7 +388,8 @@ final class LineTokenizer {
 		var bestMatchRuleId = RuleId.END_RULE;
 		var bestMatchResultPriority = 0;
 
-		final var scopes = stack.contentNameScopesList.getScopeNames();
+		final List<String> scopes = stack.contentNameScopesList != null ? stack.contentNameScopesList.getScopeNames()
+			: Collections.emptyList();
 
 		for (int i = 0, len = injections.size(); i < len; i++) {
 			final var injection = injections.get(i);
@@ -484,7 +486,7 @@ final class LineTokenizer {
 			if (retokenizeCapturedWithRuleId.notEquals(RuleId.NO_RULE)) {
 				// the capture requires additional matching
 				final var scopeName = captureRule.getName(lineTextContent, captureIndices);
-				final var nameScopesList = stack.contentNameScopesList.pushAttributed(scopeName, grammar);
+				final var nameScopesList = castNonNull(stack.contentNameScopesList).pushAttributed(scopeName, grammar);
 				final var contentName = captureRule.getContentName(lineTextContent, captureIndices);
 				final var contentNameScopesList = nameScopesList.pushAttributed(contentName, grammar);
 
@@ -501,7 +503,7 @@ final class LineTokenizer {
 			if (captureRuleScopeName != null) {
 				// push
 				final var base = localStack.isEmpty() ? stack.contentNameScopesList : localStack.getLast().scopes;
-				final var captureRuleScopesList = base.pushAttributed(captureRuleScopeName, grammar);
+				final var captureRuleScopesList = castNonNull(base).pushAttributed(captureRuleScopeName, grammar);
 				localStack.add(new LocalStackElement(captureRuleScopesList, captureIndex.end));
 			}
 		}

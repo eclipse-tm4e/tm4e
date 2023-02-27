@@ -42,8 +42,8 @@ public final class StateStack implements IStateStack {
 	@NonNullByDefault({}) // https://github.com/eclipse-jdt/eclipse.jdt.core/issues/233
 	record Frame(
 		RuleId ruleId,
-		int enterPos,
-		int anchorPos,
+		@Nullable Integer enterPos,
+		@Nullable Integer anchorPos,
 		boolean beginRuleCapturedEOL,
 		@Nullable String endRule,
 		List<AttributedScopeStack.Frame> nameScopesList,
@@ -263,8 +263,7 @@ public final class StateStack implements IStateStack {
 		if (parent != null) {
 			parent._writeString(res);
 		}
-		// , TODO-${this.nameScopesList}, TODO-${this.contentNameScopesList})`;
-		res.add("(" + ruleId + ")");
+		res.add("(" + ruleId + ", " + this.nameScopesList + ", " + this.contentNameScopesList + ")");
 	}
 
 	StateStack withContentNameScopesList(final @Nullable AttributedScopeStack contentNameScopesList) {
@@ -315,8 +314,8 @@ public final class StateStack implements IStateStack {
 		final var parent = this.parent;
 		return new Frame(
 			this.ruleId,
-			this._enterPos,
-			this._anchorPos,
+			null,
+			null,
 			this.beginRuleCapturedEOL,
 			this.endRule,
 			nameScopesList != null
@@ -330,11 +329,13 @@ public final class StateStack implements IStateStack {
 	public static StateStack pushFrame(@Nullable final StateStack self, final Frame frame) {
 		final var namesScopeList = AttributedScopeStack.fromExtension(self == null ? null : self.nameScopesList,
 			frame.nameScopesList);
+		final var enterPos = frame.enterPos;
+		final var anchorPos = frame.anchorPos;
 		return new StateStack(
 			self,
 			frame.ruleId,
-			frame.enterPos,
-			frame.anchorPos,
+			enterPos == null ? -1 : enterPos,
+			anchorPos == null ? -1 : anchorPos,
 			frame.beginRuleCapturedEOL,
 			frame.endRule,
 			namesScopeList,

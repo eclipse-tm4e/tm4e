@@ -19,8 +19,8 @@ package org.eclipse.tm4e.core.internal.grammar.dependencies;
 
 /**
  * @see <a href=
- *      "https://github.com/microsoft/vscode-textmate/blob/e8d1fc5d04b2fc91384c7a895f6c9ff296a38ac8/src/grammarDependencies.ts#L247">
- *      github.com/microsoft/vscode-textmate/blob/main/src/grammarDependencies.ts</a>
+ *      "https://github.com/microsoft/vscode-textmate/blob/88baacf1a6637c5ec08dce18cea518d935fcf0a0/src/grammar/grammarDependencies.ts#L240">
+ *      github.com/microsoft/vscode-textmate/blob/main/src/grammar/grammarDependencies.ts</a>
  */
 public class IncludeReference {
 	public enum Kind {
@@ -42,16 +42,15 @@ public class IncludeReference {
 			return SELF;
 		default:
 			final var indexOfSharp = include.indexOf("#");
-			switch (indexOfSharp) {
-			case -1:
-				return new IncludeReference(Kind.TopLevelReference, include, "");
-			case 0:
-				return new IncludeReference(Kind.RelativeReference, "", include.substring(1));
-			default:
+			return switch (indexOfSharp) {
+			case -1 -> new IncludeReference(Kind.TopLevelReference, include, "");
+			case 0 -> new IncludeReference(Kind.RelativeReference, "", include.substring(1));
+			default -> {
 				final var scopeName = include.substring(0, indexOfSharp);
 				final var ruleName = include.substring(indexOfSharp + 1);
-				return new IncludeReference(Kind.TopLevelRepositoryReference, scopeName, ruleName);
+				yield new IncludeReference(Kind.TopLevelRepositoryReference, scopeName, ruleName);
 			}
+			};
 		}
 	}
 

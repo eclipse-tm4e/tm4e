@@ -16,7 +16,7 @@
  */
 package org.eclipse.tm4e.core.internal.rule;
 
-import static org.eclipse.tm4e.core.internal.utils.NullSafetyHelper.*;
+import static org.eclipse.tm4e.core.internal.utils.NullSafetyHelper.defaultIfNull;
 
 import java.util.List;
 
@@ -25,7 +25,7 @@ import org.eclipse.tm4e.core.internal.oniguruma.OnigCaptureIndex;
 
 /**
  * @see <a href=
- *      "https://github.com/microsoft/vscode-textmate/blob/e8d1fc5d04b2fc91384c7a895f6c9ff296a38ac8/src/rule.ts#L209">
+ *      "https://github.com/microsoft/vscode-textmate/blob/88baacf1a6637c5ec08dce18cea518d935fcf0a0/src/rule.ts#L209">
  *      github.com/microsoft/vscode-textmate/blob/main/src/rule.ts</a>
  */
 public final class BeginEndRule extends Rule {

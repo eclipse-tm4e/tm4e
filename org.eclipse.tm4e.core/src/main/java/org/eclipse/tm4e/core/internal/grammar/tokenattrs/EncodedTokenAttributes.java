@@ -16,7 +16,7 @@ import org.eclipse.tm4e.core.internal.theme.FontStyle;
 
 /**
  * @see <a href=
- *      "https://github.com/microsoft/vscode-textmate/blob/e8d1fc5d04b2fc91384c7a895f6c9ff296a38ac8/src/encodedTokenAttributes.ts">
+ *      "https://github.com/microsoft/vscode-textmate/blob/88baacf1a6637c5ec08dce18cea518d935fcf0a0/src/encodedTokenAttributes.ts#L9">
  *      github.com/microsoft/vscode-textmate/blob/main/src/encodedTokenAttributes.ts</a>
  */
 public final class EncodedTokenAttributes {

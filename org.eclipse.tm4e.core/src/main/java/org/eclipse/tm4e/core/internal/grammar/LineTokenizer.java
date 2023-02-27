@@ -43,7 +43,7 @@ import org.eclipse.tm4e.core.internal.rule.RuleId;
 
 /**
  * @see <a href=
- *      "https://github.com/microsoft/vscode-textmate/blob/e8d1fc5d04b2fc91384c7a895f6c9ff296a38ac8/src/tokenizeString.ts">
+ *      "https://github.com/microsoft/vscode-textmate/blob/88baacf1a6637c5ec08dce18cea518d935fcf0a0/src/grammar/tokenizeString.ts#L31">
  *      github.com/microsoft/vscode-textmate/blob/main/src/tokenizeString.ts</a>
  */
 final class LineTokenizer {

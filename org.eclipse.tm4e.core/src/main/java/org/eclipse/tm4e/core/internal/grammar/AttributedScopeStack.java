@@ -28,7 +28,7 @@ import com.google.common.base.Splitter;
 
 /**
  * @see <a href=
- *      "https://github.com/microsoft/vscode-textmate/blob/5c3f08bea898b354a60a37900a33c5437aa72f5a/src/grammar/grammar.ts#L418">
+ *      "https://github.com/microsoft/vscode-textmate/blob/88baacf1a6637c5ec08dce18cea518d935fcf0a0/src/grammar/grammar.ts#L418">
  *      github.com/microsoft/vscode-textmate/blob/main/src/grammar/grammar.ts</a>
  */
 public final class AttributedScopeStack {
@@ -86,6 +86,11 @@ public final class AttributedScopeStack {
 		this.parent = parent;
 		this.scopePath = scopePath;
 		this.tokenAttributes = tokenAttributes;
+	}
+
+	@Override
+	public String toString() {
+		return String.join(" ", this.getScopeNames());
 	}
 
 	public boolean equals(final AttributedScopeStack other) {

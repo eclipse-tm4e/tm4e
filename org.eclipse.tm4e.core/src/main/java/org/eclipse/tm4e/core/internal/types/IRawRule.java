@@ -23,7 +23,7 @@ import org.eclipse.tm4e.core.internal.rule.RuleId;
 
 /**
  * @see <a href=
- *      "https://github.com/microsoft/vscode-textmate/blob/a05a1c5d3552b5dddad4cf740e80973638e59a29/src/rawGrammar.ts">
+ *      "https://github.com/microsoft/vscode-textmate/blob/88baacf1a6637c5ec08dce18cea518d935fcf0a0/src/rawGrammar.ts#L39">
  *      github.com/microsoft/vscode-textmate/blob/main/src/rawGrammar.ts</a>
  */
 public interface IRawRule {

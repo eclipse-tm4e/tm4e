@@ -3,9 +3,49 @@
 <plugin>
 
   <!-- base content type -->
+  <!-- The content type manager in Eclipse considers the "depth" from the content type to the base-type
+       a more important measure of importance than the priority of the content-type.
+       Therefore for the fallback content types in TM4E make the depth arbitrarily 10 so that existing
+       content types are not overridden by the TM4E version. -->
   <extension point="org.eclipse.core.contenttype.contentTypes">
-    <content-type id="org.eclipse.tm4e.language_pack.basetype"
+    <content-type id="org.eclipse.tm4e.language_pack.basetype1"
       base-type="org.eclipse.core.runtime.text"
+      name="Text (Syntax Highlighting) (Base 1)"
+      priority="low"/>
+    <content-type id="org.eclipse.tm4e.language_pack.basetype2"
+      base-type="org.eclipse.tm4e.language_pack.basetype1"
+      name="Text (Syntax Highlighting) (Base 2)"
+      priority="low"/>
+    <content-type id="org.eclipse.tm4e.language_pack.basetype3"
+      base-type="org.eclipse.tm4e.language_pack.basetype2"
+      name="Text (Syntax Highlighting) (Base 3)"
+      priority="low"/>
+    <content-type id="org.eclipse.tm4e.language_pack.basetype4"
+      base-type="org.eclipse.tm4e.language_pack.basetype3"
+      name="Text (Syntax Highlighting) (Base 4)"
+      priority="low"/>
+    <content-type id="org.eclipse.tm4e.language_pack.basetype5"
+      base-type="org.eclipse.tm4e.language_pack.basetype4"
+      name="Text (Syntax Highlighting) (Base 5)"
+      priority="low"/>
+    <content-type id="org.eclipse.tm4e.language_pack.basetype6"
+      base-type="org.eclipse.tm4e.language_pack.basetype5"
+      name="Text (Syntax Highlighting) (Base 6)"
+      priority="low"/>
+    <content-type id="org.eclipse.tm4e.language_pack.basetype7"
+      base-type="org.eclipse.tm4e.language_pack.basetype6"
+      name="Text (Syntax Highlighting) (Base 7)"
+      priority="low"/>
+    <content-type id="org.eclipse.tm4e.language_pack.basetype8"
+      base-type="org.eclipse.tm4e.language_pack.basetype7"
+      name="Text (Syntax Highlighting) (Base 8)"
+      priority="low"/>
+    <content-type id="org.eclipse.tm4e.language_pack.basetype9"
+      base-type="org.eclipse.tm4e.language_pack.basetype8"
+      name="Text (Syntax Highlighting) (Base 9)"
+      priority="low"/>
+    <content-type id="org.eclipse.tm4e.language_pack.basetype"
+      base-type="org.eclipse.tm4e.language_pack.basetype9"
       name="Text (Syntax Highlighting)"
       priority="low"/>
   </extension>

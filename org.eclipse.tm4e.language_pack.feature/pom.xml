@@ -10,5 +10,5 @@
 
 	<artifactId>org.eclipse.tm4e.language_pack.feature</artifactId>
 	<packaging>eclipse-feature</packaging>
-	<version>0.1.1-SNAPSHOT</version>
+	<version>0.1.2-SNAPSHOT</version>
 </project>

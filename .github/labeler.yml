@@ -1,0 +1,11 @@
+# see https://github.com/srvaroa/labeler
+version: 1
+labels:
+- label: "bug"
+  title: "^fix(\\(.*\\))?:.*"
+- label: "dependencies"
+  title: "^deps(\\(.*\\))?:.*"
+- label: "documentation"
+  title: "^docs(\\(.*\\))?:.*"
+- label: "enhancement"
+  title: "^feat(\\(.*\\))?:.*"

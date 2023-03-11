@@ -1,4 +1,4 @@
-/**
+/*
  * Copyright (c) 2015-2017 Angelo ZERR.
  * This program and the accompanying materials are made
  * available under the terms of the Eclipse Public License 2.0
@@ -11,9 +11,9 @@
  */
 package org.eclipse.tm4e.core.internal.oniguruma;
 
-import java.util.Arrays;
-
 import static org.junit.jupiter.api.Assertions.*;
+
+import java.util.Arrays;
 
 import org.junit.jupiter.api.Test;
 
@@ -38,6 +38,5 @@ class OnigScannerTest {
 			new OnigCaptureIndex(0, 1, 4),
 			new OnigCaptureIndex(1, 2, 3) },
 				result.getCaptureIndices());
-
 	}
 }

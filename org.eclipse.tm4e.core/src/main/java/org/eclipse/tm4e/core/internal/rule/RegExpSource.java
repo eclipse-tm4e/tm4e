@@ -1,4 +1,4 @@
-/**
+/*
  * Copyright (c) 2015-2017 Angelo ZERR.
  * This program and the accompanying materials are made
  * available under the terms of the Eclipse Public License 2.0
@@ -128,43 +128,43 @@ final class RegExpSource {
 		final var source = this.source;
 		final var sourceLen = source.length();
 
-		final var A0_G0_result = new StringBuilder(sourceLen);
-		final var A0_G1_result = new StringBuilder(sourceLen);
-		final var A1_G0_result = new StringBuilder(sourceLen);
-		final var A1_G1_result = new StringBuilder(sourceLen);
+		final var a0_g0_result = new StringBuilder(sourceLen);
+		final var a0_g1_result = new StringBuilder(sourceLen);
+		final var a1_g0_result = new StringBuilder(sourceLen);
+		final var a1_g1_result = new StringBuilder(sourceLen);
 
 		for (int pos = 0, len = sourceLen; pos < len; pos++) {
 			final char ch = source.charAt(pos);
-			A0_G0_result.append(ch);
-			A0_G1_result.append(ch);
-			A1_G0_result.append(ch);
-			A1_G1_result.append(ch);
+			a0_g0_result.append(ch);
+			a0_g1_result.append(ch);
+			a1_g0_result.append(ch);
+			a1_g1_result.append(ch);
 
 			if (ch == '\\' && pos + 1 < len) {
 				final char nextCh = source.charAt(pos + 1);
 				if (nextCh == 'A') {
-					A0_G0_result.append('\uFFFF');
-					A0_G1_result.append('\uFFFF');
-					A1_G0_result.append('A');
-					A1_G1_result.append('A');
+					a0_g0_result.append('\uFFFF');
+					a0_g1_result.append('\uFFFF');
+					a1_g0_result.append('A');
+					a1_g1_result.append('A');
 				} else if (nextCh == 'G') {
-					A0_G0_result.append('\uFFFF');
-					A0_G1_result.append('G');
-					A1_G0_result.append('\uFFFF');
-					A1_G1_result.append('G');
+					a0_g0_result.append('\uFFFF');
+					a0_g1_result.append('G');
+					a1_g0_result.append('\uFFFF');
+					a1_g1_result.append('G');
 				} else {
-					A0_G0_result.append(nextCh);
-					A0_G1_result.append(nextCh);
-					A1_G0_result.append(nextCh);
-					A1_G1_result.append(nextCh);
+					a0_g0_result.append(nextCh);
+					a0_g1_result.append(nextCh);
+					a1_g0_result.append(nextCh);
+					a1_g1_result.append(nextCh);
 				}
 				pos++;
 			}
 		}
 
 		return new String[][] {
-			{ A0_G0_result.toString(), A0_G1_result.toString() },
-			{ A1_G0_result.toString(), A1_G1_result.toString() }
+			{ a0_g0_result.toString(), a0_g1_result.toString() },
+			{ a1_g0_result.toString(), a1_g1_result.toString() }
 		};
 	}
 

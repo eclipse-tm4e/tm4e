@@ -1,4 +1,4 @@
-/**
+/*
  * Copyright (c) 2015-2017 Angelo ZERR.
  * This program and the accompanying materials are made
  * available under the terms of the Eclipse Public License 2.0
@@ -16,7 +16,6 @@ import org.eclipse.swt.custom.StyledText;
 
 /**
  * TextMate theme.
- *
  */
 public interface ITheme extends ITokenProvider {
 
@@ -64,9 +63,8 @@ public interface ITheme extends ITokenProvider {
 
 	/**
 	 * Initialize foreground, background color of the given {@link StyledText} with theme.
-	 * 
+	 *
 	 * @param styledText the StyledText to initialize
 	 */
 	void initializeViewerColors(StyledText styledText);
-
 }

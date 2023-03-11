@@ -1,4 +1,4 @@
-/*******************************************************************************
+/*
  * Copyright (c) 2008, 2014 Angelo Zerr and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -7,10 +7,10 @@
  *
  * Contributors:
  * Angelo Zerr <angelo.zerr@gmail.com> - initial API and implementation
- *******************************************************************************/
+ */
 package org.eclipse.tm4e.core.internal.theme.css.sac;
 
-import static java.lang.System.Logger.Level.*;
+import static java.lang.System.Logger.Level.ERROR;
 
 import java.lang.System.Logger;
 
@@ -41,7 +41,7 @@ public abstract class AbstractSACParserFactory extends ParserFactory implements 
 			if (preferredParserName != null) {
 				return makeParser(preferredParserName);
 			}
-		} catch (final Throwable ex) {
+		} catch (final Exception | LinkageError ex) {
 			LOGGER.log(ERROR, ex.getMessage(), ex);
 		}
 		return super.makeParser();

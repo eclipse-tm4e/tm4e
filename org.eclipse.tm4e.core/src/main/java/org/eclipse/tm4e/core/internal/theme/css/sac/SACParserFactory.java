@@ -1,4 +1,4 @@
-/*******************************************************************************
+/*
  * Copyright (c) 2008, 2015 Angelo Zerr and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -7,7 +7,7 @@
  *
  * Contributors:
  * Angelo Zerr <angelo.zerr@gmail.com> - initial API and implementation
- *******************************************************************************/
+ */
 package org.eclipse.tm4e.core.internal.theme.css.sac;
 
 import java.lang.reflect.InvocationTargetException;
@@ -52,7 +52,7 @@ public final class SACParserFactory extends AbstractSACParserFactory {
 				assert parser != null;
 				return parser;
 			} catch (InvocationTargetException | NoSuchMethodException ex) {
-				throw (InstantiationException) ((new InstantiationException()).initCause(ex));
+				throw (InstantiationException) new InstantiationException().initCause(ex);
 			}
 		}
 		throw new IllegalAccessException(
@@ -61,8 +61,6 @@ public final class SACParserFactory extends AbstractSACParserFactory {
 
 	/**
 	 * Register SAC parser name.
-	 *
-	 * @param parser
 	 */
 	private static void registerSACParser(final String parser) {
 		registerSACParser(parser, parser);
@@ -71,9 +69,6 @@ public final class SACParserFactory extends AbstractSACParserFactory {
 	/**
 	 * register SAC parser with name <code>name</code> mapped with Class name
 	 * <code>classNameParser</code>.
-	 *
-	 * @param name
-	 * @param classNameParser
 	 */
 	private static void registerSACParser(final String name, final String classNameParser) {
 		parsers.put(name, classNameParser);

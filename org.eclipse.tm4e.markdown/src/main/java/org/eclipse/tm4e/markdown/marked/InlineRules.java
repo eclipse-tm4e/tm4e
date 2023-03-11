@@ -1,4 +1,4 @@
-/**
+/*
  * Copyright (c) 2015-2017 Angelo ZERR.
  * This program and the accompanying materials are made
  * available under the terms of the Eclipse Public License 2.0
@@ -21,13 +21,10 @@ public class InlineRules {
 	private static final String INLINE_INSIDE = "(?:\\[[^\\]]*\\]|[^\\[\\]]|\\](?=[^\\[]*\\]))*";
 	private static final String INLINE_HREF = "\\s*<?([\\s\\S]*?)>?(?:\\s+['\"]([\\s\\S]*?)['\"])?\\s*";
 
-	public static final InlineRules normal = normal();
-
-	public static final InlineRules pedantic = pedantic();
-
-	public static final InlineRules gfm = gfm();
-
-	public static final InlineRules breaks = breaks();
+	public static final InlineRules NORMA = normal();
+	public static final InlineRules PEDANTIC = pedantic();
+	public static final InlineRules GFM = gfm();
+	public static final InlineRules BREAKS = breaks();
 
 	public final RegExp escape;
 	public final RegExp autolink;
@@ -43,6 +40,7 @@ public class InlineRules {
 	public final RegExp del;
 	public final RegExp text;
 
+	// CHECKSTYLE:IGNORE ParameterNumber NEXT LINE
 	public InlineRules(final RegExp escape, final RegExp autolink, final RegExp url, final RegExp tag, final RegExp link,
 			final RegExp reflink, final RegExp nolink, final RegExp strong, final RegExp em, final RegExp code, final RegExp br,
 			final RegExp del, final RegExp text) {

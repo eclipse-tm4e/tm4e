@@ -1,4 +1,4 @@
-/*******************************************************************************
+/*
  * Copyright (c) 2008, 2013 Angelo Zerr and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -7,7 +7,7 @@
  *
  * Contributors:
  * Angelo Zerr <angelo.zerr@gmail.com> - initial API and implementation
- *******************************************************************************/
+ */
 package org.eclipse.tm4e.core.internal.theme.css.sac;
 
 import org.eclipse.jdt.annotation.Nullable;
@@ -26,10 +26,8 @@ public interface ISACParserFactory {
 
 	/**
 	 * Set the preferred SAC parser name to use when makeParser is called.
-	 *
-	 * @param preferredParserName
 	 */
-	void setPreferredParserName(@Nullable final String preferredParserName);
+	void setPreferredParserName(@Nullable String preferredParserName);
 
 	/**
 	 * Return default instance of SAC Parser.
@@ -44,8 +42,6 @@ public interface ISACParserFactory {
 	/**
 	 * Return instance of SAC Parser registered into the factory with name <code>name</code>.
 	 *
-	 * @param name
-	 * 
 	 * @see SACConstants
 	 */
 	Parser makeParser(String name)

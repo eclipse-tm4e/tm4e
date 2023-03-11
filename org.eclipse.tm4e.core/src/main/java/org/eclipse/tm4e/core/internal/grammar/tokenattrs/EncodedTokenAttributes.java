@@ -1,4 +1,4 @@
-/**
+/*
  * Copyright (c) 2015-2017 Angelo ZERR.
  * This program and the accompanying materials are made
  * available under the terms of the Eclipse Public License 2.0
@@ -35,14 +35,14 @@ public final class EncodedTokenAttributes {
 		final var background = getBackground(encodedTokenAttributes);
 		final var containsBalancedBrackets = containsBalancedBrackets(encodedTokenAttributes);
 
-		return "{\n" +
-				"  languageId: " + languageId + ",\n" +
-				"  tokenType: " + tokenType + ",\n" +
-				"  fontStyle: " + fontStyle + ",\n" +
-				"  foreground: " + foreground + ",\n" +
-				"  background: " + background + "\n," +
-				"  containsBalancedBrackets: " + containsBalancedBrackets + "\n" +
-				"}";
+		return "{\n"
+				+ "  languageId: " + languageId + ",\n"
+				+ "  tokenType: " + tokenType + ",\n"
+				+ "  fontStyle: " + fontStyle + ",\n"
+				+ "  foreground: " + foreground + ",\n"
+				+ "  background: " + background + "\n,"
+				+ "  containsBalancedBrackets: " + containsBalancedBrackets + "\n"
+				+ "}";
 	}
 
 	public static int getLanguageId(final int metadata) {

@@ -1,4 +1,4 @@
-/**
+/*
  * Copyright (c) 2015-2017 Angelo ZERR.
  * This program and the accompanying materials are made
  * available under the terms of the Eclipse Public License 2.0
@@ -20,6 +20,7 @@ package org.eclipse.tm4e.core.internal.grammar.tokenattrs;
  */
 final class StandardTokenType {
 
+	// CHECKSTYLE:IGNORE ConstantName NEXT 4 LINES
 	static final int Other = 0;
 	static final int Comment = 1;
 	static final int String = 2;

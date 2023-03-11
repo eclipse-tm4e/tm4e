@@ -1,4 +1,4 @@
-/**
+/*
  * Copyright (c) 2018 Red Hat Inc. and others.
  * This program and the accompanying materials are made
  * available under the terms of the Eclipse Public License 2.0
@@ -191,11 +191,11 @@ public class LanguageConfiguration {
 					final var jsonObj = json.getAsJsonObject();
 					final var markersElem = jsonObj.get("markers"); //$NON-NLS-1$
 					if (markersElem != null && markersElem.isJsonObject()) {
-						final var offSide = getAsBoolean(jsonObj.get("offSide"), false); //$NON-NLS-1$
 						final var markersObj = markersElem.getAsJsonObject();
 						final var startMarker = getAsPattern(markersObj.get("start")); //$NON-NLS-1$
 						final var endMarker = getAsPattern(markersObj.get("end")); //$NON-NLS-1$
 						if (startMarker != null && endMarker != null) {
+							final var offSide = getAsBoolean(jsonObj.get("offSide"), false); //$NON-NLS-1$
 							return new FoldingRules(offSide, startMarker, endMarker);
 						}
 					}
@@ -218,11 +218,11 @@ public class LanguageConfiguration {
 		}
 		if (element.isJsonObject()) {
 			// ex : { "pattern": "^<\\/([_:\\w][_:\\w-.\\d]*)\\s*>", "flags": "i" }
-			var pattern = getAsString(((JsonObject) element).get("pattern"));
+			final var pattern = getAsString(((JsonObject) element).get("pattern"));
 			if (pattern == null) {
 				return null;
 			}
-			var flags = getAsString(((JsonObject) element).get("flags"));
+			final var flags = getAsString(((JsonObject) element).get("flags"));
 			return flags != null ? pattern + "(?" + flags + ")" : pattern;
 		}
 		// ex : "^<\\/([_:\\w][_:\\w-.\\d]*)\\s*>"

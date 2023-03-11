@@ -1,4 +1,4 @@
-/**
+/*
  * Copyright (c) 2015-2017 Angelo ZERR.
  * This program and the accompanying materials are made
  * available under the terms of the Eclipse Public License 2.0
@@ -18,7 +18,7 @@ package org.eclipse.tm4e.markdown.marked;
 
 public class BlockRules {
 
-	private static final String _tag = "(?!(?:" + "a|em|strong|small|s|cite|q|dfn|abbr|data|time|code"
+	private static final String TAG = "(?!(?:" + "a|em|strong|small|s|cite|q|dfn|abbr|data|time|code"
 			+ "|var|samp|kbd|sub|sup|i|b|u|mark|ruby|rt|rp|bdi|bdo"
 			+ "|span|br|wbr|ins|del|img)\\b)\\w+(?!:\\/|[^\\w\\s@]*@)\\b";
 
@@ -43,6 +43,7 @@ public class BlockRules {
 	public final RegExp bullet;
 	public final RegExp item;
 
+	// CHECKSTYLE:IGNORE ParameterNumber NEXT LINE
 	public BlockRules(final RegExp newline, final RegExp code, final RegExp fences, final RegExp hr,
 			final RegExp heading, final RegExp nptable,
 			final RegExp lheading, final RegExp blockquote, final RegExp list, final RegExp html, final RegExp def,
@@ -89,7 +90,7 @@ public class BlockRules {
 				"\\n+(?=" + def.source + ")");
 		blockquote.replace("def", def);
 		paragraph.replace("hr", hr).replace("heading", heading).replace("lheading", lheading)
-				.replace("blockquote", blockquote).replace("tag", "<" + _tag).replace("def", def);
+				.replace("blockquote", blockquote).replace("tag", "<" + TAG).replace("def", def);
 		return new BlockRules(newline, code, fences, hr, heading, nptable, lheading, blockquote, list, html, def, table,
 				paragraph, text, bullet, item);
 	}

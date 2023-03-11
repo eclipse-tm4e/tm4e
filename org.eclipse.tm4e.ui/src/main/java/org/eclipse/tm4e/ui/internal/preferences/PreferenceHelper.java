@@ -1,4 +1,4 @@
-/**
+/*
  * Copyright (c) 2015-2017 Angelo ZERR.
  * This program and the accompanying materials are made
  * available under the terms of the Eclipse Public License 2.0
@@ -21,8 +21,7 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.InstanceCreator;
 
 /**
- * Helper class load, save theme preferences with Json format.
- *
+ * Helper class load, save theme preferences with JSON format.
  */
 public final class PreferenceHelper {
 
@@ -39,5 +38,8 @@ public final class PreferenceHelper {
 
 	public static String toJsonThemeAssociations(final Collection<IThemeAssociation> themeAssociations) {
 		return DEFAULT_GSON.toJson(themeAssociations);
+	}
+
+	private PreferenceHelper() {
 	}
 }

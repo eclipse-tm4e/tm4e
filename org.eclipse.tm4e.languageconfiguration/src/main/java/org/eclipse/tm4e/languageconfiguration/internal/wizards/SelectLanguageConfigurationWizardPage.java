@@ -1,4 +1,4 @@
-/**
+/*
  * Copyright (c) 2018 Red Hat Inc. and others.
  * This program and the accompanying materials are made
  * available under the terms of the Eclipse Public License 2.0
@@ -15,6 +15,7 @@ import static org.eclipse.tm4e.languageconfiguration.internal.LanguageConfigurat
 
 import java.io.FileReader;
 import java.util.ArrayList;
+import java.util.Objects;
 
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.ResourcesPlugin;
@@ -228,8 +229,7 @@ final class SelectLanguageConfigurationWizardPage extends WizardPage implements 
 			final var elements = new ArrayList<>();
 			final var baseType = (IContentType) parentElement;
 			for (final var contentType : manager.getAllContentTypes()) {
-				if ((contentType.getBaseType() == null && baseType == null)
-						|| (contentType.getBaseType() != null && contentType.getBaseType().equals(baseType))) {
+				if (Objects.equals(baseType, contentType.getBaseType())) {
 					elements.add(contentType);
 				}
 			}

@@ -1,4 +1,4 @@
-/**
+/*
  * Copyright (c) 2015-2017 Angelo ZERR.
  * This program and the accompanying materials are made
  * available under the terms of the Eclipse Public License 2.0
@@ -41,5 +41,8 @@ public final class RegExpUtils {
 			LanguageConfigurationPlugin.logError("Failed to parse pattern: " + regex, ex);
 			return null;
 		}
+	}
+
+	private RegExpUtils() {
 	}
 }

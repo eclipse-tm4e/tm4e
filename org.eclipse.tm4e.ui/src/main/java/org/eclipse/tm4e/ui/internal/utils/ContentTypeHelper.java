@@ -1,4 +1,4 @@
-/**
+/*
  * Copyright (c) 2015-2017 Angelo ZERR.
  * This program and the accompanying materials are made
  * available under the terms of the Eclipse Public License 2.0
@@ -45,11 +45,7 @@ public final class ContentTypeHelper {
 	/**
 	 * Find the content types from the given {@link IDocument} and null otherwise.
 	 *
-	 * @param document
-	 * 
 	 * @return the content types from the given {@link IDocument} and null otherwise.
-	 * 
-	 * @throws CoreException
 	 */
 	@Nullable
 	public static ContentTypeInfo findContentTypes(final IDocument document) throws CoreException {
@@ -65,8 +61,6 @@ public final class ContentTypeHelper {
 	/**
 	 * Find the content type with the given contentTypeId
 	 *
-	 * @param contentTypeId
-	 * 
 	 * @return matching content type or null
 	 */
 	@Nullable
@@ -81,12 +75,8 @@ public final class ContentTypeHelper {
 	 * Find the content types from the given {@link IDocument} by using
 	 * {@link ITextFileBufferManager} and null otherwise.
 	 *
-	 * @param document
-	 * 
 	 * @return the content types from the given {@link IDocument} by using
 	 *         {@link ITextFileBufferManager} and null otherwise.
-	 * 
-	 * @throws CoreException
 	 */
 	@Nullable
 	private static ContentTypeInfo findContentTypesFromFileBuffers(final IDocument document) throws CoreException {
@@ -101,11 +91,7 @@ public final class ContentTypeHelper {
 	/**
 	 * Returns the content types from the given {@link ITextFileBuffer}.
 	 *
-	 * @param buffer
-	 * 
 	 * @return the content types from the given {@link ITextFileBuffer}.
-	 * 
-	 * @throws CoreException
 	 */
 	@Nullable
 	private static ContentTypeInfo getContentTypes(final ITextFileBuffer buffer) throws CoreException {
@@ -146,11 +132,7 @@ public final class ContentTypeHelper {
 	/**
 	 * Returns the content of the given buffer.
 	 *
-	 * @param buffer
-	 * 
 	 * @return the content of the given buffer.
-	 * 
-	 * @throws CoreException
 	 */
 	private static InputStream getContents(final ITextFileBuffer buffer) throws CoreException {
 		final IPath path = buffer.getLocation();
@@ -170,8 +152,6 @@ public final class ContentTypeHelper {
 	 * Find the content types from the given {@link IDocument} by using
 	 * {@link IEditorInput} and null otherwise.
 	 *
-	 * @param document
-	 * 
 	 * @return the content types from the given {@link IDocument} by using
 	 *         {@link IEditorInput} and null otherwise.
 	 */
@@ -200,8 +180,6 @@ public final class ContentTypeHelper {
 	/**
 	 * Returns the {@link IEditorInput} from the given document and null otherwise.
 	 *
-	 * @param document
-	 * 
 	 * @return the {@link IEditorInput} from the given document and null otherwise.
 	 */
 	@Nullable
@@ -240,4 +218,6 @@ public final class ContentTypeHelper {
 		return null;
 	}
 
+	private ContentTypeHelper() {
+	}
 }

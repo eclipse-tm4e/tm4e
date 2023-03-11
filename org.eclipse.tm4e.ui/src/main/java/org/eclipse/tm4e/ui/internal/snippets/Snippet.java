@@ -1,4 +1,4 @@
-/**
+/*
  * Copyright (c) 2015-2017 Angelo ZERR.
  * This program and the accompanying materials are made
  * available under the terms of the Eclipse Public License 2.0
@@ -31,8 +31,6 @@ final class Snippet extends TMResource implements ISnippet {
 
 	/**
 	 * Constructor for extension point.
-	 *
-	 * @param scopeName
 	 */
 	Snippet(final String scopeName, final String path, final String name) {
 		super(path);

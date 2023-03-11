@@ -1,4 +1,4 @@
-/**
+/*
  * Copyright (c) 2015-2017 Angelo ZERR.
  * This program and the accompanying materials are made
  * available under the terms of the Eclipse Public License 2.0
@@ -73,8 +73,8 @@ public class CSSParser {
 				final Selector selector = list.item(i);
 				if (selector instanceof final ExtendedSelector s) {
 					final int nbMatch = s.nbMatch(names);
-					if (nbMatch > 0 && nbMatch == s.nbClass() //
-							&& (bestStyle == null || nbMatch >= bestSpecificity)) {
+					// CHECKSTYLE:IGNORE LogicConditionNeedOptimizationCheck NEXT LINE
+					if (nbMatch > 0 && nbMatch == s.nbClass() && (bestStyle == null || nbMatch >= bestSpecificity)) {
 						bestStyle = style;
 						bestSpecificity = nbMatch;
 					}

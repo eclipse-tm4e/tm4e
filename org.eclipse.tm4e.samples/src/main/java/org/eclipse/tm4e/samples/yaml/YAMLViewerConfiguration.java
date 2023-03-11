@@ -1,4 +1,4 @@
-/**
+/*
  * Copyright (c) 2015-2017 Angelo ZERR.
  * This program and the accompanying materials are made
  * available under the terms of the Eclipse Public License 2.0
@@ -19,9 +19,8 @@ import org.eclipse.tm4e.ui.text.TMPresentationReconciler;
 public class YAMLViewerConfiguration extends SourceViewerConfiguration {
 
 	@Override
-	public IPresentationReconciler getPresentationReconciler(ISourceViewer viewer) {
+	public IPresentationReconciler getPresentationReconciler(final ISourceViewer viewer) {
 		// Defines a TextMate Presentation reconcilier
 		return new TMPresentationReconciler();
 	}
-
 }

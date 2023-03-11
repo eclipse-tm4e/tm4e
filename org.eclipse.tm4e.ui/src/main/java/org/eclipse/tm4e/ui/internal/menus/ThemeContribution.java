@@ -1,4 +1,4 @@
-/**
+/*
  * Copyright (c) 2015-2017 Angelo ZERR.
  * This program and the accompanying materials are made
  * available under the terms of the Eclipse Public License 2.0
@@ -53,16 +53,16 @@ public final class ThemeContribution extends CompoundContributionItem implements
 		if (handlerService != null) {
 			final IEditorPart editorPart = getActivePart(handlerService.getCurrentState());
 			if (editorPart != null) {
-				final IThemeManager manager = TMUIPlugin.getThemeManager();
-				final boolean dark = manager.isDarkEclipseTheme();
-				final ITheme[] themes = manager.getThemes();
 				final TMPresentationReconciler presentationReconciler = TMPresentationReconciler
 						.getTMPresentationReconciler(editorPart);
 				if (presentationReconciler != null) {
 					final var grammar = presentationReconciler.getGrammar();
 					if (grammar != null) {
 						final String scopeName = grammar.getScopeName();
+						final IThemeManager manager = TMUIPlugin.getThemeManager();
+						final boolean dark = manager.isDarkEclipseTheme();
 						final ITheme selectedTheme = manager.getThemeForScope(scopeName, dark);
+						final ITheme[] themes = manager.getThemes();
 						for (final ITheme theme : themes) {
 							final IAction action = createAction(scopeName, theme, dark);
 							if (theme.equals(selectedTheme)) {
@@ -73,7 +73,6 @@ public final class ThemeContribution extends CompoundContributionItem implements
 						}
 					}
 				}
-
 			}
 		}
 		return items.toArray(IContributionItem[]::new);

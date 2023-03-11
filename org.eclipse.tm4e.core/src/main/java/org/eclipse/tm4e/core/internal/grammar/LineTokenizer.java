@@ -1,4 +1,4 @@
-/**
+/*
  * Copyright (c) 2015-2017 Angelo ZERR.
  * This program and the accompanying materials are made
  * available under the terms of the Eclipse Public License 2.0
@@ -81,7 +81,7 @@ final class LineTokenizer {
 		public final StateStack stack;
 		public final boolean stoppedEarly;
 
-		public TokenizeStringResult(final StateStack stack, final boolean stoppedEarly) {
+		TokenizeStringResult(final StateStack stack, final boolean stoppedEarly) {
 			this.stack = stack;
 			this.stoppedEarly = stoppedEarly;
 		}
@@ -454,7 +454,7 @@ final class LineTokenizer {
 				lineTokens.produceFromScopes(lastElem.scopes, lastElem.endPos);
 			}
 
-			if (!localStack.isEmpty()) {
+			if (!localStack.isEmpty()) { // CHECKSTYLE:IGNORE ConfusingConditionCheck
 				lineTokens.produceFromScopes(localStack.getLast().scopes, captureIndex.start);
 			} else {
 				lineTokens.produce(stack, captureIndex.start);
@@ -557,6 +557,7 @@ final class LineTokenizer {
 		return new WhileCheckResult(stack, linePos, anchorPosition, isFirstLine);
 	}
 
+	// CHECKSTYLE:IGNORE ParameterNumber NEXT LINE
 	static TokenizeStringResult tokenizeString(final Grammar grammar, final OnigString lineText, final boolean isFirstLine,
 			final int linePos, final StateStack stack, final LineTokens lineTokens, final boolean checkWhileConditions,
 			final Duration timeLimit) {

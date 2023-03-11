@@ -1,4 +1,4 @@
-/**
+/*
  * Copyright (c) 2015-2019 Angelo ZERR.
  * This program and the accompanying materials are made
  * available under the terms of the Eclipse Public License 2.0
@@ -58,7 +58,7 @@ public abstract class AbstractGrammarRegistryManager implements IGrammarRegistry
 		}
 
 		@Override
-		public @Nullable IGrammarSource getGrammarSource(String scopeName) {
+		public @Nullable IGrammarSource getGrammarSource(final String scopeName) {
 			final IGrammarDefinition info = getDefinition(scopeName);
 			if (info == null)
 				return null;

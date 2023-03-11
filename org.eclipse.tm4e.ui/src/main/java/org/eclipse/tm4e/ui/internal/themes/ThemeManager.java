@@ -1,4 +1,4 @@
-/**
+/*
  * Copyright (c) 2015, 2021 Angelo ZERR and others.
  * This program and the accompanying materials are made
  * available under the terms of the Eclipse Public License 2.0
@@ -45,7 +45,7 @@ public final class ThemeManager extends AbstractThemeManager {
 	private static final String THEME_ASSOCIATION_ELT = "themeAssociation"; //$NON-NLS-1$
 
 	@Nullable
-	private static ThemeManager INSTANCE;
+	private static ThemeManager INSTANCE; // CHECKSTYLE:IGNORE StaticVariableName
 
 	public static ThemeManager getInstance() {
 		if (INSTANCE != null) {
@@ -147,8 +147,6 @@ public final class ThemeManager extends AbstractThemeManager {
 	/**
 	 * Add preference change listener to observe changed of Eclipse E4 Theme and
 	 * TextMate theme association with grammar.
-	 *
-	 * @param themeChangeListener
 	 */
 	public void addPreferenceChangeListener(final IPreferenceChangeListener themeChangeListener) {
 		// Observe change of Eclipse E4 Theme
@@ -166,8 +164,6 @@ public final class ThemeManager extends AbstractThemeManager {
 	/**
 	 * Remove preference change listener to observe changed of Eclipse E4 Theme and
 	 * TextMate theme association with grammar.
-	 *
-	 * @param themeChangeListener
 	 */
 	public void removePreferenceChangeListener(final IPreferenceChangeListener themeChangeListener) {
 		// Observe change of Eclipse E4 Theme

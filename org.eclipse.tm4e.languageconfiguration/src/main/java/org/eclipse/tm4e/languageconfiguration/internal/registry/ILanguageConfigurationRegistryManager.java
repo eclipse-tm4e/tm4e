@@ -1,4 +1,4 @@
-/**
+/*
  * Copyright (c) 2018 Red Hat Inc. and others.
  * This program and the accompanying materials are made
  * available under the terms of the Eclipse Public License 2.0
@@ -34,8 +34,6 @@ public interface ILanguageConfigurationRegistryManager {
 	 * Add language configuration definition to the registry.
 	 *
 	 * NOTE: you must call save() method if you wish to save in the preferences.
-	 *
-	 * @param definition
 	 */
 	void registerLanguageConfigurationDefinition(ILanguageConfigurationDefinition definition);
 
@@ -43,15 +41,11 @@ public interface ILanguageConfigurationRegistryManager {
 	 * Remove language configuration definition from the registry.
 	 *
 	 * NOTE: you must call save() method if you wish to save in the preferences.
-	 *
-	 * @param definition
 	 */
 	void unregisterLanguageConfigurationDefinition(ILanguageConfigurationDefinition definition);
 
 	/**
 	 * Save the language configuration definitions.
-	 *
-	 * @throws BackingStoreException
 	 */
 	void save() throws BackingStoreException;
 

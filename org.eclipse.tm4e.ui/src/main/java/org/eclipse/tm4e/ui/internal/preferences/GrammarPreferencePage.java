@@ -1,4 +1,4 @@
-/*******************************************************************************
+/*
  * Copyright (c) 2000, 2017 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -11,7 +11,7 @@
  * https://bugs.eclipse.org/203722
  * Angelo Zerr <angelo.zerr@gmail.com> - Adapt org.eclipse.ui.texteditor.templates.TemplatePreferencePage for TextMate
  * grammar
- *******************************************************************************/
+ */
 package org.eclipse.tm4e.ui.internal.preferences;
 
 import static org.eclipse.tm4e.core.internal.utils.NullSafetyHelper.lazyNonNull;
@@ -114,8 +114,6 @@ public final class GrammarPreferencePage extends PreferencePage implements IWork
 
 	/**
 	 * Set the grammar registry manager.
-	 *
-	 * @param grammarRegistryManager
 	 */
 	void setGrammarRegistryManager(final IGrammarRegistryManager grammarRegistryManager) {
 		this.grammarRegistryManager = grammarRegistryManager;
@@ -132,8 +130,6 @@ public final class GrammarPreferencePage extends PreferencePage implements IWork
 
 	/**
 	 * Set the theme manager.
-	 *
-	 * @param themeManager
 	 */
 	void setThemeManager(final IThemeManager themeManager) {
 		this.themeManager = themeManager;
@@ -236,7 +232,7 @@ public final class GrammarPreferencePage extends PreferencePage implements IWork
 				if (selection.isEmpty()) {
 					return;
 				}
-				final IGrammarDefinition definition = (IGrammarDefinition) (selection).getFirstElement();
+				final IGrammarDefinition definition = (IGrammarDefinition) selection.getFirstElement();
 
 				// Update button
 				grammarRemoveButton.setEnabled(definition.getPluginId() == null);
@@ -448,8 +444,6 @@ public final class GrammarPreferencePage extends PreferencePage implements IWork
 
 	/**
 	 * Create "Injection" tab
-	 *
-	 * @param folder
 	 */
 	private void createInjectionTab(final TabFolder folder) {
 		final var tab = new TabItem(folder, SWT.NONE);

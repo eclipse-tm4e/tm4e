@@ -13,6 +13,7 @@ class TokenizeLineTest {
 	void testTokenizeLine() throws Exception {
 		final var grammar = new Registry().addGrammar(IGrammarSource.fromResource(Data.class, "JavaScript.tmLanguage"));
 
+		// CHECKSTYLE:IGNORE LineLength NEXT 10 LINES
 		final var expected = """
 			Token from 0 to 8 with scopes [source.js, meta.function.js, storage.type.function.js]
 			Token from 8 to 9 with scopes [source.js, meta.function.js]

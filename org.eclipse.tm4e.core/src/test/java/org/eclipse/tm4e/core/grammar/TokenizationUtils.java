@@ -1,4 +1,4 @@
-/**
+/*
  * Copyright (c) 2022 Sebastian Thomschke and others.
  *
  * This program and the accompanying materials are made
@@ -13,7 +13,6 @@
 package org.eclipse.tm4e.core.grammar;
 
 import java.io.BufferedReader;
-import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.concurrent.atomic.AtomicReference;
@@ -21,7 +20,7 @@ import java.util.stream.Stream;
 
 import com.google.common.base.Splitter;
 
-public class TokenizationUtils {
+public final class TokenizationUtils {
 
 	private static final Splitter BY_LINE_SPLITTER = Splitter.onPattern("\\r?\\n");
 
@@ -51,10 +50,8 @@ public class TokenizationUtils {
 	 * @param text the text to tokenize
 	 *
 	 * @return The stream of {@link ITokenizeLineResult}, each item covering 1 line of the text
-	 *
-	 * @throws IOException
 	 */
-	public static Stream<ITokenizeLineResult<IToken[]>> tokenizeText(final InputStream text, final IGrammar grammar) throws IOException {
+	public static Stream<ITokenizeLineResult<IToken[]>> tokenizeText(final InputStream text, final IGrammar grammar) {
 		final var reader = new BufferedReader(new InputStreamReader(text));
 
 		final var prevStack = new AtomicReference<IStateStack>();

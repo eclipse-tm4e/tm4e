@@ -1,4 +1,4 @@
-/**
+/*
  * Copyright (c) 2015-2017 Angelo ZERR.
  * This program and the accompanying materials are made
  * available under the terms of the Eclipse Public License 2.0
@@ -23,7 +23,7 @@ import org.eclipse.tm4e.markdown.marked.HTMLRenderer;
 import org.eclipse.tm4e.markdown.marked.Helpers;
 import org.eclipse.tm4e.registry.TMEclipseRegistryPlugin;
 
-public class TMHTMLRenderer extends HTMLRenderer {
+public class TMHTMLRenderer extends HTMLRenderer { // CHECKSTYLE:IGNORE AbbreviationAsWordInName
 
 	private final String defaultLang;
 

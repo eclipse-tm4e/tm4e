@@ -1,4 +1,4 @@
-/**
+/*
  * Copyright (c) 2015-2017 Angelo ZERR.
  * This program and the accompanying materials are made
  * available under the terms of the Eclipse Public License 2.0
@@ -70,8 +70,10 @@ public class ParsedThemeRule {
 		if (getClass() != obj.getClass())
 			return false;
 		final ParsedThemeRule other = (ParsedThemeRule) obj;
-		return Objects.equals(background, other.background) && fontStyle == other.fontStyle
-				&& Objects.equals(foreground, other.foreground) && index == other.index
+		return index == other.index
+				&& fontStyle == other.fontStyle
+				&& Objects.equals(background, other.background)
+				&& Objects.equals(foreground, other.foreground)
 				&& Objects.equals(parentScopes, other.parentScopes) && Objects.equals(scope, other.scope);
 	}
 

@@ -17,6 +17,11 @@
 		<sonar.jacoco.reportPath>../target/jacoco.exec</sonar.jacoco.reportPath>
 		<tycho.scmUrl>scm:git:https://github.com/eclipse/tm4e.git</tycho.scmUrl>
 		<jgit.dirtyWorkingTree>error</jgit.dirtyWorkingTree>
+		<checkstyle.version>10.8.0</checkstyle.version>
+		<checkstyle.skip>false</checkstyle.skip>
+		<checkstyle.sevntu-checks.version>1.44.1</checkstyle.sevntu-checks.version>
+		<checkstyle.violation-severity>warning</checkstyle.violation-severity>
+
 	</properties>
 	<organization>
 		<name>Eclipse TM4E project</name>
@@ -31,6 +36,7 @@
 			<distribution>repo</distribution>
 		</license>
 	</licenses>
+
 	<modules>
 		<module>target-platform</module>
 		<module>org.eclipse.tm4e.core</module>
@@ -47,11 +53,46 @@
 		<module>org.eclipse.tm4e.language_pack.feature</module>
 		<module>org.eclipse.tm4e.repository</module>
 	</modules>
+
 	<build>
 		<defaultGoal>clean install</defaultGoal>
 		<!-- plain surefire tests without tycho -->
 		<testSourceDirectory>src/test/java</testSourceDirectory>
+
 		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-checkstyle-plugin</artifactId>
+				<version>3.2.1</version>
+				<executions>
+					<execution>
+						<phase>validate</phase>
+						<goals>
+							<goal>check</goal>
+						</goals>
+						<configuration>
+							<configLocation>${maven.multiModuleProjectDirectory}/checkstyle.xml</configLocation>
+							<consoleOutput>true</consoleOutput>
+							<includeTestSourceDirectory>true</includeTestSourceDirectory>
+							<failOnViolation>true</failOnViolation>
+							<logViolationsToConsole>true</logViolationsToConsole>
+							<violationSeverity>${checkstyle.violation-severity}</violationSeverity>
+						</configuration>
+					</execution>
+				</executions>
+				<dependencies>
+					<dependency>
+						<groupId>com.puppycrawl.tools</groupId>
+						<artifactId>checkstyle</artifactId>
+						<version>${checkstyle.version}</version>
+					</dependency>
+					<dependency>
+						<groupId>com.github.sevntu-checkstyle</groupId>
+						<artifactId>sevntu-checks</artifactId>
+						<version>${checkstyle.sevntu-checks.version}</version>
+					</dependency>
+				</dependencies>
+			</plugin>
 			<plugin>
 				<groupId>org.eclipse.tycho</groupId>
 				<artifactId>tycho-maven-plugin</artifactId>
@@ -250,6 +291,36 @@
 				</executions>
 			</plugin>
 		</plugins>
+
+		<pluginManagement>
+			<plugins>
+				<!--This plugin's configuration is used to store Eclipse m2e settings only. It has no influence on the Maven build itself.-->
+				<plugin>
+					<groupId>org.eclipse.m2e</groupId>
+					<artifactId>lifecycle-mapping</artifactId>
+					<version>1.0.0</version>
+					<configuration>
+						<lifecycleMappingMetadata>
+							<pluginExecutions>
+								<pluginExecution>
+									<pluginExecutionFilter>
+										<groupId>org.apache.maven.plugins</groupId>
+										<artifactId>maven-checkstyle-plugin</artifactId>
+										<versionRange>[3.2.1,)</versionRange>
+										<goals>
+											<goal>check</goal>
+										</goals>
+									</pluginExecutionFilter>
+									<action>
+										<ignore />
+									</action>
+								</pluginExecution>
+							</pluginExecutions>
+						</lifecycleMappingMetadata>
+					</configuration>
+				</plugin>
+			</plugins>
+		</pluginManagement>
 	</build>
 
 	<scm>

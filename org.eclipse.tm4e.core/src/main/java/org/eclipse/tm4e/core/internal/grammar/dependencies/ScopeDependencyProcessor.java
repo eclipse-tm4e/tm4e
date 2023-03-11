@@ -1,4 +1,4 @@
-/**
+/*
  * Copyright (c) 2022 Sebastian Thomschke and others.
  *
  * This program and the accompanying materials are made
@@ -61,7 +61,7 @@ public class ScopeDependencyProcessor {
 
 	public final Set<String /*ScopeName*/> seenFullScopeRequests = new HashSet<>();
 	final Set<String> seenPartialScopeRequests = new HashSet<>();
-	public Deque<AbsoluteRuleReference> Q = new ArrayDeque<>();
+	public Deque<AbsoluteRuleReference> Q = new ArrayDeque<>(); // CHECKSTYLE:IGNORE MemberName
 
 	public final IGrammarRepository repo;
 	public final String initialScopeName;
@@ -105,7 +105,7 @@ public class ScopeDependencyProcessor {
 		}
 	}
 
-	void collectReferencesOfReference(
+	private void collectReferencesOfReference(
 			final AbsoluteRuleReference reference,
 			final String baseGrammarScopeName,
 			final IGrammarRepository repo,
@@ -163,7 +163,7 @@ public class ScopeDependencyProcessor {
 		}
 	}
 
-	void collectExternalReferencesInTopLevelRepositoryRule(final String ruleName, final ContextWithRepository context,
+	private void collectExternalReferencesInTopLevelRepositoryRule(final String ruleName, final ContextWithRepository context,
 			final ExternalReferenceCollector result) {
 
 		if (context.repository != null) {
@@ -174,7 +174,7 @@ public class ScopeDependencyProcessor {
 		}
 	}
 
-	void collectExternalReferencesInTopLevelRule(final Context context, final ExternalReferenceCollector result) {
+	private void collectExternalReferencesInTopLevelRule(final Context context, final ExternalReferenceCollector result) {
 		final var patterns = context.selfGrammar.getPatterns();
 		if (patterns != null) {
 			collectExternalReferencesInRules(patterns, new ContextWithRepository(context, context.selfGrammar.getRepository()), result);
@@ -188,7 +188,7 @@ public class ScopeDependencyProcessor {
 		}
 	}
 
-	void collectExternalReferencesInRules(
+	private void collectExternalReferencesInRules(
 			final Collection<IRawRule> rules,
 			final ContextWithRepository context,
 			final ExternalReferenceCollector result) {

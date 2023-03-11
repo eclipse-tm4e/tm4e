@@ -1,0 +1,379 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE module PUBLIC "-//Checkstyle//DTD Checkstyle Configuration 1.3//EN" "https://checkstyle.org/dtds/configuration_1_3.dtd">
+<!--
+	Checkstyle-Configuration: tm4e Checks
+	Description: none
+-->
+<module name="Checker">
+	<property name="tabWidth" value="4" />
+	<property name="severity" value="warning" />
+
+	<module name="TreeWalker">
+		<!-- Annotations -->
+		<module name="AnnotationLocation" />
+		<module name="AnnotationUseStyle">
+			<property name="elementStyle" value="compact" />
+		</module>
+		<module name="MissingOverride" />
+		<module name="PackageAnnotation" />
+
+		<!-- JavaDoc -->
+		<module name="AtclauseOrder" />
+		<module name="InvalidJavadocPosition" />
+		<module name="JavadocBlockTagLocation" />
+		<module name="JavadocContentLocation" />
+		<module name="JavadocMethod">
+			<property name="allowMissingParamTags" value="true" />
+			<property name="allowMissingReturnTag" value="true" />
+		</module>
+		<module name="JavadocMissingLeadingAsterisk">
+			<property name="violateExecutionOnNonTightHtml" value="false" />
+		</module>
+		<module name="JavadocMissingWhitespaceAfterAsterisk" />
+		<module name="JavadocTagContinuationIndentation">
+			<property name="offset" value="4" />
+		</module>
+		<module name="NonEmptyAtclauseDescription" />
+		<module name="RequireEmptyLineBeforeBlockTagGroup" />
+		<module name="SingleLineJavadoc" />
+
+		<!-- Naming Conventions -->
+		<module name="AbbreviationAsWordInName">
+			<property name="allowedAbbreviationLength" value="4" />
+		</module>
+		<module name="CatchParameterName" />
+		<module name="ConstantName">
+			<metadata name="net.sf.eclipsecs.core.comment" value="Public constants" />
+			<property name="applyToPublic" value="true" />
+			<property name="applyToProtected" value="false" />
+			<property name="applyToPackage" value="false" />
+			<property name="applyToPrivate" value="false" />
+		</module>
+		<module name="ConstantName">
+			<metadata name="net.sf.eclipsecs.core.comment" value="non-public constants" />
+			<property name="format" value="^[_A-Z][A-Z0-9]*(_[A-Z0-9]+)*$" />
+			<property name="applyToPublic" value="false" />
+			<property name="applyToProtected" value="true" />
+			<property name="applyToPackage" value="true" />
+			<property name="applyToPrivate" value="true" />
+		</module>
+		<module name="IllegalIdentifierName" />
+		<module name="LambdaParameterName" />
+		<module name="LocalFinalVariableName">
+			<property name="format" value="^[_a-z][_a-zA-Z0-9]*$" />
+		</module>
+		<module name="LocalVariableName">
+			<property name="format" value="^[_a-z][_a-zA-Z0-9]*$" />
+		</module>
+		<module name="MemberName">
+			<metadata name="net.sf.eclipsecs.core.comment" value="Non-Private Members" />
+			<property name="format" value="^[a-z][_a-zA-Z0-9]*$" />
+			<property name="applyToPrivate" value="false" />
+		</module>
+		<module name="MemberName">
+			<metadata name="net.sf.eclipsecs.core.comment" value="Private Members" />
+			<property name="format" value="^[_a-z][_a-zA-Z0-9]*$" />
+			<property name="applyToPublic" value="false" />
+			<property name="applyToProtected" value="false" />
+			<property name="applyToPackage" value="false" />
+		</module>
+		<module name="MethodName">
+			<property name="format" value="^[_a-z][_a-zA-Z0-9]*$" />
+		</module>
+		<module name="PackageName" />
+		<module name="ParameterName">
+			<property name="accessModifiers" value="public" />
+			<property name="format" value="^[_a-z][_a-zA-Z0-9]*$" />
+		</module>
+		<module name="StaticVariableName">
+			<metadata name="net.sf.eclipsecs.core.comment" value="Private Fields" />
+			<property name="format" value="^[_a-z][_a-zA-Z0-9]*$" />
+			<property name="applyToPublic" value="false" />
+			<property name="applyToProtected" value="false" />
+			<property name="applyToPackage" value="false" />
+		</module>
+		<module name="StaticVariableName">
+			<metadata name="net.sf.eclipsecs.core.comment" value="Non-Private Fields" />
+			<property name="format" value="^[a-z][_a-zA-Z0-9]*$" />
+			<property name="applyToPrivate" value="false" />
+		</module>
+		<module name="TypeName">
+			<property name="format" value="^[A-Z][_a-zA-Z0-9]*$" />
+		</module>
+
+		<!-- Imports -->
+		<module name="AvoidStarImport">
+			<property name="allowStaticMemberImports" value="true" />
+		</module>
+		<module name="IllegalImport" />
+		<module name="ImportOrder">
+			<property name="option" value="top" />
+			<property name="groups" value="/^java\./,javax,org,com" />
+			<property name="separated" value="true" />
+			<property name="sortStaticImportsAlphabetically" value="true" />
+			<property name="useContainerOrderingForStatic" value="true" />
+			<metadata name="net.sf.eclipsecs.core.lastEnabledSeverity" value="inherit" />
+		</module>
+		<module name="RedundantImport" />
+		<module name="UnusedImports" />
+
+		<!-- Indentation -->
+		<module name="CommentsIndentation" />
+		<module name="Indentation">
+			<property name="basicOffset" value="4" />
+			<property name="caseIndent" value="4" />
+			<property name="throwsIndent" value="4" />
+			<property name="arrayInitIndent" value="4" />
+			<property name="lineWrappingIndentation" value="0" />
+		</module>
+		<module name="RegexpSinglelineJava">
+			<property name="format" value="^\t* " />
+			<property name="message" value="Indent must use tab characters" />
+			<property name="ignoreComments" value="true" />
+		</module>
+
+		<!-- Size Violations -->
+		<module name="ParameterNumber">
+			<property name="ignoreOverriddenMethods" value="true" />
+		</module>
+
+		<!-- Whitespace -->
+		<module name="EmptyForInitializerPad" />
+		<module name="EmptyForIteratorPad" />
+		<module name="EmptyLineSeparator">
+			<property name="tokens" value="IMPORT,CLASS_DEF,ENUM_DEF,INTERFACE_DEF,CTOR_DEF,METHOD_DEF,STATIC_INIT,INSTANCE_INIT" />
+		</module>
+		<module name="GenericWhitespace" />
+		<module name="MethodParamPad" />
+		<module name="NoWhitespaceAfter">
+			<property name="severity" value="ignore" />
+			<metadata name="net.sf.eclipsecs.core.lastEnabledSeverity" value="inherit" />
+		</module>
+		<module name="NoWhitespaceBefore" />
+		<module name="NoWhitespaceBeforeCaseDefaultColon" />
+		<module name="OperatorWrap">
+			<property name="tokens"
+				value="QUESTION,COLON,EQUAL,NOT_EQUAL,DIV,PLUS,MINUS,STAR,MOD,SR,BSR,GE,GT,SL,LE,LT,BXOR,BOR,LOR,BAND,LAND,LITERAL_INSTANCEOF,TYPE_EXTENSION_AND" />
+		</module>
+		<module name="ParenPad">
+			<metadata name="net.sf.eclipsecs.core.comment" value="TODO" />
+			<property name="severity" value="ignore" />
+			<metadata name="net.sf.eclipsecs.core.lastEnabledSeverity" value="inherit" />
+		</module>
+		<module name="SeparatorWrap">
+			<metadata name="net.sf.eclipsecs.core.comment" value="Dot on new line" />
+			<property name="option" value="nl" />
+			<property name="tokens" value="DOT" />
+		</module>
+		<module name="SeparatorWrap">
+			<metadata name="net.sf.eclipsecs.core.comment" value="Comma on end of line" />
+			<property name="tokens" value="COMMA" />
+		</module>
+		<module name="SingleSpaceSeparator" />
+		<module name="TypecastParenPad" />
+		<module name="WhitespaceAfter" />
+		<module name="WhitespaceAround">
+			<property name="allowEmptyConstructors" value="true" />
+			<property name="allowEmptyMethods" value="true" />
+			<property name="allowEmptyTypes" value="true" />
+			<property name="allowEmptyCatches" value="true" />
+			<property name="tokens"
+				value="ASSIGN,BAND,BAND_ASSIGN,BOR,BOR_ASSIGN,BSR,BSR_ASSIGN,BXOR,BXOR_ASSIGN,COLON,DIV,DIV_ASSIGN,DO_WHILE,EQUAL,GE,GT,LAMBDA,LAND,LCURLY,LE,LITERAL_ASSERT,LITERAL_CATCH,LITERAL_DO,LITERAL_ELSE,LITERAL_FINALLY,LITERAL_FOR,LITERAL_IF,LITERAL_RETURN,LITERAL_SYNCHRONIZED,LITERAL_TRY,LITERAL_WHILE,LOR,LT,MINUS,MINUS_ASSIGN,MOD,MOD_ASSIGN,NOT_EQUAL,PLUS,PLUS_ASSIGN,QUESTION,SL,SLIST,SL_ASSIGN,SR,SR_ASSIGN,STAR,STAR_ASSIGN,TYPE_EXTENSION_AND" />
+		</module>
+
+		<!-- Modifiers -->
+		<module name="ModifierOrder" />
+		<module name="RedundantModifier" />
+
+		<!-- Blocks -->
+		<module name="EmptyBlock">
+			<property name="option" value="text" />
+		</module>
+		<module name="EmptyCatchBlock" />
+		<module name="LeftCurly" />
+		<module name="RightCurly" />
+
+		<!-- Coding Problems -->
+		<module name="CovariantEquals" />
+		<module name="DefaultComesLast" />
+		<module name="EmptyStatement" />
+		<module name="EqualsAvoidNull" />
+		<module name="EqualsHashCode" />
+		<module name="FallThrough" />
+		<module name="FinalLocalVariable">
+			<property name="validateEnhancedForLoopVariable" value="true" />
+			<property name="tokens" value="PARAMETER_DEF,VARIABLE_DEF" />
+		</module>
+		<module name="IllegalCatch">
+			<property name="illegalClassNames" value="java.lang.Error, java.lang.Throwable" />
+		</module>
+		<module name="IllegalInstantiation" />
+		<module name="IllegalThrows" />
+		<!--
+			<module name="InnerAssignment" />
+			"final var button = this.button = new Button()" is needed to workaround Eclipse Null Analysis issues
+		-->
+		<module name="NoFinalizer" />
+		<module name="OneStatementPerLine" />
+		<module name="PackageDeclaration" />
+		<module name="SimplifyBooleanReturn" />
+		<module name="SimplifyBooleanExpression" />
+		<module name="StringLiteralEquality" />
+		<module name="SuperFinalize" />
+		<module name="UnnecessaryParentheses" />
+		<module name="UnnecessarySemicolonAfterOuterTypeDeclaration" />
+		<module name="UnnecessarySemicolonAfterTypeMemberDeclaration" />
+		<module name="UnnecessarySemicolonInEnumeration" />
+		<module name="UnnecessarySemicolonInTryWithResources" />
+
+		<!-- Class Design -->
+		<module name="FinalClass" />
+		<module name="HideUtilityClassConstructor" />
+		<module name="MutableException" />
+		<module name="OneTopLevelClass" />
+
+		<!-- Miscellaneous -->
+		<module name="ArrayTypeStyle" />
+		<module name="AvoidEscapedUnicodeCharacters">
+			<property name="allowEscapesForControlCharacters" value="true" />
+			<property name="allowNonPrintableEscapes" value="true" />
+			<property name="allowIfAllCharactersEscaped" value="true" />
+		</module>
+		<module name="OuterTypeFilename" />
+		<module name="UpperEll" />
+
+		<!-- Filters -->
+		<module name="SuppressWithNearbyCommentFilter">
+			<metadata name="net.sf.eclipsecs.core.comment" value="Disable matching checkstyle rules for the following line" />
+			<property name="commentFormat" value="CHECKSTYLE:IGNORE ([^ ]+) NEXT LINE" />
+			<property name="checkFormat" value="$1" />
+			<property name="influenceFormat" value="1" />
+		</module>
+		<module name="SuppressWithNearbyCommentFilter">
+			<metadata name="net.sf.eclipsecs.core.comment" value="Disable matching checkstyle rules for the following N lines" />
+			<property name="commentFormat" value="CHECKSTYLE:IGNORE ([^ ]+) NEXT (\d+) LINES" />
+			<property name="checkFormat" value="$1" />
+			<property name="influenceFormat" value="$2" />
+		</module>
+		<module name="SuppressWithNearbyCommentFilter">
+			<metadata name="net.sf.eclipsecs.core.comment" value="Disable matching checkstyle rules on the same line" />
+			<property name="commentFormat" value="CHECKSTYLE:IGNORE ([^ ]+)" />
+			<property name="checkFormat" value="$1" />
+		</module>
+		<module name="SuppressWithNearbyCommentFilter">
+			<metadata name="net.sf.eclipsecs.core.comment" value="Disable switch fallthrough warning for following line" />
+			<property name="commentFormat" value="\$FALL-THROUGH\$" />
+			<property name="checkFormat" value="FallThrough" />
+			<property name="influenceFormat" value="1" />
+		</module>
+
+		<!-- SevNTU rules https://github.com/sevntu-checkstyle/sevntu.checkstyle -->
+		<module name="AvoidConditionInversionCheck">
+			<property name="applyOnlyToRelationalOperands" value="true" />
+		</module>
+		<module name="AvoidConstantAsFirstOperandInConditionCheck">
+			<property name="targetConstantTypes" value="LITERAL_NULL,LITERAL_TRUE,LITERAL_FALSE,NUM_INT,NUM_DOUBLE,NUM_LONG,NUM_FLOAT" />
+		</module>
+		<module name="AvoidNotShortCircuitOperatorsForBooleanCheck" />
+		<module name="ConfusingConditionCheck" />
+		<module name="DiamondOperatorForVariableDefinitionCheck" />
+		<module name="EitherLogOrThrowCheck" />
+		<module name="EmptyPublicCtorInClassCheck" />
+		<module name="FinalizeImplementationCheck" />
+		<module name="ForbidInstantiationCheck" />
+		<module name="ForbidReturnInFinallyBlockCheck" />
+		<module name="ForbidThrowAnonymousExceptionsCheck" />
+		<module name="LogicConditionNeedOptimizationCheck" />
+		<module name="LineLengthExtendedCheck">
+			<property name="max" value="140" />
+			<property name="ignorePattern" value="^import .*$|^\s+(\*|//)\s.*https?:\/\/.+" />
+		</module>
+		<module name="MapIterationInForEachLoopCheck">
+			<property name="proposeKeySetUsage" value="true" />
+			<property name="proposeEntrySetUsage" value="true" />
+		</module>
+		<module name="MoveVariableInsideIfCheck" />
+		<module name="NameConventionForJunit4TestClassesCheck" />
+		<module name="NestedSwitchCheck">
+			<property name="max" value="2" />
+		</module>
+		<module name="NumericLiteralNeedsUnderscoreCheck" />
+		<module name="PublicReferenceToPrivateTypeCheck" />
+		<module name="RedundantReturnCheck" />
+		<module name="RequireFailForTryCatchInJunitCheck" />
+		<module name="ReturnNullInsteadOfBooleanCheck" />
+		<module name="UniformEnumConstantNameCheck" />
+		<module name="UnnecessaryParenthesesExtendedCheck" />
+		<module name="UselessSingleCatchCheck" />
+		<module name="UselessSuperCtorCallCheck" />
+		<module name="WhitespaceBeforeArrayInitializerCheck" />
+	</module>
+
+   <!-- License Header -->
+	<module name="RegexpHeader">
+		<property name="header" value="^/[*]$\n [*] Copyright \([cC]\) .*$" />
+		<property name="fileExtensions" value="java" />
+	</module>
+	<module name="SuppressionSingleFilter">
+		<property name="checks" value="RegexpHeader" />
+		<property name="files" value=".*[\\/]src[\\/]test[\\/].*Test.java$" />
+	</module>
+	<module name="SuppressionSingleFilter">
+		<property name="checks" value="RegexpHeader" />
+		<property name="files" value=".*[\\/]src[\\/]test[\\/].*Test.java$" />
+	</module>
+	<module name="SuppressionSingleFilter">
+		<property name="checks" value="RegexpHeader" />
+		<property name="files" value="package-info.java" />
+	</module>
+
+	<!-- Size Violations -->
+	<module name="LineLength">
+		<property name="fileExtensions" value="js, xml" />
+		<property name="max" value="160" />
+	</module>
+
+	<!-- Whitespace -->
+	<module name="FileTabCharacter">
+		<property name="fileExtensions" value="cfg, md, properties, py, yml, yaml" />
+	</module>
+
+	<!-- Miscellaneous -->
+	<module name="NewlineAtEndOfFile">
+		<property name="lineSeparator" value="lf_cr_crlf" />
+		<property name="fileExtensions" value="cfg, groovy, java, js, json, md, properties, py, sh, yml, yaml, xml, xsd" />
+	</module>
+	<module name="Translation" />
+	<module name="UniqueProperties" />
+
+	<module name="SuppressionSingleFilter">
+		<property name="checks" value="StaticVariableName" />
+		<property name="files" value=".*Messages.java" />
+	</module>
+	<module name="SuppressionSingleFilter">
+		<property name="checks" value=".*" />
+		<property name="files" value="org.eclipse.tm4e.core.tests[\\/]src[\\/]main[\\/]resources[\\/]test-cases[\\/].*$" />
+	</module>
+
+	<!-- File Exclusion Filters -->
+	<module name="BeforeExecutionExclusionFileFilter">
+		<metadata name="net.sf.eclipsecs.core.comment" value="Ignore temp files generated by Eclipse markdown editor" />
+		<property name="fileNamePattern" value="\.md\.html$" />
+	</module>
+	<module name="BeforeExecutionExclusionFileFilter">
+		<metadata name="net.sf.eclipsecs.core.comment" value="Ignore certificate files" />
+		<property name="fileNamePattern" value="\.(pem|pfx|cer|crt)$" />
+	</module>
+	<module name="BeforeExecutionExclusionFileFilter">
+		<metadata name="net.sf.eclipsecs.core.comment" value="Ignore image files" />
+		<property name="fileNamePattern" value="\.(png|jpg|gif)$" />
+	</module>
+	<module name="BeforeExecutionExclusionFileFilter">
+		<metadata name="net.sf.eclipsecs.core.comment" value="Ignore node.js module cache directories" />
+		<property name="fileNamePattern" value="[\\/]node_modules[\\/].*$" />
+	</module>
+	<module name="BeforeExecutionExclusionFileFilter">
+		<metadata name="net.sf.eclipsecs.core.comment" value="Ignore auto-generated source files" />
+		<property name="fileNamePattern" value="[\\/]generated-sources[\\/].*$" />
+	</module>
+</module>

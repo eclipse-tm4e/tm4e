@@ -1,4 +1,4 @@
-/**
+/*
  * Copyright (c) 2015-2017 Angelo ZERR.
  * This program and the accompanying materials are made
  * available under the terms of the Eclipse Public License 2.0
@@ -76,7 +76,7 @@ public class TMTokenization implements ITokenizationSupport {
 		final var tmTokens = new ArrayList<TMToken>(tokens.length < 10 ? tokens.length : 10);
 		String lastTokenType = null;
 		for (final var token : tokens) {
-			final int tokenStartIndex = token.getStartIndex();
+			final int tokenStartIndex = token.getStartIndex(); // CHECKSTYLE:IGNORE MoveVariableInsideIfCheck
 			final var tokenType = decodeTextMateToken(this.decodeMap, token.getScopes());
 
 			// do not push a new token if the type is exactly the same (also helps with ligatures)
@@ -143,9 +143,9 @@ public class TMTokenization implements ITokenizationSupport {
 		private static final Splitter BY_DOT_SPLITTER = Splitter.on('.');
 
 		private int lastAssignedId = 0;
-		private final Map<String /* scope */, Integer @Nullable [] /* ids */ > scopeToTokenIds = new LinkedHashMap<>();
-		private final Map<String /* token */, @Nullable Integer /* id */ > tokenToTokenId = new LinkedHashMap<>();
-		private final Map<Integer /* id */, String /* id */ > tokenIdToToken = new LinkedHashMap<>();
+		private final Map<String /* scope */, Integer @Nullable [] /* ids */> scopeToTokenIds = new LinkedHashMap<>();
+		private final Map<String /* token */, @Nullable Integer /* id */> tokenToTokenId = new LinkedHashMap<>();
+		private final Map<Integer /* id */, String /* id */> tokenIdToToken = new LinkedHashMap<>();
 		TMTokenDecodeData prevToken = new TMTokenDecodeData(Collections.emptyList(), new LinkedHashMap<>());
 
 		Integer[] getTokenIds(final String scope) {

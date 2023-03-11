@@ -1,4 +1,4 @@
-/**
+/*
  * Copyright (c) 2015-2017 Angelo ZERR.
  * This program and the accompanying materials are made
  * available under the terms of the Eclipse Public License 2.0
@@ -52,8 +52,6 @@ public class Theme extends TMResource implements ITheme {
 
 	/**
 	 * Constructor for extension point.
-	 *
-	 * @param id
 	 */
 	public Theme(final String id, final String path, final String name, final boolean dark, final boolean isDefault) {
 		super(path);

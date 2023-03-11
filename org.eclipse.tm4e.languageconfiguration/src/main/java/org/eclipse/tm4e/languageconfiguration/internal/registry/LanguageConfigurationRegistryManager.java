@@ -1,4 +1,4 @@
-/**
+/*
  * Copyright (c) 2015-2018 Angelo ZERR and others.
  * This program and the accompanying materials are made
  * available under the terms of the Eclipse Public License 2.0
@@ -198,8 +198,7 @@ public final class LanguageConfigurationRegistryManager extends AbstractLanguage
 			// Here we add `\t` to appendText first because enterAction is leveraging
 			// appendText and removeText to change indentation.
 			if (enterResult.appendText == null) {
-				if ((enterResult.indentAction == IndentAction.Indent)
-						|| (enterResult.indentAction == IndentAction.IndentOutdent)) {
+				if (enterResult.indentAction == IndentAction.Indent || enterResult.indentAction == IndentAction.IndentOutdent) {
 					enterResult.appendText = "\t"; //$NON-NLS-1$
 				} else {
 					enterResult.appendText = ""; //$NON-NLS-1$
@@ -212,7 +211,8 @@ public final class LanguageConfigurationRegistryManager extends AbstractLanguage
 			}
 
 			return new CompleteEnterAction(enterResult, indentation);
-		} catch (final BadLocationException e1) {
+		} catch (final BadLocationException ex) {
+			// ignore
 		}
 		return null;
 	}

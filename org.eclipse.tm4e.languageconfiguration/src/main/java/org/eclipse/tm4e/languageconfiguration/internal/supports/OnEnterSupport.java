@@ -1,4 +1,4 @@
-/**
+/*
  * Copyright (c) 2015-2017 Angelo ZERR.
  * This program and the accompanying materials are made
  * available under the terms of the Eclipse Public License 2.0
@@ -19,8 +19,8 @@ import java.util.regex.Pattern;
 import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.tm4e.languageconfiguration.internal.model.CharacterPair;
 import org.eclipse.tm4e.languageconfiguration.internal.model.EnterAction;
-import org.eclipse.tm4e.languageconfiguration.internal.model.OnEnterRule;
 import org.eclipse.tm4e.languageconfiguration.internal.model.EnterAction.IndentAction;
+import org.eclipse.tm4e.languageconfiguration.internal.model.OnEnterRule;
 import org.eclipse.tm4e.languageconfiguration.internal.utils.RegExpUtils;
 
 /**

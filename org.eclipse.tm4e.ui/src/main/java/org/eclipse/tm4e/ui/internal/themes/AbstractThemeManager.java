@@ -1,4 +1,4 @@
-/**
+/*
  * Copyright (c) 2015, 2021 Angelo ZERR and others.
  * This program and the accompanying materials are made
  * available under the terms of the Eclipse Public License 2.0
@@ -32,7 +32,7 @@ import org.eclipse.tm4e.ui.themes.ThemeAssociation;
  */
 public abstract class AbstractThemeManager implements IThemeManager {
 
-	private final Map<String /* theme id */ , ITheme> themes = new LinkedHashMap<>();
+	private final Map<String /* theme id */, ITheme> themes = new LinkedHashMap<>();
 	private final ThemeAssociationRegistry themeAssociationRegistry = new ThemeAssociationRegistry();
 
 	@Override

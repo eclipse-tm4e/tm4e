@@ -1,4 +1,4 @@
-/**
+/*
  * Copyright (c) 2022 Sebastian Thomschke and others.
  *
  * This program and the accompanying materials are made

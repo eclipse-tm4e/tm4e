@@ -1,4 +1,4 @@
-/*******************************************************************************
+/*
  * Copyright (c) 2008, 2013 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -7,7 +7,7 @@
  *
  * Contributors:
  * IBM Corporation - initial API and implementation
- *******************************************************************************/
+ */
 package org.eclipse.tm4e.core.internal.theme.css;
 
 import org.w3c.css.sac.LexicalUnit;
@@ -48,8 +48,7 @@ final class Measure extends CSSValueImpl {
 	@Override
 	public String getStringValue() throws DOMException {
 		final short lexicalUnit = value.getLexicalUnitType();
-		if ((lexicalUnit == LexicalUnit.SAC_IDENT) || (lexicalUnit == LexicalUnit.SAC_STRING_VALUE)
-				|| (lexicalUnit == LexicalUnit.SAC_URI))
+		if (lexicalUnit == LexicalUnit.SAC_IDENT || lexicalUnit == LexicalUnit.SAC_STRING_VALUE || lexicalUnit == LexicalUnit.SAC_URI)
 			return value.getStringValue();
 		// TODO There are more cases to catch of getLexicalUnitType()
 		throw new UnsupportedOperationException("NOT YET IMPLEMENTED");
@@ -84,8 +83,9 @@ final class Measure extends CSSValueImpl {
 		return switch (value.getLexicalUnitType()) {
 			case LexicalUnit.SAC_INTEGER -> String.valueOf(value.getIntegerValue());
 			case LexicalUnit.SAC_REAL -> String.valueOf(value.getFloatValue());
-			case LexicalUnit.SAC_PERCENTAGE, LexicalUnit.SAC_PIXEL, LexicalUnit.SAC_CENTIMETER, LexicalUnit.SAC_EM, LexicalUnit.SAC_EX, LexicalUnit.SAC_PICA, LexicalUnit.SAC_POINT, LexicalUnit.SAC_INCH, LexicalUnit.SAC_DEGREE -> String
-					.valueOf(value.getFloatValue()) + value.getDimensionUnitText();
+			case LexicalUnit.SAC_PERCENTAGE, LexicalUnit.SAC_PIXEL, LexicalUnit.SAC_CENTIMETER, LexicalUnit.SAC_EM, LexicalUnit.SAC_EX, //
+					LexicalUnit.SAC_PICA, LexicalUnit.SAC_POINT, LexicalUnit.SAC_INCH, LexicalUnit.SAC_DEGREE -> String
+							.valueOf(value.getFloatValue()) + value.getDimensionUnitText();
 			case LexicalUnit.SAC_URI -> "url(" + value.getStringValue() + ")";
 			case LexicalUnit.SAC_OPERATOR_COMMA -> ",";
 			case LexicalUnit.SAC_INHERIT -> "inherit";

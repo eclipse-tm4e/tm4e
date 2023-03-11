@@ -1,4 +1,4 @@
-/**
+/*
  * Copyright (c) 2015-2017 Angelo ZERR.
  * This program and the accompanying materials are made
  * available under the terms of the Eclipse Public License 2.0
@@ -44,6 +44,7 @@ public final class BeginWhileRule extends Rule {
 	@Nullable
 	private RegExpSourceList cachedCompiledWhilePatterns;
 
+	// CHECKSTYLE:IGNORE ParameterNumber NEXT LINE
 	BeginWhileRule(final RuleId id, @Nullable final String name, @Nullable final String contentName,
 			final String begin, final List<@Nullable CaptureRule> beginCaptures,
 			final String _while, final List<@Nullable CaptureRule> whileCaptures,

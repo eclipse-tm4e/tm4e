@@ -1,4 +1,4 @@
-/**
+/*
  * Copyright (c) 2015-2018 Angelo ZERR.
  * This program and the accompanying materials are made
  * available under the terms of the Eclipse Public License 2.0
@@ -29,7 +29,7 @@ public final class PListParserJSON<T> implements PListParser<T> {
 	@Override
 	public T parse(final Reader contents) throws IOException, SAXException {
 		final var pList = new PListContentHandler<T>(objectFactory);
-		try (final var reader = new JsonReader(contents)) {
+		try (var reader = new JsonReader(contents)) {
 			// reader.setLenient(true);
 			boolean parsing = true;
 			pList.startElement(null, "plist", null, null);

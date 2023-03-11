@@ -1,4 +1,4 @@
-/**
+/*
  * Copyright (c) 2019 Red Hat Inc., and others
  * This program and the accompanying materials are made
  * available under the terms of the Eclipse Public License 2.0
@@ -36,7 +36,8 @@ import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
 
-@TestMethodOrder(value = MethodOrderer.MethodName.class)
+//CHECKSTYLE:IGNORE IllegalThrows NEXT 700 LINES
+@TestMethodOrder(MethodOrderer.MethodName.class)
 class DocumentTMModelTest {
 
 	private static final String LF = "\n";

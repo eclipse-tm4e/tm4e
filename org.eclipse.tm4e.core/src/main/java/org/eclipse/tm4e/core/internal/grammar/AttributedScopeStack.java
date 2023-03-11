@@ -1,4 +1,4 @@
-/**
+/*
  * Copyright (c) 2015-2017 Angelo ZERR.
  * This program and the accompanying materials are made
  * available under the terms of the Eclipse Public License 2.0
@@ -93,7 +93,7 @@ public final class AttributedScopeStack {
 		return String.join(" ", this.getScopeNames());
 	}
 
-	public boolean equals(final AttributedScopeStack other) {
+	public boolean equals(final AttributedScopeStack other) { // CHECKSTYLE:IGNORE CovariantEquals
 		return equals(this, other);
 	}
 
@@ -115,7 +115,7 @@ public final class AttributedScopeStack {
 				return false;
 			}
 
-			if (!Objects.equals(a.scopeName(), b.scopeName()) || a.tokenAttributes != b.tokenAttributes) {
+			if (a.tokenAttributes != b.tokenAttributes || !Objects.equals(a.scopeName(), b.scopeName())) {
 				return false;
 			}
 

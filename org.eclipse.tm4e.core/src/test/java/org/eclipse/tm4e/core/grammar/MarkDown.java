@@ -1,4 +1,4 @@
-/**
+/*
  * Copyright (c) 2015-2017 Angelo ZERR.
  * This program and the accompanying materials are made
  * available under the terms of the Eclipse Public License 2.0
@@ -19,7 +19,7 @@ import org.eclipse.tm4e.core.Data;
 import org.eclipse.tm4e.core.registry.IGrammarSource;
 import org.eclipse.tm4e.core.registry.Registry;
 
-public class MarkDown {
+public final class MarkDown {
 
 	public static void main(final String[] args) throws Exception {
 		final var registry = new Registry();
@@ -57,5 +57,8 @@ public class MarkDown {
 		try (var s = new java.util.Scanner(is).useDelimiter("\\A")) {
 			return s.hasNext() ? s.next() : "";
 		}
+	}
+
+	private MarkDown() {
 	}
 }

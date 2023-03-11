@@ -1,4 +1,4 @@
-/**
+/*
  * Copyright (c) 2022 Sebastian Thomschke and others.
  *
  * This program and the accompanying materials are made
@@ -66,7 +66,7 @@ public final class BenchmarkRunner {
 				}
 			}
 
-			final var startFreeMem = RUNTIME.freeMemory();
+			final var startFreeMem = RUNTIME.freeMemory(); // CHECKSTYLE:IGNORE MoveVariableInsideIfCheck
 			final var startAt = System.currentTimeMillis();
 
 			for (int i = 0; i < iterations; i++) {
@@ -96,5 +96,8 @@ public final class BenchmarkRunner {
 		t.setPriority(Thread.MAX_PRIORITY);
 		t.start();
 		t.join();
+	}
+
+	private BenchmarkRunner() {
 	}
 }

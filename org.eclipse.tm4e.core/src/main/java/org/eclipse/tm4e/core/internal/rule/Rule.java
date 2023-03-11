@@ -1,4 +1,4 @@
-/**
+/*
  * Copyright (c) 2015-2017 Angelo ZERR.
  * This program and the accompanying materials are made
  * available under the terms of the Eclipse Public License 2.0
@@ -68,5 +68,4 @@ public abstract class Rule {
 	public abstract CompiledRule compile(IRuleRegistry grammar, @Nullable String endRegexSource);
 
 	public abstract CompiledRule compileAG(IRuleRegistry grammar, @Nullable String endRegexSource, boolean allowA, boolean allowG);
-
 }

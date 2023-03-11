@@ -1,4 +1,4 @@
-/**
+/*
  * Copyright (c) 2015-2017 Angelo ZERR.
  * This program and the accompanying materials are made
  * available under the terms of the Eclipse Public License 2.0
@@ -88,7 +88,7 @@ public final class RegexSource {
 		final int index;
 		final String command;
 		final int doublePointIndex = match.indexOf(':');
-		if (doublePointIndex != -1) {
+		if (doublePointIndex != -1) { // CHECKSTYLE:IGNORE ConfusingConditionCheck
 			index = Integer.parseInt(match.substring(2, doublePointIndex));
 			command = match.substring(doublePointIndex + 2, match.length() - 1);
 		} else {

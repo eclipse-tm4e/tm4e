@@ -1,4 +1,4 @@
-/**
+/*
  * Copyright (c) 2022 Sebastian Thomschke and others.
  *
  * This program and the accompanying materials are made
@@ -24,6 +24,7 @@ package org.eclipse.tm4e.core.internal.grammar.tokenattrs;
  */
 public final class OptionalStandardTokenType {
 
+	// CHECKSTYLE:IGNORE ConstantName NEXT 10 LINES
 	// Must have the same values as `StandardTokenType`!
 	public static final int Other = StandardTokenType.Other;
 	public static final int Comment = StandardTokenType.Comment;

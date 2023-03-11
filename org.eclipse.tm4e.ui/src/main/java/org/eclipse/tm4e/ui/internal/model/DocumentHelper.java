@@ -1,4 +1,4 @@
-/**
+/*
  * Copyright (c) 2015-2017 Angelo ZERR.
  * This program and the accompanying materials are made
  * available under the terms of the Eclipse Public License 2.0
@@ -93,5 +93,8 @@ final class DocumentHelper {
 		final int startOffset = document.getLineOffset(fromLineIndex);
 		final int endOffset = document.getLineOffset(toLineIndex) + document.getLineLength(toLineIndex);
 		return new Region(startOffset, endOffset - startOffset);
+	}
+
+	private DocumentHelper() {
 	}
 }

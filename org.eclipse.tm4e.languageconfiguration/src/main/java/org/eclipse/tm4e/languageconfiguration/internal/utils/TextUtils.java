@@ -1,4 +1,4 @@
-/**
+/*
  * Copyright (c) 2015-2022 Angelo ZERR and others.
  * This program and the accompanying materials are made
  * available under the terms of the Eclipse Public License 2.0
@@ -27,13 +27,10 @@ public final class TextUtils {
 	/**
 	 * Returns true if text of the command is an enter and false otherwise.
 	 *
-	 * @param d
-	 * @param c
-	 *
 	 * @return true if text of the command is an enter and false otherwise.
 	 */
 	public static boolean isEnter(final IDocument d, final DocumentCommand c) {
-		return (c.length == 0 && c.text != null && TextUtilities.equals(d.getLegalLineDelimiters(), c.text) != -1);
+		return c.length == 0 && c.text != null && TextUtilities.equals(d.getLegalLineDelimiters(), c.text) != -1;
 	}
 
 	public static String normalizeIndentation(final String str, final int tabSize, final boolean insertSpaces) {
@@ -73,10 +70,12 @@ public final class TextUtils {
 	}
 
 	/**
-	 * Returns the start of the string at the offset in the text. If the string is
-	 * not in the text at the offset, returns -1.</br>
-	 * Ex: </br>
+	 * Returns the start of the string at the offset in the text.
+	 * If the string is not in the text at the offset, returns -1.
+	 * For example:
+	 * <pre>
 	 * text = "apple banana", offset=8, string="banana" returns=6
+	 * </pre>
 	 */
 	public static int startIndexOfOffsetTouchingString(final String text, final int offset, final String string) {
 		int start = offset - string.length();
@@ -191,7 +190,7 @@ public final class TextUtils {
 	 * @return <code>true</code> if all the characters of the specified document line are the whitespace
 	 *         characters, otherwise returns <code>false</code>
 	 */
-	public static boolean isBlankLine(final IDocument document, int line) {
+	public static boolean isBlankLine(final IDocument document, final int line) {
 		try {
 			int offset = document.getLineOffset(line);
 			final int lineEnd = offset + document.getLineLength(line);
@@ -201,9 +200,12 @@ public final class TextUtils {
 				}
 				offset++;
 			}
-		} catch (BadLocationException e) {
+		} catch (final BadLocationException e) {
 			// Ignore, forcing a positive result
 		}
 		return true;
+	}
+
+	private TextUtils() {
 	}
 }

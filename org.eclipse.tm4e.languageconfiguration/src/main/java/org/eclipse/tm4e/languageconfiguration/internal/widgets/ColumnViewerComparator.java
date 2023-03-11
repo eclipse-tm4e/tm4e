@@ -1,4 +1,4 @@
-/**
+/*
  * Copyright (c) 2015-2017 Angelo ZERR.
  * This program and the accompanying materials are made
  * available under the terms of the Eclipse Public License 2.0
@@ -21,7 +21,6 @@ import org.eclipse.swt.SWT;
 
 /**
  * Viewer compoarator which sort a given column.
- *
  */
 public final class ColumnViewerComparator extends ViewerComparator {
 
@@ -59,7 +58,7 @@ public final class ColumnViewerComparator extends ViewerComparator {
 			final IBaseLabelProvider baseLabel = tableViewer.getLabelProvider();
 			final String left = ((ITableLabelProvider) baseLabel).getColumnText(e1, fSortColumn);
 			final String right = ((ITableLabelProvider) baseLabel).getColumnText(e2, fSortColumn);
-			final int sortResult = getComparator().compare(left != null ? left : "", right != null ? right : ""); //$NON-NLS-1$ //$NON-NLS-2$
+			final int sortResult = getComparator().compare(left != null ? left : "", right != null ? right : "");
 			return sortResult * fSortOrder;
 		}
 

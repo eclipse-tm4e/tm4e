@@ -1,4 +1,4 @@
-/**
+/*
  * Copyright (c) 2015-2017 Angelo ZERR.
  * This program and the accompanying materials are made
  * available under the terms of the Eclipse Public License 2.0
@@ -82,7 +82,7 @@ class ThemeMatchingTest extends AbstractThemeTest {
 		assertEquals(colorMap.get(result.foregroundId), "#300000");
 	}
 
-	private final Map<String, String> match(Theme theme, String... path) {
+	private Map<String, String> match(final Theme theme, final String... path) {
 		final var map = theme.getColorMap();
 		final var result = theme.match(ScopeStack.from(path));
 		if (result == null) {

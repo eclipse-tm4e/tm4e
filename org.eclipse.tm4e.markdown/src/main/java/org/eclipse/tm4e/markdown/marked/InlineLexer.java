@@ -1,4 +1,4 @@
-/**
+/*
  * Copyright (c) 2015-2017 Angelo ZERR.
  * This program and the accompanying materials are made
  * available under the terms of the Eclipse Public License 2.0
@@ -18,10 +18,11 @@ package org.eclipse.tm4e.markdown.marked;
 
 import static org.eclipse.tm4e.markdown.marked.Helpers.htmlEscape;
 
-import com.google.common.base.Strings;
 import java.util.regex.Matcher;
 
 import org.eclipse.jdt.annotation.Nullable;
+
+import com.google.common.base.Strings;
 
 public class InlineLexer {
 
@@ -43,14 +44,14 @@ public class InlineLexer {
 
 		if (this.options.isGfm()) {
 			if (this.options.isBreaks()) {
-				this.rules = InlineRules.breaks;
+				this.rules = InlineRules.BREAKS;
 			} else {
-				this.rules = InlineRules.gfm;
+				this.rules = InlineRules.GFM;
 			}
 		} else if (this.options.isPedantic()) {
-			this.rules = InlineRules.pedantic;
+			this.rules = InlineRules.PEDANTIC;
 		} else {
-			this.rules = InlineRules.normal;
+			this.rules = InlineRules.NORMA;
 		}
 	}
 

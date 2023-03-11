@@ -1,4 +1,4 @@
-/**
+/*
  * Copyright (c) 2015-2022 Angelo ZERR.
  * This program and the accompanying materials are made
  * available under the terms of the Eclipse Public License 2.0
@@ -268,8 +268,6 @@ public class TMPresentationReconciler implements IPresentationReconciler {
 
 		/**
 		 * Finds a grammar for the given document.
-		 *
-		 * @throws CoreException
 		 */
 		@Nullable
 		IGrammar findGrammar(final IDocument newDoc) throws CoreException {
@@ -347,7 +345,7 @@ public class TMPresentationReconciler implements IPresentationReconciler {
 		}
 
 		IRegion computeRegionToRedraw(final TextEvent event, final IDocument doc) {
-			IRegion region = event.getOffset() == 0 && event.getLength() == 0 && event.getText() == null
+			final IRegion region = event.getOffset() == 0 && event.getLength() == 0 && event.getText() == null
 					? new Region(0, doc.getLength()) // redraw state change, damage the whole document
 					: widgetRegion2ModelRegion(event);
 			if (region == null || region.getLength() == 0) {
@@ -437,7 +435,7 @@ public class TMPresentationReconciler implements IPresentationReconciler {
 
 	public void setGrammar(@Nullable final IGrammar grammar) {
 		var viewer = this.viewer;
-		final boolean changed = (viewer != null && ((this.grammar == null) || !Objects.equals(grammar, this.grammar)));
+		final boolean changed = viewer != null && (this.grammar == null || !Objects.equals(grammar, this.grammar));
 		this.grammar = grammar;
 		this.forcedGrammar = true;
 		if (changed) {
@@ -464,7 +462,7 @@ public class TMPresentationReconciler implements IPresentationReconciler {
 
 	public void setTheme(final ITokenProvider newTheme) {
 		final ITokenProvider oldTheme = this.tokenProvider;
-		if (!Objects.equals(oldTheme, newTheme) && grammar != null) {
+		if (grammar != null && !Objects.equals(oldTheme, newTheme)) {
 			this.tokenProvider = newTheme;
 			applyThemeEditor();
 			final var viewer = this.viewer;
@@ -664,7 +662,6 @@ public class TMPresentationReconciler implements IPresentationReconciler {
 	 *            the length of the range to be styled
 	 * @param attr
 	 *            the attribute describing the style of the range to be styled
-	 * @param lastLineStyleRanges
 	 */
 	protected void addRange(final TextPresentation presentation, final int offset, final int length,
 			@Nullable final TextAttribute attr) {
@@ -830,8 +827,6 @@ public class TMPresentationReconciler implements IPresentationReconciler {
 
 	/**
 	 * Set true if a {@link TMException} should be thrown if grammar or theme cannot be found and false otherwise.
-	 *
-	 * @param throwError
 	 */
 	public void setThrowError(final boolean throwError) {
 		this.throwError = throwError;

@@ -8,7 +8,7 @@
 		}
 	],
 	"repository": {
-	
+
 		"object-member-ng-template": {
 			"begin": "template\\s*:",
 			"end": "(?=,|\\})",
@@ -67,7 +67,7 @@
 					"name": "punctuation.definition.template-expression.end.ts"
 				}
 			}
-		},		
+		},
 
 		"ng-style": {
 			"begin": "(<)([Ss][Tt][Yy][Ll][Ee])(>)",
@@ -279,7 +279,7 @@
 			},
 			"match": "(?x)\\s*([_$@a-zA-Z*#(\\[][-$@.:\\w()\\[\\]]*)(?=\\s|=|/?>|/\\*|//)",
 			"name": "meta.tag.attribute-name"
-		},		
+		},
 
 		"ng-tag-attributes": {
 			"patterns": [

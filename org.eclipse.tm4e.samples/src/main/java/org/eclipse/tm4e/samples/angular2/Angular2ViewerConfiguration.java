@@ -1,4 +1,4 @@
-/**
+/*
  * Copyright (c) 2015-2017 Angelo ZERR.
  * This program and the accompanying materials are made
  * available under the terms of the Eclipse Public License 2.0
@@ -26,25 +26,25 @@ import org.eclipse.tm4e.ui.text.TMPresentationReconciler;
 public class Angular2ViewerConfiguration extends SourceViewerConfiguration {
 
 	@Override
-	public IPresentationReconciler getPresentationReconciler(ISourceViewer viewer) {
+	public IPresentationReconciler getPresentationReconciler(final ISourceViewer viewer) {
 		// Defines a TextMate Presentation reconcilier
-		TMPresentationReconciler reconciler = new TMPresentationReconciler();
+		final var reconciler = new TMPresentationReconciler();
 		// Set the Angular2 grammar
 		reconciler.setGrammar(getGrammar());
 		return reconciler;
 	}
 
 	private IGrammar getGrammar() {
-		Registry registry = new Registry(new IRegistryOptions() {
+		final var registry = new Registry(new IRegistryOptions() {
 
 			@Override
-			public Collection<String> getInjections(String scopeName) {
+			public Collection<String> getInjections(final String scopeName) {
 				return Arrays.asList("template.ng", "styles.ng", "source.ng.css");
 			}
 
 			@Override
-			public IGrammarSource getGrammarSource(String scopeName) {
-				String resourceName = switch (scopeName) {
+			public IGrammarSource getGrammarSource(final String scopeName) {
+				final String resourceName = switch (scopeName) {
 					// case "source.ng.css" -> "source.ng.css.json";
 					// case "source.ng.ts" -> "source.ng.ts.json";
 					// case "template.ng" -> "template.ng.json";
@@ -56,5 +56,4 @@ public class Angular2ViewerConfiguration extends SourceViewerConfiguration {
 		});
 		return registry.loadGrammar("source.ng.ts");
 	}
-
 }

@@ -1,4 +1,4 @@
-/**
+/*
  * Copyright (c) 2021, 2022 Red Hat Inc. and others.
  * This program and the accompanying materials are made
  * available under the terms of the Eclipse Public License 2.0
@@ -82,10 +82,10 @@ public class TestComment {
 
 		text = doc.get();
 		assertEquals(" a ", text);
-		ISelection selection = editor.getSelectionProvider().getSelection();
+		final ISelection selection = editor.getSelectionProvider().getSelection();
 		assertNotNull(selection);
 		assertInstanceOf(ITextSelection.class, selection);
-		ITextSelection textSelection = (ITextSelection) selection;
+		final var textSelection = (ITextSelection) selection;
 		assertEquals(0, textSelection.getOffset());
 		assertEquals(3, textSelection.getLength());
 		checktTextSelection(editor.getSelectionProvider().getSelection(), 0, 3);
@@ -99,8 +99,6 @@ public class TestComment {
 
 	/**
 	 * Test case for https://github.com/eclipse/wildwebdeveloper/issues/909
-	 * 
-	 * @throws Exception
 	 */
 	@Test
 	public void testToggleLineCommentUseBlockCommentAndWindowsEOL() throws Exception {
@@ -296,10 +294,10 @@ public class TestComment {
 		checktTextSelection(editor.getSelectionProvider().getSelection(), 4, 1);
 	}
 
-	private void checktTextSelection(ISelection selection, int expectedOffset, int expectedLength) {
+	private void checktTextSelection(final ISelection selection, final int expectedOffset, final int expectedLength) {
 		assertNotNull(selection);
 		assertInstanceOf(ITextSelection.class, selection);
-		ITextSelection textSelection = (ITextSelection) selection;
+		final var textSelection = (ITextSelection) selection;
 		assertEquals(expectedOffset, textSelection.getOffset());
 		assertEquals(expectedLength, textSelection.getLength());
 	}

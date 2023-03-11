@@ -1,4 +1,4 @@
-/**
+/*
  * Copyright (c) 2015-2017 Angelo ZERR.
  * This program and the accompanying materials are made
  * available under the terms of the Eclipse Public License 2.0
@@ -16,7 +16,7 @@
  */
 package org.eclipse.tm4e.core.internal.grammar;
 
-import static org.eclipse.tm4e.core.internal.utils.NullSafetyHelper.*;
+import static org.eclipse.tm4e.core.internal.utils.NullSafetyHelper.castNonNull;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -47,7 +47,7 @@ public final class StateStack implements IStateStack {
 			boolean beginRuleCapturedEOL,
 			@Nullable String endRule,
 			List<AttributedScopeStack.Frame> nameScopesList,
-			/** on top of nameScopesList */
+			/* on top of nameScopesList */
 			List<AttributedScopeStack.Frame> contentNameScopesList) {
 	}
 
@@ -115,6 +115,7 @@ public final class StateStack implements IStateStack {
 	@Nullable
 	final AttributedScopeStack contentNameScopesList;
 
+	// CHECKSTYLE:IGNORE ParameterNumber NEXT LINE
 	StateStack(
 			@Nullable final StateStack parent,
 			final RuleId ruleId,

@@ -1,4 +1,4 @@
-/**
+/*
  * Copyright (c) 2015-2017 Angelo ZERR.
  * This program and the accompanying materials are made
  * available under the terms of the Eclipse Public License 2.0
@@ -32,7 +32,7 @@ public final class GrammarRegistryManager extends AbstractGrammarRegistryManager
 	private static final String EXTENSION_GRAMMARS = "grammars";
 
 	@Nullable
-	private static GrammarRegistryManager INSTANCE;
+	private static GrammarRegistryManager INSTANCE; // CHECKSTYLE:IGNORE StaticVariableName
 
 	public static GrammarRegistryManager getInstance() {
 		if (INSTANCE != null) {

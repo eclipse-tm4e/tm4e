@@ -1,4 +1,4 @@
-/**
+/*
  * Copyright (c) 2015-2017 Angelo ZERR.
  * This program and the accompanying materials are made
  * available under the terms of the Eclipse Public License 2.0
@@ -44,8 +44,6 @@ public final class TextMateGrammarImportWizard extends Wizard implements IImport
 
 	/**
 	 * Set grammar registry to use to add the created grammar definitions.
-	 *
-	 * @param grammarRegistryManager
 	 */
 	public void setGrammarRegistryManager(final IGrammarRegistryManager grammarRegistryManager) {
 		this.grammarRegistryManager = grammarRegistryManager;

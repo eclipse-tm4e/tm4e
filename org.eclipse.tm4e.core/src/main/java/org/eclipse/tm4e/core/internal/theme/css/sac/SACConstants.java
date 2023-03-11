@@ -1,4 +1,4 @@
-/*******************************************************************************
+/*
  * Copyright (c) 2008, 2013 Angelo Zerr and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -7,16 +7,15 @@
  *
  * Contributors:
  * Angelo Zerr <angelo.zerr@gmail.com> - initial API and implementation
- *******************************************************************************/
+ */
 package org.eclipse.tm4e.core.internal.theme.css.sac;
 
 /**
  * SAC Constants Parsers.
  *
- * @version 1.0.0
- * 
  * @author <a href="mailto:angelo.zerr@gmail.com">Angelo ZERR</a>
  *
+ * @version 1.0.0
  */
 public final class SACConstants {
 

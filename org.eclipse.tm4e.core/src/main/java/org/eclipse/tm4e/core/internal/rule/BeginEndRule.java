@@ -1,4 +1,4 @@
-/**
+/*
  * Copyright (c) 2015-2017 Angelo ZERR.
  * This program and the accompanying materials are made
  * available under the terms of the Eclipse Public License 2.0
@@ -44,6 +44,7 @@ public final class BeginEndRule extends Rule {
 	@Nullable
 	private RegExpSourceList cachedCompiledPatterns;
 
+	// CHECKSTYLE:IGNORE ParameterNumber NEXT LINE
 	BeginEndRule(final RuleId id, @Nullable final String name, @Nullable final String contentName, final String begin,
 			final List<@Nullable CaptureRule> beginCaptures, @Nullable final String end,
 			final List<@Nullable CaptureRule> endCaptures, final boolean applyEndPatternLast,

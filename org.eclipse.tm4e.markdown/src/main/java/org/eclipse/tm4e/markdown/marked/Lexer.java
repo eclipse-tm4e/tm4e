@@ -1,4 +1,4 @@
-/**
+/*
  * Copyright (c) 2015-2017 Angelo ZERR.
  * This program and the accompanying materials are made
  * available under the terms of the Eclipse Public License 2.0
@@ -18,8 +18,9 @@ package org.eclipse.tm4e.markdown.marked;
 
 import java.util.regex.Matcher;
 
-import com.google.common.base.Strings;
 import org.eclipse.jdt.annotation.Nullable;
+
+import com.google.common.base.Strings;
 
 public class Lexer {
 
@@ -48,8 +49,10 @@ public class Lexer {
 	}
 
 	private Tokens lex(String src) {
-		src = src.replaceAll("\r\n|\r", "\n").replaceAll("\t", "    ").replaceAll("\u00a0", " ").replaceAll("\u2424",
-				"\n");
+		src = src.replaceAll("\r\n|\r", "\n")
+				.replaceAll("\t", "    ")
+				.replaceAll("\u00a0", " ")
+				.replaceAll("\u2424", "\n");
 		return this.token(src, true);
 	}
 
@@ -119,7 +122,7 @@ public class Lexer {
 			}
 
 			// top-level paragraph
-			if (top && ((cap = this.rules.paragraph.exec(src)) != null)) {
+			if (top && (cap = this.rules.paragraph.exec(src)) != null) {
 				src = src.substring(cap.group(0).length());
 				final String text = cap.group(1).charAt(cap.group(1).length() - 1) == '\n' ? cap.group(1) : cap.group(1);
 				this.tokens.add(new Token(TokenType.paragraph, text));

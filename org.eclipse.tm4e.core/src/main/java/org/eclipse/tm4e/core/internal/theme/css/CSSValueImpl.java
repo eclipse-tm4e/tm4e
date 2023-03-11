@@ -1,4 +1,4 @@
-/*******************************************************************************
+/*
  * Copyright (c) 2008, 2013 Angelo Zerr and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -8,7 +8,7 @@
  * Contributors:
  * Angelo Zerr <angelo.zerr@gmail.com> - initial API and implementation
  * IBM Corporation - ongoing development
- *******************************************************************************/
+ */
 package org.eclipse.tm4e.core.internal.theme.css;
 
 import org.eclipse.jdt.annotation.Nullable;
@@ -87,5 +87,4 @@ abstract class CSSValueImpl implements CSSPrimitiveValue {
 		// TODO Auto-generated method stub
 		throw new UnsupportedOperationException("NOT YET IMPLEMENTED");
 	}
-
 }

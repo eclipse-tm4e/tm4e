@@ -1,4 +1,4 @@
-/**
+/*
  * Copyright (c) 2015-2017 Angelo ZERR.
  * This program and the accompanying materials are made
  * available under the terms of the Eclipse Public License 2.0
@@ -83,8 +83,8 @@ public final class ColorManager {
 
 		final String systemDefaultToken = getSystemDefaultToken(tokenId);
 
-		return "".equals(systemDefaultToken) || // returns true if system default token doesn't exists
-				!prefStore.getBoolean(systemDefaultToken, true);
+		return "".equals(systemDefaultToken) // returns true if system default token doesn't exists
+				|| !prefStore.getBoolean(systemDefaultToken, true);
 	}
 
 	/**
@@ -99,9 +99,8 @@ public final class ColorManager {
 	 */
 	@Nullable
 	public Color getPriorityColor(@Nullable final Color themeColor, final String tokenId) {
-		final Color prefColor = getPreferenceEditorColor(tokenId);
-
 		if (isColorUserDefined(tokenId)) {
+			final Color prefColor = getPreferenceEditorColor(tokenId);
 			return prefColor;
 		}
 
@@ -117,10 +116,14 @@ public final class ColorManager {
 	 */
 	private String getSystemDefaultToken(final String tokenId) {
 		return switch (tokenId) {
-			case AbstractTextEditor.PREFERENCE_COLOR_FOREGROUND -> AbstractTextEditor.PREFERENCE_COLOR_FOREGROUND_SYSTEM_DEFAULT;
-			case AbstractTextEditor.PREFERENCE_COLOR_BACKGROUND -> AbstractTextEditor.PREFERENCE_COLOR_BACKGROUND_SYSTEM_DEFAULT;
-			case AbstractTextEditor.PREFERENCE_COLOR_SELECTION_BACKGROUND -> AbstractTextEditor.PREFERENCE_COLOR_SELECTION_BACKGROUND_SYSTEM_DEFAULT;
-			case AbstractTextEditor.PREFERENCE_COLOR_SELECTION_FOREGROUND -> AbstractTextEditor.PREFERENCE_COLOR_SELECTION_FOREGROUND_SYSTEM_DEFAULT;
+			case AbstractTextEditor.PREFERENCE_COLOR_FOREGROUND -> //
+					AbstractTextEditor.PREFERENCE_COLOR_FOREGROUND_SYSTEM_DEFAULT;
+			case AbstractTextEditor.PREFERENCE_COLOR_BACKGROUND -> //
+					AbstractTextEditor.PREFERENCE_COLOR_BACKGROUND_SYSTEM_DEFAULT;
+			case AbstractTextEditor.PREFERENCE_COLOR_SELECTION_BACKGROUND -> //
+					AbstractTextEditor.PREFERENCE_COLOR_SELECTION_BACKGROUND_SYSTEM_DEFAULT;
+			case AbstractTextEditor.PREFERENCE_COLOR_SELECTION_FOREGROUND -> //
+					AbstractTextEditor.PREFERENCE_COLOR_SELECTION_FOREGROUND_SYSTEM_DEFAULT;
 			default -> "";
 		};
 	}

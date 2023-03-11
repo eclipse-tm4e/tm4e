@@ -1,4 +1,4 @@
-/**
+/*
  * Copyright (c) 2015-2017 Angelo ZERR.
  * This program and the accompanying materials are made
  * available under the terms of the Eclipse Public License 2.0
@@ -31,10 +31,6 @@ public class StyleRangesCollector implements ITMPresentationReconcilerListener {
 	private StringBuilder currentRanges;
 
 	private final Object lock = new Object();
-
-	public StyleRangesCollector() {
-
-	}
 
 	@Override
 	public void install(final ITextViewer viewer, final IDocument document) {
@@ -111,5 +107,4 @@ public class StyleRangesCollector implements ITMPresentationReconcilerListener {
 	public boolean isFinished() {
 		return isFinished;
 	}
-
 }

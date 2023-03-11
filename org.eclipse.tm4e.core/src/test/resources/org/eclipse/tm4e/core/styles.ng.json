@@ -8,7 +8,7 @@
 		}
 	],
 	"repository": {
-	
+
 		"object-member-ng-styles": {
 			"begin": "styles\\s*:",
 			"end": "(?=,|\\})",

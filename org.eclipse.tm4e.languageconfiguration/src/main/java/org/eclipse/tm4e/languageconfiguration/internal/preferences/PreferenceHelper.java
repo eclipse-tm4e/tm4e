@@ -1,4 +1,4 @@
-/**
+/*
  * Copyright (c) 2018 Red Hat Inc. and others.
  * This program and the accompanying materials are made
  * available under the terms of the Eclipse Public License 2.0
@@ -75,5 +75,8 @@ public final class PreferenceHelper {
 
 	public static String toJson(final Collection<ILanguageConfigurationDefinition> definitions) {
 		return DEFAULT_GSON.toJson(definitions);
+	}
+
+	private PreferenceHelper() {
 	}
 }

@@ -1,4 +1,4 @@
-/**
+/*
  * Copyright (c) 2015-2017 Angelo ZERR.
  * This program and the accompanying materials are made
  * available under the terms of the Eclipse Public License 2.0
@@ -118,32 +118,32 @@ public class LanguageConfigurationAutoEditStrategy implements IAutoEditStrategy 
 				if (registry.getAutoCloseBefore(contentType).indexOf(ch) < 0)
 					return false;
 			}
-		} catch (Exception ex) {
+		} catch (final Exception ex) {
 			// ignore
 		}
 
 		if (!pair.notIn.isEmpty()) {
 			final var docModel = TMModelManager.INSTANCE.connect(document);
 			try {
-				final var lineIndex = document.getLineOfOffset(offset);
-				final var lineCharOffset = offset - document.getLineOffset(lineIndex) - 1;
+				final int lineIndex = document.getLineOfOffset(offset);
 				final var tokens = docModel.getLineTokens(lineIndex);
 				if (tokens != null) {
+					final int lineCharOffset = offset - document.getLineOffset(lineIndex) - 1;
 					TMToken tokenAtOffset = null;
-					for (var token : tokens) {
+					for (final TMToken token : tokens) {
 						if (token.startIndex > lineCharOffset)
 							break;
 						tokenAtOffset = token;
 					}
 					if (tokenAtOffset != null) {
-						for (var notIn : pair.notIn) {
+						for (final String notIn : pair.notIn) {
 							if (tokenAtOffset.type.contains(notIn)) {
 								return false;
 							}
 						}
 					}
 				}
-			} catch (BadLocationException ex) {
+			} catch (final BadLocationException ex) {
 				// ignore
 			}
 		}
@@ -179,8 +179,9 @@ public class LanguageConfigurationAutoEditStrategy implements IAutoEditStrategy 
 	}
 
 	private void onEnter(final IDocument document, final DocumentCommand command) {
-		final var registry = LanguageConfigurationRegistryManager.getInstance();
+		final var contentTypes = this.contentTypes;
 		if (contentTypes != null) {
+			final var registry = LanguageConfigurationRegistryManager.getInstance();
 			for (final IContentType contentType : contentTypes) {
 				if (!registry.shouldEnterAction(document, command.offset, contentType)) {
 					continue;
@@ -254,7 +255,7 @@ public class LanguageConfigurationAutoEditStrategy implements IAutoEditStrategy 
 	}
 
 	private String outdentString(final String str) {
-		if (str.startsWith("\t")) {//$NON-NLS-1$
+		if (str.startsWith("\t")) { //$NON-NLS-1$
 			return str.substring(1);
 		}
 		final TabSpacesInfo tabSpaces = getTabSpaces();

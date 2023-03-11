@@ -1,4 +1,4 @@
-/**
+/*
  * Copyright (c) 2015-2017 Angelo ZERR.
  * This program and the accompanying materials are made
  * available under the terms of the Eclipse Public License 2.0
@@ -9,7 +9,7 @@
  * Contributors:
  * Angelo Zerr <angelo.zerr@gmail.com> - initial API and implementation
  */
-/**
+/*
  * Copyright (c) 2015-2017 Angelo ZERR.
  * This program and the accompanying materials are made
  * available under the terms of the Eclipse Public License 2.0
@@ -24,7 +24,7 @@ package org.eclipse.tm4e.ui.themes;
 
 import java.util.Objects;
 
-/**
+/*
  * Copyright (c) 2015-2017 Angelo ZERR.
  * This program and the accompanying materials are made
  * available under the terms of the Eclipse Public License 2.0
@@ -115,10 +115,9 @@ public class ThemeAssociation implements IThemeAssociation {
 		if (getClass() != obj.getClass())
 			return false;
 		final ThemeAssociation other = (ThemeAssociation) obj;
-		return Objects.equals(pluginId, other.pluginId)
+		return whenDark == other.whenDark
+				&& Objects.equals(pluginId, other.pluginId)
 				&& Objects.equals(scopeName, other.scopeName)
-				&& Objects.equals(themeId, other.themeId)
-				&& whenDark == other.whenDark;
+				&& Objects.equals(themeId, other.themeId);
 	}
-
 }

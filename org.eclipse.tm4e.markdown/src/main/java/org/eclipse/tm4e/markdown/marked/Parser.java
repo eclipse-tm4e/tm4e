@@ -1,4 +1,4 @@
-/**
+/*
  * Copyright (c) 2015-2017 Angelo ZERR.
  * This program and the accompanying materials are made
  * available under the terms of the Eclipse Public License 2.0
@@ -56,7 +56,7 @@ public class Parser {
 	 * Next Token
 	 */
 	private boolean next(final Tokens tokens) {
-		return ((this.token = tokens.pop()) != null);
+		return (this.token = tokens.pop()) != null;
 	}
 
 	/**

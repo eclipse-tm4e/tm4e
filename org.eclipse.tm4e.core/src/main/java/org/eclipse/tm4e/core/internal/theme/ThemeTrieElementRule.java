@@ -1,4 +1,4 @@
-/**
+/*
  * Copyright (c) 2015-2017 Angelo ZERR.
  * This program and the accompanying materials are made
  * available under the terms of the Eclipse Public License 2.0
@@ -99,7 +99,10 @@ public class ThemeTrieElementRule {
 			return false;
 		}
 		final ThemeTrieElementRule other = (ThemeTrieElementRule) obj;
-		return background == other.background && fontStyle == other.fontStyle && foreground == other.foreground &&
-				Objects.equals(parentScopes, other.parentScopes) && scopeDepth == other.scopeDepth;
+		return background == other.background
+				&& fontStyle == other.fontStyle
+				&& foreground == other.foreground
+				&& scopeDepth == other.scopeDepth
+				&& Objects.equals(parentScopes, other.parentScopes);
 	}
 }

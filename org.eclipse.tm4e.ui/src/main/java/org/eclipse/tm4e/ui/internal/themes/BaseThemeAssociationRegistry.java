@@ -1,4 +1,4 @@
-/**
+/*
  * Copyright (c) 2015-2018 Angelo ZERR.
  * This program and the accompanying materials are made
  * available under the terms of the Eclipse Public License 2.0
@@ -19,6 +19,7 @@ import java.util.Map;
 import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.tm4e.ui.themes.IThemeAssociation;
 
+//CHECKSTYLE:IGNORE .* NEXT 200 LINES
 /**
  * Base Theme association registry.
  *

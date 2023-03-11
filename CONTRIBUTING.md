@@ -37,11 +37,13 @@ Latest builds, for testing, can usually be found at `https://download.eclipse.or
 
 ## 🧑‍💻 Developer resources
 
-### ⌨️ Setting up the Development Environment manually
+### ⌨️ Setting up the Development Environment
 
-* Download and install the **Eclipse IDE for Eclipse Committers** from https://www.eclipse.org/downloads/packages/ or another Eclipse installation with the [Plug-in Development Environment (PDE)](https://www.eclipse.org/pde/) installed.
-* Clone this repository <a href="https://mickaelistria.github.io/redirctToEclipseIDECloneCommand/redirect.html"><img src="https://mickaelistria.github.io/redirctToEclipseIDECloneCommand/cloneToEclipseBadge.png" alt="Clone to Eclipse IDE"/></a>.
-* _File > Open Projects from Filesystem..._ , select the path to the tm4e Git repo and the relevant children projects you want to import
+1. Download and install the **Eclipse IDE for Eclipse Committers** from https://www.eclipse.org/downloads/packages/ or another Eclipse installation with the [Plug-in Development Environment (PDE)](https://www.eclipse.org/pde/) installed.
+1. Install the [Checkstyle Eclipse plug-in](https://checkstyle.org/eclipse-cs/) from the Eclipse market place: https://marketplace.eclipse.org/content/checkstyle-plug
+1. Install the [Sevntu-Checkstyle Eclipse plug-in](https://sevntu-checkstyle.github.io/sevntu.checkstyle/) from its update site: https://sevntu-checkstyle.github.io/sevntu.checkstyle/update-site/
+1. Clone this repository <a href="https://mickaelistria.github.io/redirctToEclipseIDECloneCommand/redirect.html"><img src="https://mickaelistria.github.io/redirctToEclipseIDECloneCommand/cloneToEclipseBadge.png" alt="Clone to Eclipse IDE"/></a>.
+1. _File > Open Projects from Filesystem..._ , select the path to the tm4e Git repo and the relevant children projects you want to import
 
 ### 🏗️ Build
 

@@ -1,4 +1,4 @@
-/**
+/*
  * Copyright (c) 2015-2017 Angelo ZERR.
  * This program and the accompanying materials are made
  * available under the terms of the Eclipse Public License 2.0
@@ -31,8 +31,6 @@ public interface ITMResource extends ITMDefinition {
 	 * Returns the stream of the TextMate resource.
 	 *
 	 * @return the stream of the TextMate resource.
-	 * 
-	 * @throws IOException
 	 */
 	InputStream getInputStream() throws IOException;
 }

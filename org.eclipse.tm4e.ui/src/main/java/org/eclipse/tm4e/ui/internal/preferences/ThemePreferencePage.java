@@ -1,4 +1,4 @@
-/*******************************************************************************
+/*
  * Copyright (c) 2000, 2017 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -11,7 +11,7 @@
  * https://bugs.eclipse.org/203722
  * Angelo Zerr <angelo.zerr@gmail.com> - Adapt org.eclipse.ui.texteditor.templates.TemplatePreferencePage for TextMate
  * theme
- *******************************************************************************/
+ */
 package org.eclipse.tm4e.ui.internal.preferences;
 
 import static org.eclipse.tm4e.core.internal.utils.NullSafetyHelper.*;
@@ -124,11 +124,8 @@ public final class ThemePreferencePage extends PreferencePage implements IWorkbe
 
 	/**
 	 * Create the theme list content.
-	 *
-	 * @param parent
 	 */
 	private void createThemesTableContent(final Composite parent) {
-		GridLayout layout;
 		final var tableComposite = new Composite(parent, SWT.NONE);
 		final var data = new GridData(GridData.FILL_BOTH);
 		data.widthHint = 360;
@@ -175,8 +172,8 @@ public final class ThemePreferencePage extends PreferencePage implements IWorkbe
 		themesTable.setComparator(viewerComparator);
 		themesTable.addSelectionChangedListener(e -> {
 			// Fill Theme details
-			final var selectedTheme = ThemePreferencePage.this.selectedTheme = ((ITheme) ((IStructuredSelection) themesTable
-					.getSelection()).getFirstElement());
+			final var selectedTheme = ThemePreferencePage.this.selectedTheme = (ITheme) ((IStructuredSelection) themesTable
+					.getSelection()).getFirstElement();
 			if (selectedTheme != null) {
 				darkThemeButton.setSelection(selectedTheme.isDark());
 				defaultThemeButton.setSelection(selectedTheme.isDefault());
@@ -193,7 +190,7 @@ public final class ThemePreferencePage extends PreferencePage implements IWorkbe
 
 		final var buttons = new Composite(parent, SWT.NONE);
 		buttons.setLayoutData(new GridData(GridData.VERTICAL_ALIGN_BEGINNING));
-		layout = new GridLayout();
+		final var layout = new GridLayout();
 		layout.marginHeight = 0;
 		layout.marginWidth = 0;
 		buttons.setLayout(layout);
@@ -241,8 +238,6 @@ public final class ThemePreferencePage extends PreferencePage implements IWorkbe
 
 	/**
 	 * Create theme detail content.
-	 *
-	 * @param parent
 	 */
 	private void createThemeDetailContent(final Composite ancestor) {
 		final var parent = new Composite(ancestor, SWT.NONE);
@@ -268,8 +263,6 @@ public final class ThemePreferencePage extends PreferencePage implements IWorkbe
 
 	/**
 	 * Create theme associations content.
-	 *
-	 * @param parent
 	 */
 	private void createThemePreviewContent(final Composite ancestor) {
 		final var parent = new Composite(ancestor, SWT.NONE);

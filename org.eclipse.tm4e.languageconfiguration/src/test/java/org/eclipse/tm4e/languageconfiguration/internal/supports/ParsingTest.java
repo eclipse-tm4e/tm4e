@@ -1,4 +1,4 @@
-/*********************************************************************
+/********************************************************************
  * Copyright (c) 2018 Red Hat Inc., and others
  *
  * This program and the accompanying materials are made

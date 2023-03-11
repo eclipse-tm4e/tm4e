@@ -1,4 +1,4 @@
-/**
+/*
  * Copyright (c) 2015-2017 Angelo ZERR.
  * This program and the accompanying materials are made
  * available under the terms of the Eclipse Public License 2.0
@@ -16,7 +16,7 @@
  */
 package org.eclipse.tm4e.core.internal.matcher;
 
-import static java.lang.System.Logger.Level.*;
+import static java.lang.System.Logger.Level.WARNING;
 
 import java.lang.System.Logger;
 import java.util.ArrayList;

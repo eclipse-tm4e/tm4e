@@ -1,4 +1,4 @@
-/**
+/*
  * Copyright (c) 2015-2017 Angelo ZERR.
  * This program and the accompanying materials are made
  * available under the terms of the Eclipse Public License 2.0
@@ -18,16 +18,11 @@ import org.eclipse.jdt.annotation.Nullable;
  * Grammar definition defined by the "org.eclipse.tm4e.registry.grammars"
  * extension point. Here a sample to register TypeScript TextMate grammar.
  *
- * <pre>
- * <extension
-         point="org.eclipse.tm4e.registry.grammars">
-      <grammar
-      		scopeName="source.ts"
-            path="./syntaxes/TypeScript.tmLanguage.json" >
-      </grammar>
-   </extension>
- * </pre>
- *
+ * <pre>{@code
+ * <extension point="org.eclipse.tm4e.registry.grammars">
+ *     <grammar scopeName="source.ts" path="./syntaxes/TypeScript.tmLanguage.json" />
+ * </extension>
+ * }</pre>
  */
 public class GrammarDefinition extends TMResource implements IGrammarDefinition {
 
@@ -42,8 +37,6 @@ public class GrammarDefinition extends TMResource implements IGrammarDefinition 
 
 	/**
 	 * Constructor for extension point.
-	 *
-	 * @param scopeName
 	 */
 	public GrammarDefinition(final String scopeName, final String path) {
 		super(path);

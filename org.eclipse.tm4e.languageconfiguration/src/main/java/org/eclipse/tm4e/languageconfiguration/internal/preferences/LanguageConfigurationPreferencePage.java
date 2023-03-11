@@ -1,4 +1,4 @@
-/**
+/*
  * Copyright (c) 2015-2018 Angelo ZERR and others.
  * This program and the accompanying materials are made
  * available under the terms of the Eclipse Public License 2.0
@@ -117,8 +117,6 @@ public final class LanguageConfigurationPreferencePage extends PreferencePage im
 
 	/**
 	 * Create grammar list content.
-	 *
-	 * @param parent
 	 */
 	private void createDefinitionsListContent(final Composite parent) {
 		final var description = new Label(parent, SWT.NONE);
@@ -157,7 +155,7 @@ public final class LanguageConfigurationPreferencePage extends PreferencePage im
 			};
 
 			column.setText(label);
-			int minWidth = computeMinimumColumnWidth(gc, label);
+			final int minWidth = computeMinimumColumnWidth(gc, label);
 			columnLayout.setColumnData(column, new ColumnWeightData(2, minWidth, true));
 			column.addSelectionListener(new ColumnSelectionAdapter(column, definitionViewer, i, viewerComparator));
 
@@ -234,7 +232,7 @@ public final class LanguageConfigurationPreferencePage extends PreferencePage im
 				if (selection.isEmpty()) {
 					return;
 				}
-				final var definition = (ILanguageConfigurationDefinition) (selection).getFirstElement();
+				final var definition = (ILanguageConfigurationDefinition) selection.getFirstElement();
 				// Update button
 				assert definitionRemoveButton != null;
 				definitionRemoveButton.setEnabled(definition.getPluginId() == null);

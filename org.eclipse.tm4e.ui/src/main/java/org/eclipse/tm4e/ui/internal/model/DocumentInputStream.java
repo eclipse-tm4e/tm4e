@@ -1,4 +1,4 @@
-/*******************************************************************************
+/*
  * Copyright (c) 2005, 2008 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -9,7 +9,7 @@
  * IBM Corporation - initial API and implementation
  * QNX Software System
  * Sebastian Thomschke - implement read(byte[], int, int)
- *******************************************************************************/
+ */
 package org.eclipse.tm4e.ui.internal.model;
 
 import java.io.IOException;

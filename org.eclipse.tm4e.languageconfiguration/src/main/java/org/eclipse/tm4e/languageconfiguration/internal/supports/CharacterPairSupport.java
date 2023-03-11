@@ -1,4 +1,4 @@
-/**
+/*
  * Copyright (c) 2015-2017 Angelo ZERR.
  * This program and the accompanying materials are made
  * available under the terms of the Eclipse Public License 2.0
@@ -42,7 +42,7 @@ public final class CharacterPairSupport {
 	public final String autoCloseBefore;
 
 	@SuppressWarnings("unchecked")
-	public CharacterPairSupport(LanguageConfiguration config) {
+	public CharacterPairSupport(final LanguageConfiguration config) {
 		final var autoClosingPairs = config.getAutoClosingPairs();
 		final var brackets = config.getBrackets();
 

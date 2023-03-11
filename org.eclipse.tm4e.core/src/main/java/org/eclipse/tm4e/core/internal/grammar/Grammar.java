@@ -1,4 +1,4 @@
-/**
+/*
  * Copyright (c) 2015-2017 Angelo ZERR.
  * This program and the accompanying materials are made
  * available under the terms of the Eclipse Public License 2.0
@@ -79,6 +79,7 @@ public final class Grammar implements IGrammar, IRuleFactoryHelper {
 	@Nullable
 	private final BalancedBracketSelectors balancedBracketSelectors;
 
+	// CHECKSTYLE:IGNORE ParameterNumber NEXT LINE
 	public Grammar(
 			final String rootScopeName,
 			final IRawGrammar grammar,
@@ -285,7 +286,7 @@ public final class Grammar implements IGrammar, IRuleFactoryHelper {
 			this.getInjections();
 		}
 
-		boolean isFirstLine;
+		final boolean isFirstLine;
 		if (prevState == null || prevState.equals(StateStack.NULL)) {
 			isFirstLine = true;
 			final var rawDefaultMetadata = this._basicScopeAttributesProvider.getDefaultAttributes();
@@ -301,7 +302,7 @@ public final class Grammar implements IGrammar, IRuleFactoryHelper {
 
 			final var rootScopeName = this.getRule(rootId).getName(null, null);
 
-			AttributedScopeStack scopeList;
+			final AttributedScopeStack scopeList;
 			if (rootScopeName != null) {
 				scopeList = AttributedScopeStack.createRootAndLookUpScopeName(
 						rootScopeName,

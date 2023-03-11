@@ -1,4 +1,4 @@
-/**
+/*
  * Copyright (c) 2015-2017 Angelo ZERR.
  * This program and the accompanying materials are made
  * available under the terms of the Eclipse Public License 2.0
@@ -43,9 +43,8 @@ public class EnterAction {
 		 */
 		Outdent;
 
-		public static IndentAction get(@Nullable String value) {
-			// see
-			// https://github.com/microsoft/vscode/blob/13ba7bb446a638d37ebccb1a7d74e31c32bb9790/src/vs/workbench/contrib/codeEditor/browser/languageConfigurationExtensionPoint.ts#L341
+		public static IndentAction get(final @Nullable String value) {
+			// see https://github.com/microsoft/vscode/blob/13ba7bb446a638d37ebccb1a7d74e31c32bb9790/src/vs/workbench/contrib/codeEditor/browser/languageConfigurationExtensionPoint.ts#L341
 			if (value == null) {
 				return IndentAction.None;
 			}

@@ -1,4 +1,4 @@
-/**
+/*
  * Copyright (c) 2015-2017 Angelo ZERR.
  * This program and the accompanying materials are made
  * available under the terms of the Eclipse Public License 2.0
@@ -17,7 +17,6 @@ import org.eclipse.jdt.annotation.Nullable;
 
 /**
  * Class Reflection utilities.
- *
  */
 public final class ClassHelper {
 
@@ -54,5 +53,8 @@ public final class ClassHelper {
 		} catch (final SecurityException e) {
 			return null;
 		}
+	}
+
+	private ClassHelper() {
 	}
 }

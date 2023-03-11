@@ -1,4 +1,4 @@
-/**
+/*
  * Copyright (c) 2022 Sebastian Thomschke and others.
  *
  * This program and the accompanying materials are made
@@ -110,7 +110,7 @@ public final class MarkerUtils {
 				marker.delete(); // this marker is for a non-existing line
 				continue;
 			}
-			var markersOfLine = markers.computeIfAbsent(lineNumberObj, l -> new ArrayList<>(1));
+			final var markersOfLine = markers.computeIfAbsent(lineNumberObj, l -> new ArrayList<>(1));
 			markersOfLine.add(marker);
 		}
 
@@ -134,8 +134,7 @@ public final class MarkerUtils {
 					final var lineOffset = doc.getLineOffset(lineIndex);
 					final var commentText = doc.get(
 							lineOffset + token.startIndex,
-							((nextToken == null ? doc.getLineLength(lineIndex) : nextToken.startIndex)
-									- token.startIndex));
+							(nextToken == null ? doc.getLineLength(lineIndex) : nextToken.startIndex) - token.startIndex);
 					if (commentText.length() < 3)
 						continue;
 
@@ -145,7 +144,6 @@ public final class MarkerUtils {
 
 					final var markerConfig = MarkerUtils.MARKERCONFIG_BY_TAG.get(matcher.group());
 					final var markerText = commentText.substring(matcher.start()).trim();
-					final var markerTextStartOffset = lineOffset + token.startIndex + matcher.start();
 
 					final var attrs = new HashMap<String, Object>();
 					attrs.put(IMarker.LINE_NUMBER, lineNumberObj);
@@ -157,6 +155,7 @@ public final class MarkerUtils {
 
 					// only create a new marker if no matching marker already exists
 					if (!removeMatchingMarker(outdatedMarkers, markerConfig.type, attrs)) {
+						final var markerTextStartOffset = lineOffset + token.startIndex + matcher.start();
 						attrs.put(IMarker.CHAR_START, markerTextStartOffset);
 						attrs.put(IMarker.CHAR_END, markerTextStartOffset + markerText.length());
 						res.createMarker(markerConfig.type, attrs);

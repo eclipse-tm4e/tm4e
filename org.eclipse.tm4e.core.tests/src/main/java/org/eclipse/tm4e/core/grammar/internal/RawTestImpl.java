@@ -1,4 +1,4 @@
-/**
+/*
  * Copyright (c) 2015-2017 Angelo ZERR.
  * This program and the accompanying materials are made
  * available under the terms of the Eclipse Public License 2.0
@@ -64,10 +64,6 @@ public class RawTestImpl {
 		return grammarInjections;
 	}
 
-	public List<RawTestLine> getLines() {
-		return lines;
-	}
-
 	public void executeTest() throws Exception {
 		final var options = new IRegistryOptions() {
 			@Override
@@ -85,7 +81,7 @@ public class RawTestImpl {
 			grammar = registry.grammarForScopeName(getGrammarScopeName());
 		}
 		if (grammar == null) {
-			throw new Exception("I HAVE NO GRAMMAR FOR TEST");
+			throw new RuntimeException("I HAVE NO GRAMMAR FOR TEST");
 		}
 
 		IStateStack prevState = null;
@@ -97,6 +93,7 @@ public class RawTestImpl {
 	private IGrammar getGrammar(final Registry registry, final File testLocation) throws Exception {
 		IGrammar grammar = null;
 		for (final String grammarPath : getGrammars()) {
+			// CHECKSTYLE:IGNORE MoveVariableInsideIf NEXT LINE
 			final IGrammar tmpGrammar = registry.addGrammar(IGrammarSource.fromFile(new File(testLocation, grammarPath).toPath()));
 			if (grammarPath.equals(getGrammarPath())) {
 				grammar = tmpGrammar;

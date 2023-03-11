@@ -1,4 +1,4 @@
-/**
+/*
  * Copyright (c) 2015-2017 Angelo ZERR.
  * This program and the accompanying materials are made
  * available under the terms of the Eclipse Public License 2.0
@@ -27,6 +27,7 @@ import org.junit.jupiter.api.Test;
  */
 class GrammarInjectionTest {
 
+	// CHECKSTYLE:IGNORE LineLength NEXT 10 LINES
 	private static final String[] EXPECTED_TOKENS = {
 		"Token from 0 to 1 with scopes [source.ts, meta.decorator.ts, punctuation.decorator.ts]",
 		"Token from 1 to 10 with scopes [source.ts, meta.decorator.ts, entity.name.function.ts]",

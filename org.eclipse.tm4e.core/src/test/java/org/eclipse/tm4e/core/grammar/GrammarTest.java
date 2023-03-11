@@ -1,4 +1,4 @@
-/**
+/*
  * Copyright (c) 2015-2017 Angelo ZERR.
  * This program and the accompanying materials are made
  * available under the terms of the Eclipse Public License 2.0
@@ -38,6 +38,7 @@ import org.junit.jupiter.api.TestMethodOrder;
 @TestMethodOrder(MethodOrderer.DisplayName.class)
 class GrammarTest {
 
+	// CHECKSTYLE:IGNORE LineLength NEXT 10 LINES
 	private static final String[] EXPECTED_SINGLE_LINE_TOKENS = {
 		"Token from 0 to 8 with scopes [source.js, meta.function.js, storage.type.function.js]",
 		"Token from 8 to 9 with scopes [source.js, meta.function.js]",
@@ -56,6 +57,7 @@ class GrammarTest {
 		"Token from 29 to 32 with scopes [source.js, meta.function.js, meta.decl.block.js]",
 		"Token from 32 to 33 with scopes [source.js, meta.function.js, meta.decl.block.js, meta.brace.curly.js]" };
 
+	// CHECKSTYLE:IGNORE LineLength NEXT 10 LINES
 	private static final String[] EXPECTED_MULTI_LINE_TOKENS = {
 		"Token from 0 to 8 with scopes [source.js, meta.function.js, storage.type.function.js]",
 		"Token from 8 to 9 with scopes [source.js, meta.function.js]",

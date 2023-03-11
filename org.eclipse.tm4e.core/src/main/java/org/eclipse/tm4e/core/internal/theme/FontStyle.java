@@ -1,4 +1,4 @@
-/**
+/*
  * Copyright (c) 2015-2017 Angelo ZERR.
  * This program and the accompanying materials are made
  * available under the terms of the Eclipse Public License 2.0
@@ -20,6 +20,7 @@ package org.eclipse.tm4e.core.internal.theme;
  */
 public final class FontStyle {
 
+	// CHECKSTYLE:IGNORE ConstantName NEXT 10 LINES
 	public static final int NotSet = -1;
 
 	// This can are bit-flags, so it can be `Italic | Bold`

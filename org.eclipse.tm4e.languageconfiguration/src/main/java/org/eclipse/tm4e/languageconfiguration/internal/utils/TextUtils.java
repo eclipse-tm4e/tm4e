@@ -206,4 +206,7 @@ public final class TextUtils {
 		}
 		return true;
 	}
+
+	private TextUtils() {
+	}
 }

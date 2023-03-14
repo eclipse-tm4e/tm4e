@@ -240,4 +240,6 @@ public final class ContentTypeHelper {
 		return null;
 	}
 
+	private ContentTypeHelper() {
+	}
 }

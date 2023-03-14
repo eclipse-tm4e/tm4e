@@ -94,4 +94,7 @@ final class DocumentHelper {
 		final int endOffset = document.getLineOffset(toLineIndex) + document.getLineLength(toLineIndex);
 		return new Region(startOffset, endOffset - startOffset);
 	}
+
+	private DocumentHelper() {
+	}
 }

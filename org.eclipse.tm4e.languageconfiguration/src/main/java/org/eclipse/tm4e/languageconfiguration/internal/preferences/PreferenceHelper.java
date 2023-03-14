@@ -76,4 +76,7 @@ public final class PreferenceHelper {
 	public static String toJson(final Collection<ILanguageConfigurationDefinition> definitions) {
 		return DEFAULT_GSON.toJson(definitions);
 	}
+
+	private PreferenceHelper() {
+	}
 }

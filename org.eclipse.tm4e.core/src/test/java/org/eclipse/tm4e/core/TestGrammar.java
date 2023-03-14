@@ -15,7 +15,7 @@ import org.eclipse.tm4e.core.grammar.IGrammar;
 import org.eclipse.tm4e.core.registry.IGrammarSource;
 import org.eclipse.tm4e.core.registry.Registry;
 
-public class TestGrammar {
+public final class TestGrammar {
 
 	public static void main(final String[] args) throws Exception {
 		final var registry = new Registry();
@@ -26,5 +26,8 @@ public class TestGrammar {
 		for (int i = 0; i < result.getTokens().length; i++) {
 			System.err.println(result.getTokens()[i]);
 		}
+	}
+
+	private TestGrammar() {
 	}
 }

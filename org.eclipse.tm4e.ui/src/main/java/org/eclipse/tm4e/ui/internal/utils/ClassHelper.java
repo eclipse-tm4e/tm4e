@@ -55,4 +55,7 @@ public final class ClassHelper {
 			return null;
 		}
 	}
+
+	private ClassHelper() {
+	}
 }

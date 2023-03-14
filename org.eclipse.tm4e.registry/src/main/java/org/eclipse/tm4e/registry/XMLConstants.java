@@ -14,7 +14,7 @@ package org.eclipse.tm4e.registry;
 /**
  * XML constants used with the "org.eclipse.tm4e.registry.grammars" extension point.
  */
-public class XMLConstants {
+public final class XMLConstants {
 
 	// grammar definition
 	public static final String GRAMMAR_ELT = "grammar";
@@ -32,4 +32,6 @@ public class XMLConstants {
 
 	public static final String ID_ATTR = "id";
 
+	private XMLConstants() {
+	}
 }

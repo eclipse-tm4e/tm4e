@@ -42,4 +42,7 @@ public final class RegExpUtils {
 			return null;
 		}
 	}
+
+	private RegExpUtils() {
+	}
 }

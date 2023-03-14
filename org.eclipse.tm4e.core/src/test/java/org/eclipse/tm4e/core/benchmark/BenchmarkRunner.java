@@ -97,4 +97,7 @@ public final class BenchmarkRunner {
 		t.start();
 		t.join();
 	}
+
+	private BenchmarkRunner() {
+	}
 }

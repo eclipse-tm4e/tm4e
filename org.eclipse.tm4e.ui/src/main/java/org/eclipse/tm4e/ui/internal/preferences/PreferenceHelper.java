@@ -40,4 +40,7 @@ public final class PreferenceHelper {
 	public static String toJsonThemeAssociations(final Collection<IThemeAssociation> themeAssociations) {
 		return DEFAULT_GSON.toJson(themeAssociations);
 	}
+
+	private PreferenceHelper() {
+	}
 }

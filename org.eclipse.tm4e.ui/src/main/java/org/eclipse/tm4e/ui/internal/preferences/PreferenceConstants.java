@@ -25,4 +25,6 @@ public final class PreferenceConstants {
 
 	public static final String EDITOR_CURRENTLINE_HIGHLIGHT = "currentLineColor"; //$NON-NLS-1$
 
+	private PreferenceConstants() {
+	}
 }

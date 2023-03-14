@@ -16,7 +16,7 @@
  */
 package org.eclipse.tm4e.markdown.marked;
 
-public class Helpers {
+public final class Helpers {
 
 	public static String htmlEscape(final String html) {
 		return htmlEscape(html, false);
@@ -29,5 +29,8 @@ public class Helpers {
 				.replace(">", "&gt;")
 				.replace("\"", "&quot;")
 				.replace("'", "&#39;");
+	}
+
+	private Helpers() {
 	}
 }

@@ -241,8 +241,6 @@ public final class ThemePreferencePage extends PreferencePage implements IWorkbe
 
 	/**
 	 * Create theme detail content.
-	 *
-	 * @param parent
 	 */
 	private void createThemeDetailContent(final Composite ancestor) {
 		final var parent = new Composite(ancestor, SWT.NONE);
@@ -268,8 +266,6 @@ public final class ThemePreferencePage extends PreferencePage implements IWorkbe
 
 	/**
 	 * Create theme associations content.
-	 *
-	 * @param parent
 	 */
 	private void createThemePreviewContent(final Composite ancestor) {
 		final var parent = new Composite(ancestor, SWT.NONE);

@@ -664,7 +664,6 @@ public class TMPresentationReconciler implements IPresentationReconciler {
 	 *            the length of the range to be styled
 	 * @param attr
 	 *            the attribute describing the style of the range to be styled
-	 * @param lastLineStyleRanges
 	 */
 	protected void addRange(final TextPresentation presentation, final int offset, final int length,
 			@Nullable final TextAttribute attr) {

@@ -53,14 +53,14 @@ public final class ThemeContribution extends CompoundContributionItem implements
 		if (handlerService != null) {
 			final IEditorPart editorPart = getActivePart(handlerService.getCurrentState());
 			if (editorPart != null) {
-				final IThemeManager manager = TMUIPlugin.getThemeManager();
-				final boolean dark = manager.isDarkEclipseTheme();
-				final ITheme[] themes = manager.getThemes();
 				final TMPresentationReconciler presentationReconciler = TMPresentationReconciler
 						.getTMPresentationReconciler(editorPart);
 				if (presentationReconciler != null) {
 					final var grammar = presentationReconciler.getGrammar();
 					if (grammar != null) {
+						final IThemeManager manager = TMUIPlugin.getThemeManager();
+						final boolean dark = manager.isDarkEclipseTheme();
+						final ITheme[] themes = manager.getThemes();
 						final String scopeName = grammar.getScopeName();
 						final ITheme selectedTheme = manager.getThemeForScope(scopeName, dark);
 						for (final ITheme theme : themes) {

@@ -70,9 +70,12 @@ public class ParsedThemeRule {
 		if (getClass() != obj.getClass())
 			return false;
 		final ParsedThemeRule other = (ParsedThemeRule) obj;
-		return Objects.equals(background, other.background) && fontStyle == other.fontStyle
-				&& Objects.equals(foreground, other.foreground) && index == other.index
-				&& Objects.equals(parentScopes, other.parentScopes) && Objects.equals(scope, other.scope);
+		return fontStyle == other.fontStyle
+				&& index == other.index
+				&& Objects.equals(background, other.background)
+				&& Objects.equals(foreground, other.foreground)
+				&& Objects.equals(parentScopes, other.parentScopes)
+				&& Objects.equals(scope, other.scope);
 	}
 
 	@Override

@@ -99,9 +99,8 @@ public final class ColorManager {
 	 */
 	@Nullable
 	public Color getPriorityColor(@Nullable final Color themeColor, final String tokenId) {
-		final Color prefColor = getPreferenceEditorColor(tokenId);
-
 		if (isColorUserDefined(tokenId)) {
+			final Color prefColor = getPreferenceEditorColor(tokenId);
 			return prefColor;
 		}
 

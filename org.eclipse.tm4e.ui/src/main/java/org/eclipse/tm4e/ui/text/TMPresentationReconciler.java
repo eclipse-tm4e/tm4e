@@ -464,7 +464,7 @@ public class TMPresentationReconciler implements IPresentationReconciler {
 
 	public void setTheme(final ITokenProvider newTheme) {
 		final ITokenProvider oldTheme = this.tokenProvider;
-		if (!Objects.equals(oldTheme, newTheme) && grammar != null) {
+		if (grammar != null && !Objects.equals(oldTheme, newTheme)) {
 			this.tokenProvider = newTheme;
 			applyThemeEditor();
 			final var viewer = this.viewer;

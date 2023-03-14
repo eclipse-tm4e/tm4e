@@ -73,8 +73,8 @@ public class CSSParser {
 				final Selector selector = list.item(i);
 				if (selector instanceof final ExtendedSelector s) {
 					final int nbMatch = s.nbMatch(names);
-					if (nbMatch > 0 && nbMatch == s.nbClass() //
-							&& (bestStyle == null || nbMatch >= bestSpecificity)) {
+					if ((nbMatch >= bestSpecificity || bestStyle == null)
+							&& nbMatch > 0 && nbMatch == s.nbClass()) {
 						bestStyle = style;
 						bestSpecificity = nbMatch;
 					}

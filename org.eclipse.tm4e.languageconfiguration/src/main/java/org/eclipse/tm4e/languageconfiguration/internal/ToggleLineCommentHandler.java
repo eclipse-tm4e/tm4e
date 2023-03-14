@@ -129,7 +129,6 @@ public class ToggleLineCommentHandler extends AbstractHandler {
 										}).collect(Collectors.toSet());
 
 								final int first = lineRange[0];
-								final int last = lineRange[1];
 								boolean isToAdd = false;
 								for (final int line : lines) {
 									final Set<ITypedRegion> existingBlocks = getBlockCommentPartsForLine(document, line,
@@ -164,6 +163,7 @@ public class ToggleLineCommentHandler extends AbstractHandler {
 
 								// Add new block comments in case we need it
 								if (isToAdd) {
+									final int last = lineRange[1];
 									for (final int line : lines) {
 										final int lineOffset = document.getLineOffset(line);
 										final int lineLength = document.getLineLength(line);
@@ -470,7 +470,6 @@ public class ToggleLineCommentHandler extends AbstractHandler {
 					return l;
 				}).collect(Collectors.toSet());
 
-		final int last = lineRange[1];
 		final Set<ITypedRegion> comments = getBlockCommentParts(document, textSelectionStart,
 				textSelectionEnd - textSelectionStart, open, close);
 		final ITypedRegion[] brokenEnds = findBrokenBlockCommentPart(comments, open, close);
@@ -483,6 +482,7 @@ public class ToggleLineCommentHandler extends AbstractHandler {
 			if (nextCloseCommentPart != null) {
 				newCommentEnd = nextCloseCommentPart.getOffset() + nextCloseCommentPart.getLength();
 			} else { // Limit the new comment with the end of the last selected line
+				final int last = lineRange[1];
 				newCommentEnd = document.getLineOffset(last) + document.getLineLength(last);
 			}
 		}

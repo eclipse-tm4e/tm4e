@@ -103,9 +103,9 @@ public final class ObjectCloner {
 
 	@SuppressWarnings("unchecked")
 	private static <@NonNull T> T shallowClone(final T obj, final Supplier<T> fallback) {
-		final var objClass = obj.getClass();
 		if (obj instanceof Cloneable) {
 			try {
+				final var objClass = obj.getClass();
 				final var cloneMethod = CLONE_METHODS.get(objClass);
 				if (cloneMethod.isPresent()) {
 					return (T) cloneMethod.get().invoke(obj);

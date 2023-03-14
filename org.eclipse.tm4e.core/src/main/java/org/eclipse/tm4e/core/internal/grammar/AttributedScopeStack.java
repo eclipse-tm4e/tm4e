@@ -115,7 +115,8 @@ public final class AttributedScopeStack {
 				return false;
 			}
 
-			if (!Objects.equals(a.scopeName(), b.scopeName()) || a.tokenAttributes != b.tokenAttributes) {
+			if (a.tokenAttributes != b.tokenAttributes
+					|| !Objects.equals(a.scopeName(), b.scopeName())) {
 				return false;
 			}
 

@@ -178,16 +178,15 @@ public final class RuleFactory {
 
 						final var externalGrammarName = reference.scopeName;
 
-						@Nullable
-						final String externalGrammarInclude = reference.kind == IncludeReference.Kind.TopLevelRepositoryReference
-								? reference.ruleName
-								: null;
-
 						// External include
 						final var externalGrammar = helper.getExternalGrammar(externalGrammarName, repository);
 
 						if (externalGrammar != null) {
 							final var externalGrammarRepo = externalGrammar.getRepository();
+							@Nullable
+							final String externalGrammarInclude = reference.kind == IncludeReference.Kind.TopLevelRepositoryReference
+									? reference.ruleName
+									: null;
 							if (externalGrammarInclude != null) {
 								final var externalIncludedRule = externalGrammarRepo.getRule(externalGrammarInclude);
 								if (externalIncludedRule != null) {

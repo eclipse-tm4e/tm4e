@@ -191,11 +191,11 @@ public class LanguageConfiguration {
 					final var jsonObj = json.getAsJsonObject();
 					final var markersElem = jsonObj.get("markers"); //$NON-NLS-1$
 					if (markersElem != null && markersElem.isJsonObject()) {
-						final var offSide = getAsBoolean(jsonObj.get("offSide"), false); //$NON-NLS-1$
 						final var markersObj = markersElem.getAsJsonObject();
 						final var startMarker = getAsPattern(markersObj.get("start")); //$NON-NLS-1$
 						final var endMarker = getAsPattern(markersObj.get("end")); //$NON-NLS-1$
 						if (startMarker != null && endMarker != null) {
+							final var offSide = getAsBoolean(jsonObj.get("offSide"), false); //$NON-NLS-1$
 							return new FoldingRules(offSide, startMarker, endMarker);
 						}
 					}

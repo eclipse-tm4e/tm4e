@@ -76,11 +76,11 @@ public class TMTokenization implements ITokenizationSupport {
 		final var tmTokens = new ArrayList<TMToken>(tokens.length < 10 ? tokens.length : 10);
 		String lastTokenType = null;
 		for (final var token : tokens) {
-			final int tokenStartIndex = token.getStartIndex();
 			final var tokenType = decodeTextMateToken(this.decodeMap, token.getScopes());
 
 			// do not push a new token if the type is exactly the same (also helps with ligatures)
 			if (!tokenType.equals(lastTokenType)) {
+				final int tokenStartIndex = token.getStartIndex();
 				tmTokens.add(new TMToken(tokenStartIndex + offsetDelta, tokenType));
 				lastTokenType = tokenType;
 			}

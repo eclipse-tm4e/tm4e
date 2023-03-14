@@ -88,7 +88,7 @@ public class TMModel implements ITMModel {
 
 		@Override
 		public void run() {
-			while (!isInterrupted() && fThread == this) {
+			while (fThread == this && !isInterrupted()) {
 				try {
 					final int lineIndexToProcess = invalidLines.take();
 

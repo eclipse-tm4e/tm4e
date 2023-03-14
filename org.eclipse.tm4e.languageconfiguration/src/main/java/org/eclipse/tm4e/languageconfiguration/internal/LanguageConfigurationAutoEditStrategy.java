@@ -126,9 +126,9 @@ public class LanguageConfigurationAutoEditStrategy implements IAutoEditStrategy 
 			final var docModel = TMModelManager.INSTANCE.connect(document);
 			try {
 				final var lineIndex = document.getLineOfOffset(offset);
-				final var lineCharOffset = offset - document.getLineOffset(lineIndex) - 1;
 				final var tokens = docModel.getLineTokens(lineIndex);
 				if (tokens != null) {
+					final var lineCharOffset = offset - document.getLineOffset(lineIndex) - 1;
 					TMToken tokenAtOffset = null;
 					for (final var token : tokens) {
 						if (token.startIndex > lineCharOffset)
@@ -179,8 +179,8 @@ public class LanguageConfigurationAutoEditStrategy implements IAutoEditStrategy 
 	}
 
 	private void onEnter(final IDocument document, final DocumentCommand command) {
-		final var registry = LanguageConfigurationRegistryManager.getInstance();
 		if (contentTypes != null) {
+			final var registry = LanguageConfigurationRegistryManager.getInstance();
 			for (final IContentType contentType : contentTypes) {
 				if (!registry.shouldEnterAction(document, command.offset, contentType)) {
 					continue;

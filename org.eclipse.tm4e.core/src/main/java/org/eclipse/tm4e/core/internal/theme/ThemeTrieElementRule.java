@@ -99,7 +99,10 @@ public class ThemeTrieElementRule {
 			return false;
 		}
 		final ThemeTrieElementRule other = (ThemeTrieElementRule) obj;
-		return background == other.background && fontStyle == other.fontStyle && foreground == other.foreground &&
-				Objects.equals(parentScopes, other.parentScopes) && scopeDepth == other.scopeDepth;
+		return scopeDepth == other.scopeDepth
+				&& background == other.background
+				&& fontStyle == other.fontStyle
+				&& foreground == other.foreground
+				&& Objects.equals(parentScopes, other.parentScopes);
 	}
 }

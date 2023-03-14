@@ -32,5 +32,5 @@ public enum TokenType {
 	loose_item_start,
 	html,
 	paragraph,
-	text;
+	text
 }

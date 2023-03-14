@@ -162,8 +162,8 @@ final class LineTokens {
 		final List<String> scopes = scopesList != null ? scopesList.getScopeNames() : Collections.emptyList();
 
 		if (LOGGER.isLoggable(TRACE)) {
-			LOGGER.log(TRACE, "  token: |" +
-					this._lineText.substring(this._lastTokenEndIndex, endIndex).replace("\n", "\\n") + '|');
+			LOGGER.log(TRACE, "  token: |"
+					+ this._lineText.substring(this._lastTokenEndIndex, endIndex).replace("\n", "\\n") + '|');
 			for (final String scope : scopes) {
 				LOGGER.log(TRACE, "      * " + scope);
 			}
@@ -194,11 +194,11 @@ final class LineTokens {
 
 			@Override
 			public String toString() {
-				return "{" +
-						"startIndex: " + startIndex +
-						", endIndex: " + endIndex +
-						", scopes: " + scopes +
-						"}";
+				return "{"
+						+ "startIndex: " + startIndex
+						+ ", endIndex: " + endIndex
+						+ ", scopes: " + scopes
+						+ "}";
 			}
 		});
 

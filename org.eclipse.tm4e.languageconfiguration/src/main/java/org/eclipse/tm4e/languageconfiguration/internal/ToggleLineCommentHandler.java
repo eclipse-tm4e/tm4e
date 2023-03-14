@@ -120,8 +120,8 @@ public class ToggleLineCommentHandler extends AbstractHandler {
 								final int selectionStartLine = textSelection.getStartLine();
 								final int selectionEndLine = textSelection.getEndLine();
 								final int lineRange[] = { -1, -1 };
-								lines = lines.stream().filter(l -> l >= selectionStartLine && l <= selectionEndLine &&
-										!TextUtils.isBlankLine(document, l))
+								lines = lines.stream().filter(l -> l >= selectionStartLine && l <= selectionEndLine
+										&& !TextUtils.isBlankLine(document, l))
 										.map(l -> {
 											lineRange[0] = lineRange[0] == -1 || lineRange[0] > l ? l : lineRange[0];
 											lineRange[1] = lineRange[1] < l ? l : lineRange[1];

@@ -135,23 +135,23 @@ class EncodedTokenAttributesTest {
 			final int /*StandardTokenType*/ tokenType,
 			final boolean containsBalancedBrackets, final int /*FontStyle*/ fontStyle, final int foreground,
 			final int background) {
-		final var actual = "{\n" +
-				"languageId: " + EncodedTokenAttributes.getLanguageId(metadata) + ",\n" +
-				"tokenType: " + EncodedTokenAttributes.getTokenType(metadata) + ",\n" +
-				"containsBalancedBrackets: " + EncodedTokenAttributes.containsBalancedBrackets(metadata) + ",\n" +
-				"fontStyle: " + EncodedTokenAttributes.getFontStyle(metadata) + ",\n" +
-				"foreground: " + EncodedTokenAttributes.getForeground(metadata) + ",\n" +
-				"background: " + EncodedTokenAttributes.getBackground(metadata) + ",\n" +
-				"}";
+		final var actual = "{\n"
+				+ "languageId: " + EncodedTokenAttributes.getLanguageId(metadata) + ",\n"
+				+ "tokenType: " + EncodedTokenAttributes.getTokenType(metadata) + ",\n"
+				+ "containsBalancedBrackets: " + EncodedTokenAttributes.containsBalancedBrackets(metadata) + ",\n"
+				+ "fontStyle: " + EncodedTokenAttributes.getFontStyle(metadata) + ",\n"
+				+ "foreground: " + EncodedTokenAttributes.getForeground(metadata) + ",\n"
+				+ "background: " + EncodedTokenAttributes.getBackground(metadata) + ",\n"
+				+ "}";
 
-		final var expected = "{\n" +
-				"languageId: " + languageId + ",\n" +
-				"tokenType: " + tokenType + ",\n" +
-				"containsBalancedBrackets: " + containsBalancedBrackets + ",\n" +
-				"fontStyle: " + fontStyle + ",\n" +
-				"foreground: " + foreground + ",\n" +
-				"background: " + background + ",\n" +
-				"}";
+		final var expected = "{\n"
+				+ "languageId: " + languageId + ",\n"
+				+ "tokenType: " + tokenType + ",\n"
+				+ "containsBalancedBrackets: " + containsBalancedBrackets + ",\n"
+				+ "fontStyle: " + fontStyle + ",\n"
+				+ "foreground: " + foreground + ",\n"
+				+ "background: " + background + ",\n"
+				+ "}";
 
 		Assertions.assertEquals(expected, actual, "equals for " + EncodedTokenAttributes.toBinaryStr(metadata));
 	}

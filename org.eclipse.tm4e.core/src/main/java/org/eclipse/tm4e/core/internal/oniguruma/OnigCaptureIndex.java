@@ -58,11 +58,11 @@ public final class OnigCaptureIndex {
 
 	@Override
 	public String toString() {
-		return "{" +
-				"\"index\": " + index +
-				", \"start\": " + start +
-				", \"end\": " + end +
-				", \"length\": " + getLength() +
-				"}";
+		return "{"
+				+ "\"index\": " + index
+				+ ", \"start\": " + start
+				+ ", \"end\": " + end
+				+ ", \"length\": " + getLength()
+				+ "}";
 	}
 }

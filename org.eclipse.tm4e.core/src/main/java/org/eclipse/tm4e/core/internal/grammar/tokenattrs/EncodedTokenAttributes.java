@@ -35,14 +35,14 @@ public final class EncodedTokenAttributes {
 		final var background = getBackground(encodedTokenAttributes);
 		final var containsBalancedBrackets = containsBalancedBrackets(encodedTokenAttributes);
 
-		return "{\n" +
-				"  languageId: " + languageId + ",\n" +
-				"  tokenType: " + tokenType + ",\n" +
-				"  fontStyle: " + fontStyle + ",\n" +
-				"  foreground: " + foreground + ",\n" +
-				"  background: " + background + "\n," +
-				"  containsBalancedBrackets: " + containsBalancedBrackets + "\n" +
-				"}";
+		return "{\n"
+				+ "  languageId: " + languageId + ",\n"
+				+ "  tokenType: " + tokenType + ",\n"
+				+ "  fontStyle: " + fontStyle + ",\n"
+				+ "  foreground: " + foreground + ",\n"
+				+ "  background: " + background + "\n,"
+				+ "  containsBalancedBrackets: " + containsBalancedBrackets + "\n"
+				+ "}";
 	}
 
 	public static int getLanguageId(final int metadata) {

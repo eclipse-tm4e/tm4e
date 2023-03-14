@@ -83,8 +83,8 @@ public final class ColorManager {
 
 		final String systemDefaultToken = getSystemDefaultToken(tokenId);
 
-		return "".equals(systemDefaultToken) || // returns true if system default token doesn't exists
-				!prefStore.getBoolean(systemDefaultToken, true);
+		return "".equals(systemDefaultToken) // returns true if system default token doesn't exists
+				|| !prefStore.getBoolean(systemDefaultToken, true);
 	}
 
 	/**

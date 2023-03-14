@@ -228,8 +228,8 @@ final class SelectLanguageConfigurationWizardPage extends WizardPage implements 
 			final var elements = new ArrayList<>();
 			final var baseType = (IContentType) parentElement;
 			for (final var contentType : manager.getAllContentTypes()) {
-				if ((contentType.getBaseType() == null && baseType == null)
-						|| (contentType.getBaseType() != null && contentType.getBaseType().equals(baseType))) {
+				if (contentType.getBaseType() == null && baseType == null
+						|| contentType.getBaseType() != null && contentType.getBaseType().equals(baseType)) {
 					elements.add(contentType);
 				}
 			}

@@ -234,7 +234,7 @@ public final class LanguageConfigurationPreferencePage extends PreferencePage im
 				if (selection.isEmpty()) {
 					return;
 				}
-				final var definition = (ILanguageConfigurationDefinition) (selection).getFirstElement();
+				final var definition = (ILanguageConfigurationDefinition) selection.getFirstElement();
 				// Update button
 				assert definitionRemoveButton != null;
 				definitionRemoveButton.setEnabled(definition.getPluginId() == null);

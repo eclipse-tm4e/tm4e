@@ -120,8 +120,8 @@ public class ToggleLineCommentHandler extends AbstractHandler {
 								final int selectionStartLine = textSelection.getStartLine();
 								final int selectionEndLine = textSelection.getEndLine();
 								final int lineRange[] = { -1, -1 };
-								lines = lines.stream().filter(l -> (l >= selectionStartLine && l <= selectionEndLine &&
-										!TextUtils.isBlankLine(document, l)))
+								lines = lines.stream().filter(l -> l >= selectionStartLine && l <= selectionEndLine &&
+										!TextUtils.isBlankLine(document, l))
 										.map(l -> {
 											lineRange[0] = lineRange[0] == -1 || lineRange[0] > l ? l : lineRange[0];
 											lineRange[1] = lineRange[1] < l ? l : lineRange[1];
@@ -259,7 +259,7 @@ public class ToggleLineCommentHandler extends AbstractHandler {
 	private static boolean isBeforeSelection(final IRegion region, final int selectionStart) {
 		final int regionStart = region.getOffset();
 		final int regionEnd = regionStart + region.getLength();
-		return (regionStart < selectionStart && regionEnd <= selectionStart);
+		return regionStart < selectionStart && regionEnd <= selectionStart;
 	}
 
 	private static @Nullable ITypedRegion findCommentPartAtOffset(final IDocument document, final int offset, final String part)
@@ -283,7 +283,7 @@ public class ToggleLineCommentHandler extends AbstractHandler {
 	private static boolean isInsideSelection(final IRegion region, final int selectionStart, final int selectionEnd) {
 		final int regionStart = region.getOffset();
 		final int regionEnd = regionStart + region.getLength();
-		return (selectionStart <= regionStart && selectionEnd >= regionEnd);
+		return selectionStart <= regionStart && selectionEnd >= regionEnd;
 	}
 
 	private static Set<Integer> computeLines(final ITextSelection textSelection, final IDocument document)
@@ -316,9 +316,9 @@ public class ToggleLineCommentHandler extends AbstractHandler {
 			return false;
 		}
 		// A command should to be either Toggle Line comment or Add/Remove Block comment
-		return (TOGGLE_LINE_COMMENT_COMMAND_ID.equals(command.getId())
+		return TOGGLE_LINE_COMMENT_COMMAND_ID.equals(command.getId())
 				|| ADD_BLOCK_COMMENT_COMMAND_ID.equals(command.getId())
-				|| REMOVE_BLOCK_COMMENT_COMMAND_ID.equals(command.getId()));
+				|| REMOVE_BLOCK_COMMENT_COMMAND_ID.equals(command.getId());
 	}
 
 	/**
@@ -418,7 +418,7 @@ public class ToggleLineCommentHandler extends AbstractHandler {
 		if (text.startsWith(open)) {
 			return true;
 		}
-		return (findNotClosedOpen(document, expandedSelection, open, close) != null);
+		return findNotClosedOpen(document, expandedSelection, open, close) != null;
 	}
 
 	private static @Nullable ITypedRegion findNotClosedOpen(final IDocument document,
@@ -463,8 +463,7 @@ public class ToggleLineCommentHandler extends AbstractHandler {
 		final int lineRange[] = { -1, -1 };
 		Set<Integer> lines = computeLines(new TextSelection(textSelectionStart, textSelectionEnd - textSelectionStart),
 				document);
-		lines = lines.stream().filter(l -> (l >= selectionStartLine && l <= selectionEndLine &&
-				!TextUtils.isBlankLine(document, l)))
+		lines = lines.stream().filter(l -> l >= selectionStartLine && l <= selectionEndLine && !TextUtils.isBlankLine(document, l))
 				.map(l -> {
 					lineRange[0] = lineRange[0] == -1 || lineRange[0] > l ? l : lineRange[0];
 					lineRange[1] = lineRange[1] < l ? l : lineRange[1];
@@ -533,7 +532,7 @@ public class ToggleLineCommentHandler extends AbstractHandler {
 
 		// Filter out the blank lines and lines that are outside of the text selection
 		final Set<Integer> lines = computeLines(selection, document).stream()
-				.filter(l -> (l >= selection.getStartLine() && l <= selection.getEndLine()))
+				.filter(l -> l >= selection.getStartLine() && l <= selection.getEndLine())
 				.collect(Collectors.toSet());
 
 		boolean isFirstLineUpdated = false;
@@ -558,7 +557,7 @@ public class ToggleLineCommentHandler extends AbstractHandler {
 
 		// Filter out the blank lines and lines that are outside of the text selection
 		final Set<Integer> lines = computeLines(selection, document).stream()
-				.filter(l -> (l >= selection.getStartLine() && l <= selection.getEndLine()))
+				.filter(l -> l >= selection.getStartLine() && l <= selection.getEndLine())
 				.collect(Collectors.toSet());
 
 		boolean isFirstLineUpdated = false;

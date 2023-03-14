@@ -198,8 +198,8 @@ public final class LanguageConfigurationRegistryManager extends AbstractLanguage
 			// Here we add `\t` to appendText first because enterAction is leveraging
 			// appendText and removeText to change indentation.
 			if (enterResult.appendText == null) {
-				if ((enterResult.indentAction == IndentAction.Indent)
-						|| (enterResult.indentAction == IndentAction.IndentOutdent)) {
+				if (enterResult.indentAction == IndentAction.Indent
+						|| enterResult.indentAction == IndentAction.IndentOutdent) {
 					enterResult.appendText = "\t"; //$NON-NLS-1$
 				} else {
 					enterResult.appendText = ""; //$NON-NLS-1$

@@ -48,8 +48,9 @@ final class Measure extends CSSValueImpl {
 	@Override
 	public String getStringValue() throws DOMException {
 		final short lexicalUnit = value.getLexicalUnitType();
-		if ((lexicalUnit == LexicalUnit.SAC_IDENT) || (lexicalUnit == LexicalUnit.SAC_STRING_VALUE)
-				|| (lexicalUnit == LexicalUnit.SAC_URI))
+		if (lexicalUnit == LexicalUnit.SAC_IDENT
+				|| lexicalUnit == LexicalUnit.SAC_STRING_VALUE
+				|| lexicalUnit == LexicalUnit.SAC_URI)
 			return value.getStringValue();
 		// TODO There are more cases to catch of getLexicalUnitType()
 		throw new UnsupportedOperationException("NOT YET IMPLEMENTED");

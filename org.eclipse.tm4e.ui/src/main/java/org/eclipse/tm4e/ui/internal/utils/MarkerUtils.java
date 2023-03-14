@@ -134,8 +134,7 @@ public final class MarkerUtils {
 					final var lineOffset = doc.getLineOffset(lineIndex);
 					final var commentText = doc.get(
 							lineOffset + token.startIndex,
-							((nextToken == null ? doc.getLineLength(lineIndex) : nextToken.startIndex)
-									- token.startIndex));
+							(nextToken == null ? doc.getLineLength(lineIndex) : nextToken.startIndex) - token.startIndex);
 					if (commentText.length() < 3)
 						continue;
 

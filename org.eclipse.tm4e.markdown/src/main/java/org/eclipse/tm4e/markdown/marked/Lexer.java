@@ -120,7 +120,7 @@ public class Lexer {
 			}
 
 			// top-level paragraph
-			if (top && ((cap = this.rules.paragraph.exec(src)) != null)) {
+			if (top && (cap = this.rules.paragraph.exec(src)) != null) {
 				src = src.substring(cap.group(0).length());
 				final String text = cap.group(1).charAt(cap.group(1).length() - 1) == '\n' ? cap.group(1) : cap.group(1);
 				this.tokens.add(new Token(TokenType.paragraph, text));

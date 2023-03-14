@@ -175,8 +175,8 @@ public final class ThemePreferencePage extends PreferencePage implements IWorkbe
 		themesTable.setComparator(viewerComparator);
 		themesTable.addSelectionChangedListener(e -> {
 			// Fill Theme details
-			final var selectedTheme = ThemePreferencePage.this.selectedTheme = ((ITheme) ((IStructuredSelection) themesTable
-					.getSelection()).getFirstElement());
+			final var selectedTheme = ThemePreferencePage.this.selectedTheme = (ITheme) ((IStructuredSelection) themesTable
+					.getSelection()).getFirstElement();
 			if (selectedTheme != null) {
 				darkThemeButton.setSelection(selectedTheme.isDark());
 				defaultThemeButton.setSelection(selectedTheme.isDefault());

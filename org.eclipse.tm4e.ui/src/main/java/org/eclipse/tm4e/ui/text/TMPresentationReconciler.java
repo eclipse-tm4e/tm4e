@@ -437,7 +437,7 @@ public class TMPresentationReconciler implements IPresentationReconciler {
 
 	public void setGrammar(@Nullable final IGrammar grammar) {
 		var viewer = this.viewer;
-		final boolean changed = (viewer != null && ((this.grammar == null) || !Objects.equals(grammar, this.grammar)));
+		final boolean changed = viewer != null && (this.grammar == null || !Objects.equals(grammar, this.grammar));
 		this.grammar = grammar;
 		this.forcedGrammar = true;
 		if (changed) {

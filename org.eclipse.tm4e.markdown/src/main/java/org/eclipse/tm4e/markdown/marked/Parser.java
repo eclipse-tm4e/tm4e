@@ -56,7 +56,7 @@ public class Parser {
 	 * Next Token
 	 */
 	private boolean next(final Tokens tokens) {
-		return ((this.token = tokens.pop()) != null);
+		return (this.token = tokens.pop()) != null;
 	}
 
 	/**

@@ -236,7 +236,7 @@ public final class GrammarPreferencePage extends PreferencePage implements IWork
 				if (selection.isEmpty()) {
 					return;
 				}
-				final IGrammarDefinition definition = (IGrammarDefinition) (selection).getFirstElement();
+				final IGrammarDefinition definition = (IGrammarDefinition) selection.getFirstElement();
 
 				// Update button
 				grammarRemoveButton.setEnabled(definition.getPluginId() == null);

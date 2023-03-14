@@ -13,10 +13,9 @@ package org.eclipse.tm4e.core.internal.theme.css.sac;
 /**
  * SAC Constants Parsers.
  *
- * @version 1.0.0
- * 
  * @author <a href="mailto:angelo.zerr@gmail.com">Angelo ZERR</a>
  *
+ * @version 1.0.0
  */
 public final class SACConstants {
 

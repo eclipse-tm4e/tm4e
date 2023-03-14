@@ -26,12 +26,6 @@ public class TMSamplesPlugin extends AbstractUIPlugin {
 	/** The shared instance */
 	private static TMSamplesPlugin plugin;
 
-	/**
-	 * The constructor
-	 */
-	public TMSamplesPlugin() {
-	}
-
 	@Override
 	public void start(final BundleContext context) throws Exception {
 		super.start(context);

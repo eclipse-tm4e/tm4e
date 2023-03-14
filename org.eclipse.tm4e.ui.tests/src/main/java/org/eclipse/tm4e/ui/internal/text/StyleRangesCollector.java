@@ -32,10 +32,6 @@ public class StyleRangesCollector implements ITMPresentationReconcilerListener {
 
 	private final Object lock = new Object();
 
-	public StyleRangesCollector() {
-
-	}
-
 	@Override
 	public void install(final ITextViewer viewer, final IDocument document) {
 		this.document = document;

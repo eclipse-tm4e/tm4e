@@ -18,10 +18,11 @@ package org.eclipse.tm4e.markdown.marked;
 
 import static org.eclipse.tm4e.markdown.marked.Helpers.htmlEscape;
 
-import com.google.common.base.Strings;
 import java.util.regex.Matcher;
 
 import org.eclipse.jdt.annotation.Nullable;
+
+import com.google.common.base.Strings;
 
 public class InlineLexer {
 

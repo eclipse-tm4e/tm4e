@@ -18,8 +18,9 @@ package org.eclipse.tm4e.markdown.marked;
 
 import java.util.regex.Matcher;
 
-import com.google.common.base.Strings;
 import org.eclipse.jdt.annotation.Nullable;
+
+import com.google.common.base.Strings;
 
 public class Lexer {
 

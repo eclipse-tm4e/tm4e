@@ -11,9 +11,9 @@
  */
 package org.eclipse.tm4e.core.internal.oniguruma;
 
-import java.util.Arrays;
-
 import static org.junit.jupiter.api.Assertions.*;
+
+import java.util.Arrays;
 
 import org.junit.jupiter.api.Test;
 

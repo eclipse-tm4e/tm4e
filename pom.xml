@@ -298,26 +298,35 @@
 
 	<pluginRepositories>
 		<pluginRepository>
+			<!--
+				listing maven central first ensures that maven will query maven central first and
+				only uses other repositories as fallback, which reduces download/build times.
+				This is a workaround for https://issues.apache.org/jira/browse/MNG-6763
+			 -->
+			<id>central</id>
+			<url>https://repo.maven.apache.org/maven2/</url>
+			<snapshots><enabled>false</enabled></snapshots>
+			<releases><enabled>true</enabled></releases>
+		</pluginRepository>
+		<pluginRepository>
 			<!-- org.eclipse.cbi.maven.plugins:eclipse-jarsigner-plugin not present in central maven repo -->
 			<id>cbi</id>
 			<url>https://repo.eclipse.org/content/groups/cbi</url>
-			<snapshots>
-				<enabled>true</enabled>
-			</snapshots>
+			<snapshots><enabled>true</enabled></snapshots>
+			<releases><enabled>true</enabled></releases>
 		</pluginRepository>
 		<pluginRepository>
-			<id>dash-licenses-snapshots</id>
-			<url>https://repo.eclipse.org/content/repositories/dash-licenses-snapshots/</url>
-			<snapshots>
-				<enabled>true</enabled>
-			</snapshots>
-		</pluginRepository>
+		  	<id>dash-licenses-snapshots</id>
+		  	<url>https://repo.eclipse.org/content/repositories/dash-licenses-snapshots/</url>
+			<snapshots><enabled>true</enabled></snapshots>
+			<releases><enabled>false</enabled></releases>
+  		</pluginRepository>
 		<pluginRepository>
 			<id>tycho-snapshots</id>
 			<url>https://repo.eclipse.org/content/repositories/tycho-snapshots/</url>
-			<snapshots>
-				<enabled>true</enabled>
-			</snapshots>
+			<snapshots><enabled>false</enabled></snapshots>
+			<releases><enabled>true</enabled></releases>
 		</pluginRepository>
 	</pluginRepositories>
+
 </project>

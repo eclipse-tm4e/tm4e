@@ -14,7 +14,7 @@ package org.eclipse.tm4e.ui.snippets;
 import org.eclipse.tm4e.registry.ITMResource;
 
 /**
- * 
+ *
  * Snippet API.
  *
  */
@@ -22,21 +22,21 @@ public interface ISnippet extends ITMResource {
 
 	/**
 	 * Returns the name of the snippet.
-	 * 
+	 *
 	 * @return the name of the snippet.
 	 */
 	String getName();
 
 	/**
 	 * Returns the scope name of the snippet.
-	 * 
+	 *
 	 * @return the scope name of the snippet.
 	 */
 	String getScopeName();
 
 	/**
 	 * Returns the content of the snippet.
-	 * 
+	 *
 	 * @return the content of the snippet.
 	 */
 	String getContent();

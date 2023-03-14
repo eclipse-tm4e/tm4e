@@ -143,9 +143,9 @@ public class TMTokenization implements ITokenizationSupport {
 		private static final Splitter BY_DOT_SPLITTER = Splitter.on('.');
 
 		private int lastAssignedId = 0;
-		private final Map<String /* scope */, Integer @Nullable [] /* ids */ > scopeToTokenIds = new LinkedHashMap<>();
-		private final Map<String /* token */, @Nullable Integer /* id */ > tokenToTokenId = new LinkedHashMap<>();
-		private final Map<Integer /* id */, String /* id */ > tokenIdToToken = new LinkedHashMap<>();
+		private final Map<String /* scope */, Integer @Nullable [] /* ids */> scopeToTokenIds = new LinkedHashMap<>();
+		private final Map<String /* token */, @Nullable Integer /* id */> tokenToTokenId = new LinkedHashMap<>();
+		private final Map<Integer /* id */, String /* id */> tokenIdToToken = new LinkedHashMap<>();
 		TMTokenDecodeData prevToken = new TMTokenDecodeData(Collections.emptyList(), new LinkedHashMap<>());
 
 		Integer[] getTokenIds(final String scope) {

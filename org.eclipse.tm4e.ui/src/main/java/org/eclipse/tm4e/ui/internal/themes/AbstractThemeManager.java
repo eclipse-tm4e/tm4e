@@ -32,7 +32,7 @@ import org.eclipse.tm4e.ui.themes.ThemeAssociation;
  */
 public abstract class AbstractThemeManager implements IThemeManager {
 
-	private final Map<String /* theme id */ , ITheme> themes = new LinkedHashMap<>();
+	private final Map<String /* theme id */, ITheme> themes = new LinkedHashMap<>();
 	private final ThemeAssociationRegistry themeAssociationRegistry = new ThemeAssociationRegistry();
 
 	@Override

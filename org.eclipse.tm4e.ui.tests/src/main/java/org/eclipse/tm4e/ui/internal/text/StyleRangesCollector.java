@@ -107,5 +107,4 @@ public class StyleRangesCollector implements ITMPresentationReconcilerListener {
 	public boolean isFinished() {
 		return isFinished;
 	}
-
 }

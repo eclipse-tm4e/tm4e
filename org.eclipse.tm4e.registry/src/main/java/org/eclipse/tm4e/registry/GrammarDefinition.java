@@ -22,7 +22,7 @@ import org.eclipse.jdt.annotation.Nullable;
  * <extension
          point="org.eclipse.tm4e.registry.grammars">
       <grammar
-      		scopeName="source.ts"
+            scopeName="source.ts"
             path="./syntaxes/TypeScript.tmLanguage.json" >
       </grammar>
    </extension>

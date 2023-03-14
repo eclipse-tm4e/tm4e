@@ -254,7 +254,7 @@ public class LanguageConfigurationAutoEditStrategy implements IAutoEditStrategy 
 	}
 
 	private String outdentString(final String str) {
-		if (str.startsWith("\t")) {//$NON-NLS-1$
+		if (str.startsWith("\t")) { //$NON-NLS-1$
 			return str.substring(1);
 		}
 		final TabSpacesInfo tabSpaces = getTabSpaces();

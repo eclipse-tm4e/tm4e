@@ -51,7 +51,7 @@ public interface IGrammarRegistryManager {
 
 	/**
 	 * Save the grammar definitions.
-	 * 
+	 *
 	 * @throws BackingStoreException
 	 */
 	void save() throws BackingStoreException;
@@ -60,7 +60,7 @@ public interface IGrammarRegistryManager {
 
 	/**
 	 * @param contentTypes the content types to lookup for grammar association.
-	 * 
+	 *
 	 * @return the first {@link IGrammar} that applies to given content-types, or
 	 *         <code>null</code> if no content-type has a grammar associated. Grammars associated
 	 *         with parent content-types will be returned if applicable.

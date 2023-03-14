@@ -19,7 +19,7 @@ public interface IGrammarDefinition extends ITMResource {
 
 	/**
 	 * Returns the scope name of the TextMate grammar.
-	 * 
+	 *
 	 * @return the scope name of the TextMate grammar.
 	 */
 	String getScopeName();

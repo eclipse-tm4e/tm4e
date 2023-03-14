@@ -65,5 +65,4 @@ public final class ColumnViewerComparator extends ViewerComparator {
 
 		return super.compare(viewer, e1, e2);
 	}
-
 }

@@ -9,7 +9,7 @@
  */
 package org.eclipse.tm4e.core.model;
 
-import static org.eclipse.tm4e.core.registry.IGrammarSource.*;
+import static org.eclipse.tm4e.core.registry.IGrammarSource.fromResource;
 import static org.junit.jupiter.api.Assertions.*;
 
 import org.eclipse.tm4e.core.Data;
@@ -24,7 +24,7 @@ class TMModelTest {
 
 		final var lines = """
 				function addNumbers(a: number, b: number) { // 1
-				    return a + b;                           // 2
+					return a + b;                           // 2
 				}                                           // 3
 				const sum = addNumbers(10, 15);             // 4
 				console.log('Sum is: ' + sum);              // 5

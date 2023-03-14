@@ -16,7 +16,7 @@
  */
 package org.eclipse.tm4e.core.internal.matcher;
 
-import static java.lang.System.Logger.Level.*;
+import static java.lang.System.Logger.Level.WARNING;
 
 import java.lang.System.Logger;
 import java.util.ArrayList;

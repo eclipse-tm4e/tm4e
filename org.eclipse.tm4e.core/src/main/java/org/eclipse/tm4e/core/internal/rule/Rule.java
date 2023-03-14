@@ -68,5 +68,4 @@ public abstract class Rule {
 	public abstract CompiledRule compile(IRuleRegistry grammar, @Nullable String endRegexSource);
 
 	public abstract CompiledRule compileAG(IRuleRegistry grammar, @Nullable String endRegexSource, boolean allowA, boolean allowG);
-
 }

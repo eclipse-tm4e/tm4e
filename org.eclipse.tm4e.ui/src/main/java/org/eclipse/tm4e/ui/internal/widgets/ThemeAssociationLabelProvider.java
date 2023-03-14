@@ -65,5 +65,4 @@ public final class ThemeAssociationLabelProvider extends LabelProvider implement
 		final IThemeManager themeManager = TMUIPlugin.getThemeManager();
 		return themeManager.getThemeById(themeId);
 	}
-
 }

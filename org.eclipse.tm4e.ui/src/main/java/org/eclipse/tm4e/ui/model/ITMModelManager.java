@@ -22,16 +22,16 @@ public interface ITMModelManager {
 
 	/**
 	 * Connect the given document to a TextMate model.
-	 * 
+	 *
 	 * @param document
-	 * 
+	 *
 	 * @return the TextMate model connected to the document.
 	 */
 	ITMModel connect(IDocument document);
 
 	/**
 	 * Disconnect the TextMate model of the given document.
-	 * 
+	 *
 	 * @param document
 	 */
 	void disconnect(IDocument document);

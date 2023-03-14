@@ -64,7 +64,7 @@ public interface ITheme extends ITokenProvider {
 
 	/**
 	 * Initialize foreground, background color of the given {@link StyledText} with theme.
-	 * 
+	 *
 	 * @param styledText the StyledText to initialize
 	 */
 	void initializeViewerColors(StyledText styledText);

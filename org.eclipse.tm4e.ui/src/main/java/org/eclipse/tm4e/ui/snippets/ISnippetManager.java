@@ -19,9 +19,9 @@ public interface ISnippetManager {
 
 	/**
 	 * Returns list of snippet for a given scope name and empty otherwise.
-	 * 
+	 *
 	 * @param scopeName
-	 * 
+	 *
 	 * @return list of snippet for a given scope name and empty otherwise.
 	 */
 	ISnippet[] getSnippets(String scopeName);

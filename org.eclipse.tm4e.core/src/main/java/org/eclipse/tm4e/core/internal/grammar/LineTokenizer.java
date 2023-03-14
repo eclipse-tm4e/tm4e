@@ -81,7 +81,7 @@ final class LineTokenizer {
 		public final StateStack stack;
 		public final boolean stoppedEarly;
 
-		public TokenizeStringResult(final StateStack stack, final boolean stoppedEarly) {
+		TokenizeStringResult(final StateStack stack, final boolean stoppedEarly) {
 			this.stack = stack;
 			this.stoppedEarly = stoppedEarly;
 		}

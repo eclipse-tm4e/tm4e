@@ -52,7 +52,7 @@ public class OnEnterSupportTest {
 
 	private class UseBracketsTest extends OnEnterSupport {
 
-		public UseBracketsTest() {
+		UseBracketsTest() {
 			super(Arrays.asList(new CharacterPair("(", ")"), new CharacterPair("begin", "end")), null);
 		}
 

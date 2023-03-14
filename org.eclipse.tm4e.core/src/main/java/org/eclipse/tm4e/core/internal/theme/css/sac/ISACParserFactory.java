@@ -29,7 +29,7 @@ public interface ISACParserFactory {
 	 *
 	 * @param preferredParserName
 	 */
-	void setPreferredParserName(@Nullable final String preferredParserName);
+	void setPreferredParserName(@Nullable String preferredParserName);
 
 	/**
 	 * Return default instance of SAC Parser.
@@ -45,7 +45,7 @@ public interface ISACParserFactory {
 	 * Return instance of SAC Parser registered into the factory with name <code>name</code>.
 	 *
 	 * @param name
-	 * 
+	 *
 	 * @see SACConstants
 	 */
 	Parser makeParser(String name)

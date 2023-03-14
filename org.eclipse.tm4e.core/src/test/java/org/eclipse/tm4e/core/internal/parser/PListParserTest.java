@@ -30,7 +30,7 @@ class PListParserTest {
 	@Test
 	void testParseJSONPList() throws Exception {
 		final var parser = new PListParserJSON<RawGrammar>(GrammarReader.OBJECT_FACTORY);
-		try (final var is = Data.class.getResourceAsStream("csharp.json")) {
+		try (var is = Data.class.getResourceAsStream("csharp.json")) {
 			final var grammar = parser.parse(new InputStreamReader(is));
 			assertNotNull(grammar);
 			assertNotNull(grammar.getRepository());
@@ -47,7 +47,7 @@ class PListParserTest {
 	@Test
 	void testParseYAMLPlist() throws Exception {
 		final var parser = new PListParserYAML<RawGrammar>(GrammarReader.OBJECT_FACTORY);
-		try (final var is = Data.class.getResourceAsStream("JavaScript.tmLanguage.yaml")) {
+		try (var is = Data.class.getResourceAsStream("JavaScript.tmLanguage.yaml")) {
 			final var grammar = parser.parse(new InputStreamReader(is));
 			assertNotNull(grammar);
 			assertNotNull(grammar.getRepository());
@@ -62,7 +62,7 @@ class PListParserTest {
 	@Test
 	void testParseXMLPlist() throws Exception {
 		final var parser = new PListParserXML<RawGrammar>(GrammarReader.OBJECT_FACTORY);
-		try (final var is = Data.class.getResourceAsStream("JavaScript.tmLanguage")) {
+		try (var is = Data.class.getResourceAsStream("JavaScript.tmLanguage")) {
 			final var grammar = parser.parse(new InputStreamReader(is));
 			assertNotNull(grammar);
 			assertNotNull(grammar.getRepository());

@@ -64,10 +64,6 @@ public class RawTestImpl {
 		return grammarInjections;
 	}
 
-	public List<RawTestLine> getLines() {
-		return lines;
-	}
-
 	public void executeTest() throws Exception {
 		final var options = new IRegistryOptions() {
 			@Override

@@ -285,7 +285,7 @@ public final class Grammar implements IGrammar, IRuleFactoryHelper {
 			this.getInjections();
 		}
 
-		boolean isFirstLine;
+		final boolean isFirstLine;
 		if (prevState == null || prevState.equals(StateStack.NULL)) {
 			isFirstLine = true;
 			final var rawDefaultMetadata = this._basicScopeAttributesProvider.getDefaultAttributes();
@@ -301,7 +301,7 @@ public final class Grammar implements IGrammar, IRuleFactoryHelper {
 
 			final var rootScopeName = this.getRule(rootId).getName(null, null);
 
-			AttributedScopeStack scopeList;
+			final AttributedScopeStack scopeList;
 			if (rootScopeName != null) {
 				scopeList = AttributedScopeStack.createRootAndLookUpScopeName(
 						rootScopeName,

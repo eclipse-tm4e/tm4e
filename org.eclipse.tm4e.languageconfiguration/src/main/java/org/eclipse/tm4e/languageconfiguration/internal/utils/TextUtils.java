@@ -191,7 +191,7 @@ public final class TextUtils {
 	 * @return <code>true</code> if all the characters of the specified document line are the whitespace
 	 *         characters, otherwise returns <code>false</code>
 	 */
-	public static boolean isBlankLine(final IDocument document, int line) {
+	public static boolean isBlankLine(final IDocument document, final int line) {
 		try {
 			int offset = document.getLineOffset(line);
 			final int lineEnd = offset + document.getLineLength(line);
@@ -201,7 +201,7 @@ public final class TextUtils {
 				}
 				offset++;
 			}
-		} catch (BadLocationException e) {
+		} catch (final BadLocationException e) {
 			// Ignore, forcing a positive result
 		}
 		return true;

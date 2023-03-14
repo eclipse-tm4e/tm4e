@@ -157,7 +157,7 @@ public final class LanguageConfigurationPreferencePage extends PreferencePage im
 			};
 
 			column.setText(label);
-			int minWidth = computeMinimumColumnWidth(gc, label);
+			final int minWidth = computeMinimumColumnWidth(gc, label);
 			columnLayout.setColumnData(column, new ColumnWeightData(2, minWidth, true));
 			column.addSelectionListener(new ColumnSelectionAdapter(column, definitionViewer, i, viewerComparator));
 

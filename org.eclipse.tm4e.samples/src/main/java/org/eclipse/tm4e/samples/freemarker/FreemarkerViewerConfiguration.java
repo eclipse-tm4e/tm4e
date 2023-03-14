@@ -19,7 +19,7 @@ import org.eclipse.tm4e.ui.text.TMPresentationReconciler;
 public class FreemarkerViewerConfiguration extends SourceViewerConfiguration {
 
 	@Override
-	public IPresentationReconciler getPresentationReconciler(ISourceViewer viewer) {
+	public IPresentationReconciler getPresentationReconciler(final ISourceViewer viewer) {
 		// Defines a TextMate Presentation reconcilier
 		return new TMPresentationReconciler();
 	}

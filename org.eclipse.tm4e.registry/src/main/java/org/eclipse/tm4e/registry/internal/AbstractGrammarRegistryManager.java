@@ -58,7 +58,7 @@ public abstract class AbstractGrammarRegistryManager implements IGrammarRegistry
 		}
 
 		@Override
-		public @Nullable IGrammarSource getGrammarSource(String scopeName) {
+		public @Nullable IGrammarSource getGrammarSource(final String scopeName) {
 			final IGrammarDefinition info = getDefinition(scopeName);
 			if (info == null)
 				return null;

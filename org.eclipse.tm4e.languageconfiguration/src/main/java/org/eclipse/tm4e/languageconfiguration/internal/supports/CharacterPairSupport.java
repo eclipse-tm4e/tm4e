@@ -42,7 +42,7 @@ public final class CharacterPairSupport {
 	public final String autoCloseBefore;
 
 	@SuppressWarnings("unchecked")
-	public CharacterPairSupport(LanguageConfiguration config) {
+	public CharacterPairSupport(final LanguageConfiguration config) {
 		final var autoClosingPairs = config.getAutoClosingPairs();
 		final var brackets = config.getBrackets();
 

@@ -91,8 +91,8 @@ public final class ThemeTrieElement {
 		}
 
 		final int dotIndex = scope.indexOf('.');
-		String head;
-		String tail;
+		final String head;
+		final String tail;
 		if (dotIndex == -1) {
 			head = scope;
 			tail = "";
@@ -116,8 +116,8 @@ public final class ThemeTrieElement {
 		}
 
 		final int dotIndex = scope.indexOf('.');
-		String head;
-		String tail;
+		final String head;
+		final String tail;
 		if (dotIndex == -1) {
 			head = scope;
 			tail = "";
@@ -126,7 +126,7 @@ public final class ThemeTrieElement {
 			tail = scope.substring(dotIndex + 1);
 		}
 
-		ThemeTrieElement child;
+		final ThemeTrieElement child;
 		if (this._children.containsKey(head)) {
 			child = this._children.get(head);
 		} else {

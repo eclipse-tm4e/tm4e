@@ -218,11 +218,11 @@ public class LanguageConfiguration {
 		}
 		if (element.isJsonObject()) {
 			// ex : { "pattern": "^<\\/([_:\\w][_:\\w-.\\d]*)\\s*>", "flags": "i" }
-			var pattern = getAsString(((JsonObject) element).get("pattern"));
+			final var pattern = getAsString(((JsonObject) element).get("pattern"));
 			if (pattern == null) {
 				return null;
 			}
-			var flags = getAsString(((JsonObject) element).get("flags"));
+			final var flags = getAsString(((JsonObject) element).get("flags"));
 			return flags != null ? pattern + "(?" + flags + ")" : pattern;
 		}
 		// ex : "^<\\/([_:\\w][_:\\w-.\\d]*)\\s*>"

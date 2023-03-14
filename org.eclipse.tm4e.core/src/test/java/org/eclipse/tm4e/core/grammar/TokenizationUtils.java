@@ -21,7 +21,7 @@ import java.util.stream.Stream;
 
 import com.google.common.base.Splitter;
 
-public class TokenizationUtils {
+public final class TokenizationUtils {
 
 	private static final Splitter BY_LINE_SPLITTER = Splitter.onPattern("\\r?\\n");
 

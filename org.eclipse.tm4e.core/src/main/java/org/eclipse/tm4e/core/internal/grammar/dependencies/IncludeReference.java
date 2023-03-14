@@ -22,7 +22,7 @@ package org.eclipse.tm4e.core.internal.grammar.dependencies;
  *      "https://github.com/microsoft/vscode-textmate/blob/88baacf1a6637c5ec08dce18cea518d935fcf0a0/src/grammar/grammarDependencies.ts#L240">
  *      github.com/microsoft/vscode-textmate/blob/main/src/grammar/grammarDependencies.ts</a>
  */
-public class IncludeReference {
+public final class IncludeReference {
 	public enum Kind {
 		Base,
 		Self,
@@ -35,23 +35,22 @@ public class IncludeReference {
 	public static final IncludeReference SELF = new IncludeReference(Kind.Base, "$self", "");
 
 	public static IncludeReference parseInclude(final String include) {
-		switch (include) {
-			case "$base":
-				return BASE;
-			case "$self":
-				return SELF;
-			default:
+		return switch (include) {
+			case "$base" -> BASE;
+			case "$self" -> SELF;
+			default -> {
 				final var indexOfSharp = include.indexOf("#");
-				return switch (indexOfSharp) {
-					case -1 -> new IncludeReference(Kind.TopLevelReference, include, "");
-					case 0 -> new IncludeReference(Kind.RelativeReference, "", include.substring(1));
-					default -> {
-						final var scopeName = include.substring(0, indexOfSharp);
-						final var ruleName = include.substring(indexOfSharp + 1);
-						yield new IncludeReference(Kind.TopLevelRepositoryReference, scopeName, ruleName);
-					}
-				};
-		}
+				yield switch (indexOfSharp) {
+									case -1 -> new IncludeReference(Kind.TopLevelReference, include, "");
+									case 0 -> new IncludeReference(Kind.RelativeReference, "", include.substring(1));
+									default -> {
+										final var scopeName = include.substring(0, indexOfSharp);
+										final var ruleName = include.substring(indexOfSharp + 1);
+										yield new IncludeReference(Kind.TopLevelRepositoryReference, scopeName, ruleName);
+									}
+								};
+			}
+		};
 	}
 
 	public final Kind kind;

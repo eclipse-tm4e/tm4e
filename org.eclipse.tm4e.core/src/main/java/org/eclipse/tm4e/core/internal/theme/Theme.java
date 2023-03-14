@@ -139,7 +139,7 @@ public final class Theme {
 			i++;
 
 			final Object settingScope = entry.getScope();
-			List<String> scopes;
+			final List<String> scopes;
 			if (settingScope instanceof String _scope) {
 				// remove leading commas
 				_scope = _scope.replaceAll("^,+", "");

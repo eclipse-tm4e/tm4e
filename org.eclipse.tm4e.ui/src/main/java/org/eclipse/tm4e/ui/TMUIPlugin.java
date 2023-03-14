@@ -52,7 +52,7 @@ public class TMUIPlugin extends AbstractUIPlugin {
 		}
 	}
 
-	public static void logError(Exception ex) {
+	public static void logError(final Exception ex) {
 		log(new Status(IStatus.ERROR, PLUGIN_ID, ex.getMessage(), ex));
 	}
 

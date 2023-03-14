@@ -347,7 +347,7 @@ public class TMPresentationReconciler implements IPresentationReconciler {
 		}
 
 		IRegion computeRegionToRedraw(final TextEvent event, final IDocument doc) {
-			IRegion region = event.getOffset() == 0 && event.getLength() == 0 && event.getText() == null
+			final IRegion region = event.getOffset() == 0 && event.getLength() == 0 && event.getText() == null
 					? new Region(0, doc.getLength()) // redraw state change, damage the whole document
 					: widgetRegion2ModelRegion(event);
 			if (region == null || region.getLength() == 0) {

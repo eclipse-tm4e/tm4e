@@ -110,7 +110,7 @@ public final class MarkerUtils {
 				marker.delete(); // this marker is for a non-existing line
 				continue;
 			}
-			var markersOfLine = markers.computeIfAbsent(lineNumberObj, l -> new ArrayList<>(1));
+			final var markersOfLine = markers.computeIfAbsent(lineNumberObj, l -> new ArrayList<>(1));
 			markersOfLine.add(marker);
 		}
 

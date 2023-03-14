@@ -22,9 +22,9 @@ import org.eclipse.tm4e.ui.text.TMPresentationReconciler;
 public class TypeScriptViewerConfiguration extends SourceViewerConfiguration {
 
 	@Override
-	public IPresentationReconciler getPresentationReconciler(ISourceViewer viewer) {
+	public IPresentationReconciler getPresentationReconciler(final ISourceViewer viewer) {
 		// Defines a TextMate Presentation reconcilier
-		TMPresentationReconciler reconciler = new TMPresentationReconciler();
+		final var reconciler = new TMPresentationReconciler();
 		// Set the TypeScript grammar
 		reconciler.setGrammar(getGrammar());
 		// reconciler.setThemeId(ThemeIdConstants.Monokai);
@@ -33,11 +33,11 @@ public class TypeScriptViewerConfiguration extends SourceViewerConfiguration {
 
 	private IGrammar getGrammar() {
 		// TODO: cache the grammar
-		Registry registry = new Registry();
+		final var registry = new Registry();
 		try {
 			return registry.addGrammar(
 					IGrammarSource.fromResource(TypeScriptViewerConfiguration.class, "TypeScript.tmLanguage.json"));
-		} catch (Exception e) {
+		} catch (final Exception e) {
 			e.printStackTrace();
 			return null;
 		}

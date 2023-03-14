@@ -128,7 +128,7 @@ public final class ThemePreferencePage extends PreferencePage implements IWorkbe
 	 * @param parent
 	 */
 	private void createThemesTableContent(final Composite parent) {
-		GridLayout layout;
+		final GridLayout layout;
 		final var tableComposite = new Composite(parent, SWT.NONE);
 		final var data = new GridData(GridData.FILL_BOTH);
 		data.widthHint = 360;

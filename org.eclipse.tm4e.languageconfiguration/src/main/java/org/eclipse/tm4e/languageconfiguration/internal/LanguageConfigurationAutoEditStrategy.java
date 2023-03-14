@@ -118,7 +118,7 @@ public class LanguageConfigurationAutoEditStrategy implements IAutoEditStrategy 
 				if (registry.getAutoCloseBefore(contentType).indexOf(ch) < 0)
 					return false;
 			}
-		} catch (Exception ex) {
+		} catch (final Exception ex) {
 			// ignore
 		}
 
@@ -130,20 +130,20 @@ public class LanguageConfigurationAutoEditStrategy implements IAutoEditStrategy 
 				final var tokens = docModel.getLineTokens(lineIndex);
 				if (tokens != null) {
 					TMToken tokenAtOffset = null;
-					for (var token : tokens) {
+					for (final var token : tokens) {
 						if (token.startIndex > lineCharOffset)
 							break;
 						tokenAtOffset = token;
 					}
 					if (tokenAtOffset != null) {
-						for (var notIn : pair.notIn) {
+						for (final var notIn : pair.notIn) {
 							if (tokenAtOffset.type.contains(notIn)) {
 								return false;
 							}
 						}
 					}
 				}
-			} catch (BadLocationException ex) {
+			} catch (final BadLocationException ex) {
 				// ignore
 			}
 		}

@@ -77,18 +77,18 @@ public class ThemeResolvingTest extends AbstractThemeTest {
 	protected static final Gson THEME_GSON = new GsonBuilder()
 			.setExclusionStrategies(new ExclusionStrategy() {
 				@Override
-				public boolean shouldSkipField(FieldAttributes f) {
+				public boolean shouldSkipField(final FieldAttributes f) {
 					return f.getDeclaredClass() == Theme.class && f.getName().equals("_cachedMatchRoot"); // ignore the cache objects
 				}
 
 				@Override
-				public boolean shouldSkipClass(Class<?> clazz) {
+				public boolean shouldSkipClass(final Class<?> clazz) {
 					return false;
 				}
 			})
 			.setPrettyPrinting().create();
 
-	private static void assertThemeEqual(Theme actual, Theme expected) {
+	private static void assertThemeEqual(final Theme actual, final Theme expected) {
 		// if this fails, we get a nice visual representation of the difference:
 		assertEquals(THEME_GSON.toJson(expected), THEME_GSON.toJson(actual));
 

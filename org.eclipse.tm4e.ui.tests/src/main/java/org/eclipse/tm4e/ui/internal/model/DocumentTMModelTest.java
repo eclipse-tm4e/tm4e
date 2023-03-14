@@ -36,7 +36,7 @@ import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
 
-@TestMethodOrder(value = MethodOrderer.MethodName.class)
+@TestMethodOrder(MethodOrderer.MethodName.class)
 class DocumentTMModelTest {
 
 	private static final String LF = "\n";

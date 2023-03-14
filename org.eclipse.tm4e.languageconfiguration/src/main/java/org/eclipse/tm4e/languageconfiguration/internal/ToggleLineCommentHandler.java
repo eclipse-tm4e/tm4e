@@ -119,7 +119,7 @@ public class ToggleLineCommentHandler extends AbstractHandler {
 								// Filter out the blank lines and lines that are outside of the text selection
 								final int selectionStartLine = textSelection.getStartLine();
 								final int selectionEndLine = textSelection.getEndLine();
-								final int lineRange[] = { -1, -1 };
+								final int[] lineRange = { -1, -1 };
 								lines = lines.stream().filter(l -> l >= selectionStartLine && l <= selectionEndLine
 										&& !TextUtils.isBlankLine(document, l))
 										.map(l -> {
@@ -460,7 +460,7 @@ public class ToggleLineCommentHandler extends AbstractHandler {
 		// Filter out the blank lines and lines that are outside of the text selection
 		final int selectionStartLine = document.getLineOfOffset(textSelectionStart);
 		final int selectionEndLine = document.getLineOfOffset(textSelectionEnd);
-		final int lineRange[] = { -1, -1 };
+		final int[] lineRange = { -1, -1 };
 		Set<Integer> lines = computeLines(new TextSelection(textSelectionStart, textSelectionEnd - textSelectionStart),
 				document);
 		lines = lines.stream().filter(l -> l >= selectionStartLine && l <= selectionEndLine && !TextUtils.isBlankLine(document, l))

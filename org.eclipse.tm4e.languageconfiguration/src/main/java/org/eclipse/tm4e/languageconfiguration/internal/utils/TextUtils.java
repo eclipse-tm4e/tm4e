@@ -11,16 +11,11 @@
  */
 package org.eclipse.tm4e.languageconfiguration.internal.utils;
 
-import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.jface.text.BadLocationException;
 import org.eclipse.jface.text.DocumentCommand;
 import org.eclipse.jface.text.IDocument;
 import org.eclipse.jface.text.IRegion;
-import org.eclipse.jface.text.ITextViewer;
-import org.eclipse.jface.text.TabsToSpacesConverter;
 import org.eclipse.jface.text.TextUtilities;
-import org.eclipse.jface.text.TextViewer;
-import org.eclipse.tm4e.ui.internal.utils.ClassHelper;
 
 public final class TextUtils {
 
@@ -105,17 +100,17 @@ public final class TextUtils {
 		return -1;
 	}
 
-	public static String getIndentationFromWhitespace(final String whitespace, final TabSpacesInfo tabSpaces) {
+	public static String getIndentationFromWhitespace(final String whitespace, final int tabSize, final boolean insertSpaces) {
 		final var tab = "\t"; //$NON-NLS-1$
 		int indentOffset = 0;
 		boolean startsWithTab = true;
 		boolean startsWithSpaces = true;
-		final String spaces = tabSpaces.isInsertSpaces()
-				? " ".repeat(tabSpaces.getTabSize())
+		final String spaces = insertSpaces
+				? " ".repeat(tabSize)
 				: "";
 		while (startsWithTab || startsWithSpaces) {
 			startsWithTab = whitespace.startsWith(tab, indentOffset);
-			startsWithSpaces = tabSpaces.isInsertSpaces() && whitespace.startsWith(spaces, indentOffset);
+			startsWithSpaces = insertSpaces && whitespace.startsWith(spaces, indentOffset);
 			if (startsWithTab) {
 				indentOffset += tab.length();
 			}
@@ -167,19 +162,6 @@ public final class TextUtils {
 			offset++;
 		}
 		return end;
-	}
-
-	public static TabSpacesInfo getTabSpaces(@Nullable final ITextViewer viewer) {
-		if (viewer != null) {
-			final TabsToSpacesConverter converter = ClassHelper.getFieldValue(viewer, "fTabsToSpacesConverter", //$NON-NLS-1$
-					TextViewer.class);
-			if (converter != null) {
-				@SuppressWarnings("null")
-				final int tabSize = ClassHelper.getFieldValue(converter, "fTabRatio", TabsToSpacesConverter.class); //$NON-NLS-1$
-				return new TabSpacesInfo(tabSize, true);
-			}
-		}
-		return new TabSpacesInfo(4, false);
 	}
 
 	/**

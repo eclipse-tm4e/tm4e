@@ -50,7 +50,7 @@ public final class MarkerUtils {
 
 	private static final Map<String, MarkerConfig> MARKERCONFIG_BY_TAG = Map.of(
 			// problem markers:
-			"BUG", MarkerConfig.forProblem(IMarker.SEVERITY_ERROR),
+			"BUG", MarkerConfig.forProblem(IMarker.SEVERITY_INFO),
 			"NOTE", MarkerConfig.forProblem(IMarker.SEVERITY_INFO),
 			// task markers:
 			"FIXME", MarkerConfig.forTask(IMarker.PRIORITY_HIGH),

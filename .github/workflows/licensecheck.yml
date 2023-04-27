@@ -3,19 +3,27 @@ name: License check
 
 on:
   push:
-    branches: 
-      - '*'
+    branches:    # build all branches
+    - '**'
+    tags-ignore: # but don't build tags
+    - '**'
   pull_request:
-    branches: 
-     - '*'
+    branches:
+    - '**'
   workflow_dispatch:
     # https://github.blog/changelog/2020-07-06-github-actions-manual-triggers-with-workflow_dispatch/
 
+defaults:
+  run:
+    shell: bash
+
+env:
+  JAVA_VERSION: 17
+
 jobs:
+
   build:
-
     runs-on: ubuntu-latest
-
     steps:
     - name: Git Checkout
       uses: actions/checkout@v3 #https://github.com/actions/checkout
@@ -36,8 +44,13 @@ jobs:
         restore-keys: |
           ${{ runner.os }}-mvnrepo-
 
-    - name: License check
-      run: | 
+    - name: "Install: Maven"
+      uses: stCarolas/setup-maven@v4.5 # https://github.com/stCarolas/setup-maven
+      with:
+        maven-version: 3.9.1
+
+    - name: License check # see https://github.com/eclipse/dash-licenses
+      run: |
         set -eu
 
         MAVEN_OPTS="${MAVEN_OPTS:-}"
@@ -48,6 +61,21 @@ jobs:
         echo "  -> MAVEN_OPTS: $MAVEN_OPTS"
         export MAVEN_OPTS
 
+        # "excludeArtifactIds" parameter is to prevent builds from failing with:
+        # License information could not be automatically verified for the following content:
+        # maven/mavencentral/org.eclipse/org.eclipse.tm4e.core/0.5.2-SNAPSHOT
+        # maven/mavencentral/org.eclipse/org.eclipse.tm4e.feature/0.5.4-SNAPSHOT
+        # maven/mavencentral/org.eclipse/org.eclipse.tm4e.language_pack.feature/0.1.1-SNAPSHOT
+        # maven/mavencentral/org.eclipse/org.eclipse.tm4e.language_pack/0.1.1-SNAPSHOT
+        # maven/mavencentral/org.eclipse/org.eclipse.tm4e.languageconfiguration/0.5.4-SNAPSHOT
+        # maven/mavencentral/org.eclipse/org.eclipse.tm4e.markdown/0.5.1-SNAPSHOT
+        # maven/mavencentral/org.eclipse/org.eclipse.tm4e.registry/0.6.3-SNAPSHOT
+        # maven/mavencentral/org.eclipse/org.eclipse.tm4e.samples/0.4.1-SNAPSHOT
+        # maven/mavencentral/org.eclipse/org.eclipse.tm4e.ui/0.6.2-SNAPSHOT
+        # p2/orbit/p2.eclipse.plugin/org.eclipse.ui.tests.harness/1.9.0.v20221024-2137
+        # This content is either not correctly mapped by the system, or requires review.
+        # Error: Dependency license check failed. Some dependencies need to be vetted. 
+
         mvn \
           --errors \
           --update-snapshots \
@@ -56,4 +84,15 @@ jobs:
           --no-transfer-progress \
           org.eclipse.dash:license-tool-plugin:license-check \
           --file pom.xml \
-          -Ddash.fail=true
+          -Ddash.fail=true \
+          -DexcludeArtifactIds=\
+        org.eclipse.tm4e.core,\
+        org.eclipse.tm4e.feature,\
+        org.eclipse.tm4e.language_pack.feature,\
+        org.eclipse.tm4e.language_pack,\
+        org.eclipse.tm4e.languageconfiguration,\
+        org.eclipse.tm4e.markdown,\
+        org.eclipse.tm4e.registry,\
+        org.eclipse.tm4e.samples,\
+        org.eclipse.tm4e.ui,\
+        org.eclipse.ui.tests.harness

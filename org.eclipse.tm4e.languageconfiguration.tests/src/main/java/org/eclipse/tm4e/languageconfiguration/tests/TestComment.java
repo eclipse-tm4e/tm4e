@@ -126,6 +126,36 @@ public class TestComment {
 		assertEquals("a\r\n\r\nb\r\n\r\nc", doc.get());
 		checktTextSelection(editor.getSelectionProvider().getSelection(), 0, 0);
 	}
+	
+	@Test
+	public void testToggleLineComment() throws Exception {
+		final var now = System.currentTimeMillis();
+		final var proj = ResourcesPlugin.getWorkspace().getRoot().getProject(getClass().getName() + now);
+		proj.create(null);
+		proj.open(null);
+		final var file = proj.getFile("whatever.lc-test");
+		// smallest padding so that the selected lines would not come out of a HashSet in order.
+		String padding = "0\n1\n2\n3\n4\n5\n6\n7\n8\n9\n10\n11\n12\n13\n";
+		String input = padding + "a\nb\nc\n" + padding;
+		file.create(new ByteArrayInputStream(input.getBytes()), true, null);
+		final var editor = (ITextEditor) IDE.openEditor(
+				PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage(), file,
+				"org.eclipse.ui.genericeditor.GenericEditor");
+		final var doc = editor.getDocumentProvider().getDocument(editor.getEditorInput());
+		final var service = PlatformUI.getWorkbench().getService(IHandlerService.class);
+		String text = doc.get();
+		int indexOfA = text.indexOf('a');
+		int lengthToC = text.indexOf('c') + 1 - indexOfA;
+		editor.getSelectionProvider().setSelection(new TextSelection(indexOfA, lengthToC));
+		service.executeCommand(ToggleLineCommentHandler.TOGGLE_LINE_COMMENT_COMMAND_ID, null);
+		String commented = padding + "//a\n//b\n//c\n" + padding;
+		assertEquals(commented, doc.get());
+
+		// Repeatedly executed toggle comment command should remove the comments inserted previously
+		service.executeCommand(ToggleLineCommentHandler.TOGGLE_LINE_COMMENT_COMMAND_ID, null);
+		assertEquals(input, doc.get());
+		checktTextSelection(editor.getSelectionProvider().getSelection(), indexOfA, lengthToC);
+	}
 
 	@Test
 	public void testToggleBlockCommentUseLineComment() throws Exception {

@@ -533,7 +533,7 @@ public class ToggleLineCommentHandler extends AbstractHandler {
 		// Filter out the blank lines and lines that are outside of the text selection
 		final Set<Integer> lines = computeLines(selection, document).stream()
 				.filter(l -> l >= selection.getStartLine() && l <= selection.getEndLine())
-				.collect(Collectors.toSet());
+				.collect(Collectors.toCollection(TreeSet::new));
 
 		boolean isFirstLineUpdated = false;
 		for (final int lineNumber : lines) {

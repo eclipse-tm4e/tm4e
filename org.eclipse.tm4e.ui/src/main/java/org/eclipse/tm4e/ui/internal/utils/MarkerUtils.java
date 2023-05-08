@@ -22,14 +22,13 @@ import java.util.stream.Collectors;
 
 import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.runtime.CoreException;
-import org.eclipse.jdt.annotation.NonNull;
-import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.tm4e.core.model.ITMModel;
 import org.eclipse.tm4e.core.model.ModelTokensChangedEvent;
 import org.eclipse.tm4e.core.model.TMToken;
 import org.eclipse.tm4e.ui.TMUIPlugin;
 import org.eclipse.tm4e.ui.internal.model.TMDocumentModel;
+import org.eclipse.tm4e.ui.internal.preferences.PreferenceHelper;
 
 public final class MarkerUtils {
 
@@ -37,29 +36,23 @@ public final class MarkerUtils {
 	private static final String PROBLEMMARKER_TYPE = "org.eclipse.tm4e.ui.problemmarker";
 	private static final String TASKMARKER_TYPE = "org.eclipse.tm4e.ui.taskmarker";
 
-	@NonNullByDefault({})
-	private record MarkerConfig(@NonNull String type, int priority, int severity) {
-		static MarkerConfig forProblem(final int severity) {
-			return new MarkerConfig(PROBLEMMARKER_TYPE, IMarker.PRIORITY_NORMAL, severity);
-		}
+	private static final Map<String, MarkerConfig> MARKERCONFIG_BY_TAG = new HashMap<>();
+	private static Pattern TAG_SELECTOR_PATTERN = lazyNonNull();
 
-		static MarkerConfig forTask(final int priority) {
-			return new MarkerConfig(TASKMARKER_TYPE, priority, IMarker.SEVERITY_INFO);
-		}
+	static {
+		reloadMarkerConfigs();
 	}
 
-	private static final Map<String, MarkerConfig> MARKERCONFIG_BY_TAG = Map.of(
-			// problem markers:
-			"BUG", MarkerConfig.forProblem(IMarker.SEVERITY_ERROR),
-			"NOTE", MarkerConfig.forProblem(IMarker.SEVERITY_INFO),
-			// task markers:
-			"FIXME", MarkerConfig.forTask(IMarker.PRIORITY_HIGH),
-			"HACK", MarkerConfig.forTask(IMarker.PRIORITY_NORMAL),
-			"TODO", MarkerConfig.forTask(IMarker.PRIORITY_NORMAL),
-			"XXX", MarkerConfig.forTask(IMarker.PRIORITY_NORMAL));
-
-	private static final Pattern TAG_SELECTOR_PATTERN = Pattern.compile(
-			"\\b(" + MARKERCONFIG_BY_TAG.keySet().stream().collect(Collectors.joining("|")) + ")\\b");
+	public static void reloadMarkerConfigs() {
+		synchronized (MARKERCONFIG_BY_TAG) {
+			MARKERCONFIG_BY_TAG.clear();
+			for (final var markerConfig : PreferenceHelper.loadMarkerConfigs()) {
+				MARKERCONFIG_BY_TAG.put(markerConfig.tag, markerConfig);
+			}
+			TAG_SELECTOR_PATTERN = Pattern
+					.compile("^\\s*(" + MARKERCONFIG_BY_TAG.keySet().stream().collect(Collectors.joining("|")) + ")\\b");
+		}
+	}
 
 	/**
 	 * Updates all TM4E text markers of the corresponding document starting from
@@ -82,7 +75,7 @@ public final class MarkerUtils {
 	 *
 	 * @param startLineNumber 1-based
 	 */
-	public static void updateTextMarkers(final TMDocumentModel docModel, final int startLineNumber)
+	private static void updateTextMarkers(final TMDocumentModel docModel, final int startLineNumber)
 			throws CoreException {
 
 		final var doc = docModel.getDocument();
@@ -142,23 +135,29 @@ public final class MarkerUtils {
 					if (!matcher.find())
 						continue;
 
-					final var markerConfig = MarkerUtils.MARKERCONFIG_BY_TAG.get(matcher.group());
+					final var markerConfig = MarkerUtils.MARKERCONFIG_BY_TAG.get(matcher.group(1));
 					final var markerText = commentText.substring(matcher.start()).trim();
 
 					final var attrs = new HashMap<String, Object>();
 					attrs.put(IMarker.LINE_NUMBER, lineNumberObj);
 					attrs.put(IMarker.MESSAGE, markerText);
-					attrs.put(IMarker.PRIORITY, markerConfig.priority);
-					attrs.put(IMarker.SEVERITY, markerConfig.severity);
+					switch (markerConfig.type) {
+						case PROBLEM -> attrs.put(IMarker.SEVERITY, markerConfig.asProblemMarkerConfig().severity.value);
+						case TASK -> attrs.put(IMarker.PRIORITY, markerConfig.asTaskMarkerConfig().priority.value);
+					}
 					attrs.put(IMarker.USER_EDITABLE, Boolean.FALSE);
 					attrs.put(IMarker.SOURCE_ID, "TM4E");
 
 					// only create a new marker if no matching marker already exists
-					if (!removeMatchingMarker(outdatedMarkers, markerConfig.type, attrs)) {
+					String markerTypeId = switch (markerConfig.type) {
+						case PROBLEM -> PROBLEMMARKER_TYPE;
+						case TASK -> TASKMARKER_TYPE;
+					};
+					if (!removeMatchingMarker(outdatedMarkers, markerTypeId, attrs)) {
 						final var markerTextStartOffset = lineOffset + token.startIndex + matcher.start();
 						attrs.put(IMarker.CHAR_START, markerTextStartOffset);
 						attrs.put(IMarker.CHAR_END, markerTextStartOffset + markerText.length());
-						res.createMarker(markerConfig.type, attrs);
+						res.createMarker(markerTypeId, attrs);
 					}
 				} catch (final Exception ex) {
 					TMUIPlugin.logError(ex);
@@ -187,7 +186,9 @@ public final class MarkerUtils {
 	}
 
 	/**
-	 * Removes a matching marker from the given list and returns the removed marker or null if no match was found.
+	 * Removes a matching marker from the given list.
+	 *
+	 * @return true if a matching marker was found and removed.
 	 */
 	private static boolean removeMatchingMarker(final List<IMarker> markers, final String type,
 			final Map<String, ?> attributes) throws CoreException {

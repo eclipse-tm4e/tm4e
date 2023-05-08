@@ -20,7 +20,7 @@ import org.eclipse.jface.viewers.ViewerComparator;
 import org.eclipse.swt.SWT;
 
 /**
- * Viewer compoarator which sort a given column.
+ * Viewer comparator which sort a given column.
  *
  */
 public final class ColumnViewerComparator extends ViewerComparator {

@@ -56,6 +56,10 @@
             class="org.eclipse.tm4e.ui.internal.preferences.GrammarPreferencePage"
             id="org.eclipse.tm4e.ui.preferences.GrammarPreferencePage"
             category="org.eclipse.tm4e.ui.preferences.TextMatePreferencePage" />
+      <page name="%TaskTagsPreferencePage.name"
+            class="org.eclipse.tm4e.ui.internal.preferences.TaskTagsPreferencePage"
+            id="org.eclipse.tm4e.ui.preferences.TaskTagsPreferencePage"
+            category="org.eclipse.tm4e.ui.preferences.TextMatePreferencePage" />
       <page name="%ThemePreferencePage.name"
             class="org.eclipse.tm4e.ui.internal.preferences.ThemePreferencePage"
             id="org.eclipse.tm4e.ui.preferences.ThemePreferencePage"

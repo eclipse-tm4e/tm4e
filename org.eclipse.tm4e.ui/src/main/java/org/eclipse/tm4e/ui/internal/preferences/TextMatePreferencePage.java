@@ -38,13 +38,15 @@ public final class TextMatePreferencePage extends PreferencePage implements IWor
 		composite.setLayout(layout);
 
 		// Add link to grammar preference page
-		addRelatedLink(composite, GrammarPreferencePage.PAGE_ID,
-				TMUIMessages.TextMatePreferencePage_GrammarRelatedLink);
+		addRelatedLink(composite, GrammarPreferencePage.PAGE_ID, TMUIMessages.TextMatePreferencePage_GrammarRelatedLink);
 
 		// Add link to language configuration preference page
 		addRelatedLink(composite,
 				"org.eclipse.tm4e.languageconfiguration.preferences.LanguageConfigurationPreferencePage", //$NON-NLS-1$
 				TMUIMessages.TextMatePreferencePage_LanguageConfigurationRelatedLink);
+
+		// Add link to task tags preference page
+		addRelatedLink(composite, TaskTagsPreferencePage.PAGE_ID, TMUIMessages.TextMatePreferencePage_TaskTagsRelatedLink);
 
 		// Add link to theme preference page
 		addRelatedLink(composite, ThemePreferencePage.PAGE_ID, TMUIMessages.TextMatePreferencePage_ThemeRelatedLink);
@@ -64,6 +66,5 @@ public final class TextMatePreferencePage extends PreferencePage implements IWor
 
 	@Override
 	public void init(@Nullable final IWorkbench workbench) {
-
 	}
 }

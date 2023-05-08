@@ -32,6 +32,7 @@ public final class TMUIMessages extends NLS {
 	// TextMate preferences page
 	public static String TextMatePreferencePage_GrammarRelatedLink;
 	public static String TextMatePreferencePage_LanguageConfigurationRelatedLink;
+	public static String TextMatePreferencePage_TaskTagsRelatedLink;
 	public static String TextMatePreferencePage_ThemeRelatedLink;
 
 	// Grammar preferences page
@@ -48,6 +49,18 @@ public final class TMUIMessages extends NLS {
 	public static String GrammarPreferencePage_tab_theme_text;
 	public static String GrammarPreferencePage_tab_injection_text;
 	public static String GrammarPreferencePage_preview;
+
+	// Task Tags preferences page
+	public static String TaskTagsPreferencePage_description;
+	public static String TaskTagsPreferencePage_column_tag;
+	public static String TaskTagsPreferencePage_column_type;
+	public static String TaskTagsPreferencePage_column_level;
+	public static String TaskTagsPreferencePage_addTagDialog_windowTitle;
+	public static String TaskTagsPreferencePage_addTagDialog_header;
+	public static String TaskTagsPreferencePage_addTagDialog_message;
+	public static String TaskTagsPreferencePage_editTagDialog_windowTitle;
+	public static String TaskTagsPreferencePage_editTagDialog_header;
+	public static String TaskTagsPreferencePage_editTagDialog_message;
 
 	// Theme preferences page
 	public static String ThemePreferencePage_title;

@@ -40,51 +40,63 @@ defaults:
   run:
     shell: bash
 
+env:
+  JAVA_VERSION: 17
+
 jobs:
 
   build:
+
     runs-on: ubuntu-latest
+
     steps:
+    - name: Show environment variables
+      run: env | sort
+
     - name: Git Checkout
       uses: actions/checkout@v3 #https://github.com/actions/checkout
       with:
         fetch-depth: 0 # required to prevent tycho-p2-extras-plugin:compare-version-with-baseline potentially failing the build
 
-    - name: Set up JDK 17
-      uses: actions/setup-java@v3 # https://github.com/actions/setup-java
-      with:
-        distribution: 'temurin'
-        java-version: 17
-
     - name: Configure Fast APT Mirror
       uses: vegardit/fast-apt-mirror.sh@v1
 
-    - name: Install xvfb
-      run: |
-        sudo apt-get install --no-install-recommends -y xvfb
+    - name: "Install: xvfb"
+      run: sudo apt-get install --no-install-recommends -y xvfb
 
-        sudo apt-get install --no-install-recommends -y dbus-x11
-        # prevents: "Failed to execute child process “dbus-launch” (No such file or directory)"
+    - name: "Install: dbus-x11"
+      # prevents: "Failed to execute child process “dbus-launch” (No such file or directory)"
+      run: sudo apt-get install --no-install-recommends -y dbus-x11
 
-        sudo apt-get install --no-install-recommends -y libswt-gtk-*-java
-        # prevents:
-        #  java.lang.UnsatisfiedLinkError: Could not load SWT library. Reasons:
-        #    no swt-pi4-gtk-4956r13 in java.library.path: /usr/java/packages/lib:/usr/lib64:/lib64:/lib:/usr/lib
-        #    no swt-pi4-gtk in java.library.path: /usr/java/packages/lib:/usr/lib64:/lib64:/lib:/usr/lib
-        #    no swt-pi4 in java.library.path: /usr/java/packages/lib:/usr/lib64:/lib64:/lib:/usr/lib
+    - name: "Install: at-spi2-core"
+      # prevents: "dbind-WARNING **: 20:17:55.046: AT-SPI: Error retrieving accessibility bus address: org.freedesktop.DBus.Error.ServiceUnknown: The name org.a11y.Bus was not provided by any .service files"
+      # see https://gist.github.com/jeffcogswell/62395900725acef1c0a5a608f7eb7a05
+      run: sudo apt-get install --no-install-recommends -y at-spi2-core
+
+    - name: "Install: lib-swt-gtk-*-java"
+      # prevents:
+      #  java.lang.UnsatisfiedLinkError: Could not load SWT library. Reasons:
+      #    no swt-pi4-gtk-4956r13 in java.library.path: /usr/java/packages/lib:/usr/lib64:/lib64:/lib:/usr/lib
+      #    no swt-pi4-gtk in java.library.path: /usr/java/packages/lib:/usr/lib64:/lib64:/lib:/usr/lib
+      #    no swt-pi4 in java.library.path: /usr/java/packages/lib:/usr/lib64:/lib64:/lib:/usr/lib
+      run: sudo apt-get install --no-install-recommends -y libswt-gtk-*-java
+
+    - name: "Install: JDK ${{ env.JAVA_VERSION }}"
+      uses: actions/setup-java@v3 # https://github.com/actions/setup-java
+      with:
+        distribution: temurin
+        java-version: ${{ env.JAVA_VERSION }}
 
     - name: "Cache: Local Maven Repository"
       uses: actions/cache@v3
       with:
         path: |
           ~/.m2/repository
-          !~/.m2/**/*SNAPSHOT*
+          !~/.m2/repository/*SNAPSHOT*
         key: ${{ runner.os }}-mvnrepo-${{ hashFiles('**/pom.xml') }}-${{ hashFiles('**/target-platform/tm4e-target.target') }}
-        restore-keys: |
-          ${{ runner.os }}-mvnrepo-
 
-    - name: Set up Maven
-      uses: stCarolas/setup-maven@v4.5
+    - name: "Install: Maven"
+      uses: stCarolas/setup-maven@v4.5 # https://github.com/stCarolas/setup-maven
       with:
         maven-version: 3.9.1
 
@@ -93,20 +105,25 @@ jobs:
       run: |
         set -eu
 
-        MAVEN_OPTS="${MAVEN_OPTS:-}"
-        MAVEN_OPTS="$MAVEN_OPTS -XX:+TieredCompilation -XX:TieredStopAtLevel=1" # https://zeroturnaround.com/rebellabs/your-maven-build-is-slow-speed-it-up/
-        MAVEN_OPTS="$MAVEN_OPTS -Djava.security.egd=file:/dev/./urandom" # https://stackoverflow.com/questions/58991966/what-java-security-egd-option-is-for/59097932#59097932
-        MAVEN_OPTS="$MAVEN_OPTS -Dorg.slf4j.simpleLogger.showDateTime=true -Dorg.slf4j.simpleLogger.dateTimeFormat=HH:mm:ss,SSS" # https://stackoverflow.com/questions/5120470/how-to-time-the-different-stages-of-maven-execution/49494561#49494561
-        MAVEN_OPTS="$MAVEN_OPTS -Xmx1024m -Djava.awt.headless=true -Djava.net.preferIPv4Stack=true -Dhttps.protocols=TLSv1.2"
+        MAVEN_OPTS+=" -Djava.security.egd=file:/dev/./urandom" # https://stackoverflow.com/questions/58991966/what-java-security-egd-option-is-for/59097932#59097932
+        MAVEN_OPTS+=" -Dorg.slf4j.simpleLogger.showDateTime=true -Dorg.slf4j.simpleLogger.dateTimeFormat=HH:mm:ss,SSS" # https://stackoverflow.com/questions/5120470/how-to-time-the-different-stages-of-maven-execution/49494561#49494561
+        MAVEN_OPTS+=" -Xmx1024m -Djava.awt.headless=true -Djava.net.preferIPv4Stack=true -Dhttps.protocols=TLSv1.2"
         echo "  -> MAVEN_OPTS: $MAVEN_OPTS"
         export MAVEN_OPTS
 
+        if [[ ${ACT:-} == "true" ]]; then # when running locally using nektos/act
+           maven_args="-Djgit.dirtyWorkingTree=warning"
+        else
+           maven_args="--no-transfer-progress"
+        fi
+
         # prevent "org.eclipse.swt.SWTError: No more handles [gtk_init_check() failed]"
-        xvfb-run mvn \
+        xvfb-run --server-args="-screen 0 1600x900x24" mvn \
           --errors \
           --update-snapshots \
           --batch-mode \
           --show-version \
-          --no-transfer-progress \
+          -Dtycho.disableP2Mirrors=true \
+          $maven_args \
           ${{ github.event.inputs.additional_maven_args }} \
           clean verify

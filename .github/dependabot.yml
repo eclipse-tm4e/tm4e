@@ -1,4 +1,4 @@
-# https://help.github.com/github/administering-a-repository/configuration-options-for-dependency-updates
+# https://docs.github.com/en/code-security/dependabot/dependabot-version-updates/configuration-options-for-the-dependabot.yml-file
 version: 2
 updates:
 - package-ecosystem: github-actions
@@ -6,15 +6,17 @@ updates:
   schedule:
     interval: daily
   commit-message:
-    prefix: fix
-    prefix-development: chore
+    prefix: ci
+    prefix-development: ci
     include: scope
+
 - package-ecosystem: maven
-  directory: "/"
+  directory: /
   schedule:
     interval: daily
   commit-message:
-    prefix: fix
+    prefix: deps
     prefix-development: chore
     include: scope
-  open-pull-requests-limit: 10
+  labels:
+    - dependencies

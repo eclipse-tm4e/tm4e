@@ -50,7 +50,7 @@ public final class MarkerUtils {
 				MARKERCONFIG_BY_TAG.put(markerConfig.tag, markerConfig);
 			}
 			TAG_SELECTOR_PATTERN = Pattern
-					.compile("^\\s*(" + MARKERCONFIG_BY_TAG.keySet().stream().collect(Collectors.joining("|")) + ")\\b");
+					.compile("\\b(" + MARKERCONFIG_BY_TAG.keySet().stream().collect(Collectors.joining("|")) + ")\\b");
 		}
 	}
 

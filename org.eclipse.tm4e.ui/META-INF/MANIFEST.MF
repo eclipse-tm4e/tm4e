@@ -4,7 +4,7 @@ Bundle-Name: %pluginName
 Bundle-Vendor: %providerName
 Bundle-Localization: plugin
 Bundle-SymbolicName: org.eclipse.tm4e.ui;singleton:=true
-Bundle-Version: 0.6.3.qualifier
+Bundle-Version: 0.6.4.qualifier
 Require-Bundle: org.eclipse.tm4e.core;bundle-version="0.5.2",
  org.eclipse.jface.text,
  org.eclipse.core.runtime,

@@ -36,22 +36,23 @@ public final class MarkerUtils {
 	private static final String PROBLEMMARKER_TYPE = "org.eclipse.tm4e.ui.problemmarker";
 	private static final String TASKMARKER_TYPE = "org.eclipse.tm4e.ui.taskmarker";
 
-	private static final Map<String, MarkerConfig> MARKERCONFIG_BY_TAG = new HashMap<>();
-	private static Pattern TAG_SELECTOR_PATTERN = lazyNonNull();
+	private static final class MarkerConfigs {
+		final Map<String, MarkerConfig> markerConfigByTag = new HashMap<>();
+		final Pattern tagSelectorPattern;
 
-	static {
-		reloadMarkerConfigs();
+		MarkerConfigs() {
+			for (final var markerConfig : PreferenceHelper.loadMarkerConfigs()) {
+				markerConfigByTag.put(markerConfig.tag, markerConfig);
+			}
+			tagSelectorPattern = Pattern
+					.compile("\\b(" + markerConfigByTag.keySet().stream().collect(Collectors.joining("|")) + ")\\b");
+		}
 	}
 
-	public static void reloadMarkerConfigs() {
-		synchronized (MARKERCONFIG_BY_TAG) {
-			MARKERCONFIG_BY_TAG.clear();
-			for (final var markerConfig : PreferenceHelper.loadMarkerConfigs()) {
-				MARKERCONFIG_BY_TAG.put(markerConfig.tag, markerConfig);
-			}
-			TAG_SELECTOR_PATTERN = Pattern
-					.compile("\\b(" + MARKERCONFIG_BY_TAG.keySet().stream().collect(Collectors.joining("|")) + ")\\b");
-		}
+	private static volatile MarkerConfigs MARKER_CONFIGS = new MarkerConfigs();
+
+	public static synchronized void reloadMarkerConfigs() {
+		MARKER_CONFIGS = new MarkerConfigs();
 	}
 
 	/**
@@ -107,6 +108,10 @@ public final class MarkerUtils {
 			markersOfLine.add(marker);
 		}
 
+		final var markerConfigs = MARKER_CONFIGS;
+		final var markerConfigByTag = markerConfigs.markerConfigByTag;
+		final var tagSelectorPattern = markerConfigs.tagSelectorPattern;
+
 		// iterate over all lines
 		for (int lineNumber = startLineNumber; lineNumber <= numberOfLines; lineNumber++) {
 			final var lineNumberObj = Integer.valueOf(lineNumber);
@@ -131,11 +136,11 @@ public final class MarkerUtils {
 					if (commentText.length() < 3)
 						continue;
 
-					final var matcher = MarkerUtils.TAG_SELECTOR_PATTERN.matcher(commentText);
+					final var matcher = tagSelectorPattern.matcher(commentText);
 					if (!matcher.find())
 						continue;
 
-					final var markerConfig = MarkerUtils.MARKERCONFIG_BY_TAG.get(matcher.group(1));
+					final var markerConfig = markerConfigByTag.get(matcher.group(1));
 					final var markerText = commentText.substring(matcher.start()).trim();
 
 					final var attrs = new HashMap<String, Object>();
@@ -149,7 +154,7 @@ public final class MarkerUtils {
 					attrs.put(IMarker.SOURCE_ID, "TM4E");
 
 					// only create a new marker if no matching marker already exists
-					String markerTypeId = switch (markerConfig.type) {
+					final String markerTypeId = switch (markerConfig.type) {
 						case PROBLEM -> PROBLEMMARKER_TYPE;
 						case TASK -> TASKMARKER_TYPE;
 					};

@@ -19,6 +19,8 @@
 
 package org.eclipse.tm4e.core.internal.oniguruma;
 
+import java.lang.System.Logger;
+import java.lang.System.Logger.Level;
 import java.nio.charset.StandardCharsets;
 
 import org.eclipse.jdt.annotation.Nullable;
@@ -37,7 +39,18 @@ import org.joni.exception.SyntaxException;
  *      github.com/atom/node-oniguruma/blob/master/src/onig-reg-exp.cc</a>
  */
 final class OnigRegExp {
+	private static final Logger LOGGER = System.getLogger(OnigRegExp.class.getName());
 
+	/**
+	 * {@link WarnCallback} which is used if log level is at least Level.WARNING.
+	 */
+	private static WarnCallback LOGGER_WARN_CALLBACK = new WarnCallback() {
+		@Override
+		public void warn(@Nullable String message) {
+			LOGGER.log(Level.WARNING, message);
+		}
+	};
+	
 	@Nullable
 	private OnigString lastSearchString;
 
@@ -55,7 +68,7 @@ final class OnigRegExp {
 		final byte[] pattern = source.getBytes(StandardCharsets.UTF_8);
 		try {
 			regex = new Regex(pattern, 0, pattern.length, Option.CAPTURE_GROUP, UTF8Encoding.INSTANCE, Syntax.DEFAULT,
-					WarnCallback.DEFAULT);
+					LOGGER.isLoggable(Level.WARNING) ? LOGGER_WARN_CALLBACK : WarnCallback.NONE);
 		} catch (final SyntaxException ex) {
 			throw new TMException("Parsing regex pattern \"" + source + "\" failed with " + ex, ex);
 		}

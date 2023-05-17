@@ -52,7 +52,7 @@ public final class SACParserFactory extends AbstractSACParserFactory {
 				assert parser != null;
 				return parser;
 			} catch (InvocationTargetException | NoSuchMethodException ex) {
-				throw (InstantiationException) ((new InstantiationException()).initCause(ex));
+				throw (InstantiationException) new InstantiationException().initCause(ex);
 			}
 		}
 		throw new IllegalAccessException(
@@ -61,19 +61,13 @@ public final class SACParserFactory extends AbstractSACParserFactory {
 
 	/**
 	 * Register SAC parser name.
-	 *
-	 * @param parser
 	 */
 	private static void registerSACParser(final String parser) {
 		registerSACParser(parser, parser);
 	}
 
 	/**
-	 * register SAC parser with name <code>name</code> mapped with Class name
-	 * <code>classNameParser</code>.
-	 *
-	 * @param name
-	 * @param classNameParser
+	 * Register SAC parser with name <code>name</code> mapped with Class name <code>classNameParser</code>.
 	 */
 	private static void registerSACParser(final String name, final String classNameParser) {
 		parsers.put(name, classNameParser);

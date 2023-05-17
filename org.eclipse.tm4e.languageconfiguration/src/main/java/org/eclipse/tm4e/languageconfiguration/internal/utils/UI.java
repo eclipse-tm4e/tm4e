@@ -29,33 +29,33 @@ public final class UI {
 
 	@Nullable
 	public static IWorkbenchPage getActivePage() {
-		var window = getActiveWindow();
+		final var window = getActiveWindow();
 		return window == null ? null : window.getActivePage();
 	}
 
 	@Nullable
 	public static IWorkbenchPart getActivePart() {
-		var page = getActivePage();
+		final var page = getActivePage();
 		return page == null ? null : page.getActivePart();
 	}
 
 	@Nullable
 	public static Shell getActiveShell() {
-		var window = getActiveWindow();
+		final var window = getActiveWindow();
 		return window == null ? null : window.getShell();
 	}
 
 	@Nullable
 	public static ITextEditor getActiveTextEditor() {
-		var activePage = getActivePage();
+		final var activePage = getActivePage();
 		if (activePage == null) {
 			return null;
 		}
-		var editorPart = activePage.getActiveEditor();
+		final var editorPart = activePage.getActiveEditor();
 		if (editorPart instanceof ITextEditor textEditor) {
 			return textEditor;
 		} else if (editorPart instanceof MultiPageEditorPart multiPageEditorPart) {
-			Object page = multiPageEditorPart.getSelectedPage();
+			final Object page = multiPageEditorPart.getSelectedPage();
 			if (page instanceof ITextEditor textEditor) {
 				return textEditor;
 			}
@@ -65,7 +65,7 @@ public final class UI {
 
 	@Nullable
 	public static ITextViewer getActiveTextViewer() {
-		ITextEditor editor = getActiveTextEditor();
+		final var editor = getActiveTextEditor();
 		if (editor != null) {
 			return editor.getAdapter(ITextViewer.class);
 		}
@@ -93,5 +93,4 @@ public final class UI {
 
 	private UI() {
 	}
-
 }

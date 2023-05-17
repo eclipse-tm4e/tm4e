@@ -81,7 +81,7 @@ public class RawTestImpl {
 			grammar = registry.grammarForScopeName(getGrammarScopeName());
 		}
 		if (grammar == null) {
-			throw new Exception("I HAVE NO GRAMMAR FOR TEST");
+			throw new IllegalStateException("I HAVE NO GRAMMAR FOR TEST");
 		}
 
 		IStateStack prevState = null;

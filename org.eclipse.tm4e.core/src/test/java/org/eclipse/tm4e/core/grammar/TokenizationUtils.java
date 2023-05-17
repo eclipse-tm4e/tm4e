@@ -13,7 +13,6 @@
 package org.eclipse.tm4e.core.grammar;
 
 import java.io.BufferedReader;
-import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.concurrent.atomic.AtomicReference;
@@ -51,10 +50,8 @@ public final class TokenizationUtils {
 	 * @param text the text to tokenize
 	 *
 	 * @return The stream of {@link ITokenizeLineResult}, each item covering 1 line of the text
-	 *
-	 * @throws IOException
 	 */
-	public static Stream<ITokenizeLineResult<IToken[]>> tokenizeText(final InputStream text, final IGrammar grammar) throws IOException {
+	public static Stream<ITokenizeLineResult<IToken[]>> tokenizeText(final InputStream text, final IGrammar grammar) {
 		final var reader = new BufferedReader(new InputStreamReader(text));
 
 		final var prevStack = new AtomicReference<IStateStack>();

@@ -10,7 +10,7 @@
  *******************************************************************************/
 package org.eclipse.tm4e.core.internal.theme.css.sac;
 
-import static java.lang.System.Logger.Level.*;
+import static java.lang.System.Logger.Level.ERROR;
 
 import java.lang.System.Logger;
 
@@ -41,7 +41,7 @@ public abstract class AbstractSACParserFactory extends ParserFactory implements 
 			if (preferredParserName != null) {
 				return makeParser(preferredParserName);
 			}
-		} catch (final Throwable ex) {
+		} catch (final Exception | LinkageError ex) {
 			LOGGER.log(ERROR, ex.getMessage(), ex);
 		}
 		return super.makeParser();

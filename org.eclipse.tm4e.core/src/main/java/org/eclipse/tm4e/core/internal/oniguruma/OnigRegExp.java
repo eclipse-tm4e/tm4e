@@ -16,7 +16,6 @@
  * - Fabio Zadrozny <fabiofz@gmail.com> - Convert uniqueId to Object (for identity compare)
  * - Fabio Zadrozny <fabiofz@gmail.com> - Fix recursion error on creation of OnigRegExp with unicode chars
  */
-
 package org.eclipse.tm4e.core.internal.oniguruma;
 
 import java.lang.System.Logger;
@@ -44,13 +43,8 @@ final class OnigRegExp {
 	/**
 	 * {@link WarnCallback} which is used if log level is at least Level.WARNING.
 	 */
-	private static WarnCallback LOGGER_WARN_CALLBACK = new WarnCallback() {
-		@Override
-		public void warn(@Nullable String message) {
-			LOGGER.log(Level.WARNING, message);
-		}
-	};
-	
+	private static final WarnCallback LOGGER_WARN_CALLBACK = message -> LOGGER.log(Level.WARNING, message);
+
 	@Nullable
 	private OnigString lastSearchString;
 

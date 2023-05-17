@@ -8,7 +8,7 @@
 		}
 	],
 	"repository": {
-	
+
 		"object-member-ng-template": {
 			"begin": "template\\s*:",
 			"end": "(?=,|\\})",
@@ -251,7 +251,7 @@
 			},
 			"match": "(?x)\\s*([_$a-zA-Z*#(\\[][-$.:\\w()\\[\\]]*)(?=\\s|=|/?>|/\\*|//)",
 			"name": "meta.tag.attribute-name"
-		},		
+		},
 
 		"ng-tag-attributes": {
 			"patterns": [

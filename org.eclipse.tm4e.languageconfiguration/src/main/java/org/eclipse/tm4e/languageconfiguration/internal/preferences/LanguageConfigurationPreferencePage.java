@@ -117,8 +117,6 @@ public final class LanguageConfigurationPreferencePage extends PreferencePage im
 
 	/**
 	 * Create grammar list content.
-	 *
-	 * @param parent
 	 */
 	private void createDefinitionsListContent(final Composite parent) {
 		final var description = new Label(parent, SWT.NONE);

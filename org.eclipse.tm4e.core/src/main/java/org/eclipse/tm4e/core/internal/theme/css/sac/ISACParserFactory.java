@@ -26,8 +26,6 @@ public interface ISACParserFactory {
 
 	/**
 	 * Set the preferred SAC parser name to use when makeParser is called.
-	 *
-	 * @param preferredParserName
 	 */
 	void setPreferredParserName(@Nullable String preferredParserName);
 

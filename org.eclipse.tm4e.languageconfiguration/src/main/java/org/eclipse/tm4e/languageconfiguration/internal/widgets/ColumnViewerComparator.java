@@ -54,15 +54,14 @@ public final class ColumnViewerComparator extends ViewerComparator {
 
 	@Override
 	public int compare(@Nullable final Viewer viewer, @Nullable final Object e1, @Nullable final Object e2) {
-
 		if (viewer instanceof final TableViewer tableViewer) {
 			final IBaseLabelProvider baseLabel = tableViewer.getLabelProvider();
 			final String left = ((ITableLabelProvider) baseLabel).getColumnText(e1, fSortColumn);
 			final String right = ((ITableLabelProvider) baseLabel).getColumnText(e2, fSortColumn);
-			final int sortResult = getComparator().compare(left != null ? left : "", right != null ? right : ""); //$NON-NLS-1$ //$NON-NLS-2$
+			final int sortResult = getComparator()
+					.compare(left != null ? left : "", right != null ? right : ""); //$NON-NLS-1$ //$NON-NLS-2$
 			return sortResult * fSortOrder;
 		}
-
 		return super.compare(viewer, e1, e2);
 	}
 }

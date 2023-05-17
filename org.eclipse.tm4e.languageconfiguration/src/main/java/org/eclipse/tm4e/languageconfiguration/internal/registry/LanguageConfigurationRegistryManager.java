@@ -213,6 +213,7 @@ public final class LanguageConfigurationRegistryManager extends AbstractLanguage
 
 			return new CompleteEnterAction(enterResult, indentation);
 		} catch (final BadLocationException e1) {
+			// ignore
 		}
 		return null;
 	}

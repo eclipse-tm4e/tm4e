@@ -31,9 +31,6 @@ import org.eclipse.tm4e.languageconfiguration.internal.utils.UI;
 import org.eclipse.tm4e.ui.internal.model.TMModelManager;
 import org.eclipse.tm4e.ui.internal.utils.ContentTypeHelper;
 import org.eclipse.tm4e.ui.internal.utils.ContentTypeInfo;
-import org.eclipse.ui.IEditorPart;
-import org.eclipse.ui.IWorkbenchPage;
-import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.editors.text.EditorsUI;
 import org.eclipse.ui.texteditor.AbstractDecoratedTextEditorPreferenceConstants;
 import org.eclipse.ui.texteditor.ITextEditor;
@@ -180,6 +177,7 @@ public class LanguageConfigurationAutoEditStrategy implements IAutoEditStrategy 
 	}
 
 	private void onEnter(final IDocument document, final DocumentCommand command, final @Nullable ITextEditor editor) {
+		final var contentTypes = this.contentTypes;
 		if (contentTypes != null) {
 			final var registry = LanguageConfigurationRegistryManager.getInstance();
 			for (final IContentType contentType : contentTypes) {
@@ -223,8 +221,10 @@ public class LanguageConfigurationAutoEditStrategy implements IAutoEditStrategy 
 							break;
 						}
 						case Outdent:
-							final String indentation = TextUtils.getIndentationFromWhitespace(enterAction.indentation, getTabSize(editor), isInsertSpaces(editor));
-							final String outdentedText = outdentString(normalizeIndentation(indentation + enterAction.appendText, editor), editor);
+							final String indentation = TextUtils.getIndentationFromWhitespace(enterAction.indentation, getTabSize(editor),
+									isInsertSpaces(editor));
+							final String outdentedText = outdentString(normalizeIndentation(indentation + enterAction.appendText, editor),
+									editor);
 
 							command.text = delim + outdentedText;
 							command.shiftsCaret = false;
@@ -254,8 +254,8 @@ public class LanguageConfigurationAutoEditStrategy implements IAutoEditStrategy 
 		return contentTypes;
 	}
 
-	private String outdentString(final String str, @Nullable ITextEditor editor) {
-		if (str.startsWith("\t")) {//$NON-NLS-1$
+	private String outdentString(final String str, final @Nullable ITextEditor editor) {
+		if (str.startsWith("\t")) { //$NON-NLS-1$
 			return str.substring(1);
 		}
 		if (isInsertSpaces(editor)) {
@@ -269,36 +269,33 @@ public class LanguageConfigurationAutoEditStrategy implements IAutoEditStrategy 
 		return str;
 	}
 
-	private String normalizeIndentation(final String str, @Nullable ITextEditor editor) {
-		int tabSize = getTabSize(editor);
-		boolean insertSpaces = isInsertSpaces(editor);
+	private String normalizeIndentation(final String str, final @Nullable ITextEditor editor) {
+		final int tabSize = getTabSize(editor);
+		final boolean insertSpaces = isInsertSpaces(editor);
 		return TextUtils.normalizeIndentation(str, tabSize, insertSpaces);
 	}
 
-	private int getTabSize(@Nullable ITextEditor editor) {
-		String name = AbstractDecoratedTextEditorPreferenceConstants.EDITOR_TAB_WIDTH;
+	private int getTabSize(final @Nullable ITextEditor editor) {
+		final String name = AbstractDecoratedTextEditorPreferenceConstants.EDITOR_TAB_WIDTH;
 		return getPreferenceStoreFor(name, editor).getInt(name);
 	}
-	
-	private boolean isInsertSpaces(@Nullable ITextEditor editor) {
-		String name = AbstractDecoratedTextEditorPreferenceConstants.EDITOR_SPACES_FOR_TABS;
+
+	private boolean isInsertSpaces(final @Nullable ITextEditor editor) {
+		final String name = AbstractDecoratedTextEditorPreferenceConstants.EDITOR_SPACES_FOR_TABS;
 		return getPreferenceStoreFor(name, editor).getBoolean(name);
 	}
 
-	private IPreferenceStore getPreferenceStoreFor(String name, @Nullable ITextEditor editor) {
-		IPreferenceStore editorPreferenceStore = editor != null ? editor.getAdapter(IPreferenceStore.class) : null;
+	private IPreferenceStore getPreferenceStoreFor(final String name, final @Nullable ITextEditor editor) {
+		final IPreferenceStore editorPreferenceStore = editor != null ? editor.getAdapter(IPreferenceStore.class) : null;
 		if (editorPreferenceStore != null && editorPreferenceStore.contains(name)) {
 			return editorPreferenceStore;
 		}
 		return EditorsUI.getPreferenceStore();
 	}
 
-
 	private void installViewer() {
 		if (viewer == null) {
-			final IWorkbenchPage page = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
-			final IEditorPart editorPart = page.getActiveEditor();
-			viewer = editorPart.getAdapter(ITextViewer.class);
+			viewer = UI.getActiveTextViewer();
 		}
 	}
 }

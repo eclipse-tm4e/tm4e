@@ -22,13 +22,10 @@ public final class TextUtils {
 	/**
 	 * Returns true if text of the command is an enter and false otherwise.
 	 *
-	 * @param d
-	 * @param c
-	 *
 	 * @return true if text of the command is an enter and false otherwise.
 	 */
-	public static boolean isEnter(final IDocument d, final DocumentCommand c) {
-		return c.length == 0 && c.text != null && TextUtilities.equals(d.getLegalLineDelimiters(), c.text) != -1;
+	public static boolean isEnter(final IDocument doc, final DocumentCommand cmd) {
+		return cmd.length == 0 && cmd.text != null && TextUtilities.equals(doc.getLegalLineDelimiters(), cmd.text) != -1;
 	}
 
 	public static String normalizeIndentation(final String str, final int tabSize, final boolean insertSpaces) {
@@ -69,8 +66,8 @@ public final class TextUtils {
 
 	/**
 	 * Returns the start of the string at the offset in the text. If the string is
-	 * not in the text at the offset, returns -1.</br>
-	 * Ex: </br>
+	 * not in the text at the offset, returns -1.<br/>
+	 * Ex: <br/>
 	 * text = "apple banana", offset=8, string="banana" returns=6
 	 */
 	public static int startIndexOfOffsetTouchingString(final String text, final int offset, final String string) {

@@ -19,7 +19,6 @@ package org.eclipse.tm4e.core.registry;
 import java.util.Collection;
 import java.util.List;
 
-import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.tm4e.core.internal.theme.IRawTheme;
 
@@ -46,7 +45,7 @@ public interface IRegistryOptions {
 	}
 
 	@Nullable
-	default Collection<@NonNull String> getInjections(@SuppressWarnings("unused") final String scopeName) {
+	default Collection<String> getInjections(@SuppressWarnings("unused") final String scopeName) {
 		return null;
 	}
 }

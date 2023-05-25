@@ -4,13 +4,15 @@
     <locations>
         <location includeAllPlatforms="false" includeConfigurePhase="true" includeMode="planner" includeSource="true" type="InstallableUnit">
             <unit id="org.eclipse.license.feature.group" version="2.0.2.v20181016-2210"/>
-            <repository location="https://download.eclipse.org/cbi/updates/license/2.0.2.v20181016-2210/"/>
+            <repository location="https://download.eclipse.org/cbi/updates/license"/>
         </location>
         <location includeAllPlatforms="false" includeConfigurePhase="true" includeMode="planner" includeSource="true" type="InstallableUnit">
             <unit id="com.google.guava" version="30.1.0.v20221112-0806"/>
+            <unit id="com.google.gson" version="2.10.1.v20230109-0753"/>
             <unit id="org.apache.batik.css" version="1.16.0.v20221027-0840"/>
             <unit id="org.yaml.snakeyaml" version="1.27.0.v20221112-0806"/>
-            <repository location="https://download.eclipse.org/tools/orbit/downloads/latest-R/"/>
+            <!-- R20230302014618 = Eclipse 2023-03 -->
+            <repository location="https://download.eclipse.org/tools/orbit/downloads/drops/R20230302014618/repository"/>
         </location>
         <location includeAllPlatforms="false" includeConfigurePhase="true" includeMode="planner" includeSource="true" type="InstallableUnit">
             <unit id="org.eclipse.platform.feature.group" version="0.0.0"/>
@@ -20,17 +22,8 @@
             <unit id="junit-jupiter-api" version="0.0.0"/>
             <unit id="org.eclipse.jdt.junit5.runtime" version="0.0.0"/>
             <unit id="org.eclipse.ui.trace" version="0.0.0"/>
-            <repository location="https://download.eclipse.org/eclipse/updates/4.26/"/>
-        </location>
-        <location includeDependencyDepth="direct" includeDependencyScopes="compile" includeSource="true" missingManifest="generate" type="Maven">
-            <dependencies>
-                <dependency>
-                    <groupId>com.google.code.gson</groupId>
-                    <artifactId>gson</artifactId>
-                    <version>2.10.1</version>
-                    <type>jar</type>
-                </dependency>
-            </dependencies>
+            <!-- 4.27 = Eclipse 2023-03 -->
+            <repository location="https://download.eclipse.org/eclipse/updates/4.27/"/>
         </location>
         <location includeDependencyDepth="direct" includeDependencyScopes="compile" includeSource="true" missingManifest="generate" type="Maven">
             <dependencies>

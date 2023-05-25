@@ -11,6 +11,7 @@
  */
 package org.eclipse.tm4e.ui.internal.preferences;
 
+import org.eclipse.core.runtime.Platform;
 import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.jface.preference.PreferencePage;
 import org.eclipse.swt.SWT;
@@ -41,9 +42,11 @@ public final class TextMatePreferencePage extends PreferencePage implements IWor
 		addRelatedLink(composite, GrammarPreferencePage.PAGE_ID, TMUIMessages.TextMatePreferencePage_GrammarRelatedLink);
 
 		// Add link to language configuration preference page
-		addRelatedLink(composite,
-				"org.eclipse.tm4e.languageconfiguration.preferences.LanguageConfigurationPreferencePage", //$NON-NLS-1$
-				TMUIMessages.TextMatePreferencePage_LanguageConfigurationRelatedLink);
+		if (Platform.getBundle("org.eclipse.tm4e.languageconfiguration") != null) { //$NON-NLS-1$
+			addRelatedLink(composite,
+					"org.eclipse.tm4e.languageconfiguration.preferences.LanguageConfigurationPreferencePage", //$NON-NLS-1$
+					TMUIMessages.TextMatePreferencePage_LanguageConfigurationRelatedLink);
+		}
 
 		// Add link to task tags preference page
 		addRelatedLink(composite, TaskTagsPreferencePage.PAGE_ID, TMUIMessages.TextMatePreferencePage_TaskTagsRelatedLink);

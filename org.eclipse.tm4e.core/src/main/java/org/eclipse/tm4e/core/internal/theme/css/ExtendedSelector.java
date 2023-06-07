@@ -11,9 +11,9 @@
  */
 package org.eclipse.tm4e.core.internal.theme.css;
 
-import org.w3c.css.sac.Selector;
+import org.w3c.css.sac.SimpleSelector;
 
-public interface ExtendedSelector extends Selector {
+public interface ExtendedSelector extends SimpleSelector {
 
 	/**
 	 * Returns the specificity of this selector.

@@ -55,7 +55,7 @@ public final class CSSSelectorFactory implements SelectorFactory {
 	@Override
 	public ConditionalSelector createConditionalSelector(final SimpleSelector selector, final Condition condition)
 			throws CSSException {
-		return new CSSConditionalSelector(selector, condition);
+		return new CSSConditionalSelector((ExtendedSelector) selector, (ExtendedCondition) condition);
 	}
 
 	@Override

@@ -16,13 +16,13 @@ import org.w3c.css.sac.Condition;
 
 public abstract class AbstractCombinatorCondition implements CombinatorCondition, ExtendedCondition {
 
-	private final Condition firstCondition;
-	private final Condition secondCondition;
+	protected final ExtendedCondition firstCondition;
+	protected final ExtendedCondition secondCondition;
 
 	/**
 	 * Creates a new CombinatorCondition object.
 	 */
-	protected AbstractCombinatorCondition(final Condition c1, final Condition c2) {
+	protected AbstractCombinatorCondition(final ExtendedCondition c1, final ExtendedCondition c2) {
 		firstCondition = c1;
 		secondCondition = c2;
 	}
@@ -39,7 +39,6 @@ public abstract class AbstractCombinatorCondition implements CombinatorCondition
 
 	@Override
 	public int getSpecificity() {
-		return ((ExtendedCondition) getFirstCondition()).getSpecificity()
-				+ ((ExtendedCondition) getSecondCondition()).getSpecificity();
+		return firstCondition.getSpecificity() + secondCondition.getSpecificity();
 	}
 }

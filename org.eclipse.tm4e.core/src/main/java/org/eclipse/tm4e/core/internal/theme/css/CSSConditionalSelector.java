@@ -17,21 +17,11 @@ import org.w3c.css.sac.SimpleSelector;
 
 final class CSSConditionalSelector implements ConditionalSelector, ExtendedSelector {
 
-	/**
-	 * The simple selector.
-	 */
-	private final SimpleSelector simpleSelector;
+	private final ExtendedSelector selector;
+	private final ExtendedCondition condition;
 
-	/**
-	 * The condition.
-	 */
-	private final Condition condition;
-
-	/**
-	 * Creates a new ConditionalSelector object.
-	 */
-	CSSConditionalSelector(final SimpleSelector simpleSelector, final Condition condition) {
-		this.simpleSelector = simpleSelector;
+	CSSConditionalSelector(final ExtendedSelector simpleSelector, final ExtendedCondition condition) {
+		this.selector = simpleSelector;
 		this.condition = condition;
 	}
 
@@ -47,25 +37,21 @@ final class CSSConditionalSelector implements ConditionalSelector, ExtendedSelec
 
 	@Override
 	public SimpleSelector getSimpleSelector() {
-		return simpleSelector;
+		return selector;
 	}
 
 	@Override
 	public int getSpecificity() {
-		return ((ExtendedSelector) getSimpleSelector()).getSpecificity()
-				+ ((ExtendedCondition) getCondition()).getSpecificity();
+		return selector.getSpecificity() + condition.getSpecificity();
 	}
 
 	@Override
 	public int nbMatch(final String... names) {
-		return ((ExtendedSelector) getSimpleSelector()).nbMatch(names)
-				+ ((ExtendedCondition) getCondition()).nbMatch(names);
+		return selector.nbMatch(names) + condition.nbMatch(names);
 	}
 
 	@Override
 	public int nbClass() {
-		return ((ExtendedSelector) getSimpleSelector()).nbClass()
-				+ ((ExtendedCondition) getCondition()).nbClass();
+		return selector.nbClass() + condition.nbClass();
 	}
-
 }

@@ -27,7 +27,6 @@ import org.eclipse.tm4e.core.theme.IStyle;
 import org.w3c.css.sac.CSSException;
 import org.w3c.css.sac.InputSource;
 import org.w3c.css.sac.Parser;
-import org.w3c.css.sac.Selector;
 import org.w3c.css.sac.SelectorList;
 
 /**
@@ -69,15 +68,13 @@ public class CSSParser {
 		IStyle bestStyle = null;
 		for (final IStyle style : handler.getList()) {
 			final SelectorList list = ((CSSStyle) style).getSelectorList();
-			for (int i = 0; i < list.getLength(); i++) {
-				final Selector selector = list.item(i);
-				if (selector instanceof final ExtendedSelector s) {
-					final int nbMatch = s.nbMatch(names);
-					if ((nbMatch >= bestSpecificity || bestStyle == null)
-							&& nbMatch > 0 && nbMatch == s.nbClass()) {
-						bestStyle = style;
-						bestSpecificity = nbMatch;
-					}
+			for (int i = 0, l = list.getLength(); i < l; i++) {
+				final var selector = (ExtendedSelector) list.item(i);
+				final int nbMatch = selector.nbMatch(names);
+				if ((nbMatch >= bestSpecificity || bestStyle == null)
+						&& nbMatch > 0 && nbMatch == selector.nbClass()) {
+					bestStyle = style;
+					bestSpecificity = nbMatch;
 				}
 			}
 		}

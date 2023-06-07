@@ -40,7 +40,7 @@ public final class CSSConditionFactory implements ConditionFactory {
 
 	@Override
 	public CombinatorCondition createAndCondition(final Condition first, final Condition second) throws CSSException {
-		return new CSSAndCondition(first, second);
+		return new CSSAndCondition((ExtendedCondition) first, (ExtendedCondition) second);
 	}
 
 	@Override

@@ -11,7 +11,9 @@
  */
 package org.eclipse.tm4e.core.internal.theme.css;
 
-interface ExtendedCondition {
+import org.w3c.css.sac.Condition;
+
+interface ExtendedCondition extends Condition {
 
 	/**
 	 * Returns the specificity of this condition.

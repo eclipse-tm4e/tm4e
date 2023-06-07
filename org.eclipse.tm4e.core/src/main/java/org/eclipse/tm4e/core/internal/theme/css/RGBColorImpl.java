@@ -16,7 +16,7 @@ import org.w3c.dom.DOMException;
 import org.w3c.dom.css.CSSPrimitiveValue;
 import org.w3c.dom.css.RGBColor;
 
-final class RGBColorImpl extends CSSValueImpl implements RGBColor {
+final class RGBColorImpl extends AbstractCSSValue implements RGBColor {
 
 	private final CSSPrimitiveValue red;
 	private final CSSPrimitiveValue green;

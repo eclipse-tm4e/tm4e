@@ -14,7 +14,7 @@ import org.w3c.css.sac.LexicalUnit;
 import org.w3c.dom.DOMException;
 import org.w3c.dom.css.CSSValue;
 
-final class Measure extends CSSValueImpl {
+final class Measure extends AbstractCSSValue {
 
 	private final LexicalUnit value;
 

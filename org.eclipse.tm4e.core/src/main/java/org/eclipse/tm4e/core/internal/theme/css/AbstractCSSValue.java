@@ -18,7 +18,7 @@ import org.w3c.dom.css.Counter;
 import org.w3c.dom.css.RGBColor;
 import org.w3c.dom.css.Rect;
 
-abstract class CSSValueImpl implements CSSPrimitiveValue {
+abstract class AbstractCSSValue implements CSSPrimitiveValue { // FIXME rename
 
 	// W3C CSSValue API methods
 

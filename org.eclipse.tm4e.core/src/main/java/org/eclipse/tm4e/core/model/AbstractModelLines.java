@@ -11,8 +11,8 @@
  */
 package org.eclipse.tm4e.core.model;
 
+import java.util.ArrayList;
 import java.util.Collections;
-import java.util.LinkedList;
 import java.util.List;
 
 import org.eclipse.jdt.annotation.Nullable;
@@ -37,7 +37,7 @@ public abstract class AbstractModelLines {
 		List<TMToken> tokens = Collections.emptyList();
 	}
 
-	private final List<ModelLine> list = new LinkedList<>();
+	private final List<ModelLine> list = new ArrayList<>();
 
 	@Nullable
 	private TMModel model;

@@ -34,7 +34,10 @@ import org.w3c.css.sac.SelectorList;
  */
 public class CSSParser {
 
-	private final CSSDocumentHandler handler;
+	protected final CSSDocumentHandler handler = new CSSDocumentHandler();
+
+	protected CSSParser() {
+	}
 
 	public CSSParser(final InputStream source) throws Exception {
 		this(toSource(source));
@@ -55,7 +58,6 @@ public class CSSParser {
 	}
 
 	public CSSParser(final InputSource source, final Parser parser) throws CSSException, IOException {
-		this.handler = new CSSDocumentHandler();
 		parser.setDocumentHandler(handler);
 		parser.setConditionFactory(CSSConditionFactory.INSTANCE);
 		parser.setSelectorFactory(CSSSelectorFactory.INSTANCE);
@@ -84,5 +86,4 @@ public class CSSParser {
 	public List<IStyle> getStyles() {
 		return handler.getList();
 	}
-
 }

@@ -12,7 +12,9 @@
 package org.eclipse.tm4e.ui.themes.css;
 
 import java.io.InputStream;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.eclipse.jdt.annotation.Nullable;
@@ -34,12 +36,24 @@ public class CSSTokenProvider extends AbstractTokenProvider {
 
 	private static final Splitter BY_DOT_SPLITTER = Splitter.on('.');
 
+	private static class NoopCSSParser extends CSSParser {
+		@Override
+		public List<IStyle> getStyles() {
+			return Collections.emptyList();
+		}
+
+		@Override
+		public @Nullable IStyle getBestStyle(String... names) {
+			return null;
+		}
+	}
+
 	private final Map<IStyle, @Nullable IToken> tokenMaps = new HashMap<>();
 
-	@Nullable
-	private CSSParser parser;
+	private final CSSParser parser;
 
 	public CSSTokenProvider(final InputStream in) {
+		CSSParser parser = null;
 		try {
 			parser = new CSSParser(in);
 			for (final IStyle style : parser.getStyles()) {
@@ -65,16 +79,14 @@ public class CSSTokenProvider extends AbstractTokenProvider {
 		} catch (final Exception ex) {
 			TMUIPlugin.logError(ex);
 		}
+
+		this.parser = parser == null ? new NoopCSSParser() : parser;
 	}
 
 	@Nullable
 	@Override
 	public IToken getToken(@Nullable final String type) {
 		if (type == null)
-			return null;
-
-		final var parser = this.parser;
-		if (parser == null)
 			return null;
 
 		final IStyle style = parser.getBestStyle(BY_DOT_SPLITTER.splitToStream(type).toArray(String[]::new));
@@ -86,10 +98,6 @@ public class CSSTokenProvider extends AbstractTokenProvider {
 
 	@Nullable
 	private Color getColor(final boolean isForeground, final String... styles) {
-		final var parser = this.parser;
-		if (parser == null)
-			return null;
-
 		final var style = parser.getBestStyle(styles);
 		if (style == null)
 			return null;
@@ -123,7 +131,6 @@ public class CSSTokenProvider extends AbstractTokenProvider {
 	@Override
 	public Color getEditorSelectionBackground() {
 		return getColor(false, "editor", "selection");
-
 	}
 
 	@Nullable

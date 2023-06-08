@@ -37,10 +37,17 @@ public abstract class AbstractModelLines {
 		List<TMToken> tokens = Collections.emptyList();
 	}
 
-	private final List<ModelLine> list = new ArrayList<>();
+	private final List<ModelLine> list;
 
 	@Nullable
 	private TMModel model;
+
+	protected AbstractModelLines(final int initialNumberOfLines) {
+		list = new ArrayList<>(Math.max(10, initialNumberOfLines));
+		for (int i = 0; i < initialNumberOfLines; i++) {
+			list.add(new ModelLine());
+		}
+	}
 
 	void setModel(@Nullable final TMModel model) {
 		this.model = model;

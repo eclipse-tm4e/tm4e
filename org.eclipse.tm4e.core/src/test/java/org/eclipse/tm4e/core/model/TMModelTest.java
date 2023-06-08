@@ -31,7 +31,7 @@ class TMModelTest {
 			""".split("\\r?\\n");
 		assertEquals(5, lines.length);
 
-		final var modelLines = new AbstractModelLines() {
+		final var modelLines = new AbstractModelLines(0) {
 			@Override
 			public String getLineText(final int lineIndex) throws Exception {
 				return lines[lineIndex];

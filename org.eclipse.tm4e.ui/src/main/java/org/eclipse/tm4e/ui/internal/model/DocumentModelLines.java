@@ -30,9 +30,9 @@ final class DocumentModelLines extends AbstractModelLines implements IDocumentLi
 	private int endLineIndexOfRemovedText = -1;
 
 	DocumentModelLines(final IDocument document) {
+		super(document.getNumberOfLines());
 		this.document = document;
 		document.addDocumentListener(this);
-		addLines(0, document.getNumberOfLines());
 	}
 
 	@Override

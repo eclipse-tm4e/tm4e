@@ -15,7 +15,7 @@ import org.eclipse.tm4e.core.internal.parser.PropertySettable;
 import org.eclipse.tm4e.core.internal.types.IRawCaptures;
 import org.eclipse.tm4e.core.internal.types.IRawRule;
 
-public class RawCaptures extends HashMap<String, IRawRule> implements IRawCaptures, PropertySettable<IRawRule> {
+public final class RawCaptures extends HashMap<String, IRawRule> implements IRawCaptures, PropertySettable<IRawRule> {
 
 	private static final long serialVersionUID = 1L;
 

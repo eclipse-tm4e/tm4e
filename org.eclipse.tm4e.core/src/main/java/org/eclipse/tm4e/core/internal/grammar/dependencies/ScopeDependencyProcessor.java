@@ -40,7 +40,7 @@ import org.eclipse.tm4e.core.internal.types.IRawRule;
  *      "https://github.com/microsoft/vscode-textmate/blob/88baacf1a6637c5ec08dce18cea518d935fcf0a0/src/grammar/grammarDependencies.ts#L59">
  *      github.com/microsoft/vscode-textmate/blob/main/src/grammar/grammarDependencies.ts</a>
  */
-public class ScopeDependencyProcessor {
+public final class ScopeDependencyProcessor {
 
 	private static class ExternalReferenceCollector {
 

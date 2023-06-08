@@ -26,7 +26,7 @@ import org.eclipse.tm4e.core.internal.types.IRawGrammar;
 import org.eclipse.tm4e.core.internal.types.IRawRepository;
 import org.eclipse.tm4e.core.internal.types.IRawRule;
 
-public class RawGrammar extends HashMap<String, @Nullable Object> implements IRawGrammar, PropertySettable<Object> {
+public final class RawGrammar extends HashMap<String, @Nullable Object> implements IRawGrammar, PropertySettable<Object> {
 
 	private static final String FILE_TYPES = "fileTypes";
 	private static final String FIRST_LINE_MATCH = "firstLineMatch";

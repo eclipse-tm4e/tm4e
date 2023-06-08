@@ -27,7 +27,7 @@ import org.eclipse.tm4e.core.internal.matcher.Matcher;
  *      "https://github.com/microsoft/vscode-textmate/blob/88baacf1a6637c5ec08dce18cea518d935fcf0a0/src/grammar/grammar.ts#L898">
  *      github.com/microsoft/vscode-textmate/blob/main/src/grammar/grammar.ts</a>
  */
-public class BalancedBracketSelectors {
+public final class BalancedBracketSelectors {
 	private final Matcher<List<String>>[] balancedBracketScopes;
 	private final Matcher<List<String>>[] unbalancedBracketScopes;
 

@@ -19,7 +19,7 @@ import org.eclipse.tm4e.core.internal.parser.PropertySettable;
 import org.eclipse.tm4e.core.internal.types.IRawRepository;
 import org.eclipse.tm4e.core.internal.types.IRawRule;
 
-public class RawRepository extends HashMap<String, IRawRule> implements IRawRepository, PropertySettable<IRawRule> {
+public final class RawRepository extends HashMap<String, IRawRule> implements IRawRepository, PropertySettable<IRawRule> {
 
 	private static final long serialVersionUID = 1L;
 

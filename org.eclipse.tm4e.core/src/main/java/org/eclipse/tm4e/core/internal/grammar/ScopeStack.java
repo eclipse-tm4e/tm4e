@@ -27,7 +27,7 @@ import org.eclipse.jdt.annotation.Nullable;
  *      "https://github.com/microsoft/vscode-textmate/blob/88baacf1a6637c5ec08dce18cea518d935fcf0a0/src/theme.ts#L101">
  *      github.com/microsoft/vscode-textmate/blob/main/src/theme.ts</a>
  */
-public class ScopeStack {
+public final class ScopeStack {
 
 	@Nullable
 	static ScopeStack push(@Nullable ScopeStack path, final List<String> scopeNames) {

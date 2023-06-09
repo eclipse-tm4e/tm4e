@@ -31,6 +31,8 @@ import org.eclipse.jdt.annotation.Nullable;
  */
 public final class StringUtils {
 
+	private static final List<String> LIST_WITH_EMPTY_STRING = List.of("");
+
 	private static final Pattern RRGGBB = Pattern.compile("^#[0-9a-f]{6}", Pattern.CASE_INSENSITIVE);
 	private static final Pattern RRGGBBAA = Pattern.compile("^#[0-9a-f]{8}", Pattern.CASE_INSENSITIVE);
 	private static final Pattern RGB = Pattern.compile("^#[0-9a-f]{3}", Pattern.CASE_INSENSITIVE);
@@ -70,6 +72,9 @@ public final class StringUtils {
 	 * 7.5 times faster than {@link String#split(String)} and 2.5 times faster than {@link com.google.common.base.Splitter}.
 	 */
 	public static String[] splitToArray(final String line, final char separator) {
+		if (line.isEmpty())
+			return new String[] { "" };
+
 		var tmp = new String[8];
 		int count = 0;
 		int start = 0;
@@ -105,6 +110,9 @@ public final class StringUtils {
 	 * Very fast String splitting.
 	 */
 	public static List<String> splitToList(final String line, final char separator) {
+		if (line.isEmpty())
+			return LIST_WITH_EMPTY_STRING;
+
 		final var result = new ArrayList<String>(8);
 		int start = 0;
 		int end = line.indexOf(separator, 0);

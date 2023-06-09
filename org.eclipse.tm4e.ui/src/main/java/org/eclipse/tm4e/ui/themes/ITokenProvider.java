@@ -13,6 +13,7 @@ package org.eclipse.tm4e.ui.themes;
 
 import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.jface.text.rules.IToken;
+import org.eclipse.jface.text.rules.Token;
 import org.eclipse.swt.graphics.Color;
 
 /**
@@ -21,14 +22,15 @@ import org.eclipse.swt.graphics.Color;
  */
 public interface ITokenProvider {
 
+	IToken DEFAULT_TOKEN = new Token(null);
+
 	/**
-	 * Returns the Eclipse {@link IToken} from the given type and null otherwise.
+	 * Returns the Eclipse {@link IToken} from the given type and {@link #DEFAULT_TOKEN} otherwise.
 	 *
 	 * @param type
-	 * 
-	 * @return the Eclipse {@link IToken} from the given type and null otherwise.
+	 *
+	 * @return the Eclipse {@link IToken} from the given type and {@link #DEFAULT_TOKEN} otherwise.
 	 */
-	@Nullable
 	IToken getToken(String type);
 
 	@Nullable

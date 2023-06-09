@@ -16,6 +16,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.jface.text.TextAttribute;
@@ -46,6 +47,7 @@ public class CSSTokenProvider implements ITokenProvider {
 	}
 
 	private final Map<IStyle, @Nullable IToken> tokenMaps = new HashMap<>();
+	private final Map<String, IToken> getTokenReturnValueCache = new ConcurrentHashMap<>();
 
 	private final CSSParser parser;
 
@@ -80,17 +82,20 @@ public class CSSTokenProvider implements ITokenProvider {
 		this.parser = parser == null ? new NoopCSSParser() : parser;
 	}
 
-	@Nullable
 	@Override
 	public IToken getToken(@Nullable final String type) {
-		if (type == null)
-			return null;
+		if (type == null || type.isEmpty())
+			return DEFAULT_TOKEN;
 
+		return getTokenReturnValueCache.computeIfAbsent(type, this::getTokenInternal);
+	}
+
+	private IToken getTokenInternal(final String type) {
 		final IStyle style = parser.getBestStyle(StringUtils.splitToArray(type, '.'));
 		if (style == null)
-			return null;
-
-		return tokenMaps.get(style);
+			return DEFAULT_TOKEN;
+		final IToken token = tokenMaps.get(style);
+		return token == null ? DEFAULT_TOKEN : token;
 	}
 
 	@Nullable

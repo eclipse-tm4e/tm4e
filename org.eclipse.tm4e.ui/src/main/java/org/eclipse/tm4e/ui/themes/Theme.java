@@ -81,11 +81,10 @@ public class Theme extends TMResource implements ITheme {
 		return name;
 	}
 
-	@Nullable
 	@Override
 	public IToken getToken(final String type) {
 		final ITokenProvider provider = getTokenProvider();
-		return provider != null ? provider.getToken(type) : null;
+		return provider == null ? ITokenProvider.DEFAULT_TOKEN : provider.getToken(type);
 	}
 
 	@Nullable

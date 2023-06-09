@@ -90,9 +90,6 @@ import org.eclipse.ui.IEditorPart;
  */
 public class TMPresentationReconciler implements IPresentationReconciler {
 
-	/** The default text attribute if none is returned as data by the current token. */
-	private final Token defaultToken;
-
 	/** The target viewer. */
 	@Nullable
 	private ITextViewer viewer;
@@ -125,7 +122,6 @@ public class TMPresentationReconciler implements IPresentationReconciler {
 	private boolean throwError;
 
 	public TMPresentationReconciler() {
-		this.defaultToken = new Token(null);
 		this.internalListener = new InternalListener();
 		this.fDefaultTextAttribute = new TextAttribute(null);
 		if (PreferenceUtils.isDebugGenerateTest()) {
@@ -528,6 +524,9 @@ public class TMPresentationReconciler implements IPresentationReconciler {
 			TMUIPlugin.logTrace("Render from: " + fromLineIndex + " to: " + toLineIndex);
 		final var presentation = new TextPresentation(damage, 1000);
 		Exception error = null;
+
+		final var tokenProvider = this.tokenProvider;
+
 		try {
 			int lastStart = presentation.getExtent().getOffset();
 			int length = 0;
@@ -561,7 +560,8 @@ public class TMPresentationReconciler implements IPresentationReconciler {
 							tokenStartIndex = damage.getOffset() - startLineOffset;
 						} else {
 							tokenStartIndex = damage.getOffset() - startLineOffset;
-							final IToken token = toToken(currentToken);
+							final IToken token = tokenProvider == null ? ITokenProvider.DEFAULT_TOKEN
+									: tokenProvider.getToken(currentToken.type);
 							lastAttribute = getTokenTextAttribute(token);
 							length += getTokenLengh(tokenStartIndex, nextToken, lineIndex, doc);
 							firstToken = false;
@@ -573,7 +573,7 @@ public class TMPresentationReconciler implements IPresentationReconciler {
 						break;
 					}
 
-					final IToken token = toToken(currentToken);
+					final IToken token = tokenProvider == null ? ITokenProvider.DEFAULT_TOKEN : tokenProvider.getToken(currentToken.type);
 					final TextAttribute attribute = getTokenTextAttribute(token);
 					if (lastAttribute.equals(attribute)) {
 						length += getTokenLengh(tokenStartIndex, nextToken, lineIndex, doc);
@@ -614,17 +614,6 @@ public class TMPresentationReconciler implements IPresentationReconciler {
 	 */
 	private boolean isAfterRegion(final TMToken token, final int startLineOffset, final IRegion damage) {
 		return token.startIndex + startLineOffset >= damage.getOffset() + damage.getLength();
-	}
-
-	private IToken toToken(final TMToken token) {
-		final var tokenProvider = this.tokenProvider;
-		if (tokenProvider != null) {
-			final IToken result = tokenProvider.getToken(token.type);
-			if (result != null) {
-				return result;
-			}
-		}
-		return defaultToken;
 	}
 
 	private int getTokenLengh(final int tokenStartIndex, @Nullable final TMToken nextToken, final int line,

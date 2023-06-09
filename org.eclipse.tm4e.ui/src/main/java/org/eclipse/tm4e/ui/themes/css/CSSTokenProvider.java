@@ -28,10 +28,10 @@ import org.eclipse.tm4e.core.theme.IStyle;
 import org.eclipse.tm4e.core.theme.RGB;
 import org.eclipse.tm4e.core.theme.css.CSSParser;
 import org.eclipse.tm4e.ui.TMUIPlugin;
-import org.eclipse.tm4e.ui.themes.AbstractTokenProvider;
 import org.eclipse.tm4e.ui.themes.ColorManager;
+import org.eclipse.tm4e.ui.themes.ITokenProvider;
 
-public class CSSTokenProvider extends AbstractTokenProvider {
+public class CSSTokenProvider implements ITokenProvider {
 
 	private static class NoopCSSParser extends CSSParser {
 		@Override

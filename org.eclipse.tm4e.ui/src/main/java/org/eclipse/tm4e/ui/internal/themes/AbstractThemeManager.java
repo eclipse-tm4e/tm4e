@@ -138,7 +138,7 @@ public abstract class AbstractThemeManager implements IThemeManager {
 	}
 
 	@Override
-	public ITokenProvider getThemeForScope(final String scopeName, final RGB background) {
+	public ITheme getThemeForScope(final String scopeName, final RGB background) {
 		return getThemeForScope(scopeName, 0.299 * background.red
 				+ 0.587 * background.green
 				+ 0.114 * background.blue < 128);

@@ -138,5 +138,5 @@ public interface IThemeManager {
 	 *
 	 * @return the theme that will fit best for the defined background color
 	 */
-	ITokenProvider getThemeForScope(String scopeName, RGB background);
+	ITheme getThemeForScope(String scopeName, RGB background);
 }

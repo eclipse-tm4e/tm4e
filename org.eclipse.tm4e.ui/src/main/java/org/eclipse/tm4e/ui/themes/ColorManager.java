@@ -30,25 +30,21 @@ public final class ColorManager {
 		return INSTANCE;
 	}
 
-	private final Map<RGB, @Nullable Color> fColorTable = new HashMap<>(10);
+	private static Color rgbToColor(RGB rgb) {
+		return new Color(Display.getCurrent(), rgb.red, rgb.green, rgb.blue);
+	}
+
+	private final Map<RGB, Color> fColorTable = new HashMap<>(10);
 
 	private ColorManager() {
 	}
 
 	public Color getColor(final RGB rgb) {
-		Color color = fColorTable.get(rgb);
-		if (color == null) {
-			color = new Color(Display.getCurrent(), rgb.red, rgb.green, rgb.blue);
-			fColorTable.put(rgb, color);
-		}
-		return color;
+		return fColorTable.computeIfAbsent(rgb, ColorManager::rgbToColor);
 	}
 
 	public void dispose() {
-		for (final var c : fColorTable.values()) {
-			if (c != null)
-				c.dispose();
-		}
+		fColorTable.values().forEach(Color::dispose);
 	}
 
 	/**
@@ -97,8 +93,7 @@ public final class ColorManager {
 	@Nullable
 	public Color getPriorityColor(@Nullable final Color themeColor, final String tokenId) {
 		if (isColorUserDefined(tokenId)) {
-			final Color prefColor = getPreferenceEditorColor(tokenId);
-			return prefColor;
+			return getPreferenceEditorColor(tokenId);
 		}
 
 		return themeColor != null ? themeColor : null;

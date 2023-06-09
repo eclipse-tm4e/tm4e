@@ -23,6 +23,7 @@ import org.eclipse.jface.text.rules.IToken;
 import org.eclipse.jface.text.rules.Token;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Color;
+import org.eclipse.tm4e.core.internal.utils.StringUtils;
 import org.eclipse.tm4e.core.theme.IStyle;
 import org.eclipse.tm4e.core.theme.RGB;
 import org.eclipse.tm4e.core.theme.css.CSSParser;
@@ -30,11 +31,7 @@ import org.eclipse.tm4e.ui.TMUIPlugin;
 import org.eclipse.tm4e.ui.themes.AbstractTokenProvider;
 import org.eclipse.tm4e.ui.themes.ColorManager;
 
-import com.google.common.base.Splitter;
-
 public class CSSTokenProvider extends AbstractTokenProvider {
-
-	private static final Splitter BY_DOT_SPLITTER = Splitter.on('.');
 
 	private static class NoopCSSParser extends CSSParser {
 		@Override
@@ -89,7 +86,7 @@ public class CSSTokenProvider extends AbstractTokenProvider {
 		if (type == null)
 			return null;
 
-		final IStyle style = parser.getBestStyle(BY_DOT_SPLITTER.splitToStream(type).toArray(String[]::new));
+		final IStyle style = parser.getBestStyle(StringUtils.splitToArray(type, '.'));
 		if (style == null)
 			return null;
 

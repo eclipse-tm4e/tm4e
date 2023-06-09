@@ -17,15 +17,12 @@ import java.util.Map;
 import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.widgets.Display;
+import org.eclipse.tm4e.core.internal.utils.StringUtils;
 import org.eclipse.tm4e.core.theme.RGB;
 import org.eclipse.tm4e.ui.internal.utils.PreferenceUtils;
 import org.eclipse.ui.texteditor.AbstractTextEditor;
 
-import com.google.common.base.Splitter;
-
 public final class ColorManager {
-
-	private static final Splitter BY_COMMA_SPLITTER = Splitter.on(',');
 
 	private static final ColorManager INSTANCE = new ColorManager();
 
@@ -132,10 +129,9 @@ public final class ColorManager {
 	 * @return RGB value
 	 */
 	private RGB stringToRGB(final String value) {
-		final String[] rgbValues = BY_COMMA_SPLITTER.splitToStream(value).toArray(String[]::new);
+		final String[] rgbValues = StringUtils.splitToArray(value, ',');
 		return rgbValues.length == 3
-				? new RGB(Integer.parseInt(rgbValues[0]), Integer.parseInt(rgbValues[1]),
-						Integer.parseInt(rgbValues[2]))
+				? new RGB(Integer.parseInt(rgbValues[0]), Integer.parseInt(rgbValues[1]), Integer.parseInt(rgbValues[2]))
 				: new RGB(255, 255, 255);
 	}
 }

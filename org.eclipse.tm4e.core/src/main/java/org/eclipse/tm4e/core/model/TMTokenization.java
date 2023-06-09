@@ -29,8 +29,7 @@ import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.tm4e.core.grammar.IGrammar;
 import org.eclipse.tm4e.core.grammar.IStateStack;
 import org.eclipse.tm4e.core.internal.grammar.StateStack;
-
-import com.google.common.base.Splitter;
+import org.eclipse.tm4e.core.internal.utils.StringUtils;
 
 /**
  * @see <a href=
@@ -140,8 +139,6 @@ public class TMTokenization implements ITokenizationSupport {
 
 	private static final class DecodeMap {
 
-		private static final Splitter BY_DOT_SPLITTER = Splitter.on('.');
-
 		private int lastAssignedId = 0;
 		private final Map<String /* scope */, Integer @Nullable [] /* ids */> scopeToTokenIds = new LinkedHashMap<>();
 		private final Map<String /* token */, @Nullable Integer /* id */> tokenToTokenId = new LinkedHashMap<>();
@@ -153,7 +150,7 @@ public class TMTokenization implements ITokenizationSupport {
 			if (tokens != null) {
 				return tokens;
 			}
-			final String[] tmpTokens = BY_DOT_SPLITTER.splitToStream(scope).toArray(String[]::new);
+			final String[] tmpTokens = StringUtils.splitToArray(scope, '.');
 
 			tokens = new Integer[tmpTokens.length];
 			for (int i = 0; i < tmpTokens.length; i++) {

@@ -11,17 +11,16 @@
  */
 package org.eclipse.tm4e.core.theme.css;
 
+import org.eclipse.tm4e.core.internal.utils.StringUtils;
 import org.eclipse.tm4e.core.theme.IStyle;
 
 public final class CSSParserTest {
 
 	public static void main(final String[] args) throws Exception {
 		final var parser = new CSSParser(".comment {color:rgb(0,1,2)} .comment.ts {color:rgb(0,1,2)}");
-		String[] names = "comment".split("[.]");
-		parser.getBestStyle(names);
+		parser.getBestStyle("comment");
 
-		names = "comment.ts".split("[.]");
-		final IStyle style = parser.getBestStyle(names);
+		final IStyle style = parser.getBestStyle(StringUtils.splitToArray("comment.ts", '.'));
 
 		System.err.println(style.getColor().red);
 	}

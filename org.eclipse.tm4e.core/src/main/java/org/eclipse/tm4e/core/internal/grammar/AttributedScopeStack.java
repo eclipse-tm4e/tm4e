@@ -23,8 +23,7 @@ import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.tm4e.core.internal.grammar.tokenattrs.EncodedTokenAttributes;
 import org.eclipse.tm4e.core.internal.theme.FontStyle;
 import org.eclipse.tm4e.core.internal.theme.StyleAttributes;
-
-import com.google.common.base.Splitter;
+import org.eclipse.tm4e.core.internal.utils.StringUtils;
 
 /**
  * @see <a href=
@@ -36,8 +35,6 @@ public final class AttributedScopeStack {
 	@NonNullByDefault({}) // https://github.com/eclipse-jdt/eclipse.jdt.core/issues/233
 	record Frame(int encodedTokenAttributes, List<String> scopeNames) {
 	}
-
-	private static final Splitter BY_SPACE_SPLITTER = Splitter.on(' ');
 
 	@Nullable
 	static AttributedScopeStack fromExtension(final @Nullable AttributedScopeStack namesScopeList,
@@ -160,7 +157,7 @@ public final class AttributedScopeStack {
 			return _pushAttributed(this, scopePath, grammar);
 		}
 
-		final var scopes = BY_SPACE_SPLITTER.split(scopePath);
+		final var scopes = StringUtils.splitToArray(scopePath, ' ');
 		var result = this;
 		for (final var scope : scopes) {
 			result = _pushAttributed(result, scope, grammar);

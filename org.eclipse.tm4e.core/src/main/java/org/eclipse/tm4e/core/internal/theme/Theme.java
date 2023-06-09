@@ -23,8 +23,8 @@ import java.util.Objects;
 
 import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.tm4e.core.internal.grammar.ScopeStack;
+import org.eclipse.tm4e.core.internal.utils.StringUtils;
 
-import com.google.common.base.Splitter;
 import com.google.common.collect.Lists;
 
 /**
@@ -35,9 +35,6 @@ import com.google.common.collect.Lists;
  *      github.com/microsoft/vscode-textmate/blob/main/src/theme.ts</a>
  */
 public final class Theme {
-
-	private static final Splitter BY_COMMA_SPLITTER = Splitter.on(',');
-	private static final Splitter BY_SPACE_SPLITTER = Splitter.on(' ');
 
 	public static Theme createFromRawTheme(@Nullable final IRawTheme source, @Nullable final List<String> colorMap) {
 		return createFromParsedTheme(parseTheme(source), colorMap);
@@ -147,7 +144,7 @@ public final class Theme {
 				// remove trailing commas
 				_scope = _scope.replaceAll(",+$", "");
 
-				scopes = BY_COMMA_SPLITTER.splitToList(_scope);
+				scopes = StringUtils.splitToList(_scope, ',');
 			} else if (settingScope instanceof List) {
 				@SuppressWarnings("unchecked")
 				final var settingScopes = (List<String>) settingScope;
@@ -161,7 +158,7 @@ public final class Theme {
 			if (settingsFontStyle instanceof final String style) {
 				fontStyle = FontStyle.None;
 
-				final var segments = BY_SPACE_SPLITTER.split(style);
+				final var segments = StringUtils.splitToArray(style, ' ');
 				for (final var segment : segments) {
 					switch (segment) {
 						case "italic":
@@ -197,7 +194,7 @@ public final class Theme {
 			for (int j = 0, lenJ = scopes.size(); j < lenJ; j++) {
 				final var _scope = scopes.get(j).trim();
 
-				final var segments = BY_SPACE_SPLITTER.splitToList(_scope);
+				final var segments = StringUtils.splitToList(_scope, ' ');
 
 				final var scope = getLastElement(segments);
 				List<String> parentScopes = null;

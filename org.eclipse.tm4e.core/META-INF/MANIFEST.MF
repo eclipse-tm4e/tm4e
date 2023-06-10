@@ -10,7 +10,7 @@ Require-Bundle: org.apache.batik.css;bundle-version="1.9.1";resolution:=optional
  com.google.gson;bundle-version="2.9.0",
  com.google.guava;bundle-version="[30.1.0,31.0.0)",
  org.jcodings;bundle-version="1.0.57",
- org.joni;bundle-version="2.1.48",
+ org.joni;bundle-version="2.2.1",
  org.yaml.snakeyaml;bundle-version="1.27.0"
 Import-Package: org.w3c.css.sac;resolution:=optional,
  org.w3c.css.sac.helpers;resolution:=optional,

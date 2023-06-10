@@ -12,6 +12,11 @@ on:
     - '**'
   workflow_dispatch:
     # https://github.blog/changelog/2020-07-06-github-actions-manual-triggers-with-workflow_dispatch/
+    inputs:
+      dash-iplab-token:
+        description: "Gitlab Personal Access Token (https://gitlab.eclipse.org/-/profile/personal_access_tokens) with 'api'' scope for Automatic IP Team Review Requests via org.eclipse.dash:license-tool-plugin, see https://github.com/eclipse/dash-licenses#automatic-ip-team-review-requests"
+        default: ""
+        type: string
 
 defaults:
   run:
@@ -49,7 +54,9 @@ jobs:
       with:
         maven-version: 3.9.1
 
-    - name: License check # see https://github.com/eclipse/dash-licenses
+    - name: Dash License check # see https://github.com/eclipse/dash-licenses
+      env:
+        DASH_IPLAB_TOKEN: "${{ inputs.dash-iplab-token }}"
       run: |
         set -eu
 
@@ -82,8 +89,11 @@ jobs:
           --no-transfer-progress \
           -Dtycho.disableP2Mirrors=true \
           org.eclipse.dash:license-tool-plugin:license-check \
-          --file pom.xml \
+          -Dtycho.target.eager=true \
+          -Ddash.projectId=technology.tm4e \
+          -Ddash.iplab.token="$DASH_IPLAB_TOKEN" \
           -Ddash.fail=true \
+          -Ddash.summary=DEPENDENCIES \
           -DexcludeArtifactIds=\
         org.eclipse.tm4e.core,\
         org.eclipse.tm4e.feature,\
@@ -95,3 +105,7 @@ jobs:
         org.eclipse.tm4e.samples,\
         org.eclipse.tm4e.ui,\
         org.eclipse.ui.tests.harness
+
+    - name: Dash Summary
+      if: always()
+      run: cat DEPENDENCIES

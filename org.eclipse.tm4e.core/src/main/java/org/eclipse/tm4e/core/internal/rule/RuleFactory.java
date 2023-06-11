@@ -118,7 +118,7 @@ public final class RuleFactory {
 		}
 
 		// Initialize result
-		final var r = new ArrayList<@Nullable CaptureRule>();
+		final var r = new ArrayList<@Nullable CaptureRule>(maximumCaptureId);
 		for (int i = 0; i <= maximumCaptureId; i++) {
 			r.add(null);
 		}

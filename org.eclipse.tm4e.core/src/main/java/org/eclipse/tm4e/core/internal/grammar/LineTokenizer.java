@@ -563,7 +563,7 @@ final class LineTokenizer {
 	}
 
 	static String debugCompiledRuleToString(final CompiledRule ruleScanner) {
-		final var r = new ArrayList<String>();
+		final var r = new ArrayList<String>(ruleScanner.rules.length);
 		for (int i = 0, l = ruleScanner.rules.length; i < l; i++) {
 			r.add("   - " + ruleScanner.rules[i] + ": " + ruleScanner.debugRegExps.get(i));
 		}

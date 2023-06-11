@@ -34,6 +34,10 @@ public final class OnigScannerMatch {
 		this.captureIndices = captureIndicesOfMatch(result, source);
 	}
 
+	/**
+	 * @see <a href="https://github.com/atom/node-oniguruma/blob/0c6b95fc7d79ab7e60a7ed63df6d05677ace2642/src/onig-scanner.cc#L102">
+	 *      github.com/atom/node-oniguruma/blob/master/src/onig-scanner.cc#L102</a>
+	 */
 	private OnigCaptureIndex[] captureIndicesOfMatch(final OnigResult result, final OnigString source) {
 		final int resultCount = result.count();
 		final var captures = new OnigCaptureIndex[resultCount];

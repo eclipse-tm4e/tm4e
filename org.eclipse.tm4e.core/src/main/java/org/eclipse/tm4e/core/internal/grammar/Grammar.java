@@ -286,7 +286,7 @@ public final class Grammar implements IGrammar, IRuleFactoryHelper {
 		}
 
 		final boolean isFirstLine;
-		if (prevState == null || prevState.equals(StateStack.NULL)) {
+		if (prevState == null || prevState == StateStack.NULL) {
 			isFirstLine = true;
 			final var rawDefaultMetadata = this._basicScopeAttributesProvider.getDefaultAttributes();
 			final var defaultStyle = this.themeProvider.getDefaults();

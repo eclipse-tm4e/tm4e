@@ -18,7 +18,13 @@ package org.eclipse.tm4e.core.internal.oniguruma;
 
 import org.eclipse.jdt.annotation.Nullable;
 
+/**
+ * @see <a href="https://github.com/atom/node-oniguruma/blob/0c6b95fc7d79ab7e60a7ed63df6d05677ace2642/src/onig-scanner.cc#L110">
+ *      github.com/atom/node-oniguruma/blob/master/src/onig-scanner.cc#L110</a>
+ */
 public final class OnigCaptureIndex {
+
+	static final OnigCaptureIndex EMPTY = new OnigCaptureIndex(0, 0);
 
 	public final int start;
 	public final int end;

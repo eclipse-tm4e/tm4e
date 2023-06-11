@@ -313,7 +313,7 @@ final class LineTokenizer {
 		final var rule = stack.getRule(grammar);
 		final var ruleScanner = rule.compileAG(grammar, stack.endRule, isFirstLine, linePos == anchorPosition);
 
-		final OnigNextMatchResult r = ruleScanner.scanner.findNextMatchSync(lineText, linePos);
+		final OnigNextMatchResult r = ruleScanner.scanner.findNextMatch(lineText, linePos);
 
 		if (r != null) {
 			return new MatchResult(ruleScanner.rules[r.getIndex()], r.getCaptureIndices());
@@ -379,7 +379,7 @@ final class LineTokenizer {
 
 			final var rule = grammar.getRule(injection.ruleId);
 			final var ruleScanner = rule.compileAG(grammar, null, isFirstLine, linePos == anchorPosition);
-			final var matchResult = ruleScanner.scanner.findNextMatchSync(lineText, linePos);
+			final var matchResult = ruleScanner.scanner.findNextMatch(lineText, linePos);
 			if (matchResult == null) {
 				continue;
 			}
@@ -524,7 +524,7 @@ final class LineTokenizer {
 			final var whileRule = whileRules.get(i);
 
 			final var ruleScanner = whileRule.rule.compileWhileAG(whileRule.stack.endRule, isFirstLine, anchorPosition == linePos);
-			final var r = ruleScanner.scanner.findNextMatchSync(lineText, linePos);
+			final var r = ruleScanner.scanner.findNextMatch(lineText, linePos);
 			if (LOGGER.isLoggable(TRACE)) {
 				LOGGER.log(TRACE, "  scanning for while rule");
 				LOGGER.log(TRACE, debugCompiledRuleToString(ruleScanner));

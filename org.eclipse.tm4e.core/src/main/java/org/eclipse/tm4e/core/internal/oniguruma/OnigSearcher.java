@@ -16,7 +16,6 @@
  */
 package org.eclipse.tm4e.core.internal.oniguruma;
 
-import java.util.Collection;
 import java.util.List;
 
 import org.eclipse.jdt.annotation.Nullable;
@@ -29,7 +28,7 @@ final class OnigSearcher {
 
 	private final List<OnigRegExp> regExps;
 
-	OnigSearcher(final Collection<String> regExps) {
+	OnigSearcher(final List<String> regExps) {
 		this.regExps = regExps.stream().map(OnigRegExp::new).toList();
 	}
 

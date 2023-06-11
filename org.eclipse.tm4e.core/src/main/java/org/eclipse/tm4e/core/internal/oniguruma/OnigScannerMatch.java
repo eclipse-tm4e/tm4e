@@ -26,7 +26,7 @@ import org.eclipse.jdt.annotation.Nullable;
  */
 public final class OnigScannerMatch {
 
-	private final int index;
+	public final int index;
 	private final OnigCaptureIndex[] captureIndices;
 
 	OnigScannerMatch(final OnigResult result, final OnigString source) {
@@ -63,10 +63,6 @@ public final class OnigScannerMatch {
 		return captureIndices;
 	}
 
-	public int getIndex() {
-		return index;
-	}
-
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -80,11 +76,11 @@ public final class OnigScannerMatch {
 	public String toString() {
 		final var result = new StringBuilder("{\n");
 		result.append("  \"index\": ");
-		result.append(getIndex());
+		result.append(index);
 		result.append(",\n");
 		result.append("  \"captureIndices\": [\n");
 		int i = 0;
-		for (final OnigCaptureIndex captureIndex : getCaptureIndices()) {
+		for (final OnigCaptureIndex captureIndex : captureIndices) {
 			if (i > 0) {
 				result.append(",\n");
 			}

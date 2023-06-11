@@ -24,7 +24,7 @@ class OnigScannerTest {
 		var scanner = new OnigScanner(Arrays.asList("c", "a(b)?"));
 		OnigScannerMatch result = scanner.findNextMatch("abc", 0);
 		assertNotNull(result);
-		assertEquals(1, result.getIndex());
+		assertEquals(1, result.index);
 		assertArrayEquals(new OnigCaptureIndex[] {
 			new OnigCaptureIndex(0, 2),
 			new OnigCaptureIndex(1, 2) },
@@ -33,7 +33,7 @@ class OnigScannerTest {
 		scanner = new OnigScanner(Arrays.asList("a([b-d])c"));
 		result = scanner.findNextMatch("!abcdef", 0);
 		assertNotNull(result);
-		assertEquals(0, result.getIndex());
+		assertEquals(0, result.index);
 		assertArrayEquals(new OnigCaptureIndex[] {
 			new OnigCaptureIndex(1, 4),
 			new OnigCaptureIndex(2, 3) },

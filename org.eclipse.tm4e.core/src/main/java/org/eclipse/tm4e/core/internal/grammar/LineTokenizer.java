@@ -316,7 +316,7 @@ final class LineTokenizer {
 		final OnigScannerMatch r = ruleScanner.scanner.findNextMatch(lineText, linePos);
 
 		if (r != null) {
-			return new MatchResult(ruleScanner.rules[r.getIndex()], r.getCaptureIndices());
+			return new MatchResult(ruleScanner.rules[r.index], r.getCaptureIndices());
 		}
 		return null;
 	}
@@ -397,7 +397,7 @@ final class LineTokenizer {
 
 			bestMatchRating = matchRating;
 			bestMatchCaptureIndices = matchResult.getCaptureIndices();
-			bestMatchRuleId = ruleScanner.rules[matchResult.getIndex()];
+			bestMatchRuleId = ruleScanner.rules[matchResult.index];
 			bestMatchResultPriority = injection.priority;
 
 			if (bestMatchRating == linePos) {
@@ -531,7 +531,7 @@ final class LineTokenizer {
 			}
 
 			if (r != null) {
-				final RuleId matchedRuleId = ruleScanner.rules[r.getIndex()];
+				final RuleId matchedRuleId = ruleScanner.rules[r.index];
 				if (RuleId.WHILE_RULE.notEquals(matchedRuleId)) {
 					// we shouldn't end up here
 					stack = castNonNull(whileRule.stack.pop());

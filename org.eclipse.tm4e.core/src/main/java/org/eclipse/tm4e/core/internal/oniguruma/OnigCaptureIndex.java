@@ -20,12 +20,10 @@ import org.eclipse.jdt.annotation.Nullable;
 
 public final class OnigCaptureIndex {
 
-	public final int index;
 	public final int start;
 	public final int end;
 
-	OnigCaptureIndex(final int index, final int start, final int end) {
-		this.index = index;
+	OnigCaptureIndex(final int start, final int end) {
 		this.start = start >= 0 ? start : 0;
 		this.end = end >= 0 ? end : 0;
 	}
@@ -38,7 +36,6 @@ public final class OnigCaptureIndex {
 			return false;
 		final var other = (OnigCaptureIndex) obj;
 		return end == other.end
-				&& index == other.index
 				&& start == other.start;
 	}
 
@@ -51,7 +48,6 @@ public final class OnigCaptureIndex {
 		final int prime = 31;
 		int result = 1;
 		result = prime * result + end;
-		result = prime * result + index;
 		result = prime * result + start;
 		return result;
 	}
@@ -59,7 +55,6 @@ public final class OnigCaptureIndex {
 	@Override
 	public String toString() {
 		return "{"
-				+ "\"index\": " + index
 				+ ", \"start\": " + start
 				+ ", \"end\": " + end
 				+ ", \"length\": " + getLength()

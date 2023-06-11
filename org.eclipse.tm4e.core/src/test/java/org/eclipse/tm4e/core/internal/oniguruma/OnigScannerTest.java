@@ -26,8 +26,8 @@ class OnigScannerTest {
 		assertNotNull(result);
 		assertEquals(1, result.getIndex());
 		assertArrayEquals(new OnigCaptureIndex[] {
-			new OnigCaptureIndex(0, 0, 2),
-			new OnigCaptureIndex(1, 1, 2) },
+			new OnigCaptureIndex(0, 2),
+			new OnigCaptureIndex(1, 2) },
 				result.getCaptureIndices());
 
 		scanner = new OnigScanner(Arrays.asList("a([b-d])c"));
@@ -35,8 +35,8 @@ class OnigScannerTest {
 		assertNotNull(result);
 		assertEquals(0, result.getIndex());
 		assertArrayEquals(new OnigCaptureIndex[] {
-			new OnigCaptureIndex(0, 1, 4),
-			new OnigCaptureIndex(1, 2, 3) },
+			new OnigCaptureIndex(1, 4),
+			new OnigCaptureIndex(2, 3) },
 				result.getCaptureIndices());
 
 	}

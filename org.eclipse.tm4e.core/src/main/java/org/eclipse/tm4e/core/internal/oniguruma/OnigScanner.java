@@ -40,9 +40,4 @@ public final class OnigScanner {
 		}
 		return null;
 	}
-
-	@Nullable
-	public OnigScannerMatch findNextMatch(final String text, final int startPosition) {
-		return findNextMatch(OnigString.of(text), startPosition);
-	}
 }

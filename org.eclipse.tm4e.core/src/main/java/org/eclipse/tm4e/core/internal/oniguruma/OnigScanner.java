@@ -33,16 +33,16 @@ public final class OnigScanner {
 	}
 
 	@Nullable
-	public OnigNextMatchResult findNextMatch(final OnigString source, final int startPosition) {
+	public OnigScannerMatch findNextMatch(final OnigString source, final int startPosition) {
 		final OnigResult bestResult = searcher.search(source, startPosition);
 		if (bestResult != null) {
-			return new OnigNextMatchResult(bestResult, source);
+			return new OnigScannerMatch(bestResult, source);
 		}
 		return null;
 	}
 
 	@Nullable
-	public OnigNextMatchResult findNextMatch(final String text, final int startPosition) {
+	public OnigScannerMatch findNextMatch(final String text, final int startPosition) {
 		return findNextMatch(OnigString.of(text), startPosition);
 	}
 }

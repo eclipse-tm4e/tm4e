@@ -24,12 +24,12 @@ import org.eclipse.jdt.annotation.Nullable;
  * @see <a href="https://github.com/atom/node-oniguruma/blob/master/src/onig-scanner.cc">
  *      github.com/atom/node-oniguruma/blob/master/src/onig-scanner.cc</a>
  */
-public final class OnigNextMatchResult {
+public final class OnigScannerMatch {
 
 	private final int index;
 	private final OnigCaptureIndex[] captureIndices;
 
-	OnigNextMatchResult(final OnigResult result, final OnigString source) {
+	OnigScannerMatch(final OnigResult result, final OnigString source) {
 		this.index = result.getIndex();
 		this.captureIndices = captureIndicesOfMatch(result, source);
 	}
@@ -54,7 +54,7 @@ public final class OnigNextMatchResult {
 			return true;
 		if (obj == null || getClass() != obj.getClass())
 			return false;
-		final var other = (OnigNextMatchResult) obj;
+		final var other = (OnigScannerMatch) obj;
 		return index == other.index
 				&& Arrays.equals(captureIndices, other.captureIndices);
 	}

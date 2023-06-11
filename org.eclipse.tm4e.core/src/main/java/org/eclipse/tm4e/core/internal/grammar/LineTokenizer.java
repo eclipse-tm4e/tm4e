@@ -31,7 +31,7 @@ import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.tm4e.core.internal.oniguruma.OnigCaptureIndex;
-import org.eclipse.tm4e.core.internal.oniguruma.OnigNextMatchResult;
+import org.eclipse.tm4e.core.internal.oniguruma.OnigScannerMatch;
 import org.eclipse.tm4e.core.internal.oniguruma.OnigString;
 import org.eclipse.tm4e.core.internal.rule.BeginEndRule;
 import org.eclipse.tm4e.core.internal.rule.BeginWhileRule;
@@ -313,7 +313,7 @@ final class LineTokenizer {
 		final var rule = stack.getRule(grammar);
 		final var ruleScanner = rule.compileAG(grammar, stack.endRule, isFirstLine, linePos == anchorPosition);
 
-		final OnigNextMatchResult r = ruleScanner.scanner.findNextMatch(lineText, linePos);
+		final OnigScannerMatch r = ruleScanner.scanner.findNextMatch(lineText, linePos);
 
 		if (r != null) {
 			return new MatchResult(ruleScanner.rules[r.getIndex()], r.getCaptureIndices());

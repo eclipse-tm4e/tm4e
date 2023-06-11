@@ -39,6 +39,47 @@ import org.eclipse.tm4e.core.internal.theme.FontStyle;
  */
 final class LineTokens {
 
+	private static final class Token implements IToken {
+		private int startIndex;
+		private final int endIndex;
+		private final List<String> scopes;
+
+		Token(final int startIndex, final int endIndex, final List<String> scopes) {
+			this.startIndex = startIndex;
+			this.endIndex = endIndex;
+			this.scopes = scopes;
+		}
+
+		@Override
+		public int getStartIndex() {
+			return startIndex;
+		}
+
+		@Override
+		public void setStartIndex(final int startIndex) {
+			this.startIndex = startIndex;
+		}
+
+		@Override
+		public int getEndIndex() {
+			return endIndex;
+		}
+
+		@Override
+		public List<String> getScopes() {
+			return scopes;
+		}
+
+		@Override
+		public String toString() {
+			return "{"
+					+ "startIndex: " + startIndex
+					+ ", endIndex: " + endIndex
+					+ ", scopes: " + scopes
+					+ "}";
+		}
+	}
+
 	private static final Logger LOGGER = System.getLogger(LineTokens.class.getName());
 
 	private static final Deque<IToken> EMPTY_DEQUE = new ArrayDeque<>(0);
@@ -169,38 +210,7 @@ final class LineTokens {
 			}
 		}
 
-		this._tokens.add(new IToken() {
-			private int startIndex = _lastTokenEndIndex;
-
-			@Override
-			public int getStartIndex() {
-				return startIndex;
-			}
-
-			@Override
-			public void setStartIndex(final int startIndex) {
-				this.startIndex = startIndex;
-			}
-
-			@Override
-			public int getEndIndex() {
-				return endIndex;
-			}
-
-			@Override
-			public List<String> getScopes() {
-				return scopes;
-			}
-
-			@Override
-			public String toString() {
-				return "{"
-						+ "startIndex: " + startIndex
-						+ ", endIndex: " + endIndex
-						+ ", scopes: " + scopes
-						+ "}";
-			}
-		});
+		this._tokens.add(new Token(_lastTokenEndIndex, endIndex, scopes));
 
 		this._lastTokenEndIndex = endIndex;
 	}

@@ -166,7 +166,7 @@
     <!-- issues: syntax highlighting broken; syntax highlighting broken
     <extension point="org.eclipse.core.contenttype.contentTypes">
         <content-type id="lng.git-commit" base-type="org.eclipse.tm4e.language_pack.basetype" name="Git Commit Message (Syntax Highlighting)" priority="low" file-names="COMMIT_EDITMSG,MERGE_MSG"/>
-        <content-type id="lng.git-rebase" base-type="org.eclipse.tm4e.language_pack.basetype" name="Git Rebase Message (Syntax Highlighting)" priority="low" file-names="git-rebase-todo"/>
+        <content-type id="lng.git-rebase" base-type="org.eclipse.tm4e.language_pack.basetype" name="Git Rebase Message (Syntax Highlighting)" priority="low" file-names="git-rebase-todo" file-patterns="**/rebase-merge/done"/>
         <content-type id="lng.ignore" base-type="org.eclipse.tm4e.language_pack.basetype" name="Git Ignore (Syntax Highlighting)" priority="low" file-extensions="gitignore_global,gitignore"/>
     </extension>
     <extension point="org.eclipse.tm4e.languageconfiguration.languageConfigurations">
@@ -198,7 +198,7 @@
 
     <!-- groovy -->
     <extension point="org.eclipse.core.contenttype.contentTypes">
-        <content-type id="lng.groovy" base-type="org.eclipse.tm4e.language_pack.basetype" name="Groovy (Syntax Highlighting)" priority="low" file-extensions="groovy,gvy,gradle,jenkinsfile,nf" file-names="Jenkinsfile" file-patterns="Jenkinsfile.*"/>
+        <content-type id="lng.groovy" base-type="org.eclipse.tm4e.language_pack.basetype" name="Groovy (Syntax Highlighting)" priority="low" file-extensions="groovy,gvy,gradle,jenkinsfile,nf" file-names="Jenkinsfile" file-patterns="Jenkinsfile*"/>
     </extension>
     <extension point="org.eclipse.tm4e.languageconfiguration.languageConfigurations">
         <languageConfiguration contentTypeId="lng.groovy" path="groovy/language-configuration.json"/>
@@ -273,7 +273,7 @@
 
     <!-- javascript -->
     <extension point="org.eclipse.core.contenttype.contentTypes">
-        <content-type id="lng.javascriptreact" base-type="org.eclipse.tm4e.language_pack.basetype" name="JavaScript React (Syntax Highlighting)" priority="low" file-extensions="jsx"/>
+        <content-type id="lng.javascriptreact" base-type="org.eclipse.tm4e.language_pack.basetype" name="JavaScript JSX (Syntax Highlighting)" priority="low" file-extensions="jsx"/>
         <content-type id="lng.javascript" base-type="org.eclipse.tm4e.language_pack.basetype" name="JavaScript (Syntax Highlighting)" priority="low" file-extensions="js,es6,mjs,cjs,pac" file-names="jakefile"/>
     </extension>
     <extension point="org.eclipse.tm4e.languageconfiguration.languageConfigurations">
@@ -290,18 +290,22 @@
 
     <!-- json -->
     <extension point="org.eclipse.core.contenttype.contentTypes">
-        <content-type id="lng.json" base-type="org.eclipse.tm4e.language_pack.basetype" name="JSON (Syntax Highlighting)" priority="low" file-extensions="json,bowerrc,jscsrc,webmanifest,har,jslintrc,jsonld,geojson,ipynb" file-names="composer.lock,.watchmanconfig" file-patterns="*.js.map2,*.css.map2,*.ts.map2"/>
-        <content-type id="lng.jsonc" base-type="org.eclipse.tm4e.language_pack.basetype" name="JSON with Comments (Syntax Highlighting)" priority="low" file-extensions="jsonc,eslintrc,jsfmtrc,jshintrc,swcrc,hintrc,babelrc" file-names="babel.config.json,.babelrc.json,.ember-cli" file-patterns="*.eslintrc.json2"/>
+        <content-type id="lng.json" base-type="org.eclipse.tm4e.language_pack.basetype" name="JSON (Syntax Highlighting)" priority="low" file-extensions="json,bowerrc,jscsrc,webmanifest,har,jslintrc,jsonld,geojson,ipynb,vuerc" file-names="composer.lock,.watchmanconfig" file-patterns="*.js.map2,*.css.map2,*.ts.map2"/>
+        <content-type id="lng.jsonc" base-type="org.eclipse.tm4e.language_pack.basetype" name="JSON with Comments (Syntax Highlighting)" priority="low" file-extensions="jsonc,eslintrc,jsfmtrc,jshintrc,swcrc,hintrc,babelrc" file-names="babel.config.json,.babelrc.json,.ember-cli,typedoc.json" file-patterns="*.eslintrc.json2"/>
+        <content-type id="lng.jsonl" base-type="org.eclipse.tm4e.language_pack.basetype" name="JSON Lines (Syntax Highlighting)" priority="low" file-extensions="jsonl"/>
     </extension>
     <extension point="org.eclipse.tm4e.languageconfiguration.languageConfigurations">
         <languageConfiguration contentTypeId="lng.json" path="json/language-configuration.json"/>
         <languageConfiguration contentTypeId="lng.jsonc" path="json/language-configuration.json"/>
+        <languageConfiguration contentTypeId="lng.jsonl" path="json/language-configuration.json"/>
     </extension>
     <extension point="org.eclipse.tm4e.registry.grammars">
         <grammar scopeName="lngpck.source.json" path="json/JSON.tmLanguage.json"/>
         <scopeNameContentTypeBinding scopeName="lngpck.source.json" contentTypeId="lng.json"/>
         <grammar scopeName="lngpck.source.json.comments" path="json/JSONC.tmLanguage.json"/>
         <scopeNameContentTypeBinding scopeName="lngpck.source.json.comments" contentTypeId="lng.jsonc"/>
+        <grammar scopeName="lngpck.source.json.lines" path="json/JSONL.tmLanguage.json"/>
+        <scopeNameContentTypeBinding scopeName="lngpck.source.json.lines" contentTypeId="lng.jsonl"/>
     </extension>
 
     <!-- julia -->
@@ -487,7 +491,7 @@
 
     <!-- python -->
     <extension point="org.eclipse.core.contenttype.contentTypes">
-        <content-type id="lng.python" base-type="org.eclipse.tm4e.language_pack.basetype" name="Python (Syntax Highlighting)" priority="low" file-extensions="py,rpy,pyw,cpy,gyp,gypi,pyi,ipy,pyt" file-names="Snakefile,SConstruct,SConscript"/>
+        <content-type id="lng.python" base-type="org.eclipse.tm4e.language_pack.basetype" name="Python (Syntax Highlighting)" priority="low" file-extensions="py,rpy,pyw,cpy,gyp,gypi,pyi,ipy,pyt" file-names="SConstruct,SConscript"/>
     </extension>
     <extension point="org.eclipse.tm4e.languageconfiguration.languageConfigurations">
         <languageConfiguration contentTypeId="lng.python" path="python/language-configuration.json"/>
@@ -604,7 +608,7 @@
     <!-- shellscript -->
     <!-- issues: syntax highlighting broken
     <extension point="org.eclipse.core.contenttype.contentTypes">
-        <content-type id="lng.shellscript" base-type="org.eclipse.tm4e.language_pack.basetype" name="Shell Script (Syntax Highlighting)" priority="low" file-extensions="sh,bash,bashrc,bash_aliases,bash_profile,bash_login,ebuild,profile,bash_logout,xprofile,xsession,xsessionrc,Xsession,zsh,zshrc,zprofile,zlogin,zlogout,zshenv,zsh-theme,ksh,csh,cshrc,tcshrc,yashrc,yash_profile" file-names="APKBUILD,PKGBUILD,.envrc,.hushlogin,zshrc,zshenv,zlogin,zprofile,zlogout,bashrc_Apple_Terminal,zshrc_Apple_Terminal"/>
+        <content-type id="lng.shellscript" base-type="org.eclipse.tm4e.language_pack.basetype" name="Shell Script (Syntax Highlighting)" priority="low" file-extensions="sh,bash,bashrc,bash_aliases,bash_profile,bash_login,ebuild,profile,bash_logout,xprofile,xsession,xsessionrc,Xsession,zsh,zshrc,zprofile,zlogin,zlogout,zshenv,zsh-theme,fish,ksh,csh,cshrc,tcshrc,yashrc,yash_profile" file-names="APKBUILD,PKGBUILD,.envrc,.hushlogin,zshrc,zshenv,zlogin,zprofile,zlogout,bashrc_Apple_Terminal,zshrc_Apple_Terminal" file-patterns=".env.*"/>
     </extension>
     <extension point="org.eclipse.tm4e.languageconfiguration.languageConfigurations">
         <languageConfiguration contentTypeId="lng.shellscript" path="shellscript/language-configuration.json"/>
@@ -642,7 +646,7 @@
     <!-- typescript-basics -->
     <extension point="org.eclipse.core.contenttype.contentTypes">
         <content-type id="lng.typescript" base-type="org.eclipse.tm4e.language_pack.basetype" name="TypeScript (Syntax Highlighting)" priority="low" file-extensions="ts,cts,mts"/>
-        <content-type id="lng.typescriptreact" base-type="org.eclipse.tm4e.language_pack.basetype" name="TypeScript React (Syntax Highlighting)" priority="low" file-extensions="tsx"/>
+        <content-type id="lng.typescriptreact" base-type="org.eclipse.tm4e.language_pack.basetype" name="TypeScript JSX (Syntax Highlighting)" priority="low" file-extensions="tsx"/>
     </extension>
     <extension point="org.eclipse.tm4e.languageconfiguration.languageConfigurations">
         <languageConfiguration contentTypeId="lng.typescript" path="typescript-basics/language-configuration.json"/>

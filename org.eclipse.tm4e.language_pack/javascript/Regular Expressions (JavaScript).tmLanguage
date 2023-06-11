@@ -230,6 +230,7 @@
 		</dict>
 	</dict>
 	<key>scopeName</key>
+	<!-- TODO manually changed from 'source.js.regexp' to 'lngpck.source.js.regexp' after regeneration see https://github.com/eclipse/tm4e/pull/452 -->
 	<string>lngpck.source.js.regexp</string>
 	<key>uuid</key>
 	<string>AC8679DE-3AC7-4056-84F9-69A7ADC29DDD</string>

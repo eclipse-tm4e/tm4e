@@ -221,7 +221,7 @@ final class LineTokens {
 	}
 
 	int[] getBinaryResult(final StateStack stack, final int lineLength) {
-		if (!this._binaryTokens.isEmpty() && this._binaryTokens.get(_binaryTokens.size() - 2) == lineLength - 1) {
+		if (!this._binaryTokens.isEmpty() && getElementAt(this._binaryTokens, -2) == lineLength - 1) {
 			// pop produced token for newline
 			removeLastElement(this._binaryTokens);
 			removeLastElement(this._binaryTokens);

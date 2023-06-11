@@ -21,13 +21,6 @@ import org.eclipse.jdt.annotation.Nullable;
 
 public final class MoreCollections {
 
-	@SafeVarargs
-	public static <T> List<T> asArrayList(final T... items) {
-		final var list = new ArrayList<T>();
-		Collections.addAll(list, items);
-		return list;
-	}
-
 	public static <T> List<T> asArrayList(final T firstItem, final List<T> moreItems) {
 		final var list = new ArrayList<T>();
 		list.add(firstItem);
@@ -44,18 +37,39 @@ public final class MoreCollections {
 		return null;
 	}
 
+	/**
+	 * @return the last element or null if list is empty
+	 */
 	@Nullable
-	public static <T> T findLastElement(@Nullable final List<T> list) {
-		if (list == null || list.isEmpty())
+	public static <T> T findLastElement(final List<T> list) {
+		if (list.isEmpty())
 			return null;
 		return getLastElement(list);
 	}
 
 	/**
-	 * @param list a non-empty list with non-nullable elements
+	 * @param list a non-empty list
+	 * @param index the element to get. negative index counts from end of list, e.g. -1 = last element.
+	 *
+	 * @throws IndexOutOfBoundsException if the list is empty
+	 */
+	public static <T> T getElementAt(final List<T> list, final int index) {
+		if (index < 0)
+			return list.get(list.size() + index);
+		return list.get(index);
+	}
+
+	/**
+	 * @param list a non-empty list
+	 *
+	 * @throws IndexOutOfBoundsException if the list is empty
 	 */
 	public static <T> T getLastElement(final List<T> list) {
 		return list.get(list.size() - 1);
+	}
+
+	public static <T> List<T> nullToEmpty(@Nullable final List<T> list) {
+		return list == null ? Collections.emptyList() : list;
 	}
 
 	/**
@@ -68,10 +82,6 @@ public final class MoreCollections {
 	 */
 	public static <T> T removeLastElement(final List<T> list) {
 		return list.remove(list.size() - 1);
-	}
-
-	public static <T> List<T> nullToEmpty(@Nullable final List<T> list) {
-		return list == null ? Collections.emptyList() : list;
 	}
 
 	private MoreCollections() {

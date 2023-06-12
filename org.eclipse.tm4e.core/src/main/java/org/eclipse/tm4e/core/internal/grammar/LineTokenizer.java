@@ -50,6 +50,9 @@ final class LineTokenizer {
 
 	private static final Logger LOGGER = System.getLogger(LineTokenizer.class.getName());
 
+	private record LocalStackElement(AttributedScopeStack scopes, int endPos) {
+	}
+
 	private static class MatchResult {
 		final OnigCaptureIndex[] captureIndices;
 		final RuleId matchedRuleId;

@@ -19,7 +19,7 @@ package org.eclipse.tm4e.core.model;
 import java.time.Duration;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.LinkedHashMap;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -29,6 +29,7 @@ import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.tm4e.core.grammar.IGrammar;
 import org.eclipse.tm4e.core.grammar.IStateStack;
 import org.eclipse.tm4e.core.internal.grammar.StateStack;
+import org.eclipse.tm4e.core.internal.utils.MoreCollections;
 import org.eclipse.tm4e.core.internal.utils.StringUtils;
 
 /**
@@ -99,13 +100,16 @@ public class TMTokenization implements ITokenizationSupport {
 				tokenizationResult.isStoppedEarly());
 	}
 
+	/**
+	 * https://github.com/microsoft/vscode/blob/70d250824ef66ef09f04c4084b804d5f353fb704/src/vs/editor/node/textMate/TMSyntax.ts#L251
+	 */
 	private String decodeTextMateToken(final DecodeMap decodeMap, final List<String> scopes) {
 		final var prevTokenScopes = decodeMap.prevToken.scopes;
 		final int prevTokenScopesLength = prevTokenScopes.size();
 		final var prevTokenScopeTokensMaps = decodeMap.prevToken.scopeTokensMaps;
 
-		final var scopeTokensMaps = new LinkedHashMap<Integer, Map<Integer, Boolean>>();
-		Map<Integer, Boolean> prevScopeTokensMaps = new LinkedHashMap<>();
+		final var scopeTokensMaps = new HashMap<Integer /* level */, Map<Integer, Boolean>>();
+		Map<Integer, Boolean> prevScopeTokensMaps = new HashMap<>();
 		boolean sameAsPrev = true;
 		for (int level = 1/* deliberately skip scope 0 */; level < scopes.size(); level++) {
 			final String scope = scopes.get(level);
@@ -120,7 +124,7 @@ public class TMTokenization implements ITokenizationSupport {
 			}
 
 			final Integer[] tokens = decodeMap.getTokenIds(scope);
-			prevScopeTokensMaps = new LinkedHashMap<>(prevScopeTokensMaps);
+			prevScopeTokensMaps = new HashMap<>(prevScopeTokensMaps);
 			for (final Integer token : tokens) {
 				prevScopeTokensMaps.put(token, true);
 			}
@@ -134,16 +138,20 @@ public class TMTokenization implements ITokenizationSupport {
 	@NonNullByDefault({})
 	private record TMTokenDecodeData(
 			@NonNull List<String> scopes,
-			@NonNull Map<Integer, Map<Integer, Boolean>> scopeTokensMaps) {
+			@NonNull Map<Integer /* level */, Map<Integer, Boolean>> scopeTokensMaps) {
 	}
 
+	/**
+	 * https://github.com/microsoft/vscode/blob/70d250824ef66ef09f04c4084b804d5f353fb704/src/vs/editor/node/textMate/TMSyntax.ts#L129
+	 */
+	@NonNullByDefault({})
 	private static final class DecodeMap {
 
-		private int lastAssignedId = 0;
-		private final Map<String /* scope */, Integer @Nullable [] /* ids */> scopeToTokenIds = new LinkedHashMap<>();
-		private final Map<String /* token */, @Nullable Integer /* id */> tokenToTokenId = new LinkedHashMap<>();
-		private final Map<Integer /* id */, String /* id */> tokenIdToToken = new LinkedHashMap<>();
-		TMTokenDecodeData prevToken = new TMTokenDecodeData(Collections.emptyList(), new LinkedHashMap<>());
+		private int lastAssignedTokenId = 0;
+		private final Map<String /* scope */, Integer[] /* ids */> scopeToTokenIds = new HashMap<>();
+		private final Map<String /* token */, Integer /* id */> tokenToTokenId = new HashMap<>();
+		private final List<String> tokenIdToToken = MoreCollections.asArrayList("element-at-index-zero-is-unused");
+		TMTokenDecodeData prevToken = new TMTokenDecodeData(Collections.emptyList(), Collections.emptyMap());
 
 		Integer[] getTokenIds(final String scope) {
 			Integer[] tokens = this.scopeToTokenIds.get(scope);
@@ -157,9 +165,9 @@ public class TMTokenization implements ITokenizationSupport {
 				final String token = tmpTokens[i];
 				Integer tokenId = this.tokenToTokenId.get(token);
 				if (tokenId == null) {
-					tokenId = ++this.lastAssignedId;
+					tokenId = ++this.lastAssignedTokenId;
 					this.tokenToTokenId.put(token, tokenId);
-					this.tokenIdToToken.put(tokenId, token);
+					this.tokenIdToToken.add(token);
 				}
 				tokens[i] = tokenId;
 			}
@@ -171,15 +179,14 @@ public class TMTokenization implements ITokenizationSupport {
 		String getToken(final Map<Integer, Boolean> tokenMap) {
 			final var result = new StringBuilder();
 			boolean isFirst = true;
-			for (int i = 1; i <= this.lastAssignedId; i++) {
+			for (int i = 1; i <= this.lastAssignedTokenId; i++) {
 				if (tokenMap.containsKey(i)) {
 					if (isFirst) {
 						isFirst = false;
-						result.append(this.tokenIdToToken.get(i));
 					} else {
 						result.append('.');
-						result.append(this.tokenIdToToken.get(i));
 					}
+					result.append(this.tokenIdToToken.get(i));
 				}
 			}
 			return result.toString();

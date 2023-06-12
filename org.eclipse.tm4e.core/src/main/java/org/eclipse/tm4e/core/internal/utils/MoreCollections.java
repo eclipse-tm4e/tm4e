@@ -21,6 +21,12 @@ import org.eclipse.jdt.annotation.Nullable;
 
 public final class MoreCollections {
 
+	public static <T> List<T> asArrayList(final T firstItem) {
+		final var list = new ArrayList<T>();
+		list.add(firstItem);
+		return list;
+	}
+
 	public static <T> List<T> asArrayList(final T firstItem, final List<T> moreItems) {
 		final var list = new ArrayList<T>();
 		list.add(firstItem);

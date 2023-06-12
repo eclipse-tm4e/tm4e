@@ -107,7 +107,7 @@ public class ThemeResolvingTest extends AbstractThemeTest {
 		final int _B = colorMap.getId("#ffffff");
 		final var expected = new Theme(
 				colorMap,
-				new StyleAttributes(None, _A, _B),
+				StyleAttributes.of(None, _A, _B),
 				NOTSET_THEME_TRIE_ELEMENT);
 		assertThemeEqual(actual, expected);
 	}
@@ -122,7 +122,7 @@ public class ThemeResolvingTest extends AbstractThemeTest {
 		final int _B = colorMap.getId("#ffffff");
 		final var expected = new Theme(
 				colorMap,
-				new StyleAttributes(None, _A, _B),
+				StyleAttributes.of(None, _A, _B),
 				NOTSET_THEME_TRIE_ELEMENT);
 		assertThemeEqual(actual, expected);
 	}
@@ -137,7 +137,7 @@ public class ThemeResolvingTest extends AbstractThemeTest {
 		final int _B = colorMap.getId("#ffffff");
 		final var expected = new Theme(
 				colorMap,
-				new StyleAttributes(None, _A, _B),
+				StyleAttributes.of(None, _A, _B),
 				NOTSET_THEME_TRIE_ELEMENT);
 		assertThemeEqual(actual, expected);
 	}
@@ -152,7 +152,7 @@ public class ThemeResolvingTest extends AbstractThemeTest {
 		final int _B = colorMap.getId("#ffffff");
 		final var expected = new Theme(
 				colorMap,
-				new StyleAttributes(Bold, _A, _B),
+				StyleAttributes.of(Bold, _A, _B),
 				NOTSET_THEME_TRIE_ELEMENT);
 		assertThemeEqual(actual, expected);
 	}
@@ -167,7 +167,7 @@ public class ThemeResolvingTest extends AbstractThemeTest {
 		final int _B = colorMap.getId("#ffffff");
 		final var expected = new Theme(
 				colorMap,
-				new StyleAttributes(None, _A, _B),
+				StyleAttributes.of(None, _A, _B),
 				NOTSET_THEME_TRIE_ELEMENT);
 		assertThemeEqual(actual, expected);
 	}
@@ -182,7 +182,7 @@ public class ThemeResolvingTest extends AbstractThemeTest {
 		final int _B = colorMap.getId("#ff0000");
 		final var expected = new Theme(
 				colorMap,
-				new StyleAttributes(None, _A, _B),
+				StyleAttributes.of(None, _A, _B),
 				NOTSET_THEME_TRIE_ELEMENT);
 		assertThemeEqual(actual, expected);
 	}
@@ -200,7 +200,7 @@ public class ThemeResolvingTest extends AbstractThemeTest {
 		final int _B = colorMap.getId("#ff0000");
 		final var expected = new Theme(
 				colorMap,
-				new StyleAttributes(Bold, _A, _B),
+				StyleAttributes.of(Bold, _A, _B),
 				NOTSET_THEME_TRIE_ELEMENT);
 		assertThemeEqual(actual, expected);
 	}
@@ -218,7 +218,7 @@ public class ThemeResolvingTest extends AbstractThemeTest {
 		final int _C = colorMap.getId("#ff0000");
 		final var expected = new Theme(
 				colorMap,
-				new StyleAttributes(None, _A, _B),
+				StyleAttributes.of(None, _A, _B),
 				new ThemeTrieElement(NOTSET_THEME_TRIE_ELEMENT_RULE, list(), map(
 						"var", new ThemeTrieElement(new ThemeTrieElementRule(1, null, NotSet, _C, _NOT_SET)) //
 				)));
@@ -239,7 +239,7 @@ public class ThemeResolvingTest extends AbstractThemeTest {
 		final int _C = colorMap.getId("#ff0000");
 		final var expected = new Theme(
 				colorMap,
-				new StyleAttributes(None, _A, _B),
+				StyleAttributes.of(None, _A, _B),
 				new ThemeTrieElement(NOTSET_THEME_TRIE_ELEMENT_RULE, list(), map(
 						"var", new ThemeTrieElement(new ThemeTrieElementRule(1, null, Bold, _C, _NOT_SET)) //
 				)));
@@ -260,7 +260,7 @@ public class ThemeResolvingTest extends AbstractThemeTest {
 		final int _C = colorMap.getId("#ff0000");
 		final int _D = colorMap.getId("#00ff00");
 		final var expected = new Theme(colorMap,
-				new StyleAttributes(None, _A, _B),
+				StyleAttributes.of(None, _A, _B),
 				new ThemeTrieElement(NOTSET_THEME_TRIE_ELEMENT_RULE, list(), map(
 						"var", new ThemeTrieElement(new ThemeTrieElementRule(1, null, Bold, _C, _NOT_SET), list(), map(
 								"identifier", new ThemeTrieElement(new ThemeTrieElementRule(2, null, Bold, _D, _NOT_SET)) //
@@ -292,7 +292,7 @@ public class ThemeResolvingTest extends AbstractThemeTest {
 		final int _G = colorMap.getId("#00ff00");
 
 		final var expected = new Theme(colorMap,
-				new StyleAttributes(None, _A, _B),
+				StyleAttributes.of(None, _A, _B),
 				new ThemeTrieElement(NOTSET_THEME_TRIE_ELEMENT_RULE, list(), map(
 						"var", new ThemeTrieElement(new ThemeTrieElementRule(1, null, Bold, _F, _NOT_SET), list(), map(
 								"identifier", new ThemeTrieElement(new ThemeTrieElementRule(2, null, Bold, _G, _NOT_SET)) //
@@ -326,7 +326,7 @@ public class ThemeResolvingTest extends AbstractThemeTest {
 		final int _D = colorMap.getId("#300000");
 		final int _E = colorMap.getId("#200000");
 		final var expected = new Theme(colorMap,
-				new StyleAttributes(None, _A, _B),
+				StyleAttributes.of(None, _A, _B),
 				new ThemeTrieElement(NOTSET_THEME_TRIE_ELEMENT_RULE, list(), map(
 						"var", new ThemeTrieElement(
 								new ThemeTrieElementRule(1, null, Bold, _C, _NOT_SET),

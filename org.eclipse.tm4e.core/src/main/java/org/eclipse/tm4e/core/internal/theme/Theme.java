@@ -79,7 +79,7 @@ public final class Theme {
 			return null;
 		}
 
-		return new StyleAttributes(
+		return StyleAttributes.of(
 				effectiveRule.fontStyle,
 				effectiveRule.foreground,
 				effectiveRule.background);
@@ -254,7 +254,7 @@ public final class Theme {
 			}
 		}
 		final var colorMap = new ColorMap(_colorMap);
-		final var defaults = new StyleAttributes(defaultFontStyle, colorMap.getId(defaultForeground), colorMap.getId(defaultBackground));
+		final var defaults = StyleAttributes.of(defaultFontStyle, colorMap.getId(defaultForeground), colorMap.getId(defaultBackground));
 
 		final var root = new ThemeTrieElement(new ThemeTrieElementRule(0, null, FontStyle.NotSet, 0, 0), Collections.emptyList());
 		for (int i = 0, len = parsedThemeRules.size(); i < len; i++) {

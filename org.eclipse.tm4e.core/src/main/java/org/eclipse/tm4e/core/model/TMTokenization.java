@@ -22,6 +22,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.NonNullByDefault;
@@ -31,6 +32,10 @@ import org.eclipse.tm4e.core.grammar.IStateStack;
 import org.eclipse.tm4e.core.internal.grammar.StateStack;
 import org.eclipse.tm4e.core.internal.utils.MoreCollections;
 import org.eclipse.tm4e.core.internal.utils.StringUtils;
+
+import com.google.common.cache.CacheBuilder;
+import com.google.common.cache.CacheLoader;
+import com.google.common.cache.LoadingCache;
 
 /**
  * @see <a href=
@@ -62,6 +67,15 @@ public class TMTokenization implements ITokenizationSupport {
 		return tokenize(line, state, null, null);
 	}
 
+	private final LoadingCache<List<String>, String> tokenTypeOfScopesCache = CacheBuilder.newBuilder()
+			.expireAfterAccess(5, TimeUnit.SECONDS)
+			.build(new CacheLoader<List<String>, String>() {
+				@Override
+				public String load(final List<String> scopes) throws Exception {
+					return decodeTextMateToken(TMTokenization.this.decodeMap, scopes);
+				}
+			});
+
 	@Override
 	public TokenizationResult tokenize(final String line,
 			@Nullable final IStateStack state,
@@ -76,7 +90,7 @@ public class TMTokenization implements ITokenizationSupport {
 		final var tmTokens = new ArrayList<TMToken>(tokens.length < 10 ? tokens.length : 10);
 		String lastTokenType = null;
 		for (final var token : tokens) {
-			final var tokenType = decodeTextMateToken(this.decodeMap, token.getScopes());
+			final String tokenType = tokenTypeOfScopesCache.getUnchecked(token.getScopes());
 
 			// do not push a new token if the type is exactly the same (also helps with ligatures)
 			if (!tokenType.equals(lastTokenType)) {

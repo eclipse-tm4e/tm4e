@@ -308,7 +308,7 @@ public final class StateStack implements IStateStack {
 		return false;
 	}
 
-	public Frame toStateStackFrame() {
+	Frame toStateStackFrame() {
 		final var nameScopesList = this.nameScopesList;
 		final var contentNameScopesList = this.contentNameScopesList;
 		final var parent = this.parent;

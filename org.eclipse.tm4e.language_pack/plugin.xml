@@ -255,8 +255,6 @@
     <extension point="org.eclipse.tm4e.registry.grammars">
         <grammar scopeName="lngpck.source.ini" path="ini/ini.tmLanguage.json"/>
         <scopeNameContentTypeBinding scopeName="lngpck.source.ini" contentTypeId="lng.ini"/>
-        <grammar scopeName="lngpck.source.ini" path="ini/ini.tmLanguage.json"/>
-        <scopeNameContentTypeBinding scopeName="lngpck.source.ini" contentTypeId="lng.properties"/>
     </extension>
 
     <!-- java -->

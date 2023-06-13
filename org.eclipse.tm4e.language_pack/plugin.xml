@@ -674,7 +674,6 @@
     </extension>
 
     <!-- xml -->
-    <!-- issues: syntax highlighting broken; java.lang.IllegalArgumentException: 
     <extension point="org.eclipse.core.contenttype.contentTypes">
         <content-type id="lng.xml" base-type="org.eclipse.tm4e.language_pack.basetype" name="XML (Syntax Highlighting)" priority="low" file-extensions="xml,xsd,ascx,atom,axml,axaml,bpmn,cpt,csl,csproj,dita,ditamap,dtd,ent,mod,dtml,fsproj,fxml,iml,isml,jmx,launch,menu,mxml,nuspec,opml,owl,proj,props,pt,publishsettings,pubxml,rbxlx,rbxmx,rdf,rng,rss,shproj,storyboard,svg,targets,tld,tmx,vbproj,vcxproj,wsdl,wxi,wxl,wxs,xaml,xbl,xib,xlf,xliff,xpdl,xul,xoml" file-patterns="*.csproj.user2,*.pubxml.user2,*.vbproj.user2,*.vcxproj.filters2"/>
         <content-type id="lng.xsl" base-type="org.eclipse.tm4e.language_pack.basetype" name="XSL (Syntax Highlighting)" priority="low" file-extensions="xsl,xslt"/>
@@ -689,7 +688,6 @@
         <grammar scopeName="lngpck.text.xml.xsl" path="xml/xsl.tmLanguage.json"/>
         <scopeNameContentTypeBinding scopeName="lngpck.text.xml.xsl" contentTypeId="lng.xsl"/>
     </extension>
-    -->
 
     <!-- yaml -->
     <!-- issues: overridden by the more general YAML

@@ -28,7 +28,7 @@ for the [Eclipse IDE](https://eclipseide.org).
 | [HTML](https://en.wikipedia.org/wiki/HTML) | *.html, *.htm, *.shtml, *.xhtml, *.xht, *.mdoc, *.jsp, *.asp, *.aspx, *.jshtm, *.volt, *.ejs, *.rhtml |
 | [INI File](https://en.wikipedia.org/wiki/INI%20file) | *.ini |
 | [Java](https://en.wikipedia.org/wiki/Java%20%28programming%20language%29) | *.java, *.jav |
-| [JavaScript React](https://en.wikipedia.org/wiki/React%20%28JavaScript%20library%29) | *.jsx |
+| [JavaScript JSX](https://en.wikipedia.org/wiki/JSX%20%28JavaScript%29) | *.jsx |
 | [JavaScript](https://en.wikipedia.org/wiki/JavaScript) | *.js, *.es6, *.mjs, *.cjs, *.pac, jakefile |
 | [JSON](https://en.wikipedia.org/wiki/JSON) | *.json, *.bowerrc, *.jscsrc, *.webmanifest, *.js.map, *.css.map, *.ts.map, *.har, *.jslintrc, *.jsonld, *.geojson, *.ipynb, *.vuerc, composer.lock, .watchmanconfig |
 | [JSON with Comments](https://code.visualstudio.com/docs/languages/json#_json-with-comments) | *.jsonc, *.eslintrc, *.eslintrc.json, *.jsfmtrc, *.jshintrc, *.swcrc, *.hintrc, *.babelrc, babel.config.json, .babelrc.json, .ember-cli, typedoc.json |
@@ -37,6 +37,7 @@ for the [Eclipse IDE](https://eclipseide.org).
 | [Less](https://en.wikipedia.org/wiki/Less%20%28style%20sheet%20language%29) | *.less |
 | [Lua](https://en.wikipedia.org/wiki/Lua%20%28programming%20language%29) | *.lua |
 | [Makefile](https://github.com/emilast/vscode-logfile-highlighter#features) | *.mak, *.mk, Makefile, makefile, GNUmakefile, OCamlMakefile |
+| [Markdown](https://en.wikipedia.org/wiki/Markdown) | *.md, *.mkd, *.mdwn, *.mdown, *.markdown, *.markdn, *.mdtxt, *.mdtext, *.workbook |
 | [Objective-C](https://en.wikipedia.org/wiki/Objective-C) | *.m |
 | [Objective-C++](https://en.wikipedia.org/wiki/Objective-C#Objective-C++) | *.mm |
 | [Perl](https://en.wikipedia.org/wiki/Perl) | *.pl, *.pm, *.pod, *.t, *.PL, *.psgi |
@@ -52,6 +53,8 @@ for the [Eclipse IDE](https://eclipseide.org).
 | [SQL](https://en.wikipedia.org/wiki/SQL) | *.sql, *.dsql |
 | [Swift](https://en.wikipedia.org/wiki/Swift%20%28programming%20language%29) | *.swift |
 | [TypeScript](https://en.wikipedia.org/wiki/TypeScript) | *.ts, *.cts, *.mts |
-| [TypeScript React](https://www.typescriptlang.org/docs/handbook/react.html) | *.tsx |
+| [TypeScript JSX](https://www.typescriptlang.org/docs/handbook/react.html) | *.tsx |
 | [Visual Basic .NET](https://en.wikipedia.org/wiki/Visual%20Basic%20%28.NET%29) | *.vb, *.brs, *.vbs, *.bas, *.vba |
+| [XML](https://en.wikipedia.org/wiki/XML) | *.xml, *.xsd, *.ascx, *.atom, *.axml, *.axaml, *.bpmn, *.cpt, *.csl, *.csproj, *.csproj.user, *.dita, *.ditamap, *.dtd, *.ent, *.mod, *.dtml, *.fsproj, *.fxml, *.iml, *.isml, *.jmx, *.launch, *.menu, *.mxml, *.nuspec, *.opml, *.owl, *.proj, *.props, *.pt, *.publishsettings, *.pubxml, *.pubxml.user, *.rbxlx, *.rbxmx, *.rdf, *.rng, *.rss, *.shproj, *.storyboard, *.svg, *.targets, *.tld, *.tmx, *.vbproj, *.vbproj.user, *.vcxproj, *.vcxproj.filters, *.wsdl, *.wxi, *.wxl, *.wxs, *.xaml, *.xbl, *.xib, *.xlf, *.xliff, *.xpdl, *.xul, *.xoml |
+| [XSL](https://en.wikipedia.org/wiki/XSL) | *.xsl, *.xslt |
 

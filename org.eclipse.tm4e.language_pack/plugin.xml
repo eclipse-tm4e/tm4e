@@ -393,7 +393,6 @@
     </extension>
 
     <!-- markdown-basics -->
-    <!-- issues: syntax highlighting and uncommenting broken, folding works
     <extension point="org.eclipse.core.contenttype.contentTypes">
         <content-type id="lng.markdown" base-type="org.eclipse.tm4e.language_pack.basetype" name="Markdown (Syntax Highlighting)" priority="low" file-extensions="md,mkd,mdwn,mdown,markdown,markdn,mdtxt,mdtext,workbook"/>
     </extension>
@@ -404,7 +403,6 @@
         <grammar scopeName="lngpck.text.html.markdown" path="markdown-basics/markdown.tmLanguage.json"/>
         <scopeNameContentTypeBinding scopeName="lngpck.text.html.markdown" contentTypeId="lng.markdown"/>
     </extension>
-    -->
 
     <!-- markdown-math -->
     <!-- issues: broken because math.block begin regex not supported by Joni. Re-enable when the following is fixed

@@ -95,12 +95,15 @@ https://en.wikipedia.org/w/api.php?action=query&format=xml&prop=pageprops&ppprop
     </extension>
     <extension id="javascript">
         <language name="JavaScript" wikidata="Q2005"/>
-        <language name="JavaScript React" wikidata="Q19399674"/>
+        <language name="JavaScript JSX" wikidata="Q105157779"/>
     </extension>
     <extension id="json">
         <language name="JSON" wikidata="Q2063"/>
         <language name="JSON with Comments">
             <related link="https://code.visualstudio.com/docs/languages/json#_json-with-comments"/>
+        </language>
+        <language name="JSON Lines">
+            <related link="https://jsonlines.org/"/>
         </language>
     </extension>
     <extension id="julia">
@@ -132,7 +135,12 @@ https://en.wikipedia.org/w/api.php?action=query&format=xml&prop=pageprops&ppprop
         </language>
     </extension>
     <extension id="markdown-basics">
-        <language name="Markdown" wikidata="Q1193600" issues="syntax highlighting and uncommenting broken, folding works"/>
+        <language name="Markdown" wikidata="Q1193600"/>
+    </extension>
+    <extension id="markdown-math">
+        <language name="Markdown Math" issue="broken because math.block begin regex not supported by Joni. Re-enable when the following is fixed and integrated: https://github.com/microsoft/vscode/issues/181662">
+            <related link="https://upyesp.org/posts/makrdown-vscode-math-formula/"/>
+        </language>
     </extension>
     <extension id="objective-c">
         <language name="Objective-C" wikidata="Q188531"/>
@@ -201,7 +209,7 @@ https://en.wikipedia.org/w/api.php?action=query&format=xml&prop=pageprops&ppprop
     </extension>
     <extension id="typescript-basics">
         <language name="TypeScript" wikidata="Q978185"/>
-        <language name="TypeScript React">
+        <language name="TypeScript JSX">
             <related link="https://www.typescriptlang.org/docs/handbook/react.html"/>
             <related wikidata="Q978185"/>
         </language>
@@ -210,8 +218,8 @@ https://en.wikipedia.org/w/api.php?action=query&format=xml&prop=pageprops&ppprop
         <language name="Visual Basic" better-name="Visual Basic .NET" wikidata="Q50077"/>
     </extension>
     <extension id="xml">
-        <language name="XML" wikidata="Q2115" issues="syntax highlighting broken"/>
-        <language name="XSL" wikidata="Q32061" issues="java.lang.IllegalArgumentException: "/>
+        <language name="XML" wikidata="Q2115" />
+        <language name="XSL" wikidata="Q32061" />
     </extension>
     <extension id="yaml">
         <language name="YAML" wikidata="Q281876"/>

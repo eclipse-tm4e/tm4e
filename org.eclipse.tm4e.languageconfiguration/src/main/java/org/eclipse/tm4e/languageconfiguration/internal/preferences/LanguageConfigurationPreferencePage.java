@@ -92,7 +92,7 @@ public final class LanguageConfigurationPreferencePage extends PreferencePage im
 		innerLayout.marginHeight = 0;
 		innerLayout.marginWidth = 0;
 		innerParent.setLayout(innerLayout);
-		final var gd = new GridData(GridData.FILL_BOTH);
+		final var gd = new GridData(SWT.FILL, SWT.FILL, true, false);
 		gd.horizontalSpan = 2;
 		innerParent.setLayoutData(gd);
 

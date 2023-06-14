@@ -12,7 +12,6 @@
 package org.eclipse.tm4e.ui.model;
 
 import org.eclipse.jface.text.IDocument;
-import org.eclipse.tm4e.core.model.ITMModel;
 
 /**
  * TextMate model manager API.
@@ -27,7 +26,7 @@ public interface ITMModelManager {
 	 *
 	 * @return the TextMate model connected to the document.
 	 */
-	ITMModel connect(IDocument document);
+	ITMDocumentModel connect(IDocument document);
 
 	/**
 	 * Disconnect the TextMate model of the given document.

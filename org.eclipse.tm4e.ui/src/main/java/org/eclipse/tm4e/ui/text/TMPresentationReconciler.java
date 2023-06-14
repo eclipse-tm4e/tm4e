@@ -65,7 +65,6 @@ import org.eclipse.tm4e.core.model.Range;
 import org.eclipse.tm4e.core.model.TMToken;
 import org.eclipse.tm4e.registry.TMEclipseRegistryPlugin;
 import org.eclipse.tm4e.ui.TMUIPlugin;
-import org.eclipse.tm4e.ui.internal.model.TMDocumentModel;
 import org.eclipse.tm4e.ui.internal.model.TMModelManager;
 import org.eclipse.tm4e.ui.internal.preferences.PreferenceConstants;
 import org.eclipse.tm4e.ui.internal.text.TMPresentationReconcilerTestGenerator;
@@ -75,6 +74,7 @@ import org.eclipse.tm4e.ui.internal.utils.ContentTypeHelper;
 import org.eclipse.tm4e.ui.internal.utils.ContentTypeInfo;
 import org.eclipse.tm4e.ui.internal.utils.MarkerUtils;
 import org.eclipse.tm4e.ui.internal.utils.PreferenceUtils;
+import org.eclipse.tm4e.ui.model.ITMDocumentModel;
 import org.eclipse.tm4e.ui.themes.ITheme;
 import org.eclipse.tm4e.ui.themes.IThemeManager;
 import org.eclipse.tm4e.ui.themes.ITokenProvider;
@@ -84,7 +84,7 @@ import org.eclipse.ui.IEditorPart;
  * TextMate presentation reconciler which must be initialized with:
  *
  * <ol>
- * <li>a TextMate grammar {@link IGrammar} used to initialize the {@link TMDocumentModel}.</li>
+ * <li>a TextMate grammar {@link IGrammar} used to initialize the {@link ITMDocumentModel}.</li>
  * <li>a token provider {@link ITokenProvider} to retrieve the {@link IToken} from a {@link TMToken} type .</li>
  * </ol>
  */
@@ -396,7 +396,7 @@ public class TMPresentationReconciler implements IPresentationReconciler {
 				return;
 			}
 			final ITMModel model = event.model;
-			if (model instanceof final TMDocumentModel docModel) {
+			if (model instanceof final ITMDocumentModel docModel) {
 				for (final Range range : event.ranges) {
 					try {
 						final int length = document.getLineOffset(range.toLineNumber - 1)
@@ -514,7 +514,7 @@ public class TMPresentationReconciler implements IPresentationReconciler {
 		return null;
 	}
 
-	private void colorize(final IRegion damage, final TMDocumentModel model) throws BadLocationException {
+	private void colorize(final IRegion damage, final ITMDocumentModel model) throws BadLocationException {
 		final IDocument doc = model.getDocument();
 		final int fromLineIndex = doc.getLineOfOffset(damage.getOffset());
 		final int toLineIndex = doc.getLineOfOffset(damage.getOffset() + damage.getLength());

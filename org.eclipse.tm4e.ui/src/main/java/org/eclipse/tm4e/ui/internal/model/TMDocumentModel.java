@@ -13,8 +13,9 @@ package org.eclipse.tm4e.ui.internal.model;
 
 import org.eclipse.jface.text.IDocument;
 import org.eclipse.tm4e.core.model.TMModel;
+import org.eclipse.tm4e.ui.model.ITMDocumentModel;
 
-public final class TMDocumentModel extends TMModel {
+public final class TMDocumentModel extends TMModel implements ITMDocumentModel {
 
 	private final IDocument document;
 
@@ -23,6 +24,7 @@ public final class TMDocumentModel extends TMModel {
 		this.document = document;
 	}
 
+	@Override
 	public IDocument getDocument() {
 		return document;
 	}

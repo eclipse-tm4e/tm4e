@@ -9,9 +9,10 @@
  * Contributors:
  * Angelo Zerr <angelo.zerr@gmail.com> - initial API and implementation
  */
-package org.eclipse.tm4e.core.internal.theme;
+package org.eclipse.tm4e.core.internal.theme.raw;
 
 import org.eclipse.jdt.annotation.Nullable;
+import org.eclipse.tm4e.core.internal.theme.IThemeSetting;
 
 /**
  * A single theme setting.

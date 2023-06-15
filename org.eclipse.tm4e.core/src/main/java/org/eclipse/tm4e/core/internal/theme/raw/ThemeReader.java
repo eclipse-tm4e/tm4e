@@ -14,7 +14,7 @@
  * - Microsoft Corporation: Initial code, written in TypeScript, licensed under MIT license
  * - Angelo Zerr <angelo.zerr@gmail.com> - translation and adaptation to Java
  */
-package org.eclipse.tm4e.core.internal.theme;
+package org.eclipse.tm4e.core.internal.theme.raw;
 
 import org.eclipse.tm4e.core.internal.parser.PListParser;
 import org.eclipse.tm4e.core.internal.parser.PListParserJSON;

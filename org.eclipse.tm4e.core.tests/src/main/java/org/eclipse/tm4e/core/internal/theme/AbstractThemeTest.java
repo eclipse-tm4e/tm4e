@@ -23,6 +23,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.eclipse.tm4e.core.internal.theme.raw.ThemeReader;
 import org.eclipse.tm4e.core.registry.IThemeSource;
 import org.junit.jupiter.api.Assertions;
 

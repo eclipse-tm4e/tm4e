@@ -33,7 +33,7 @@ import org.eclipse.tm4e.core.internal.grammar.dependencies.ScopeDependencyProces
 import org.eclipse.tm4e.core.internal.grammar.raw.GrammarReader;
 import org.eclipse.tm4e.core.internal.registry.SyncRegistry;
 import org.eclipse.tm4e.core.internal.theme.Theme;
-import org.eclipse.tm4e.core.internal.theme.ThemeReader;
+import org.eclipse.tm4e.core.internal.theme.raw.ThemeReader;
 
 /**
  * The registry that will hold all grammars.

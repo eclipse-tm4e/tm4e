@@ -27,7 +27,7 @@ import org.eclipse.tm4e.core.registry.IGrammarSource;
 /**
  * TextMate Grammar reader utilities.
  */
-public final class GrammarReader {
+public final class RawGrammarReader {
 
 	public static final PropertySettable.Factory<PListPath> OBJECT_FACTORY = path -> {
 		if (path.size() == 0) {
@@ -61,6 +61,6 @@ public final class GrammarReader {
 	/**
 	 * methods should be accessed statically
 	 */
-	private GrammarReader() {
+	private RawGrammarReader() {
 	}
 }

@@ -18,7 +18,7 @@ import java.util.List;
 import java.util.Set;
 
 import org.eclipse.tm4e.core.Data;
-import org.eclipse.tm4e.core.internal.grammar.raw.GrammarReader;
+import org.eclipse.tm4e.core.internal.grammar.raw.RawGrammarReader;
 import org.eclipse.tm4e.core.internal.grammar.raw.RawGrammar;
 import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Test;
@@ -29,7 +29,7 @@ class PListParserTest {
 
 	@Test
 	void testParseJSONPList() throws Exception {
-		final var parser = new PListParserJSON<RawGrammar>(GrammarReader.OBJECT_FACTORY);
+		final var parser = new PListParserJSON<RawGrammar>(RawGrammarReader.OBJECT_FACTORY);
 		try (var is = Data.class.getResourceAsStream("csharp.json")) {
 			final var grammar = parser.parse(new InputStreamReader(is));
 			assertNotNull(grammar);
@@ -46,7 +46,7 @@ class PListParserTest {
 
 	@Test
 	void testParseYAMLPlist() throws Exception {
-		final var parser = new PListParserYAML<RawGrammar>(GrammarReader.OBJECT_FACTORY);
+		final var parser = new PListParserYAML<RawGrammar>(RawGrammarReader.OBJECT_FACTORY);
 		try (var is = Data.class.getResourceAsStream("JavaScript.tmLanguage.yaml")) {
 			final var grammar = parser.parse(new InputStreamReader(is));
 			assertNotNull(grammar);
@@ -61,7 +61,7 @@ class PListParserTest {
 
 	@Test
 	void testParseXMLPlist() throws Exception {
-		final var parser = new PListParserXML<RawGrammar>(GrammarReader.OBJECT_FACTORY);
+		final var parser = new PListParserXML<RawGrammar>(RawGrammarReader.OBJECT_FACTORY);
 		try (var is = Data.class.getResourceAsStream("JavaScript.tmLanguage")) {
 			final var grammar = parser.parse(new InputStreamReader(is));
 			assertNotNull(grammar);

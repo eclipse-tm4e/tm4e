@@ -27,13 +27,13 @@ import org.eclipse.tm4e.core.registry.IThemeSource;
 /**
  * TextMate Theme reader utilities.
  */
-public final class ThemeReader {
+public final class RawThemeReader {
 
-	private static final PropertySettable.Factory<PListPath> OBJECT_FACTORY = path -> new ThemeRaw();
+	private static final PropertySettable.Factory<PListPath> OBJECT_FACTORY = path -> new RawTheme();
 
-	private static final PListParser<ThemeRaw> JSON_PARSER = new PListParserJSON<>(OBJECT_FACTORY);
-	private static final PListParser<ThemeRaw> XML_PARSER = new PListParserXML<>(OBJECT_FACTORY);
-	private static final PListParser<ThemeRaw> YAML_PARSER = new PListParserYAML<>(OBJECT_FACTORY);
+	private static final PListParser<RawTheme> JSON_PARSER = new PListParserJSON<>(OBJECT_FACTORY);
+	private static final PListParser<RawTheme> XML_PARSER = new PListParserXML<>(OBJECT_FACTORY);
+	private static final PListParser<RawTheme> YAML_PARSER = new PListParserYAML<>(OBJECT_FACTORY);
 
 	public static IRawTheme readTheme(final IThemeSource source) throws Exception {
 		try (var reader = source.getReader()) {
@@ -52,6 +52,6 @@ public final class ThemeReader {
 	/**
 	 * methods should be accessed statically
 	 */
-	private ThemeReader() {
+	private RawThemeReader() {
 	}
 }

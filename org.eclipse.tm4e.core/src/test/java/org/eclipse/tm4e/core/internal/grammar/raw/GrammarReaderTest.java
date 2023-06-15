@@ -26,15 +26,15 @@ class GrammarReaderTest {
 	 */
 	@Test
 	void testLoadDifferentPlistFormats() throws Exception {
-		final var grammarFromXML = GrammarReader.readGrammar(IGrammarSource.fromResource(Data.class, "JavaScript.tmLanguage"));
+		final var grammarFromXML = RawGrammarReader.readGrammar(IGrammarSource.fromResource(Data.class, "JavaScript.tmLanguage"));
 
 		assertNotNull(grammarFromXML);
 		assertFalse(grammarFromXML.getFileTypes().isEmpty());
 
-		final var grammarFromJSON = GrammarReader.readGrammar(IGrammarSource.fromResource(Data.class, "JavaScript.tmLanguage.json"));
+		final var grammarFromJSON = RawGrammarReader.readGrammar(IGrammarSource.fromResource(Data.class, "JavaScript.tmLanguage.json"));
 		assertEquals(grammarFromXML, grammarFromJSON);
 
-		final var grammarFromYAML = GrammarReader.readGrammar(IGrammarSource.fromResource(Data.class, "JavaScript.tmLanguage.yaml"));
+		final var grammarFromYAML = RawGrammarReader.readGrammar(IGrammarSource.fromResource(Data.class, "JavaScript.tmLanguage.yaml"));
 		assertEquals(grammarFromJSON, grammarFromYAML);
 	}
 }

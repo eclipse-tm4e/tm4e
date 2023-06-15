@@ -18,7 +18,7 @@ import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.tm4e.core.internal.parser.PropertySettable;
 import org.eclipse.tm4e.core.internal.theme.IThemeSetting;
 
-public final class ThemeRaw extends HashMap<String, @Nullable Object>
+public final class RawTheme extends HashMap<String, @Nullable Object>
 		implements IRawTheme, IRawThemeSetting, IThemeSetting, PropertySettable<Object> {
 
 	private static final long serialVersionUID = 1L;

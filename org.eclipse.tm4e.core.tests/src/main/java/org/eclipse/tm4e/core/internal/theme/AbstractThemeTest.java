@@ -23,7 +23,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.eclipse.tm4e.core.internal.theme.raw.ThemeReader;
+import org.eclipse.tm4e.core.internal.theme.raw.RawThemeReader;
 import org.eclipse.tm4e.core.registry.IThemeSource;
 import org.junit.jupiter.api.Assertions;
 
@@ -61,13 +61,13 @@ public abstract class AbstractThemeTest extends Assertions {
 	}
 
 	protected static Theme createTheme(final String themeAsJsonString) throws Exception {
-		return Theme.createFromRawTheme(ThemeReader.readTheme(
+		return Theme.createFromRawTheme(RawThemeReader.readTheme(
 				IThemeSource.fromString(IThemeSource.ContentType.JSON, themeAsJsonString)),
 				null);
 	}
 
 	protected static List<ParsedThemeRule> parseTheme(final String themeAsJsonString) throws Exception {
-		return Theme.parseTheme(ThemeReader.readTheme(
+		return Theme.parseTheme(RawThemeReader.readTheme(
 				IThemeSource.fromString(IThemeSource.ContentType.JSON, themeAsJsonString)));
 	}
 }

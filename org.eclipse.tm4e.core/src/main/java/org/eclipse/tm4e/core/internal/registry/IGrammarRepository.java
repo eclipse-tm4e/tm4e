@@ -19,7 +19,7 @@ package org.eclipse.tm4e.core.internal.registry;
 import java.util.Collection;
 
 import org.eclipse.jdt.annotation.Nullable;
-import org.eclipse.tm4e.core.internal.types.IRawGrammar;
+import org.eclipse.tm4e.core.internal.grammar.raw.IRawGrammar;
 
 /**
  * TextMate grammar repository API.

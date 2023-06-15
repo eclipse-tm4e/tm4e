@@ -10,12 +10,11 @@
  * Contributors:
  * Sebastian Thomschke - initial implementation
  */
-package org.eclipse.tm4e.core.internal.grammar.reader;
+package org.eclipse.tm4e.core.internal.grammar.raw;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 import org.eclipse.tm4e.core.Data;
-import org.eclipse.tm4e.core.internal.grammar.GrammarReader;
 import org.eclipse.tm4e.core.registry.IGrammarSource;
 import org.junit.jupiter.api.Test;
 

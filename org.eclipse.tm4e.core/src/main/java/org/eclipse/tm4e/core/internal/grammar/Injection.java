@@ -18,9 +18,9 @@ package org.eclipse.tm4e.core.internal.grammar;
 
 import java.util.List;
 
+import org.eclipse.tm4e.core.internal.grammar.raw.IRawGrammar;
 import org.eclipse.tm4e.core.internal.matcher.Matcher;
 import org.eclipse.tm4e.core.internal.rule.RuleId;
-import org.eclipse.tm4e.core.internal.types.IRawGrammar;
 
 /**
  * @see <a href=

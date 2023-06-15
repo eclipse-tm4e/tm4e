@@ -14,43 +14,16 @@
  * - Microsoft Corporation: Initial code, written in TypeScript, licensed under MIT license
  * - Angelo Zerr <angelo.zerr@gmail.com> - translation and adaptation to Java
  */
-package org.eclipse.tm4e.core.internal.types;
-
-import java.util.Collection;
-import java.util.Map;
-
-import org.eclipse.jdt.annotation.Nullable;
+package org.eclipse.tm4e.core.internal.grammar.raw;
 
 /**
  * @see <a href=
  *      "https://github.com/microsoft/vscode-textmate/blob/88baacf1a6637c5ec08dce18cea518d935fcf0a0/src/rawGrammar.ts">
  *      github.com/microsoft/vscode-textmate/blob/main/src/rawGrammar.ts</a>
  */
-public interface IRawGrammar {
+public interface IRawCaptures {
 
-	IRawRepository getRepository();
+	IRawRule getCapture(String captureId);
 
-	String getScopeName();
-
-	@Nullable // TODO non-null in upstream project
-	Collection<IRawRule> getPatterns();
-
-	@Nullable
-	Map<String, IRawRule> getInjections();
-
-	@Nullable
-	String getInjectionSelector();
-
-	Collection<String> getFileTypes();
-
-	@Nullable
-	String getName();
-
-	@Nullable
-	String getFirstLineMatch();
-
-	void setRepository(IRawRepository repository);
-
-	IRawRule toRawRule();
-
+	Iterable<String> getCaptureIds();
 }

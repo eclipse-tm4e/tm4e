@@ -11,8 +11,8 @@ package org.eclipse.tm4e.core.internal.utils;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-import org.eclipse.tm4e.core.internal.grammar.RawRepository;
-import org.eclipse.tm4e.core.internal.grammar.RawRule;
+import org.eclipse.tm4e.core.internal.grammar.raw.RawRepository;
+import org.eclipse.tm4e.core.internal.grammar.raw.RawRule;
 import org.junit.jupiter.api.Test;
 
 class ObjectClonerTest {

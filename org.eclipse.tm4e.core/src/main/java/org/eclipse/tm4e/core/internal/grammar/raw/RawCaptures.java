@@ -7,13 +7,11 @@
  *
  * SPDX-License-Identifier: EPL-2.0
  */
-package org.eclipse.tm4e.core.internal.grammar;
+package org.eclipse.tm4e.core.internal.grammar.raw;
 
 import java.util.HashMap;
 
 import org.eclipse.tm4e.core.internal.parser.PropertySettable;
-import org.eclipse.tm4e.core.internal.types.IRawCaptures;
-import org.eclipse.tm4e.core.internal.types.IRawRule;
 
 public final class RawCaptures extends HashMap<String, IRawRule> implements IRawCaptures, PropertySettable<IRawRule> {
 

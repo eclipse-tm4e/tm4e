@@ -14,64 +14,43 @@
  * - Microsoft Corporation: Initial code, written in TypeScript, licensed under MIT license
  * - Angelo Zerr <angelo.zerr@gmail.com> - translation and adaptation to Java
  */
-package org.eclipse.tm4e.core.internal.types;
+package org.eclipse.tm4e.core.internal.grammar.raw;
 
 import java.util.Collection;
+import java.util.Map;
 
 import org.eclipse.jdt.annotation.Nullable;
-import org.eclipse.tm4e.core.internal.rule.RuleId;
 
 /**
  * @see <a href=
- *      "https://github.com/microsoft/vscode-textmate/blob/88baacf1a6637c5ec08dce18cea518d935fcf0a0/src/rawGrammar.ts#L39">
+ *      "https://github.com/microsoft/vscode-textmate/blob/88baacf1a6637c5ec08dce18cea518d935fcf0a0/src/rawGrammar.ts">
  *      github.com/microsoft/vscode-textmate/blob/main/src/rawGrammar.ts</a>
  */
-public interface IRawRule {
+public interface IRawGrammar {
 
-	/** This is not part of the spec only used internally */
+	IRawRepository getRepository();
+
+	String getScopeName();
+
+	@Nullable // TODO non-null in upstream project
+	Collection<IRawRule> getPatterns();
+
 	@Nullable
-	RuleId getId();
-
-	void setId(RuleId id);
+	Map<String, IRawRule> getInjections();
 
 	@Nullable
-	String getInclude();
+	String getInjectionSelector();
+
+	Collection<String> getFileTypes();
 
 	@Nullable
 	String getName();
 
 	@Nullable
-	String getContentName();
+	String getFirstLineMatch();
 
-	@Nullable
-	String getMatch();
+	void setRepository(IRawRepository repository);
 
-	@Nullable
-	IRawCaptures getCaptures();
+	IRawRule toRawRule();
 
-	@Nullable
-	String getBegin();
-
-	@Nullable
-	IRawCaptures getBeginCaptures();
-
-	@Nullable
-	String getEnd();
-
-	@Nullable
-	String getWhile();
-
-	@Nullable
-	IRawCaptures getEndCaptures();
-
-	@Nullable
-	IRawCaptures getWhileCaptures();
-
-	@Nullable
-	Collection<IRawRule> getPatterns();
-
-	@Nullable
-	IRawRepository getRepository();
-
-	boolean isApplyEndPatternLast();
 }

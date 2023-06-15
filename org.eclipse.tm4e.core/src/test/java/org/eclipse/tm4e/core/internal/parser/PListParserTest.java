@@ -18,8 +18,8 @@ import java.util.List;
 import java.util.Set;
 
 import org.eclipse.tm4e.core.Data;
-import org.eclipse.tm4e.core.internal.grammar.GrammarReader;
-import org.eclipse.tm4e.core.internal.grammar.RawGrammar;
+import org.eclipse.tm4e.core.internal.grammar.raw.GrammarReader;
+import org.eclipse.tm4e.core.internal.grammar.raw.RawGrammar;
 import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;

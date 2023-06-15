@@ -17,8 +17,8 @@
 package org.eclipse.tm4e.core.internal.rule;
 
 import org.eclipse.jdt.annotation.Nullable;
-import org.eclipse.tm4e.core.internal.types.IRawGrammar;
-import org.eclipse.tm4e.core.internal.types.IRawRepository;
+import org.eclipse.tm4e.core.internal.grammar.raw.IRawGrammar;
+import org.eclipse.tm4e.core.internal.grammar.raw.IRawRepository;
 
 /**
  * @see <a href=

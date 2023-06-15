@@ -9,7 +9,7 @@
  * Contributors:
  * Angelo Zerr <angelo.zerr@gmail.com> - initial API and implementation
  */
-package org.eclipse.tm4e.core.internal.grammar;
+package org.eclipse.tm4e.core.internal.grammar.raw;
 
 import java.util.Collection;
 import java.util.HashMap;
@@ -18,9 +18,6 @@ import java.util.List;
 import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.tm4e.core.internal.parser.PropertySettable;
 import org.eclipse.tm4e.core.internal.rule.RuleId;
-import org.eclipse.tm4e.core.internal.types.IRawCaptures;
-import org.eclipse.tm4e.core.internal.types.IRawRepository;
-import org.eclipse.tm4e.core.internal.types.IRawRule;
 
 public class RawRule extends HashMap<String, @Nullable Object> implements IRawRule, PropertySettable<Object> {
 

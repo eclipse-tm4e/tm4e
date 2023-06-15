@@ -14,16 +14,38 @@
  * - Microsoft Corporation: Initial code, written in TypeScript, licensed under MIT license
  * - Angelo Zerr <angelo.zerr@gmail.com> - translation and adaptation to Java
  */
-package org.eclipse.tm4e.core.internal.types;
+package org.eclipse.tm4e.core.internal.grammar.raw;
+
+import org.eclipse.jdt.annotation.Nullable;
+import org.eclipse.tm4e.core.internal.parser.PropertySettable;
 
 /**
  * @see <a href=
  *      "https://github.com/microsoft/vscode-textmate/blob/88baacf1a6637c5ec08dce18cea518d935fcf0a0/src/rawGrammar.ts">
  *      github.com/microsoft/vscode-textmate/blob/main/src/rawGrammar.ts</a>
  */
-public interface IRawCaptures {
+public interface IRawRepository {
 
-	IRawRule getCapture(String captureId);
+	static IRawRepository merge(@Nullable final IRawRepository... sources) {
+		final var merged = new RawRepository();
+		for (final var source : sources) {
+			if (source == null)
+				continue;
+			source.putEntries(merged);
+		}
+		return merged;
+	}
 
-	Iterable<String> getCaptureIds();
+	void putEntries(PropertySettable<IRawRule> target);
+
+	@Nullable
+	IRawRule getRule(String name);
+
+	IRawRule getBase();
+
+	IRawRule getSelf();
+
+	void setSelf(IRawRule raw);
+
+	void setBase(IRawRule base);
 }

@@ -26,9 +26,9 @@ import org.eclipse.tm4e.core.grammar.IGrammar;
 import org.eclipse.tm4e.core.internal.grammar.BalancedBracketSelectors;
 import org.eclipse.tm4e.core.internal.grammar.Grammar;
 import org.eclipse.tm4e.core.internal.grammar.ScopeStack;
+import org.eclipse.tm4e.core.internal.grammar.raw.IRawGrammar;
 import org.eclipse.tm4e.core.internal.theme.StyleAttributes;
 import org.eclipse.tm4e.core.internal.theme.Theme;
-import org.eclipse.tm4e.core.internal.types.IRawGrammar;
 
 /**
  * @see <a href=

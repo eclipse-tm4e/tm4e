@@ -10,7 +10,7 @@
  * Angelo Zerr <angelo.zerr@gmail.com> - initial API and implementation
  * Pierre-Yves B. - Issue #221 NullPointerException when retrieving fileTypes
  */
-package org.eclipse.tm4e.core.internal.grammar;
+package org.eclipse.tm4e.core.internal.grammar.raw;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -22,9 +22,6 @@ import java.util.Objects;
 
 import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.tm4e.core.internal.parser.PropertySettable;
-import org.eclipse.tm4e.core.internal.types.IRawGrammar;
-import org.eclipse.tm4e.core.internal.types.IRawRepository;
-import org.eclipse.tm4e.core.internal.types.IRawRule;
 
 public final class RawGrammar extends HashMap<String, @Nullable Object> implements IRawGrammar, PropertySettable<Object> {
 

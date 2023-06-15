@@ -26,11 +26,11 @@ import java.util.Collections;
 import java.util.List;
 
 import org.eclipse.jdt.annotation.Nullable;
-import org.eclipse.tm4e.core.internal.grammar.RawRule;
 import org.eclipse.tm4e.core.internal.grammar.dependencies.IncludeReference;
-import org.eclipse.tm4e.core.internal.types.IRawCaptures;
-import org.eclipse.tm4e.core.internal.types.IRawRepository;
-import org.eclipse.tm4e.core.internal.types.IRawRule;
+import org.eclipse.tm4e.core.internal.grammar.raw.IRawCaptures;
+import org.eclipse.tm4e.core.internal.grammar.raw.IRawRepository;
+import org.eclipse.tm4e.core.internal.grammar.raw.IRawRule;
+import org.eclipse.tm4e.core.internal.grammar.raw.RawRule;
 
 /**
  * @see <a href=

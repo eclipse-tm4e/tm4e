@@ -9,15 +9,13 @@
  * Contributors:
  * Angelo Zerr <angelo.zerr@gmail.com> - initial API and implementation
  */
-package org.eclipse.tm4e.core.internal.grammar;
+package org.eclipse.tm4e.core.internal.grammar.raw;
 
 import java.util.HashMap;
 import java.util.NoSuchElementException;
 
 import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.tm4e.core.internal.parser.PropertySettable;
-import org.eclipse.tm4e.core.internal.types.IRawRepository;
-import org.eclipse.tm4e.core.internal.types.IRawRule;
 
 public final class RawRepository extends HashMap<String, IRawRule> implements IRawRepository, PropertySettable<IRawRule> {
 

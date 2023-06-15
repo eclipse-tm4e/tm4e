@@ -30,10 +30,10 @@ import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.tm4e.core.TMException;
 import org.eclipse.tm4e.core.internal.grammar.dependencies.AbsoluteRuleReference.TopLevelRepositoryRuleReference;
 import org.eclipse.tm4e.core.internal.grammar.dependencies.AbsoluteRuleReference.TopLevelRuleReference;
+import org.eclipse.tm4e.core.internal.grammar.raw.IRawGrammar;
+import org.eclipse.tm4e.core.internal.grammar.raw.IRawRepository;
+import org.eclipse.tm4e.core.internal.grammar.raw.IRawRule;
 import org.eclipse.tm4e.core.internal.registry.IGrammarRepository;
-import org.eclipse.tm4e.core.internal.types.IRawGrammar;
-import org.eclipse.tm4e.core.internal.types.IRawRepository;
-import org.eclipse.tm4e.core.internal.types.IRawRule;
 
 /**
  * @see <a href=

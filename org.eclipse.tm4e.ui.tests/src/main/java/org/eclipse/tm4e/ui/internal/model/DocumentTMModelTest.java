@@ -23,7 +23,6 @@ import java.util.concurrent.atomic.AtomicReference;
 
 import org.eclipse.jface.text.Document;
 import org.eclipse.tm4e.core.grammar.IGrammar;
-import org.eclipse.tm4e.core.model.IModelTokensChangedListener;
 import org.eclipse.tm4e.core.model.ModelTokensChangedEvent;
 import org.eclipse.tm4e.core.model.Range;
 import org.eclipse.tm4e.core.registry.IGrammarSource;
@@ -69,7 +68,7 @@ class DocumentTMModelTest {
 		// prepare document
 		{
 			final var signal = new CountDownLatch(1);
-			final IModelTokensChangedListener listener = e -> signal.countDown();
+			final ModelTokensChangedEvent.Listener listener = e -> signal.countDown();
 			model.addModelTokensChangedListener(listener);
 			model.getDocument().set(String.join(LF, initialLines));
 			assertTrue(signal.await(2, TimeUnit.SECONDS));
@@ -82,7 +81,7 @@ class DocumentTMModelTest {
 		// test
 		final var event = new AtomicReference<ModelTokensChangedEvent>();
 		final var signal = new CountDownLatch(1);
-		final IModelTokensChangedListener listener = e -> {
+		final ModelTokensChangedEvent.Listener listener = e -> {
 			event.set(e);
 			signal.countDown();
 		};

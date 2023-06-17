@@ -20,9 +20,7 @@ import java.time.Duration;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
-import java.util.Set;
 import java.util.concurrent.BlockingQueue;
-import java.util.concurrent.CopyOnWriteArraySet;
 
 import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.tm4e.core.grammar.IGrammar;
@@ -42,8 +40,7 @@ public class TMModel implements ITMModel {
 	/** The TextMate grammar to use to parse for each lines of the document the TextMate tokens. **/
 	private @Nullable IGrammar grammar;
 
-	/** Listener when TextMate model tokens changed **/
-	private final Set<IModelTokensChangedListener> listeners = new CopyOnWriteArraySet<>();
+	private final ModelTokensChangedEvent.Listeners listeners = new ModelTokensChangedEvent.Listeners();
 
 	/** The background thread performing async tokenization. */
 	private @Nullable volatile TokenizerThread tokenizerThread;
@@ -203,9 +200,9 @@ public class TMModel implements ITMModel {
 				}
 			}
 
-			if (!changedRanges.isEmpty()) {
-				emit(new ModelTokensChangedEvent(changedRanges, TMModel.this));
-			}
+			if (DEBUG_LOGGING)
+				logDebug("(%d) >> changedRanges: %s", startLineIndex, changedRanges);
+			listeners.dispatchEvent(changedRanges, TMModel.this);
 		}
 	}
 
@@ -231,19 +228,23 @@ public class TMModel implements ITMModel {
 	}
 
 	@Override
-	public synchronized void addModelTokensChangedListener(final IModelTokensChangedListener listener) {
-		listeners.add(listener);
-		startTokenizerThread();
+	public synchronized boolean addModelTokensChangedListener(final ModelTokensChangedEvent.Listener listener) {
+		if (listeners.add(listener)) {
+			startTokenizerThread();
+			return true;
+		}
+		return false;
 	}
 
 	@Override
-	public synchronized void removeModelTokensChangedListener(final IModelTokensChangedListener listener) {
-		listeners.remove(listener);
-
-		if (listeners.isEmpty()) {
-			// no need to keep tokenizing if no-one cares
-			stopTokenizerThread();
+	public synchronized boolean removeModelTokensChangedListener(final ModelTokensChangedEvent.Listener listener) {
+		if (listeners.remove(listener)) {
+			if (listeners.isEmpty()) {
+				stopTokenizerThread(); // no need to keep tokenizing if no-one cares
+			}
+			return true;
 		}
+		return false;
 	}
 
 	@Override
@@ -253,7 +254,7 @@ public class TMModel implements ITMModel {
 	}
 
 	private synchronized void startTokenizerThread() {
-		if (tokenizer != null && !listeners.isEmpty()) {
+		if (tokenizer != null && listeners.isNotEmpty()) {
 			var thread = this.tokenizerThread;
 			if (thread == null || thread.isInterrupted() || !thread.isAlive()) {
 				thread = this.tokenizerThread = new TokenizerThread();
@@ -272,14 +273,6 @@ public class TMModel implements ITMModel {
 		this.tokenizerThread = null;
 	}
 
-	private void emit(final ModelTokensChangedEvent e) {
-		if (DEBUG_LOGGING)
-			logDebug("(%s)", e);
-		for (final IModelTokensChangedListener listener : listeners) {
-			listener.modelTokensChanged(e);
-		}
-	}
-
 	@Override
 	public @Nullable List<TMToken> getLineTokens(final int lineIndex) {
 		final var modelLine = modelLines.getOrNull(lineIndex);
@@ -290,7 +283,7 @@ public class TMModel implements ITMModel {
 		return modelLines.getNumberOfLines();
 	}
 
-	/** Marks the given line as out-of-date resulting in async re-parsing */
+	/** Marks the given line as out-of-date resulting in async (re-)tokenization */
 	void invalidateLine(final int lineIndex) {
 		if (DEBUG_LOGGING)
 			logDebug("(%d)", lineIndex);

@@ -23,7 +23,7 @@ import org.eclipse.tm4e.core.grammar.IGrammar;
  *      github.com/microsoft/vscode/main/src/vs/editor/common/tokenizationTextModelPart.ts
  *      <code>#ITokenizationTextModelPart</code></a>
  */
-public interface ITMModel {
+public interface ITMModel extends ModelTokensChangedEvent.Listenable {
 
 	enum BackgroundTokenizationState {
 		IN_PROGRESS,
@@ -44,20 +44,6 @@ public interface ITMModel {
 	 * Sets the grammar to use to parse the lines of the document.
 	 */
 	void setGrammar(IGrammar grammar);
-
-	/**
-	 * Add model tokens changed listener.
-	 *
-	 * @param listener to add
-	 */
-	void addModelTokensChangedListener(IModelTokensChangedListener listener);
-
-	/**
-	 * Remove model tokens changed listener.
-	 *
-	 * @param listener to remove
-	 */
-	void removeModelTokensChangedListener(IModelTokensChangedListener listener);
 
 	void dispose();
 

@@ -58,7 +58,6 @@ import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.tm4e.core.TMException;
 import org.eclipse.tm4e.core.grammar.IGrammar;
-import org.eclipse.tm4e.core.model.IModelTokensChangedListener;
 import org.eclipse.tm4e.core.model.ITMModel;
 import org.eclipse.tm4e.core.model.ModelTokensChangedEvent;
 import org.eclipse.tm4e.core.model.Range;
@@ -176,7 +175,7 @@ public class TMPresentationReconciler implements IPresentationReconciler {
 	/**
 	 * Internal listener class.
 	 */
-	private final class InternalListener implements ITextInputListener, IModelTokensChangedListener, ITextListener {
+	private final class InternalListener implements ITextInputListener, ModelTokensChangedEvent.Listener, ITextListener {
 
 		void fireInstall(final ITextViewer viewer, final IDocument document) {
 			synchronized (listeners) {
@@ -374,7 +373,7 @@ public class TMPresentationReconciler implements IPresentationReconciler {
 		}
 
 		@Override
-		public void modelTokensChanged(final ModelTokensChangedEvent event) {
+		public void onModelTokensChanged(final ModelTokensChangedEvent event) {
 			final var viewer = TMPresentationReconciler.this.viewer;
 			if (viewer != null) {
 				final Control control = viewer.getTextWidget();

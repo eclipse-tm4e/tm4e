@@ -79,7 +79,7 @@ public class TMTokenization implements ITokenizationSupport {
 			.build(new CacheLoader<List<String>, String>() {
 				@Override
 				public String load(final List<String> scopes) throws Exception {
-					return decodeTextMateToken(TMTokenization.this.decodeMap, scopes);
+					return decodeTextMateToken(decodeMap, scopes);
 				}
 			});
 
@@ -179,8 +179,8 @@ public class TMTokenization implements ITokenizationSupport {
 			if (tokens != null) {
 				return tokens;
 			}
-			final String[] tmpTokens = StringUtils.splitToArray(scope, '.');
 
+			final String[] tmpTokens = StringUtils.splitToArray(scope, '.');
 			tokens = new Integer[tmpTokens.length];
 			for (int i = 0; i < tmpTokens.length; i++) {
 				final String token = tmpTokens[i];

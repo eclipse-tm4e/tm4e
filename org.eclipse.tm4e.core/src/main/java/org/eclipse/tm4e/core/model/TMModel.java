@@ -11,7 +11,7 @@
  */
 package org.eclipse.tm4e.core.model;
 
-import static java.lang.System.Logger.Level.ERROR;
+import static java.lang.System.Logger.Level.*;
 import static org.eclipse.tm4e.core.internal.utils.MoreCollections.findLastElement;
 import static org.eclipse.tm4e.core.internal.utils.NullSafetyHelper.castNonNull;
 
@@ -23,7 +23,6 @@ import java.util.Objects;
 import java.util.Set;
 import java.util.concurrent.CopyOnWriteArraySet;
 import java.util.concurrent.PriorityBlockingQueue;
-import java.util.function.IntConsumer;
 
 import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.tm4e.core.grammar.IGrammar;
@@ -59,6 +58,18 @@ public class TMModel implements ITMModel {
 		invalidateLine(0);
 	}
 
+	private static final boolean DEBUG_LOGGING = LOGGER.isLoggable(DEBUG);
+
+	private void logDebug(final String msg, final Object... args) {
+		if (!DEBUG_LOGGING)
+			return;
+		final var t = Thread.currentThread();
+		final var caller = t.getStackTrace()[2];
+		final var threadName = t.getName().endsWith(TokenizerThread.class.getSimpleName()) ? "tknz" : t.getName();
+		LOGGER.log(DEBUG, "[" + threadName + "] " + getClass().getSimpleName() + "." + caller.getMethodName() +
+				String.format(msg, args));
+	}
+
 	/**
 	 * The {@link TokenizerThread} continuously runs tokenizing in background on the lines found in
 	 * {@link TMModel#modelLines}.
@@ -81,9 +92,10 @@ public class TMModel implements ITMModel {
 
 		@Override
 		public void run() {
-			while (tokenizerThread == this && !isInterrupted()) {
-				try {
-					tokenizerThreadIsWorking = false;
+			try {
+				while (tokenizerThread == this) {
+					tokenizerThreadIsWorking = !invalidLines.isEmpty();
+
 					final int lineIndexToProcess = invalidLines.take();
 					tokenizerThreadIsWorking = true;
 
@@ -98,9 +110,9 @@ public class TMModel implements ITMModel {
 						LOGGER.log(ERROR, ex.getMessage(), ex);
 						invalidateLine(lineIndexToProcess);
 					}
-				} catch (final InterruptedException e) {
-					interrupt();
 				}
+			} catch (final InterruptedException e) {
+				interrupt();
 			}
 			tokenizerThreadIsWorking = false;
 		}
@@ -114,37 +126,78 @@ public class TMModel implements ITMModel {
 		 * @param startLineIndex 0-based
 		 */
 		private void revalidateTokens(final int startLineIndex) {
+			if (DEBUG_LOGGING)
+				logDebug("(%d)", startLineIndex);
 
 			final var changedRanges = new ArrayList<Range>();
-			final IntConsumer lineChangedListener = lineNumber -> {
-				final Range previousRange = findLastElement(changedRanges);
-				if (previousRange != null && previousRange.toLineNumber == lineNumber - 1) {
-					previousRange.toLineNumber++; // extend previous range
-				} else {
-					changedRanges.add(new Range(lineNumber)); // insert new range
-				}
-			};
-
 			int lineIndex = startLineIndex;
 			final long startTime = System.currentTimeMillis();
 
 			revalidateTokens_Loop: {
-				while (lineIndex < modelLines.getNumberOfLines()) {
-					switch (updateTokensOfLine(lineChangedListener, lineIndex, MAX_TIME_PER_LINE)) {
-						case DONE:
-							break revalidateTokens_Loop;
-						case UPDATE_FAILED:
-							// mark the current line as invalid and add it to the end of the queue
-							invalidateLine(lineIndex);
-							break revalidateTokens_Loop;
-						case NEXT_LINE_IS_OUTDATED:
-							if (System.currentTimeMillis() - startTime >= MAX_LOOP_TIME) {
-								// mark the next line as invalid and add it to the end of the queue
-								invalidateLine(lineIndex + 1);
-								break revalidateTokens_Loop;
-							}
-							lineIndex++;
-							break;
+				while (true) {
+
+					final var modelLine = modelLines.getOrNull(lineIndex);
+					if (modelLine == null) {
+						if (DEBUG_LOGGING)
+							logDebug("(%d) >> DONE - line %d does not exist anymore", startLineIndex, lineIndex);
+						break revalidateTokens_Loop; // EXIT: line does not exist anymore
+					}
+
+					// (re-)tokenize the line
+					if (DEBUG_LOGGING)
+						logDebug("(%d) >> tokenizing line %d...", startLineIndex, lineIndex);
+					final TokenizationResult r;
+					try {
+						final String lineText = modelLines.getLineText(lineIndex);
+						r = castNonNull(tokenizer).tokenize(lineText, modelLine.startState, 0, MAX_TIME_PER_LINE);
+					} catch (final Exception ex) {
+						LOGGER.log(ERROR, ex.toString());
+						// mark the current line as invalid and add it to the end of the queue
+						invalidateLine(lineIndex);
+						break revalidateTokens_Loop; // EXIT: error occurred
+					}
+
+					// check if complete line was tokenized
+					if (r.stoppedEarly) {
+						// treat the rest of the line as one default token
+						r.tokens.add(new TMToken(r.actualStopOffset, ""));
+						// Use the line's starting state as end state in case of incomplete tokenization
+						r.endState = modelLine.startState;
+					}
+					modelLine.tokens = r.tokens;
+
+					// add the line number to the changed ranges
+					final int lineNumber = lineIndex + 1;
+					final Range previousRange = findLastElement(changedRanges);
+					if (previousRange != null && previousRange.toLineNumber == lineNumber - 1) {
+						previousRange.toLineNumber = lineNumber; // extend previous range
+					} else {
+						changedRanges.add(new Range(lineNumber)); // insert new range
+					}
+					modelLine.isInvalid = false;
+
+					// check if the next line requires re-tokenization too
+					lineIndex++;
+					final var nextModelLine = modelLines.getOrNull(lineIndex);
+					if (nextModelLine == null) {
+						if (DEBUG_LOGGING)
+							logDebug("(%d) >> DONE - next line %d does not exist", startLineIndex, lineIndex);
+						break revalidateTokens_Loop;
+					}
+					if (!nextModelLine.isInvalid && nextModelLine.startState.equals(r.endState)) {
+						// has matching start state == is up to date
+						if (DEBUG_LOGGING)
+							logDebug("(%d) >> DONE - tokens of next line %d are up-to-date", startLineIndex, lineIndex);
+						break revalidateTokens_Loop;
+					}
+
+					// next line is out of date
+					nextModelLine.startState = r.endState;
+					if (System.currentTimeMillis() - startTime >= MAX_LOOP_TIME) {
+						if (DEBUG_LOGGING)
+							logDebug("(%d) >> DONE - no more time left", startLineIndex);
+						invalidateLine(lineIndex); // mark the next line as invalid and add it to the end of the queue
+						break revalidateTokens_Loop;
 					}
 				}
 			}
@@ -152,64 +205,6 @@ public class TMModel implements ITMModel {
 			if (!changedRanges.isEmpty()) {
 				emit(new ModelTokensChangedEvent(changedRanges, TMModel.this));
 			}
-		}
-
-		private enum UpdateTokensOfLineResult {
-			DONE,
-			UPDATE_FAILED,
-			NEXT_LINE_IS_OUTDATED,
-		}
-
-		/**
-		 * @param lineIndex 0-based
-		 */
-		private UpdateTokensOfLineResult updateTokensOfLine(final IntConsumer lineChangedListener, final int lineIndex,
-				final Duration timeLimit) {
-
-			final var modelLine = modelLines.getOrNull(lineIndex);
-			if (modelLine == null) {
-				return UpdateTokensOfLineResult.DONE; // line does not exist anymore
-			}
-
-			/*
-			 * (re-)tokenize the requested line
-			 */
-			final TokenizationResult r;
-			final String lineText;
-			try {
-				lineText = modelLines.getLineText(lineIndex);
-				r = castNonNull(tokenizer).tokenize(lineText, modelLine.startState, 0, timeLimit);
-			} catch (final Exception ex) {
-				LOGGER.log(ERROR, ex.toString());
-				return UpdateTokensOfLineResult.UPDATE_FAILED;
-			}
-
-			if (r.stoppedEarly) {
-				// treat the rest of the line as one default token
-				r.tokens.add(new TMToken(r.actualStopOffset, ""));
-				// Use the line's starting state as end state in case of incomplete tokenization
-				r.endState = modelLine.startState;
-			}
-
-			modelLine.tokens = r.tokens;
-			lineChangedListener.accept(lineIndex + 1);
-			modelLine.isInvalid = false;
-
-			/*
-			 * check if the next line now requires a token update too
-			 */
-			final var nextModelLine = modelLines.getOrNull(lineIndex + 1);
-			if (nextModelLine == null) {
-				return UpdateTokensOfLineResult.DONE; // next line does not exist
-			}
-
-			if (!nextModelLine.isInvalid && nextModelLine.startState.equals(r.endState)) {
-				return UpdateTokensOfLineResult.DONE; // next line is valid and has matching start state
-			}
-
-			// next line is out of date
-			nextModelLine.startState = r.endState;
-			return UpdateTokensOfLineResult.NEXT_LINE_IS_OUTDATED;
 		}
 	}
 
@@ -224,11 +219,12 @@ public class TMModel implements ITMModel {
 	}
 
 	@Override
-	public void setGrammar(final IGrammar grammar) {
+	public synchronized void setGrammar(final IGrammar grammar) {
 		if (!Objects.equals(grammar, this.grammar)) {
 			this.grammar = grammar;
 			final var tokenizer = this.tokenizer = new TMTokenization(grammar);
 			modelLines.get(0).startState = tokenizer.getInitialState();
+			invalidateLine(0);
 			startTokenizerThread();
 		}
 	}
@@ -278,6 +274,8 @@ public class TMModel implements ITMModel {
 	}
 
 	private void emit(final ModelTokensChangedEvent e) {
+		if (DEBUG_LOGGING)
+			logDebug("(%s)", e);
 		for (final IModelTokensChangedListener listener : listeners) {
 			listener.modelTokensChanged(e);
 		}
@@ -295,6 +293,8 @@ public class TMModel implements ITMModel {
 
 	/** Marks the given line as out-of-date resulting in async re-parsing */
 	void invalidateLine(final int lineIndex) {
+		if (DEBUG_LOGGING)
+			logDebug("(%d)", lineIndex);
 		final var modelLine = modelLines.getOrNull(lineIndex);
 		if (modelLine != null) {
 			modelLine.isInvalid = true;

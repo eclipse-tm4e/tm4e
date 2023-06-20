@@ -44,7 +44,7 @@ public final class TMPresentationReconcilerTestGenerator
 	}*/
 
 	@Override
-	public void install(final ITextViewer viewer, final IDocument document) {
+	public void onInstalled(final ITextViewer viewer, final IDocument document) {
 		this.viewer = viewer;
 		this.document = document;
 		document.addDocumentListener(this);
@@ -114,7 +114,7 @@ public final class TMPresentationReconcilerTestGenerator
 	}
 
 	@Override
-	public void uninstall() {
+	public void onUninstalled() {
 
 		// for (Command command : commands) {
 		// write(toString(command.ranges));
@@ -153,7 +153,7 @@ public final class TMPresentationReconcilerTestGenerator
 	}
 
 	@Override
-	public void colorize(final TextPresentation presentation, @Nullable final Throwable e) {
+	public void onColorized(final TextPresentation presentation, @Nullable final Throwable e) {
 		// Command command = commands.get(commands.size() - 1);
 		// if (e != null) {
 		// command.error = e;

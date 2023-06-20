@@ -24,12 +24,18 @@ public final class PreferenceUtils {
 	private static final String E4_CSS_PREFERENCE_NAME = "org.eclipse.e4.ui.css.swt.theme"; //$NON-NLS-1$
 	private static final String EDITORS_PREFERENCE_NAME = "org.eclipse.ui.editors"; //$NON-NLS-1$
 
+	private static @Nullable Boolean isDebugThrowError;
+
 	public static boolean isDebugGenerateTest() {
 		return Boolean.parseBoolean(Platform.getDebugOption(TMUIPlugin.PLUGIN_ID + "/debug/log/GenerateTest"));
 	}
 
 	public static boolean isDebugThrowError() {
-		return Boolean.parseBoolean(Platform.getDebugOption(TMUIPlugin.PLUGIN_ID + "/debug/log/ThrowError"));
+		var isDebugThrowError = PreferenceUtils.isDebugThrowError;
+		if (isDebugThrowError == null)
+			isDebugThrowError = PreferenceUtils.isDebugThrowError = Boolean.parseBoolean(
+					Platform.getDebugOption(TMUIPlugin.PLUGIN_ID + "/debug/log/ThrowError"));
+		return isDebugThrowError;
 	}
 
 	/**

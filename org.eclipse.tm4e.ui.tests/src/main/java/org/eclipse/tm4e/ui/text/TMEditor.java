@@ -48,7 +48,7 @@ public class TMEditor {
 		setAndExecute(text);
 
 		reconciler = new TMPresentationReconciler();
-		reconciler.addTMPresentationReconcilerListener(collector);
+		reconciler.addListener(collector);
 		reconciler.setGrammar(grammar);
 		reconciler.setTheme(tokenProvider);
 		reconciler.install(viewer);

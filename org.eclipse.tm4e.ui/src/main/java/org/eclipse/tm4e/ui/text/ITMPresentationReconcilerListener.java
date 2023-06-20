@@ -23,17 +23,14 @@ import org.eclipse.jface.text.TextPresentation;
 public interface ITMPresentationReconcilerListener {
 
 	/**
-	 * Install the given viewer and document.
-	 *
-	 * @param viewer
-	 * @param document
+	 * The presentation reconciler was installed into the text viewer for the given document.
 	 */
-	void install(ITextViewer viewer, IDocument document);
+	void onInstalled(ITextViewer viewer, IDocument document);
 
 	/**
-	 * Uninstall.
+	 * The presentation reconciler was uninstalled from the textviewer.
 	 */
-	void uninstall();
+	void onUninstalled();
 
 	/**
 	 * Colorize the StyledText with the given text presentation.
@@ -43,5 +40,5 @@ public interface ITMPresentationReconcilerListener {
 	 * @param error
 	 *            when there are error.
 	 */
-	void colorize(TextPresentation presentation, @Nullable Throwable error);
+	void onColorized(TextPresentation presentation, @Nullable Throwable error);
 }

@@ -33,17 +33,17 @@ public class StyleRangesCollector implements ITMPresentationReconcilerListener {
 	private final Object lock = new Object();
 
 	@Override
-	public void install(final ITextViewer viewer, final IDocument document) {
+	public void onInstalled(final ITextViewer viewer, final IDocument document) {
 		this.document = document;
 	}
 
 	@Override
-	public void uninstall() {
+	public void onUninstalled() {
 		this.document = null;
 	}
 
 	@Override
-	public void colorize(final TextPresentation presentation, final Throwable error) {
+	public void onColorized(final TextPresentation presentation, final Throwable error) {
 		add(presentation);
 		if (waitForToLineNumber != null) {
 			final int offset = presentation.getExtent().getOffset() + presentation.getExtent().getLength();

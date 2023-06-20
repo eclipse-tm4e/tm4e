@@ -57,7 +57,7 @@ public final class MoreCollections {
 	 * @param list a non-empty list
 	 * @param index the element to get. negative index counts from end of list, e.g. -1 = last element.
 	 *
-	 * @throws IndexOutOfBoundsException if the list is empty
+	 * @throws IndexOutOfBoundsException
 	 */
 	public static <T> T getElementAt(final List<T> list, final int index) {
 		if (index < 0)
@@ -88,6 +88,21 @@ public final class MoreCollections {
 	 */
 	public static <T> T removeLastElement(final List<T> list) {
 		return list.remove(list.size() - 1);
+	}
+
+	public static String toStringWithIndex(final List<?> list) {
+		if (list.isEmpty())
+			return "[]";
+
+		final var sb = new StringBuilder("[");
+		for (int i = 0, l = list.size(); i < l; i++) {
+			final var e = list.get(i);
+			sb.append(i).append(':').append(e == list ? "(this List)" : e);
+			if (i == l - 1)
+				break;
+			sb.append(", ");
+		}
+		return sb.append(']').toString();
 	}
 
 	private MoreCollections() {

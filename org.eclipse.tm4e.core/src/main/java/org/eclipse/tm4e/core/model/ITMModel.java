@@ -47,10 +47,20 @@ public interface ITMModel extends ModelTokensChangedEvent.Listenable {
 
 	void dispose();
 
+	int getNumberOfLines();
+
 	/**
 	 * @param lineIndex 0-based
 	 *
-	 * @return <code>null</code> if line does not exit or has not yet been tokenized.
+	 * @throws Exception if line does not exist in the underlying document
+	 */
+	String getLineText(int lineIndex) throws Exception;
+
+	/**
+	 * @param lineIndex 0-based
+	 *
+	 * @return <code>null</code> if line does not exist or has not yet been tokenized.
+	 * 
 	 */
 	@Nullable
 	List<TMToken> getLineTokens(int lineIndex);

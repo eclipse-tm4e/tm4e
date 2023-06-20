@@ -13,6 +13,7 @@ import static org.eclipse.tm4e.core.registry.IGrammarSource.fromResource;
 import static org.junit.jupiter.api.Assertions.*;
 
 import org.eclipse.tm4e.core.Data;
+import org.eclipse.tm4e.core.internal.grammar.StateStack;
 import org.eclipse.tm4e.core.model.ITMModel.BackgroundTokenizationState;
 import org.eclipse.tm4e.core.registry.Registry;
 import org.junit.jupiter.api.Test;
@@ -23,38 +24,30 @@ class TMModelTest {
 	void testTokenizeWithTimeout() {
 		final var grammar = new Registry().addGrammar(fromResource(Data.class, "TypeScript.tmLanguage.json"));
 
-		final var lines = """
+		final var textLines = """
 				function addNumbers(a: number, b: number) { // 1
 					return a + b;                           // 2
 				}                                           // 3
 				const sum = addNumbers(10, 15);             // 4
 				console.log('Sum is: ' + sum);              // 5
 			""".split("\\r?\\n");
-		assertEquals(5, lines.length);
+		assertEquals(5, textLines.length);
 
-		final var modelLines = new AbstractModelLines(0) {
+		final var tmModel = new TMModel(textLines.length) {
 			@Override
 			public String getLineText(final int lineIndex) throws Exception {
-				return lines[lineIndex];
+				return textLines[lineIndex];
 			}
 		};
 
-		modelLines.addLines(0, lines.length);
-
-		final var tmModel = new TMModel(modelLines);
 		try {
 			tmModel.setGrammar(grammar);
-
-			for (int i = 0; i < lines.length; i++) {
-				assertTrue(modelLines.get(i).isInvalid, "Line " + i + " is expected to be outdated");
-			}
 
 			assertEquals(BackgroundTokenizationState.COMPLETED, tmModel.getBackgroundTokenizationState());
 
 			// adding a listener will spawn the TokenizerThread
 			tmModel.addModelTokensChangedListener(event -> {
 			});
-			modelLines.replaceLines(0, 5, 5);
 
 			boolean tokenizationWasSeenInProgress = false;
 			boolean tokenizationCompleted = false;
@@ -73,8 +66,11 @@ class TMModelTest {
 
 			assertEquals(BackgroundTokenizationState.COMPLETED, tmModel.getBackgroundTokenizationState());
 
-			for (int i = 0; i < lines.length; i++) {
-				assertFalse(modelLines.get(i).isInvalid, "Line " + i + " is expected to be up-to-date");
+			for (int i = 1; i < textLines.length; i++) {
+				assertNotEquals(StateStack.NULL, tmModel.lines.get(i).startState, "Line " + i + " is expected to be up-to-date");
+			}
+			for (int i = 0; i < textLines.length; i++) {
+				assertNotNull(tmModel.lines.get(i).tokens, "Line " + i + " is expected to be up-to-date");
 			}
 		} finally {
 			tmModel.dispose();

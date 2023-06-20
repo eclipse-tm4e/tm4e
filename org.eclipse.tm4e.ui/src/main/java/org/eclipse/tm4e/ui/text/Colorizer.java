@@ -108,7 +108,7 @@ class Colorizer {
 				if (tokens == null) {
 					if (TMUIPlugin.isLogTraceEnabled())
 						TMUIPlugin.logTrace("TextMate tokens not yet available for line " + lineIndex);
-					break;
+					continue;
 				}
 				final int startLineOffset = doc.getLineOffset(lineIndex);
 				for (int i = 0; i < tokens.size(); i++) {

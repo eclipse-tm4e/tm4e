@@ -9,10 +9,14 @@
  * Contributors:
  * Angelo Zerr <angelo.zerr@gmail.com> - initial API and implementation
  */
-package org.eclipse.tm4e.ui.themes;
+package org.eclipse.tm4e.ui.tests.themes;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import org.eclipse.tm4e.ui.themes.ITheme;
+import org.eclipse.tm4e.ui.themes.IThemeManager;
+import org.eclipse.tm4e.ui.themes.Theme;
+import org.eclipse.tm4e.ui.themes.ThemeIdConstants;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 

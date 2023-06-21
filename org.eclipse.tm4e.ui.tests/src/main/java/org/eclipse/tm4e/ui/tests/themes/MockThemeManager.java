@@ -9,7 +9,7 @@
  * Contributors:
  * Angelo Zerr <angelo.zerr@gmail.com> - initial API and implementation
  */
-package org.eclipse.tm4e.ui.themes;
+package org.eclipse.tm4e.ui.tests.themes;
 
 import org.eclipse.tm4e.ui.internal.themes.AbstractThemeManager;
 import org.osgi.service.prefs.BackingStoreException;

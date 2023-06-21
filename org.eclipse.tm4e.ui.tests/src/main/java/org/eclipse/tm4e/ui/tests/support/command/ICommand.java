@@ -9,7 +9,7 @@
  * Contributors:
  * Angelo Zerr <angelo.zerr@gmail.com> - initial API and implementation
  */
-package org.eclipse.tm4e.ui.text;
+package org.eclipse.tm4e.ui.tests.support.command;
 
 public interface ICommand {
 

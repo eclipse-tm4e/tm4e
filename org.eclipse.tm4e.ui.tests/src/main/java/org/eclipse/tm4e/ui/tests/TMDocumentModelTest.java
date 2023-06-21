@@ -9,7 +9,7 @@
  * Contributors:
  * - Mickael Istria (Red Hat Inc.)
  */
-package org.eclipse.tm4e.ui.internal.model;
+package org.eclipse.tm4e.ui.tests;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -27,6 +27,7 @@ import org.eclipse.tm4e.core.model.ModelTokensChangedEvent;
 import org.eclipse.tm4e.core.model.Range;
 import org.eclipse.tm4e.core.registry.IGrammarSource;
 import org.eclipse.tm4e.core.registry.Registry;
+import org.eclipse.tm4e.ui.internal.model.TMDocumentModel;
 import org.junit.function.ThrowingRunnable;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
@@ -36,7 +37,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
 
 @TestMethodOrder(MethodOrderer.MethodName.class)
-class DocumentTMModelTest {
+class TMDocumentModelTest {
 
 	private static final String LF = "\n";
 	private static IGrammar grammar;
@@ -44,8 +45,8 @@ class DocumentTMModelTest {
 	@BeforeAll
 	static void beforeAll() {
 		final var grammarPath = "/grammars/TypeScript.tmLanguage.json";
-		final var grammarSource = DocumentTMModelTest.class.getResource(grammarPath) != null
-				? IGrammarSource.fromResource(DocumentTMModelTest.class, grammarPath)
+		final var grammarSource = TMDocumentModelTest.class.getResource(grammarPath) != null
+				? IGrammarSource.fromResource(TMDocumentModelTest.class, grammarPath)
 				: IGrammarSource.fromFile(Path.of("." + grammarPath));
 		grammar = new Registry().addGrammar(grammarSource);
 	}

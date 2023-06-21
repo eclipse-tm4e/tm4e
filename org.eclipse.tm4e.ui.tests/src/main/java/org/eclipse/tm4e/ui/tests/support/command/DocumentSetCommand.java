@@ -9,7 +9,7 @@
  * Contributors:
  * Angelo Zerr <angelo.zerr@gmail.com> - initial API and implementation
  */
-package org.eclipse.tm4e.ui.internal.text;
+package org.eclipse.tm4e.ui.tests.support.command;
 
 import org.eclipse.jface.text.Document;
 
@@ -34,7 +34,7 @@ public class DocumentSetCommand extends Command {
 	}
 
 	@Override
-	protected Integer getLineTo() {
+	public Integer getLineTo() {
 		final int numberOfLines = document.getNumberOfLines();
 		return numberOfLines > 0 ? numberOfLines - 1 : null;
 	}

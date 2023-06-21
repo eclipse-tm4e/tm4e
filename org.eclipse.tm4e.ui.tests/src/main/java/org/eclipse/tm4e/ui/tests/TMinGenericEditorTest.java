@@ -9,7 +9,7 @@
  * Contributors:
  * Angelo Zerr <angelo.zerr@gmail.com> - initial API and implementation
  */
-package org.eclipse.tm4e.ui;
+package org.eclipse.tm4e.ui.tests;
 
 import static org.junit.jupiter.api.Assertions.*;
 

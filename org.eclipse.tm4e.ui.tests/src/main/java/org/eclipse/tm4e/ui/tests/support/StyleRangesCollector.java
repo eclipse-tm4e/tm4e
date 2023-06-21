@@ -9,7 +9,7 @@
  * Contributors:
  * Angelo Zerr <angelo.zerr@gmail.com> - initial API and implementation
  */
-package org.eclipse.tm4e.ui.internal.text;
+package org.eclipse.tm4e.ui.tests.support;
 
 import java.util.Arrays;
 import java.util.Iterator;
@@ -19,6 +19,7 @@ import org.eclipse.jface.text.IDocument;
 import org.eclipse.jface.text.ITextViewer;
 import org.eclipse.jface.text.TextPresentation;
 import org.eclipse.swt.custom.StyleRange;
+import org.eclipse.tm4e.ui.tests.support.command.Command;
 import org.eclipse.tm4e.ui.text.ITMPresentationReconcilerListener;
 
 public class StyleRangesCollector implements ITMPresentationReconcilerListener {

@@ -9,9 +9,7 @@
  * Contributors:
  * Angelo Zerr <angelo.zerr@gmail.com> - initial API and implementation
  */
-package org.eclipse.tm4e.ui.internal.text;
-
-import org.eclipse.tm4e.ui.text.ICommand;
+package org.eclipse.tm4e.ui.tests.support.command;
 
 public abstract class Command implements ICommand {
 
@@ -47,7 +45,7 @@ public abstract class Command implements ICommand {
 
 	protected abstract void doExecute();
 
-	protected abstract Integer getLineTo();
+	public abstract Integer getLineTo();
 
 	public static String toText(final String text) {
 		final var newText = new StringBuilder();

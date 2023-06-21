@@ -9,7 +9,7 @@
  * Contributors:
  * Angelo Zerr <angelo.zerr@gmail.com> - initial API and implementation
  */
-package org.eclipse.tm4e.ui.text;
+package org.eclipse.tm4e.ui.tests.support;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,11 +20,12 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.tm4e.core.grammar.IGrammar;
-import org.eclipse.tm4e.ui.internal.text.Command;
-import org.eclipse.tm4e.ui.internal.text.DocumentReplaceCommand;
-import org.eclipse.tm4e.ui.internal.text.DocumentSetCommand;
-import org.eclipse.tm4e.ui.internal.text.StyleRangesCollector;
-import org.eclipse.tm4e.ui.internal.text.TextViewerInvalidateTextPresentationCommand;
+import org.eclipse.tm4e.ui.tests.support.command.Command;
+import org.eclipse.tm4e.ui.tests.support.command.DocumentReplaceCommand;
+import org.eclipse.tm4e.ui.tests.support.command.DocumentSetCommand;
+import org.eclipse.tm4e.ui.tests.support.command.ICommand;
+import org.eclipse.tm4e.ui.tests.support.command.TextViewerInvalidateTextPresentationCommand;
+import org.eclipse.tm4e.ui.text.TMPresentationReconciler;
 import org.eclipse.tm4e.ui.themes.ITokenProvider;
 
 public class TMEditor {

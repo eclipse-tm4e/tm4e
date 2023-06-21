@@ -9,7 +9,7 @@
  * Contributors:
  * Angelo Zerr <angelo.zerr@gmail.com> - initial API and implementation
  */
-package org.eclipse.tm4e.ui.internal.text;
+package org.eclipse.tm4e.ui.tests.support.command;
 
 import org.eclipse.jface.text.BadLocationException;
 import org.eclipse.jface.text.TextViewer;
@@ -37,7 +37,7 @@ public class TextViewerInvalidateTextPresentationCommand extends Command {
 	}
 
 	@Override
-	protected Integer getLineTo() {
+	public Integer getLineTo() {
 		try {
 			return viewer.getDocument().getLineOfOffset(offset + length);
 		} catch (final BadLocationException e) {

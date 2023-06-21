@@ -9,10 +9,10 @@
  * Contributors:
  * Angelo Zerr <angelo.zerr@gmail.com> - initial API and implementation
  */
-package org.eclipse.tm4e.ui.themes;
+package org.eclipse.tm4e.ui.tests.themes;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.junit.jupiter.api.Assumptions.*;
+import static org.junit.jupiter.api.Assumptions.assumeTrue;
 
 import java.io.File;
 import java.io.IOException;
@@ -21,9 +21,12 @@ import org.eclipse.core.runtime.preferences.InstanceScope;
 import org.eclipse.swt.custom.StyledText;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.widgets.Control;
-import org.eclipse.swt.widgets.Display;
 import org.eclipse.tm4e.ui.TMUIPlugin;
 import org.eclipse.tm4e.ui.internal.utils.UI;
+import org.eclipse.tm4e.ui.themes.ColorManager;
+import org.eclipse.tm4e.ui.themes.ITheme;
+import org.eclipse.tm4e.ui.themes.IThemeManager;
+import org.eclipse.tm4e.ui.themes.ThemeIdConstants;
 import org.eclipse.ui.IEditorDescriptor;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.PartInitException;

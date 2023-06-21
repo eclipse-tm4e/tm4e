@@ -9,7 +9,7 @@
  * Contributors:
  * Angelo Zerr <angelo.zerr@gmail.com> - initial API and implementation
  */
-package org.eclipse.tm4e.ui.text.typescript;
+package org.eclipse.tm4e.ui.tests;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -18,8 +18,8 @@ import java.util.List;
 import org.eclipse.tm4e.core.grammar.IGrammar;
 import org.eclipse.tm4e.core.registry.IGrammarSource;
 import org.eclipse.tm4e.core.registry.Registry;
-import org.eclipse.tm4e.ui.text.ICommand;
-import org.eclipse.tm4e.ui.text.TMEditor;
+import org.eclipse.tm4e.ui.tests.support.TMEditor;
+import org.eclipse.tm4e.ui.tests.support.command.ICommand;
 import org.eclipse.tm4e.ui.themes.ITokenProvider;
 import org.eclipse.tm4e.ui.themes.css.CSSTokenProvider;
 import org.junit.jupiter.api.Disabled;

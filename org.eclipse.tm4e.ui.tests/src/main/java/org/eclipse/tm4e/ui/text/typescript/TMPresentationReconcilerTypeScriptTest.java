@@ -325,7 +325,7 @@ public class TMPresentationReconcilerTypeScriptTest {
 	}
 
 	private static ITokenProvider getTokenProvider() {
-		return new CSSTokenProvider(TMEditor.class.getResourceAsStream("Solarized-light.css"));
+		return new CSSTokenProvider(TMPresentationReconcilerTypeScriptTest.class.getResourceAsStream("/themes/Solarized-light.css"));
 	}
 
 	public static IGrammar getGrammar() {

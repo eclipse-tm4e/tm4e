@@ -13,23 +13,30 @@ package org.eclipse.tm4e.ui.tests.themes;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import org.eclipse.tm4e.ui.internal.themes.AbstractThemeManager;
 import org.eclipse.tm4e.ui.themes.ITheme;
 import org.eclipse.tm4e.ui.themes.IThemeManager;
 import org.eclipse.tm4e.ui.themes.Theme;
 import org.eclipse.tm4e.ui.themes.ThemeIdConstants;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.osgi.service.prefs.BackingStoreException;
 
 /**
  * Test for theme manager.
- *
  */
 class ThemeManagerTest implements ThemeIdConstants {
+
+	private static final class MockThemeManager extends AbstractThemeManager {
+		@Override
+		public void save() throws BackingStoreException {
+		}
+	}
 
 	private IThemeManager manager;
 
 	@BeforeEach
-	public void init() {
+	public void setup() {
 		manager = new MockThemeManager();
 
 		// Register theme
@@ -40,23 +47,21 @@ class ThemeManagerTest implements ThemeIdConstants {
 	}
 
 	@Test
-	void themes() {
-		// All themes
+	void testGetAllThemes() {
 		final ITheme[] themes = manager.getThemes();
 		assertNotNull(themes);
 		assertEquals(4, themes.length);
 	}
 
 	@Test
-	void defaultThemeAssociation() {
-		// Default theme
+	void testDefaultThemeAssociation() {
 		final ITheme theme = manager.getDefaultTheme();
 		assertNotNull(theme);
 		assertEquals(SolarizedLight, theme.getId());
 	}
 
 	@Test
-	void darkThemes() {
+	void testDarkThemes() {
 		// All themes for Dark E4 CSS Theme
 		final ITheme[] darkThemes = manager.getThemes(true);
 		assertNotNull(darkThemes);

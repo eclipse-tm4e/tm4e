@@ -1,5 +1,6 @@
 /**
  * Copyright (c) 2019 Red Hat Inc., and others
+ * Copyright (c) 2023 Vegard IT GmbH and others.
  * This program and the accompanying materials are made
  * available under the terms of the Eclipse Public License 2.0
  * which is available at https://www.eclipse.org/legal/epl-2.0/
@@ -8,6 +9,7 @@
  *
  * Contributors:
  * - Mickael Istria (Red Hat Inc.)
+ * - Sebastian Thomschke (Vegard IT GmbH) - add test cases
  */
 package org.eclipse.tm4e.ui.tests;
 
@@ -28,6 +30,7 @@ import org.eclipse.tm4e.core.model.Range;
 import org.eclipse.tm4e.core.registry.IGrammarSource;
 import org.eclipse.tm4e.core.registry.Registry;
 import org.eclipse.tm4e.ui.internal.model.TMDocumentModel;
+import org.eclipse.tm4e.ui.tests.support.TestUtils;
 import org.junit.function.ThrowingRunnable;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
@@ -73,7 +76,7 @@ class TMDocumentModelTest {
 			model.addModelTokensChangedListener(listener);
 			model.getDocument().set(String.join(LF, initialLines));
 			assertTrue(signal.await(2, TimeUnit.SECONDS));
-			Thread.sleep("true".equals(System.getenv("CI")) ? 500 : 50);
+			Thread.sleep(TestUtils.isCI() ? 500 : 50);
 			model.removeModelTokensChangedListener(listener);
 		}
 
@@ -106,7 +109,6 @@ class TMDocumentModelTest {
 	/**
 	 * Tests appending a few new lines to the end of the document
 	 */
-	// @Disabled
 	@Test
 	void testAppend2Lines() throws Throwable {
 		final var initialLines = List.of(
@@ -127,7 +129,6 @@ class TMDocumentModelTest {
 	/**
 	 * Tests appending a new line char to the end of the document
 	 */
-	// @Disabled
 	@Test
 	void testAppendEmptyLine() throws Throwable {
 		final var initialLines = List.of(
@@ -147,7 +148,6 @@ class TMDocumentModelTest {
 	/**
 	 * Tests appending a some chars to the end of the document
 	 */
-	// @Disabled
 	@Test
 	void testAppendText() throws Throwable {
 		final var initialLines = List.of(
@@ -167,7 +167,6 @@ class TMDocumentModelTest {
 	/**
 	 * Tests appending a new text line to the end of the document
 	 */
-	// @Disabled
 	@Test
 	void testAppendTextLine() throws Throwable {
 		final var initialLines = List.of(
@@ -206,7 +205,6 @@ class TMDocumentModelTest {
 	/**
 	 * Tests inserting/pasting two line after the first line
 	 */
-	// @Disabled
 	@Test
 	void testInsert2Lines() throws Throwable {
 		final var initialLines = List.of(
@@ -228,7 +226,6 @@ class TMDocumentModelTest {
 	/**
 	 * Tests inserting/pasting some text with new line chars that spawns two lines
 	 */
-	// @Disabled
 	@Test
 	void testInsert2LinesPartially() throws Throwable {
 		final var initialLines = List.of(
@@ -250,7 +247,6 @@ class TMDocumentModelTest {
 	/**
 	 * Tests inserting a line break in the middle of a line
 	 */
-	// @Disabled
 	@Test
 	void testInsertEmptyLine() throws Throwable {
 		final var initialLines = List.of(
@@ -272,7 +268,6 @@ class TMDocumentModelTest {
 	/**
 	 * Tests inserting '/*' at the beginning of the second line which invalidates all following lines
 	 */
-	// @Disabled
 	@Test
 	void testInsertMultiLineCommentStartToken() throws Throwable {
 		final var initialLines = List.of(
@@ -294,7 +289,6 @@ class TMDocumentModelTest {
 	/**
 	 * Tests splitting a line
 	 */
-	// @Disabled
 	@Test
 	void testInsertNewLineCharInLine() throws Throwable {
 		final var initialLines = List.of(
@@ -316,7 +310,6 @@ class TMDocumentModelTest {
 	/**
 	 * Tests inserting some chars into a line
 	 */
-	// @Disabled
 	@Test
 	void testInsertText() throws Throwable {
 		final var initialLines = List.of(
@@ -337,7 +330,6 @@ class TMDocumentModelTest {
 	/**
 	 * Tests inserting a line after the first line
 	 */
-	// @Disabled
 	@Test
 	void testInsertTextLine() throws Throwable {
 		final var initialLines = List.of(
@@ -358,7 +350,6 @@ class TMDocumentModelTest {
 	/**
 	 * Tests inserting a new line char at the beginning of the document.
 	 */
-	// @Disabled
 	@Test
 	void testPrefixEmptyLine() throws Throwable {
 		final var initialLines = List.of(
@@ -378,7 +369,6 @@ class TMDocumentModelTest {
 	/**
 	 * Tests inserting a new line at the beginning of the document.
 	 */
-	// @Disabled
 	@Test
 	void testPrefixText() throws Throwable {
 		final var initialLines = List.of(
@@ -398,7 +388,6 @@ class TMDocumentModelTest {
 	/**
 	 * Tests inserting a new line at the beginning of the document.
 	 */
-	// @Disabled
 	@Test
 	void testPrefixTextLine() throws Throwable {
 		final var initialLines = List.of(
@@ -418,7 +407,6 @@ class TMDocumentModelTest {
 	/**
 	 * Tests removing the second and the third line
 	 */
-	// @Disabled
 	@Test
 	void testRemove2TextLines() throws Throwable {
 		final var initialLines = List.of(
@@ -440,7 +428,6 @@ class TMDocumentModelTest {
 		assertRange(event, 2, 2);
 	}
 
-	// @Disabled
 	@Test
 	void testRemoveLastChar() throws Throwable {
 		final var initialLines = List.of(
@@ -457,7 +444,6 @@ class TMDocumentModelTest {
 		assertRange(event, 2, 2);
 	}
 
-	// @Disabled
 	@Test
 	void testRemoveLastCharOfLine() throws Throwable {
 		final var initialLines = List.of(
@@ -477,7 +463,6 @@ class TMDocumentModelTest {
 	/**
 	 * Tests joining two lines
 	 */
-	// @Disabled
 	@Test
 	void testRemoveNewLineChar() throws Throwable {
 		final var initialLines = List.of(
@@ -502,7 +487,6 @@ class TMDocumentModelTest {
 	/**
 	 * Tests removing some chars of a line
 	 */
-	// @Disabled
 	@Test
 	void testRemoveText() throws Throwable {
 		final var initialLines = List.of(
@@ -523,7 +507,6 @@ class TMDocumentModelTest {
 	/**
 	 * Tests removing the second line
 	 */
-	// @Disabled
 	@Test
 	void testRemoveTextLine() throws Throwable {
 		final var initialLines = List.of(
@@ -637,7 +620,6 @@ class TMDocumentModelTest {
 		assertRange(event, 2, 2);
 	}
 
-	// @Disabled
 	@Test
 	void testSetDocumentContent() throws Throwable {
 		final var event1 = awaitModelChangedEvent(model, Collections.emptyList(), () -> doc.set("a"));

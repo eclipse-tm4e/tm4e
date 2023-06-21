@@ -13,6 +13,7 @@ package org.eclipse.tm4e.ui.tests.support;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 import org.eclipse.jface.text.Document;
 import org.eclipse.jface.text.TextViewer;
@@ -35,7 +36,7 @@ public class TMEditor {
 	private final Shell shell;
 	private final StyleRangesCollector collector;
 
-	private final List<ICommand> commands;
+	private List<Command> commands;
 	private final TMPresentationReconciler reconciler;
 
 	public TMEditor(final IGrammar grammar, final ITokenProvider tokenProvider, final String text) {
@@ -46,27 +47,32 @@ public class TMEditor {
 		commands = new ArrayList<>();
 		collector = new StyleRangesCollector();
 
-		setAndExecute(text);
-
 		reconciler = new TMPresentationReconciler();
 		reconciler.addListener(collector);
 		reconciler.setGrammar(grammar);
 		reconciler.setTheme(tokenProvider);
 		reconciler.install(viewer);
 
+		setTextNow(text);
 	}
 
-	public void set(final String text) {
+	/**
+	 * queues a command that sets the editor text
+	 */
+	public void setText(final String text) {
 		commands.add(new DocumentSetCommand(text, document));
 	}
 
-	private void setAndExecute(final String text) {
+	private void setTextNow(final String text) {
 		final var command = new DocumentSetCommand(text, document);
 		commands.add(command);
-		collector.setCommand(command);
+		collector.executeCommand(command);
 	}
 
-	public void replace(final int pos, final int length, final String text) {
+	/**
+	 * queues a command that replaces text in the editor
+	 */
+	public void replaceText(final int pos, final int length, final String text) {
 		commands.add(new DocumentReplaceCommand(pos, length, text, document));
 	}
 
@@ -81,22 +87,30 @@ public class TMEditor {
 		commands.add(new TextViewerInvalidateTextPresentationCommand(offset, length, viewer));
 	}
 
+	/**
+	 * executes queued commands
+	 */
+	@SuppressWarnings("unchecked")
 	public List<ICommand> execute() {
+		final var commands = this.commands;
+		final var done = new AtomicBoolean(false);
 		new Thread(() -> {
-			for (final ICommand command : commands) {
-				collector.executeCommand((Command) command);
-			}
-			shell.getDisplay().syncExec(shell::dispose);
-		}).start();
+			commands.forEach(c -> collector.executeCommandSync(c));
+			done.set(true);
+		}, "Commands Executor").start();
 
 		final Display display = shell.getDisplay();
-		while (!shell.isDisposed()) {
+		while (!done.get()) {
 			if (!display.readAndDispatch()) {
 				display.sleep();
 			}
 		}
-		reconciler.uninstall();
-		return commands;
+		this.commands = new ArrayList<>();
+		return (List<ICommand>) (List<?>) commands;
 	}
 
+	public void dispose() {
+		shell.getDisplay().syncExec(shell::dispose);
+		reconciler.uninstall();
+	}
 }

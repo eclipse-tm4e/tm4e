@@ -44,5 +44,4 @@ public class TextViewerInvalidateTextPresentationCommand extends Command {
 			return null;
 		}
 	}
-
 }

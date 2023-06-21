@@ -16,5 +16,4 @@ public interface ICommand {
 	String getName();
 
 	String getStyleRanges();
-
 }

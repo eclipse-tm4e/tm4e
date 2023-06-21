@@ -11,7 +11,7 @@
  */
 package org.eclipse.tm4e.ui.tests;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.util.List;
 
@@ -19,24 +19,46 @@ import org.eclipse.tm4e.core.grammar.IGrammar;
 import org.eclipse.tm4e.core.registry.IGrammarSource;
 import org.eclipse.tm4e.core.registry.Registry;
 import org.eclipse.tm4e.ui.tests.support.TMEditor;
+import org.eclipse.tm4e.ui.tests.support.TestUtils;
 import org.eclipse.tm4e.ui.tests.support.command.ICommand;
 import org.eclipse.tm4e.ui.themes.ITokenProvider;
 import org.eclipse.tm4e.ui.themes.css.CSSTokenProvider;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 public class TMPresentationReconcilerTypeScriptTest {
 
-	@Disabled("Remove this annotation when org.eclipse.swt.SWTError: No more handles [gtk_init_check() failed] will be fixed")
+	private IGrammar grammar;
+	private ITokenProvider theme;
+	private TMEditor editor;
+
+	@BeforeEach
+	void setup() throws Exception {
+		TestUtils.assertNoTM4EThreadsRunning();
+
+		grammar = new Registry().addGrammar(IGrammarSource.fromResource(getClass(), "/grammars/TypeScript.tmLanguage.json"));
+		try (final var is = getClass().getResourceAsStream("/themes/Solarized-light.css")) {
+			theme = new CSSTokenProvider(is);
+		}
+	}
+
+	@AfterEach
+	void tearDown() throws InterruptedException {
+		editor.dispose();
+
+		TestUtils.assertNoTM4EThreadsRunning();
+	}
+
 	@Test
 	void colorizeTypescript() throws Exception {
+		editor = new TMEditor(grammar, theme, "let a = '';\nlet b = 10;\nlet c = true;");
 
-		final var editor = new TMEditor(getGrammar(), getTokenProvider(), "let a = '';\nlet b = 10;\nlet c = true;");
 		final List<ICommand> commands = editor.execute();
-
 		assertEquals(1, commands.size());
-		final ICommand command = commands.get(0);
 
+		final ICommand command = commands.get(0);
 		assertEquals("["
 				+ "StyleRange {0, 3, fontStyle=bold, foreground=Color {7, 54, 66, 255}}, "
 				+ "StyleRange {3, 1, fontStyle=normal}, "
@@ -66,13 +88,13 @@ public class TMPresentationReconcilerTypeScriptTest {
 				command.getStyleRanges());
 	}
 
-	@Disabled("Remove this annotation when org.eclipse.swt.SWTError: No more handles [gtk_init_check() failed] will be fixed")
 	@Test
 	void colorizeTypescriptWithInvalidate1() throws Exception {
-
-		final var editor = new TMEditor(getGrammar(), getTokenProvider(), "let a = '';\nlet b = 10;\nlet c = true;");
+		editor = new TMEditor(grammar, theme, "let a = '';\nlet b = 10;\nlet c = true;");
 		editor.invalidateTextPresentation(0, 3);
+
 		final List<ICommand> commands = editor.execute();
+		assertEquals(2, commands.size());
 
 		// document.set("let a = '';\nlet b = 10;\nlet c = true;");
 		final ICommand command0 = commands.get(0);
@@ -110,16 +132,15 @@ public class TMPresentationReconcilerTypeScriptTest {
 				+ "StyleRange {0, 3, fontStyle=bold, foreground=Color {7, 54, 66, 255}}"
 				+ "]",
 				command1.getStyleRanges());
-
 	}
 
-	@Disabled
 	@Test
 	void colorizeTypescriptWithInvalidate2() throws Exception {
-
-		final var editor = new TMEditor(getGrammar(), getTokenProvider(), "let a = '';\nlet b = 10;\nlet c = true;");
+		editor = new TMEditor(grammar, theme, "let a = '';\nlet b = 10;\nlet c = true;");
 		editor.invalidateTextPresentation(0, 2);
+
 		final List<ICommand> commands = editor.execute();
+		assertEquals(2, commands.size());
 
 		// document.set("let a = '';\nlet b = 10;\nlet c = true;");
 		final ICommand command0 = commands.get(0);
@@ -153,24 +174,22 @@ public class TMPresentationReconcilerTypeScriptTest {
 
 		// viewer.invalidateTextPresentation(0, 2);
 		final ICommand command1 = commands.get(1);
-		assertEquals(
-				"["
-						+ "StyleRange {0, 2, fontStyle=bold, foreground=Color {7, 54, 66, 255}}"
-						+ "]",
+		assertEquals("["
+				+ "StyleRange {0, 2, fontStyle=bold, foreground=Color {7, 54, 66, 255}}"
+				+ "]",
 				command1.getStyleRanges());
-
 	}
 
-	@Disabled("Remove this annotation when org.eclipse.swt.SWTError: No more handles [gtk_init_check() failed] will be fixed")
 	@Test
 	void colorizeTypescriptWithInvalidate3() throws Exception {
-
-		final var editor = new TMEditor(getGrammar(), getTokenProvider(), "let a = '';\nlet b = 10;\nlet c = true;");
+		editor = new TMEditor(grammar, theme, "let a = '';\nlet b = 10;\nlet c = true;");
 		editor.invalidateTextPresentation(1, 2);
+
 		final List<ICommand> commands = editor.execute();
+		assertEquals(2, commands.size());
 
 		// document.set("let a = '';\nlet b = 10;\nlet c = true;");
-		final ICommand command0 = commands.get(0);
+		final ICommand Command0 = commands.get(0);
 		assertEquals("["
 				+ "StyleRange {0, 3, fontStyle=bold, foreground=Color {7, 54, 66, 255}}, "
 				+ "StyleRange {3, 1, fontStyle=normal}, "
@@ -197,25 +216,23 @@ public class TMPresentationReconcilerTypeScriptTest {
 				+ "StyleRange {32, 4, fontStyle=normal, foreground=Color {181, 137, 0, 255}}, "
 				+ "StyleRange {36, 1, fontStyle=normal}"
 				+ "]",
-				command0.getStyleRanges());
+				Command0.getStyleRanges());
 
 		// viewer.invalidateTextPresentation(1, 2);
 		final ICommand command1 = commands.get(1);
-		assertEquals(
-				"["
-						+ "StyleRange {1, 2, fontStyle=bold, foreground=Color {7, 54, 66, 255}}"
-						+ "]",
+		assertEquals("["
+				+ "StyleRange {1, 2, fontStyle=bold, foreground=Color {7, 54, 66, 255}}"
+				+ "]",
 				command1.getStyleRanges());
-
 	}
 
-	@Disabled
 	@Test
 	void colorizeTypescriptWithInvalidate4() throws Exception {
-
-		final var editor = new TMEditor(getGrammar(), getTokenProvider(), "let a = '';\nlet b = 10;\nlet c = true;");
+		editor = new TMEditor(grammar, theme, "let a = '';\nlet b = 10;\nlet c = true;");
 		editor.invalidateTextPresentation(1, 1);
+
 		final List<ICommand> commands = editor.execute();
+		assertEquals(2, commands.size());
 
 		// document.set("let a = '';\nlet b = 10;\nlet c = true;");
 		final ICommand command0 = commands.get(0);
@@ -253,16 +270,16 @@ public class TMPresentationReconcilerTypeScriptTest {
 				+ "StyleRange {1, 1, fontStyle=bold, foreground=Color {7, 54, 66, 255}}"
 				+ "]",
 				command1.getStyleRanges());
-
 	}
 
 	@Disabled
 	@Test
 	void colorizeTypescriptWithInvalidate8() throws Exception {
-
-		final var editor = new TMEditor(getGrammar(), getTokenProvider(), "let a = '';\nlet b = 10;\nlet c = true;");
+		editor = new TMEditor(grammar, theme, "let a = '';\nlet b = 10;\nlet c = true;");
 		editor.invalidateTextPresentation(1, 8);
+
 		final List<ICommand> commands = editor.execute();
+		assertEquals(2, commands.size());
 
 		// document.set("let a = '';\nlet b = 10;\nlet c = true;");
 		final ICommand command0 = commands.get(0);
@@ -294,24 +311,20 @@ public class TMPresentationReconcilerTypeScriptTest {
 				+ "]",
 				command0.getStyleRanges());
 
-		// viewer.invalidateTextPresentation(1, 8);
+		//viewer.invalidateTextPresentation(1, 8);
 		final ICommand command1 = commands.get(1);
 		assertEquals("["
 				+ "StyleRange {1, 2, fontStyle=bold, foreground=Color {7, 54, 66, 255}}"
 				+ "]",
 				command1.getStyleRanges());
-
 	}
 
-	@Disabled("Remove this annotation when org.eclipse.swt.SWTError: No more handles [gtk_init_check() failed] will be fixed")
 	@Test
 	void colorizeTypescriptWithInvalidateAndSeveralLines() throws Exception {
-
-		final var editor = new TMEditor(getGrammar(), getTokenProvider(), "a\r\n\r\nb");
+		editor = new TMEditor(grammar, theme, "a\r\n\r\nb");
 		editor.invalidateTextPresentation(0, 6);
 
 		final List<ICommand> commands = editor.execute();
-
 		assertEquals(2, commands.size());
 
 		for (final ICommand command : commands) {
@@ -321,20 +334,6 @@ public class TMPresentationReconcilerTypeScriptTest {
 					+ "StyleRange {5, 1, fontStyle=normal, foreground=Color {38, 139, 210, 255}}"
 					+ "]",
 					command.getStyleRanges());
-		}
-	}
-
-	private static ITokenProvider getTokenProvider() {
-		return new CSSTokenProvider(TMPresentationReconcilerTypeScriptTest.class.getResourceAsStream("/themes/Solarized-light.css"));
-	}
-
-	public static IGrammar getGrammar() {
-		try {
-			return new Registry().addGrammar(IGrammarSource.fromResource(TMPresentationReconcilerTypeScriptTest.class,
-					"/grammars/TypeScript.tmLanguage.json"));
-		} catch (final Exception e) {
-			e.printStackTrace();
-			return null;
 		}
 	}
 }

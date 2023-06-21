@@ -15,17 +15,17 @@ public abstract class Command implements ICommand {
 
 	private final String name;
 	private String styleRanges;
-	private boolean done;
+	private boolean done = false;
 
 	protected Command(final String name) {
 		this.name = name;
-		this.done = false;
 	}
 
 	@Override
 	public String getName() {
 		return name;
 	}
+
 
 	public void setStyleRanges(final String styleRanges) {
 		this.styleRanges = styleRanges;
@@ -47,7 +47,7 @@ public abstract class Command implements ICommand {
 
 	public abstract Integer getLineTo();
 
-	public static String toText(final String text) {
+	protected static String toText(final String text) {
 		final var newText = new StringBuilder();
 		for (int i = 0; i < text.length(); i++) {
 			final char c = text.charAt(i);
@@ -67,5 +67,4 @@ public abstract class Command implements ICommand {
 		}
 		return newText.toString();
 	}
-
 }

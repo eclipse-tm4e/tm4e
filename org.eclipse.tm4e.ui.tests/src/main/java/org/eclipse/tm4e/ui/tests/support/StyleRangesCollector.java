@@ -22,13 +22,11 @@ import org.eclipse.swt.custom.StyleRange;
 import org.eclipse.tm4e.ui.tests.support.command.Command;
 import org.eclipse.tm4e.ui.text.ITMPresentationReconcilerListener;
 
-public class StyleRangesCollector implements ITMPresentationReconcilerListener {
+final class StyleRangesCollector implements ITMPresentationReconcilerListener {
 
 	private IDocument document;
 	private Command command;
 	private Integer waitForToLineNumber;
-	private boolean isFinished;
-
 	private StringBuilder currentRanges;
 
 	private final Object lock = new Object();
@@ -74,12 +72,12 @@ public class StyleRangesCollector implements ITMPresentationReconcilerListener {
 		return null;
 	}
 
-	public static String toString(final StyleRange[] ranges) {
+	static String toString(final StyleRange[] ranges) {
 		return Arrays.asList(ranges).toString();
 	}
 
-	public void executeCommand(final Command command) {
-		setCommand(command);
+	void executeCommandSync(final Command command) {
+		executeCommand(command);
 		if (command.getStyleRanges() == null) {
 			synchronized (lock) {
 				try {
@@ -91,21 +89,17 @@ public class StyleRangesCollector implements ITMPresentationReconcilerListener {
 		}
 	}
 
-	public void wait(final Command command) throws InterruptedException {
+	void wait(final Command command) throws InterruptedException {
 		lock.wait();
 		if (command.getStyleRanges() == null) {
 			wait(command);
 		}
 	}
 
-	public void setCommand(final Command command) {
+	void executeCommand(final Command command) {
 		this.currentRanges = new StringBuilder();
 		this.command = command;
 		this.waitForToLineNumber = command.getLineTo();
 		command.execute();
-	}
-
-	public boolean isFinished() {
-		return isFinished;
 	}
 }

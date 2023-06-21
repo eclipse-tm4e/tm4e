@@ -37,8 +37,8 @@ public class DocumentReplaceCommand extends Command {
 	protected void doExecute() {
 		try {
 			document.replace(pos, length, text);
-		} catch (final BadLocationException e) {
-			e.printStackTrace();
+		} catch (final BadLocationException ex) {
+			ex.printStackTrace();
 		}
 	}
 
@@ -50,5 +50,4 @@ public class DocumentReplaceCommand extends Command {
 			return null;
 		}
 	}
-
 }

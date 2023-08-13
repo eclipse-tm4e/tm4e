@@ -8,6 +8,7 @@
  *
  * Contributors:
  * Lucas Bullen (Red Hat Inc.) - initial API and implementation
+ * Sebastian Thomschke (Vegard IT GmbH) - fixed content type selection
  */
 package org.eclipse.tm4e.languageconfiguration.internal.wizards;
 
@@ -229,7 +230,7 @@ final class SelectLanguageConfigurationWizardPage extends WizardPage implements 
 			final var elements = new ArrayList<>();
 			final var baseType = (IContentType) parentElement;
 			for (final var contentType : manager.getAllContentTypes()) {
-				if (Objects.equals(baseType, contentType)) {
+				if (Objects.equals(baseType, contentType.getBaseType())) {
 					elements.add(contentType);
 				}
 			}
@@ -252,7 +253,7 @@ final class SelectLanguageConfigurationWizardPage extends WizardPage implements 
 
 		@Override
 		public Object[] getElements(@Nullable final Object inputElement) {
-			return getChildren(null);
+			return getChildren(manager.getContentType(IContentTypeManager.CT_TEXT));
 		}
 
 		@Override

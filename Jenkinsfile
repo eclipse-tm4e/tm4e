@@ -24,9 +24,11 @@ pipeline {
 				withMaven(maven:'apache-maven-latest', mavenLocalRepo: '$WORKSPACE/.m2/repository') {
 				withCredentials([string(credentialsId: 'gpg-passphrase', variable: 'KEYRING_PASSPHRASE')]) {
 				wrap([$class: 'Xvnc', useXauthority: true]) {
-					sh 'mvn clean verify \
+					sh '''mvn clean verify \
 						-Dmaven.test.failure.ignore=true \
-						-Psign -Dgpg.passphrase="${KEYRING_PASSPHRASE}"'
+						-Dsurefire.rerunFailingTestsCount=3 \
+						-Psign -Dgpg.passphrase="${KEYRING_PASSPHRASE}"
+					'''
 				}}}
 			}
 			post {

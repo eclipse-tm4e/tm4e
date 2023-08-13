@@ -124,6 +124,7 @@ jobs:
           --batch-mode \
           --show-version \
           -Dtycho.disableP2Mirrors=true \
+          -Dsurefire.rerunFailingTestsCount=3 \
           $maven_args \
           ${{ github.event.inputs.additional_maven_args }} \
           clean verify

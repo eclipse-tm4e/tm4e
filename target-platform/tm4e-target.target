@@ -23,26 +23,26 @@
             <!-- 4.28 = Eclipse 2023-06 -->
             <repository location="https://download.eclipse.org/eclipse/updates/4.28/"/>
         </location>
-	    <location includeDependencyDepth="direct" includeDependencyScopes="compile" includeSource="true" missingManifest="generate" type="Maven">
-		    <dependencies>
-			    <dependency>
-				    <groupId>org.yaml</groupId>
-				    <artifactId>snakeyaml</artifactId>
-				    <version>2.0</version>
-				    <type>jar</type>
-			    </dependency>
-		    </dependencies>
-	    </location>
-	    <location includeDependencyDepth="direct" includeDependencyScopes="compile" includeSource="true" missingManifest="generate" type="Maven">
-		    <dependencies>
-			    <dependency>
-				    <groupId>org.jruby.joni</groupId>
-				    <artifactId>joni</artifactId>
-				    <version>2.2.1</version>
-				    <type>jar</type>
-			    </dependency>
-		    </dependencies>
-		    <instructions><![CDATA[
+        <location includeDependencyDepth="direct" includeDependencyScopes="compile" includeSource="true" missingManifest="generate" type="Maven">
+            <dependencies>
+                <dependency>
+                    <groupId>org.yaml</groupId>
+                    <artifactId>snakeyaml</artifactId>
+                    <version>2.1</version>
+                    <type>jar</type>
+                </dependency>
+            </dependencies>
+        </location>
+        <location includeDependencyDepth="direct" includeDependencyScopes="compile" includeSource="true" missingManifest="generate" type="Maven">
+            <dependencies>
+                <dependency>
+                    <groupId>org.jruby.joni</groupId>
+                    <artifactId>joni</artifactId>
+                    <version>2.2.1</version>
+                    <type>jar</type>
+                </dependency>
+            </dependencies>
+            <instructions><![CDATA[
 Bundle-Name:           Bundle derived from maven artifact ${mvnGroupId}:${mvnArtifactId}:${mvnVersion}
 version:               ${version_cleanup;${mvnVersion}}
 Bundle-SymbolicName:   org.${mvnArtifactId}
@@ -51,7 +51,7 @@ Import-Package:        *;resolution:=optional
 Export-Package:        *;version="${version}";-noimport:=true
 DynamicImport-Package: *
 ]]></instructions>
-	    </location>
+        </location>
     </locations>
     <targetJRE path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-17"/>
 </target>

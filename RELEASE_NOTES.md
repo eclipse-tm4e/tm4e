@@ -1,8 +1,6 @@
 # Eclipse TM4E: Release notes
 
-This page describes the noteworthy improvements provided by each release of Eclipse TM4E.
-
-### Latest release
+> **IMPORTANT:** Releases and changelogs are now tracked via the [GitHub releases](https://github.com/eclipse/tm4e/releases) page. Older changelogs are listed below.
 
 ## 0.8.0
 

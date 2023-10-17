@@ -2,7 +2,7 @@
 <feature
       id="org.eclipse.tm4e.feature"
       label="%featureName"
-      version="0.6.1.qualifier"
+      version="0.6.2.qualifier"
       provider-name="%featureProvider"
       license-feature="org.eclipse.license"
       license-feature-version="0.0.0">

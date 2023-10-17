@@ -35,6 +35,9 @@
       <theme id="org.eclipse.tm4e.ui.themes.EclipseLight"
              name="%Theme.EclipseLight.name"
              path="./themes/Eclipse-light.css" />
+      <theme id="org.eclipse.tm4e.ui.themes.WtpXmlClassic"
+             name="%Theme.WtpXmlClassic.name"
+             path="./themes/WTP-XML-Classic.css" />  
       <!-- "Dark" themes -->
       <theme id="org.eclipse.tm4e.ui.themes.Dark"
              name="%Theme.Dark.name"

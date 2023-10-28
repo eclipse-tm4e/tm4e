@@ -11,6 +11,8 @@
  */
 package org.eclipse.tm4e.registry.internal;
 
+import static org.eclipse.tm4e.core.internal.utils.NullSafetyHelper.castNullable;
+
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -61,7 +63,14 @@ final class GrammarCache {
 	 */
 	@Nullable
 	IGrammarDefinition getDefinition(final String scopeName) {
-		return definitions.get(scopeName);
+		var grammar = castNullable(definitions.get(scopeName));
+
+		// check if tm4e language pack is installed, e.g. "source.python" -> "lngpck.source.python"
+		if (grammar == null && !scopeName.startsWith("lngpck.")) {
+			grammar = definitions.get("lngpck." + scopeName);
+		}
+
+		return grammar;
 	}
 
 	/**

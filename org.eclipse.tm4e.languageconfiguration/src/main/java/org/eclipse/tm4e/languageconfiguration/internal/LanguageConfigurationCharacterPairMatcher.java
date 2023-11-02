@@ -117,7 +117,7 @@ public class LanguageConfigurationCharacterPairMatcher
 			if (contentTypes != null) {
 				final var registry = LanguageConfigurationRegistryManager.getInstance();
 				for (final IContentType contentType : contentTypes) {
-					if (!registry.shouldSurroundingPairs(document, -1, contentType)) {
+					if (!registry.shouldSurroundingPairs(contentType)) {
 						continue;
 					}
 					final var surroundingPairs = registry.getSurroundingPairs(contentType);

@@ -95,7 +95,7 @@ public final class LanguageConfigurationRegistryManager extends AbstractLanguage
 				: charPairSupport.autoCloseBefore;
 	}
 
-	public boolean shouldSurroundingPairs(final IDocument document, final int offset, final IContentType contentType) {
+	public boolean shouldSurroundingPairs(final IContentType contentType) {
 		final var definition = getDefinition(contentType);
 		if (definition == null || !definition.isMatchingPairsEnabled()) {
 			return false;
@@ -104,7 +104,7 @@ public final class LanguageConfigurationRegistryManager extends AbstractLanguage
 		return characterPairSupport != null;
 	}
 
-	public boolean shouldEnterAction(final IDocument document, final int offset, final IContentType contentType) {
+	public boolean shouldEnterAction(final IContentType contentType) {
 		final var definition = getDefinition(contentType);
 		if (definition == null || !definition.isOnEnterEnabled()) {
 			return false;

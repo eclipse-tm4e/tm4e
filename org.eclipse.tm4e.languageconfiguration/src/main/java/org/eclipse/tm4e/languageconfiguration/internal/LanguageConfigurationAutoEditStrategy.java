@@ -181,7 +181,7 @@ public class LanguageConfigurationAutoEditStrategy implements IAutoEditStrategy 
 		if (contentTypes != null) {
 			final var registry = LanguageConfigurationRegistryManager.getInstance();
 			for (final IContentType contentType : contentTypes) {
-				if (!registry.shouldEnterAction(document, command.offset, contentType)) {
+				if (!registry.shouldEnterAction(contentType)) {
 					continue;
 				}
 				// https://github.com/microsoft/vscode/blob/bf63ea1932dd253745f38a4cbe26bb9be01801b1/src/vs/editor/common/cursor/cursorTypeOperations.ts#L309

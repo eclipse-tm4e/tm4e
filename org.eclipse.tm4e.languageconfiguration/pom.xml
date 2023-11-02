@@ -10,5 +10,5 @@
 
 	<artifactId>org.eclipse.tm4e.languageconfiguration</artifactId>
 	<packaging>eclipse-plugin</packaging>
-	<version>0.5.7-SNAPSHOT</version>
+	<version>0.5.8-SNAPSHOT</version>
 </project>

@@ -77,61 +77,6 @@ final class ThemeAssociationRegistry {
 		}
 	}
 
-	// IThemeAssociation getThemeAssociationFor(String scopeName, String
-	// eclipseThemeId) {
-	// IThemeAssociation association = null;
-	// BaseThemeAssociationRegistry registry = scopes.get(scopeName);
-	// if (registry != null) {
-	// association = registry.getThemeAssociationFor(eclipseThemeId);
-	// if (association == null) {
-	// association = registry.getDefaultAssociation();
-	// }
-	// }
-	// if (association == null) {
-	// association = super.getThemeAssociationFor(eclipseThemeId);
-	// }
-	// return association != null ? association : getDefaultAssociation();
-	// }
-
-	// IThemeAssociation[] getThemeAssociationsForScope(String scopeName) {
-	// BaseThemeAssociationRegistry registry = scopes.get(scopeName);
-	// if (registry != null) {
-	// // Get the user associations (from preferences)
-	// List<IThemeAssociation> userAssociations = registry.getThemeAssociations();
-	// // Get the default associations (from plugin)
-	// /*List<IThemeAssociation> defaultAssociations =
-	// getThemeAssociations().stream()
-	// .filter().toList();
-	// // Add default association if user associations doesn't define it.
-	// for (IThemeAssociation defaultAssociation : defaultAssociations) {
-	// if (!(contains(userAssociations, defaultAssociation))) {
-	// userAssociations.add(defaultAssociation);
-	// }
-	// }*/
-	// return userAssociations.toArray(IThemeAssociation[]::new);
-	// }
-	// return getThemeAssociations(true);
-	// }
-	//
-	// private boolean contains(List<IThemeAssociation> userAssociations,
-	// IThemeAssociation defaultAssociation) {
-	//// for (IThemeAssociation userAssociation : userAssociations) {
-	//// if (defaultAssociation.getEclipseThemeId() == null) {
-	//// if (userAssociation.getEclipseThemeId() == null) {
-	//// return true;
-	//// }
-	//// } else {
-	//// if
-	// (defaultAssociation.getEclipseThemeId().equals(userAssociation.getEclipseThemeId()))
-	// {
-	//// return true;
-	//// }
-	//// }
-	//// }
-	// return false;
-	// }
-	//
-	// @Override
 	List<IThemeAssociation> getThemeAssociations() {
 		final var associations = new ArrayList<IThemeAssociation>();
 		final var eclipseAssociations = scopes.values();
@@ -147,5 +92,4 @@ final class ThemeAssociationRegistry {
 		}
 		return associations;
 	}
-
 }

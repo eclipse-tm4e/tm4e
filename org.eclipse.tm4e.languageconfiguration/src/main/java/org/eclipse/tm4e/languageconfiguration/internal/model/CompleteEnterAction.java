@@ -11,6 +11,8 @@
  */
 package org.eclipse.tm4e.languageconfiguration.internal.model;
 
+import org.eclipse.tm4e.core.internal.utils.StringUtils;
+
 /**
  * @see <a href=
  *      "https://github.com/microsoft/vscode/blob/8e2ec5a7ee1ae5500c645c05145359f2a814611c/src/vs/editor/common/languages/languageConfiguration.ts#L250">
@@ -28,5 +30,14 @@ public final class CompleteEnterAction extends EnterAction {
 		this.indentation = indentation;
 		this.appendText = action.appendText;
 		this.removeText = action.removeText;
+	}
+
+	@Override
+	public String toString() {
+		return StringUtils.toString(this, sb -> sb
+				.append("indentAction=").append(indentAction).append(", ")
+				.append("appendText=").append(appendText).append(", ")
+				.append("removeText=").append(removeText).append(", ")
+				.append("indentation=").append(indentation));
 	}
 }

@@ -11,6 +11,8 @@
  */
 package org.eclipse.tm4e.languageconfiguration.internal.model;
 
+import org.eclipse.tm4e.core.internal.utils.StringUtils;
+
 /**
  * A tuple of two characters, like a pair of opening and closing brackets.
  *
@@ -26,5 +28,12 @@ public class CharacterPair {
 	public CharacterPair(final String opening, final String closing) {
 		this.open = opening;
 		this.close = closing;
+	}
+
+	@Override
+	public String toString() {
+		return StringUtils.toString(this, sb -> sb
+				.append("open=").append(open).append(", ")
+				.append("close=").append(close));
 	}
 }

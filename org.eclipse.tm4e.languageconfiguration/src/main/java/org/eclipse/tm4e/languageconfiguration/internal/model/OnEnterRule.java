@@ -15,6 +15,7 @@ package org.eclipse.tm4e.languageconfiguration.internal.model;
 import java.util.regex.Pattern;
 
 import org.eclipse.jdt.annotation.Nullable;
+import org.eclipse.tm4e.core.internal.utils.StringUtils;
 
 /**
  * Describes a rule to be evaluated when pressing Enter.
@@ -64,5 +65,14 @@ public final class OnEnterRule {
 		this.afterText = afterText == null ? null : Pattern.compile(afterText);
 		this.previousLineText = previousLineText == null ? null : Pattern.compile(previousLineText);
 		this.action = action;
+	}
+
+	@Override
+	public String toString() {
+		return StringUtils.toString(this, sb -> sb
+				.append("beforeText=").append(beforeText).append(", ")
+				.append("afterText=").append(afterText).append(", ")
+				.append("previousLineText=").append(previousLineText).append(", ")
+				.append("action=").append(action));
 	}
 }

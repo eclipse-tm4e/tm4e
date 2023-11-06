@@ -13,6 +13,8 @@ package org.eclipse.tm4e.languageconfiguration.internal.model;
 
 import java.util.List;
 
+import org.eclipse.tm4e.core.internal.utils.StringUtils;
+
 /**
  * @see <a href=
  *      "https://github.com/microsoft/vscode/blob/8e2ec5a7ee1ae5500c645c05145359f2a814611c/src/vs/editor/common/languages/languageConfiguration.ts#L201">
@@ -25,5 +27,13 @@ public final class AutoClosingPairConditional extends AutoClosingPair {
 	public AutoClosingPairConditional(final String open, final String close, final List<String> notIn) {
 		super(open, close);
 		this.notIn = notIn;
+	}
+
+	@Override
+	public String toString() {
+		return StringUtils.toString(this, sb -> sb
+				.append("open=").append(open).append(", ")
+				.append("close=").append(close).append(", ")
+				.append("notIn=").append(notIn));
 	}
 }

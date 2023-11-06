@@ -12,6 +12,7 @@
 package org.eclipse.tm4e.languageconfiguration.internal.model;
 
 import org.eclipse.jdt.annotation.Nullable;
+import org.eclipse.tm4e.core.internal.utils.StringUtils;
 
 /**
  * Describes what to do when pressing Enter.
@@ -99,5 +100,13 @@ public class EnterAction {
 	EnterAction withRemoveText(@Nullable final Integer removeText) {
 		this.removeText = removeText;
 		return this;
+	}
+
+	@Override
+	public String toString() {
+		return StringUtils.toString(this, sb -> sb
+				.append("indentAction=").append(indentAction).append(", ")
+				.append("appendText=").append(appendText).append(", ")
+				.append("removeText=").append(removeText));
 	}
 }

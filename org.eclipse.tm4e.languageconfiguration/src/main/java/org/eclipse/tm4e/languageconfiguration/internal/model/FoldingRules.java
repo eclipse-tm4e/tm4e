@@ -13,6 +13,8 @@ package org.eclipse.tm4e.languageconfiguration.internal.model;
 
 import java.util.regex.Pattern;
 
+import org.eclipse.tm4e.core.internal.utils.StringUtils;
+
 /**
  * Describes folding rules for a language.
  *
@@ -35,5 +37,13 @@ public final class FoldingRules {
 		this.offSide = offSide;
 		this.markersStart = markersStart;
 		this.markersEnd = markersEnd;
+	}
+
+	@Override
+	public String toString() {
+		return StringUtils.toString(this, sb -> sb
+				.append("markersStart=").append(markersStart).append(", ")
+				.append("markersEnd=").append(markersEnd).append(", ")
+				.append("offSide=").append(offSide));
 	}
 }

@@ -32,6 +32,7 @@ import org.eclipse.core.runtime.content.IContentType;
 import org.eclipse.core.runtime.content.IContentTypeManager;
 import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.jface.text.IDocument;
+import org.eclipse.tm4e.ui.TMUIPlugin;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IStorageEditorInput;
 
@@ -45,13 +46,11 @@ public final class ContentTypeHelper {
 	 * Find the content types from the given {@link IDocument} and null otherwise.
 	 *
 	 * @param document
-	 * 
+	 *
 	 * @return the content types from the given {@link IDocument} and null otherwise.
-	 * 
-	 * @throws CoreException
 	 */
 	@Nullable
-	public static ContentTypeInfo findContentTypes(final IDocument document) throws CoreException {
+	public static ContentTypeInfo findContentTypes(final IDocument document) {
 		// Find content types from FileBuffers
 		final ContentTypeInfo contentTypes = findContentTypesFromFileBuffers(document);
 		if (contentTypes != null) {
@@ -65,7 +64,7 @@ public final class ContentTypeHelper {
 	 * Find the content type with the given contentTypeId
 	 *
 	 * @param contentTypeId
-	 * 
+	 *
 	 * @return matching content type or null
 	 */
 	@Nullable
@@ -81,14 +80,12 @@ public final class ContentTypeHelper {
 	 * {@link ITextFileBufferManager} and null otherwise.
 	 *
 	 * @param document
-	 * 
+	 *
 	 * @return the content types from the given {@link IDocument} by using
 	 *         {@link ITextFileBufferManager} and null otherwise.
-	 * 
-	 * @throws CoreException
 	 */
 	@Nullable
-	private static ContentTypeInfo findContentTypesFromFileBuffers(final IDocument document) throws CoreException {
+	private static ContentTypeInfo findContentTypesFromFileBuffers(final IDocument document) {
 		final ITextFileBufferManager bufferManager = FileBuffers.getTextFileBufferManager();
 		final ITextFileBuffer buffer = bufferManager.getTextFileBuffer(document);
 		if (buffer != null) {
@@ -101,13 +98,11 @@ public final class ContentTypeHelper {
 	 * Returns the content types from the given {@link ITextFileBuffer}.
 	 *
 	 * @param buffer
-	 * 
+	 *
 	 * @return the content types from the given {@link ITextFileBuffer}.
-	 * 
-	 * @throws CoreException
 	 */
 	@Nullable
-	private static ContentTypeInfo getContentTypes(final ITextFileBuffer buffer) throws CoreException {
+	private static ContentTypeInfo getContentTypes(final ITextFileBuffer buffer) {
 		try {
 			final String fileName = buffer.getFileStore().getName();
 			final var contentTypes = new LinkedHashSet<IContentType>();
@@ -136,8 +131,8 @@ public final class ContentTypeHelper {
 			} catch (final Exception e) {
 				return null;
 			}
-		} catch (final IOException ex) {
-			ex.printStackTrace();
+		} catch (final CoreException | IOException ex) {
+			TMUIPlugin.logError(ex);
 			return null;
 		}
 	}
@@ -146,9 +141,9 @@ public final class ContentTypeHelper {
 	 * Returns the content of the given buffer.
 	 *
 	 * @param buffer
-	 * 
+	 *
 	 * @return the content of the given buffer.
-	 * 
+	 *
 	 * @throws CoreException
 	 */
 	private static InputStream getContents(final ITextFileBuffer buffer) throws CoreException {
@@ -170,7 +165,7 @@ public final class ContentTypeHelper {
 	 * {@link IEditorInput} and null otherwise.
 	 *
 	 * @param document
-	 * 
+	 *
 	 * @return the content types from the given {@link IDocument} by using
 	 *         {@link IEditorInput} and null otherwise.
 	 */
@@ -200,7 +195,7 @@ public final class ContentTypeHelper {
 	 * Returns the {@link IEditorInput} from the given document and null otherwise.
 	 *
 	 * @param document
-	 * 
+	 *
 	 * @return the {@link IEditorInput} from the given document and null otherwise.
 	 */
 	@Nullable

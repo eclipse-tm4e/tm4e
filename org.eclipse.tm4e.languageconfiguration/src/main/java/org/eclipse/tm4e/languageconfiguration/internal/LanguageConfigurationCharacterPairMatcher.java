@@ -11,7 +11,6 @@
  */
 package org.eclipse.tm4e.languageconfiguration.internal;
 
-import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.content.IContentType;
 import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.jface.text.IDocument;
@@ -113,7 +112,8 @@ public class LanguageConfigurationCharacterPairMatcher
 
 			// initialize a DefaultCharacterPairMatcher by using character pairs of the language configuration.
 			final var sb = new StringBuilder();
-			final IContentType[] contentTypes = findContentTypes(document);
+			final ContentTypeInfo info = ContentTypeHelper.findContentTypes(document);
+			final IContentType[] contentTypes = info == null ? null : info.getContentTypes();
 			if (contentTypes != null) {
 				final var registry = LanguageConfigurationRegistryManager.getInstance();
 				for (final IContentType contentType : contentTypes) {
@@ -132,17 +132,5 @@ public class LanguageConfigurationCharacterPairMatcher
 			this.matcher = matcher = new DefaultCharacterPairMatcher(chars);
 		}
 		return matcher;
-	}
-
-	private IContentType @Nullable [] findContentTypes(final IDocument document) {
-		try {
-			final ContentTypeInfo info = ContentTypeHelper.findContentTypes(document);
-			if (info != null) {
-				return info.getContentTypes();
-			}
-		} catch (final CoreException ex) {
-			ex.printStackTrace();
-		}
-		return null;
 	}
 }

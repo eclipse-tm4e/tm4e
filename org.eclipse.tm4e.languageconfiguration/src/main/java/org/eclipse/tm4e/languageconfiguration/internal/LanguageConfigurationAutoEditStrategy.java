@@ -13,7 +13,6 @@ package org.eclipse.tm4e.languageconfiguration.internal;
 
 import java.util.Arrays;
 
-import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.content.IContentType;
 import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.jface.preference.IPreferenceStore;
@@ -244,13 +243,10 @@ public class LanguageConfigurationAutoEditStrategy implements IAutoEditStrategy 
 		if (this.document != null && this.document.equals(document)) {
 			return contentTypes;
 		}
-		try {
-			final ContentTypeInfo info = ContentTypeHelper.findContentTypes(document);
-			this.contentTypes = info == null ? null : info.getContentTypes();
-			this.document = document;
-		} catch (final CoreException e) {
-			e.printStackTrace();
-		}
+
+		final ContentTypeInfo info = ContentTypeHelper.findContentTypes(document);
+		this.contentTypes = info == null ? null : info.getContentTypes();
+		this.document = document;
 		return contentTypes;
 	}
 

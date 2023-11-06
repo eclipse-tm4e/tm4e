@@ -15,7 +15,6 @@ import static org.eclipse.tm4e.core.internal.utils.NullSafetyHelper.*;
 
 import org.eclipse.core.expressions.PropertyTester;
 import org.eclipse.core.runtime.Adapters;
-import org.eclipse.core.runtime.CoreException;
 import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.tm4e.languageconfiguration.internal.registry.LanguageConfigurationRegistryManager;
 import org.eclipse.tm4e.ui.internal.utils.ContentTypeHelper;
@@ -44,13 +43,7 @@ public final class HasLanguageConfigurationPropertyTester extends PropertyTester
 			return false;
 		}
 
-		final ContentTypeInfo info;
-		try {
-			info = ContentTypeHelper.findContentTypes(document);
-		} catch (final CoreException e) {
-			return false;
-		}
-
+		final ContentTypeInfo info = ContentTypeHelper.findContentTypes(document);
 		if (info == null) {
 			return false;
 		}

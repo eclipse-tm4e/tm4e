@@ -21,7 +21,6 @@ import org.eclipse.core.commands.Command;
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.core.runtime.Adapters;
-import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.content.IContentType;
 import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.jface.text.BadLocationException;
@@ -77,14 +76,10 @@ public class ToggleLineCommentHandler extends AbstractHandler {
 				return null;
 			}
 
-			final ContentTypeInfo info;
-			try {
-				info = ContentTypeHelper.findContentTypes(document);
+			final ContentTypeInfo info = ContentTypeHelper.findContentTypes(document);
 				if (info == null)
 					return null;
-			} catch (final CoreException e) {
-				return null;
-			}
+
 			final var contentTypes = info.getContentTypes();
 			final var command = event.getCommand();
 			final var commentSupport = getCommentSupport(contentTypes);

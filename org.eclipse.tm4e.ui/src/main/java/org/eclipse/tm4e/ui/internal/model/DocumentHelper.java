@@ -23,7 +23,7 @@ import com.google.common.base.Strings;
 /**
  * Utilities class for {@link IDocument}.
  */
-final class DocumentHelper {
+public final class DocumentHelper {
 
 	enum DocumentEventType {
 		INSERT,
@@ -73,7 +73,7 @@ final class DocumentHelper {
 	/**
 	 * @param lineIndex 0-based
 	 */
-	static String getLineText(final IDocument document, final int lineIndex, final boolean withLineDelimiter)
+	public static String getLineText(final IDocument document, final int lineIndex, final boolean withLineDelimiter)
 			throws BadLocationException {
 		final int lo = document.getLineOffset(lineIndex);
 		int ll = document.getLineLength(lineIndex);

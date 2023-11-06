@@ -8,12 +8,12 @@
  *
  * Contributors:
  * Angelo Zerr <angelo.zerr@gmail.com> - initial API and implementation
+ * Sebastian Thomschke (Vegard IT GmbH) - refactor and extend test cases
  */
 package org.eclipse.tm4e.languageconfiguration.internal.model;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-import java.util.Arrays;
 import java.util.List;
 
 import org.eclipse.jdt.annotation.Nullable;
@@ -23,12 +23,35 @@ import org.junit.jupiter.api.Test;
 
 /**
  * {@link OnEnterSupport} tests.
+ *
+ * @see <a href="https://github.com/microsoft/vscode/blob/main/src/vs/editor/test/common/modes/supports/onEnter.test.ts">
+ *      https://github.com/microsoft/vscode/blob/main/src/vs/editor/test/common/modes/supports/onEnter.test.ts</a>
  */
 public class OnEnterSupportTest {
 
 	@Test
-	public void useBrackets() {
-		final var support = new UseBracketsTest();
+	public void testUseBrackets() {
+
+		class Support extends OnEnterSupport {
+			Support() {
+				super(List.of(
+						new CharacterPair("(", ")"),
+						new CharacterPair("begin", "end")),
+						null);
+			}
+
+			void testIndentAction(final String beforeText, final String afterText, final IndentAction expected) {
+				final EnterAction actual = onEnter("", beforeText, afterText);
+				if (expected == IndentAction.None) {
+					assertNull(actual);
+				} else {
+					assertNotNull(actual);
+					assertEquals(expected, actual.indentAction);
+				}
+			}
+		}
+
+		final var support = new Support();
 
 		support.testIndentAction("a", "", IndentAction.None);
 		support.testIndentAction("", "b", IndentAction.None);
@@ -50,103 +73,128 @@ public class OnEnterSupportTest {
 		support.testIndentAction("begin", "", IndentAction.Indent);
 	}
 
-	private class UseBracketsTest extends OnEnterSupport {
-
-		UseBracketsTest() {
-			super(Arrays.asList(new CharacterPair("(", ")"), new CharacterPair("begin", "end")), null);
-		}
-
-		public void testIndentAction(final String beforeText, final String afterText, final IndentAction expected) {
-			final EnterAction actual = super.onEnter(beforeText, afterText);
-			if (expected == IndentAction.None) {
-				assertNull(actual);
-			} else {
-				assertNotNull(actual);
-				assertEquals(expected, actual.indentAction);
-			}
-		}
-	}
-
 	@Test
-	public void regExpRules() {
-		final var support = new RegExpRulesTest();
+	public void testRegExpRules() {
 
-		support.testIndentAction("\t/**", " */", IndentAction.IndentOutdent, " * ");
-		support.testIndentAction("\t/**", "", IndentAction.None, " * ");
-		support.testIndentAction("\t/** * / * / * /", "", IndentAction.None, " * ");
-		support.testIndentAction("\t/** /*", "", IndentAction.None, " * ");
-		support.testIndentAction("/**", "", IndentAction.None, " * ");
-		support.testIndentAction("\t/**/", "", null, null);
-		support.testIndentAction("\t/***/", "", null, null);
-		support.testIndentAction("\t/*******/", "", null, null);
-		support.testIndentAction("\t/** * * * * */", "", null, null);
-		support.testIndentAction("\t/** */", "", null, null);
-		support.testIndentAction("\t/** asdfg */", "", null, null);
-		support.testIndentAction("\t/* asdfg */", "", null, null);
-		support.testIndentAction("\t/* asdfg */", "", null, null);
-		support.testIndentAction("\t/** asdfg */", "", null, null);
-		support.testIndentAction("*/", "", null, null);
-		support.testIndentAction("\t/*", "", null, null);
-		support.testIndentAction("\t*", "", null, null);
-		support.testIndentAction("\t *", "", IndentAction.None, "* ");
-		support.testIndentAction("\t */", "", IndentAction.None, null, 1);
-		support.testIndentAction("\t * */", "", IndentAction.None, null, 1);
-		support.testIndentAction("\t * * / * / * / */", "", null, null);
-		support.testIndentAction("\t * ", "", IndentAction.None, "* ");
-		support.testIndentAction(" * ", "", IndentAction.None, "* ");
-		support.testIndentAction(" * asdfsfagadfg", "", IndentAction.None, "* ");
-		support.testIndentAction(" * asdfsfagadfg * * * ", "", IndentAction.None, "* ");
-		support.testIndentAction(" * /*", "", IndentAction.None, "* ");
-		support.testIndentAction(" * asdfsfagadfg * / * / * /", "", IndentAction.None, "* ");
-		support.testIndentAction(" * asdfsfagadfg * / * / * /*", "", IndentAction.None, "* ");
-		support.testIndentAction(" */", "", IndentAction.None, null, 1);
-		support.testIndentAction("\t */", "", IndentAction.None, null, 1);
-		support.testIndentAction("\t\t */", "", IndentAction.None, null, 1);
-		support.testIndentAction("   */", "", IndentAction.None, null, 1);
-		support.testIndentAction("     */", "", IndentAction.None, null, 1);
-		support.testIndentAction("\t     */", "", IndentAction.None, null, 1);
-		support.testIndentAction(
-				" *--------------------------------------------------------------------------------------------*/", "",
-				IndentAction.None, null, 1);
-	}
+		class Support extends OnEnterSupport {
+			Support() {
+				super(null, List.of(
+						// see https://github.com/microsoft/vscode/blob/main/src/vs/editor/test/common/modes/supports/javascriptOnEnterRules.ts
+						new OnEnterRule( // e.g. /** | */
+								"^\\s*\\/\\*\\*(?!\\/)([^\\*]|\\*(?!\\/))*$",
+								"^\\s*\\*\\/$", null,
+								new EnterAction(IndentAction.IndentOutdent).withAppendText(" * ")),
+						new OnEnterRule( // e.g. /** ...|
+								"^\\s*\\/\\*\\*(?!\\/)([^\\*]|\\*(?!\\/))*$",
+								null, null,
+								new EnterAction(IndentAction.None).withAppendText(" * ")),
+						new OnEnterRule(
+								// e.g.  * ...|
+								"^(\\t|(\\ \\ ))*\\ \\*(\\ ([^\\*]|\\*(?!\\/))*)?$",
+								null, "(?=^(\\s*(\\/\\*\\*|\\*)).*)(?=(?!(\\s*\\*\\/)))",
+								new EnterAction(IndentAction.None).withAppendText("* ")),
+						new OnEnterRule( // e.g.  */|
+								"^(\\t|(\\ \\ ))*\\ \\*\\/\\s*$",
+								null, null,
+								new EnterAction(IndentAction.None).withRemoveText(1)),
+						new OnEnterRule( // e.g.  *-----*/|
+								"^(\\t|(\\ \\ ))*\\ \\*[^/]*\\*\\/\\s*$",
+								null, null,
+								new EnterAction(IndentAction.None).withRemoveText(1))));
+			}
 
-	private static final class RegExpRulesTest extends OnEnterSupport {
+			void testIndentAction(final String previousLineText, final String beforeText, final String afterText,
+					@Nullable final IndentAction expectedIndentAction, @Nullable final String expectedAppendText) {
+				testIndentAction(previousLineText, beforeText, afterText, expectedIndentAction, expectedAppendText, 0);
+			}
 
-		RegExpRulesTest() {
-			super(null, List.of(
-					new OnEnterRule("^\\s*\\/\\*\\*(?!\\/)([^\\*]|\\*(?!\\/))*$", "^\\s*\\*\\/$",
-							new EnterAction(IndentAction.IndentOutdent).withAppendText(" * ")),
-					new OnEnterRule("^\\s*\\/\\*\\*(?!\\/)([^\\*]|\\*(?!\\/))*$", null,
-							new EnterAction(IndentAction.None).withAppendText(" * ")),
-					new OnEnterRule("^(\\t|(\\ \\ ))*\\ \\*(\\ ([^\\*]|\\*(?!\\/))*)?$", null,
-							new EnterAction(IndentAction.None).withAppendText("* ")),
-					new OnEnterRule("^(\\t|(\\ \\ ))*\\ \\*\\/\\s*$", null,
-							new EnterAction(IndentAction.None).withRemoveText(1)),
-					new OnEnterRule("^(\\t|(\\ \\ ))*\\ \\*[^/]*\\*\\/\\s*$", null,
-							new EnterAction(IndentAction.None).withRemoveText(1))));
-		}
-
-		void testIndentAction(final String beforeText, final String afterText,
-				@Nullable final IndentAction expectedIndentAction, @Nullable final String expectedAppendText) {
-			testIndentAction(beforeText, afterText, expectedIndentAction, expectedAppendText, 0);
-		}
-
-		void testIndentAction(final String beforeText, final String afterText,
-				@Nullable final IndentAction expectedIndentAction, @Nullable final String expectedAppendText,
-				final int removeText) {
-			final EnterAction actual = super.onEnter(beforeText, afterText);
-			if (expectedIndentAction == null) {
-				assertNull(actual, "isNull:" + beforeText);
-			} else {
-				assertNotNull(actual, "isNotNull:" + beforeText);
-				assertEquals(expectedIndentAction, actual.indentAction, "indentAction:" + beforeText);
-				if (expectedAppendText != null) {
-					assertEquals(expectedAppendText, actual.appendText, "appendText:" + beforeText);
-				}
-				if (removeText != 0) {
-					assertEquals(removeText, actual.removeText, "removeText:" + beforeText);
+			void testIndentAction(final String previousLineText, final String beforeText, final String afterText,
+					@Nullable final IndentAction expectedIndentAction, @Nullable final String expectedAppendText,
+					final int removeText) {
+				final EnterAction actual = onEnter(previousLineText, beforeText, afterText);
+				if (expectedIndentAction == null) {
+					assertNull(actual, "isNull:" + beforeText);
+				} else {
+					assertNotNull(actual, "isNotNull:" + beforeText);
+					assertEquals(expectedIndentAction, actual.indentAction, "indentAction:" + beforeText);
+					if (expectedAppendText != null) {
+						assertEquals(expectedAppendText, actual.appendText, "appendText:" + beforeText);
+					}
+					if (removeText != 0) {
+						assertEquals(removeText, actual.removeText, "removeText:" + beforeText);
+					}
 				}
 			}
 		}
+
+		final var support = new Support();
+
+		support.testIndentAction("", "\t/**", " */", IndentAction.IndentOutdent, " * ");
+		support.testIndentAction("", "\t/**", "", IndentAction.None, " * ");
+		support.testIndentAction("", "\t/** * / * / * /", "", IndentAction.None, " * ");
+		support.testIndentAction("", "\t/** /*", "", IndentAction.None, " * ");
+		support.testIndentAction("", "/**", "", IndentAction.None, " * ");
+		support.testIndentAction("", "\t/**/", "", null, null);
+		support.testIndentAction("", "\t/***/", "", null, null);
+		support.testIndentAction("", "\t/*******/", "", null, null);
+		support.testIndentAction("", "\t/** * * * * */", "", null, null);
+		support.testIndentAction("", "\t/** */", "", null, null);
+		support.testIndentAction("", "\t/** asdfg */", "", null, null);
+		support.testIndentAction("", "\t/* asdfg */", "", null, null);
+		support.testIndentAction("", "\t/* asdfg */", "", null, null);
+		support.testIndentAction("", "\t/** asdfg */", "", null, null);
+		support.testIndentAction("", "*/", "", null, null);
+		support.testIndentAction("", "\t/*", "", null, null);
+		support.testIndentAction("", "\t*", "", null, null);
+
+		support.testIndentAction("\t/**", "\t *", "", IndentAction.None, "* ");
+		support.testIndentAction("\t * something", "\t *", "", IndentAction.None, "* ");
+		support.testIndentAction("\t *", "\t *", "", IndentAction.None, "* ");
+
+		support.testIndentAction("", "\t */", "", IndentAction.None, null, 1);
+		support.testIndentAction("", "\t * */", "", IndentAction.None, null, 1);
+		support.testIndentAction("", "\t * * / * / * / */", "", null, null);
+
+		support.testIndentAction("\t/**", "\t * ", "", IndentAction.None, "* ");
+		support.testIndentAction("\t * something", "\t * ", "", IndentAction.None, "* ");
+		support.testIndentAction("\t *", "\t * ", "", IndentAction.None, "* ");
+
+		support.testIndentAction("/**", " * ", "", IndentAction.None, "* ");
+		support.testIndentAction(" * something", " * ", "", IndentAction.None, "* ");
+		support.testIndentAction(" *", " * asdfsfagadfg", "", IndentAction.None, "* ");
+
+		support.testIndentAction("/**", " * asdfsfagadfg * * * ", "", IndentAction.None, "* ");
+		support.testIndentAction(" * something", " * asdfsfagadfg * * * ", "", IndentAction.None, "* ");
+		support.testIndentAction(" *", " * asdfsfagadfg * * * ", "", IndentAction.None, "* ");
+
+		support.testIndentAction("/**", " * /*", "", IndentAction.None, "* ");
+		support.testIndentAction(" * something", " * /*", "", IndentAction.None, "* ");
+		support.testIndentAction(" *", " * /*", "", IndentAction.None, "* ");
+
+		support.testIndentAction("/**", " * asdfsfagadfg * / * / * /", "", IndentAction.None, "* ");
+		support.testIndentAction(" * something", " * asdfsfagadfg * / * / * /", "", IndentAction.None, "* ");
+		support.testIndentAction(" *", " * asdfsfagadfg * / * / * /", "", IndentAction.None, "* ");
+
+		support.testIndentAction("/**", " * asdfsfagadfg * / * / * /*", "", IndentAction.None, "* ");
+		support.testIndentAction(" * something", " * asdfsfagadfg * / * / * /*", "", IndentAction.None, "* ");
+		support.testIndentAction(" *", " * asdfsfagadfg * / * / * /*", "", IndentAction.None, "* ");
+
+		support.testIndentAction("", " */", "", IndentAction.None, null, 1);
+		support.testIndentAction(" */", " * test() {", "", IndentAction.Indent, null, 0);
+		support.testIndentAction("", "\t */", "", IndentAction.None, null, 1);
+		support.testIndentAction("", "\t\t */", "", IndentAction.None, null, 1);
+		support.testIndentAction("", "   */", "", IndentAction.None, null, 1);
+		support.testIndentAction("", "     */", "", IndentAction.None, null, 1);
+		support.testIndentAction("", "\t     */", "", IndentAction.None, null, 1);
+		support.testIndentAction("", " *--------------------------------------------------------------------------------------------*/", "",
+				IndentAction.None, null, 1);
+
+		// issue https://github.com/microsoft/vscode/issues/43469
+		support.testIndentAction("class A {", "    * test() {", "", IndentAction.Indent, null, 0);
+		support.testIndentAction("", "    * test() {", "", IndentAction.Indent, null, 0);
+		support.testIndentAction("    ", "    * test() {", "", IndentAction.Indent, null, 0);
+		support.testIndentAction("class A {", "  * test() {", "", IndentAction.Indent, null, 0);
+		support.testIndentAction("", "  * test() {", "", IndentAction.Indent, null, 0);
+		support.testIndentAction("  ", "  * test() {", "", IndentAction.Indent, null, 0);
 	}
 }

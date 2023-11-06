@@ -8,6 +8,7 @@
  *
  * Contributors:
  * Angelo Zerr <angelo.zerr@gmail.com> - initial API and implementation
+ * Sebastian Thomschke (Vegard IT GmbH) - add previousLineText support
  */
 package org.eclipse.tm4e.languageconfiguration.internal.supports;
 
@@ -52,22 +53,24 @@ public class OnEnterSupport {
 	@Nullable
 	public EnterAction onEnter(
 			// TODO autoIndent: EditorAutoIndentStrategy,
-			// TODO final String previousLineText,
+			final String previousLineText,
 			final String beforeEnterText,
 			final String afterEnterText) {
 		// (1): `regExpRules`
 		for (final OnEnterRule rule : regExpRules) {
-			final var beforeText = rule.beforeText;
-			if (beforeText.matcher(beforeEnterText).find()) {
-				final var afterText = rule.afterText;
-				if (afterText != null) {
-					if (afterText.matcher(afterEnterText).find()) {
-						return rule.action;
-					}
-				} else {
-					return rule.action;
-				}
-			}
+			final var beforeTextPattern = rule.beforeText;
+			if (!beforeTextPattern.matcher(beforeEnterText).find())
+				continue;
+
+			final var afterTextPattern = rule.afterText;
+			if (afterTextPattern != null && !afterTextPattern.matcher(afterEnterText).find())
+				continue;
+
+			final var previousLinePattern = rule.previousLineText;
+			if (previousLinePattern != null && !previousLinePattern.matcher(previousLineText).find())
+				continue;
+
+			return rule.action;
 		}
 
 		// (2): Special indent-outdent

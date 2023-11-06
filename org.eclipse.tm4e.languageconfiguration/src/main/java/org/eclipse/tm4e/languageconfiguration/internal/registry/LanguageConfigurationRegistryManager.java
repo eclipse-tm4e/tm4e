@@ -36,6 +36,7 @@ import org.eclipse.tm4e.languageconfiguration.internal.supports.CharacterPairSup
 import org.eclipse.tm4e.languageconfiguration.internal.supports.CommentSupport;
 import org.eclipse.tm4e.languageconfiguration.internal.supports.OnEnterSupport;
 import org.eclipse.tm4e.languageconfiguration.internal.utils.TextUtils;
+import org.eclipse.tm4e.ui.internal.model.DocumentHelper;
 import org.osgi.service.prefs.BackingStoreException;
 
 public final class LanguageConfigurationRegistryManager extends AbstractLanguageConfigurationRegistryManager {
@@ -159,34 +160,31 @@ public final class LanguageConfigurationRegistryManager extends AbstractLanguage
 
 			// String scopeLineText = DocumentHelper.getLineTextOfOffset(document, offset, false);
 			final String beforeEnterText = document.get(lineInfo.getOffset(), offset - lineInfo.getOffset());
-			String afterEnterText = null;
 
 			// selection support
+			String afterEnterText = null;
 			// if (range.isEmpty()) {
 			afterEnterText = document.get(offset, lineInfo.getLength() - (offset - lineInfo.getOffset()));
-			// afterEnterText = scopedLineText.substr(range.startColumn - 1 - scopedLineTokens.firstCharOffset);
+			//    afterEnterText = scopedLineText.substr(range.startColumn - 1 - scopedLineTokens.firstCharOffset);
 			// } else {
-			// const endScopedLineTokens = this.getScopedLineTokens(model,
-			// range.endLineNumber, range.endColumn);
-			// afterEnterText = endScopedLineTokens.getLineContent().substr(range.endColumn - 1 -
-			// scopedLineTokens.firstCharOffset);
+			//    const endScopedLineTokens = this.getScopedLineTokens(model, range.endLineNumber, range.endColumn);
+			//    afterEnterText = endScopedLineTokens.getLineContent().substr(range.endColumn - 1 - scopedLineTokens.firstCharOffset);
 			// }
 
-			/*
-			 * let lineNumber = range.startLineNumber; let oneLineAboveText = '';
-			 *
-			 * if (lineNumber > 1 && scopedLineTokens.firstCharOffset === 0) { // This is
-			 * not the first line and the entire line belongs to this mode let
-			 * oneLineAboveScopedLineTokens = this.getScopedLineTokens(model, lineNumber -
-			 * 1); if (oneLineAboveScopedLineTokens.languageId ===
-			 * scopedLineTokens.languageId) { // The line above ends with text belonging to
-			 * the same mode oneLineAboveText =
-			 * oneLineAboveScopedLineTokens.getLineContent(); } }
-			 */
+			String previousLineText = "";
+			// if (range.startLineNumber > 1 && scopedLineTokens.firstCharOffset === 0) {
+			//    // This is not the first line and the entire line belongs to this mode
+			// 	const oneLineAboveScopedLineTokens = getScopedLineTokens(model, range.startLineNumber - 1);
+			// 	if (oneLineAboveScopedLineTokens.languageId === scopedLineTokens.languageId) {
+			// 		// The line above ends with text belonging to the same mode
+			// 		previousLineText = oneLineAboveScopedLineTokens.getLineContent();
+			previousLineText = DocumentHelper.getLineText(document, document.getLineOfOffset(offset), false);
+			// 	}
+			// }
 
 			EnterAction enterResult = null;
 			try {
-				enterResult = onEnterSupport.onEnter(beforeEnterText, afterEnterText);
+				enterResult = onEnterSupport.onEnter(previousLineText, beforeEnterText, afterEnterText);
 			} catch (final Exception e) {
 				// onUnexpectedError(e);
 			}
@@ -195,8 +193,7 @@ public final class LanguageConfigurationRegistryManager extends AbstractLanguage
 				return null;
 			}
 
-			// Here we add `\t` to appendText first because enterAction is leveraging
-			// appendText and removeText to change indentation.
+			// Here we add `\t` to appendText first because enterAction is leveraging appendText and removeText to change indentation.
 			if (enterResult.appendText == null) {
 				if (enterResult.indentAction == IndentAction.Indent
 						|| enterResult.indentAction == IndentAction.IndentOutdent) {

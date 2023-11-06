@@ -66,13 +66,14 @@ public class LanguageConfiguration {
 						final var indentActionString = getAsString(actionJsonObj.get("indent")); //$NON-NLS-1$
 						if (indentActionString != null) {
 							final var afterText = getAsPattern(jsonObj.get("afterText")); //$NON-NLS-1$
+							final var previousLineText = getAsPattern(jsonObj.get("previousLineText")); //$NON-NLS-1$
 							final var indentAction = IndentAction.get(indentActionString);
 							final var removeText = getAsInteger(actionJsonObj.get("removeText")); //$NON-NLS-1$
 							final var appendText = getAsString(actionJsonObj.get("appendText")); //$NON-NLS-1$
 							final var action = new EnterAction(indentAction);
 							action.appendText = appendText;
 							action.removeText = removeText;
-							return new OnEnterRule(beforeText, afterText, action);
+							return new OnEnterRule(beforeText, afterText, previousLineText, action);
 						}
 					}
 					return null;

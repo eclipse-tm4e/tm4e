@@ -8,6 +8,7 @@
  *
  * Contributors:
  * Angelo Zerr <angelo.zerr@gmail.com> - initial API and implementation
+ * Sebastian Thomschke (Vegard IT GmbH) - add previousLineText support
  */
 package org.eclipse.tm4e.languageconfiguration.internal.model;
 
@@ -35,16 +36,21 @@ public final class OnEnterRule {
 	@Nullable
 	public final Pattern afterText;
 
-	// TODO @Nullable public final Pattern previousLineText;
+	/**
+	 * This rule will only execute if the text above the current line matches this regular expression.
+	 */
+	@Nullable
+	public final Pattern previousLineText;
 
 	/**
 	 * The action to execute.
 	 */
 	public final EnterAction action;
 
-	public OnEnterRule(final Pattern beforeText, @Nullable final Pattern afterText, final EnterAction action) {
+	public OnEnterRule(final Pattern beforeText, @Nullable final Pattern afterText, @Nullable final Pattern previousLineText, final EnterAction action) {
 		this.beforeText = beforeText;
 		this.afterText = afterText;
+		this.previousLineText = previousLineText;
 		this.action = action;
 	}
 
@@ -53,9 +59,10 @@ public final class OnEnterRule {
 	 *
 	 * @throws PatternSyntaxException if beforeText or afterText contain invalid regex pattern
 	 */
-	OnEnterRule(final String beforeText, @Nullable final String afterText, final EnterAction action) {
+	OnEnterRule(final String beforeText, @Nullable final String afterText, @Nullable final String previousLineText, final EnterAction action) {
 		this.beforeText = Pattern.compile(beforeText);
 		this.afterText = afterText == null ? null : Pattern.compile(afterText);
+		this.previousLineText = previousLineText == null ? null : Pattern.compile(previousLineText);
 		this.action = action;
 	}
 }

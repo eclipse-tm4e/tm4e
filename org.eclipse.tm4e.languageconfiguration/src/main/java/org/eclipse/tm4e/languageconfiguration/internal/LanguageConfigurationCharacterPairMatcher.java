@@ -11,6 +11,8 @@
  */
 package org.eclipse.tm4e.languageconfiguration.internal;
 
+import java.util.Objects;
+
 import org.eclipse.core.runtime.content.IContentType;
 import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.jface.text.IDocument;
@@ -18,6 +20,7 @@ import org.eclipse.jface.text.IRegion;
 import org.eclipse.jface.text.source.DefaultCharacterPairMatcher;
 import org.eclipse.jface.text.source.ICharacterPairMatcher;
 import org.eclipse.jface.text.source.ICharacterPairMatcherExtension;
+import org.eclipse.tm4e.languageconfiguration.internal.model.AutoClosingPair;
 import org.eclipse.tm4e.languageconfiguration.internal.registry.LanguageConfigurationRegistryManager;
 import org.eclipse.tm4e.ui.internal.utils.ContentTypeHelper;
 import org.eclipse.tm4e.ui.internal.utils.ContentTypeInfo;
@@ -27,6 +30,8 @@ import org.eclipse.tm4e.ui.internal.utils.ContentTypeInfo;
  */
 public class LanguageConfigurationCharacterPairMatcher
 		implements ICharacterPairMatcher, ICharacterPairMatcherExtension {
+
+	private static DefaultCharacterPairMatcher NOOP_MATCHER = new DefaultCharacterPairMatcher(new char[0]);
 
 	@Nullable
 	private DefaultCharacterPairMatcher matcher;
@@ -111,25 +116,37 @@ public class LanguageConfigurationCharacterPairMatcher
 			this.document = document;
 
 			// initialize a DefaultCharacterPairMatcher by using character pairs of the language configuration.
-			final var sb = new StringBuilder();
 			final ContentTypeInfo info = ContentTypeHelper.findContentTypes(document);
 			final IContentType[] contentTypes = info == null ? null : info.getContentTypes();
-			if (contentTypes != null) {
+
+			if (contentTypes == null || contentTypes.length == 0) {
+				this.matcher = matcher = NOOP_MATCHER;
+			} else {
+				final var surroundingBracketsChars = new StringBuilder();
+				final var surroundingQuotesChars = new StringBuilder();
 				final var registry = LanguageConfigurationRegistryManager.getInstance();
 				for (final IContentType contentType : contentTypes) {
-					if (!registry.shouldSurroundingPairs(contentType)) {
-						continue;
-					}
-					final var surroundingPairs = registry.getSurroundingPairs(contentType);
-					for (final var surroundingPair : surroundingPairs) {
-						sb.append(surroundingPair.open);
-						sb.append(surroundingPair.close);
+					if (registry.shouldSurroundingPairs(contentType)) {
+						for (final AutoClosingPair surroundingPair : registry.getSurroundingPairs(contentType)) {
+							if (Objects.equals(surroundingPair.open, surroundingPair.close)) {
+								surroundingQuotesChars.append(surroundingPair.open);
+							} else {
+								surroundingBracketsChars.append(surroundingPair.open);
+								surroundingBracketsChars.append(surroundingPair.close);
+							}
+						}
 					}
 				}
+				if (surroundingBracketsChars.isEmpty() && surroundingQuotesChars.isEmpty()) {
+					this.matcher = matcher = NOOP_MATCHER;
+				} else {
+					final var bracketsChars = new char[surroundingBracketsChars.length()];
+					surroundingBracketsChars.getChars(0, surroundingBracketsChars.length(), bracketsChars, 0);
+					// TODO handle surroundingQuotesChars, DefaultCharacterPairMatcher cannot handle pairs correctly when open and close chars 
+					//      are identically, see https://github.com/eclipse/tm4e/issues/470
+					this.matcher = matcher = new DefaultCharacterPairMatcher(bracketsChars);
+				}
 			}
-			final var chars = new char[sb.length()];
-			sb.getChars(0, sb.length(), chars, 0);
-			this.matcher = matcher = new DefaultCharacterPairMatcher(chars);
 		}
 		return matcher;
 	}

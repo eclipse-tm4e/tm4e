@@ -21,8 +21,7 @@ import static org.eclipse.tm4e.markdown.marked.Helpers.htmlEscape;
 import java.util.regex.Matcher;
 
 import org.eclipse.jdt.annotation.Nullable;
-
-import com.google.common.base.Strings;
+import org.eclipse.tm4e.core.internal.utils.StringUtils;
 
 public class InlineLexer {
 
@@ -57,13 +56,13 @@ public class InlineLexer {
 
 	public void output(String src) {
 		Matcher cap = null;
-		while (!Strings.isNullOrEmpty(src)) {
+		while (!StringUtils.isNullOrEmpty(src)) {
 
 			// strong
 			if ((cap = this.rules.strong.exec(src)) != null) {
 				src = src.substring(cap.group(0).length());
 				this.renderer.startStrong();
-				this.output(!Strings.isNullOrEmpty(cap.group(2)) ? cap.group(2) : cap.group(1));
+				this.output(!StringUtils.isNullOrEmpty(cap.group(2)) ? cap.group(2) : cap.group(1));
 				this.renderer.endStrong();
 				continue;
 			}
@@ -72,7 +71,7 @@ public class InlineLexer {
 			if ((cap = this.rules.em.exec(src)) != null) {
 				src = src.substring(cap.group(0).length());
 				this.renderer.startEm();
-				this.output(!Strings.isNullOrEmpty(cap.group(2)) ? cap.group(2) : cap.group(1));
+				this.output(!StringUtils.isNullOrEmpty(cap.group(2)) ? cap.group(2) : cap.group(1));
 				this.renderer.endEm();
 				continue;
 			}

@@ -27,8 +27,6 @@ import org.eclipse.tm4e.core.internal.theme.raw.IRawTheme;
 import org.eclipse.tm4e.core.internal.theme.raw.IRawThemeSetting;
 import org.eclipse.tm4e.core.internal.utils.StringUtils;
 
-import com.google.common.collect.Lists;
-
 /**
  * TextMate theme.
  *
@@ -201,8 +199,8 @@ public final class Theme {
 				final var scope = getLastElement(segments);
 				List<String> parentScopes = null;
 				if (segments.size() > 1) {
-					parentScopes = segments.subList(0, segments.size() - 1);
-					parentScopes = Lists.reverse(parentScopes);
+					parentScopes = new ArrayList<>(segments.subList(0, segments.size() - 1));
+					Collections.reverse(parentScopes);
 				}
 
 				result.add(new ParsedThemeRule(

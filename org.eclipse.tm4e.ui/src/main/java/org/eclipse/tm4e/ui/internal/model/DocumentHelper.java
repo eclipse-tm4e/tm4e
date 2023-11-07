@@ -17,8 +17,7 @@ import org.eclipse.jface.text.IDocument;
 import org.eclipse.jface.text.IDocumentListener;
 import org.eclipse.jface.text.IRegion;
 import org.eclipse.jface.text.Region;
-
-import com.google.common.base.Strings;
+import org.eclipse.tm4e.core.internal.utils.StringUtils;
 
 /**
  * Utilities class for {@link IDocument}.
@@ -32,7 +31,7 @@ public final class DocumentHelper {
 	}
 
 	static DocumentEventType getEventType(final DocumentEvent event) {
-		if (Strings.isNullOrEmpty(event.getText())) {
+		if (StringUtils.isNullOrEmpty(event.getText())) {
 			return DocumentEventType.REMOVE;
 		}
 		return event.getLength() == 0

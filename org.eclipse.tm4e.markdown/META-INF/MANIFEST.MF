@@ -4,12 +4,11 @@ Bundle-Name: %pluginName
 Bundle-Vendor: %providerName
 Bundle-Localization: plugin
 Bundle-SymbolicName: org.eclipse.tm4e.markdown;singleton:=true
-Bundle-Version: 0.5.3.qualifier
+Bundle-Version: 0.5.4.qualifier
 Require-Bundle: org.eclipse.core.runtime,
- org.eclipse.tm4e.core;bundle-version="0.6.1",
- org.eclipse.tm4e.registry;bundle-version="0.6.5",
- org.eclipse.tm4e.ui;bundle-version="0.7.1",
- com.google.guava;bundle-version="[32.1.0,33.0.0)"
+ org.eclipse.tm4e.core;bundle-version="0.6.2",
+ org.eclipse.tm4e.registry;bundle-version="0.6.6",
+ org.eclipse.tm4e.ui;bundle-version="0.7.2"
 Bundle-RequiredExecutionEnvironment: JavaSE-17
 Export-Package: org.eclipse.tm4e.markdown,
  org.eclipse.tm4e.markdown.marked

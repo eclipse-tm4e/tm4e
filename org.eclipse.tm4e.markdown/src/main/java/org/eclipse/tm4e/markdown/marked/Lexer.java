@@ -19,8 +19,7 @@ package org.eclipse.tm4e.markdown.marked;
 import java.util.regex.Matcher;
 
 import org.eclipse.jdt.annotation.Nullable;
-
-import com.google.common.base.Strings;
+import org.eclipse.tm4e.core.internal.utils.StringUtils;
 
 public class Lexer {
 
@@ -61,7 +60,7 @@ public class Lexer {
 	private Tokens token(String src, final boolean top, @Nullable final Object bq) {
 		src = src.replaceAll("^ +$", "");
 		Matcher cap;
-		while (!Strings.isNullOrEmpty(src)) {
+		while (!StringUtils.isNullOrEmpty(src)) {
 
 			// newline
 			if ((cap = this.rules.newline.exec(src)) != null) {
@@ -86,7 +85,7 @@ public class Lexer {
 			if ((cap = this.rules.fences.exec(src)) != null) {
 				src = src.substring(cap.group(0).length());
 				final String lang = cap.group(2);
-				final String text = !Strings.isNullOrEmpty(cap.group(3)) ? cap.group(3) : "";
+				final String text = !StringUtils.isNullOrEmpty(cap.group(3)) ? cap.group(3) : "";
 				this.tokens.add(new Token(TokenType.code, lang, text));
 				continue;
 			}

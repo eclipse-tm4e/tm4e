@@ -10,5 +10,5 @@
 
 	<artifactId>org.eclipse.tm4e.markdown</artifactId>
 	<packaging>eclipse-plugin</packaging>
-	<version>0.5.3-SNAPSHOT</version>
+	<version>0.5.4-SNAPSHOT</version>
 </project>

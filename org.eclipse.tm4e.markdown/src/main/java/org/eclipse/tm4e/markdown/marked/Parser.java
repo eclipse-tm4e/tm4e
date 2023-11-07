@@ -17,8 +17,7 @@
 package org.eclipse.tm4e.markdown.marked;
 
 import org.eclipse.jdt.annotation.Nullable;
-
-import com.google.common.base.Strings;
+import org.eclipse.tm4e.core.internal.utils.StringUtils;
 
 public class Parser {
 
@@ -75,14 +74,14 @@ public class Parser {
 				break;
 			case heading:
 				// this.renderer.heading(this.inline.output(token.text), token.depth, token.text);
-				this.renderer.heading(Strings.nullToEmpty(token.text), token.depth, Strings.nullToEmpty(token.text));
+				this.renderer.heading(StringUtils.nullToEmpty(token.text), token.depth, StringUtils.nullToEmpty(token.text));
 				break;
 			case code:
-				this.renderer.code(Strings.nullToEmpty(token.text), token.lang, token.escaped);
+				this.renderer.code(StringUtils.nullToEmpty(token.text), token.lang, token.escaped);
 				break;
 			case paragraph:
 				this.renderer.startParagraph();
-				inline.output(Strings.nullToEmpty(token.text));
+				inline.output(StringUtils.nullToEmpty(token.text));
 				this.renderer.endParagraph();
 				break;
 		}

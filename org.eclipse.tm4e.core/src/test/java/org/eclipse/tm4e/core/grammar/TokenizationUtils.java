@@ -16,13 +16,12 @@ import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.concurrent.atomic.AtomicReference;
+import java.util.regex.Pattern;
 import java.util.stream.Stream;
-
-import com.google.common.base.Splitter;
 
 public final class TokenizationUtils {
 
-	private static final Splitter BY_LINE_SPLITTER = Splitter.onPattern("\\r?\\n");
+	private static final Pattern BY_LINE_SPLITTER = Pattern.compile("\\r?\\n");
 
 	/**
 	 * Lazy tokenizes the given text.
@@ -37,7 +36,7 @@ public final class TokenizationUtils {
 		}
 
 		final var prevStack = new AtomicReference<IStateStack>();
-		return BY_LINE_SPLITTER.splitToStream(text).map(line -> {
+		return BY_LINE_SPLITTER.splitAsStream(text).map(line -> {
 			final var tokenized = grammar.tokenizeLine(line, prevStack.get(), null);
 			prevStack.set(tokenized.getRuleStack());
 			return tokenized;

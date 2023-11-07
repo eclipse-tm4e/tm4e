@@ -22,7 +22,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.TimeUnit;
+import java.util.function.BiFunction;
 
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.NonNullByDefault;
@@ -32,10 +32,6 @@ import org.eclipse.tm4e.core.grammar.IStateStack;
 import org.eclipse.tm4e.core.internal.grammar.StateStack;
 import org.eclipse.tm4e.core.internal.utils.MoreCollections;
 import org.eclipse.tm4e.core.internal.utils.StringUtils;
-
-import com.google.common.cache.CacheBuilder;
-import com.google.common.cache.CacheLoader;
-import com.google.common.cache.LoadingCache;
 
 /**
  * @see <a href=
@@ -74,15 +70,6 @@ public class TMTokenizationSupport implements ITokenizationSupport {
 		return tokenize(line, state, null, null);
 	}
 
-	private final LoadingCache<List<String>, String> tokenTypeOfScopesCache = CacheBuilder.newBuilder()
-			.expireAfterAccess(5, TimeUnit.SECONDS)
-			.build(new CacheLoader<List<String>, String>() {
-				@Override
-				public String load(final List<String> scopes) throws Exception {
-					return decodeTextMateToken(decodeMap, scopes);
-				}
-			});
-
 	@Override
 	public TokenizationResult tokenize(final String line,
 			@Nullable final IStateStack state,
@@ -97,7 +84,7 @@ public class TMTokenizationSupport implements ITokenizationSupport {
 		final var tmTokens = new ArrayList<TMToken>(tokens.length < 10 ? tokens.length : 10);
 		String lastTokenType = null;
 		for (final var token : tokens) {
-			final String tokenType = tokenTypeOfScopesCache.getUnchecked(token.getScopes());
+			final String tokenType = decodeTextMateTokenCached.apply(decodeMap, token.getScopes());
 
 			// do not push a new token if the type is exactly the same (also helps with ligatures)
 			if (!tokenType.equals(lastTokenType)) {
@@ -120,6 +107,34 @@ public class TMTokenizationSupport implements ITokenizationSupport {
 				tokenizationResult.getRuleStack(),
 				tokenizationResult.isStoppedEarly());
 	}
+
+	private final BiFunction<DecodeMap, List<String>, String> decodeTextMateTokenCached = new BiFunction<>() {
+		private static final long EXPIRE_AFTER_ACCESS_MS = 5_000;
+
+		static final class CacheEntry {
+			CacheEntry(final String tokenType) {
+				this.tokenType = tokenType;
+			}
+
+			final String tokenType;
+			long lastAccessed;
+		}
+
+		private final Map<List<String>, CacheEntry> cache = new HashMap<>();
+		private long lastCacheCleanup = System.currentTimeMillis();
+
+		@Override
+		public String apply(final DecodeMap decodeMap, final List<String> scopes) {
+			final var entry = cache.computeIfAbsent(scopes, s -> new CacheEntry(decodeTextMateToken(decodeMap, s)));
+			final var now = System.currentTimeMillis();
+			entry.lastAccessed = now;
+			if (now - lastCacheCleanup > EXPIRE_AFTER_ACCESS_MS) {
+				lastCacheCleanup = now;
+				cache.values().removeIf(e -> now - e.lastAccessed > EXPIRE_AFTER_ACCESS_MS);
+			}
+			return entry.tokenType;
+		}
+	};
 
 	/**
 	 * https://github.com/microsoft/vscode/blob/70d250824ef66ef09f04c4084b804d5f353fb704/src/vs/editor/node/textMate/TMSyntax.ts#L251

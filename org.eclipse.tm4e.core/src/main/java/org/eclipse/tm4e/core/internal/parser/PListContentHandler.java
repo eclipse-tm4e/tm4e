@@ -17,6 +17,7 @@ import java.lang.System.Logger;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
@@ -26,14 +27,13 @@ import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
 
-import com.google.common.collect.Iterators;
-
 final class PListContentHandler<T> extends DefaultHandler {
 
 	private static final Logger LOGGER = System.getLogger(PListContentHandler.class.getName());
 
 	private static final class PListPathImpl implements PListPath {
 		final LinkedList<String> keys = new LinkedList<>();
+		final List<String> keysUnmodifiable = Collections.unmodifiableList(keys);
 		final List<Integer> keysDepths = new ArrayList<>();
 		int depth = 0;
 
@@ -69,7 +69,7 @@ final class PListContentHandler<T> extends DefaultHandler {
 
 		@Override
 		public Iterator<String> iterator() {
-			return Iterators.unmodifiableIterator(keys.iterator());
+			return keysUnmodifiable.iterator();
 		}
 
 		@Override

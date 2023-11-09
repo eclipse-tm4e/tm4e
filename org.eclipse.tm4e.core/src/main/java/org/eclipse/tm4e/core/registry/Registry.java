@@ -16,9 +16,9 @@
  */
 package org.eclipse.tm4e.core.registry;
 
-import static java.lang.System.Logger.Level.*;
-import static org.eclipse.tm4e.core.internal.utils.MoreCollections.*;
-import static org.eclipse.tm4e.core.internal.utils.NullSafetyHelper.*;
+import static java.lang.System.Logger.Level.WARNING;
+import static org.eclipse.tm4e.core.internal.utils.MoreCollections.nullToEmpty;
+import static org.eclipse.tm4e.core.internal.utils.NullSafetyHelper.castNonNull;
 
 import java.lang.System.Logger;
 import java.util.HashMap;
@@ -160,8 +160,8 @@ public final class Registry {
 			final var grammar = RawGrammarReader.readGrammar(grammarSource);
 			this._syncRegistry.addGrammar(grammar, this._options.getInjections(scopeName));
 		} catch (final Exception ex) {
-			LOGGER.log(ERROR, "Loading grammar for scope [{0}] failed: {1}", scopeName, ex.getMessage(), ex);
-			return false;
+			throw new TMException("Loading grammar for scope [" + scopeName + "] from [" +
+					grammarSource.getFilePath() + "] failed: " + ex.getMessage(), ex);
 		}
 		return true;
 	}
@@ -185,7 +185,7 @@ public final class Registry {
 					this._grammarForScopeName(rawGrammar.getScopeName(), initialLanguage, embeddedLanguages, null, null));
 
 		} catch (final Exception ex) {
-			throw new TMException("Loading grammar from '" + source.getFilePath() + "' failed: " + ex.getMessage(), ex);
+			throw new TMException("Loading grammar from [" + source.getFilePath() + "] failed: " + ex.getMessage(), ex);
 		}
 	}
 

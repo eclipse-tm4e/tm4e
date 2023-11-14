@@ -19,9 +19,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import org.snakeyaml.engine.v2.api.Load;
+import org.snakeyaml.engine.v2.api.LoadSettings;
 import org.xml.sax.SAXException;
-import org.yaml.snakeyaml.Yaml;
-import org.yaml.snakeyaml.error.YAMLException;
 
 /**
  * Parses TextMate Grammar file in YAML format.
@@ -77,11 +77,13 @@ public final class PListParserYAML<T> implements PListParser<T> {
 		pList.endElement(null, "string", null);
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
-	public T parse(final Reader contents) throws SAXException, YAMLException {
+	public T parse(final Reader contents) throws SAXException {
+		final var yamlLoader = new Load(LoadSettings.builder().build());
 		final var pList = new PListContentHandler<T>(objectFactory);
 		pList.startElement(null, "plist", null, null);
-		addMapToPList(pList, new Yaml().loadAs(contents, Map.class));
+		addMapToPList(pList, (Map<String, Object>) yamlLoader.loadFromReader(contents));
 		pList.endElement(null, "plist", null);
 		return pList.getResult();
 	}

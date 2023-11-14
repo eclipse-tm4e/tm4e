@@ -26,9 +26,9 @@
         <location includeDependencyDepth="direct" includeDependencyScopes="compile" includeSource="true" missingManifest="generate" type="Maven">
             <dependencies>
                 <dependency>
-                    <groupId>org.yaml</groupId>
-                    <artifactId>snakeyaml</artifactId>
-                    <version>2.2</version>
+                    <groupId>org.snakeyaml</groupId>
+                    <artifactId>snakeyaml-engine</artifactId>
+                    <version>2.7</version>
                     <type>jar</type>
                 </dependency>
             </dependencies>

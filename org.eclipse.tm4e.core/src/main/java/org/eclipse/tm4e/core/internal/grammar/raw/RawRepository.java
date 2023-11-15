@@ -11,13 +11,12 @@
  */
 package org.eclipse.tm4e.core.internal.grammar.raw;
 
-import java.util.HashMap;
 import java.util.NoSuchElementException;
 
 import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.tm4e.core.internal.parser.PropertySettable;
 
-public final class RawRepository extends HashMap<String, IRawRule> implements IRawRepository, PropertySettable<IRawRule> {
+public final class RawRepository extends PropertySettable.HashMap<IRawRule> implements IRawRepository {
 
 	private static final long serialVersionUID = 1L;
 
@@ -64,10 +63,5 @@ public final class RawRepository extends HashMap<String, IRawRule> implements IR
 		for (final var entry : entrySet()) {
 			target.setProperty(entry.getKey(), entry.getValue());
 		}
-	}
-
-	@Override
-	public void setProperty(final String name, final IRawRule value) {
-		put(name, value);
 	}
 }

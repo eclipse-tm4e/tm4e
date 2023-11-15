@@ -12,9 +12,7 @@
  */
 package org.eclipse.tm4e.core.internal.grammar.raw;
 
-import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.NoSuchElementException;
@@ -23,7 +21,7 @@ import java.util.Objects;
 import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.tm4e.core.internal.parser.PropertySettable;
 
-public final class RawGrammar extends HashMap<String, @Nullable Object> implements IRawGrammar, PropertySettable<Object> {
+public final class RawGrammar extends PropertySettable.HashMap<@Nullable Object> implements IRawGrammar {
 
 	private static final String FILE_TYPES = "fileTypes";
 	private static final String FIRST_LINE_MATCH = "firstLineMatch";
@@ -129,11 +127,6 @@ public final class RawGrammar extends HashMap<String, @Nullable Object> implemen
 		if (m != null && m.containsKey(FILE_TYPES))
 			fileTypes = null;
 		super.putAll(m);
-	}
-
-	@Override
-	public void setProperty(final String name, final Object value) {
-		put(name, value);
 	}
 
 	@Override

@@ -9,11 +9,9 @@
  */
 package org.eclipse.tm4e.core.internal.grammar.raw;
 
-import java.util.HashMap;
-
 import org.eclipse.tm4e.core.internal.parser.PropertySettable;
 
-public final class RawCaptures extends HashMap<String, IRawRule> implements IRawCaptures, PropertySettable<IRawRule> {
+public final class RawCaptures extends PropertySettable.HashMap<IRawRule> implements IRawCaptures {
 
 	private static final long serialVersionUID = 1L;
 
@@ -25,10 +23,5 @@ public final class RawCaptures extends HashMap<String, IRawRule> implements IRaw
 	@Override
 	public Iterable<String> getCaptureIds() {
 		return keySet();
-	}
-
-	@Override
-	public void setProperty(final String name, final IRawRule value) {
-		put(name, value);
 	}
 }

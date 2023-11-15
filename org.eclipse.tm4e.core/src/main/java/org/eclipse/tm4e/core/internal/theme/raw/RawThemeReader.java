@@ -16,12 +16,14 @@
  */
 package org.eclipse.tm4e.core.internal.theme.raw;
 
-import org.eclipse.tm4e.core.internal.parser.PListParser;
-import org.eclipse.tm4e.core.internal.parser.PListParserJSON;
-import org.eclipse.tm4e.core.internal.parser.PListParserXML;
-import org.eclipse.tm4e.core.internal.parser.PListParserYAML;
-import org.eclipse.tm4e.core.internal.parser.PListPath;
+import java.util.List;
+
 import org.eclipse.tm4e.core.internal.parser.PropertySettable;
+import org.eclipse.tm4e.core.internal.parser.TMParser;
+import org.eclipse.tm4e.core.internal.parser.TMParser.ObjectFactory;
+import org.eclipse.tm4e.core.internal.parser.TMParserJSON;
+import org.eclipse.tm4e.core.internal.parser.TMParserPList;
+import org.eclipse.tm4e.core.internal.parser.TMParserYAML;
 import org.eclipse.tm4e.core.registry.IThemeSource;
 
 /**
@@ -29,23 +31,27 @@ import org.eclipse.tm4e.core.registry.IThemeSource;
  */
 public final class RawThemeReader {
 
-	private static final PropertySettable.Factory<PListPath> OBJECT_FACTORY = path -> new RawTheme();
+	public static final ObjectFactory<RawTheme> OBJECT_FACTORY = new ObjectFactory<>() {
+		@Override
+		public RawTheme createRoot() {
+			return new RawTheme();
+		}
 
-	private static final PListParser<RawTheme> JSON_PARSER = new PListParserJSON<>(OBJECT_FACTORY);
-	private static final PListParser<RawTheme> XML_PARSER = new PListParserXML<>(OBJECT_FACTORY);
-	private static final PListParser<RawTheme> YAML_PARSER = new PListParserYAML<>(OBJECT_FACTORY);
+		@Override
+		public PropertySettable<?> createChild(final TMParser.PropertyPath path, final Class<?> sourceType) {
+			return List.class.isAssignableFrom(sourceType)
+					? new PropertySettable.ArrayList<>()
+					: new RawTheme();
+		}
+	};
 
 	public static IRawTheme readTheme(final IThemeSource source) throws Exception {
 		try (var reader = source.getReader()) {
-			switch (source.getContentType()) {
-				case JSON:
-					return JSON_PARSER.parse(reader);
-				case YAML:
-					return YAML_PARSER.parse(reader);
-				case XML:
-				default:
-					return XML_PARSER.parse(reader);
-			}
+			return switch (source.getContentType()) {
+				case JSON -> TMParserJSON.INSTANCE.parse(reader, OBJECT_FACTORY);
+				case YAML -> TMParserYAML.INSTANCE.parse(reader, OBJECT_FACTORY);
+				default -> TMParserPList.INSTANCE.parse(reader, OBJECT_FACTORY);
+			};
 		}
 	}
 

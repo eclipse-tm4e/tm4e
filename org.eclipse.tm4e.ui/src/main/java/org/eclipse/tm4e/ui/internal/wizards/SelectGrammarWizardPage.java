@@ -8,16 +8,23 @@
  *
  * Contributors:
  * Angelo Zerr <angelo.zerr@gmail.com> - initial API and implementation
+ * Sebastian Thomschke (Vegard IT) - code cleanup, implement "Browse Workspace..." button
  */
 package org.eclipse.tm4e.ui.internal.wizards;
 
-import static org.eclipse.tm4e.core.internal.utils.NullSafetyHelper.*;
+import static org.eclipse.tm4e.core.internal.utils.NullSafetyHelper.lazyNonNull;
 
 import java.nio.file.Paths;
 
+import org.eclipse.core.resources.IContainer;
+import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
+import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.eclipse.jdt.annotation.Nullable;
+import org.eclipse.jface.viewers.Viewer;
+import org.eclipse.jface.viewers.ViewerFilter;
 import org.eclipse.osgi.util.NLS;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
@@ -38,17 +45,18 @@ import org.eclipse.tm4e.registry.IGrammarDefinition;
 import org.eclipse.tm4e.ui.TMUIPlugin;
 import org.eclipse.tm4e.ui.internal.TMUIMessages;
 import org.eclipse.tm4e.ui.internal.widgets.GrammarInfoWidget;
+import org.eclipse.ui.dialogs.ElementTreeSelectionDialog;
+import org.eclipse.ui.model.WorkbenchContentProvider;
+import org.eclipse.ui.model.WorkbenchLabelProvider;
 
 /**
- * Wizard page to select a textMate grammar file and register it in the grammar
- * registry.
- *
+ * Wizard page to select a textMate grammar file and register it in the grammar registry.
  */
 final class SelectGrammarWizardPage extends AbstractWizardPage {
 
 	private static final String PAGE_NAME = SelectGrammarWizardPage.class.getName();
 
-	private static final String[] TEXTMATE_EXTENSIONS = {
+	private static final String[] TEXTMATE_GRAMMAR_FILE_FILTERS = {
 		"*.tmLanguage",
 		"*.json",
 		"*.YAML-tmLanguage",
@@ -57,8 +65,6 @@ final class SelectGrammarWizardPage extends AbstractWizardPage {
 
 	private Text grammarFileText = lazyNonNull();
 	private GrammarInfoWidget grammarInfoWidget = lazyNonNull();
-
-	// private ContentTypesBindingWidget contentTypesWidget;
 
 	protected SelectGrammarWizardPage() {
 		super(PAGE_NAME);
@@ -91,7 +97,7 @@ final class SelectGrammarWizardPage extends AbstractWizardPage {
 			@Override
 			public void widgetSelected(@Nullable final SelectionEvent e) {
 				final var dialog = new FileDialog(parent.getShell());
-				dialog.setFilterExtensions(TEXTMATE_EXTENSIONS);
+				dialog.setFilterExtensions(TEXTMATE_GRAMMAR_FILE_FILTERS);
 				dialog.setFilterPath(grammarFileText.getText());
 				final String result = dialog.open();
 				if (result != null && !result.isEmpty()) {
@@ -105,7 +111,56 @@ final class SelectGrammarWizardPage extends AbstractWizardPage {
 		browseWorkspaceButton.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(@Nullable final SelectionEvent e) {
-				// TODO
+				var dialog = new ElementTreeSelectionDialog(parent.getShell(), new WorkbenchLabelProvider(),
+						new WorkbenchContentProvider());
+				dialog.setTitle("TextMate grammar selection");
+				dialog.setMessage("Select a TextMate grammar file:");
+				dialog.setInput(ResourcesPlugin.getWorkspace().getRoot());
+				dialog.addFilter(new ViewerFilter() {
+
+					private boolean isGrammarFile(final IFile file) {
+						String ext = file.getFileExtension();
+						if (ext == null)
+							return false;
+						ext = "*." + ext.toLowerCase();
+						for (var pattern : TEXTMATE_GRAMMAR_FILE_FILTERS) {
+							if (pattern.equals(ext))
+								return true;
+						}
+						return false;
+					}
+
+					private boolean containsGrammarFile(final IContainer container) {
+						try {
+							for (final var member : container.members()) {
+								if (member instanceof IFile file) {
+									if (isGrammarFile(file))
+										return true;
+									continue;
+								}
+								if (member instanceof IContainer subContainer && containsGrammarFile(subContainer))
+									return true;
+							}
+						} catch (Exception ex) {
+							// ignore
+						}
+						return false;
+					}
+
+					@Override
+					@NonNullByDefault({})
+					public boolean select(Viewer viewer, Object parentElement, Object element) {
+						if (element instanceof IContainer container)
+							return containsGrammarFile(container);
+						if (element instanceof IFile file)
+							return isGrammarFile(file);
+						return true;
+					}
+				});
+
+				if (dialog.open() == ElementTreeSelectionDialog.OK && dialog.getFirstResult() instanceof IFile file) {
+					grammarFileText.setText(file.getLocation().toOSString());
+				}
 			}
 		});
 

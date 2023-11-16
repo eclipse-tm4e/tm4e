@@ -29,6 +29,7 @@ import org.eclipse.jface.viewers.ComboViewer;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.viewers.TableViewer;
+import org.eclipse.jface.viewers.ViewerComparator;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.SashForm;
 import org.eclipse.swt.graphics.GC;
@@ -282,6 +283,7 @@ public final class ThemePreferencePage extends PreferencePage implements IWorkbe
 		grammarsCombo = new ComboViewer(parent);
 		grammarsCombo.setContentProvider(new GrammarDefinitionContentProvider());
 		grammarsCombo.setLabelProvider(new GrammarDefinitionLabelProvider());
+		grammarsCombo.setComparator(new ViewerComparator());
 		grammarsCombo.addSelectionChangedListener(e -> preview());
 		grammarsCombo.getControl().setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		grammarsCombo.setInput(grammarRegistryManager);

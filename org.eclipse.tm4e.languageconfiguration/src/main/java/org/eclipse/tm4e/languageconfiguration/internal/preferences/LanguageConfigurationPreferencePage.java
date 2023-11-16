@@ -12,6 +12,7 @@
  */
 package org.eclipse.tm4e.languageconfiguration.internal.preferences;
 
+import static org.eclipse.tm4e.core.internal.utils.NullSafetyHelper.lazyNonNull;
 import static org.eclipse.tm4e.languageconfiguration.internal.LanguageConfigurationMessages.*;
 
 import java.util.Collection;
@@ -51,6 +52,7 @@ import org.eclipse.tm4e.languageconfiguration.internal.widgets.ColumnSelectionAd
 import org.eclipse.tm4e.languageconfiguration.internal.widgets.ColumnViewerComparator;
 import org.eclipse.tm4e.languageconfiguration.internal.widgets.LanguageConfigurationPreferencesWidget;
 import org.eclipse.tm4e.languageconfiguration.internal.wizards.LanguageConfigurationImportWizard;
+import org.eclipse.tm4e.ui.internal.utils.UI;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchPreferencePage;
 import org.osgi.service.prefs.BackingStoreException;
@@ -67,11 +69,8 @@ public final class LanguageConfigurationPreferencePage extends PreferencePage im
 	private final ILanguageConfigurationRegistryManager manager = new WorkingCopyLanguageConfigurationRegistryManager(
 			LanguageConfigurationRegistryManager.getInstance());
 
-	@Nullable
-	private TableViewer definitionViewer;
-
-	@Nullable
-	private LanguageConfigurationPreferencesWidget infoWidget;
+	private TableViewer definitionViewer = lazyNonNull();
+	private LanguageConfigurationPreferencesWidget infoWidget = lazyNonNull();
 
 	public LanguageConfigurationPreferencePage() {
 		setDescription(LanguageConfigurationPreferencePage_description);
@@ -98,12 +97,7 @@ public final class LanguageConfigurationPreferencePage extends PreferencePage im
 
 		createDefinitionsListContent(parent);
 
-		assert definitionViewer != null;
-		definitionViewer.setInput(manager);
-
-		final var infoWidget = new LanguageConfigurationPreferencesWidget(parent, SWT.NONE);
-		this.infoWidget = infoWidget;
-
+		infoWidget = new LanguageConfigurationPreferencesWidget(parent, SWT.NONE);
 		final var data = new GridData(GridData.FILL_HORIZONTAL);
 		data.horizontalSpan = 2;
 		infoWidget.setLayoutData(data);
@@ -111,8 +105,10 @@ public final class LanguageConfigurationPreferencePage extends PreferencePage im
 		Dialog.applyDialogFont(parent);
 		innerParent.layout();
 
-		return parent;
+		definitionViewer.setInput(manager);
+		UI.selectFirstElement(definitionViewer);
 
+		return parent;
 	}
 
 	/**
@@ -141,8 +137,7 @@ public final class LanguageConfigurationPreferencePage extends PreferencePage im
 
 		final var viewerComparator = new ColumnViewerComparator();
 
-		final var definitionViewer = new TableViewer(table);
-		this.definitionViewer = definitionViewer;
+		this.definitionViewer = new TableViewer(table);
 
 		for (int i = 0; i < 4; i++) {
 			final var column = new TableColumn(table, SWT.NONE);
@@ -227,7 +222,6 @@ public final class LanguageConfigurationPreferencePage extends PreferencePage im
 			@Override
 			public void selectionChanged(@Nullable final SelectionChangedEvent e) {
 				final var selection = definitionViewer.getStructuredSelection();
-				assert infoWidget != null;
 				infoWidget.refresh(null, manager);
 				if (selection.isEmpty()) {
 					return;
@@ -240,7 +234,6 @@ public final class LanguageConfigurationPreferencePage extends PreferencePage im
 			}
 
 			private void selectDefinition(final ILanguageConfigurationDefinition definition) {
-				assert infoWidget != null;
 				infoWidget.refresh(definition, manager);
 			}
 		});

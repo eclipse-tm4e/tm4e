@@ -53,6 +53,7 @@ import org.eclipse.tm4e.registry.WorkingCopyGrammarRegistryManager;
 import org.eclipse.tm4e.ui.TMUIPlugin;
 import org.eclipse.tm4e.ui.internal.TMUIMessages;
 import org.eclipse.tm4e.ui.internal.themes.WorkingCopyThemeManager;
+import org.eclipse.tm4e.ui.internal.utils.UI;
 import org.eclipse.tm4e.ui.internal.widgets.ColumnSelectionAdapter;
 import org.eclipse.tm4e.ui.internal.widgets.ColumnViewerComparator;
 import org.eclipse.tm4e.ui.internal.widgets.ContentTypesBindingWidget;
@@ -171,6 +172,7 @@ public final class GrammarPreferencePage extends PreferencePage implements IWork
 
 		previewViewer = doCreateViewer(innerParent);
 		grammarViewer.setInput(grammarRegistryManager);
+		UI.selectFirstElement(grammarViewer);
 
 		updateButtons();
 		Dialog.applyDialogFont(parent);

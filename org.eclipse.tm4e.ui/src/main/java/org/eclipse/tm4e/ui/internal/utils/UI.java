@@ -13,6 +13,8 @@ package org.eclipse.tm4e.ui.internal.utils;
 
 import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.jface.text.ITextViewer;
+import org.eclipse.jface.viewers.StructuredSelection;
+import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.IWorkbenchPage;
@@ -89,6 +91,14 @@ public final class UI {
 			return display;
 
 		return Display.getDefault();
+	}
+
+	public static boolean selectFirstElement(final TableViewer viewer) {
+		final var firstElement = viewer.getElementAt(0);
+		if (firstElement == null)
+			return false;
+		viewer.setSelection(new StructuredSelection(firstElement), true);
+		return true;
 	}
 
 	private UI() {

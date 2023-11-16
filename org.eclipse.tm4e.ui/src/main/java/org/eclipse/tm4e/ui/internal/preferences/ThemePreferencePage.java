@@ -51,6 +51,7 @@ import org.eclipse.tm4e.registry.IGrammarRegistryManager;
 import org.eclipse.tm4e.registry.TMEclipseRegistryPlugin;
 import org.eclipse.tm4e.ui.TMUIPlugin;
 import org.eclipse.tm4e.ui.internal.TMUIMessages;
+import org.eclipse.tm4e.ui.internal.utils.UI;
 import org.eclipse.tm4e.ui.internal.widgets.ColumnSelectionAdapter;
 import org.eclipse.tm4e.ui.internal.widgets.ColumnViewerComparator;
 import org.eclipse.tm4e.ui.internal.widgets.GrammarDefinitionContentProvider;
@@ -116,6 +117,7 @@ public final class ThemePreferencePage extends PreferencePage implements IWorkbe
 		parent.setWeights(2, 1);
 
 		themesTable.setInput(themeManager);
+		UI.selectFirstElement(themesTable);
 
 		Dialog.applyDialogFont(parent);
 		innerParent.layout();

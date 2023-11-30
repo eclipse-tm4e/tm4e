@@ -82,7 +82,7 @@ jobs:
       run: sudo apt-get install --no-install-recommends -y libswt-gtk-*-java
 
     - name: "Install: JDK ${{ env.JAVA_VERSION }}"
-      uses: actions/setup-java@v3 # https://github.com/actions/setup-java
+      uses: actions/setup-java@v4 # https://github.com/actions/setup-java
       with:
         distribution: temurin
         java-version: ${{ env.JAVA_VERSION }}

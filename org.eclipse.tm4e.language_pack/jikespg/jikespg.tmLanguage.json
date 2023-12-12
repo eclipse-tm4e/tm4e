@@ -1,0 +1,167 @@
+{
+  "$schema": "https://raw.githubusercontent.com/martinring/tmlanguage/master/tmlanguage.json",
+  "name": "Jikespg Grammar",
+  "fileTypes": [
+    "g"
+  ],
+  "patterns": [
+    {
+      "include": "#keywords"
+    },
+    {
+      "include": "#options"
+    },
+    {
+      "include": "#sections"
+    },
+    {
+      "include": "#comments"
+    },
+    {
+      "include": "#embeddedCode"
+    },
+    {
+      "include": "#macro"
+    },
+    {
+      "include": "#productions"
+    }
+  ],
+  "repository": {
+    "keywords": {
+      "patterns": [
+        {
+          "name": "keyword.control.jikespg",
+          "match": "\\b(?<=\\$)([Dd][Ee][Ff][Ii][Nn][Ee]|[Ee][Mm][Pp][Tt][Yy]|[Ee][Rr][Rr][Oo][Rr]|[Ee][Oo][Ll]|[Ee][Oo][Ff]|[Ee][Nn][Dd]|[Rr][Uu][Ll][Ee][Ss]|[Aa][Ll][Ii][Aa][Ss]|[Ss][Tt][Aa][Rr][Tt]|[Nn][Aa][Mm][Ee][Ss])\\b",
+          "comment": "Dollar prefixed keywords. keywords are case insensitive"
+        }
+      ]
+    },
+    "comments": {
+      "patterns": [
+        {
+          "name": "comment.line.double-dash.jikespg",
+          "match": "(?<!')(--.*)"
+        }
+      ]
+    },
+    "options": {
+      "patterns": [
+        {
+          "begin": "\\b(?<=%)([Oo][Pp][Tt][Ii][Oo][Nn][Ss])",
+          "end": "$\\n?",
+          "beginCaptures": {
+            "1": {
+              "name": "keyword.control.less.jikespg"
+            }
+          },
+          "patterns": [
+            {
+              "match": "([^=,]+)(?:=([^,]+))?",
+              "captures": {
+                "1": {
+                  "name": "variable.name.jikespg"
+                },
+                "2": {
+                  "name": "constant.language.jikespg"
+                }
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "sections": {
+      "begin": "\\b(?<=\\$)([Tt][Ee][Rr][Mm][Ii][Nn][Aa][Ll][Ss])\\b",
+      "end": "(?=\\$)",
+      "beginCaptures": {
+        "1": {
+          "name": "keyword.control"
+        }
+      },
+      "patterns": [
+        {
+          "name": "constant.language",
+          "match": "\\b(\\w+)\\b"
+        },
+        {
+          "include": "#comments"
+        }
+      ]
+    },
+    "embeddedCode": {
+      "patterns": [
+        {
+          "name": "string.quoted.triple.jikespg",
+          "begin": "\\s*/\\.",
+          "end": "\\./"
+        },
+        {
+          "name": "string.quoted.triple.jikespg",
+          "begin": "\\s*/:",
+          "end": ":/"
+        }
+      ]
+    },
+    "macro": {
+      "patterns": [
+        {
+          "match": "\\b(?<=\\$)(\\w+)\\b",
+          "name": "entity.name.function"
+        }
+      ]
+    },
+    "productions": {
+      "patterns": [
+        {
+          "name": "variable.name.jikespg",
+          "begin": "^\\s*([%\\{\\}\\[\\]\\w]+)\\s*(::=)",
+          "end": "(?:(?=--)|$\\n?)",
+          "beginCaptures": {
+            "1": {
+              "name": "variable.name.jikespg"
+            },
+            "2": {
+              "name": "keyword.operator.jikespg"
+            }
+          }
+        },
+        {
+          "name": "variable.name.jikespg",
+          "begin": "^\\s*([%\\{\\}\\[\\]\\w]+)\\s*(->)",
+          "end": "(?:(?=--)|$\\n?)",
+          "beginCaptures": {
+            "1": {
+              "name": "variable.name.jikespg"
+            },
+            "2": {
+              "name": "keyword.operator.jikespg"
+            }
+          }
+        },
+        {
+          "name": "variable.name.jikespg",
+          "begin": "^\\s*(\\|)",
+          "end": "(?:(?=--)|$\\n?)",
+          "beginCaptures": {
+            "1": {
+              "name": "keyword.operator.jikespg"
+            }
+          }
+        },
+        {
+          "comment": "if not yet captured, it's probably a continued definition line. use hard symbols to avoid reparsing something",
+          "begin": "^",
+          "end": "(?:(?:/.)|(?:\\$)|(?=--)|$\\n?)",
+          "patterns": [
+            {
+              "name": "variable.name.jikespg",
+              "match": "([%\\{\\}\\[\\]\\w]+)"
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "scopeName": "lngpck.source.jikespg"
+}

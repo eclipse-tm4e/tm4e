@@ -306,6 +306,18 @@
         <scopeNameContentTypeBinding scopeName="lngpck.source.json.lines" contentTypeId="lng.jsonl"/>
     </extension>
 
+    <!-- jikespg -->
+    <extension point="org.eclipse.core.contenttype.contentTypes">
+        <content-type id="lng.jikespg" base-type="org.eclipse.tm4e.language_pack.basetype" name="jikespg grammar" priority="low" file-extensions="g" />
+    </extension>
+    <extension point="org.eclipse.tm4e.languageconfiguration.languageConfigurations">
+        <languageConfiguration contentTypeId="lng.jikespg" path="jikespg/language-configuration.json"/>
+    </extension>
+    <extension point="org.eclipse.tm4e.registry.grammars">
+        <grammar scopeName="lngpck.source.jikespg" path="jikespg/jikespg.tmLanguage.json"/>
+        <scopeNameContentTypeBinding scopeName="lngpck.source.jikespg" contentTypeId="lng.jikespg"/>
+    </extension>
+
     <!-- julia -->
     <extension point="org.eclipse.core.contenttype.contentTypes">
         <content-type id="lng.julia" base-type="org.eclipse.tm4e.language_pack.basetype" name="Julia (Syntax Highlighting)" priority="low" file-extensions="jl"/>

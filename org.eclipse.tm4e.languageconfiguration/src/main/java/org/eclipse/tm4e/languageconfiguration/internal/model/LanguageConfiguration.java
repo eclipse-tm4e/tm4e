@@ -8,6 +8,7 @@
  *
  * Contributors:
  * Lucas Bullen (Red Hat Inc.) - initial API and implementation
+ * Sebastian Thomschke (Vegard IT) - improve JSON parsing tolerance
  */
 package org.eclipse.tm4e.languageconfiguration.internal.model;
 
@@ -16,6 +17,7 @@ import java.io.Reader;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.NonNullByDefault;
@@ -38,6 +40,23 @@ import com.google.gson.JsonObject;
  */
 public class LanguageConfiguration {
 
+	private static String removeTrailingCommas(String jsonString) {
+		/* matches:
+		 * --------------
+		 * },
+		 *    }
+		 * --------------
+		 * as well as:
+		 * --------------
+		 * },
+		 *   // foo
+		 *   // bar
+		 *    }
+		 * --------------
+		 */
+		return jsonString.replaceAll("(,)(\\s*\\n(\\s*\\/\\/.*\\n)*\\s*})", "$2");
+	}
+
 	/**
 	 * See JSON format at https://code.visualstudio.com/api/language-extensions/language-configuration-guide
 	 *
@@ -47,7 +66,28 @@ public class LanguageConfiguration {
 	@NonNullByDefault({})
 	@Nullable
 	public static LanguageConfiguration load(@NonNull final Reader reader) {
+		// GSON does not support trailing commas so we have to manually remove them -> maybe better switch to jackson json parser?
+		final var jsonString = removeTrailingCommas(new BufferedReader(reader).lines().collect(Collectors.joining("\n")));
 		return new GsonBuilder()
+				.registerTypeAdapter(String.class, (JsonDeserializer<String>) (json, typeOfT, context) -> {
+					if (json.isJsonObject()) {
+						/* for example:
+						 * "wordPattern": {
+						 *   "pattern": "...",
+						 *   "flags": "..."
+						 * },
+						 */
+						final var jsonObj = json.getAsJsonObject();
+						return jsonObj.has("pattern") && jsonObj.get("pattern").isJsonPrimitive() //
+								? jsonObj.get("pattern").getAsString()
+								: null;
+					}
+
+					/* for example:
+					 * "wordPattern": "...",
+					 */
+					return json.getAsString();
+				})
 
 				.registerTypeAdapter(OnEnterRule.class, (JsonDeserializer<OnEnterRule>) (json, typeOfT, context) -> {
 					if (!json.isJsonObject()) {
@@ -203,7 +243,7 @@ public class LanguageConfiguration {
 					return null;
 				})
 				.create()
-				.fromJson(new BufferedReader(reader), LanguageConfiguration.class);
+				.fromJson(jsonString, LanguageConfiguration.class);
 	}
 
 	@Nullable

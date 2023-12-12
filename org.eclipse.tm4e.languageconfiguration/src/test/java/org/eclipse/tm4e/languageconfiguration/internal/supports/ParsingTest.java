@@ -14,6 +14,13 @@ import static org.junit.jupiter.api.Assertions.*;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.nio.file.FileVisitResult;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.SimpleFileVisitor;
+import java.nio.file.attribute.BasicFileAttributes;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.tm4e.languageconfiguration.internal.model.LanguageConfiguration;
@@ -42,7 +49,6 @@ public class ParsingTest {
 		assertEquals(";:.,=}])>` \n\t", languageConfiguration.getAutoCloseBefore());
 		assertNotNull(languageConfiguration.getWordPattern());
 		assertNotNull(languageConfiguration.getOnEnterRules());
-
 		assertNotNull(languageConfiguration.getSurroundingPairs());
 		assertNotNull(languageConfiguration.getFolding());
 	}
@@ -62,5 +68,26 @@ public class ParsingTest {
 		assertNotNull(languageConfiguration.getOnEnterRules());
 		assertNotNull(languageConfiguration.getSurroundingPairs());
 		assertNull(languageConfiguration.getFolding());
+	}
+
+	@Test
+	void testLanguagePackLangConfigs() throws IOException {
+		final var count = new AtomicInteger();
+		Files.walkFileTree(Paths.get("../org.eclipse.tm4e.language_pack"), new SimpleFileVisitor<Path>() {
+			@Override
+			public FileVisitResult visitFile(final Path file, final @Nullable BasicFileAttributes attrs) throws IOException {
+				if (file.getFileName().toString().endsWith("language-configuration.json")) {
+					try (var input = Files.newBufferedReader(file)) {
+						System.out.println("Parsing [" + file + "]...");
+						final var languageConfiguration = LanguageConfiguration.load(input);
+						count.incrementAndGet();
+						assertNotNull(languageConfiguration);
+					}
+				}
+				return FileVisitResult.CONTINUE;
+			}
+		});
+		System.out.println("Successfully parsed " + count.intValue() + " language configurations.");
+		assertTrue(count.intValue() > 10, "Only " + count.intValue() + " language configurations found, expected more than 10!");
 	}
 }

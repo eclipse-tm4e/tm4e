@@ -247,17 +247,17 @@ public final class TaskTagsPreferencePage extends PreferencePage implements IWor
 		final var column1 = new TableColumn(table, SWT.NONE);
 		column1.setText(TMUIMessages.TaskTagsPreferencePage_column_tag);
 		column1.setWidth(computeMinimumColumnWidth("1234567890"));
-		column1.addSelectionListener(new ColumnSelectionAdapter(column1, markerConfigsTable, 0, tableColumnSorter));
+		column1.addSelectionListener(new ColumnSelectionAdapter(markerConfigsTable, tableColumnSorter));
 
 		final var column2 = new TableColumn(table, SWT.NONE);
 		column2.setText(TMUIMessages.TaskTagsPreferencePage_column_type);
 		column2.setWidth(column1.getWidth());
-		column2.addSelectionListener(new ColumnSelectionAdapter(column2, markerConfigsTable, 1, tableColumnSorter));
+		column2.addSelectionListener(new ColumnSelectionAdapter(markerConfigsTable, tableColumnSorter, 0));
 
 		final var column3 = new TableColumn(table, SWT.NONE);
 		column3.setText(TMUIMessages.TaskTagsPreferencePage_column_level);
 		column3.setWidth(column1.getWidth());
-		column3.addSelectionListener(new ColumnSelectionAdapter(column3, markerConfigsTable, 2, tableColumnSorter));
+		column3.addSelectionListener(new ColumnSelectionAdapter(markerConfigsTable, tableColumnSorter, 0));
 
 		// Specify default sorting
 		table.setSortColumn(column1);

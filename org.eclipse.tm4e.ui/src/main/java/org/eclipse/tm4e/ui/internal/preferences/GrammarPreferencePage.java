@@ -210,19 +210,19 @@ public final class GrammarPreferencePage extends PreferencePage implements IWork
 		column1.setText(TMUIMessages.GrammarPreferencePage_column_scopeName);
 		int minWidth = computeMinimumColumnWidth(gc, TMUIMessages.GrammarPreferencePage_column_scopeName);
 		columnLayout.setColumnData(column1, new ColumnWeightData(2, minWidth, true));
-		column1.addSelectionListener(new ColumnSelectionAdapter(column1, grammarViewer, 0, viewerComparator));
+		column1.addSelectionListener(new ColumnSelectionAdapter(grammarViewer, viewerComparator));
 
 		final var column2 = new TableColumn(table, SWT.NONE);
 		column2.setText(TMUIMessages.GrammarPreferencePage_column_path);
 		minWidth = computeMinimumColumnWidth(gc, TMUIMessages.GrammarPreferencePage_column_path);
 		columnLayout.setColumnData(column2, new ColumnWeightData(2, minWidth, true));
-		column2.addSelectionListener(new ColumnSelectionAdapter(column2, grammarViewer, 1, viewerComparator));
+		column2.addSelectionListener(new ColumnSelectionAdapter(grammarViewer, viewerComparator, 0));
 
 		final var column3 = new TableColumn(table, SWT.NONE);
 		column3.setText(TMUIMessages.GrammarPreferencePage_column_pluginId);
 		minWidth = computeMinimumColumnWidth(gc, TMUIMessages.GrammarPreferencePage_column_pluginId);
 		columnLayout.setColumnData(column3, new ColumnWeightData(2, minWidth, true));
-		column3.addSelectionListener(new ColumnSelectionAdapter(column3, grammarViewer, 2, viewerComparator));
+		column3.addSelectionListener(new ColumnSelectionAdapter(grammarViewer, viewerComparator, 0));
 
 		gc.dispose();
 

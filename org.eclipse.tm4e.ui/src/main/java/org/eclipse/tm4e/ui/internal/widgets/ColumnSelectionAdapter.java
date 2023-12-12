@@ -24,26 +24,37 @@ import org.eclipse.swt.widgets.TableColumn;
  */
 public final class ColumnSelectionAdapter extends SelectionAdapter {
 
-	private final TableColumn fTableColumn;
 	private final TableViewer tableViewer;
-	private final int fColumnIndex;
 	private final ColumnViewerComparator viewerComparator;
+	private final int[] secondarySortColumns;
 
-	public ColumnSelectionAdapter(final TableColumn column, final TableViewer tableViewer, final int index,
-			final ColumnViewerComparator vc) {
-		fTableColumn = column;
+	public ColumnSelectionAdapter(final TableViewer tableViewer,
+			final ColumnViewerComparator vc, int... secondarySortColumns) {
 		this.tableViewer = tableViewer;
-		fColumnIndex = index;
 		viewerComparator = vc;
+		this.secondarySortColumns = secondarySortColumns;
 	}
 
 	@Override
 	public void widgetSelected(@Nullable final SelectionEvent e) {
-		viewerComparator.setColumn(fColumnIndex);
-		final int dir = viewerComparator.getDirection();
-		final Table table = tableViewer.getTable();
-		table.setSortDirection(dir);
-		table.setSortColumn(fTableColumn);
-		tableViewer.refresh();
+		if (e != null && e.getSource() instanceof TableColumn tableColumn) {
+			int columnIndex = -1;
+			TableColumn[] columns = tableViewer.getTable().getColumns();
+			for (int i = 0; i < columns.length; i++) {
+				if (columns[i].equals(tableColumn)) {
+					columnIndex = i;
+					break;
+				}
+			}
+			if (columnIndex == -1)
+				return;
+
+			viewerComparator.setColumns(columnIndex, secondarySortColumns);
+			final int dir = viewerComparator.getDirection();
+			final Table table = tableViewer.getTable();
+			table.setSortDirection(dir);
+			table.setSortColumn(tableColumn);
+			tableViewer.refresh();
+		}
 	}
 }

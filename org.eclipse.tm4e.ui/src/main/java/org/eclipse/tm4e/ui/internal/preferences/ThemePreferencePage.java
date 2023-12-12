@@ -157,19 +157,19 @@ public final class ThemePreferencePage extends PreferencePage implements IWorkbe
 		column1.setText(TMUIMessages.ThemePreferencePage_column_name);
 		int minWidth = computeMinimumColumnWidth(gc, TMUIMessages.ThemePreferencePage_column_name);
 		columnLayout.setColumnData(column1, new ColumnWeightData(2, minWidth, true));
-		column1.addSelectionListener(new ColumnSelectionAdapter(column1, themesTable, 0, viewerComparator));
+		column1.addSelectionListener(new ColumnSelectionAdapter(themesTable, viewerComparator));
 
 		final var column2 = new TableColumn(table, SWT.NONE);
 		column2.setText(TMUIMessages.ThemePreferencePage_column_path);
 		minWidth = computeMinimumColumnWidth(gc, TMUIMessages.ThemePreferencePage_column_path);
 		columnLayout.setColumnData(column2, new ColumnWeightData(2, minWidth, true));
-		column2.addSelectionListener(new ColumnSelectionAdapter(column2, themesTable, 1, viewerComparator));
+		column2.addSelectionListener(new ColumnSelectionAdapter(themesTable, viewerComparator, 0));
 
 		final var column3 = new TableColumn(table, SWT.NONE);
 		column3.setText(TMUIMessages.ThemePreferencePage_column_pluginId);
 		minWidth = computeMinimumColumnWidth(gc, TMUIMessages.ThemePreferencePage_column_pluginId);
 		columnLayout.setColumnData(column3, new ColumnWeightData(2, minWidth, true));
-		column3.addSelectionListener(new ColumnSelectionAdapter(column3, themesTable, 2, viewerComparator));
+		column3.addSelectionListener(new ColumnSelectionAdapter(themesTable, viewerComparator, 0));
 
 		gc.dispose();
 

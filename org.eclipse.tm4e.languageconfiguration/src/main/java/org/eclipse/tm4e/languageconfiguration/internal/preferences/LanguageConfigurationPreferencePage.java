@@ -48,11 +48,11 @@ import org.eclipse.tm4e.languageconfiguration.internal.registry.ILanguageConfigu
 import org.eclipse.tm4e.languageconfiguration.internal.registry.ILanguageConfigurationRegistryManager;
 import org.eclipse.tm4e.languageconfiguration.internal.registry.LanguageConfigurationRegistryManager;
 import org.eclipse.tm4e.languageconfiguration.internal.registry.WorkingCopyLanguageConfigurationRegistryManager;
-import org.eclipse.tm4e.languageconfiguration.internal.widgets.ColumnSelectionAdapter;
-import org.eclipse.tm4e.languageconfiguration.internal.widgets.ColumnViewerComparator;
 import org.eclipse.tm4e.languageconfiguration.internal.widgets.LanguageConfigurationPreferencesWidget;
 import org.eclipse.tm4e.languageconfiguration.internal.wizards.LanguageConfigurationImportWizard;
 import org.eclipse.tm4e.ui.internal.utils.UI;
+import org.eclipse.tm4e.ui.internal.widgets.ColumnSelectionAdapter;
+import org.eclipse.tm4e.ui.internal.widgets.ColumnViewerComparator;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchPreferencePage;
 import org.osgi.service.prefs.BackingStoreException;
@@ -152,7 +152,7 @@ public final class LanguageConfigurationPreferencePage extends PreferencePage im
 			column.setText(label);
 			final int minWidth = computeMinimumColumnWidth(gc, label);
 			columnLayout.setColumnData(column, new ColumnWeightData(2, minWidth, true));
-			column.addSelectionListener(new ColumnSelectionAdapter(column, definitionViewer, i, viewerComparator));
+			column.addSelectionListener(new ColumnSelectionAdapter(definitionViewer, viewerComparator, 0));
 
 			if (i == 0) {
 				// Specify default sorting

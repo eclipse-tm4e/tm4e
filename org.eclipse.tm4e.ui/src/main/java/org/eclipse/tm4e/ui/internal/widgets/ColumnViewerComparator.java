@@ -8,11 +8,13 @@
  *
  * Contributors:
  * Angelo Zerr <angelo.zerr@gmail.com> - initial API and implementation
+ * Sebastian Thomschke (Vegard IT) - add support for secondary sort columns
  */
 package org.eclipse.tm4e.ui.internal.widgets;
 
+import static org.eclipse.tm4e.core.internal.utils.StringUtils.nullToEmpty;
+
 import org.eclipse.jdt.annotation.Nullable;
-import org.eclipse.jface.viewers.IBaseLabelProvider;
 import org.eclipse.jface.viewers.ITableLabelProvider;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.viewers.Viewer;
@@ -20,52 +22,57 @@ import org.eclipse.jface.viewers.ViewerComparator;
 import org.eclipse.swt.SWT;
 
 /**
- * Viewer comparator which sort a given column.
- *
+ * {@link TableViewer} comparator which sorts based on the given column(s).
  */
 public final class ColumnViewerComparator extends ViewerComparator {
 
-	private int fSortColumn = 0;
-	private int fSortOrder = 1; // 1 = asc, -1 = desc
+	private int[] sortColumns = { 0 };
+	private int sortOrder = 1; // 1 = ascending, -1 = descending
 
 	/**
 	 * Returns the {@linkplain SWT} style constant for the sort direction.
 	 *
-	 * @return {@link SWT#DOWN} for asc sorting, {@link SWT#UP} otherwise
+	 * @return {@link SWT#DOWN} for ascending sorting, {@link SWT#UP} otherwise
 	 */
 	public int getDirection() {
-		return fSortOrder == 1 ? SWT.DOWN : SWT.UP;
+		return sortOrder == 1 ? SWT.DOWN : SWT.UP;
 	}
 
 	/**
 	 * Sets the sort column. If the newly set sort column equals the previous
 	 * set sort column, the sort direction changes.
 	 *
-	 * @param column
+	 * @param primaryColumn
 	 *            New sort column
 	 */
-	public void setColumn(final int column) {
-		if (column == fSortColumn) {
-			fSortOrder *= -1;
+	public void setColumns(final int primaryColumn, int... secondaryColumns) {
+		if (primaryColumn == sortColumns[0]) {
+			sortOrder *= -1;
 		} else {
-			fSortColumn = column;
-			fSortOrder = 1;
+			if (secondaryColumns.length == 0) {
+				sortColumns = new int[] { primaryColumn };
+			} else {
+				sortColumns = new int[secondaryColumns.length + 1];
+				System.arraycopy(secondaryColumns, 0, sortColumns, 1, secondaryColumns.length);
+				sortColumns[0] = primaryColumn;
+			}
+			sortOrder = 1;
 		}
 	}
 
 	@Override
 	public int compare(@Nullable final Viewer viewer, @Nullable final Object e1, @Nullable final Object e2) {
-
-		if (viewer instanceof final TableViewer tableViewer) {
-			final IBaseLabelProvider baseLabel = tableViewer.getLabelProvider();
-
-			final String left = ((ITableLabelProvider) baseLabel).getColumnText(e1, fSortColumn);
-			final String right = ((ITableLabelProvider) baseLabel).getColumnText(e2, fSortColumn);
-			final int sortResult = getComparator().compare(left != null ? left : "", right != null ? right : "");
-			return sortResult * fSortOrder;
+		if (viewer instanceof final TableViewer tableViewer
+				&& tableViewer.getLabelProvider() instanceof ITableLabelProvider labelProvider) {
+			for (var column : sortColumns) {
+				final String left = labelProvider.getColumnText(e1, column);
+				final String right = labelProvider.getColumnText(e2, column);
+				final int sortResult = getComparator().compare(nullToEmpty(left), nullToEmpty(right));
+				if (sortResult != 0)
+					return sortResult * sortOrder;
+			}
+			return 0;
 		}
-
 		return super.compare(viewer, e1, e2);
 	}
-
 }

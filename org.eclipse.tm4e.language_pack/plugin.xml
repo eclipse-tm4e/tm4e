@@ -23,13 +23,13 @@
         <content-type id="lng.bat" base-type="org.eclipse.tm4e.language_pack.basetype" name="Batch File (Syntax Highlighting)" priority="low" file-extensions="bat,cmd"/>
     </extension>
     <extension point="org.eclipse.tm4e.languageconfiguration.languageConfigurations">
-        <languageConfiguration contentTypeId="lng.bat" path="bat/language-configuration.json"/>
+        <languageConfiguration contentTypeId="lng.bat" path="syntaxes/bat/language-configuration.json"/>
     </extension>
     <extension point="org.eclipse.ui.genericeditor.icons">
-        <icon contentType="lng.bat" icon="bat/bat.png"/>
+        <icon contentType="lng.bat" icon="syntaxes/bat/bat.png"/>
     </extension>
     <extension point="org.eclipse.tm4e.registry.grammars">
-        <grammar scopeName="lngpck.source.batchfile" path="bat/batchfile.tmLanguage.json"/>
+        <grammar scopeName="lngpck.source.batchfile" path="syntaxes/bat/batchfile.tmLanguage.json"/>
         <scopeNameContentTypeBinding scopeName="lngpck.source.batchfile" contentTypeId="lng.bat"/>
     </extension>
 
@@ -38,13 +38,13 @@
         <content-type id="lng.clojure" base-type="org.eclipse.tm4e.language_pack.basetype" name="Clojure (Syntax Highlighting)" priority="low" file-extensions="clj,cljs,cljc,cljx,clojure,edn"/>
     </extension>
     <extension point="org.eclipse.tm4e.languageconfiguration.languageConfigurations">
-        <languageConfiguration contentTypeId="lng.clojure" path="clojure/language-configuration.json"/>
+        <languageConfiguration contentTypeId="lng.clojure" path="syntaxes/clojure/language-configuration.json"/>
     </extension>
     <extension point="org.eclipse.ui.genericeditor.icons">
-        <icon contentType="lng.clojure" icon="clojure/clojure.png"/>
+        <icon contentType="lng.clojure" icon="syntaxes/clojure/clojure.png"/>
     </extension>
     <extension point="org.eclipse.tm4e.registry.grammars">
-        <grammar scopeName="lngpck.source.clojure" path="clojure/clojure.tmLanguage.json"/>
+        <grammar scopeName="lngpck.source.clojure" path="syntaxes/clojure/clojure.tmLanguage.json"/>
         <scopeNameContentTypeBinding scopeName="lngpck.source.clojure" contentTypeId="lng.clojure"/>
     </extension>
 
@@ -53,13 +53,13 @@
         <content-type id="lng.coffeescript" base-type="org.eclipse.tm4e.language_pack.basetype" name="CoffeeScript (Syntax Highlighting)" priority="low" file-extensions="coffee,cson,iced"/>
     </extension>
     <extension point="org.eclipse.tm4e.languageconfiguration.languageConfigurations">
-        <languageConfiguration contentTypeId="lng.coffeescript" path="coffeescript/language-configuration.json"/>
+        <languageConfiguration contentTypeId="lng.coffeescript" path="syntaxes/coffeescript/language-configuration.json"/>
     </extension>
     <extension point="org.eclipse.ui.genericeditor.icons">
-        <icon contentType="lng.coffeescript" icon="coffeescript/coffeescript.png"/>
+        <icon contentType="lng.coffeescript" icon="syntaxes/coffeescript/coffeescript.png"/>
     </extension>
     <extension point="org.eclipse.tm4e.registry.grammars">
-        <grammar scopeName="lngpck.source.coffee" path="coffeescript/coffeescript.tmLanguage.json"/>
+        <grammar scopeName="lngpck.source.coffee" path="syntaxes/coffeescript/coffeescript.tmLanguage.json"/>
         <scopeNameContentTypeBinding scopeName="lngpck.source.coffee" contentTypeId="lng.coffeescript"/>
     </extension>
 
@@ -70,19 +70,19 @@
         <content-type id="lng.cuda-cpp" base-type="org.eclipse.tm4e.language_pack.basetype" name="CUDA C++ (Syntax Highlighting)" priority="low" file-extensions="cu,cuh"/>
     </extension>
     <extension point="org.eclipse.tm4e.languageconfiguration.languageConfigurations">
-        <languageConfiguration contentTypeId="lng.c" path="cpp/language-configuration.json"/>
-        <languageConfiguration contentTypeId="lng.cpp" path="cpp/language-configuration.json"/>
-        <languageConfiguration contentTypeId="lng.cuda-cpp" path="cpp/language-configuration.json"/>
+        <languageConfiguration contentTypeId="lng.c" path="syntaxes/cpp/language-configuration.json"/>
+        <languageConfiguration contentTypeId="lng.cpp" path="syntaxes/cpp/language-configuration.json"/>
+        <languageConfiguration contentTypeId="lng.cuda-cpp" path="syntaxes/cpp/language-configuration.json"/>
     </extension>
     <extension point="org.eclipse.tm4e.registry.grammars">
-        <grammar scopeName="lngpck.source.c" path="cpp/c.tmLanguage.json"/>
+        <grammar scopeName="lngpck.source.c" path="syntaxes/cpp/c.tmLanguage.json"/>
         <scopeNameContentTypeBinding scopeName="lngpck.source.c" contentTypeId="lng.c"/>
-        <grammar scopeName="lngpck.source.cpp.embedded.macro" path="cpp/cpp.embedded.macro.tmLanguage.json"/>
+        <grammar scopeName="lngpck.source.cpp.embedded.macro" path="syntaxes/cpp/cpp.embedded.macro.tmLanguage.json"/>
         <scopeNameContentTypeBinding scopeName="lngpck.source.cpp.embedded.macro" contentTypeId="lng.cpp"/>
-        <grammar scopeName="lngpck.source.cpp" path="cpp/cpp.tmLanguage.json"/>
+        <grammar scopeName="lngpck.source.cpp" path="syntaxes/cpp/cpp.tmLanguage.json"/>
         <scopeNameContentTypeBinding scopeName="lngpck.source.cpp" contentTypeId="lng.cpp"/>
-        <grammar scopeName="lngpck.source.c.platform" path="cpp/platform.tmLanguage.json"/>
-        <grammar scopeName="lngpck.source.cuda-cpp" path="cpp/cuda-cpp.tmLanguage.json"/>
+        <grammar scopeName="lngpck.source.c.platform" path="syntaxes/cpp/platform.tmLanguage.json"/>
+        <grammar scopeName="lngpck.source.cuda-cpp" path="syntaxes/cpp/cuda-cpp.tmLanguage.json"/>
         <scopeNameContentTypeBinding scopeName="lngpck.source.cuda-cpp" contentTypeId="lng.cuda-cpp"/>
     </extension>
 
@@ -91,10 +91,10 @@
         <content-type id="lng.csharp" base-type="org.eclipse.tm4e.language_pack.basetype" name="C# (Syntax Highlighting)" priority="low" file-extensions="cs,csx,cake"/>
     </extension>
     <extension point="org.eclipse.tm4e.languageconfiguration.languageConfigurations">
-        <languageConfiguration contentTypeId="lng.csharp" path="csharp/language-configuration.json"/>
+        <languageConfiguration contentTypeId="lng.csharp" path="syntaxes/csharp/language-configuration.json"/>
     </extension>
     <extension point="org.eclipse.tm4e.registry.grammars">
-        <grammar scopeName="lngpck.source.cs" path="csharp/csharp.tmLanguage.json"/>
+        <grammar scopeName="lngpck.source.cs" path="syntaxes/csharp/csharp.tmLanguage.json"/>
         <scopeNameContentTypeBinding scopeName="lngpck.source.cs" contentTypeId="lng.csharp"/>
     </extension>
 
@@ -103,10 +103,10 @@
         <content-type id="lng.css" base-type="org.eclipse.tm4e.language_pack.basetype" name="CSS (Syntax Highlighting)" priority="low" file-extensions="css"/>
     </extension>
     <extension point="org.eclipse.tm4e.languageconfiguration.languageConfigurations">
-        <languageConfiguration contentTypeId="lng.css" path="css/language-configuration.json"/>
+        <languageConfiguration contentTypeId="lng.css" path="syntaxes/css/language-configuration.json"/>
     </extension>
     <extension point="org.eclipse.tm4e.registry.grammars">
-        <grammar scopeName="lngpck.source.css" path="css/css.tmLanguage.json"/>
+        <grammar scopeName="lngpck.source.css" path="syntaxes/css/css.tmLanguage.json"/>
         <scopeNameContentTypeBinding scopeName="lngpck.source.css" contentTypeId="lng.css"/>
     </extension>
 
@@ -115,10 +115,10 @@
         <content-type id="lng.dart" base-type="org.eclipse.tm4e.language_pack.basetype" name="Dart (Syntax Highlighting)" priority="low" file-extensions="dart"/>
     </extension>
     <extension point="org.eclipse.tm4e.languageconfiguration.languageConfigurations">
-        <languageConfiguration contentTypeId="lng.dart" path="dart/language-configuration.json"/>
+        <languageConfiguration contentTypeId="lng.dart" path="syntaxes/dart/language-configuration.json"/>
     </extension>
     <extension point="org.eclipse.tm4e.registry.grammars">
-        <grammar scopeName="lngpck.source.dart" path="dart/dart.tmLanguage.json"/>
+        <grammar scopeName="lngpck.source.dart" path="syntaxes/dart/dart.tmLanguage.json"/>
         <scopeNameContentTypeBinding scopeName="lngpck.source.dart" contentTypeId="lng.dart"/>
     </extension>
 
@@ -141,10 +141,10 @@
         <content-type id="lng.dockerfile" base-type="org.eclipse.tm4e.language_pack.basetype" name="Docker (Syntax Highlighting)" priority="low" file-extensions="dockerfile,containerfile" file-names="Dockerfile,Containerfile" file-patterns="Dockerfile.*,Containerfile.*"/>
     </extension>
     <extension point="org.eclipse.tm4e.languageconfiguration.languageConfigurations">
-        <languageConfiguration contentTypeId="lng.dockerfile" path="docker/language-configuration.json"/>
+        <languageConfiguration contentTypeId="lng.dockerfile" path="syntaxes/docker/language-configuration.json"/>
     </extension>
     <extension point="org.eclipse.tm4e.registry.grammars">
-        <grammar scopeName="lngpck.source.dockerfile" path="docker/docker.tmLanguage.json"/>
+        <grammar scopeName="lngpck.source.dockerfile" path="syntaxes/docker/docker.tmLanguage.json"/>
         <scopeNameContentTypeBinding scopeName="lngpck.source.dockerfile" contentTypeId="lng.dockerfile"/>
     </extension>
 
@@ -189,10 +189,10 @@
         <content-type id="lng.go" base-type="org.eclipse.tm4e.language_pack.basetype" name="Go (Syntax Highlighting)" priority="low" file-extensions="go"/>
     </extension>
     <extension point="org.eclipse.tm4e.languageconfiguration.languageConfigurations">
-        <languageConfiguration contentTypeId="lng.go" path="go/language-configuration.json"/>
+        <languageConfiguration contentTypeId="lng.go" path="syntaxes/go/language-configuration.json"/>
     </extension>
     <extension point="org.eclipse.tm4e.registry.grammars">
-        <grammar scopeName="lngpck.source.go" path="go/go.tmLanguage.json"/>
+        <grammar scopeName="lngpck.source.go" path="syntaxes/go/go.tmLanguage.json"/>
         <scopeNameContentTypeBinding scopeName="lngpck.source.go" contentTypeId="lng.go"/>
     </extension>
 
@@ -201,10 +201,10 @@
         <content-type id="lng.groovy" base-type="org.eclipse.tm4e.language_pack.basetype" name="Groovy (Syntax Highlighting)" priority="low" file-extensions="groovy,gvy,gradle,jenkinsfile,nf" file-names="Jenkinsfile" file-patterns="Jenkinsfile*"/>
     </extension>
     <extension point="org.eclipse.tm4e.languageconfiguration.languageConfigurations">
-        <languageConfiguration contentTypeId="lng.groovy" path="groovy/language-configuration.json"/>
+        <languageConfiguration contentTypeId="lng.groovy" path="syntaxes/groovy/language-configuration.json"/>
     </extension>
     <extension point="org.eclipse.tm4e.registry.grammars">
-        <grammar scopeName="lngpck.source.groovy" path="groovy/groovy.tmLanguage.json"/>
+        <grammar scopeName="lngpck.source.groovy" path="syntaxes/groovy/groovy.tmLanguage.json"/>
         <scopeNameContentTypeBinding scopeName="lngpck.source.groovy" contentTypeId="lng.groovy"/>
     </extension>
 
@@ -213,10 +213,10 @@
         <content-type id="lng.handlebars" base-type="org.eclipse.tm4e.language_pack.basetype" name="Handlebars (Syntax Highlighting)" priority="low" file-extensions="handlebars,hbs,hjs"/>
     </extension>
     <extension point="org.eclipse.tm4e.languageconfiguration.languageConfigurations">
-        <languageConfiguration contentTypeId="lng.handlebars" path="handlebars/language-configuration.json"/>
+        <languageConfiguration contentTypeId="lng.handlebars" path="syntaxes/handlebars/language-configuration.json"/>
     </extension>
     <extension point="org.eclipse.tm4e.registry.grammars">
-        <grammar scopeName="lngpck.text.html.handlebars" path="handlebars/Handlebars.tmLanguage.json"/>
+        <grammar scopeName="lngpck.text.html.handlebars" path="syntaxes/handlebars/Handlebars.tmLanguage.json"/>
         <scopeNameContentTypeBinding scopeName="lngpck.text.html.handlebars" contentTypeId="lng.handlebars"/>
     </extension>
 
@@ -225,10 +225,10 @@
         <content-type id="lng.hlsl" base-type="org.eclipse.tm4e.language_pack.basetype" name="High-Level Shader Language (Syntax Highlighting)" priority="low" file-extensions="hlsl,hlsli,fx,fxh,vsh,psh,cginc,compute"/>
     </extension>
     <extension point="org.eclipse.tm4e.languageconfiguration.languageConfigurations">
-        <languageConfiguration contentTypeId="lng.hlsl" path="hlsl/language-configuration.json"/>
+        <languageConfiguration contentTypeId="lng.hlsl" path="syntaxes/hlsl/language-configuration.json"/>
     </extension>
     <extension point="org.eclipse.tm4e.registry.grammars">
-        <grammar scopeName="lngpck.source.hlsl" path="hlsl/hlsl.tmLanguage.json"/>
+        <grammar scopeName="lngpck.source.hlsl" path="syntaxes/hlsl/hlsl.tmLanguage.json"/>
         <scopeNameContentTypeBinding scopeName="lngpck.source.hlsl" contentTypeId="lng.hlsl"/>
     </extension>
 
@@ -237,11 +237,11 @@
         <content-type id="lng.html" base-type="org.eclipse.tm4e.language_pack.basetype" name="HTML (Syntax Highlighting)" priority="low" file-extensions="html,htm,shtml,xhtml,xht,mdoc,jsp,asp,aspx,jshtm,volt,ejs,rhtml"/>
     </extension>
     <extension point="org.eclipse.tm4e.languageconfiguration.languageConfigurations">
-        <languageConfiguration contentTypeId="lng.html" path="html/language-configuration.json"/>
+        <languageConfiguration contentTypeId="lng.html" path="syntaxes/html/language-configuration.json"/>
     </extension>
     <extension point="org.eclipse.tm4e.registry.grammars">
-        <grammar scopeName="lngpck.text.html.basic" path="html/html.tmLanguage.json"/>
-        <grammar scopeName="lngpck.text.html.derivative" path="html/html-derivative.tmLanguage.json"/>
+        <grammar scopeName="lngpck.text.html.basic" path="syntaxes/html/html.tmLanguage.json"/>
+        <grammar scopeName="lngpck.text.html.derivative" path="syntaxes/html/html-derivative.tmLanguage.json"/>
         <scopeNameContentTypeBinding scopeName="lngpck.text.html.derivative" contentTypeId="lng.html"/>
     </extension>
 
@@ -250,10 +250,10 @@
         <content-type id="lng.ini" base-type="org.eclipse.tm4e.language_pack.basetype" name="INI File (Syntax Highlighting)" priority="low" file-extensions="ini"/>
     </extension>
     <extension point="org.eclipse.tm4e.languageconfiguration.languageConfigurations">
-        <languageConfiguration contentTypeId="lng.ini" path="ini/ini.language-configuration.json"/>
+        <languageConfiguration contentTypeId="lng.ini" path="syntaxes/ini/ini.language-configuration.json"/>
     </extension>
     <extension point="org.eclipse.tm4e.registry.grammars">
-        <grammar scopeName="lngpck.source.ini" path="ini/ini.tmLanguage.json"/>
+        <grammar scopeName="lngpck.source.ini" path="syntaxes/ini/ini.tmLanguage.json"/>
         <scopeNameContentTypeBinding scopeName="lngpck.source.ini" contentTypeId="lng.ini"/>
     </extension>
 
@@ -262,10 +262,10 @@
         <content-type id="lng.java" base-type="org.eclipse.tm4e.language_pack.basetype" name="Java (Syntax Highlighting)" priority="low" file-extensions="java,jav"/>
     </extension>
     <extension point="org.eclipse.tm4e.languageconfiguration.languageConfigurations">
-        <languageConfiguration contentTypeId="lng.java" path="java/language-configuration.json"/>
+        <languageConfiguration contentTypeId="lng.java" path="syntaxes/java/language-configuration.json"/>
     </extension>
     <extension point="org.eclipse.tm4e.registry.grammars">
-        <grammar scopeName="lngpck.source.java" path="java/java.tmLanguage.json"/>
+        <grammar scopeName="lngpck.source.java" path="syntaxes/java/java.tmLanguage.json"/>
         <scopeNameContentTypeBinding scopeName="lngpck.source.java" contentTypeId="lng.java"/>
     </extension>
 
@@ -275,15 +275,15 @@
         <content-type id="lng.javascript" base-type="org.eclipse.tm4e.language_pack.basetype" name="JavaScript (Syntax Highlighting)" priority="low" file-extensions="js,es6,mjs,cjs,pac" file-names="jakefile"/>
     </extension>
     <extension point="org.eclipse.tm4e.languageconfiguration.languageConfigurations">
-        <languageConfiguration contentTypeId="lng.javascriptreact" path="javascript/javascript-language-configuration.json"/>
-        <languageConfiguration contentTypeId="lng.javascript" path="javascript/javascript-language-configuration.json"/>
+        <languageConfiguration contentTypeId="lng.javascriptreact" path="syntaxes/javascript/javascript-language-configuration.json"/>
+        <languageConfiguration contentTypeId="lng.javascript" path="syntaxes/javascript/javascript-language-configuration.json"/>
     </extension>
     <extension point="org.eclipse.tm4e.registry.grammars">
-        <grammar scopeName="lngpck.source.js.jsx" path="javascript/JavaScriptReact.tmLanguage.json"/>
+        <grammar scopeName="lngpck.source.js.jsx" path="syntaxes/javascript/JavaScriptReact.tmLanguage.json"/>
         <scopeNameContentTypeBinding scopeName="lngpck.source.js.jsx" contentTypeId="lng.javascriptreact"/>
-        <grammar scopeName="lngpck.source.js" path="javascript/JavaScript.tmLanguage.json"/>
+        <grammar scopeName="lngpck.source.js" path="syntaxes/javascript/JavaScript.tmLanguage.json"/>
         <scopeNameContentTypeBinding scopeName="lngpck.source.js" contentTypeId="lng.javascript"/>
-        <grammar scopeName="lngpck.source.js.regexp" path="javascript/Regular Expressions (JavaScript).tmLanguage"/>
+        <grammar scopeName="lngpck.source.js.regexp" path="syntaxes/javascript/Regular Expressions (JavaScript).tmLanguage"/>
     </extension>
 
     <!-- json -->
@@ -293,16 +293,16 @@
         <content-type id="lng.jsonl" base-type="org.eclipse.tm4e.language_pack.basetype" name="JSON Lines (Syntax Highlighting)" priority="low" file-extensions="jsonl"/>
     </extension>
     <extension point="org.eclipse.tm4e.languageconfiguration.languageConfigurations">
-        <languageConfiguration contentTypeId="lng.json" path="json/language-configuration.json"/>
-        <languageConfiguration contentTypeId="lng.jsonc" path="json/language-configuration.json"/>
-        <languageConfiguration contentTypeId="lng.jsonl" path="json/language-configuration.json"/>
+        <languageConfiguration contentTypeId="lng.json" path="syntaxes/json/language-configuration.json"/>
+        <languageConfiguration contentTypeId="lng.jsonc" path="syntaxes/json/language-configuration.json"/>
+        <languageConfiguration contentTypeId="lng.jsonl" path="syntaxes/json/language-configuration.json"/>
     </extension>
     <extension point="org.eclipse.tm4e.registry.grammars">
-        <grammar scopeName="lngpck.source.json" path="json/JSON.tmLanguage.json"/>
+        <grammar scopeName="lngpck.source.json" path="syntaxes/json/JSON.tmLanguage.json"/>
         <scopeNameContentTypeBinding scopeName="lngpck.source.json" contentTypeId="lng.json"/>
-        <grammar scopeName="lngpck.source.json.comments" path="json/JSONC.tmLanguage.json"/>
+        <grammar scopeName="lngpck.source.json.comments" path="syntaxes/json/JSONC.tmLanguage.json"/>
         <scopeNameContentTypeBinding scopeName="lngpck.source.json.comments" contentTypeId="lng.jsonc"/>
-        <grammar scopeName="lngpck.source.json.lines" path="json/JSONL.tmLanguage.json"/>
+        <grammar scopeName="lngpck.source.json.lines" path="syntaxes/json/JSONL.tmLanguage.json"/>
         <scopeNameContentTypeBinding scopeName="lngpck.source.json.lines" contentTypeId="lng.jsonl"/>
     </extension>
 
@@ -311,10 +311,10 @@
         <content-type id="lng.jikespg" base-type="org.eclipse.tm4e.language_pack.basetype" name="jikespg grammar" priority="low" file-extensions="g" />
     </extension>
     <extension point="org.eclipse.tm4e.languageconfiguration.languageConfigurations">
-        <languageConfiguration contentTypeId="lng.jikespg" path="jikespg/language-configuration.json"/>
+        <languageConfiguration contentTypeId="lng.jikespg" path="syntaxes/jikespg/language-configuration.json"/>
     </extension>
     <extension point="org.eclipse.tm4e.registry.grammars">
-        <grammar scopeName="lngpck.source.jikespg" path="jikespg/jikespg.tmLanguage.json"/>
+        <grammar scopeName="lngpck.source.jikespg" path="syntaxes/jikespg/jikespg.tmLanguage.json"/>
         <scopeNameContentTypeBinding scopeName="lngpck.source.jikespg" contentTypeId="lng.jikespg"/>
     </extension>
 
@@ -323,10 +323,10 @@
         <content-type id="lng.julia" base-type="org.eclipse.tm4e.language_pack.basetype" name="Julia (Syntax Highlighting)" priority="low" file-extensions="jl"/>
     </extension>
     <extension point="org.eclipse.tm4e.languageconfiguration.languageConfigurations">
-        <languageConfiguration contentTypeId="lng.julia" path="julia/language-configuration.json"/>
+        <languageConfiguration contentTypeId="lng.julia" path="syntaxes/julia/language-configuration.json"/>
     </extension>
     <extension point="org.eclipse.tm4e.registry.grammars">
-        <grammar scopeName="lngpck.source.julia" path="julia/julia.tmLanguage.json"/>
+        <grammar scopeName="lngpck.source.julia" path="syntaxes/julia/julia.tmLanguage.json"/>
         <scopeNameContentTypeBinding scopeName="lngpck.source.julia" contentTypeId="lng.julia"/>
     </extension>
 
@@ -360,10 +360,10 @@
         <content-type id="lng.less" base-type="org.eclipse.tm4e.language_pack.basetype" name="Less (Syntax Highlighting)" priority="low" file-extensions="less"/>
     </extension>
     <extension point="org.eclipse.tm4e.languageconfiguration.languageConfigurations">
-        <languageConfiguration contentTypeId="lng.less" path="less/language-configuration.json"/>
+        <languageConfiguration contentTypeId="lng.less" path="syntaxes/less/language-configuration.json"/>
     </extension>
     <extension point="org.eclipse.tm4e.registry.grammars">
-        <grammar scopeName="lngpck.source.css.less" path="less/less.tmLanguage.json"/>
+        <grammar scopeName="lngpck.source.css.less" path="syntaxes/less/less.tmLanguage.json"/>
         <scopeNameContentTypeBinding scopeName="lngpck.source.css.less" contentTypeId="lng.less"/>
     </extension>
 
@@ -383,10 +383,10 @@
         <content-type id="lng.lua" base-type="org.eclipse.tm4e.language_pack.basetype" name="Lua (Syntax Highlighting)" priority="low" file-extensions="lua"/>
     </extension>
     <extension point="org.eclipse.tm4e.languageconfiguration.languageConfigurations">
-        <languageConfiguration contentTypeId="lng.lua" path="lua/language-configuration.json"/>
+        <languageConfiguration contentTypeId="lng.lua" path="syntaxes/lua/language-configuration.json"/>
     </extension>
     <extension point="org.eclipse.tm4e.registry.grammars">
-        <grammar scopeName="lngpck.source.lua" path="lua/lua.tmLanguage.json"/>
+        <grammar scopeName="lngpck.source.lua" path="syntaxes/lua/lua.tmLanguage.json"/>
         <scopeNameContentTypeBinding scopeName="lngpck.source.lua" contentTypeId="lng.lua"/>
     </extension>
 
@@ -395,10 +395,10 @@
         <content-type id="lng.makefile" base-type="org.eclipse.tm4e.language_pack.basetype" name="Makefile (Syntax Highlighting)" priority="low" file-extensions="mak,mk" file-names="Makefile,makefile,GNUmakefile,OCamlMakefile"/>
     </extension>
     <extension point="org.eclipse.tm4e.languageconfiguration.languageConfigurations">
-        <languageConfiguration contentTypeId="lng.makefile" path="make/language-configuration.json"/>
+        <languageConfiguration contentTypeId="lng.makefile" path="syntaxes/make/language-configuration.json"/>
     </extension>
     <extension point="org.eclipse.tm4e.registry.grammars">
-        <grammar scopeName="lngpck.source.makefile" path="make/make.tmLanguage.json"/>
+        <grammar scopeName="lngpck.source.makefile" path="syntaxes/make/make.tmLanguage.json"/>
         <scopeNameContentTypeBinding scopeName="lngpck.source.makefile" contentTypeId="lng.makefile"/>
     </extension>
 
@@ -407,10 +407,10 @@
         <content-type id="lng.markdown" base-type="org.eclipse.tm4e.language_pack.basetype" name="Markdown (Syntax Highlighting)" priority="low" file-extensions="md,mkd,mdwn,mdown,markdown,markdn,mdtxt,mdtext,workbook"/>
     </extension>
     <extension point="org.eclipse.tm4e.languageconfiguration.languageConfigurations">
-        <languageConfiguration contentTypeId="lng.markdown" path="markdown-basics/language-configuration.json"/>
+        <languageConfiguration contentTypeId="lng.markdown" path="syntaxes/markdown-basics/language-configuration.json"/>
     </extension>
     <extension point="org.eclipse.tm4e.registry.grammars">
-        <grammar scopeName="lngpck.text.html.markdown" path="markdown-basics/markdown.tmLanguage.json"/>
+        <grammar scopeName="lngpck.text.html.markdown" path="syntaxes/markdown-basics/markdown.tmLanguage.json"/>
         <scopeNameContentTypeBinding scopeName="lngpck.text.html.markdown" contentTypeId="lng.markdown"/>
     </extension>
 
@@ -431,13 +431,13 @@
         <content-type id="lng.objective-cpp" base-type="org.eclipse.tm4e.language_pack.basetype" name="Objective-C++ (Syntax Highlighting)" priority="low" file-extensions="mm"/>
     </extension>
     <extension point="org.eclipse.tm4e.languageconfiguration.languageConfigurations">
-        <languageConfiguration contentTypeId="lng.objective-c" path="objective-c/language-configuration.json"/>
-        <languageConfiguration contentTypeId="lng.objective-cpp" path="objective-c/language-configuration.json"/>
+        <languageConfiguration contentTypeId="lng.objective-c" path="syntaxes/objective-c/language-configuration.json"/>
+        <languageConfiguration contentTypeId="lng.objective-cpp" path="syntaxes/objective-c/language-configuration.json"/>
     </extension>
     <extension point="org.eclipse.tm4e.registry.grammars">
-        <grammar scopeName="lngpck.source.objc" path="objective-c/objective-c.tmLanguage.json"/>
+        <grammar scopeName="lngpck.source.objc" path="syntaxes/objective-c/objective-c.tmLanguage.json"/>
         <scopeNameContentTypeBinding scopeName="lngpck.source.objc" contentTypeId="lng.objective-c"/>
-        <grammar scopeName="lngpck.source.objcpp" path="objective-c/objective-c++.tmLanguage.json"/>
+        <grammar scopeName="lngpck.source.objcpp" path="syntaxes/objective-c/objective-c++.tmLanguage.json"/>
         <scopeNameContentTypeBinding scopeName="lngpck.source.objcpp" contentTypeId="lng.objective-cpp"/>
     </extension>
 
@@ -447,13 +447,13 @@
         <content-type id="lng.perl6" base-type="org.eclipse.tm4e.language_pack.basetype" name="Perl 6 (Syntax Highlighting)" priority="low" file-extensions="p6,pl6,pm6,nqp"/>
     </extension>
     <extension point="org.eclipse.tm4e.languageconfiguration.languageConfigurations">
-        <languageConfiguration contentTypeId="lng.perl" path="perl/perl.language-configuration.json"/>
-        <languageConfiguration contentTypeId="lng.perl6" path="perl/perl6.language-configuration.json"/>
+        <languageConfiguration contentTypeId="lng.perl" path="syntaxes/perl/perl.language-configuration.json"/>
+        <languageConfiguration contentTypeId="lng.perl6" path="syntaxes/perl/perl6.language-configuration.json"/>
     </extension>
     <extension point="org.eclipse.tm4e.registry.grammars">
-        <grammar scopeName="lngpck.source.perl" path="perl/perl.tmLanguage.json"/>
+        <grammar scopeName="lngpck.source.perl" path="syntaxes/perl/perl.tmLanguage.json"/>
         <scopeNameContentTypeBinding scopeName="lngpck.source.perl" contentTypeId="lng.perl"/>
-        <grammar scopeName="lngpck.source.perl.6" path="perl/perl6.tmLanguage.json"/>
+        <grammar scopeName="lngpck.source.perl.6" path="syntaxes/perl/perl6.tmLanguage.json"/>
         <scopeNameContentTypeBinding scopeName="lngpck.source.perl.6" contentTypeId="lng.perl6"/>
     </extension>
 
@@ -478,10 +478,10 @@
         <content-type id="lng.powershell" base-type="org.eclipse.tm4e.language_pack.basetype" name="PowerShell (Syntax Highlighting)" priority="low" file-extensions="ps1,psm1,psd1,pssc,psrc"/>
     </extension>
     <extension point="org.eclipse.tm4e.languageconfiguration.languageConfigurations">
-        <languageConfiguration contentTypeId="lng.powershell" path="powershell/language-configuration.json"/>
+        <languageConfiguration contentTypeId="lng.powershell" path="syntaxes/powershell/language-configuration.json"/>
     </extension>
     <extension point="org.eclipse.tm4e.registry.grammars">
-        <grammar scopeName="lngpck.source.powershell" path="powershell/powershell.tmLanguage.json"/>
+        <grammar scopeName="lngpck.source.powershell" path="syntaxes/powershell/powershell.tmLanguage.json"/>
         <scopeNameContentTypeBinding scopeName="lngpck.source.powershell" contentTypeId="lng.powershell"/>
     </extension>
 
@@ -490,10 +490,10 @@
         <content-type id="lng.jade" base-type="org.eclipse.tm4e.language_pack.basetype" name="Pug (Syntax Highlighting)" priority="low" file-extensions="pug,jade"/>
     </extension>
     <extension point="org.eclipse.tm4e.languageconfiguration.languageConfigurations">
-        <languageConfiguration contentTypeId="lng.jade" path="pug/language-configuration.json"/>
+        <languageConfiguration contentTypeId="lng.jade" path="syntaxes/pug/language-configuration.json"/>
     </extension>
     <extension point="org.eclipse.tm4e.registry.grammars">
-        <grammar scopeName="lngpck.text.pug" path="pug/pug.tmLanguage.json"/>
+        <grammar scopeName="lngpck.text.pug" path="syntaxes/pug/pug.tmLanguage.json"/>
         <scopeNameContentTypeBinding scopeName="lngpck.text.pug" contentTypeId="lng.jade"/>
     </extension>
 
@@ -502,12 +502,12 @@
         <content-type id="lng.python" base-type="org.eclipse.tm4e.language_pack.basetype" name="Python (Syntax Highlighting)" priority="low" file-extensions="py,rpy,pyw,cpy,gyp,gypi,pyi,ipy,pyt" file-names="SConstruct,SConscript"/>
     </extension>
     <extension point="org.eclipse.tm4e.languageconfiguration.languageConfigurations">
-        <languageConfiguration contentTypeId="lng.python" path="python/language-configuration.json"/>
+        <languageConfiguration contentTypeId="lng.python" path="syntaxes/python/language-configuration.json"/>
     </extension>
     <extension point="org.eclipse.tm4e.registry.grammars">
-        <grammar scopeName="lngpck.source.python" path="python/MagicPython.tmLanguage.json"/>
+        <grammar scopeName="lngpck.source.python" path="syntaxes/python/MagicPython.tmLanguage.json"/>
         <scopeNameContentTypeBinding scopeName="lngpck.source.python" contentTypeId="lng.python"/>
-        <grammar scopeName="lngpck.source.regexp.python" path="python/MagicRegExp.tmLanguage.json"/>
+        <grammar scopeName="lngpck.source.regexp.python" path="syntaxes/python/MagicRegExp.tmLanguage.json"/>
     </extension>
 
     <!-- r -->
@@ -515,10 +515,10 @@
         <content-type id="lng.r" base-type="org.eclipse.tm4e.language_pack.basetype" name="R (Syntax Highlighting)" priority="low" file-extensions="r,rhistory,rprofile,rt"/>
     </extension>
     <extension point="org.eclipse.tm4e.languageconfiguration.languageConfigurations">
-        <languageConfiguration contentTypeId="lng.r" path="r/language-configuration.json"/>
+        <languageConfiguration contentTypeId="lng.r" path="syntaxes/r/language-configuration.json"/>
     </extension>
     <extension point="org.eclipse.tm4e.registry.grammars">
-        <grammar scopeName="lngpck.source.r" path="r/r.tmLanguage.json"/>
+        <grammar scopeName="lngpck.source.r" path="syntaxes/r/r.tmLanguage.json"/>
         <scopeNameContentTypeBinding scopeName="lngpck.source.r" contentTypeId="lng.r"/>
     </extension>
 
@@ -527,10 +527,10 @@
         <content-type id="lng.razor" base-type="org.eclipse.tm4e.language_pack.basetype" name="ASP.NET Razor (Syntax Highlighting)" priority="low" file-extensions="cshtml,razor"/>
     </extension>
     <extension point="org.eclipse.tm4e.languageconfiguration.languageConfigurations">
-        <languageConfiguration contentTypeId="lng.razor" path="razor/language-configuration.json"/>
+        <languageConfiguration contentTypeId="lng.razor" path="syntaxes/razor/language-configuration.json"/>
     </extension>
     <extension point="org.eclipse.tm4e.registry.grammars">
-        <grammar scopeName="lngpck.text.html.cshtml" path="razor/cshtml.tmLanguage.json"/>
+        <grammar scopeName="lngpck.text.html.cshtml" path="syntaxes/razor/cshtml.tmLanguage.json"/>
         <scopeNameContentTypeBinding scopeName="lngpck.text.html.cshtml" contentTypeId="lng.razor"/>
     </extension>
 
@@ -567,13 +567,13 @@
         <content-type id="lng.rust" base-type="org.eclipse.tm4e.language_pack.basetype" name="Rust (Syntax Highlighting)" priority="low" file-extensions="rs"/>
     </extension>
     <extension point="org.eclipse.tm4e.languageconfiguration.languageConfigurations">
-        <languageConfiguration contentTypeId="lng.rust" path="rust/language-configuration.json"/>
+        <languageConfiguration contentTypeId="lng.rust" path="syntaxes/rust/language-configuration.json"/>
     </extension>
     <extension point="org.eclipse.ui.genericeditor.icons">
-        <icon contentType="lng.rust" icon="rust/rust.png"/>
+        <icon contentType="lng.rust" icon="syntaxes/rust/rust.png"/>
     </extension>
     <extension point="org.eclipse.tm4e.registry.grammars">
-        <grammar scopeName="lngpck.source.rust" path="rust/rust.tmLanguage.json"/>
+        <grammar scopeName="lngpck.source.rust" path="syntaxes/rust/rust.tmLanguage.json"/>
         <scopeNameContentTypeBinding scopeName="lngpck.source.rust" contentTypeId="lng.rust"/>
     </extension>
 
@@ -582,12 +582,12 @@
         <content-type id="lng.scss" base-type="org.eclipse.tm4e.language_pack.basetype" name="SCSS (Syntax Highlighting)" priority="low" file-extensions="scss"/>
     </extension>
     <extension point="org.eclipse.tm4e.languageconfiguration.languageConfigurations">
-        <languageConfiguration contentTypeId="lng.scss" path="scss/language-configuration.json"/>
+        <languageConfiguration contentTypeId="lng.scss" path="syntaxes/scss/language-configuration.json"/>
     </extension>
     <extension point="org.eclipse.tm4e.registry.grammars">
-        <grammar scopeName="lngpck.source.css.scss" path="scss/scss.tmLanguage.json"/>
+        <grammar scopeName="lngpck.source.css.scss" path="syntaxes/scss/scss.tmLanguage.json"/>
         <scopeNameContentTypeBinding scopeName="lngpck.source.css.scss" contentTypeId="lng.scss"/>
-        <grammar scopeName="lngpck.source.sassdoc" path="scss/sassdoc.tmLanguage.json"/>
+        <grammar scopeName="lngpck.source.sassdoc" path="syntaxes/scss/sassdoc.tmLanguage.json"/>
     </extension>
 
     <!-- search-result -->
@@ -606,10 +606,10 @@
         <content-type id="lng.shaderlab" base-type="org.eclipse.tm4e.language_pack.basetype" name="ShaderLab (Syntax Highlighting)" priority="low" file-extensions="shader"/>
     </extension>
     <extension point="org.eclipse.tm4e.languageconfiguration.languageConfigurations">
-        <languageConfiguration contentTypeId="lng.shaderlab" path="shaderlab/language-configuration.json"/>
+        <languageConfiguration contentTypeId="lng.shaderlab" path="syntaxes/shaderlab/language-configuration.json"/>
     </extension>
     <extension point="org.eclipse.tm4e.registry.grammars">
-        <grammar scopeName="lngpck.source.shaderlab" path="shaderlab/shaderlab.tmLanguage.json"/>
+        <grammar scopeName="lngpck.source.shaderlab" path="syntaxes/shaderlab/shaderlab.tmLanguage.json"/>
         <scopeNameContentTypeBinding scopeName="lngpck.source.shaderlab" contentTypeId="lng.shaderlab"/>
     </extension>
 
@@ -632,10 +632,10 @@
         <content-type id="lng.sql" base-type="org.eclipse.tm4e.language_pack.basetype" name="SQL (Syntax Highlighting)" priority="low" file-extensions="sql,dsql"/>
     </extension>
     <extension point="org.eclipse.tm4e.languageconfiguration.languageConfigurations">
-        <languageConfiguration contentTypeId="lng.sql" path="sql/language-configuration.json"/>
+        <languageConfiguration contentTypeId="lng.sql" path="syntaxes/sql/language-configuration.json"/>
     </extension>
     <extension point="org.eclipse.tm4e.registry.grammars">
-        <grammar scopeName="lngpck.source.sql" path="sql/sql.tmLanguage.json"/>
+        <grammar scopeName="lngpck.source.sql" path="syntaxes/sql/sql.tmLanguage.json"/>
         <scopeNameContentTypeBinding scopeName="lngpck.source.sql" contentTypeId="lng.sql"/>
     </extension>
 
@@ -644,10 +644,10 @@
         <content-type id="lng.swift" base-type="org.eclipse.tm4e.language_pack.basetype" name="Swift (Syntax Highlighting)" priority="low" file-extensions="swift"/>
     </extension>
     <extension point="org.eclipse.tm4e.languageconfiguration.languageConfigurations">
-        <languageConfiguration contentTypeId="lng.swift" path="swift/language-configuration.json"/>
+        <languageConfiguration contentTypeId="lng.swift" path="syntaxes/swift/language-configuration.json"/>
     </extension>
     <extension point="org.eclipse.tm4e.registry.grammars">
-        <grammar scopeName="lngpck.source.swift" path="swift/swift.tmLanguage.json"/>
+        <grammar scopeName="lngpck.source.swift" path="syntaxes/swift/swift.tmLanguage.json"/>
         <scopeNameContentTypeBinding scopeName="lngpck.source.swift" contentTypeId="lng.swift"/>
     </extension>
 
@@ -657,16 +657,16 @@
         <content-type id="lng.typescriptreact" base-type="org.eclipse.tm4e.language_pack.basetype" name="TypeScript JSX (Syntax Highlighting)" priority="low" file-extensions="tsx"/>
     </extension>
     <extension point="org.eclipse.tm4e.languageconfiguration.languageConfigurations">
-        <languageConfiguration contentTypeId="lng.typescript" path="typescript-basics/language-configuration.json"/>
-        <languageConfiguration contentTypeId="lng.typescriptreact" path="typescript-basics/language-configuration.json"/>
+        <languageConfiguration contentTypeId="lng.typescript" path="syntaxes/typescript-basics/language-configuration.json"/>
+        <languageConfiguration contentTypeId="lng.typescriptreact" path="syntaxes/typescript-basics/language-configuration.json"/>
     </extension>
     <extension point="org.eclipse.tm4e.registry.grammars">
-        <grammar scopeName="lngpck.source.ts" path="typescript-basics/TypeScript.tmLanguage.json"/>
+        <grammar scopeName="lngpck.source.ts" path="syntaxes/typescript-basics/TypeScript.tmLanguage.json"/>
         <scopeNameContentTypeBinding scopeName="lngpck.source.ts" contentTypeId="lng.typescript"/>
-        <grammar scopeName="lngpck.source.tsx" path="typescript-basics/TypeScriptReact.tmLanguage.json"/>
+        <grammar scopeName="lngpck.source.tsx" path="syntaxes/typescript-basics/TypeScriptReact.tmLanguage.json"/>
         <scopeNameContentTypeBinding scopeName="lngpck.source.tsx" contentTypeId="lng.typescriptreact"/>
-        <grammar scopeName="lngpck.documentation.injection.ts" path="typescript-basics/jsdoc.ts.injection.tmLanguage.json"/>
-        <grammar scopeName="lngpck.documentation.injection.js.jsx" path="typescript-basics/jsdoc.js.injection.tmLanguage.json"/>
+        <grammar scopeName="lngpck.documentation.injection.ts" path="syntaxes/typescript-basics/jsdoc.ts.injection.tmLanguage.json"/>
+        <grammar scopeName="lngpck.documentation.injection.js.jsx" path="syntaxes/typescript-basics/jsdoc.js.injection.tmLanguage.json"/>
     </extension>
 
     <!-- vb -->
@@ -674,10 +674,10 @@
         <content-type id="lng.vb" base-type="org.eclipse.tm4e.language_pack.basetype" name="Visual Basic .NET (Syntax Highlighting)" priority="low" file-extensions="vb,brs,vbs,bas,vba"/>
     </extension>
     <extension point="org.eclipse.tm4e.languageconfiguration.languageConfigurations">
-        <languageConfiguration contentTypeId="lng.vb" path="vb/language-configuration.json"/>
+        <languageConfiguration contentTypeId="lng.vb" path="syntaxes/vb/language-configuration.json"/>
     </extension>
     <extension point="org.eclipse.tm4e.registry.grammars">
-        <grammar scopeName="lngpck.source.asp.vb.net" path="vb/asp-vb-net.tmlanguage.json"/>
+        <grammar scopeName="lngpck.source.asp.vb.net" path="syntaxes/vb/asp-vb-net.tmlanguage.json"/>
         <scopeNameContentTypeBinding scopeName="lngpck.source.asp.vb.net" contentTypeId="lng.vb"/>
     </extension>
 
@@ -687,13 +687,13 @@
         <content-type id="lng.xsl" base-type="org.eclipse.tm4e.language_pack.basetype" name="XSL (Syntax Highlighting)" priority="low" file-extensions="xsl,xslt"/>
     </extension>
     <extension point="org.eclipse.tm4e.languageconfiguration.languageConfigurations">
-        <languageConfiguration contentTypeId="lng.xml" path="xml/xml.language-configuration.json"/>
-        <languageConfiguration contentTypeId="lng.xsl" path="xml/xsl.language-configuration.json"/>
+        <languageConfiguration contentTypeId="lng.xml" path="syntaxes/xml/xml.language-configuration.json"/>
+        <languageConfiguration contentTypeId="lng.xsl" path="syntaxes/xml/xsl.language-configuration.json"/>
     </extension>
     <extension point="org.eclipse.tm4e.registry.grammars">
-        <grammar scopeName="lngpck.text.xml" path="xml/xml.tmLanguage.json"/>
+        <grammar scopeName="lngpck.text.xml" path="syntaxes/xml/xml.tmLanguage.json"/>
         <scopeNameContentTypeBinding scopeName="lngpck.text.xml" contentTypeId="lng.xml"/>
-        <grammar scopeName="lngpck.text.xml.xsl" path="xml/xsl.tmLanguage.json"/>
+        <grammar scopeName="lngpck.text.xml.xsl" path="syntaxes/xml/xsl.tmLanguage.json"/>
         <scopeNameContentTypeBinding scopeName="lngpck.text.xml.xsl" contentTypeId="lng.xsl"/>
     </extension>
 

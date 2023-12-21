@@ -1,0 +1,948 @@
+# AUTO-GENERATED FILE - Do not edit manually; changes will be lost.
+extensions:
+  bat:
+    github:
+      repo: microsoft/vscode
+      path: extensions/bat
+      ref: 1.79.0
+      commit: b380da4ef1ee00e224a15c1d4d9793e27c2b6302
+    languages:
+      bat:
+        label: Batch File
+        scope-name: source.batchfile
+        upstream-url: https://github.com/mmims/language-batchfile/commit/6154ae25a24e01ac9329e7bcf958e093cd8733a9
+        file-extensions:
+        - .bat
+        - .cmd
+  clojure:
+    github:
+      repo: microsoft/vscode
+      path: extensions/clojure
+      ref: 1.79.0
+      commit: b380da4ef1ee00e224a15c1d4d9793e27c2b6302
+    languages:
+      clojure:
+        label: Clojure
+        scope-name: source.clojure
+        upstream-url: https://github.com/atom/language-clojure/commit/45bdb881501d0b8f8b707ca1d3fcc8b4b99fca03
+        file-extensions:
+        - .clj
+        - .cljc
+        - .cljs
+        - .cljx
+        - .clojure
+        - .edn
+  coffeescript:
+    github:
+      repo: microsoft/vscode
+      path: extensions/coffeescript
+      ref: 1.79.0
+      commit: b380da4ef1ee00e224a15c1d4d9793e27c2b6302
+    languages:
+      coffeescript:
+        label: CoffeeScript
+        scope-name: source.coffee
+        upstream-url: https://github.com/atom/language-coffee-script/commit/0f6db9143663e18b1ad00667820f46747dba495e
+        file-extensions:
+        - .coffee
+        - .cson
+        - .iced
+  cpp:
+    github:
+      repo: microsoft/vscode
+      path: extensions/cpp
+      ref: 1.79.0
+      commit: b380da4ef1ee00e224a15c1d4d9793e27c2b6302
+    languages:
+      c:
+        label: C
+        scope-name: source.c
+        upstream-url: https://github.com/jeff-hykin/better-c-syntax/commit/34712a6106a4ffb0a04d2fa836fd28ff6c5849a4
+        file-extensions:
+        - .c
+        - .i
+      cpp:
+        label: C++
+        scope-name: source.cpp
+        upstream-url: https://github.com/jeff-hykin/better-cpp-syntax/commit/f1d127a8af2b184db570345f0bb179503c47fdf6
+        file-extensions:
+        - .c++
+        - .cc
+        - .cpp
+        - .cxx
+        - .h
+        - .h++
+        - .h.in
+        - .hh
+        - .hpp
+        - .hpp.in
+        - .hxx
+        - .ii
+        - .inl
+        - .ino
+        - .ipp
+        - .ixx
+        - .tpp
+        - .txx
+      cuda-cpp:
+        label: CUDA C++
+        scope-name: source.cuda-cpp
+        upstream-url: https://github.com/NVIDIA/cuda-cpp-grammar/commit/81e88eaec5170aa8585736c63627c73e3589998c
+        file-extensions:
+        - .cu
+        - .cuh
+    inline-grammars:
+    - source.c.platform
+  csharp:
+    github:
+      repo: microsoft/vscode
+      path: extensions/csharp
+      ref: 1.79.0
+      commit: b380da4ef1ee00e224a15c1d4d9793e27c2b6302
+    languages:
+      csharp:
+        label: C#
+        scope-name: source.cs
+        upstream-url: https://github.com/dotnet/csharp-tmLanguage/commit/5e7dd90d2af9817b0dfb614b21c79a3e81882d9f
+        file-extensions:
+        - .cake
+        - .cs
+        - .csx
+  css:
+    github:
+      repo: microsoft/vscode
+      path: extensions/css
+      ref: 1.79.0
+      commit: b380da4ef1ee00e224a15c1d4d9793e27c2b6302
+    languages:
+      css:
+        label: CSS
+        scope-name: source.css
+        upstream-url: https://github.com/microsoft/vscode-css/commit/1452547185a1793c946cf67f8c7c9001716e32c3
+        file-extensions:
+        - .css
+  dart:
+    github:
+      repo: microsoft/vscode
+      path: extensions/dart
+      ref: 1.79.0
+      commit: b380da4ef1ee00e224a15c1d4d9793e27c2b6302
+    languages:
+      dart:
+        label: Dart
+        scope-name: source.dart
+        upstream-url: https://github.com/dart-lang/dart-syntax-highlight/commit/b6324bfae2058bc29bb01af6bd2011c3eb35545d
+        file-extensions:
+        - .dart
+  diff:
+    github:
+      repo: microsoft/vscode
+      path: extensions/diff
+      ref: 1.84.0
+      commit: d037ac076cee195194f93ce6fe2bdfe2969cc82d
+  docker:
+    github:
+      repo: microsoft/vscode
+      path: extensions/docker
+      ref: 1.79.0
+      commit: b380da4ef1ee00e224a15c1d4d9793e27c2b6302
+    languages:
+      dockerfile:
+        label: Docker
+        scope-name: source.dockerfile
+        upstream-url: https://github.com/moby/moby/commit/abd39744c6f3ed854500e423f5fabf952165161f
+        file-extensions:
+        - .containerfile
+        - .dockerfile
+        file-names:
+        - Containerfile
+        - Dockerfile
+        file-patterns:
+        - Containerfile.*
+        - Dockerfile.*
+  fsharp:
+    github:
+      repo: microsoft/vscode
+      path: extensions/fsharp
+      ref: 1.79.0
+      commit: b380da4ef1ee00e224a15c1d4d9793e27c2b6302
+    languages:
+      fsharp:
+        label: F#
+        scope-name: source.fsharp
+        upstream-url: https://github.com/ionide/ionide-fsgrammar/commit/713cd4a34e7729e444cf85ae287dd94c19e34337
+        file-extensions:
+        - .fs
+        - .fsi
+        - .fsscript
+        - .fsx
+  git-base:
+    github:
+      repo: microsoft/vscode
+      path: extensions/git-base
+      ref: 1.79.0
+      commit: b380da4ef1ee00e224a15c1d4d9793e27c2b6302
+    languages:
+      git-commit:
+        label: Git Commit Message
+        scope-name: text.git-commit
+        upstream-url: https://github.com/walles/git-commit-message-plus/commit/35a079dea5a91b087021b40c01a6bb4eb0337a87
+        file-names:
+        - COMMIT_EDITMSG
+        - MERGE_MSG
+      git-rebase:
+        label: Git Rebase Message
+        scope-name: text.git-rebase
+        upstream-url: https://github.com/textmate/git.tmbundle/commit/5870cf3f8abad3a6637bdf69250b5d2ded427dc4
+        file-names:
+        - git-rebase-todo
+        file-patterns:
+        - '**/rebase-merge/done'
+      ignore:
+        label: Git Ignore
+        scope-name: source.ignore
+        file-extensions:
+        - .gitignore
+        - .gitignore_global
+        file-names:
+        - .gitignore
+  go:
+    github:
+      repo: microsoft/vscode
+      path: extensions/go
+      ref: 1.79.0
+      commit: b380da4ef1ee00e224a15c1d4d9793e27c2b6302
+    languages:
+      go:
+        label: Go
+        scope-name: source.go
+        upstream-url: https://github.com/jeff-hykin/better-go-syntax/commit/6175663a7a0e23d58ccf9aab95054cb6e5c92aff
+        file-extensions:
+        - .go
+  groovy:
+    github:
+      repo: microsoft/vscode
+      path: extensions/groovy
+      ref: 1.79.0
+      commit: b380da4ef1ee00e224a15c1d4d9793e27c2b6302
+    languages:
+      groovy:
+        label: Groovy
+        scope-name: source.groovy
+        upstream-url: https://github.com/textmate/groovy.tmbundle/commit/85d8f7c97ae473ccb9473f6c8d27e4ec957f4be1
+        file-extensions:
+        - .gradle
+        - .groovy
+        - .gvy
+        - .jenkinsfile
+        - .nf
+        file-names:
+        - Jenkinsfile
+        file-patterns:
+        - Jenkinsfile*
+  handlebars:
+    github:
+      repo: microsoft/vscode
+      path: extensions/handlebars
+      ref: 1.79.0
+      commit: b380da4ef1ee00e224a15c1d4d9793e27c2b6302
+    languages:
+      handlebars:
+        label: Handlebars
+        scope-name: text.html.handlebars
+        upstream-url: https://github.com/daaain/Handlebars/commit/85a153a6f759df4e8da7533e1b3651f007867c51
+        file-extensions:
+        - .handlebars
+        - .hbs
+        - .hjs
+  hlsl:
+    github:
+      repo: microsoft/vscode
+      path: extensions/hlsl
+      ref: 1.79.0
+      commit: b380da4ef1ee00e224a15c1d4d9793e27c2b6302
+    languages:
+      hlsl:
+        label: HLSL (High-Level Shader Language)
+        scope-name: source.hlsl
+        upstream-url: https://github.com/tgjones/shaders-tmLanguage/commit/87c0dca3a39170dbd7ee7e277db4f915fb2de14a
+        file-extensions:
+        - .cginc
+        - .compute
+        - .fx
+        - .fxh
+        - .hlsl
+        - .hlsli
+        - .psh
+        - .vsh
+  html:
+    github:
+      repo: microsoft/vscode
+      path: extensions/html
+      ref: 1.79.0
+      commit: b380da4ef1ee00e224a15c1d4d9793e27c2b6302
+    languages:
+      html:
+        label: HTML
+        scope-name: text.html.derivative
+        upstream-url: https://github.com/textmate/html.tmbundle/commit/390c8870273a2ae80244dae6db6ba064a802f407
+        file-extensions:
+        - .asp
+        - .aspx
+        - .ejs
+        - .htm
+        - .html
+        - .jshtm
+        - .jsp
+        - .mdoc
+        - .rhtml
+        - .shtml
+        - .volt
+        - .xht
+        - .xhtml
+    inline-grammars:
+    - text.html.basic
+  ini:
+    github:
+      repo: microsoft/vscode
+      path: extensions/ini
+      ref: 1.79.0
+      commit: b380da4ef1ee00e224a15c1d4d9793e27c2b6302
+    languages:
+      ini:
+        label: INI Config File
+        scope-name: source.ini
+        upstream-url: https://github.com/textmate/ini.tmbundle/commit/2af0cbb0704940f967152616f2f1ff0aae6287a6
+        file-extensions:
+        - .ini
+  java:
+    github:
+      repo: microsoft/vscode
+      path: extensions/java
+      ref: 1.79.0
+      commit: b380da4ef1ee00e224a15c1d4d9793e27c2b6302
+    languages:
+      java:
+        label: Java
+        scope-name: source.java
+        upstream-url: https://github.com/atom/language-java/commit/29f977dc42a7e2568b39bb6fb34c4ef108eb59b3
+        file-extensions:
+        - .jav
+        - .java
+  javascript:
+    github:
+      repo: microsoft/vscode
+      path: extensions/javascript
+      ref: 1.79.0
+      commit: b380da4ef1ee00e224a15c1d4d9793e27c2b6302
+    languages:
+      javascript:
+        label: JavaScript
+        scope-name: source.js
+        upstream-url: https://github.com/microsoft/TypeScript-TmLanguage/commit/e0aefd8205cc9d1bc7859cc5babbee0d833dca0f
+        file-extensions:
+        - .cjs
+        - .es6
+        - .js
+        - .mjs
+        - .pac
+        file-names:
+        - jakefile
+      javascriptreact:
+        label: JavaScript JSX
+        scope-name: source.js.jsx
+        upstream-url: https://github.com/microsoft/TypeScript-TmLanguage/commit/e0aefd8205cc9d1bc7859cc5babbee0d833dca0f
+        file-extensions:
+        - .jsx
+    inline-grammars:
+    - source.js.regexp
+  json:
+    github:
+      repo: microsoft/vscode
+      path: extensions/json
+      ref: 1.79.0
+      commit: b380da4ef1ee00e224a15c1d4d9793e27c2b6302
+    languages:
+      json:
+        label: JSON
+        scope-name: source.json
+        upstream-url: https://github.com/microsoft/vscode-JSON.tmLanguage/commit/9bd83f1c252b375e957203f21793316203f61f70
+        file-extensions:
+        - .bowerrc
+        - .css.map
+        - .geojson
+        - .har
+        - .ipynb
+        - .js.map
+        - .jscsrc
+        - .jslintrc
+        - .json
+        - .jsonld
+        - .ts.map
+        - .vuerc
+        - .webmanifest
+        file-names:
+        - .watchmanconfig
+        - composer.lock
+      jsonc:
+        label: JSON with Comments
+        scope-name: source.json.comments
+        upstream-url: https://github.com/microsoft/vscode-JSON.tmLanguage/commit/9bd83f1c252b375e957203f21793316203f61f70
+        file-extensions:
+        - .babelrc
+        - .eslintrc
+        - .eslintrc.json
+        - .hintrc
+        - .jsfmtrc
+        - .jshintrc
+        - .jsonc
+        - .swcrc
+        file-names:
+        - .babelrc.json
+        - .ember-cli
+        - babel.config.json
+        - typedoc.json
+      jsonl:
+        label: JSON Lines
+        scope-name: source.json.lines
+        upstream-url: https://github.com/microsoft/vscode-JSON.tmLanguage/commit/9bd83f1c252b375e957203f21793316203f61f70
+        file-extensions:
+        - .jsonl
+  julia:
+    github:
+      repo: microsoft/vscode
+      path: extensions/julia
+      ref: 1.79.0
+      commit: b380da4ef1ee00e224a15c1d4d9793e27c2b6302
+    languages:
+      julia:
+        label: Julia
+        scope-name: source.julia
+        upstream-url: https://github.com/JuliaEditorSupport/atom-language-julia/commit/7b7801f41ce4ac1303bd17e057dbe677e24f597f
+        file-extensions:
+        - .jl
+  latex:
+    github:
+      repo: microsoft/vscode
+      path: extensions/latex
+      ref: 1.79.0
+      commit: b380da4ef1ee00e224a15c1d4d9793e27c2b6302
+    languages:
+      bibtex:
+        label: BibTeX
+        scope-name: text.bibtex
+        upstream-url: https://github.com/jlelong/vscode-latex-basics/commit/4b19be579cb4a3c680f8b4bb613dcebfac826f8b
+        file-extensions:
+        - .bib
+      cpp_embedded_latex:
+        label: C++ embedded Latex
+        scope-name: source.cpp.embedded.latex
+        upstream-url: https://github.com/jlelong/vscode-latex-basics/commit/8c2574ce3dbc6e24451bb81c1ee2bc3b1ffb75f3
+      markdown_latex_combined:
+        label: Markdown Latex combined
+        scope-name: text.tex.markdown_latex_combined
+        upstream-url: https://github.com/jlelong/vscode-latex-basics/commit/8c2574ce3dbc6e24451bb81c1ee2bc3b1ffb75f3
+      tex:
+        label: TeX
+        scope-name: text.tex
+        upstream-url: https://github.com/jlelong/vscode-latex-basics/commit/2be145a0bde15dfaf367676a1227c8a701792f90
+        file-extensions:
+        - .bbx
+        - .cbx
+        - .cls
+        - .sty
+  less:
+    github:
+      repo: microsoft/vscode
+      path: extensions/less
+      ref: 1.79.0
+      commit: b380da4ef1ee00e224a15c1d4d9793e27c2b6302
+    languages:
+      less:
+        label: Less
+        scope-name: source.css.less
+        upstream-url: https://github.com/atom/language-less/commit/87d4d59e8de6796b506b81a16e1dc1fafc99d30f
+        file-extensions:
+        - .less
+  log:
+    github:
+      repo: microsoft/vscode
+      path: extensions/log
+      ref: 1.84.0
+      commit: d037ac076cee195194f93ce6fe2bdfe2969cc82d
+  lua:
+    github:
+      repo: microsoft/vscode
+      path: extensions/lua
+      ref: 1.79.0
+      commit: b380da4ef1ee00e224a15c1d4d9793e27c2b6302
+    languages:
+      lua:
+        label: Lua
+        scope-name: source.lua
+        upstream-url: https://github.com/sumneko/lua.tmbundle/commit/3a18700941737c3ab66ac5964696f141aee61800
+        file-extensions:
+        - .lua
+  make:
+    github:
+      repo: microsoft/vscode
+      path: extensions/make
+      ref: 1.79.0
+      commit: b380da4ef1ee00e224a15c1d4d9793e27c2b6302
+    languages:
+      makefile:
+        label: Makefile
+        scope-name: source.makefile
+        upstream-url: https://github.com/fadeevab/make.tmbundle/commit/1d4c0b541959995db098df751ffc129da39a294b
+        file-extensions:
+        - .mak
+        - .mk
+        file-names:
+        - GNUmakefile
+        - Makefile
+        - OCamlMakefile
+        - makefile
+  markdown:
+    github:
+      repo: microsoft/vscode
+      path: extensions/markdown-basics
+      ref: 1.79.0
+      commit: b380da4ef1ee00e224a15c1d4d9793e27c2b6302
+    languages:
+      markdown:
+        label: Markdown
+        scope-name: text.html.markdown
+        upstream-url: https://github.com/microsoft/vscode-markdown-tm-grammar/commit/ca2caf2157d0674be3d641f71499b84d514e4e5e
+        file-extensions:
+        - .markdn
+        - .markdown
+        - .md
+        - .mdown
+        - .mdtext
+        - .mdtxt
+        - .mdwn
+        - .mkd
+        - .workbook
+  objective-c:
+    github:
+      repo: microsoft/vscode
+      path: extensions/objective-c
+      ref: 1.79.0
+      commit: b380da4ef1ee00e224a15c1d4d9793e27c2b6302
+    languages:
+      objective-c:
+        label: Objective-C
+        scope-name: source.objc
+        upstream-url: https://github.com/jeff-hykin/better-objc-syntax/commit/119b75fb1f4d3e8726fa62588e3b935e0b719294
+        file-extensions:
+        - .m
+      objective-cpp:
+        label: Objective-C++
+        scope-name: source.objcpp
+        upstream-url: https://github.com/jeff-hykin/better-objcpp-syntax/commit/5a7eb15eee382dd5aa388bc04fdb60a0d2128e14
+        file-extensions:
+        - .mm
+  perl:
+    github:
+      repo: microsoft/vscode
+      path: extensions/perl
+      ref: 1.79.0
+      commit: b380da4ef1ee00e224a15c1d4d9793e27c2b6302
+    languages:
+      perl:
+        label: Perl
+        scope-name: source.perl
+        upstream-url: https://github.com/textmate/perl.tmbundle/commit/a85927a902d6e5d7805f56a653f324d34dfad53a
+        file-extensions:
+        - .PL
+        - .pl
+        - .pm
+        - .pod
+        - .psgi
+        - .t
+      perl6:
+        label: Perl 6 (Raku)
+        scope-name: source.perl.6
+        upstream-url: https://github.com/textmate/perl.tmbundle/commit/d9841a0878239fa43f88c640f8d458590f97e8f5
+        file-extensions:
+        - .nqp
+        - .p6
+        - .pl6
+        - .pm6
+  php:
+    github:
+      repo: microsoft/vscode
+      path: extensions/php
+      ref: 1.79.0
+      commit: b380da4ef1ee00e224a15c1d4d9793e27c2b6302
+  powershell:
+    github:
+      repo: microsoft/vscode
+      path: extensions/powershell
+      ref: 1.79.0
+      commit: b380da4ef1ee00e224a15c1d4d9793e27c2b6302
+    languages:
+      powershell:
+        label: PowerShell
+        scope-name: source.powershell
+        upstream-url: https://github.com/PowerShell/EditorSyntax/commit/742f0b5d4b60f5930c0b47fcc1f646860521296e
+        file-extensions:
+        - .ps1
+        - .psd1
+        - .psm1
+        - .psrc
+        - .pssc
+  pug:
+    github:
+      repo: microsoft/vscode
+      path: extensions/pug
+      ref: 1.79.0
+      commit: b380da4ef1ee00e224a15c1d4d9793e27c2b6302
+    languages:
+      jade:
+        label: Pug
+        scope-name: text.pug
+        upstream-url: https://github.com/davidrios/pug-tmbundle/commit/ae1dd60ca4aa4b45617f236d584216cd8d19eecf
+        file-extensions:
+        - .jade
+        - .pug
+  python:
+    github:
+      repo: microsoft/vscode
+      path: extensions/python
+      ref: 1.79.0
+      commit: b380da4ef1ee00e224a15c1d4d9793e27c2b6302
+    languages:
+      python:
+        label: Python
+        scope-name: source.python
+        upstream-url: https://github.com/MagicStack/MagicPython/commit/7d0f2b22a5ad8fccbd7341bc7b7a715169283044
+        file-extensions:
+        - .cpy
+        - .gyp
+        - .gypi
+        - .ipy
+        - .py
+        - .pyi
+        - .pyt
+        - .pyw
+        - .rpy
+        file-names:
+        - SConscript
+        - SConstruct
+    inline-grammars:
+    - source.regexp.python
+  r:
+    github:
+      repo: microsoft/vscode
+      path: extensions/r
+      ref: 1.79.0
+      commit: b380da4ef1ee00e224a15c1d4d9793e27c2b6302
+    languages:
+      r:
+        label: R
+        scope-name: source.r
+        upstream-url: https://github.com/Ikuyadeu/vscode-R/commit/ff60e426f66503f3c9533c7a62a8fd3f9f6c53df
+        file-extensions:
+        - .r
+        - .rhistory
+        - .rprofile
+        - .rt
+  razor:
+    github:
+      repo: microsoft/vscode
+      path: extensions/razor
+      ref: 1.79.0
+      commit: b380da4ef1ee00e224a15c1d4d9793e27c2b6302
+    languages:
+      razor:
+        label: ASP.NET Razor
+        scope-name: text.html.cshtml
+        upstream-url: https://github.com/dotnet/razor/commit/8d0ae9664cb27276eab36d83e48e88356468ca67
+        file-extensions:
+        - .cshtml
+        - .razor
+  restructuredtext:
+    github:
+      repo: microsoft/vscode
+      path: extensions/restructuredtext
+      ref: 1.79.0
+      commit: b380da4ef1ee00e224a15c1d4d9793e27c2b6302
+    languages:
+      restructuredtext:
+        label: reStructuredText
+        scope-name: source.rst
+        upstream-url: https://github.com/trond-snekvik/vscode-rst/commit/4f6f1a8f94e0d16e30dddc9c4e359d062b715408
+        file-extensions:
+        - .rst
+  ruby:
+    github:
+      repo: microsoft/vscode
+      path: extensions/ruby
+      ref: 1.79.0
+      commit: b380da4ef1ee00e224a15c1d4d9793e27c2b6302
+  rust:
+    github:
+      repo: microsoft/vscode
+      path: extensions/rust
+      ref: 1.79.0
+      commit: b380da4ef1ee00e224a15c1d4d9793e27c2b6302
+    languages:
+      rust:
+        label: Rust
+        scope-name: source.rust
+        upstream-url: https://github.com/dustypomerleau/rust-syntax/commit/20462d50ff97338f42c6b64c3f421c634fd60734
+        file-extensions:
+        - .rs
+  scss:
+    github:
+      repo: microsoft/vscode
+      path: extensions/scss
+      ref: 1.79.0
+      commit: b380da4ef1ee00e224a15c1d4d9793e27c2b6302
+    languages:
+      scss:
+        label: SCSS
+        scope-name: source.css.scss
+        upstream-url: https://github.com/atom/language-sass/commit/f52ab12f7f9346cc2568129d8c4419bd3d506b47
+        file-extensions:
+        - .scss
+    inline-grammars:
+    - source.sassdoc
+  search-result:
+    github:
+      repo: microsoft/vscode
+      path: extensions/search-result
+      ref: 1.84.0
+      commit: d037ac076cee195194f93ce6fe2bdfe2969cc82d
+  shaderlab:
+    github:
+      repo: microsoft/vscode
+      path: extensions/shaderlab
+      ref: 1.79.0
+      commit: b380da4ef1ee00e224a15c1d4d9793e27c2b6302
+    languages:
+      shaderlab:
+        label: ShaderLab
+        scope-name: source.shaderlab
+        upstream-url: https://github.com/tgjones/shaders-tmLanguage/commit/c72c8b39380ba5a86c58ceed053b5d965ebf38b3
+        file-extensions:
+        - .shader
+  shellscript:
+    github:
+      repo: microsoft/vscode
+      path: extensions/shellscript
+      ref: 1.79.0
+      commit: b380da4ef1ee00e224a15c1d4d9793e27c2b6302
+    languages:
+      shellscript:
+        label: Shell Script
+        scope-name: source.shell
+        upstream-url: https://github.com/jeff-hykin/better-shell-syntax/commit/1bad17d8badf6283125aaa7c31be06ba64146a0f
+        file-extensions:
+        - .Xsession
+        - .bash
+        - .bash_aliases
+        - .bash_login
+        - .bash_logout
+        - .bash_profile
+        - .bashrc
+        - .csh
+        - .cshrc
+        - .ebuild
+        - .fish
+        - .ksh
+        - .profile
+        - .sh
+        - .tcshrc
+        - .xprofile
+        - .xsession
+        - .xsessionrc
+        - .yash_profile
+        - .yashrc
+        - .zlogin
+        - .zlogout
+        - .zprofile
+        - .zsh
+        - .zsh-theme
+        - .zshenv
+        - .zshrc
+        file-names:
+        - .envrc
+        - .hushlogin
+        - APKBUILD
+        - PKGBUILD
+        - bashrc_Apple_Terminal
+        - zlogin
+        - zlogout
+        - zprofile
+        - zshenv
+        - zshrc
+        - zshrc_Apple_Terminal
+        file-patterns:
+        - .env.*
+  sql:
+    github:
+      repo: microsoft/vscode
+      path: extensions/sql
+      ref: 1.79.0
+      commit: b380da4ef1ee00e224a15c1d4d9793e27c2b6302
+    languages:
+      sql:
+        label: SQL
+        scope-name: source.sql
+        upstream-url: https://github.com/microsoft/vscode-mssql/commit/3929516cce0a570e91ee1be74b09ed886cb360f4
+        file-extensions:
+        - .dsql
+        - .sql
+  swift:
+    github:
+      repo: microsoft/vscode
+      path: extensions/swift
+      ref: 1.79.0
+      commit: b380da4ef1ee00e224a15c1d4d9793e27c2b6302
+    languages:
+      swift:
+        label: Swift
+        scope-name: source.swift
+        upstream-url: https://github.com/textmate/swift.tmbundle/commit/7a35637eb70aef3114b091c4ff6fbf6a2faa881b
+        file-extensions:
+        - .swift
+  typescript:
+    github:
+      repo: microsoft/vscode
+      path: extensions/typescript-basics
+      ref: 1.79.0
+      commit: b380da4ef1ee00e224a15c1d4d9793e27c2b6302
+    languages:
+      typescript:
+        label: TypeScript
+        scope-name: source.ts
+        upstream-url: https://github.com/microsoft/TypeScript-TmLanguage/commit/e0aefd8205cc9d1bc7859cc5babbee0d833dca0f
+        file-extensions:
+        - .cts
+        - .mts
+        - .ts
+      typescriptreact:
+        label: TypeScript JSX
+        scope-name: source.tsx
+        upstream-url: https://github.com/microsoft/TypeScript-TmLanguage/commit/e0aefd8205cc9d1bc7859cc5babbee0d833dca0f
+        file-extensions:
+        - .tsx
+    inline-grammars:
+    - documentation.injection.js.jsx
+    - documentation.injection.ts
+  vb:
+    github:
+      repo: microsoft/vscode
+      path: extensions/vb
+      ref: 1.79.0
+      commit: b380da4ef1ee00e224a15c1d4d9793e27c2b6302
+    languages:
+      vb:
+        label: Visual Basic
+        scope-name: source.asp.vb.net
+        upstream-url: https://github.com/textmate/asp.vb.net.tmbundle/commit/72d44550b3286d0382d7be0624140cf97857ff69
+        file-extensions:
+        - .bas
+        - .brs
+        - .vb
+        - .vba
+        - .vbs
+  xml:
+    github:
+      repo: microsoft/vscode
+      path: extensions/xml
+      ref: 1.79.0
+      commit: b380da4ef1ee00e224a15c1d4d9793e27c2b6302
+    languages:
+      xml:
+        label: XML
+        scope-name: text.xml
+        upstream-url: https://github.com/atom/language-xml/commit/7bc75dfe779ad5b35d9bf4013d9181864358cb49
+        file-extensions:
+        - .ascx
+        - .atom
+        - .axaml
+        - .axml
+        - .bpmn
+        - .cpt
+        - .csl
+        - .csproj
+        - .csproj.user
+        - .dita
+        - .ditamap
+        - .dtd
+        - .dtml
+        - .ent
+        - .fsproj
+        - .fxml
+        - .iml
+        - .isml
+        - .jmx
+        - .launch
+        - .menu
+        - .mod
+        - .mxml
+        - .nuspec
+        - .opml
+        - .owl
+        - .proj
+        - .props
+        - .pt
+        - .publishsettings
+        - .pubxml
+        - .pubxml.user
+        - .rbxlx
+        - .rbxmx
+        - .rdf
+        - .rng
+        - .rss
+        - .shproj
+        - .storyboard
+        - .svg
+        - .targets
+        - .tld
+        - .tmx
+        - .vbproj
+        - .vbproj.user
+        - .vcxproj
+        - .vcxproj.filters
+        - .wsdl
+        - .wxi
+        - .wxl
+        - .wxs
+        - .xaml
+        - .xbl
+        - .xib
+        - .xlf
+        - .xliff
+        - .xml
+        - .xoml
+        - .xpdl
+        - .xsd
+        - .xul
+      xsl:
+        label: XSL
+        scope-name: text.xml.xsl
+        upstream-url: https://github.com/atom/language-xml/commit/507de2ee7daca60cf02e9e21fbeb92bbae73e280
+        file-extensions:
+        - .xsl
+        - .xslt
+  yaml:
+    github:
+      repo: microsoft/vscode
+      path: extensions/yaml
+      ref: 1.79.0
+      commit: b380da4ef1ee00e224a15c1d4d9793e27c2b6302
+    languages:
+      yaml:
+        label: YAML
+        scope-name: source.yaml
+        upstream-url: https://github.com/textmate/yaml.tmbundle/commit/e54ceae3b719506dba7e481a77cea4a8b576ae46
+        file-extensions:
+        - .cff
+        - .eyaml
+        - .eyml
+        - .yaml
+        - .yml

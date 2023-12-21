@@ -6,7 +6,7 @@
 	],
 	"version": "https://github.com/textmate/git.tmbundle/commit/5870cf3f8abad3a6637bdf69250b5d2ded427dc4",
 	"name": "Git Rebase Message",
-	"scopeName": "lngpck.text.git-rebase",
+	"scopeName": "text.git-rebase",
 	"patterns": [
 		{
 			"captures": {
@@ -40,7 +40,7 @@
 				"2": {
 					"patterns": [
 						{
-							"include": "lngpck.source.shell"
+							"include": "source.shell"
 						}
 					]
 				}

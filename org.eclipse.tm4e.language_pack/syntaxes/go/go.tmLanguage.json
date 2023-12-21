@@ -6,7 +6,7 @@
 	],
 	"version": "https://github.com/jeff-hykin/better-go-syntax/commit/6175663a7a0e23d58ccf9aab95054cb6e5c92aff",
 	"name": "Go",
-	"scopeName": "lngpck.source.go",
+	"scopeName": "source.go",
 	"patterns": [
 		{
 			"include": "#comments"

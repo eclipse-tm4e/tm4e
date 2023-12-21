@@ -1,0 +1,69 @@
+<?xml version="1.0"?>
+<project
+   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd"
+   xmlns="http://maven.apache.org/POM/4.0.0"
+   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+
+   <modelVersion>4.0.0</modelVersion>
+
+   <parent>
+      <groupId>org.eclipse</groupId>
+      <artifactId>org.eclipse.tm4e</artifactId>
+      <version>0.3.2-SNAPSHOT</version>
+      <relativePath>../..</relativePath>
+   </parent>
+
+   <artifactId>org.eclipse.tm4e.language_pack.updater</artifactId>
+   <packaging>jar</packaging>
+
+   <build>
+      <plugins>
+         <plugin>
+            <groupId>org.codehaus.mojo</groupId>
+            <artifactId>exec-maven-plugin</artifactId>
+            <!-- pinning to 3.0.0 due to
+            https://github.com/mojohaus/exec-maven-plugin/issues/322 -->
+            <version>3.0.0</version>
+         </plugin>
+      </plugins>
+   </build>
+
+   <dependencies>
+      <dependency>
+         <!-- for JSON/YAML file support -->
+         <groupId>com.fasterxml.jackson.dataformat</groupId>
+         <artifactId>jackson-dataformat-yaml</artifactId>
+         <version>2.16.0</version>
+      </dependency>
+      <dependency>
+         <!-- for *.ico image support -->
+         <groupId>com.twelvemonkeys.imageio</groupId>
+         <artifactId>imageio-bmp</artifactId>
+         <version>3.10.1</version>
+      </dependency>
+      <dependency>
+         <!-- for *.svg image support -->
+         <groupId>com.twelvemonkeys.imageio</groupId>
+         <artifactId>imageio-batik</artifactId>
+         <version>3.10.1</version>
+      </dependency>
+      <dependency>
+         <!-- for *.svg image support -->
+         <groupId>org.apache.xmlgraphics</groupId>
+         <artifactId>batik-transcoder</artifactId>
+         <version>1.17</version>
+         <exclusions>
+            <exclusion>
+               <groupId>xml-apis</groupId>
+               <artifactId>xml-apis</artifactId>
+            </exclusion>
+         </exclusions>
+      </dependency>
+      <dependency>
+         <!-- for icon resizing -->
+         <groupId>net.coobird</groupId>
+         <artifactId>thumbnailator</artifactId>
+         <version>0.4.20</version>
+      </dependency>
+   </dependencies>
+</project>

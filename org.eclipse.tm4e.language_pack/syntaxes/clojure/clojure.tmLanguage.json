@@ -6,7 +6,7 @@
 	],
 	"version": "https://github.com/atom/language-clojure/commit/45bdb881501d0b8f8b707ca1d3fcc8b4b99fca03",
 	"name": "Clojure",
-	"scopeName": "lngpck.source.clojure",
+	"scopeName": "source.clojure",
 	"patterns": [
 		{
 			"include": "#comment"

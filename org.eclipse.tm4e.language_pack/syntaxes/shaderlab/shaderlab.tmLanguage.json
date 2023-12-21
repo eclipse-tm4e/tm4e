@@ -6,7 +6,7 @@
 	],
 	"version": "https://github.com/tgjones/shaders-tmLanguage/commit/c72c8b39380ba5a86c58ceed053b5d965ebf38b3",
 	"name": "ShaderLab",
-	"scopeName": "lngpck.source.shaderlab",
+	"scopeName": "source.shaderlab",
 	"patterns": [
 		{
 			"name": "comment.line.double-slash.shaderlab",
@@ -140,7 +140,7 @@
 		"hlsl-embedded": {
 			"patterns": [
 				{
-					"include": "lngpck.source.hlsl"
+					"include": "source.hlsl"
 				},
 				{
 					"name": "storage.type.basic.shaderlab",

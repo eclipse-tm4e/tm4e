@@ -63,14 +63,7 @@ final class GrammarCache {
 	 */
 	@Nullable
 	IGrammarDefinition getDefinition(final String scopeName) {
-		var grammar = castNullable(definitions.get(scopeName));
-
-		// check if tm4e language pack is installed, e.g. "source.python" -> "lngpck.source.python"
-		if (grammar == null && !scopeName.startsWith("lngpck.")) {
-			grammar = definitions.get("lngpck." + scopeName);
-		}
-
-		return grammar;
+		return castNullable(definitions.get(scopeName));
 	}
 
 	/**

@@ -6,7 +6,7 @@
 	],
 	"version": "https://github.com/textmate/groovy.tmbundle/commit/85d8f7c97ae473ccb9473f6c8d27e4ec957f4be1",
 	"name": "Groovy",
-	"scopeName": "lngpck.source.groovy",
+	"scopeName": "source.groovy",
 	"patterns": [
 		{
 			"captures": {
@@ -426,7 +426,7 @@
 					"name": "comment.block.empty.groovy"
 				},
 				{
-					"include": "lngpck.text.html.javadoc"
+					"include": "text.html.javadoc"
 				},
 				{
 					"include": "#comment-block"

@@ -6,7 +6,7 @@
 	],
 	"version": "https://github.com/microsoft/vscode-css/commit/1452547185a1793c946cf67f8c7c9001716e32c3",
 	"name": "CSS",
-	"scopeName": "lngpck.source.css",
+	"scopeName": "source.css",
 	"patterns": [
 		{
 			"include": "#comment-block"

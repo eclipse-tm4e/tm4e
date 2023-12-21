@@ -6,7 +6,7 @@
 	],
 	"version": "https://github.com/atom/language-coffee-script/commit/0f6db9143663e18b1ad00667820f46747dba495e",
 	"name": "CoffeeScript",
-	"scopeName": "lngpck.source.coffee",
+	"scopeName": "source.coffee",
 	"patterns": [
 		{
 			"include": "#jsx"
@@ -95,7 +95,7 @@
 					"name": "source.js.embedded.coffee",
 					"patterns": [
 						{
-							"include": "lngpck.source.js"
+							"include": "source.js"
 						}
 					]
 				},
@@ -171,7 +171,7 @@
 			"name": "string.regexp.coffee",
 			"patterns": [
 				{
-					"include": "lngpck.source.js.regexp"
+					"include": "source.js.regexp"
 				}
 			]
 		},

@@ -6,7 +6,7 @@
 	],
 	"version": "https://github.com/walles/git-commit-message-plus/commit/35a079dea5a91b087021b40c01a6bb4eb0337a87",
 	"name": "Git Commit Message",
-	"scopeName": "lngpck.text.git-commit",
+	"scopeName": "text.git-commit",
 	"patterns": [
 		{
 			"comment": "diff presented at the end of the commit message when using commit -v.",
@@ -16,7 +16,7 @@
 			"end": "\\z",
 			"patterns": [
 				{
-					"include": "lngpck.source.diff"
+					"include": "source.diff"
 				}
 			]
 		},

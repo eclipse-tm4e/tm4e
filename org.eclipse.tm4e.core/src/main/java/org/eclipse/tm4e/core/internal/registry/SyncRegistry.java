@@ -68,14 +68,7 @@ public final class SyncRegistry implements IGrammarRepository, IThemeProvider {
 	@Override
 	@Nullable
 	public IRawGrammar lookup(final String scopeName) {
-		var grammar = this._rawGrammars.get(scopeName);
-
-		// check if tm4e language pack is installed, e.g. "source.python" -> "lngpck.source.python"
-		if (grammar == null && !scopeName.startsWith("lngpck.")) {
-			grammar = this._rawGrammars.get("lngpck." + scopeName);
-		}
-
-		return grammar;
+		return this._rawGrammars.get(scopeName);
 	}
 
 	@Override

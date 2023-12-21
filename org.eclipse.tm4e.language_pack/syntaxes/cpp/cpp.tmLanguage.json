@@ -6,7 +6,7 @@
 	],
 	"version": "https://github.com/jeff-hykin/better-cpp-syntax/commit/f1d127a8af2b184db570345f0bb179503c47fdf6",
 	"name": "C++",
-	"scopeName": "lngpck.source.cpp",
+	"scopeName": "source.cpp",
 	"patterns": [
 		{
 			"include": "#ever_present_context"
@@ -370,16 +370,16 @@
 							"contentName": "meta.embedded.assembly",
 							"patterns": [
 								{
-									"include": "lngpck.source.asm"
+									"include": "source.asm"
 								},
 								{
-									"include": "lngpck.source.x86"
+									"include": "source.x86"
 								},
 								{
-									"include": "lngpck.source.x86_64"
+									"include": "source.x86_64"
 								},
 								{
-									"include": "lngpck.source.arm"
+									"include": "source.arm"
 								},
 								{
 									"include": "#backslash_escapes"
@@ -6087,7 +6087,7 @@
 		"macro_context": {
 			"patterns": [
 				{
-					"include": "lngpck.source.cpp.embedded.macro"
+					"include": "source.cpp.embedded.macro"
 				}
 			]
 		},
@@ -12944,7 +12944,7 @@
 					"name": "string.quoted.double.raw.regex.cpp",
 					"patterns": [
 						{
-							"include": "lngpck.source.regexp.python"
+							"include": "source.regexp.python"
 						}
 					]
 				},
@@ -12967,7 +12967,7 @@
 					"name": "meta.string.quoted.double.raw.glsl.cpp",
 					"patterns": [
 						{
-							"include": "lngpck.source.glsl"
+							"include": "source.glsl"
 						}
 					]
 				},
@@ -12990,7 +12990,7 @@
 					"name": "meta.string.quoted.double.raw.sql.cpp",
 					"patterns": [
 						{
-							"include": "lngpck.source.sql"
+							"include": "source.sql"
 						}
 					]
 				},

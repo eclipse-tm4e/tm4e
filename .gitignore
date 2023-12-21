@@ -10,8 +10,7 @@
 *.md.html
 
 # Maven
-/target
-/*/target
+target/
 
 # OSX
 .DS_Store

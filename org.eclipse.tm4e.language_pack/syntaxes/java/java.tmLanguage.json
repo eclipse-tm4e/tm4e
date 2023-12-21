@@ -6,7 +6,7 @@
 	],
 	"version": "https://github.com/atom/language-java/commit/29f977dc42a7e2568b39bb6fb34c4ef108eb59b3",
 	"name": "Java",
-	"scopeName": "lngpck.source.java",
+	"scopeName": "source.java",
 	"patterns": [
 		{
 			"begin": "\\b(package)\\b\\s*",

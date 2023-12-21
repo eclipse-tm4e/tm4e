@@ -6,7 +6,7 @@
 	],
 	"version": "https://github.com/atom/language-xml/commit/7bc75dfe779ad5b35d9bf4013d9181864358cb49",
 	"name": "XML",
-	"scopeName": "lngpck.text.xml",
+	"scopeName": "text.xml",
 	"patterns": [
 		{
 			"begin": "(<\\?)\\s*([-_a-zA-Z0-9]+)",
@@ -177,7 +177,7 @@
 			"name": "source.java.embedded.xml",
 			"patterns": [
 				{
-					"include": "lngpck.source.java"
+					"include": "source.java"
 				}
 			]
 		},

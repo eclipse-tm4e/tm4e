@@ -6,7 +6,7 @@
 	],
 	"version": "https://github.com/atom/language-less/commit/87d4d59e8de6796b506b81a16e1dc1fafc99d30f",
 	"name": "Less",
-	"scopeName": "lngpck.source.css.less",
+	"scopeName": "source.css.less",
 	"patterns": [
 		{
 			"include": "#strings"
@@ -144,7 +144,7 @@
 			"name": "comment.block.css"
 		},
 		{
-			"include": "lngpck.source.css#numeric-values"
+			"include": "source.css#numeric-values"
 		},
 		{
 			"captures": {
@@ -202,7 +202,7 @@
 					"include": "#brace_round"
 				},
 				{
-					"include": "lngpck.source.css#commas"
+					"include": "source.css#commas"
 				},
 				{
 					"include": "#strings"
@@ -234,7 +234,7 @@
 			"name": "meta.at-rule.media.css"
 		},
 		{
-			"include": "lngpck.source.css#media-features"
+			"include": "source.css#media-features"
 		},
 		{
 			"match": "\\b(tv|tty|screen|projection|print|handheld|embossed|braille|aural|all)\\b",
@@ -301,22 +301,22 @@
 			"name": "meta.property-list.css",
 			"patterns": [
 				{
-					"include": "lngpck.source.css#pseudo-elements"
+					"include": "source.css#pseudo-elements"
 				},
 				{
-					"include": "lngpck.source.css#pseudo-classes"
+					"include": "source.css#pseudo-classes"
 				},
 				{
-					"include": "lngpck.source.css#tag-names"
+					"include": "source.css#tag-names"
 				},
 				{
-					"include": "lngpck.source.css#commas"
+					"include": "source.css#commas"
 				},
 				{
 					"include": "#variable_interpolation"
 				},
 				{
-					"include": "lngpck.source.css#property-names"
+					"include": "source.css#property-names"
 				},
 				{
 					"include": "#property_values"
@@ -339,17 +339,17 @@
 			"name": "keyword.control.logical.operator.less"
 		},
 		{
-			"include": "lngpck.source.css#tag-names"
+			"include": "source.css#tag-names"
 		},
 		{
 			"match": "(?<![\\w-])[a-z][\\w&&[^A-Z]]*+-[\\w-&&[^A-Z]]+",
 			"name": "entity.name.tag.custom.css"
 		},
 		{
-			"include": "lngpck.source.css#pseudo-elements"
+			"include": "source.css#pseudo-elements"
 		},
 		{
-			"include": "lngpck.source.css#pseudo-classes"
+			"include": "source.css#pseudo-classes"
 		},
 		{
 			"captures": {
@@ -399,19 +399,19 @@
 			"name": "support.function.unit-checking.less"
 		},
 		{
-			"include": "lngpck.source.css#property-keywords"
+			"include": "source.css#property-keywords"
 		},
 		{
-			"include": "lngpck.source.css#color-keywords"
+			"include": "source.css#color-keywords"
 		},
 		{
-			"include": "lngpck.source.css#commas"
+			"include": "source.css#commas"
 		},
 		{
 			"include": "#less_builtin_functions"
 		},
 		{
-			"include": "lngpck.source.css#functions"
+			"include": "source.css#functions"
 		}
 	],
 	"repository": {
@@ -515,19 +515,19 @@
 					]
 				},
 				{
-					"include": "lngpck.source.css#property-keywords"
+					"include": "source.css#property-keywords"
 				},
 				{
-					"include": "lngpck.source.css#color-keywords"
+					"include": "source.css#color-keywords"
 				},
 				{
-					"include": "lngpck.source.css#commas"
+					"include": "source.css#commas"
 				},
 				{
 					"include": "#less_builtin_functions"
 				},
 				{
-					"include": "lngpck.source.css#functions"
+					"include": "source.css#functions"
 				},
 				{
 					"include": "$self"

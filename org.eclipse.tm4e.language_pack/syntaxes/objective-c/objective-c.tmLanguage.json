@@ -6,7 +6,7 @@
 	],
 	"version": "https://github.com/jeff-hykin/better-objc-syntax/commit/119b75fb1f4d3e8726fa62588e3b935e0b719294",
 	"name": "Objective-C",
-	"scopeName": "lngpck.source.objc",
+	"scopeName": "source.objc",
 	"patterns": [
 		{
 			"include": "#anonymous_pattern_1"

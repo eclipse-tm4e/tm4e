@@ -6,7 +6,7 @@
 	],
 	"version": "https://github.com/jeff-hykin/better-c-syntax/commit/34712a6106a4ffb0a04d2fa836fd28ff6c5849a4",
 	"name": "C",
-	"scopeName": "lngpck.source.c",
+	"scopeName": "source.c",
 	"patterns": [
 		{
 			"include": "#preprocessor-rule-enabled"
@@ -3217,16 +3217,16 @@
 									},
 									"patterns": [
 										{
-											"include": "lngpck.source.asm"
+											"include": "source.asm"
 										},
 										{
-											"include": "lngpck.source.x86"
+											"include": "source.x86"
 										},
 										{
-											"include": "lngpck.source.x86_64"
+											"include": "source.x86_64"
 										},
 										{
-											"include": "lngpck.source.arm"
+											"include": "source.arm"
 										},
 										{
 											"include": "#backslash_escapes"

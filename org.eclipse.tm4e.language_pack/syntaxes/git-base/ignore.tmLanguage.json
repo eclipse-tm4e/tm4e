@@ -1,6 +1,6 @@
 {
 	"name": "Ignore",
-	"scopeName": "lngpck.source.ignore",
+	"scopeName": "source.ignore",
 	"patterns": [
 		{
 			"match": "^#.*",

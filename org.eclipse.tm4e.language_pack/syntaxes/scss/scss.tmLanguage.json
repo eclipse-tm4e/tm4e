@@ -6,7 +6,7 @@
 	],
 	"version": "https://github.com/atom/language-sass/commit/f52ab12f7f9346cc2568129d8c4419bd3d506b47",
 	"name": "SCSS",
-	"scopeName": "lngpck.source.css.scss",
+	"scopeName": "source.css.scss",
 	"patterns": [
 		{
 			"include": "#variable_setting"
@@ -606,10 +606,10 @@
 									"name": "meta.property-name.media-query.scss",
 									"patterns": [
 										{
-											"include": "lngpck.source.css#media-features"
+											"include": "source.css#media-features"
 										},
 										{
-											"include": "lngpck.source.css#property-names"
+											"include": "source.css#property-names"
 										}
 									]
 								},
@@ -645,7 +645,7 @@
 							"include": "#conditional_operators"
 						},
 						{
-							"include": "lngpck.source.css#media-types"
+							"include": "source.css#media-types"
 						}
 					]
 				}
@@ -981,7 +981,7 @@
 			"end": "(?=$)",
 			"patterns": [
 				{
-					"include": "lngpck.source.sassdoc"
+					"include": "source.sassdoc"
 				}
 			]
 		},
@@ -1308,7 +1308,7 @@
 					"name": "meta.property-name.scss",
 					"patterns": [
 						{
-							"include": "lngpck.source.css#property-names"
+							"include": "source.css#property-names"
 						},
 						{
 							"include": "#at_rule_include"
@@ -1393,16 +1393,16 @@
 					"include": "#constant_optional"
 				},
 				{
-					"include": "lngpck.source.css#numeric-values"
+					"include": "source.css#numeric-values"
 				},
 				{
-					"include": "lngpck.source.css#property-keywords"
+					"include": "source.css#property-keywords"
 				},
 				{
-					"include": "lngpck.source.css#color-keywords"
+					"include": "source.css#color-keywords"
 				},
 				{
-					"include": "lngpck.source.css#property-names"
+					"include": "source.css#property-names"
 				},
 				{
 					"include": "#constant_mathematical_symbols"
@@ -1691,20 +1691,20 @@
 					]
 				},
 				{
-					"include": "lngpck.source.css#pseudo-classes"
+					"include": "source.css#pseudo-classes"
 				},
 				{
-					"include": "lngpck.source.css#pseudo-elements"
+					"include": "source.css#pseudo-elements"
 				},
 				{
-					"include": "lngpck.source.css#functional-pseudo-classes"
+					"include": "source.css#functional-pseudo-classes"
 				}
 			]
 		},
 		"selectors": {
 			"patterns": [
 				{
-					"include": "lngpck.source.css#tag-names"
+					"include": "source.css#tag-names"
 				},
 				{
 					"include": "#selector_custom"
@@ -1725,7 +1725,7 @@
 					"include": "#tag_parent_reference"
 				},
 				{
-					"include": "lngpck.source.css#pseudo-elements"
+					"include": "source.css#pseudo-elements"
 				},
 				{
 					"include": "#selector_attribute"

@@ -6,7 +6,7 @@
 	],
 	"version": "https://github.com/sumneko/lua.tmbundle/commit/3a18700941737c3ab66ac5964696f141aee61800",
 	"name": "Lua",
-	"scopeName": "lngpck.source.lua",
+	"scopeName": "source.lua",
 	"patterns": [
 		{
 			"begin": "\\b(?:(local)\\s+)?(function)\\b(?![,:])",
@@ -319,7 +319,7 @@
 					},
 					"patterns": [
 						{
-							"include": "lngpck.source.c"
+							"include": "source.c"
 						}
 					]
 				},

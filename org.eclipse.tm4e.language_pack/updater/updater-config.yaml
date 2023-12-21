@@ -1,0 +1,192 @@
+content-type-prefix: org.eclipse.tm4e.language_pack
+content-type-priority: low # low|normal|high
+
+targets:
+  state-file: updater-state.yaml
+  source-repos-cache-dir: "{TEMP_DIR}/syntax-repos"
+  readme-md: ../README.md
+  plugin-xml: ../plugin.xml
+  syntaxes-dir: ../syntaxes
+
+sources:
+  # entry format for none-vscode-extension repo:
+  #   <source-id>:  # used for the download path at grammars/<source-id>/...
+  #     type: custom
+  #     github:  # REQUIRED
+  #       repo: <repo-name>             # REQUIRED
+  #       path: <folderpath_in_repo>    # optional
+  #       ref:  <branch_name>|<tag>     # optional
+  #     license-download: <true|false>  # optional. defaults to true
+  #     languages:  # REQUIRED
+  #       <language-id>:  # REQUIRED, id of then language to register
+  #         label:        # REQUIRED
+  #         scope-name:   # REQUIRED, textmate grammar scope name
+  #         grammar: <filepath_in_repo|url>  # REQUIRED
+  #         update: <true|false>             # optional. if false, don't download grammar updates. defaults to true
+  #         langcfg: <filepath_in_repo|url>  # optional
+  #         example: <filepath_in_repo|url>  # optional
+  #         file-extensions: []              # optional
+  #         file-names:      []              # optional
+  #         file_patterns:   []              # optional
+  #     inline-grammars: # optional
+  #       <scope-name>:
+  #         grammar: <filepath_in_repo>      # REQUIRED
+  #         update: <true|false>             # optional. if false, don't download grammar updates. defaults to true
+
+  # entry format for repo with single VSCode extension:
+  # <source-id>:  # used for the download path at grammars/<source-id>/...
+  #     type: vscode-extension
+  #     github:  # REQUIRED
+  #       repo: <repo-name>             # REQUIRED
+  #       path: <folderpath_in_repo>    # optional
+  #       ref:  <branch_name>|<tag>     # optional
+  #     license-download: <true|false>  # optional. defaults to true
+  #     languages:  # optional
+  #       <language-id>:       # existing id as defined in package.json to override values
+  #         ignored: <reason>  # optional. if set, this language is ignored
+  #         label:             # optional
+  #         scope-name:        # optional
+  #         grammar: <filepath_in_repo|url>  # optional
+  #         update: <true|false>             # optional. if false, don't download grammar updates. defaults to true
+  #         langcfg: <filepath_in_repo|url>  # optional
+  #         example: <filepath_in_repo|url>  # optional
+  #         file-extensions: []              # optional
+  #         file-names:      []              # optional
+  #         file_patterns:   []              # optional
+  #     inline-grammars: # optional
+  #       <scope-name>:   # existing scope-name as defined in package.json to override values
+  #         ignored: <reason>                # optional. if set, this language is ignored
+  #         grammar: <filepath_in_repo>      # optional
+  #         update: <true|false>             # optional. if false, don't download grammar updates. defaults to true
+
+  # entry format for repo with multiple VSCode extensions:
+  # <source-id>:
+  #     type: vscode-extensions
+  #     github:  # REQUIRED
+  #       repo: <repo-name>             # REQUIRED
+  #       path: <folderpath_in_repo>    # optional
+  #       ref:  <branch_name>|<tag>     # optional
+  #     license-download: <true|false>  # optional. defaults to true
+  #     include-all-by-default: <true|false> # optional, specifies if all extensions shall be installed or only the explicitly listed once. defaults to true
+  #     extensions:  # optional
+  #       <exension-id>:  # name as defined in package.json, used for the download path at grammars/<exension-id>/...
+  #         ignored: <reason>  # optional. if set, this extension is ignored
+  #         languages:         # optional
+  #           <language-id>:       # existing id as defined in package.json to override values
+  #             ignored: <reason>  # optional. if set, this language is ignored
+  #             label:             # optional
+  #             scope-name:        # optional
+  #             grammar: <filepath_in_repo|url>  # optional
+  #             update: <true|false>             # optional. if false, don't download grammar updates. defaults to true
+  #             langcfg: <filepath_in_repo|url>  # optional
+  #             example: <filepath_in_repo|url>  # optional
+  #             file-extensions: []              # optional
+  #             file-names:      []              # optional
+  #             file_patterns:   []              # optional
+  #         inline-grammars: # optional
+  #           <scope-name>:   # existing scope-name as defined in package.json to override values
+  #             ignored: <reason>                # optional. if set, this language is ignored
+  #             grammar: <filepath_in_repo>      # optional
+  #             update: <true|false>             # optional. if false, don't download grammar updates. defaults to true
+
+  vscode-extensions:
+    type: vscode-extensions
+    github:
+      repo: microsoft/vscode
+      path: extensions
+      ref: "1.79.0" # https://gitlab.eclipse.org/eclipsefdn/emo-team/iplab/-/issues/8851
+      # TODO ref: "1.85.0" # https://gitlab.eclipse.org/eclipsefdn/emo-team/iplab/-/issues/11873
+    license-download: false
+    include-all-by-default: true
+    extensions:
+      bat:
+        languages:
+          bat:
+            label: Batch File
+
+      diff:
+        ignored: theme support required
+
+      git-base:
+        languages:
+          ignore:
+            label: Git Ignore
+            file-names:
+            - .gitignore
+
+      hlsl:
+        languages:
+          hlsl:
+            label: HLSL (High-Level Shader Language)
+
+      ini:
+        languages:
+          ini:
+            label: INI Config File
+          properties:
+            ignored: overridden by Properties File Editor included in Eclipse platform
+
+      latex:
+        languages:
+          cpp_embedded_latex:
+            label: C++ embedded Latex
+          latex:
+            ignored: tm4e fails to parse the grammar
+          markdown_latex_combined:
+            label: Markdown Latex combined
+
+      log:
+        ignored: 'broken, maybe because of file extension: *.log.?'
+
+      markdown-math:
+        ignored: >-
+          broken because math.block begin regex not supported by Joni. Re-enable
+          when the following is fixed and integrated: https://github.com/microsoft/vscode/issues/181662
+        languages:
+          markdown-math:
+           label: Markdown Math
+
+      perl:
+        languages:
+          perl6:
+          #raku: # TODO ID changes as of 1.85.0
+            label: Perl 6 (Raku)
+
+      php:
+        languages:
+          php:
+            ignored: tm4e fails to parse the grammar
+
+      razor:
+        languages:
+          razor:
+            label: ASP.NET Razor
+
+      ruby:
+        languages:
+          ruby:
+            ignored: tm4e fails to parse the grammar
+
+      search-result:
+        ignored: syntax highlighting broken
+        languages:
+          search-result:
+            label: VS Code Search Result
+
+      yaml:
+        languages:
+          dockercompose:
+            label: Docker Compose
+            ignored: overridden by the more general YAML
+
+      xml:
+        languages:
+          xml:
+            # don't update as grammar file is currently syntactically broken, see:
+            #  https://github.com/microsoft/vscode/issues/176193
+            #  https://github.com/microsoft/vscode/issues/184852
+            #  https://github.com/microsoft/vscode/pull/200674
+            # xml grammar was manually fixed according:
+            #  https://github.com/atom/language-xml/issues/96#issue-401315789
+            #  https://github.com/atom/language-xml/issues/96#issuecomment-456046265
+            update: false

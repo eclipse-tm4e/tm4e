@@ -6,7 +6,7 @@
 	],
 	"version": "https://github.com/JuliaEditorSupport/atom-language-julia/commit/7b7801f41ce4ac1303bd17e057dbe677e24f597f",
 	"name": "Julia",
-	"scopeName": "lngpck.source.julia",
+	"scopeName": "source.julia",
 	"comment": "This grammar is used by Atom (Oniguruma), GitHub (PCRE), and VSCode (Oniguruma),\nso all regexps must be compatible with both engines.\n\nSpecs:\n- https://github.com/kkos/oniguruma/blob/master/doc/RE\n- https://www.pcre.org/current/doc/html/",
 	"patterns": [
 		{
@@ -473,7 +473,7 @@
 					"contentName": "meta.embedded.inline.cpp",
 					"patterns": [
 						{
-							"include": "lngpck.source.cpp#root_context"
+							"include": "source.cpp#root_context"
 						},
 						{
 							"include": "#string_dollar_sign_interpolate"
@@ -500,7 +500,7 @@
 					"contentName": "meta.embedded.inline.python",
 					"patterns": [
 						{
-							"include": "lngpck.source.python"
+							"include": "source.python"
 						},
 						{
 							"include": "#string_dollar_sign_interpolate"
@@ -527,7 +527,7 @@
 					"contentName": "meta.embedded.inline.javascript",
 					"patterns": [
 						{
-							"include": "lngpck.source.js"
+							"include": "source.js"
 						},
 						{
 							"include": "#string_dollar_sign_interpolate"
@@ -554,7 +554,7 @@
 					"contentName": "meta.embedded.inline.r",
 					"patterns": [
 						{
-							"include": "lngpck.source.r"
+							"include": "source.r"
 						},
 						{
 							"include": "#string_dollar_sign_interpolate"
@@ -617,7 +617,7 @@
 					"contentName": "meta.embedded.inline.sql",
 					"patterns": [
 						{
-							"include": "lngpck.source.sql"
+							"include": "source.sql"
 						},
 						{
 							"include": "#string_dollar_sign_interpolate"

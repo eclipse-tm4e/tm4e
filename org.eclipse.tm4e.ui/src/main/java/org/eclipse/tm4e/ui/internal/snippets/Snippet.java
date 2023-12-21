@@ -29,17 +29,6 @@ final class Snippet extends TMResource implements ISnippet {
 		name = "<set-by-gson>";
 	}
 
-	/**
-	 * Constructor for extension point.
-	 *
-	 * @param scopeName
-	 */
-	Snippet(final String scopeName, final String path, final String name) {
-		super(path);
-		this.scopeName = scopeName;
-		this.name = name;
-	}
-
 	Snippet(final IConfigurationElement ce) {
 		super(ce);
 		this.scopeName = ce.getAttribute(XMLConstants.SCOPE_NAME_ATTR);

@@ -24,37 +24,30 @@ import org.eclipse.jdt.annotation.Nullable;
 /**
  * TextMate Resource.
  */
-public class TMResource implements ITMResource {
+public abstract class TMResource implements ITMResource {
 
 	private static final String PLATFORM_PLUGIN = "platform:/plugin/"; //$NON-NLS-1$
 
 	private String path;
-
-	@Nullable
-	private String pluginId;
+	private @Nullable String pluginId;
 
 	/**
 	 * Constructor for user preferences (loaded from Json with Gson).
 	 */
-	public TMResource() {
+	protected TMResource() {
 		path = "<set-by-gson>";
 	}
 
-	/**
-	 * Constructor for extension point.
-	 *
-	 * @param path
-	 */
-	public TMResource(final String path) {
-		this.path = path;
-	}
-
-	public TMResource(final IConfigurationElement ce) {
+	protected TMResource(final IConfigurationElement ce) {
 		this(ce.getAttribute(XMLConstants.PATH_ATTR));
 		this.pluginId = ce.getNamespaceIdentifier();
 	}
 
-	public TMResource(final String path, @Nullable final String pluginId) {
+	protected TMResource(final String path) {
+		this.path = path;
+	}
+
+	protected TMResource(final String path, @Nullable final String pluginId) {
 		this.path = path;
 		this.pluginId = pluginId;
 	}
@@ -64,9 +57,8 @@ public class TMResource implements ITMResource {
 		return path;
 	}
 
-	@Nullable
 	@Override
-	public String getPluginId() {
+	public @Nullable String getPluginId() {
 		return pluginId;
 	}
 
@@ -78,8 +70,7 @@ public class TMResource implements ITMResource {
 				: new FileInputStream(new File(path));
 	}
 
-	@Nullable
-	protected String getResourceContent() {
+	protected @Nullable String getResourceContent() {
 		try (InputStream in = this.getInputStream()) {
 			return convertStreamToString(in);
 		} catch (final Exception ex) {

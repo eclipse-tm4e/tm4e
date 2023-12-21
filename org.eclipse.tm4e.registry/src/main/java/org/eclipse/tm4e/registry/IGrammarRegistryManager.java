@@ -29,30 +29,26 @@ public interface IGrammarRegistryManager {
 	// --------------- TextMate grammar definitions methods
 
 	/**
-	 * Returns the list of registered TextMate grammar definitions.
-	 *
 	 * @return the list of registered TextMate grammar definitions.
 	 */
 	IGrammarDefinition[] getDefinitions();
 
 	/**
 	 * Add grammar definition to the registry.
-	 *
-	 * NOTE: you must call save() method if you wish to save in the preferences.
+	 * <p/>
+	 * <b>NOTE:</b> you must call {@link #save()} method to make the changes persistent.
 	 */
 	void registerGrammarDefinition(IGrammarDefinition definition);
 
 	/**
 	 * Remove grammar definition from the registry.
-	 *
-	 * NOTE: you must call save() method if you wish to save in the preferences.
+	 * <p/>
+	 * <b>NOTE:</b> you must call {@link #save()} method to make the changes persistent.
 	 */
 	void unregisterGrammarDefinition(IGrammarDefinition definition);
 
 	/**
-	 * Save the grammar definitions.
-	 *
-	 * @throws BackingStoreException
+	 * Save the grammar definitions
 	 */
 	void save() throws BackingStoreException;
 
@@ -61,40 +57,33 @@ public interface IGrammarRegistryManager {
 	/**
 	 * @param contentTypes the content types to lookup for grammar association.
 	 *
-	 * @return the first {@link IGrammar} that applies to given content-types, or
-	 *         <code>null</code> if no content-type has a grammar associated. Grammars associated
-	 *         with parent content-types will be returned if applicable.
+	 * @return the first {@link IGrammar} that applies to given content-types, or <code>null</code> if no content-type
+	 *         has a grammar associated. Grammars associated with parent content-types will be returned if applicable.
 	 */
 	@Nullable
 	IGrammar getGrammarFor(IContentType @Nullable [] contentTypes);
 
 	/**
-	 * Returns the {@link IGrammar} for the given scope name and null otherwise.
-	 *
 	 * @return the {@link IGrammar} for the given scope name and null otherwise.
 	 */
 	@Nullable
 	IGrammar getGrammarForScope(String scopeName);
 
 	/**
-	 * Returns the {@link IGrammar} for the given file type and null otherwise.
+	 * @param fileType a file extension
 	 *
 	 * @return the {@link IGrammar} for the file type name and null otherwise.
 	 */
 	@Nullable
-	IGrammar getGrammarForFileType(String fileType);
+	IGrammar getGrammarForFileExtension(String fileExtension);
 
 	/**
-	 * Returns the list of content types bound with the given scope name and null otherwise.
-	 *
 	 * @return the list of content types bound with the given scope name and null otherwise.
 	 */
 	@Nullable
 	List<IContentType> getContentTypesForScope(String scopeName);
 
 	/**
-	 * Returns list of scope names to inject for the given <code>scopeName</code> and null otherwise.
-	 *
 	 * @return list of scope names to inject for the given <code>scopeName</code> and null otherwise.
 	 */
 	@Nullable

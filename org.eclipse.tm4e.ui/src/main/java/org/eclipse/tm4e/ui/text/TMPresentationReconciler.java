@@ -341,9 +341,9 @@ public class TMPresentationReconciler implements IPresentationReconciler {
 			// try to determine the grammar based on the file type
 			final String fileName = info.getFileName();
 			if (fileName.indexOf('.') > -1) {
-				final String fileType = new Path(fileName).getFileExtension();
-				if (fileType != null) {
-					grammar = TMEclipseRegistryPlugin.getGrammarRegistryManager().getGrammarForFileType(fileType);
+				final String fileExtension = new Path(fileName).getFileExtension();
+				if (fileExtension != null) {
+					grammar = TMEclipseRegistryPlugin.getGrammarRegistryManager().getGrammarForFileExtension(fileExtension);
 				}
 			}
 		}

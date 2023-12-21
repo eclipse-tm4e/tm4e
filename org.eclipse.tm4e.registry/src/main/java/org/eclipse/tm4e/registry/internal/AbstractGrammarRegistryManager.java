@@ -129,12 +129,12 @@ public abstract class AbstractGrammarRegistryManager implements IGrammarRegistry
 
 	@Nullable
 	@Override
-	public IGrammar getGrammarForFileType(String fileType) {
+	public IGrammar getGrammarForFileExtension(String fileExtension) {
 		// TODO: cache grammar by file types
 		final IGrammarDefinition[] definitions = getDefinitions();
 		// #202
-		if (fileType.startsWith(".")) {
-			fileType = fileType.substring(1);
+		if (fileExtension.startsWith(".")) {
+		   fileExtension = fileExtension.substring(1);
 		}
 		for (final var definition : definitions) {
 			// Not very optimized because it forces the load of the whole grammar.
@@ -143,7 +143,7 @@ public abstract class AbstractGrammarRegistryManager implements IGrammarRegistry
 			final var grammar = getGrammarForScope(definition.getScopeName());
 			if (grammar != null) {
 				final Collection<String> fileTypes = grammar.getFileTypes();
-				if (fileTypes.contains(fileType)) {
+				if (fileTypes.contains(fileExtension)) {
 					return grammar;
 				}
 			}

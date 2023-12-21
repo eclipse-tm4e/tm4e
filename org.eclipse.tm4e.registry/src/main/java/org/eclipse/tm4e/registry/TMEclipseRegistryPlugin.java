@@ -27,17 +27,16 @@ public class TMEclipseRegistryPlugin extends Plugin {
 	public static final String PLUGIN_ID = "org.eclipse.tm4e.registry";
 
 	/** The shared instance */
-	@Nullable
-	private static volatile TMEclipseRegistryPlugin plugin;
+	private static volatile @Nullable TMEclipseRegistryPlugin plugin;
 
-	/**
-	 * Returns the shared instance
-	 *
-	 * @return the shared instance
-	 */
-	@Nullable
-	public static TMEclipseRegistryPlugin getDefault() {
+	/** @return the shared plugin instance */
+	public static @Nullable TMEclipseRegistryPlugin getDefault() {
 		return plugin;
+	}
+
+	/** @return the TextMate grammar manager */
+	public static IGrammarRegistryManager getGrammarRegistryManager() {
+		return GrammarRegistryManager.getInstance();
 	}
 
 	public static void log(final IStatus status) {
@@ -67,14 +66,5 @@ public class TMEclipseRegistryPlugin extends Plugin {
 	public void stop(@Nullable final BundleContext bundleContext) throws Exception {
 		plugin = null;
 		super.stop(bundleContext);
-	}
-
-	/**
-	 * Returns the TextMate grammar manager.
-	 *
-	 * @return the TextMate grammar manager.
-	 */
-	public static IGrammarRegistryManager getGrammarRegistryManager() {
-		return GrammarRegistryManager.getInstance();
 	}
 }

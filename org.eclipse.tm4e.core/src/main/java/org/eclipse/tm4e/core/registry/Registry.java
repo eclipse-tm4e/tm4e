@@ -30,6 +30,7 @@ import org.eclipse.tm4e.core.TMException;
 import org.eclipse.tm4e.core.grammar.IGrammar;
 import org.eclipse.tm4e.core.internal.grammar.BalancedBracketSelectors;
 import org.eclipse.tm4e.core.internal.grammar.dependencies.ScopeDependencyProcessor;
+import org.eclipse.tm4e.core.internal.grammar.raw.RawGrammar;
 import org.eclipse.tm4e.core.internal.grammar.raw.RawGrammarReader;
 import org.eclipse.tm4e.core.internal.registry.SyncRegistry;
 import org.eclipse.tm4e.core.internal.theme.Theme;
@@ -158,6 +159,12 @@ public final class Registry {
 		}
 		try {
 			final var grammar = RawGrammarReader.readGrammar(grammarSource);
+
+			// this code is specific to the tm4e project and not from upstream:
+			// adjust the scopeName in case the name as defined inside the TextMate grammar file
+			// diverges from the scopeName with which it is registered in the plugin.xml.
+			grammar.put(RawGrammar.SCOPE_NAME, scopeName);
+
 			this._syncRegistry.addGrammar(grammar, this._options.getInjections(scopeName));
 		} catch (final Exception ex) {
 			throw new TMException("Loading grammar for scope [" + scopeName + "] from [" +

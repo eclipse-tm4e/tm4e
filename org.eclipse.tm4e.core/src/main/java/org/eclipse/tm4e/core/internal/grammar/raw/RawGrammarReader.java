@@ -49,7 +49,7 @@ public final class RawGrammarReader {
 		}
 	};
 
-	public static IRawGrammar readGrammar(final IGrammarSource source) throws Exception {
+	public static RawGrammar readGrammar(final IGrammarSource source) throws Exception {
 		try (var reader = source.getReader()) {
 			return switch (source.getContentType()) {
 				case JSON -> TMParserJSON.INSTANCE.parse(reader, OBJECT_FACTORY);

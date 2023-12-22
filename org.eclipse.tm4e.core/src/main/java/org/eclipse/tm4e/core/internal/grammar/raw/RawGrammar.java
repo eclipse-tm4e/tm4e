@@ -29,7 +29,7 @@ public final class RawGrammar extends PropertySettable.HashMap<@Nullable Object>
 	private static final String INJECTION_SELECTOR = "injectionSelector";
 	private static final String NAME = "name";
 	private static final String PATTERNS = "patterns";
-	private static final String SCOPE_NAME = "scopeName";
+	public static final String SCOPE_NAME = "scopeName";
 
 	private static final long serialVersionUID = 1L;
 

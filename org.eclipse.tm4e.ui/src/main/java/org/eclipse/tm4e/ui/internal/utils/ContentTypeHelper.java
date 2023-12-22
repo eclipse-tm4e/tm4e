@@ -178,8 +178,8 @@ public final class ContentTypeHelper {
 					final IStorage storage = storageInput.getStorage();
 					final String fileName = storage.getName();
 					try (InputStream input = storage.getContents()) {
-						return new ContentTypeInfo(fileName,
-								Platform.getContentTypeManager().findContentTypesFor(input, fileName));
+						final var contentTypes = Platform.getContentTypeManager().findContentTypesFor(input, fileName);
+						return contentTypes == null ? null : new ContentTypeInfo(fileName, contentTypes);
 					}
 				} catch (final Exception e) {
 					return null;

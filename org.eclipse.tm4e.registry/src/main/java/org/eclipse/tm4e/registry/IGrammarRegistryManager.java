@@ -20,9 +20,7 @@ import org.eclipse.tm4e.core.grammar.IGrammar;
 import org.osgi.service.prefs.BackingStoreException;
 
 /**
- *
  * TextMate Grammar registry manager API.
- *
  */
 public interface IGrammarRegistryManager {
 
@@ -61,7 +59,7 @@ public interface IGrammarRegistryManager {
 	 *         has a grammar associated. Grammars associated with parent content-types will be returned if applicable.
 	 */
 	@Nullable
-	IGrammar getGrammarFor(IContentType @Nullable [] contentTypes);
+	IGrammar getGrammarFor(IContentType... contentTypes);
 
 	/**
 	 * @return the {@link IGrammar} for the given scope name and null otherwise.
@@ -70,7 +68,10 @@ public interface IGrammarRegistryManager {
 	IGrammar getGrammarForScope(String scopeName);
 
 	/**
-	 * @param fileType a file extension
+	 * <b>NOTE:</b> This method can be very expensive as it potentially results in eagerly loading of all registered grammar files,
+	 * therefore using {@link #getGrammarFor(IContentType...)} should be preferred.
+	 *
+	 * @param fileExtension a file extension
 	 *
 	 * @return the {@link IGrammar} for the file type name and null otherwise.
 	 */

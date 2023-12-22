@@ -15,90 +15,72 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+import org.eclipse.core.runtime.content.IContentType;
 import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.tm4e.registry.internal.AbstractGrammarRegistryManager;
 import org.osgi.service.prefs.BackingStoreException;
 
 /**
- * Working copy of grammar registry manager.
+ * Working copy of grammar registry manager used by e.g. tm4e.ui/GrammarPreferencePage.
  */
 public class WorkingCopyGrammarRegistryManager extends AbstractGrammarRegistryManager {
 
 	private final IGrammarRegistryManager manager;
 
-	@Nullable
-	private List<IGrammarDefinition> added;
-
-	@Nullable
-	private List<IGrammarDefinition> removed;
+	private final List<IGrammarDefinition> added = new ArrayList<>();
+	private final List<IGrammarDefinition> removed = new ArrayList<>();
 
 	public WorkingCopyGrammarRegistryManager(final IGrammarRegistryManager manager) {
 		this.manager = manager;
-		load();
+
+		// Copy grammar definitions
+		for (final IGrammarDefinition definition : manager.getDefinitions()) {
+			super.registerGrammarDefinition(definition);
+		}
 	}
 
-	private void load() {
-		// Copy grammar definitions
-		final IGrammarDefinition[] definitions = manager.getDefinitions();
-		for (final IGrammarDefinition definition : definitions) {
-			super.registerGrammarDefinition(definition);
+	@Override
+	public @Nullable List<IContentType> getContentTypesForScope(String scopeName) {
+		return manager.getContentTypesForScope(scopeName);
+	}
 
-			// Copy binding scope/content types
-			final String scopeName = definition.getScopeName();
-			final var contentTypes = manager.getContentTypesForScope(scopeName);
-			if (contentTypes != null) {
-				contentTypes.forEach(contentType -> super.registerContentTypeBinding(contentType, scopeName));
-			}
-
-			// Copy injection
-			final Collection<String> injections = manager.getInjections(scopeName);
-			if (injections != null) {
-				for (final String injectFrom : injections) {
-					super.registerInjection(injectFrom, scopeName);
-				}
-			}
-		}
+	@Override
+	public @Nullable Collection<String> getInjections(String scopeName) {
+		return manager.getInjections(scopeName);
 	}
 
 	@Override
 	public void registerGrammarDefinition(final IGrammarDefinition definition) {
 		super.registerGrammarDefinition(definition);
-		var added = this.added;
-		if (added == null) {
-			added = this.added = new ArrayList<>();
-		}
 		added.add(definition);
 	}
 
 	@Override
 	public void unregisterGrammarDefinition(final IGrammarDefinition definition) {
 		super.unregisterGrammarDefinition(definition);
-		final var added = this.added;
-		if (added != null && added.contains(definition)) {
+		if (added.contains(definition)) {
 			added.remove(definition);
 		} else {
-			var removed = this.removed;
-			if (removed == null) {
-				removed = this.removed = new ArrayList<>();
-			}
 			removed.add(definition);
 		}
 	}
 
 	@Override
 	public void save() throws BackingStoreException {
-		if (added != null) {
+		if (!added.isEmpty()) {
 			for (final IGrammarDefinition definition : added) {
 				manager.registerGrammarDefinition(definition);
 			}
 		}
-		if (removed != null) {
+		if (!removed.isEmpty()) {
 			for (final IGrammarDefinition definition : removed) {
 				manager.unregisterGrammarDefinition(definition);
 			}
 		}
-		if (added != null || removed != null) {
+		if (!added.isEmpty() || removed.isEmpty()) {
 			manager.save();
 		}
+		added.clear();
+		removed.clear();
 	}
 }

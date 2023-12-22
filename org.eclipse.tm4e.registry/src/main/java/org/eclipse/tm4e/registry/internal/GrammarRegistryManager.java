@@ -66,12 +66,12 @@ public final class GrammarRegistryManager extends AbstractGrammarRegistryManager
 			final String extensionName = ce.getName();
 			switch (extensionName) {
 				case XMLConstants.GRAMMAR_ELT:
-					super.registerGrammarDefinition(new GrammarDefinition(ce));
+					registerGrammarDefinition(new GrammarDefinition(ce));
 					break;
 				case XMLConstants.INJECTION_ELT: {
 					final String scopeName = ce.getAttribute(XMLConstants.SCOPE_NAME_ATTR);
 					final String injectTo = ce.getAttribute(XMLConstants.INJECT_TO_ATTR);
-					super.registerInjection(scopeName, injectTo);
+					registerInjection(scopeName, injectTo);
 					break;
 				}
 				case XMLConstants.SCOPE_NAME_CONTENT_TYPE_BINDING_ELT: {
@@ -82,7 +82,7 @@ public final class GrammarRegistryManager extends AbstractGrammarRegistryManager
 								.warn("No content-type found with id='" + contentTypeId + "', ignoring TM4E association.");
 					} else {
 						final String scopeName = ce.getAttribute(XMLConstants.SCOPE_NAME_ATTR);
-						super.registerContentTypeBinding(contentType, scopeName);
+						registerContentTypeToScopeBinding(contentType, scopeName);
 					}
 					break;
 				}
@@ -90,20 +90,17 @@ public final class GrammarRegistryManager extends AbstractGrammarRegistryManager
 		}
 	}
 
-	/**
-	 * Load TextMate grammars from preferences.
-	 */
 	private void loadGrammarsFromPreferences() {
 		final var definitions = PreferenceHelper.loadGrammars();
 		if (definitions != null) {
 			for (final IGrammarDefinition definition : definitions) {
-				userCache.registerGrammarDefinition(definition);
+				userDefinitions.put(definition.getScopeName(), definition);
 			}
 		}
 	}
 
 	@Override
 	public void save() throws BackingStoreException {
-		PreferenceHelper.saveGrammars(userCache.getDefinitions());
+		PreferenceHelper.saveGrammars(userDefinitions.values());
 	}
 }

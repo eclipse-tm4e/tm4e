@@ -250,25 +250,20 @@ public final class GrammarPreferencePage extends PreferencePage implements IWork
 			}
 
 			private void selectGrammar(final IGrammarDefinition definition) {
-				final String scopeName = definition.getScopeName();
-				// Fill "General" tab
-				fillGeneralTab(scopeName);
-				// Fill "Content type" tab
-				fillContentTypeTab(scopeName);
-				// Fill "Theme" tab
+				fillGeneralTab(definition);
+				fillContentTypeTab(definition);
 				final IThemeAssociation selectedAssociation = fillThemeTab(definition);
-				// Fill preview
-				fillPreview(scopeName, selectedAssociation);
+				fillPreview(definition, selectedAssociation);
 			}
 
-			private void fillGeneralTab(final String scopeName) {
-				final IGrammar grammar = grammarRegistryManager.getGrammarForScope(scopeName);
+			private void fillGeneralTab(final IGrammarDefinition definition) {
+				final IGrammar grammar = grammarRegistryManager.getGrammarForScope(definition.getScope());
 				grammarInfoWidget.refresh(grammar);
 			}
 
-			private void fillContentTypeTab(final String scopeName) {
+			private void fillContentTypeTab(final IGrammarDefinition definition) {
 				// Load the content type binding for the given grammar
-				contentTypesWidget.setInput(grammarRegistryManager.getContentTypesForScope(scopeName));
+				contentTypesWidget.setInput(grammarRegistryManager.getContentTypesForScope(definition.getScope()));
 			}
 
 			@Nullable
@@ -293,15 +288,15 @@ public final class GrammarPreferencePage extends PreferencePage implements IWork
 				return selectedAssociation;
 			}
 
-			private void fillPreview(final String scopeName, @Nullable final IThemeAssociation selectedAssociation) {
+			private void fillPreview(final IGrammarDefinition definition, @Nullable final IThemeAssociation selectedAssociation) {
 				// Preview the grammar
-				final IGrammar grammar = grammarRegistryManager.getGrammarForScope(scopeName);
+				final IGrammar grammar = grammarRegistryManager.getGrammarForScope(definition.getScope());
 				if (selectedAssociation != null) {
 					setPreviewTheme(selectedAssociation.getThemeId());
 				}
 				previewViewer.setGrammar(grammar);
 				// Snippet
-				final ISnippet[] snippets = snippetManager.getSnippets(scopeName);
+				final ISnippet[] snippets = snippetManager.getSnippets(definition.getScope().getName());
 				if (snippets.length == 0) {
 					previewViewer.setText("");
 				} else {
@@ -333,8 +328,7 @@ public final class GrammarPreferencePage extends PreferencePage implements IWork
 			wizard.setGrammarRegistryManager(grammarRegistryManager);
 			final var dialog = new WizardDialog(getShell(), wizard);
 			if (dialog.open() == Window.OK) {
-				// User grammar was saved, refresh the list of grammar and
-				// select the created grammar.
+				// User grammar was saved, refresh the list of grammar and select the created grammar.
 				final IGrammarDefinition created = wizard.getCreatedDefinition();
 				grammarViewer.refresh();
 				grammarViewer.setSelection(new StructuredSelection(created));

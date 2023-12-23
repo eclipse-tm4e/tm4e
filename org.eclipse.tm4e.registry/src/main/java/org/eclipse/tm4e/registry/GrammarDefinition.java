@@ -13,6 +13,7 @@ package org.eclipse.tm4e.registry;
 
 import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.jdt.annotation.Nullable;
+import org.eclipse.tm4e.registry.internal.TMScope;
 
 /**
  * Grammar definition defined by the "org.eclipse.tm4e.registry.grammars"
@@ -31,8 +32,8 @@ import org.eclipse.jdt.annotation.Nullable;
  */
 public class GrammarDefinition extends TMResource implements IGrammarDefinition {
 
-	@Nullable
-	private String scopeName;
+	private String scopeName = "<set-by-gson>";
+	private transient @Nullable ITMScope scope;
 
 	/**
 	 * Constructor for user preferences (loaded from Json with Gson).
@@ -40,11 +41,6 @@ public class GrammarDefinition extends TMResource implements IGrammarDefinition 
 	public GrammarDefinition() {
 	}
 
-	/**
-	 * Constructor for extension point.
-	 *
-	 * @param scopeName
-	 */
 	public GrammarDefinition(final String scopeName, final String path) {
 		super(path);
 		this.scopeName = scopeName;
@@ -56,8 +52,11 @@ public class GrammarDefinition extends TMResource implements IGrammarDefinition 
 	}
 
 	@Override
-	public String getScopeName() {
-		assert scopeName != null;
-		return scopeName;
+	public ITMScope getScope() {
+		ITMScope scope = this.scope;
+		if (scope == null) {
+			this.scope = scope = new TMScope(scopeName, getPluginId());
+		}
+		return scope;
 	}
 }

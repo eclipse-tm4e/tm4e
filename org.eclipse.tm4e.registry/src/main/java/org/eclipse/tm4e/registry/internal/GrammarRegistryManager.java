@@ -82,7 +82,7 @@ public final class GrammarRegistryManager extends AbstractGrammarRegistryManager
 								.warn("No content-type found with id='" + contentTypeId + "', ignoring TM4E association.");
 					} else {
 						final String scopeName = ce.getAttribute(XMLConstants.SCOPE_NAME_ATTR);
-						registerContentTypeToScopeBinding(contentType, scopeName);
+						registerContentTypeToScopeBinding(ce.getNamespaceIdentifier(), contentType, scopeName);
 					}
 					break;
 				}
@@ -94,13 +94,13 @@ public final class GrammarRegistryManager extends AbstractGrammarRegistryManager
 		final var definitions = PreferenceHelper.loadGrammars();
 		if (definitions != null) {
 			for (final IGrammarDefinition definition : definitions) {
-				userDefinitions.put(definition.getScopeName(), definition);
+				userDefinitions.add(definition);
 			}
 		}
 	}
 
 	@Override
 	public void save() throws BackingStoreException {
-		PreferenceHelper.saveGrammars(userDefinitions.values());
+		PreferenceHelper.saveGrammars(userDefinitions.stream().toList());
 	}
 }

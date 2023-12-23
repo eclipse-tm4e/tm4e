@@ -112,7 +112,7 @@ public final class ThemeAssociationsWidget extends TableAndButtonsWidget {
 			return new IThemeAssociation[0];
 		}
 		final IThemeAssociation[] themeAssociations = themeManager
-				.getThemeAssociationsForScope(definition.getScopeName());
+				.getThemeAssociationsForScope(definition.getScope().getName());
 		// Refresh the list of associations
 		super.setInput(themeAssociations);
 		// Select the first of given association

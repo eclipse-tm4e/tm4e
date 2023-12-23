@@ -347,12 +347,12 @@ public final class ThemePreferencePage extends PreferencePage implements IWorkbe
 		final IGrammarDefinition definition = (IGrammarDefinition) selection.getFirstElement();
 
 		// Preview the grammar
-		final IGrammar grammar = grammarRegistryManager.getGrammarForScope(definition.getScopeName());
+		final IGrammar grammar = grammarRegistryManager.getGrammarForScope(definition.getScope());
 		previewViewer.setTheme(theme);
 		previewViewer.setGrammar(grammar);
 
 		// Snippet
-		final ISnippet[] snippets = TMUIPlugin.getSnippetManager().getSnippets(definition.getScopeName());
+		final ISnippet[] snippets = TMUIPlugin.getSnippetManager().getSnippets(definition.getScope().getName());
 		if (snippets.length == 0) {
 			previewViewer.setText("");
 		} else {

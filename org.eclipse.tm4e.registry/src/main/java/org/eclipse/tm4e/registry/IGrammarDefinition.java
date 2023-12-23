@@ -13,14 +13,11 @@ package org.eclipse.tm4e.registry;
 
 /**
  * TextMate grammar definition API.
- *
  */
 public interface IGrammarDefinition extends ITMResource {
 
 	/**
-	 * Returns the scope name of the TextMate grammar.
-	 *
-	 * @return the scope name of the TextMate grammar.
+	 * @return the scope of the TextMate grammar.
 	 */
-	String getScopeName();
+	ITMScope getScope();
 }

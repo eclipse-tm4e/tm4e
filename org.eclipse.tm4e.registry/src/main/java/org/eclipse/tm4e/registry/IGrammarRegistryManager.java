@@ -12,7 +12,6 @@
 package org.eclipse.tm4e.registry;
 
 import java.util.Collection;
-import java.util.List;
 
 import org.eclipse.core.runtime.content.IContentType;
 import org.eclipse.jdt.annotation.Nullable;
@@ -65,7 +64,7 @@ public interface IGrammarRegistryManager {
 	 * @return the {@link IGrammar} for the given scope name and null otherwise.
 	 */
 	@Nullable
-	IGrammar getGrammarForScope(String scopeName);
+	IGrammar getGrammarForScope(ITMScope scope);
 
 	/**
 	 * <b>NOTE:</b> This method can be very expensive as it potentially results in eagerly loading of all registered grammar files,
@@ -82,7 +81,7 @@ public interface IGrammarRegistryManager {
 	 * @return the list of content types bound with the given scope name and null otherwise.
 	 */
 	@Nullable
-	List<IContentType> getContentTypesForScope(String scopeName);
+	Collection<IContentType> getContentTypesForScope(ITMScope scope);
 
 	/**
 	 * @return list of scope names to inject for the given <code>scopeName</code> and null otherwise.

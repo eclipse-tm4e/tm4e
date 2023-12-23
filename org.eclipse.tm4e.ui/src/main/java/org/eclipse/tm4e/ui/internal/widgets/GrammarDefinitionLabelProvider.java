@@ -39,10 +39,9 @@ public final class GrammarDefinitionLabelProvider extends LabelProvider implemen
 		if (element == null)
 			return "";
 
-		final IGrammarDefinition definition = (IGrammarDefinition) element;
-
+		final var definition = (IGrammarDefinition) element;
 		return switch (columnIndex) {
-			case 0 -> definition.getScopeName();
+			case 0 -> definition.getScope().getName();
 			case 1 -> definition.getPath();
 			case 2 -> definition.getPluginId();
 			default -> "";

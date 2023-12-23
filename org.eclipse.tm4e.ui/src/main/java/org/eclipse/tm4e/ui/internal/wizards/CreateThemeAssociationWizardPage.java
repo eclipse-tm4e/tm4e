@@ -133,7 +133,7 @@ final class CreateThemeAssociationWizardPage extends AbstractWizardPage {
 	IThemeAssociation getThemeAssociation() {
 		final String themeId = ((ITheme) themeViewer.getStructuredSelection().getFirstElement()).getId();
 		final String scopeName = ((IGrammarDefinition) grammarViewer.getStructuredSelection()
-				.getFirstElement()).getScopeName();
+				.getFirstElement()).getScope().getName();
 		final boolean whenDark = whenDarkButton.getSelection();
 		return new ThemeAssociation(themeId, scopeName, whenDark);
 	}

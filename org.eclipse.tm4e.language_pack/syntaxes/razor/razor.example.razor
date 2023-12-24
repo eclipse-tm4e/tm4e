@@ -1,0 +1,54 @@
+@{
+  // Variables
+  var name = "Alice";
+  var age = 25;
+
+  // Conditional statement
+  var message = age < 30 ? "young" : "not so young";
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Razor Example</title>
+</head>
+<body>
+
+  <h1>Welcome to Razor!</h1>
+
+  <!-- Print variables and conditionally -->
+  <p>Hello, @name! You are @age years old. You are @message.</p>
+
+  @if (age > 21) {
+    <p>You are of legal drinking age.</p>
+  } else {
+    <p>You are not of legal drinking age.</p>
+  }
+
+  <!-- Loop through an array -->
+  @foreach (var number in new[] { 1, 2, 3, 4, 5 }) {
+    <p>@number</p>
+  }
+
+  <!-- Function -->
+  @functions {
+    void Greet(string person) {
+      <p>Hello, @person!</p>
+    }
+  }
+
+  @Greet("Charlie")
+
+  <!-- Razor expressions -->
+  @{
+    var sum = 5 + 7;
+    var product = 3 * 4;
+  }
+
+  <p>Sum: @sum, Product: @product</p>
+
+  <!-- Using a helper method -->
+  @Html.Raw("<p>This is raw HTML.</p>")
+
+</body>
+</html>

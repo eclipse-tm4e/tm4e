@@ -1,0 +1,23 @@
+{
+  "name": "John Doe", // String
+  "age": 30, // Number
+  "isStudent": false, // Boolean
+
+  /* Nested Object */
+  "address": {
+    "city": "Example City",
+    "zipCode": "12345"
+  },
+
+  // Array of Strings
+  "languages": ["JavaScript", "Python", "Java"],
+
+  // Nested Object with comments
+  "scores": {
+    "math": 90, // Numeric value
+    "english": 85, // Numeric value
+    "science": 92 // Numeric value
+  },
+
+  "nullValue": null // Null value
+}

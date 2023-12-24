@@ -1,0 +1,55 @@
+# Define a function with multiple dispatch
+function greet(name::String)
+  println("Hello, $name!")
+end
+
+function greet(name::Int)
+  println("Hey, you entered an integer: $name")
+end
+
+# Function with optional and default arguments
+function calculate_sum(x, y=1)
+  x + y
+end
+
+# Define a struct
+struct Point
+  x::Float64
+  y::Float64
+end
+
+# Create an instance of the struct
+point = Point(3.0, 4.0)
+
+# Destructuring assignment
+x, y = point
+
+# Higher-order function using a lambda function
+map_result = map(x -> x^2, [1, 2, 3, 4])
+
+# Use a loop to iterate over a range
+for i in 1:5
+  println("Iteration $i")
+end
+
+# Use a while loop
+counter = 0
+while counter < 3
+  println("Counter: $counter")
+  global counter += 1
+end
+
+# Exception handling
+try
+  error("This is an example error.")
+catch e
+  println("Caught an error: $e")
+finally
+  println("This block always runs.")
+end
+
+# Use of a macro
+@time begin
+  sleep(1)
+  println("Timing this block.")
+end

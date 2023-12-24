@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<root xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="example.xsd">
+  <!--
+    This is a multiline comment in XML.
+    It spans multiple lines using multiple single-line comments.
+  -->
+
+  <!-- Element with text content -->
+  <greeting>Hello, XML!</greeting>
+
+  <!-- Element with attributes -->
+  <person name="Alice" age="25" gender="female" />
+
+  <!-- Nested elements -->
+  <contact>
+    <name>Bob</name>
+    <email>bob@example.com</email>
+    <phone type="home">123-456-7890</phone>
+    <phone type="work">987-654-3210</phone>
+  </contact>
+
+  <!-- Empty element -->
+  <status />
+
+  <!-- CDATA section for preserving whitespace and special characters -->
+  <description><![CDATA[This is a multi-line
+  description.]]></description>
+
+  <!-- List using repeated elements -->
+  <fruits>
+    <fruit>Apple</fruit>
+    <fruit>Banana</fruit>
+    <fruit>Orange</fruit>
+  </fruits>
+
+  <!-- Mixed content -->
+  <message>
+    This is <strong>important</strong>.
+  </message>
+
+  <!-- XML Namespace -->
+  <data xmlns="http://example.com/data">
+    <value>123</value>
+  </data>
+
+  <!-- Processing Instruction -->
+  <?target instruction?>
+
+</root>

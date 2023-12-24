@@ -1,0 +1,63 @@
+# Scalar types
+string: "Hello, YAML!"
+integer: 42
+float: 3.14
+boolean: true
+null_value: null
+
+# Sequence (Array)
+fruits:
+  - Apple
+  - Banana
+  - Orange
+
+# Mapping (Dictionary)
+person:
+  name: Alice
+  age: 25
+  gender: female
+
+# Multiline strings
+description: |
+  This is a multiline
+  YAML document.
+  It supports
+  line breaks.
+
+# Anchors and aliases
+object: &ref_object # Definition of ref_anchor
+  name: Object
+  age: 21
+
+# Usage of the alias ref_object
+objects:
+ - *ref_object
+
+# Directives (not widely supported in all YAML parsers)
+%YAML 1.2
+---
+
+# Tags
+!!int "42": 42
+!!float "3.14": 3.14
+!!bool "true": true
+!!null "null": null
+
+# Comments
+# This is a comment in YAML
+
+# Inline sequences and mappings
+inline_sequence: [item1, item2, item3]
+inline_mapping: { key1: value1, key2: value2 }
+
+# Flow style
+flow_sequence: !!set
+  item1: null
+  item2: null
+
+flow_mapping: { key1: "value1", key2: "value2" }
+
+# Document separator
+---
+# Another document
+another_key: another_value

@@ -1,0 +1,3 @@
+{"name": "John Doe", "age": 30, "isStudent": false, "city": "Example City"}
+{"name": "Alice Smith", "age": 25, "isStudent": true, "city": "Sampleville"}
+{"name": "Bob Johnson", "age": 35, "isStudent": false, "city": "Testington"}

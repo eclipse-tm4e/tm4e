@@ -1,0 +1,46 @@
+// Variables
+@primary-color: #3498db;
+@font-size: 16px;
+
+// Mixins
+.rounded-corners() {
+  border-radius: 5px;
+}
+
+// Nesting
+body {
+  font-size: @font-size;
+  background-color: #ecf0f1;
+
+  // Nesting within a selector
+  h1 {
+    color: @primary-color;
+  }
+
+  // Using a mixin
+  .container {
+    .rounded-corners();
+    padding: 10px;
+  }
+}
+
+// Operations
+@base-padding: 5px;
+@additional-padding: 10px;
+
+#header {
+  padding: @base-padding + @additional-padding;
+  margin: @additional-padding * 2;
+}
+
+// Functions
+.add-border(@width) {
+  border: solid @width black;
+}
+
+#content {
+  .add-border(2px);
+}
+
+// Importing another Less file
+@import "reset.less";

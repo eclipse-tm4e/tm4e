@@ -1,0 +1,16 @@
+{
+  "name": "John Doe",
+  "age": 30,
+  "isStudent": false,
+  "address": {
+    "city": "Example City",
+    "zipCode": "12345"
+  },
+  "languages": ["JavaScript", "Python", "Java"],
+  "scores": {
+    "math": 90,
+    "english": 85,
+    "science": 92
+  },
+  "nullValue": null
+}

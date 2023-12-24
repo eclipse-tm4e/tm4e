@@ -1,0 +1,59 @@
+% Document class and title
+\documentclass{article}
+\title{Concise TeX Example}
+\author{Your Name}
+\date{\today}
+
+% Start of the document
+\begin{document}
+
+% Title and author information
+\maketitle
+
+% Section heading
+\section{Introduction}
+
+This is a concise example that demonstrates various TeX features.
+
+% Formatting text
+\textbf{Bold text}, \textit{italic text}, \underline{underlined text}.
+
+% Lists
+\begin{itemize}
+    \item Item 1
+    \item Item 2
+\end{itemize}
+
+% Enumerations
+\begin{enumerate}
+    \item First item
+    \item Second item
+\end{enumerate}
+
+% Mathematics
+Inline math: $E=mc^2$.
+
+Display math:
+\[
+\int_{0}^{1} x^2 \,dx = \frac{1}{3}.
+\]
+
+% Tables
+\begin{tabular}{|c|c|}
+    \hline
+    Header 1 & Header 2 \\
+    \hline
+    Cell 1 & Cell 2 \\
+    \hline
+\end{tabular}
+
+% Cross-referencing
+See Section~\ref{sec:intro} for an example.
+
+% Custom commands
+\newcommand{\mycommand}{This is a custom command.}
+
+\mycommand
+
+% End of the document
+\end{document}

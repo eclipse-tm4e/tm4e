@@ -1,0 +1,27 @@
+<!-- Handlebars Example -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{{pageTitle}}</title>
+</head>
+<body>
+
+<h1>{{pageTitle}}</h1>
+
+{{#if showWelcomeMessage}}
+  <p>Welcome, {{userName}}!</p>
+{{else}}
+  <p>Guest user</p>
+{{/if}}
+
+<ul>
+  {{#each shoppingList}}
+    <li>{{this}}</li>
+  {{/each}}
+</ul>
+
+</body>
+</html>

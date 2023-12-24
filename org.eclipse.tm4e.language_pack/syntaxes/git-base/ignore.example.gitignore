@@ -1,0 +1,36 @@
+# Ignore build output
+/bin/
+/obj/
+
+# Ignore editor-specific files
+.vscode/
+.idea/
+
+# Ignore compiled files
+*.exe
+*.dll
+*.class
+
+# Ignore package manager directories
+node_modules/
+packages/
+bower_components/
+
+# Ignore log files and databases
+*.log
+*.sqlite
+
+# Ignore user-specific files
+*.user
+*.suo
+*.userprefs
+*.pid
+
+# Ignore environment-specific files
+.env
+.env.local
+.env.*.local
+
+# Ignore dependencies files
+yarn.lock
+package-lock.json

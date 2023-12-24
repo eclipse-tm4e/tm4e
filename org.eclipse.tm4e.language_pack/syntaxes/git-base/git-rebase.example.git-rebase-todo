@@ -1,0 +1,9 @@
+# this is a comment
+pick abc123 Commit message for commit 1
+reword def456 Commit message for commit 2
+edit 789ghi Commit message for commit 3
+# this is another comment
+squash jkl012 Commit message for commit 4
+fixup mno345 Commit message for commit 5
+drop pqr678 Commit message for commit 6
+exec command_to_run_after_commit_7

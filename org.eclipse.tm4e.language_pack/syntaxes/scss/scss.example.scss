@@ -1,0 +1,76 @@
+// Variables
+$primary-color: #3498db;
+$font-size: 16px;
+
+// Nesting
+.container {
+  width: 100%;
+  margin: 0 auto;
+
+  // Child selector
+  > header {
+    background-color: $primary-color;
+    color: #fff;
+    font-size: $font-size * 1.5;
+  }
+
+  // Descendant selector
+  article h1 {
+    color: $primary-color;
+  }
+}
+
+// Mixins
+@mixin border-radius($radius) {
+  -webkit-border-radius: $radius;
+  -moz-border-radius: $radius;
+  border-radius: $radius;
+}
+
+.button {
+  @include border-radius(5px);
+  background-color: $primary-color;
+  color: #fff;
+  padding: 10px;
+}
+
+// Extend
+.warning {
+  color: #e74c3c;
+}
+
+.error {
+  @extend .warning;
+  font-weight: bold;
+}
+
+// Variables Interpolation
+$property: margin;
+
+.element {
+  #{$property}-left: 10px;
+}
+
+// Operations
+$base-padding: 10px;
+.element {
+  padding: $base-padding * 2;
+  margin: $base-padding + 5px;
+}
+
+// Control Directives
+@for $i from 1 through 3 {
+  .column-#{$i} {
+    width: 100% / $i;
+  }
+}
+
+// Placeholder Selectors
+%placeholder-selector {
+  color: #7f8c8d;
+}
+
+.element {
+  @extend %placeholder-selector;
+  font-size: $font-size;
+}

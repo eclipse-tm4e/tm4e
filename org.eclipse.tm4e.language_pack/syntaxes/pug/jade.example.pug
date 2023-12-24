@@ -1,0 +1,56 @@
+doctype html
+html(lang="en")
+  head
+    meta(charset="UTF-8")
+    title Pug Example
+
+  body
+    h1 Welcome to Pug!
+
+    // Variables
+    - var name = "Alice"
+    p Hello, #{name}!
+
+    // Conditional statement
+    - var age = 25
+    if age < 30
+      p #{name} is young.
+    else
+      p #{name} is not so young.
+
+    // Arrays
+    - var numbers = [1, 2, 3, 4, 5]
+    ul
+      each number in numbers
+        li= number
+
+    // Hashes (objects)
+    - var person = { name: "Bob", age: 30 }
+    each value, key in person
+      p #{key}: #{value}
+
+    // Mixins (Reusable components)
+    mixin greeting(name)
+      p Hello, #{name}!
+
+    +greeting("Charlie")
+
+    // Filters
+    :markdown
+      This *is* a **Markdown** text.
+
+    // Iterating with each and while
+    - var i = 0
+    while i < 3
+      p Iteration #{i + 1}
+      - i++
+
+    // Attributes
+    a(href="https://example.com", target="_blank") Visit Example
+
+    // Class and ID
+    .container#main-container
+      p This is a container with ID and class.
+
+    // Includes
+    include includes/header.pug

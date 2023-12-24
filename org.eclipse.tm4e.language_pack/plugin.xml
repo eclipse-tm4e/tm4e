@@ -553,6 +553,26 @@
   </extension>
 
   <!-- ======================================== -->
+  <!-- latex/latex: LaTeX -->
+  <!-- ======================================== -->
+  <extension point="org.eclipse.core.contenttype.contentTypes">
+    <content-type id="org.eclipse.tm4e.language_pack.latex" name="LaTeX" base-type="org.eclipse.tm4e.language_pack.basetype" priority="low"
+                  file-extensions="ctx,ltx,tex" />
+  </extension>
+  <extension point="org.eclipse.tm4e.registry.grammars">
+    <grammar scopeName="text.tex.latex" path="syntaxes/latex/latex.tmLanguage.json" />
+    <scopeNameContentTypeBinding scopeName="text.tex.latex" contentTypeId="org.eclipse.tm4e.language_pack.latex" />
+  </extension>
+
+  <extension point="org.eclipse.tm4e.languageconfiguration.languageConfigurations">
+    <languageConfiguration contentTypeId="org.eclipse.tm4e.language_pack.latex" path="syntaxes/latex/latex.language-configuration.json" />
+  </extension>
+
+  <extension point="org.eclipse.tm4e.ui.snippets">
+    <snippet name="LaTeX Example" path="syntaxes/latex/latex.example.ltx" scopeName="text.tex.latex" />
+  </extension>
+
+  <!-- ======================================== -->
   <!-- latex/markdown_latex_combined: Markdown Latex combined -->
   <!-- ======================================== -->
   <extension point="org.eclipse.core.contenttype.contentTypes">

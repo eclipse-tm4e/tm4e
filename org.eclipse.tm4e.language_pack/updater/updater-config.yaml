@@ -130,8 +130,6 @@ sources:
         languages:
           cpp_embedded_latex:
             label: C++ embedded Latex
-          latex:
-            ignored: tm4e fails to parse the grammar
           markdown_latex_combined:
             label: Markdown Latex combined
 

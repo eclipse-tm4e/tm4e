@@ -1,0 +1,80 @@
+\documentclass{article}
+
+% Preamble
+\usepackage{amsmath}  % for mathematical symbols and environments
+
+\title{Concise LaTeX Example}
+\author{Your Name}
+\date{\today}
+
+\begin{document}
+
+\maketitle
+
+\section{Introduction}
+
+This is a concise example that demonstrates various LaTeX features.
+
+\section{Formatting Text}
+
+\textbf{Bold text}, \textit{italic text}, \underline{underlined text}.
+
+\subsection{Lists}
+
+\begin{itemize}
+    \item Item 1
+    \item Item 2
+\end{itemize}
+
+\subsection{Enumerations}
+
+\begin{enumerate}
+    \item First item
+    \item Second item
+\end{enumerate}
+
+\section{Mathematics}
+
+Inline math: $E=mc^2$.
+
+Display math:
+\[
+\int_{0}^{1} x^2 \,dx = \frac{1}{3}.
+\]
+
+\section{Tables}
+
+\begin{tabular}{|c|c|}
+    \hline
+    Header 1 & Header 2 \\
+    \hline
+    Cell 1 & Cell 2 \\
+    \hline
+\end{tabular}
+
+\section{Figures}
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=0.5\textwidth]{example-image}
+    \caption{Example Figure}
+    \label{fig:example}
+\end{figure}
+
+\section{Cross-referencing}
+
+See Figure~\ref{fig:example} for an example.
+
+\section{Custom Commands}
+
+\newcommand{\mycommand}{This is a custom command.}
+
+\mycommand
+
+\section{References}
+
+\begin{thebibliography}{9}
+    \bibitem{example1} Author, A. (Year). Title of the paper. \textit{Journal Name}, \textbf{Volume}(Issue), Page range.
+\end{thebibliography}
+
+\end{document}

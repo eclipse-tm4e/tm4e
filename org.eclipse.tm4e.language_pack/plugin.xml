@@ -733,6 +733,26 @@
   </extension>
 
   <!-- ======================================== -->
+  <!-- php/php: PHP -->
+  <!-- ======================================== -->
+  <extension point="org.eclipse.core.contenttype.contentTypes">
+    <content-type id="org.eclipse.tm4e.language_pack.php" name="PHP" base-type="org.eclipse.tm4e.language_pack.basetype" priority="low"
+                  file-extensions="ctp,php,php4,php5,phtml" />
+  </extension>
+  <extension point="org.eclipse.tm4e.registry.grammars">
+    <grammar scopeName="source.php" path="syntaxes/php/php.tmLanguage.json" />
+    <scopeNameContentTypeBinding scopeName="source.php" contentTypeId="org.eclipse.tm4e.language_pack.php" />
+  </extension>
+
+  <extension point="org.eclipse.tm4e.languageconfiguration.languageConfigurations">
+    <languageConfiguration contentTypeId="org.eclipse.tm4e.language_pack.php" path="syntaxes/php/php.language-configuration.json" />
+  </extension>
+
+  <extension point="org.eclipse.tm4e.ui.snippets">
+    <snippet name="PHP Example" path="syntaxes/php/php.example.php" scopeName="source.php" />
+  </extension>
+
+  <!-- ======================================== -->
   <!-- powershell/powershell: PowerShell -->
   <!-- ======================================== -->
   <extension point="org.eclipse.core.contenttype.contentTypes">

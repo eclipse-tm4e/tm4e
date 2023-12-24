@@ -27,7 +27,7 @@ sources:
   #         example: <filepath_in_repo|url>  # optional
   #         file-extensions: []              # optional
   #         file-names:      []              # optional
-  #         file_patterns:   []              # optional
+  #         file-patterns:   []              # optional
   #     inline-grammars: # optional
   #       <scope-name>:
   #         grammar: <filepath_in_repo>      # REQUIRED
@@ -52,7 +52,7 @@ sources:
   #         example: <filepath_in_repo|url>  # optional
   #         file-extensions: []              # optional
   #         file-names:      []              # optional
-  #         file_patterns:   []              # optional
+  #         file-patterns:   []              # optional
   #     inline-grammars: # optional
   #       <scope-name>:   # existing scope-name as defined in package.json to override values
   #         ignored: <reason>                # optional. if set, this language is ignored
@@ -82,7 +82,7 @@ sources:
   #             example: <filepath_in_repo|url>  # optional
   #             file-extensions: []              # optional
   #             file-names:      []              # optional
-  #             file_patterns:   []              # optional
+  #             file-patterns:   []              # optional
   #         inline-grammars: # optional
   #           <scope-name>:   # existing scope-name as defined in package.json to override values
   #             ignored: <reason>                # optional. if set, this language is ignored
@@ -153,7 +153,10 @@ sources:
       php:
         languages:
           php:
-            ignored: tm4e fails to parse the grammar
+            # explicitly declaring scope-name and grammar because of multiple grammar registrations
+            # for the same language in the source repo
+            scope-name: source.php
+            grammar: syntaxes/php.tmLanguage.json
 
       razor:
         languages:

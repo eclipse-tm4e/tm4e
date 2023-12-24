@@ -583,6 +583,17 @@ extensions:
       path: extensions/php
       ref: 1.79.0
       commit: b380da4ef1ee00e224a15c1d4d9793e27c2b6302
+    languages:
+      php:
+        label: PHP
+        scope-name: source.php
+        upstream-url: https://github.com/KapitanOczywisty/language-php/commit/5e8f000cb5a20f44f7a7a89d07ad0774031c53f3
+        file-extensions:
+        - .ctp
+        - .php
+        - .php4
+        - .php5
+        - .phtml
   powershell:
     github:
       repo: microsoft/vscode

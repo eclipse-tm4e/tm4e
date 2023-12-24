@@ -287,7 +287,7 @@
   <!-- ======================================== -->
   <extension point="org.eclipse.core.contenttype.contentTypes">
     <content-type id="org.eclipse.tm4e.language_pack.ignore" name="Git Ignore" base-type="org.eclipse.tm4e.language_pack.basetype" priority="low"
-                  file-extensions="gitignore,gitignore_global" file-names=".gitignore" />
+                  file-extensions="git-blame-ignore-revs,gitignore,gitignore_global" file-names=".gitignore" />
   </extension>
   <extension point="org.eclipse.tm4e.registry.grammars">
     <grammar scopeName="source.ignore" path="syntaxes/git-base/ignore.tmLanguage.json" />
@@ -509,6 +509,22 @@
   </extension>
 
   <!-- ======================================== -->
+  <!-- json/snippets: Code Snippets -->
+  <!-- ======================================== -->
+  <extension point="org.eclipse.core.contenttype.contentTypes">
+    <content-type id="org.eclipse.tm4e.language_pack.snippets" name="Code Snippets" base-type="org.eclipse.tm4e.language_pack.basetype" priority="low"
+                  file-extensions="code-snippets" file-patterns="**/User/profiles/*/snippets/*.json,**/User/snippets/*.json" />
+  </extension>
+  <extension point="org.eclipse.tm4e.registry.grammars">
+    <grammar scopeName="source.json.comments.snippets" path="syntaxes/json/snippets.tmLanguage.json" />
+    <scopeNameContentTypeBinding scopeName="source.json.comments.snippets" contentTypeId="org.eclipse.tm4e.language_pack.snippets" />
+  </extension>
+
+  <extension point="org.eclipse.tm4e.languageconfiguration.languageConfigurations">
+    <languageConfiguration contentTypeId="org.eclipse.tm4e.language_pack.snippets" path="syntaxes/json/snippets.language-configuration.json" />
+  </extension>
+
+  <!-- ======================================== -->
   <!-- julia/julia: Julia -->
   <!-- ======================================== -->
   <extension point="org.eclipse.core.contenttype.contentTypes">
@@ -717,19 +733,19 @@
   </extension>
 
   <!-- ======================================== -->
-  <!-- perl/perl6: Perl 6 (Raku) -->
+  <!-- perl/raku: Raku (Perl 6) -->
   <!-- ======================================== -->
   <extension point="org.eclipse.core.contenttype.contentTypes">
-    <content-type id="org.eclipse.tm4e.language_pack.perl6" name="Perl 6 (Raku)" base-type="org.eclipse.tm4e.language_pack.basetype" priority="low"
-                  file-extensions="nqp,p6,pl6,pm6" />
+    <content-type id="org.eclipse.tm4e.language_pack.raku" name="Raku (Perl 6)" base-type="org.eclipse.tm4e.language_pack.basetype" priority="low"
+                  file-extensions="nqp,p6,pl6,pm6,raku,rakudoc,rakumod,rakutest" />
   </extension>
   <extension point="org.eclipse.tm4e.registry.grammars">
-    <grammar scopeName="source.perl.6" path="syntaxes/perl/perl6.tmLanguage.json" />
-    <scopeNameContentTypeBinding scopeName="source.perl.6" contentTypeId="org.eclipse.tm4e.language_pack.perl6" />
+    <grammar scopeName="source.perl.6" path="syntaxes/perl/raku.tmLanguage.json" />
+    <scopeNameContentTypeBinding scopeName="source.perl.6" contentTypeId="org.eclipse.tm4e.language_pack.raku" />
   </extension>
 
   <extension point="org.eclipse.tm4e.languageconfiguration.languageConfigurations">
-    <languageConfiguration contentTypeId="org.eclipse.tm4e.language_pack.perl6" path="syntaxes/perl/perl6.language-configuration.json" />
+    <languageConfiguration contentTypeId="org.eclipse.tm4e.language_pack.raku" path="syntaxes/perl/raku.language-configuration.json" />
   </extension>
 
   <!-- ======================================== -->
@@ -1075,7 +1091,7 @@
   <!-- ======================================== -->
   <extension point="org.eclipse.core.contenttype.contentTypes">
     <content-type id="org.eclipse.tm4e.language_pack.yaml" name="YAML" base-type="org.eclipse.tm4e.language_pack.basetype" priority="low"
-                  file-extensions="cff,eyaml,eyml,yaml,yml" />
+                  file-extensions="cff,eyaml,eyml,yaml,yaml-tmlanguage,yaml-tmpreferences,yaml-tmtheme,yml" />
   </extension>
   <extension point="org.eclipse.tm4e.registry.grammars">
     <grammar scopeName="source.yaml" path="syntaxes/yaml/yaml.tmLanguage.json" />

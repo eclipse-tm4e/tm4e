@@ -94,8 +94,7 @@ sources:
     github:
       repo: microsoft/vscode
       path: extensions
-      ref: "1.79.0" # https://gitlab.eclipse.org/eclipsefdn/emo-team/iplab/-/issues/8851
-      # TODO ref: "1.85.0" # https://gitlab.eclipse.org/eclipsefdn/emo-team/iplab/-/issues/11873
+      ref: "1.85.0" # https://gitlab.eclipse.org/eclipsefdn/emo-team/iplab/-/issues/11873
     license-download: false
     include-all-by-default: true
     extensions:
@@ -146,9 +145,8 @@ sources:
 
       perl:
         languages:
-          perl6:
-          #raku: # TODO ID changes as of 1.85.0
-            label: Perl 6 (Raku)
+          raku:
+            label: Raku (Perl 6)
 
       php:
         languages:

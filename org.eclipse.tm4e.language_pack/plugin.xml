@@ -856,6 +856,26 @@
   </extension>
 
   <!-- ======================================== -->
+  <!-- ruby/ruby: Ruby -->
+  <!-- ======================================== -->
+  <extension point="org.eclipse.core.contenttype.contentTypes">
+    <content-type id="org.eclipse.tm4e.language_pack.ruby" name="Ruby" base-type="org.eclipse.tm4e.language_pack.basetype" priority="low"
+                  file-extensions="erb,gemspec,podspec,rake,rb,rbi,rbx,rjs,ru" file-names="appfile,appraisals,berksfile,berksfile.lock,brewfile,capfile,cheffile,dangerfile,deliverfile,fastfile,gemfile,guardfile,gymfile,hobofile,matchfile,podfile,puppetfile,rakefile,rantfile,scanfile,snapfile,thorfile,vagrantfile" />
+  </extension>
+  <extension point="org.eclipse.tm4e.registry.grammars">
+    <grammar scopeName="source.ruby" path="syntaxes/ruby/ruby.tmLanguage.json" />
+    <scopeNameContentTypeBinding scopeName="source.ruby" contentTypeId="org.eclipse.tm4e.language_pack.ruby" />
+  </extension>
+
+  <extension point="org.eclipse.tm4e.languageconfiguration.languageConfigurations">
+    <languageConfiguration contentTypeId="org.eclipse.tm4e.language_pack.ruby" path="syntaxes/ruby/ruby.language-configuration.json" />
+  </extension>
+
+  <extension point="org.eclipse.tm4e.ui.snippets">
+    <snippet name="Ruby Example" path="syntaxes/ruby/ruby.example.rb" scopeName="source.ruby" />
+  </extension>
+
+  <!-- ======================================== -->
   <!-- rust/rust: Rust -->
   <!-- ======================================== -->
   <extension point="org.eclipse.core.contenttype.contentTypes">

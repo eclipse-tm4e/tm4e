@@ -163,11 +163,6 @@ sources:
           razor:
             label: ASP.NET Razor
 
-      ruby:
-        languages:
-          ruby:
-            ignored: tm4e fails to parse the grammar
-
       search-result:
         ignored: syntax highlighting broken
         languages:

@@ -68,21 +68,25 @@ docker exec -u root -it $container_id /bin/bash
 
 ### ⬆️ Version bump
 
-tm4e tries to use OSGi Semantic Version (to properly expose its API contracts and breakage) and Reproducible Version Qualifiers (to minimize the avoid producing multiple equivalent artifacts for identical source).
-This requires the developer to manually bump version from time to time. Somes rules are that:
+The TM4E project adopts [Semantic Versioning](https://semver.org/) on release level, ensuring the proper exposure of API contracts and addressing potential breakages.
 
-* Versions are bumped on a __per module grain__ (bump version of individual bundles/features one by one when necessary), __DON'T bump version of parent pom, nor of other modules you don't change__
-* __Versions are bumped maximum once per release__ (don't bump versions that were already bumped since last release)
-* __Don't bump versions of what you don't change__
-* __Bump version of the bundles you're modifying only if it's their 1st change since last release__
-* Version bump may need to be cascaded to features that *include* the artifact you just changed, and then to features that *include* such features and so on (unless the version of those features were already bumped since last release).
+To alleviate confusion among end-users regarding the effectively installed TM4E release and to ease the development process and troubleshooting, starting with version **0.9.0**, individual TM4E features/plugins are no longer versioned independently (OSGi semantic versioning).
+Instead, they are aligned with the overall TM4E release version, following a practice that is common in other Eclipse Platform projects, such as EGit or Mylyn, as well as popular projects outside the Eclipse Platform universe, like the Spring Application Framework.
 
-The delta for version bumps are:
+In this versioning approach, when any plugin introduces new features necessitating a minor version increment, the versions of **all** TM4E plugins/features are updated collectively, and the next release version will be adjusted accordingly.
 
-* `+0.0.1` (next micro) for a bugfix, or an internal change that doesn't surface to APIs
-* `+0.1.0` (next minor) for an API addition
-* `+1.0.0` (next major) for an API breakage (needs to be discussed on the mailing-list first)
-* If some "smaller" bump already took place, you can replace it with your "bigger one". Eg, if last release has org.eclipse.tm4e 0.4.1; and someone already bumped version to 0.4.2 (for an internal change) and you're adding a new API, then you need to change version to 0.5.0.
+To simplify version increments, utilize the `bump-versions.py` Python script located in the root project directory.
+This script facilitates the recursive update of the project version and plugin dependencies in all relevant files, including `pom.xml`, `feature.xml`, and `META-INF/MANIFEST.MF`.
+
+The usage is as follows:
+```bash
+$ python bump-version.py (major|minor|micro)
+```
+
+Where
+* `micro` (`+0.0.1`) is for a backward compatible bugfix, or an internal change that doesn't surface to APIs
+* `minor` (`+0.1.0`) is for a backward compatible API or feature addition
+* `major` (`+1.0.0`) is for an API breakage (needs to be discussed on the mailing-list first)
 
 ### ➕ Submit changes
 

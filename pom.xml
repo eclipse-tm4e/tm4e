@@ -9,8 +9,9 @@
 	<packaging>pom</packaging>
 
 	<prerequisites>
-		<maven>3.6.3</maven>
+		<maven>3.9.6</maven>
 	</prerequisites>
+
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<tycho-version>4.0.4</tycho-version>

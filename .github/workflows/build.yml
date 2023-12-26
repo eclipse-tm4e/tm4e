@@ -98,7 +98,7 @@ jobs:
     - name: "Install: Maven"
       uses: stCarolas/setup-maven@v4.5 # https://github.com/stCarolas/setup-maven
       with:
-        maven-version: 3.9.5
+        maven-version: 3.9.6
 
     - name: Build with Maven
       id: maven-build

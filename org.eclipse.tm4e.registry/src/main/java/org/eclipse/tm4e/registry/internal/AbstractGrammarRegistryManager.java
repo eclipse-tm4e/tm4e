@@ -28,6 +28,7 @@ import java.util.stream.Stream;
 
 import org.eclipse.core.runtime.content.IContentType;
 import org.eclipse.jdt.annotation.Nullable;
+import org.eclipse.tm4e.core.TMException;
 import org.eclipse.tm4e.core.grammar.IGrammar;
 import org.eclipse.tm4e.core.registry.IGrammarSource;
 import org.eclipse.tm4e.core.registry.IRegistryOptions;
@@ -164,16 +165,24 @@ public abstract class AbstractGrammarRegistryManager implements IGrammarRegistry
 					continue;
 				}
 
+				try {
 				// look for a grammar provided by the same plugin as the content-type
-				var grammar = getGrammarForScope(binding.scope.getQualifiedName());
-				if (grammar != null) {
-					return grammar;
+					var grammar = getGrammarForScope(binding.scope.getQualifiedName());
+					if (grammar != null) {
+						return grammar;
+					}
+				} catch (TMException ex) {
+					// most likely not grammar found, continue
 				}
 
+				try {
 				// look for a grammar provided by any plugin
-				grammar = getGrammarForScope(binding.scope.getName());
-				if (grammar != null) {
-					return grammar;
+					var grammar = getGrammarForScope(binding.scope.getName());
+					if (grammar != null) {
+						return grammar;
+					}
+				} catch (TMException ex) {
+					// most likely not grammar found, continue
 				}
 			}
 		}

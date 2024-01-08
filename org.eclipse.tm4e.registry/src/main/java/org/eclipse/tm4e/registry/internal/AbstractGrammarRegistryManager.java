@@ -49,6 +49,11 @@ public abstract class AbstractGrammarRegistryManager implements IGrammarRegistry
 			this.contentType = contentType;
 			this.scope = new TMScope(scopeName, pluginId);
 		}
+
+		@Override
+		public String toString() {
+			return "ContentTypeToScopeBinding [contentType=" + contentType + ", scope=" + scope + "]";
+		}
 	}
 
 	static final class GrammarDefinitions {

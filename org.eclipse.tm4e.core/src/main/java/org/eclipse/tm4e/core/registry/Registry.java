@@ -188,8 +188,7 @@ public final class Registry {
 					injections == null || injections.isEmpty()
 							? this._options.getInjections(rawGrammar.getScopeName())
 							: injections);
-			return castNonNull(
-					this._grammarForScopeName(rawGrammar.getScopeName(), initialLanguage, embeddedLanguages, null, null));
+			return castNonNull(this._grammarForScopeName(rawGrammar.getScopeName(), initialLanguage, embeddedLanguages, null, null));
 
 		} catch (final Exception ex) {
 			throw new TMException("Loading grammar from [" + source.getFilePath() + "] failed: " + ex.getMessage(), ex);

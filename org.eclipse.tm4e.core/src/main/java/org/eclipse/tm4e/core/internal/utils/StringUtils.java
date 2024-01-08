@@ -80,6 +80,15 @@ public final class StringUtils {
 	 * 7.5 times faster than {@link String#split(String)} and 2.5 times faster than {@link com.google.common.base.Splitter}.
 	 */
 	public static String[] splitToArray(final String line, final char separator) {
+		return splitToArray(line, separator, -1);
+	}
+
+	/**
+	 * Very fast String splitting.
+	 *
+	 * 7.5 times faster than {@link String#split(String)} and 2.5 times faster than {@link com.google.common.base.Splitter}.
+	 */
+	public static String[] splitToArray(final String line, final char separator, final int limit) {
 		if (line.isEmpty())
 			return new String[] { "" };
 
@@ -96,6 +105,8 @@ public final class StringUtils {
 			tmp[count] = line.substring(start, end);
 			count++;
 			start = end + 1;
+			if (count == limit)
+				break;
 			end = line.indexOf(separator, start);
 		}
 		if (count == tmp.length) { // check if array needs resize
@@ -165,6 +176,11 @@ public final class StringUtils {
 			return 0;
 		}
 		return len1 - len2;
+	}
+
+	public static String substringBefore(final String searchIn, final char searchFor, final String defaultValue) {
+		final int foundAt = searchIn.indexOf(searchFor);
+		return foundAt == -1 ? defaultValue : searchIn.substring(0, foundAt);
 	}
 
 	/**

@@ -35,6 +35,7 @@ import org.eclipse.tm4e.core.internal.grammar.raw.RawGrammarReader;
 import org.eclipse.tm4e.core.internal.registry.SyncRegistry;
 import org.eclipse.tm4e.core.internal.theme.Theme;
 import org.eclipse.tm4e.core.internal.theme.raw.RawThemeReader;
+import org.eclipse.tm4e.core.internal.utils.ScopeNames;
 
 /**
  * The registry that will hold all grammars.
@@ -133,6 +134,10 @@ public final class Registry {
 			@Nullable final Map<String, Integer> embeddedLanguages,
 			@Nullable final Map<String, Integer> tokenTypes,
 			@Nullable final BalancedBracketSelectors balancedBracketSelectors) {
+
+		if (!_loadSingleGrammar(initialScopeName))
+			return null;
+
 		final var dependencyProcessor = new ScopeDependencyProcessor(this._syncRegistry, initialScopeName);
 		while (!dependencyProcessor.Q.isEmpty()) {
 			dependencyProcessor.Q.forEach(request -> this._loadSingleGrammar(request.scopeName));
@@ -147,12 +152,17 @@ public final class Registry {
 				balancedBracketSelectors);
 	}
 
-	private void _loadSingleGrammar(final String scopeName) {
-		this._ensureGrammarCache.computeIfAbsent(scopeName, this::_doLoadSingleGrammar);
+	private boolean _loadSingleGrammar(final String scopeName) {
+		return this._ensureGrammarCache.computeIfAbsent(scopeName, this::_doLoadSingleGrammar);
 	}
 
 	private boolean _doLoadSingleGrammar(final String scopeName) {
-		final var grammarSource = this._options.getGrammarSource(scopeName);
+		var grammarSource = this._options.getGrammarSource(scopeName);
+		if (grammarSource == null) {
+			final var scopeNameWithoutContributor = ScopeNames.withoutContributor(scopeName);
+			if (!scopeNameWithoutContributor.equals(scopeName))
+				grammarSource = this._options.getGrammarSource(scopeNameWithoutContributor);
+		}
 		if (grammarSource == null) {
 			LOGGER.log(WARNING, "No grammar source for scope [{0}]", scopeName);
 			return false;

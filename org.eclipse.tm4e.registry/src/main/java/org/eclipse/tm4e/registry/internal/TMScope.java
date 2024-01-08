@@ -12,17 +12,17 @@
  */
 package org.eclipse.tm4e.registry.internal;
 
+import static org.eclipse.tm4e.core.internal.utils.ScopeNames.CONTRIBUTOR_SEPARATOR;
 import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.tm4e.registry.ITMScope;
 
 public final class TMScope implements ITMScope {
-	private static final char SEPARATOR = '@';
 
 	/**
 	 * @param scopeName fully qualified ("source.batchfile@com.example.myplugin") or unqualified scopeName ("source.batchfile")
 	 */
 	public static TMScope parse(final String scopeName) {
-		final int separatorAt = scopeName.indexOf(SEPARATOR);
+		final int separatorAt = scopeName.indexOf(CONTRIBUTOR_SEPARATOR);
 		if (separatorAt == -1) {
 			return new TMScope(scopeName, null, scopeName);
 		}
@@ -40,7 +40,7 @@ public final class TMScope implements ITMScope {
 	public TMScope(String scopeName, @Nullable String pluginId) {
 		this.name = scopeName;
 		this.pluginId = pluginId;
-		qualifiedName = pluginId == null ? scopeName : scopeName + SEPARATOR + pluginId;
+		qualifiedName = pluginId == null ? scopeName : scopeName + CONTRIBUTOR_SEPARATOR + pluginId;
 	}
 
 	private TMScope(final String scopeName, @Nullable final String pluginId, final String qualifiedName) {

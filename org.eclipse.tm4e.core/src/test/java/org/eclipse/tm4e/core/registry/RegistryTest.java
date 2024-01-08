@@ -53,4 +53,11 @@ class RegistryTest {
 		System.out.println("Successfully parsed " + count.intValue() + " grammars.");
 		assertTrue(count.intValue() > 10, "Only " + count.intValue() + " grammars found, expected more than 10!");
 	}
+
+	@Test
+	void testLoadingUnknownGrammar() {
+		final var reg = new Registry();
+		assertNull(reg.grammarForScopeName("undefined"));
+		assertNull(reg.loadGrammar("undefined"));
+	}
 }

@@ -16,24 +16,46 @@ import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.tm4e.registry.ITMScope;
 
 public final class TMScope implements ITMScope {
+	private static final char SEPARATOR = '@';
+
+	/**
+	 * @param scopeName fully qualified ("source.batchfile@com.example.myplugin") or unqualified scopeName ("source.batchfile")
+	 */
+	public static TMScope parse(final String scopeName) {
+		final int separatorAt = scopeName.indexOf(SEPARATOR);
+		if (separatorAt == -1) {
+			return new TMScope(scopeName, null, scopeName);
+		}
+		return new TMScope(scopeName.substring(0, separatorAt), scopeName.substring(separatorAt + 1), scopeName);
+	}
+
 	private final @Nullable String pluginId; // e.g. "com.example.myplugin"
 	private final String name; // e.g. "source.batchfile"
 	private final String qualifiedName; //e.g. "source.batchfile@com.example.myplugin"
 
+	/**
+	 * @param scopeName the scope name, e.g. "source.batchfile"
+	 * @param pluginId id of the grammar contributing pluginId, e.g. "com.example.myplugin"
+	 */
 	public TMScope(String scopeName, @Nullable String pluginId) {
 		this.name = scopeName;
 		this.pluginId = pluginId;
-		qualifiedName = pluginId == null ? scopeName : scopeName + '@' + pluginId;
+		qualifiedName = pluginId == null ? scopeName : scopeName + SEPARATOR + pluginId;
+	}
+
+	private TMScope(final String scopeName, @Nullable final String pluginId, final String qualifiedName) {
+		this.name = scopeName;
+		this.pluginId = pluginId;
+		this.qualifiedName = qualifiedName;
 	}
 
 	@Override
-	public boolean equals(@Nullable Object obj) {
+	public boolean equals(final @Nullable Object obj) {
 		if (this == obj)
 			return true;
-		if (obj == null || getClass() != obj.getClass())
-			return false;
-		final TMScope other = (TMScope) obj;
-		return qualifiedName.equals(other.qualifiedName);
+		return obj instanceof TMScope other
+				? qualifiedName.equals(other.qualifiedName)
+				: false;
 	}
 
 	@Override

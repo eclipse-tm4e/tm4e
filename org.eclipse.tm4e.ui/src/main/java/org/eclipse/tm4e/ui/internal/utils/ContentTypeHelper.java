@@ -132,7 +132,6 @@ public final class ContentTypeHelper {
 				return null;
 			}
 		} catch (final CoreException | IOException ex) {
-			TMUIPlugin.logError(ex);
 			return null;
 		}
 	}
@@ -224,12 +223,12 @@ public final class ContentTypeHelper {
 							return editorInput;
 						}
 					} catch (final RuntimeException e) {
-						e.printStackTrace();
+						// e.printStackTrace();
 					}
 				}
 			}
 		} catch (final RuntimeException e) {
-			e.printStackTrace();
+			// e.printStackTrace();
 		}
 		return null;
 	}

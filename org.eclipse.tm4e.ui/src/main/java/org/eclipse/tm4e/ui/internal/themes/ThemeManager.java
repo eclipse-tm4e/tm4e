@@ -129,9 +129,8 @@ public final class ThemeManager extends AbstractThemeManager {
 					json.addProperty("path", theme.getPath());
 					json.addProperty("dark", theme.isDark());
 					return json;
-				}).collect(JsonArray::new, (final JsonArray array, final JsonObject object) -> array.add(object),
-						(r, r1) -> {
-						})
+				}).collect(JsonArray::new, JsonArray::add, (r, r1) -> {
+				})
 				.toString());
 
 		// Save Theme associations in the

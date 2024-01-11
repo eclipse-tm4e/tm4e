@@ -23,14 +23,14 @@ class RegistryTest {
 	@Test
 	void testGrammarRegistered() {
 		final IContentType contentType = Platform.getContentTypeManager().getContentType("org.eclipse.tm4e.ui.tests.testContentType");
-		final IGrammar grammar = TMEclipseRegistryPlugin.getGrammarRegistryManager().getGrammarFor(new IContentType[] { contentType });
+		final IGrammar grammar = TMEclipseRegistryPlugin.getGrammarRegistryManager().getGrammarFor(contentType);
 		Assertions.assertNotNull(grammar);
 	}
 
 	@Test
 	void testThemeAppliesToSubtypes() {
 		final IContentType contentType = Platform.getContentTypeManager().getContentType("org.eclipse.tm4e.ui.tests.testContentType.child");
-		final IGrammar grammar = TMEclipseRegistryPlugin.getGrammarRegistryManager().getGrammarFor(new IContentType[] { contentType });
+		final IGrammar grammar = TMEclipseRegistryPlugin.getGrammarRegistryManager().getGrammarFor(contentType);
 		Assertions.assertNotNull(grammar);
 	}
 }

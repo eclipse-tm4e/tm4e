@@ -50,7 +50,7 @@ public final class TextUtils {
 
 		final var result = new StringBuilder();
 		if (!insertSpaces) {
-			final long tabsCnt = Math.round(Math.floor(spacesCnt / tabSize));
+			final long tabsCnt = spacesCnt / tabSize;
 			spacesCnt = spacesCnt % tabSize;
 			for (int i = 0; i < tabsCnt; i++) {
 				result.append('\t');

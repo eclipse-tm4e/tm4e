@@ -26,7 +26,7 @@ import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.tm4e.languageconfiguration.internal.model.LanguageConfiguration;
 import org.junit.jupiter.api.Test;
 
-public class ParsingTest {
+class ParsingTest {
 
 	@Nullable
 	private LanguageConfiguration loadLanguageConfiguration(final String path) throws IOException {
@@ -37,13 +37,13 @@ public class ParsingTest {
 	}
 
 	@Test
-	public void testCanLoadPhpLanguageConfig() throws Exception {
+	void testCanLoadPhpLanguageConfig() throws Exception {
 		final var languageConfiguration = loadLanguageConfiguration("/php-language-configuration.json");
 		assertNotNull(languageConfiguration);
 		final var comments = languageConfiguration.getComments();
 		assertNotNull(comments);
 		assertNotNull(comments.blockComment);
-		assertEquals(comments.lineComment, "//");
+		assertEquals("//", comments.lineComment);
 		assertNotNull(languageConfiguration.getBrackets());
 		assertNotNull(languageConfiguration.getAutoClosingPairs());
 		assertEquals(";:.,=}])>` \n\t", languageConfiguration.getAutoCloseBefore());
@@ -54,13 +54,13 @@ public class ParsingTest {
 	}
 
 	@Test
-	public void testCanLoadRustLanguageConfig() throws Exception {
+	void testCanLoadRustLanguageConfig() throws Exception {
 		final var languageConfiguration = loadLanguageConfiguration("/rust-language-configuration.json");
 		assertNotNull(languageConfiguration);
 		final var comments = languageConfiguration.getComments();
 		assertNotNull(comments);
 		assertNotNull(comments.blockComment);
-		assertEquals(comments.lineComment, "//");
+		assertEquals("//", comments.lineComment);
 		assertNotNull(languageConfiguration.getBrackets());
 		assertNotNull(languageConfiguration.getAutoClosingPairs());
 		assertNull(languageConfiguration.getAutoCloseBefore());

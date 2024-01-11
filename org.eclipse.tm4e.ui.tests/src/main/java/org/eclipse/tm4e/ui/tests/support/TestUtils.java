@@ -28,7 +28,7 @@ import org.eclipse.ui.IWorkbenchPartSite;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.tests.harness.util.DisplayHelper;
 
-public class TestUtils {
+public final class TestUtils {
 
 	public static IEditorDescriptor assertHasGenericEditor() {
 		final var genericEditorDescr = PlatformUI.getWorkbench().getEditorRegistry()
@@ -53,7 +53,7 @@ public class TestUtils {
 			final var tm4eThread = tm4eThreads.entrySet().iterator().next();
 			final var ex = new IllegalStateException("Thread " + tm4eThread.getKey() + " is still busy");
 			ex.setStackTrace(tm4eThread.getValue());
-			ex.printStackTrace(System.out);
+			ex.printStackTrace();
 
 			fail("TM4E threads still running:\n" + tm4eThreads.keySet().stream()
 					.map(t -> " - " + t + " " + t.getClass().getName()).collect(Collectors.joining("\n")));
@@ -93,5 +93,8 @@ public class TestUtils {
 				return condition.getAsBoolean();
 			}
 		}.waitForCondition(display, timeout_ms);
+	}
+
+	private TestUtils() {
 	}
 }

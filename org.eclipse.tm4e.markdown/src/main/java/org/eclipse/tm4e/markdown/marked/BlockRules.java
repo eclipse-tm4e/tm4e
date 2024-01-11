@@ -22,9 +22,9 @@ public class BlockRules {
 			+ "|var|samp|kbd|sub|sup|i|b|u|mark|ruby|rt|rp|bdi|bdo"
 			+ "|span|br|wbr|ins|del|img)\\b)\\w+(?!:\\/|[^\\w\\s@]*@)\\b";
 
-	public static BlockRules normal = normal();
-	public static BlockRules gfm = gfm();
-	public static BlockRules tables = tables();
+	public static final BlockRules normal = normal();
+	public static final BlockRules gfm = gfm();
+	public static final BlockRules tables = tables();
 
 	public final RegExp newline;
 	public final RegExp code;

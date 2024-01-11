@@ -95,7 +95,7 @@ public class TMEditor {
 		final var commands = this.commands;
 		final var done = new AtomicBoolean(false);
 		new Thread(() -> {
-			commands.forEach(c -> collector.executeCommandSync(c));
+			commands.forEach(collector::executeCommandSync);
 			done.set(true);
 		}, "Commands Executor").start();
 

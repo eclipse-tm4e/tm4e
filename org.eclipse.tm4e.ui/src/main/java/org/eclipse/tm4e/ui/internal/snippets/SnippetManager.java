@@ -11,9 +11,11 @@
  */
 package org.eclipse.tm4e.ui.internal.snippets;
 
+import static org.eclipse.tm4e.core.internal.utils.NullSafetyHelper.castNullable;
+
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.eclipse.core.runtime.IConfigurationElement;
@@ -52,7 +54,7 @@ public final class SnippetManager implements ISnippetManager {
 		return manager;
 	}
 
-	private final Map<String, @Nullable Collection<ISnippet>> snippets = new HashMap<>();
+	private final Map<String, List<ISnippet>> snippets = new HashMap<>();
 
 	private SnippetManager() {
 	}
@@ -77,17 +79,12 @@ public final class SnippetManager implements ISnippetManager {
 
 	private void registerSnippet(final Snippet snippet) {
 		final String scopeName = snippet.getScopeName();
-		Collection<ISnippet> snippets = this.snippets.get(scopeName);
-		if (snippets == null) {
-			snippets = new ArrayList<>();
-			this.snippets.put(scopeName, snippets);
-		}
-		snippets.add(snippet);
+		snippets.computeIfAbsent(scopeName, scopeName_ -> new ArrayList<>()).add(snippet);
 	}
 
 	@Override
 	public ISnippet[] getSnippets(final String scopeName) {
-		final Collection<ISnippet> snippets = this.snippets.get(scopeName);
+		final List<ISnippet> snippets = castNullable(this.snippets.get(scopeName));
 		return snippets != null ? snippets.toArray(ISnippet[]::new) : EMPTY_SNIPPETS;
 	}
 }

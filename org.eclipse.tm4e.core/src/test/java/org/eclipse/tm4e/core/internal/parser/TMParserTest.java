@@ -41,7 +41,7 @@ class TMParserTest {
 	@SuppressWarnings("null")
 	private void validateCaptures(final RawGrammar grammar) {
 		assertNotNull(grammar.getPatterns());
-		assertEquals(grammar.getPatterns().size(), 1);
+		assertEquals(1, grammar.getPatterns().size());
 		final var pattern = grammar.getPatterns().iterator().next();
 		assertEquals("THE_PATTERN", pattern.getName());
 		assertEquals("BEGIN_PATTERN", pattern.getBegin());

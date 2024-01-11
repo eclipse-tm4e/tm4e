@@ -84,6 +84,7 @@ final class StyleRangesCollector implements ITMPresentationReconcilerListener {
 					wait(command);
 				} catch (final InterruptedException e) {
 					e.printStackTrace();
+					Thread.currentThread().interrupt();
 				}
 			}
 		}

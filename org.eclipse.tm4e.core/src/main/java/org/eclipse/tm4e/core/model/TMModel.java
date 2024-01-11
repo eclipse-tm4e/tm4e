@@ -94,7 +94,7 @@ public abstract class TMModel implements ITMModel {
 	private final ModelTokensChangedEvent.Listeners listeners = new ModelTokensChangedEvent.Listeners();
 
 	/** The background thread performing async line tokenizations */
-	private @Nullable volatile TokenizerThread tokenizerThread;
+	private volatile @Nullable TokenizerThread tokenizerThread;
 	private volatile boolean tokenizerThreadHasWork;
 	private TMTokenizationSupport tokenizer = lazyNonNull();
 
@@ -188,10 +188,8 @@ public abstract class TMModel implements ITMModel {
 
 		/**
 		 * revalidates tokens of lines starting at {@link #firstLineToRevalidate} until all lines are processed or new {@link Edit} arrive.
-		 *
-		 * @throws InterruptedException
 		 */
-		private void revalidateTokens() throws InterruptedException {
+		private void revalidateTokens() {
 			final int startLineIndex = firstLineToRevalidate;
 			final int startLineNumber = startLineIndex + 1;
 			if (DEBUG_LOGGING)

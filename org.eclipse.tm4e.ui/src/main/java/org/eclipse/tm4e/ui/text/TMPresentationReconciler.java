@@ -111,18 +111,15 @@ public class TMPresentationReconciler implements IPresentationReconciler {
 		return null;
 	}
 
-	private final ModelTokensChangedEvent.Listener modelsTokensChangedListener = new ModelTokensChangedEvent.Listener() {
-		@Override
-		public void onModelTokensChanged(final ModelTokensChangedEvent event) {
-			final var colorizer = TMPresentationReconciler.this.colorizer;
-			if (colorizer != null) {
-				final Control control = colorizer.getTextViewer().getTextWidget();
-				if (control != null) {
-					control.getDisplay().asyncExec(() -> colorizer.colorize(event));
-				}
+	private final ModelTokensChangedEvent.Listener modelsTokensChangedListener = (ModelTokensChangedEvent event) -> {
+		final var colorizer = TMPresentationReconciler.this.colorizer;
+		if (colorizer != null) {
+			final Control control = colorizer.getTextViewer().getTextWidget();
+			if (control != null) {
+				control.getDisplay().asyncExec(() -> colorizer.colorize(event));
 			}
-			MarkerUtils.updateTextMarkers(event);
 		}
+		MarkerUtils.updateTextMarkers(event);
 	};
 
 	/**

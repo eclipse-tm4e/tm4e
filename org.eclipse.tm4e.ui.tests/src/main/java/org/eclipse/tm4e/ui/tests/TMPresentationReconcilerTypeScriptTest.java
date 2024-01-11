@@ -52,7 +52,7 @@ public class TMPresentationReconcilerTypeScriptTest {
 	}
 
 	@Test
-	void colorizeTypescript() throws Exception {
+	void colorizeTypescript() {
 		editor = new TMEditor(grammar, theme, "let a = '';\nlet b = 10;\nlet c = true;");
 
 		final List<ICommand> commands = editor.execute();
@@ -89,7 +89,7 @@ public class TMPresentationReconcilerTypeScriptTest {
 	}
 
 	@Test
-	void colorizeTypescriptWithInvalidate1() throws Exception {
+	void colorizeTypescriptWithInvalidate1() {
 		editor = new TMEditor(grammar, theme, "let a = '';\nlet b = 10;\nlet c = true;");
 		editor.invalidateTextPresentation(0, 3);
 
@@ -135,7 +135,7 @@ public class TMPresentationReconcilerTypeScriptTest {
 	}
 
 	@Test
-	void colorizeTypescriptWithInvalidate2() throws Exception {
+	void colorizeTypescriptWithInvalidate2() {
 		editor = new TMEditor(grammar, theme, "let a = '';\nlet b = 10;\nlet c = true;");
 		editor.invalidateTextPresentation(0, 2);
 
@@ -181,7 +181,7 @@ public class TMPresentationReconcilerTypeScriptTest {
 	}
 
 	@Test
-	void colorizeTypescriptWithInvalidate3() throws Exception {
+	void colorizeTypescriptWithInvalidate3() {
 		editor = new TMEditor(grammar, theme, "let a = '';\nlet b = 10;\nlet c = true;");
 		editor.invalidateTextPresentation(1, 2);
 
@@ -227,7 +227,7 @@ public class TMPresentationReconcilerTypeScriptTest {
 	}
 
 	@Test
-	void colorizeTypescriptWithInvalidate4() throws Exception {
+	void colorizeTypescriptWithInvalidate4() {
 		editor = new TMEditor(grammar, theme, "let a = '';\nlet b = 10;\nlet c = true;");
 		editor.invalidateTextPresentation(1, 1);
 
@@ -274,7 +274,7 @@ public class TMPresentationReconcilerTypeScriptTest {
 
 	@Disabled
 	@Test
-	void colorizeTypescriptWithInvalidate8() throws Exception {
+	void colorizeTypescriptWithInvalidate8() {
 		editor = new TMEditor(grammar, theme, "let a = '';\nlet b = 10;\nlet c = true;");
 		editor.invalidateTextPresentation(1, 8);
 
@@ -320,7 +320,7 @@ public class TMPresentationReconcilerTypeScriptTest {
 	}
 
 	@Test
-	void colorizeTypescriptWithInvalidateAndSeveralLines() throws Exception {
+	void colorizeTypescriptWithInvalidateAndSeveralLines() {
 		editor = new TMEditor(grammar, theme, "a\r\n\r\nb");
 		editor.invalidateTextPresentation(0, 6);
 

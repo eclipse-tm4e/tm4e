@@ -27,10 +27,10 @@ import org.junit.jupiter.api.Test;
  * @see <a href="https://github.com/microsoft/vscode/blob/main/src/vs/editor/test/common/modes/supports/onEnter.test.ts">
  *      https://github.com/microsoft/vscode/blob/main/src/vs/editor/test/common/modes/supports/onEnter.test.ts</a>
  */
-public class OnEnterSupportTest {
+class OnEnterSupportTest {
 
 	@Test
-	public void testUseBrackets() {
+	void testUseBrackets() {
 
 		class Support extends OnEnterSupport {
 			Support() {
@@ -74,7 +74,7 @@ public class OnEnterSupportTest {
 	}
 
 	@Test
-	public void testRegExpRules() {
+	void testRegExpRules() {
 
 		class Support extends OnEnterSupport {
 			Support() {

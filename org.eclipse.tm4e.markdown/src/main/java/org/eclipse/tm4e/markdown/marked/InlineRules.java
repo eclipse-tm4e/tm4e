@@ -82,8 +82,7 @@ public class InlineRules {
 	}
 
 	private static InlineRules normal() {
-		final InlineRules normal = inline();
-		return normal;
+		return inline();
 	}
 
 	private static InlineRules pedantic() {

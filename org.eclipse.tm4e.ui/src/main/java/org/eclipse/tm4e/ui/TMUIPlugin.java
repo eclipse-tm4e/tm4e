@@ -56,6 +56,12 @@ public class TMUIPlugin extends AbstractUIPlugin {
 		log(new Status(IStatus.ERROR, PLUGIN_ID, ex.getMessage(), ex));
 	}
 
+	public static void logTrace(final Exception ex) {
+		if (isLogTraceEnabled()) {
+			log(new Status(IStatus.INFO, PLUGIN_ID, ex.getMessage(), ex));
+		}
+	}
+
 	public static void logTrace(final String message) {
 		if (isLogTraceEnabled()) {
 			log(new Status(IStatus.INFO, PLUGIN_ID, message));

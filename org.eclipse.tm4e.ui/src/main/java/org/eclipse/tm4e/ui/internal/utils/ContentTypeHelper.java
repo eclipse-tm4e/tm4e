@@ -11,10 +11,10 @@
  */
 package org.eclipse.tm4e.ui.internal.utils;
 
-import java.io.IOException;
 import java.io.InputStream;
 import java.util.Arrays;
 import java.util.LinkedHashSet;
+import java.util.List;
 
 import org.eclipse.core.filebuffers.FileBuffers;
 import org.eclipse.core.filebuffers.ITextFileBuffer;
@@ -38,7 +38,6 @@ import org.eclipse.ui.IStorageEditorInput;
 
 /**
  * {@link IContentType} utilities.
- *
  */
 public final class ContentTypeHelper {
 
@@ -125,16 +124,13 @@ public final class ContentTypeHelper {
 
 			// Buffer is synchronized with filesystem content
 			try (InputStream contents = getContents(buffer)) {
-				contentTypes.addAll(
-						Arrays.asList(Platform.getContentTypeManager().findContentTypesFor(contents, fileName)));
+				contentTypes.addAll(List.of(Platform.getContentTypeManager().findContentTypesFor(contents, fileName)));
 				return new ContentTypeInfo(fileName, contentTypes.toArray(IContentType[]::new));
-			} catch (final Exception e) {
-				return null;
 			}
-		} catch (final CoreException | IOException ex) {
-			TMUIPlugin.logError(ex);
-			return null;
+		} catch (final Exception ex) {
+			TMUIPlugin.logTrace(ex);
 		}
+		return null;
 	}
 
 	/**
@@ -181,7 +177,8 @@ public final class ContentTypeHelper {
 						final var contentTypes = Platform.getContentTypeManager().findContentTypesFor(input, fileName);
 						return contentTypes == null ? null : new ContentTypeInfo(fileName, contentTypes);
 					}
-				} catch (final Exception e) {
+				} catch (final Exception ex) {
+					TMUIPlugin.logTrace(ex);
 					return null;
 				}
 			} /*else {
@@ -223,13 +220,13 @@ public final class ContentTypeHelper {
 						if (input instanceof final IEditorInput editorInput) {
 							return editorInput;
 						}
-					} catch (final RuntimeException e) {
-						e.printStackTrace();
+					} catch (final RuntimeException ex) {
+						TMUIPlugin.logTrace(ex);
 					}
 				}
 			}
-		} catch (final RuntimeException e) {
-			e.printStackTrace();
+		} catch (final RuntimeException ex) {
+			TMUIPlugin.logTrace(ex);
 		}
 		return null;
 	}

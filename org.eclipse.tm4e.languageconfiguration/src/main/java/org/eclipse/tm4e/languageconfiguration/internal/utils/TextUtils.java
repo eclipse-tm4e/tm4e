@@ -14,34 +14,30 @@ package org.eclipse.tm4e.languageconfiguration.internal.utils;
 import org.eclipse.jface.text.BadLocationException;
 import org.eclipse.jface.text.DocumentCommand;
 import org.eclipse.jface.text.IDocument;
-import org.eclipse.jface.text.IRegion;
 import org.eclipse.jface.text.TextUtilities;
 
 public final class TextUtils {
 
 	/**
-	 * Returns true if text of the command is an enter and false otherwise.
-	 *
 	 * @return true if text of the command is an enter and false otherwise.
 	 */
 	public static boolean isEnter(final IDocument doc, final DocumentCommand cmd) {
 		return cmd.length == 0 && cmd.text != null && TextUtilities.equals(doc.getLegalLineDelimiters(), cmd.text) != -1;
 	}
 
-	public static String normalizeIndentation(final String str, final int tabSize, final boolean insertSpaces) {
-		int firstNonWhitespaceIndex = TextUtils.firstNonWhitespaceIndex(str);
+	public static String normalizeIndentation(final String text, final int tabSize, final boolean insertSpaces) {
+		int firstNonWhitespaceIndex = firstNonWhitespaceIndex(text);
 		if (firstNonWhitespaceIndex == -1) {
-			firstNonWhitespaceIndex = str.length();
+			firstNonWhitespaceIndex = text.length();
 		}
-		return TextUtils.normalizeIndentationFromWhitespace(str.substring(0, firstNonWhitespaceIndex), tabSize,
-				insertSpaces) + str.substring(firstNonWhitespaceIndex);
+		return normalizeIndentationFromWhitespace(text.substring(0, firstNonWhitespaceIndex), tabSize, insertSpaces)
+				+ text.substring(firstNonWhitespaceIndex);
 	}
 
-	private static String normalizeIndentationFromWhitespace(final String str, final int tabSize,
-			final boolean insertSpaces) {
+	private static String normalizeIndentationFromWhitespace(final String text, final int tabSize, final boolean insertSpaces) {
 		int spacesCnt = 0;
-		for (int i = 0; i < str.length(); i++) {
-			if (str.charAt(i) == '\t') {
+		for (int i = 0; i < text.length(); i++) {
+			if (text.charAt(i) == '\t') {
 				spacesCnt += tabSize;
 			} else {
 				spacesCnt++;
@@ -65,10 +61,13 @@ public final class TextUtils {
 	}
 
 	/**
-	 * Returns the start of the string at the offset in the text. If the string is
-	 * not in the text at the offset, returns -1.<br/>
-	 * Ex: <br/>
-	 * text = "apple banana", offset=8, string="banana" returns=6
+	 * Returns the start of the string at the offset in the text. If the string is not in the text at the offset, returns -1.
+	 * <p>
+	 * Example:
+	 *
+	 * <pre>
+	 * text="apple banana", offset=8, string="banana" -> returns 6
+	 * </pre>
 	 */
 	public static int startIndexOfOffsetTouchingString(final String text, final int offset, final String string) {
 		int start = offset - string.length();
@@ -87,9 +86,9 @@ public final class TextUtils {
 	 * Returns first index of the string that is not whitespace. If string is empty
 	 * or contains only whitespaces, returns -1
 	 */
-	private static int firstNonWhitespaceIndex(final String str) {
-		for (int i = 0, len = str.length(); i < len; i++) {
-			final char c = str.charAt(i);
+	private static int firstNonWhitespaceIndex(final String text) {
+		for (int i = 0, len = text.length(); i < len; i++) {
+			final char c = text.charAt(i);
 			if (c != ' ' && c != '\t') {
 				return i;
 			}
@@ -118,17 +117,15 @@ public final class TextUtils {
 		return whitespace.substring(0, indentOffset);
 	}
 
-	public static String getLinePrefixingWhitespaceAtPosition(final IDocument d, final int offset) {
+	public static String getIndentationAtPosition(final IDocument doc, final int offset) {
 		try {
-			// find start of line
-			final int p = offset;
-			final IRegion info = d.getLineInformationOfOffset(p);
-			final int start = info.getOffset();
+			// find start offset of current line
+			final int lineStartOffset = doc.getLineInformationOfOffset(offset).getOffset();
 
 			// find white spaces
-			final int end = findEndOfWhiteSpace(d, start, offset);
+			final int indentationEndOffset = findEndOfWhiteSpace(doc, lineStartOffset, offset);
 
-			return d.get(start, end - start);
+			return doc.get(lineStartOffset, indentationEndOffset - lineStartOffset);
 		} catch (final BadLocationException excp) {
 			// stop work
 		}
@@ -140,42 +137,40 @@ public final class TextUtils {
 	 * <code>end</code> whose character is not a space or tab character. If no such
 	 * offset is found, <code>end</code> is returned.
 	 *
-	 * @param document the document to search in
-	 * @param offset the offset at which searching start
-	 * @param end the offset at which searching stops
+	 * @param doc the document to search in
+	 * @param startAt the offset at which searching start
+	 * @param endAt the offset at which searching stops
 	 *
-	 * @return the offset in the specified range whose character is not a space or
-	 *         tab
+	 * @return the offset in the specified range whose character is not a space or tab
 	 *
 	 * @exception BadLocationException if position is an invalid range in the given document
 	 */
-	private static int findEndOfWhiteSpace(final IDocument document, int offset, final int end)
-			throws BadLocationException {
-		while (offset < end) {
-			final char c = document.getChar(offset);
+	private static int findEndOfWhiteSpace(final IDocument doc, int startAt, final int endAt) throws BadLocationException {
+		while (startAt < endAt) {
+			final char c = doc.getChar(startAt);
 			if (c != ' ' && c != '\t') {
-				return offset;
+				return startAt;
 			}
-			offset++;
+			startAt++;
 		}
-		return end;
+		return endAt;
 	}
 
 	/**
 	 * Determines if all the characters at any offset of the specified document line are the whitespace characters.
 	 *
-	 * @param document the document to search in
+	 * @param doc the document to search in
 	 * @param line zero-based document line number
 	 *
 	 * @return <code>true</code> if all the characters of the specified document line are the whitespace
 	 *         characters, otherwise returns <code>false</code>
 	 */
-	public static boolean isBlankLine(final IDocument document, final int line) {
+	public static boolean isBlankLine(final IDocument doc, final int line) {
 		try {
-			int offset = document.getLineOffset(line);
-			final int lineEnd = offset + document.getLineLength(line);
+			int offset = doc.getLineOffset(line);
+			final int lineEnd = offset + doc.getLineLength(line);
 			while (offset < lineEnd) {
-				if (!Character.isWhitespace(document.getChar(offset))) {
+				if (!Character.isWhitespace(doc.getChar(offset))) {
 					return false;
 				}
 				offset++;

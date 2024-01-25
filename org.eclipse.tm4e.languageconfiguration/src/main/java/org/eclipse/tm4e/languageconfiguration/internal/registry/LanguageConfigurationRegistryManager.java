@@ -58,8 +58,7 @@ public final class LanguageConfigurationRegistryManager extends AbstractLanguage
 		return InstanceHolder.INSTANCE;
 	}
 
-	@Nullable
-	private LanguageConfigurationDefinition getDefinition(final IContentType contentType) {
+	private @Nullable LanguageConfigurationDefinition getDefinition(final IContentType contentType) {
 		LanguageConfigurationDefinition bestFit = null;
 		for (final var iDefinition : getDefinitions()) {
 			if (iDefinition instanceof final LanguageConfigurationDefinition definition) {
@@ -73,9 +72,8 @@ public final class LanguageConfigurationRegistryManager extends AbstractLanguage
 		return bestFit;
 	}
 
-	@Nullable
-	public AutoClosingPairConditional getAutoClosingPair(final String text, final int offset,
-			final String newCharacter, final IContentType contentType) {
+	public @Nullable AutoClosingPairConditional getAutoClosingPair(final String text, final int offset, final String newCharacter,
+			final IContentType contentType) {
 		final var definition = getDefinition(contentType);
 		if (definition == null || !definition.isBracketAutoClosingEnabled()) {
 			return null;
@@ -145,10 +143,7 @@ public final class LanguageConfigurationRegistryManager extends AbstractLanguage
 	 * @see <a href="https://github.com/microsoft/vscode/blob/main/src/vs/editor/common/languages/enterAction.ts">
 	 *      https://github.com/microsoft/vscode/blob/main/src/vs/editor/common/languages/enterAction.ts</a>
 	 */
-	@Nullable
-	public CompleteEnterAction getEnterAction(final IDocument document, final int offset,
-			final IContentType contentType) {
-		String indentation = TextUtils.getLinePrefixingWhitespaceAtPosition(document, offset);
+	public @Nullable CompleteEnterAction getEnterAction(final IDocument document, final int offset, final IContentType contentType) {
 		// let scopedLineTokens = this.getScopedLineTokens(model, range.startLineNumber, range.startColumn);
 		final var onEnterSupport = this._getOnEnterSupport(contentType /* scopedLineTokens.languageId */);
 		if (onEnterSupport == null) {
@@ -182,54 +177,48 @@ public final class LanguageConfigurationRegistryManager extends AbstractLanguage
 			// 	}
 			// }
 
-			EnterAction enterResult = null;
-			try {
-				enterResult = onEnterSupport.onEnter(previousLineText, beforeEnterText, afterEnterText);
-			} catch (final Exception e) {
-				// onUnexpectedError(e);
-			}
-
+			final @Nullable EnterAction enterResult = onEnterSupport.onEnter(previousLineText, beforeEnterText, afterEnterText);
 			if (enterResult == null) {
 				return null;
 			}
 
+			final IndentAction indentAction = enterResult.indentAction;
+			String appendText = enterResult.appendText;
+			final Integer removeText = enterResult.removeText;
+
 			// Here we add `\t` to appendText first because enterAction is leveraging appendText and removeText to change indentation.
-			if (enterResult.appendText == null) {
-				if (enterResult.indentAction == IndentAction.Indent
-						|| enterResult.indentAction == IndentAction.IndentOutdent) {
-					enterResult.appendText = "\t"; //$NON-NLS-1$
+			if (appendText == null) {
+				if (indentAction == IndentAction.Indent
+						|| indentAction == IndentAction.IndentOutdent) {
+					appendText = "\t";
 				} else {
-					enterResult.appendText = ""; //$NON-NLS-1$
+					appendText = "";
 				}
 			}
 
-			final var removeText = enterResult.removeText;
+			String indentation = TextUtils.getIndentationAtPosition(document, offset);
 			if (removeText != null) {
 				indentation = indentation.substring(0, indentation.length() - removeText);
 			}
 
-			return new CompleteEnterAction(enterResult, indentation);
-		} catch (final BadLocationException e1) {
+			return new CompleteEnterAction(indentAction, appendText, removeText, indentation);
+		} catch (final BadLocationException | RuntimeException ex) {
 			// ignore
 		}
 		return null;
 	}
 
-	@Nullable
-	public CommentSupport getCommentSupport(final IContentType contentType) {
+	public @Nullable CommentSupport getCommentSupport(final IContentType contentType) {
 		final var definition = this.getDefinition(contentType);
 		return definition == null ? null : definition.getCommentSupport();
 	}
 
-	@Nullable
-	private OnEnterSupport _getOnEnterSupport(final IContentType contentType) {
+	private @Nullable OnEnterSupport _getOnEnterSupport(final IContentType contentType) {
 		final var definition = this.getDefinition(contentType);
 		return definition == null ? null : definition.getOnEnter();
-
 	}
 
-	@Nullable
-	private CharacterPairSupport _getCharacterPairSupport(final IContentType contentType) {
+	private @Nullable CharacterPairSupport _getCharacterPairSupport(final IContentType contentType) {
 		final var definition = this.getDefinition(contentType);
 		return definition == null ? null : definition.getCharacterPair();
 	}

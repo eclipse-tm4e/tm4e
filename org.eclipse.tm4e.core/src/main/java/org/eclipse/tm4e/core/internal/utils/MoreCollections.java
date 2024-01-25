@@ -15,6 +15,7 @@ package org.eclipse.tm4e.core.internal.utils;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 import java.util.function.Predicate;
 
 import org.eclipse.jdt.annotation.Nullable;
@@ -103,6 +104,13 @@ public final class MoreCollections {
 			sb.append(", ");
 		}
 		return sb.append(']').toString();
+	}
+
+	/**
+	 * @return a new list without null elements
+	 */
+	public static <T> List<T> noNulls(final @Nullable List<T> coll) {
+		return coll == null || coll.isEmpty() ? Collections.emptyList() : coll.stream().filter(Objects::nonNull).toList();
 	}
 
 	private MoreCollections() {

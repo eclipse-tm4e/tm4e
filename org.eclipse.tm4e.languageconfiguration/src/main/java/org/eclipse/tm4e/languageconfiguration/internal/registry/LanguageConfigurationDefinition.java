@@ -40,14 +40,9 @@ public final class LanguageConfigurationDefinition extends TMResource implements
 	private boolean bracketAutoClosingEnabled = true;
 	private boolean matchingPairsEnabled = true;
 
-	@Nullable
-	private CharacterPairSupport characterPair;
-
-	@Nullable
-	private OnEnterSupport onEnter;
-
-	@Nullable
-	private CommentSupport comment;
+	private @Nullable CharacterPairSupport characterPair;
+	private @Nullable OnEnterSupport onEnter;
+	private @Nullable CommentSupport comment;
 
 	public LanguageConfigurationDefinition(final IContentType contentType, final String path) {
 		super(path);
@@ -59,9 +54,8 @@ public final class LanguageConfigurationDefinition extends TMResource implements
 		final var contentTypeId = ce.getAttribute(XMLConstants.CONTENT_TYPE_ID_ATTR);
 		final var contentType = ContentTypeHelper.getContentTypeById(contentTypeId);
 		if (contentType == null)
-			throw new CoreException(
-					new Status(IStatus.ERROR, LanguageConfiguration.class,
-							"Cannot load language configuration with unknown content type ID " + contentTypeId));
+			throw new CoreException(new Status(IStatus.ERROR, LanguageConfiguration.class,
+					"Cannot load language configuration with unknown content type ID " + contentTypeId));
 		this.contentType = contentType;
 	}
 
@@ -69,8 +63,8 @@ public final class LanguageConfigurationDefinition extends TMResource implements
 	 * Constructor for user preferences (loaded from Json with Gson).
 	 */
 	public LanguageConfigurationDefinition(final IContentType contentType, final String path,
-			@Nullable final String pluginId,
-			final boolean onEnterEnabled, final boolean bracketAutoClosingEnabled, final boolean matchingPairsEnabled) {
+			@Nullable final String pluginId, final boolean onEnterEnabled, final boolean bracketAutoClosingEnabled,
+			final boolean matchingPairsEnabled) {
 		super(path, pluginId);
 		this.contentType = contentType;
 		this.onEnterEnabled = onEnterEnabled;
@@ -87,9 +81,10 @@ public final class LanguageConfigurationDefinition extends TMResource implements
 	CharacterPairSupport getCharacterPair() {
 		if (this.characterPair == null) {
 			final LanguageConfiguration conf = getLanguageConfiguration();
-			if (conf != null) {
-				this.characterPair = new CharacterPairSupport(conf);
-			}
+			if (conf == null)
+				return null;
+
+			this.characterPair = new CharacterPairSupport(conf);
 		}
 		return characterPair;
 	}
@@ -103,25 +98,27 @@ public final class LanguageConfigurationDefinition extends TMResource implements
 	OnEnterSupport getOnEnter() {
 		if (this.onEnter == null) {
 			final LanguageConfiguration conf = getLanguageConfiguration();
-			if (conf != null && (conf.getBrackets() != null || conf.getOnEnterRules() != null)) {
-				this.onEnter = new OnEnterSupport(conf.getBrackets(), conf.getOnEnterRules());
-			}
+			if (conf == null || conf.getBrackets() == null && conf.getOnEnterRules() == null)
+				return null;
+
+			this.onEnter = new OnEnterSupport(conf.getBrackets(), conf.getOnEnterRules());
 		}
 		return onEnter;
 	}
 
 	/**
-	 * Returns the "commment" support and null otherwise.
+	 * Returns the "comment" support and null otherwise.
 	 *
-	 * @return the "commment" support and null otherwise.
+	 * @return the "comment" support and null otherwise.
 	 */
 	@Nullable
 	CommentSupport getCommentSupport() {
 		if (this.comment == null) {
 			final LanguageConfiguration conf = getLanguageConfiguration();
-			if (conf != null) {
-				this.comment = new CommentSupport(conf.getComments());
-			}
+			if (conf == null)
+				return null;
+
+			this.comment = new CommentSupport(conf.getComments());
 		}
 		return comment;
 	}
@@ -131,9 +128,8 @@ public final class LanguageConfigurationDefinition extends TMResource implements
 		return contentType;
 	}
 
-	@Nullable
 	@Override
-	public LanguageConfiguration getLanguageConfiguration() {
+	public @Nullable LanguageConfiguration getLanguageConfiguration() {
 		try (var in = getInputStream()) {
 			return LanguageConfiguration.load(new InputStreamReader(in, Charset.defaultCharset()));
 		} catch (final IOException ex) {
@@ -171,5 +167,4 @@ public final class LanguageConfigurationDefinition extends TMResource implements
 	public void setMatchingPairsEnabled(final boolean matchingPairsEnabled) {
 		this.matchingPairsEnabled = matchingPairsEnabled;
 	}
-
 }

@@ -22,6 +22,7 @@ import java.util.stream.Collectors;
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.eclipse.jdt.annotation.Nullable;
+import org.eclipse.tm4e.languageconfiguration.LanguageConfigurationPlugin;
 import org.eclipse.tm4e.languageconfiguration.internal.model.EnterAction.IndentAction;
 import org.eclipse.tm4e.languageconfiguration.internal.utils.RegExpUtils;
 
@@ -64,8 +65,7 @@ public class LanguageConfiguration {
 	 *         reader.
 	 */
 	@NonNullByDefault({})
-	@Nullable
-	public static LanguageConfiguration load(@NonNull final Reader reader) {
+	public static @Nullable LanguageConfiguration load(@NonNull final Reader reader) {
 		// GSON does not support trailing commas so we have to manually remove them -> maybe better switch to jackson json parser?
 		final var jsonString = removeTrailingCommas(new BufferedReader(reader).lines().collect(Collectors.joining("\n")));
 		return new GsonBuilder()
@@ -108,11 +108,9 @@ public class LanguageConfiguration {
 							final var afterText = getAsPattern(jsonObj.get("afterText")); //$NON-NLS-1$
 							final var previousLineText = getAsPattern(jsonObj.get("previousLineText")); //$NON-NLS-1$
 							final var indentAction = IndentAction.get(indentActionString);
-							final var removeText = getAsInteger(actionJsonObj.get("removeText")); //$NON-NLS-1$
 							final var appendText = getAsString(actionJsonObj.get("appendText")); //$NON-NLS-1$
-							final var action = new EnterAction(indentAction);
-							action.appendText = appendText;
-							action.removeText = removeText;
+							final var removeText = getAsInteger(actionJsonObj.get("removeText")); //$NON-NLS-1$
+							final var action = new EnterAction(indentAction, appendText, removeText);
 							return new OnEnterRule(beforeText, afterText, previousLineText, action);
 						}
 					}
@@ -209,12 +207,12 @@ public class LanguageConfiguration {
 						close = getAsString(autoClosePair.get("close")); //$NON-NLS-1$
 						final var notInElem = autoClosePair.get("notIn"); //$NON-NLS-1$
 						if (notInElem != null && notInElem.isJsonArray()) {
-							notInElem.getAsJsonArray().forEach(element -> {
-								final var string = getAsString(element);
+							for (final JsonElement elem : notInElem.getAsJsonArray()) {
+								final var string = getAsString(elem);
 								if (string != null) {
 									notInList.add(string);
 								}
-							});
+							}
 						}
 					}
 
@@ -246,14 +244,12 @@ public class LanguageConfiguration {
 				.fromJson(jsonString, LanguageConfiguration.class);
 	}
 
-	@Nullable
-	private static Pattern getAsPattern(@Nullable final JsonElement element) {
+	private static @Nullable Pattern getAsPattern(@Nullable final JsonElement element) {
 		final var pattern = getPattern(element);
 		return pattern == null ? null : RegExpUtils.create(pattern);
 	}
 
-	@Nullable
-	private static String getPattern(@Nullable final JsonElement element) {
+	private static @Nullable String getPattern(@Nullable final JsonElement element) {
 		if (element == null) {
 			return null;
 		}
@@ -270,14 +266,14 @@ public class LanguageConfiguration {
 		return getAsString(element);
 	}
 
-	@Nullable
-	private static String getAsString(@Nullable final JsonElement element) {
+	private static @Nullable String getAsString(@Nullable final JsonElement element) {
 		if (element == null) {
 			return null;
 		}
 		try {
 			return element.getAsString();
-		} catch (final Exception e) {
+		} catch (final Exception ex) {
+			LanguageConfigurationPlugin.logError("Failed to convert JSON element [" + element + "] to String.", ex);
 			return null;
 		}
 	}
@@ -288,25 +284,25 @@ public class LanguageConfiguration {
 		}
 		try {
 			return element.getAsBoolean();
-		} catch (final Exception e) {
+		} catch (final Exception ex) {
+			LanguageConfigurationPlugin.logError("Failed to convert JSON element [" + element + "] to boolean.", ex);
 			return defaultValue;
 		}
 	}
 
-	@Nullable
-	private static Integer getAsInteger(@Nullable final JsonElement element) {
+	private static @Nullable Integer getAsInteger(@Nullable final JsonElement element) {
 		if (element == null) {
 			return null;
 		}
 		try {
 			return element.getAsInt();
-		} catch (final Exception e) {
+		} catch (final Exception ex) {
+			LanguageConfigurationPlugin.logError("Failed to convert JSON element [" + element + "] to Integer.", ex);
 			return null;
 		}
 	}
 
-	@Nullable
-	private CommentRule comments;
+	private @Nullable CommentRule comments;
 
 	/**
 	 * Returns the language's comments. The comments are used by {@link AutoClosingPairConditional} when
@@ -314,54 +310,46 @@ public class LanguageConfiguration {
 	 *
 	 * @return the language's comments.
 	 */
-	@Nullable
-	public CommentRule getComments() {
+	public @Nullable CommentRule getComments() {
 		return comments;
 	}
 
-	@Nullable
-	private List<CharacterPair> brackets;
+	private @Nullable List<CharacterPair> brackets;
 
 	/**
 	 * Returns the language's brackets. This configuration implicitly affects pressing Enter around these brackets.
 	 *
 	 * @return the language's brackets
 	 */
-	@Nullable
-	public List<CharacterPair> getBrackets() {
+	public @Nullable List<CharacterPair> getBrackets() {
 		return brackets;
 	}
 
-	@Nullable
-	private String wordPattern;
+	private @Nullable String wordPattern;
 
 	/**
 	 * Returns the language's definition of a word. This is the regex used when referring to a word.
 	 *
 	 * @return the language's word pattern.
 	 */
-	@Nullable
-	public String getWordPattern() {
+	public @Nullable String getWordPattern() {
 		return wordPattern;
 	}
 
 	// TODO @Nullable IndentionRule getIndentionRules();
 
-	@Nullable
-	private List<OnEnterRule> onEnterRules;
+	private @Nullable List<OnEnterRule> onEnterRules;
 
 	/**
 	 * Returns the language's rules to be evaluated when pressing Enter.
 	 *
 	 * @return the language's rules to be evaluated when pressing Enter.
 	 */
-	@Nullable
-	public List<OnEnterRule> getOnEnterRules() {
+	public @Nullable List<OnEnterRule> getOnEnterRules() {
 		return onEnterRules;
 	}
 
-	@Nullable
-	private List<AutoClosingPairConditional> autoClosingPairs;
+	private @Nullable List<AutoClosingPairConditional> autoClosingPairs;
 
 	/**
 	 * Returns the language's auto closing pairs. The 'close' character is automatically inserted with the 'open'
@@ -369,13 +357,12 @@ public class LanguageConfiguration {
 	 *
 	 * @return the language's auto closing pairs.
 	 */
-	@Nullable
-	public List<AutoClosingPairConditional> getAutoClosingPairs() {
+
+	public @Nullable List<AutoClosingPairConditional> getAutoClosingPairs() {
 		return autoClosingPairs;
 	}
 
-	@Nullable
-	private List<AutoClosingPair> surroundingPairs;
+	private @Nullable List<AutoClosingPair> surroundingPairs;
 
 	/**
 	 * Returns the language's surrounding pairs. When the 'open' character is typed on a selection, the selected string
@@ -383,31 +370,26 @@ public class LanguageConfiguration {
 	 *
 	 * @return the language's surrounding pairs.
 	 */
-	@Nullable
-	public List<AutoClosingPair> getSurroundingPairs() {
+	public @Nullable List<AutoClosingPair> getSurroundingPairs() {
 		return surroundingPairs;
 	}
 
-	// TODO @Nullable List<CharacterPair> getColorizedBracketPairs();
+	// TODO private @Nullable List<CharacterPair> getColorizedBracketPairs();
 
-	@Nullable
-	private String autoCloseBefore;
+	private @Nullable String autoCloseBefore;
 
-	@Nullable
-	public String getAutoCloseBefore() {
+	public @Nullable String getAutoCloseBefore() {
 		return autoCloseBefore;
 	}
 
-	@Nullable
-	private FoldingRules folding;
+	private @Nullable FoldingRules folding;
 
 	/**
 	 * Returns the language's folding rules.
 	 *
 	 * @return the language's folding rules.
 	 */
-	@Nullable
-	public FoldingRules getFolding() {
+	public @Nullable FoldingRules getFolding() {
 		return folding;
 	}
 }

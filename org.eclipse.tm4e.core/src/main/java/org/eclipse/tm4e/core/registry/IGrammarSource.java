@@ -85,7 +85,7 @@ public interface IGrammarSource {
 		final var contentType1 = contentType == null ? guessFileFormat(resourceName) : contentType;
 		return new IGrammarSource() {
 			@Override
-			public Reader getReader() throws IOException {
+			public Reader getReader() {
 				return new BufferedReader(new InputStreamReader(
 						clazz.getResourceAsStream(resourceName),
 						charset == null ? StandardCharsets.UTF_8 : charset));
@@ -107,7 +107,7 @@ public interface IGrammarSource {
 
 		return new IGrammarSource() {
 			@Override
-			public Reader getReader() throws IOException {
+			public Reader getReader() {
 				return new StringReader(content);
 			}
 

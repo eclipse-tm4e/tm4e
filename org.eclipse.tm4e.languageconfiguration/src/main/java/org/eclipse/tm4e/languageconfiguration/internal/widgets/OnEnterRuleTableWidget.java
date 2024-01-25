@@ -14,6 +14,7 @@ package org.eclipse.tm4e.languageconfiguration.internal.widgets;
 import static org.eclipse.tm4e.languageconfiguration.internal.LanguageConfigurationMessages.*;
 
 import java.util.Collections;
+import java.util.LinkedHashMap;
 import java.util.List;
 
 import org.eclipse.jdt.annotation.Nullable;
@@ -42,32 +43,21 @@ final class OnEnterRuleTableWidget extends TableViewer {
 
 		final GC gc = new GC(table.getShell());
 		gc.setFont(JFaceResources.getDialogFont());
-		final var columnLayout = new TableColumnLayout();
 
-		final var column1 = new TableColumn(table, SWT.NONE);
-		column1.setText(OnEnterRuleTableWidget_beforeText);
-		int minWidth = computeMinimumColumnWidth(gc, OnEnterRuleTableWidget_beforeText);
-		columnLayout.setColumnData(column1, new ColumnWeightData(2, minWidth, true));
+		final var colDefs = new LinkedHashMap<String /* label */, Integer /* column weight */>();
+		colDefs.put(OnEnterRuleTableWidget_beforeText, 2);
+		colDefs.put(OnEnterRuleTableWidget_afterText, 2);
+		colDefs.put(OnEnterRuleTableWidget_indentAction, 1);
+		colDefs.put(OnEnterRuleTableWidget_appendText, 1);
+		colDefs.put(OnEnterRuleTableWidget_removeText, 1);
 
-		final var column2 = new TableColumn(table, SWT.NONE);
-		column2.setText(OnEnterRuleTableWidget_afterText);
-		minWidth = computeMinimumColumnWidth(gc, OnEnterRuleTableWidget_afterText);
-		columnLayout.setColumnData(column2, new ColumnWeightData(2, minWidth, true));
-
-		final var column3 = new TableColumn(table, SWT.NONE);
-		column3.setText(OnEnterRuleTableWidget_indentAction);
-		minWidth = computeMinimumColumnWidth(gc, OnEnterRuleTableWidget_indentAction);
-		columnLayout.setColumnData(column3, new ColumnWeightData(1, minWidth, true));
-
-		final var column4 = new TableColumn(table, SWT.NONE);
-		column4.setText(OnEnterRuleTableWidget_appendText);
-		minWidth = computeMinimumColumnWidth(gc, OnEnterRuleTableWidget_appendText);
-		columnLayout.setColumnData(column4, new ColumnWeightData(1, minWidth, true));
-
-		final var column5 = new TableColumn(table, SWT.NONE);
-		column5.setText(OnEnterRuleTableWidget_removeText);
-		minWidth = computeMinimumColumnWidth(gc, OnEnterRuleTableWidget_removeText);
-		columnLayout.setColumnData(column5, new ColumnWeightData(1, minWidth, true));
+		final var colLayout = new TableColumnLayout();
+		for (final var colDef : colDefs.entrySet()) {
+			final var col = new TableColumn(table, SWT.NONE);
+			col.setText(colDef.getKey());
+			final int minWidth = computeMinimumColumnWidth(gc, colDef.getKey());
+			colLayout.setColumnData(col, new ColumnWeightData(colDef.getValue(), minWidth, true));
+		}
 
 		gc.dispose();
 	}
@@ -81,14 +71,13 @@ final class OnEnterRuleTableWidget extends TableViewer {
 		private List<OnEnterRule> onEnterRulesList = Collections.emptyList();
 
 		@Override
-		public Object[] getElements(@Nullable final Object input) {
+		public Object[] getElements(final @Nullable Object input) {
 			return onEnterRulesList.toArray(OnEnterRule[]::new);
 		}
 
 		@SuppressWarnings("unchecked")
 		@Override
-		public void inputChanged(@Nullable final Viewer viewer, @Nullable final Object oldInput,
-				@Nullable final Object newInput) {
+		public void inputChanged(final @Nullable Viewer viewer, final @Nullable Object oldInput, final @Nullable Object newInput) {
 			if (newInput == null) {
 				onEnterRulesList = Collections.emptyList();
 			} else {
@@ -104,20 +93,18 @@ final class OnEnterRuleTableWidget extends TableViewer {
 
 	private static final class OnEnterRuleLabelProvider extends LabelProvider implements ITableLabelProvider {
 
-		@Nullable
 		@Override
-		public Image getColumnImage(@Nullable final Object element, final int columnIndex) {
+		public @Nullable Image getColumnImage(final @Nullable Object element, final int columnIndex) {
 			return null;
 		}
 
-		@Nullable
 		@Override
-		public String getText(@Nullable final Object element) {
+		public String getText(final @Nullable Object element) {
 			return getColumnText(element, 0);
 		}
 
 		@Override
-		public @Nullable String getColumnText(@Nullable final Object element, final int columnIndex) {
+		public String getColumnText(@Nullable final Object element, final int columnIndex) {
 			if (element == null)
 				return "";
 
@@ -130,7 +117,7 @@ final class OnEnterRuleTableWidget extends TableViewer {
 				case 2 -> action.indentAction.toString();
 				case 3 -> action.appendText != null ? action.appendText : "";
 				case 4 -> action.removeText != null ? action.removeText.toString() : "";
-				default -> ""; //$NON-NLS-1$
+				default -> "";
 			};
 		}
 	}

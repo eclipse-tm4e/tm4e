@@ -83,24 +83,24 @@ class OnEnterSupportTest {
 						new OnEnterRule( // e.g. /** | */
 								"^\\s*\\/\\*\\*(?!\\/)([^\\*]|\\*(?!\\/))*$",
 								"^\\s*\\*\\/$", null,
-								new EnterAction(IndentAction.IndentOutdent).withAppendText(" * ")),
+								new EnterAction(IndentAction.IndentOutdent, " * ", null)),
 						new OnEnterRule( // e.g. /** ...|
 								"^\\s*\\/\\*\\*(?!\\/)([^\\*]|\\*(?!\\/))*$",
 								null, null,
-								new EnterAction(IndentAction.None).withAppendText(" * ")),
+								new EnterAction(IndentAction.None, " * ", null)),
 						new OnEnterRule(
 								// e.g.  * ...|
 								"^(\\t|(\\ \\ ))*\\ \\*(\\ ([^\\*]|\\*(?!\\/))*)?$",
 								null, "(?=^(\\s*(\\/\\*\\*|\\*)).*)(?=(?!(\\s*\\*\\/)))",
-								new EnterAction(IndentAction.None).withAppendText("* ")),
+								new EnterAction(IndentAction.None, "* ", null)),
 						new OnEnterRule( // e.g.  */|
 								"^(\\t|(\\ \\ ))*\\ \\*\\/\\s*$",
 								null, null,
-								new EnterAction(IndentAction.None).withRemoveText(1)),
+								new EnterAction(IndentAction.None, null, 1)),
 						new OnEnterRule( // e.g.  *-----*/|
 								"^(\\t|(\\ \\ ))*\\ \\*[^/]*\\*\\/\\s*$",
 								null, null,
-								new EnterAction(IndentAction.None).withRemoveText(1))));
+								new EnterAction(IndentAction.None, null, 1))));
 			}
 
 			void testIndentAction(final String previousLineText, final String beforeText, final String afterText,

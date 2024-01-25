@@ -73,33 +73,21 @@ public class EnterAction {
 	/**
 	 * Describes text to be appended after the new line and after the indentation.
 	 */
-	@Nullable
-	public String appendText;
+	public final @Nullable String appendText;
 
 	/**
 	 * Describes the number of characters to remove from the new line's indentation.
 	 */
-	@Nullable
-	public Integer removeText;
+	public final @Nullable Integer removeText;
 
 	public EnterAction(final IndentAction indentAction) {
+		this(indentAction, null, null);
+	}
+
+	public EnterAction(final IndentAction indentAction, final @Nullable String appendText, final @Nullable Integer removeText) {
 		this.indentAction = indentAction;
-	}
-
-	/**
-	 * @param appendText the appendText to set
-	 */
-	EnterAction withAppendText(@Nullable final String appendText) {
 		this.appendText = appendText;
-		return this;
-	}
-
-	/**
-	 * @param removeText the removeText to set
-	 */
-	EnterAction withRemoveText(@Nullable final Integer removeText) {
 		this.removeText = removeText;
-		return this;
 	}
 
 	@Override

@@ -28,7 +28,7 @@ import org.eclipse.tm4e.languageconfiguration.internal.utils.RegExpUtils;
  * On enter support.
  *
  * @see <a href="https://github.com/microsoft/vscode/blob/main/src/vs/editor/common/languages/supports/onEnter.ts">
- *      https://github.com/microsoft/vscode/blob/main/src/vs/editor/common/languages/supports/onEnter.ts</a>
+ *      github.com/microsoft/vscode/blob/main/src/vs/editor/common/languages/supports/onEnter.ts</a>
  */
 public class OnEnterSupport {
 
@@ -50,16 +50,15 @@ public class OnEnterSupport {
 		this.regExpRules = regExpRules != null ? regExpRules : Collections.emptyList();
 	}
 
-	@Nullable
-	public EnterAction onEnter(
+	public @Nullable EnterAction onEnter(
 			// TODO autoIndent: EditorAutoIndentStrategy,
 			final String previousLineText,
 			final String beforeEnterText,
 			final String afterEnterText) {
 		// (1): `regExpRules`
+		// if (autoIndent >= EditorAutoIndentStrategy.Advanced) {
 		for (final OnEnterRule rule : regExpRules) {
-			final var beforeTextPattern = rule.beforeText;
-			if (!beforeTextPattern.matcher(beforeEnterText).find())
+			if (!rule.beforeText.matcher(beforeEnterText).find())
 				continue;
 
 			final var afterTextPattern = rule.afterText;
@@ -74,6 +73,7 @@ public class OnEnterSupport {
 		}
 
 		// (2): Special indent-outdent
+		// if (autoIndent >= EditorAutoIndentStrategy.Brackets) {
 		if (!beforeEnterText.isEmpty() && !afterEnterText.isEmpty()) {
 			for (final ProcessedBracketPair bracket : brackets) {
 				if (bracket.matchOpen(beforeEnterText) && bracket.matchClose(afterEnterText)) {
@@ -83,6 +83,7 @@ public class OnEnterSupport {
 		}
 
 		// (3): Open bracket based logic
+		// if (autoIndent >= EditorAutoIndentStrategy.Brackets) {
 		if (!beforeEnterText.isEmpty()) {
 			for (final ProcessedBracketPair bracket : brackets) {
 				if (bracket.matchOpen(beforeEnterText)) {
@@ -98,11 +99,8 @@ public class OnEnterSupport {
 
 		private static final Pattern B_REGEXP = Pattern.compile("\\B"); //$NON-NLS-1$
 
-		@Nullable
-		private final Pattern openRegExp;
-
-		@Nullable
-		private final Pattern closeRegExp;
+		private final @Nullable Pattern openRegExp;
+		private final @Nullable Pattern closeRegExp;
 
 		private ProcessedBracketPair(final CharacterPair charPair) {
 			openRegExp = createOpenBracketRegExp(charPair.open);
@@ -117,8 +115,7 @@ public class OnEnterSupport {
 			return closeRegExp != null && closeRegExp.matcher(afterEnterText).find();
 		}
 
-		@Nullable
-		private static Pattern createOpenBracketRegExp(final String bracket) {
+		private static @Nullable Pattern createOpenBracketRegExp(final String bracket) {
 			final var str = new StringBuilder(RegExpUtils.escapeRegExpCharacters(bracket));
 			final var c = String.valueOf(str.charAt(0));
 			if (!B_REGEXP.matcher(c).find()) {
@@ -128,8 +125,7 @@ public class OnEnterSupport {
 			return RegExpUtils.create(str.toString());
 		}
 
-		@Nullable
-		private static Pattern createCloseBracketRegExp(final String bracket) {
+		private static @Nullable Pattern createCloseBracketRegExp(final String bracket) {
 			final var str = new StringBuilder(RegExpUtils.escapeRegExpCharacters(bracket));
 			final var c = String.valueOf(str.charAt(str.length() - 1));
 			if (!B_REGEXP.matcher(c).find()) {

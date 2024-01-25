@@ -57,6 +57,7 @@ public final class LanguageConfigurationMessages extends NLS {
 	public static String LanguageConfigurationPreferencesWidget_enableMatchingBrackets;
 	public static String OnEnterRuleTableWidget_beforeText;
 	public static String OnEnterRuleTableWidget_afterText;
+	public static String OnEnterRuleTableWidget_previousLineText;
 	public static String OnEnterRuleTableWidget_indentAction;
 	public static String OnEnterRuleTableWidget_appendText;
 	public static String OnEnterRuleTableWidget_removeText;
@@ -78,5 +79,4 @@ public final class LanguageConfigurationMessages extends NLS {
 	static {
 		NLS.initializeMessages(BUNDLE_NAME, LanguageConfigurationMessages.class);
 	}
-
 }

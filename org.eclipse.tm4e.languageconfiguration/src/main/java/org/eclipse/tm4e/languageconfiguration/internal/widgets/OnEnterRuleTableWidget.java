@@ -47,6 +47,7 @@ final class OnEnterRuleTableWidget extends TableViewer {
 		final var colDefs = new LinkedHashMap<String /* label */, Integer /* column weight */>();
 		colDefs.put(OnEnterRuleTableWidget_beforeText, 2);
 		colDefs.put(OnEnterRuleTableWidget_afterText, 2);
+		colDefs.put(OnEnterRuleTableWidget_previousLineText, 2);
 		colDefs.put(OnEnterRuleTableWidget_indentAction, 1);
 		colDefs.put(OnEnterRuleTableWidget_appendText, 1);
 		colDefs.put(OnEnterRuleTableWidget_removeText, 1);
@@ -114,9 +115,10 @@ final class OnEnterRuleTableWidget extends TableViewer {
 			return switch (columnIndex) {
 				case 0 -> rule.beforeText.pattern();
 				case 1 -> rule.afterText != null ? rule.afterText.pattern() : "";
-				case 2 -> action.indentAction.toString();
-				case 3 -> action.appendText != null ? action.appendText : "";
-				case 4 -> action.removeText != null ? action.removeText.toString() : "";
+				case 2 -> rule.previousLineText != null ? rule.previousLineText.pattern() : "";
+				case 3 -> action.indentAction.toString();
+				case 4 -> action.appendText != null ? action.appendText : "";
+				case 5 -> action.removeText != null ? action.removeText.toString() : "";
 				default -> "";
 			};
 		}

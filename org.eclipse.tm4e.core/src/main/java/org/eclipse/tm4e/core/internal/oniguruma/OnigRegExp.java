@@ -24,6 +24,7 @@ import java.nio.charset.StandardCharsets;
 
 import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.tm4e.core.TMException;
+import org.eclipse.tm4e.core.internal.utils.StringUtils;
 import org.jcodings.specific.UTF8Encoding;
 import org.joni.Matcher;
 import org.joni.Option;
@@ -37,7 +38,7 @@ import org.joni.exception.SyntaxException;
  * @see <a href="https://github.com/atom/node-oniguruma/blob/master/src/onig-reg-exp.cc">
  *      github.com/atom/node-oniguruma/blob/master/src/onig-reg-exp.cc</a>
  */
-final class OnigRegExp {
+public final class OnigRegExp {
 	private static final Logger LOGGER = System.getLogger(OnigRegExp.class.getName());
 
 	/**
@@ -53,23 +54,40 @@ final class OnigRegExp {
 	@Nullable
 	private OnigResult lastSearchResult;
 
+	private final String pattern;
 	private final Regex regex;
 
 	private final boolean hasGAnchor;
 
-	OnigRegExp(final String source) {
-		hasGAnchor = source.contains("\\G");
-		final byte[] pattern = source.getBytes(StandardCharsets.UTF_8);
+	/**
+	 * @throws TMException if parsing fails
+	 */
+	public OnigRegExp(final String pattern) {
+		this(pattern, false);
+	}
+
+	/**
+	 * @throws TMException if parsing fails
+	 */
+	public OnigRegExp(final String pattern, final boolean ignoreCase) {
+		this.pattern = pattern;
+		hasGAnchor = pattern.contains("\\G");
+		final byte[] patternBytes = pattern.getBytes(StandardCharsets.UTF_8);
 		try {
-			regex = new Regex(pattern, 0, pattern.length, Option.CAPTURE_GROUP, UTF8Encoding.INSTANCE, Syntax.DEFAULT,
+			int options = Option.CAPTURE_GROUP;
+			if (ignoreCase)
+				options |= Option.IGNORECASE;
+			regex = new Regex(patternBytes, 0, patternBytes.length, options, UTF8Encoding.INSTANCE, Syntax.DEFAULT,
 					LOGGER.isLoggable(Level.WARNING) ? LOGGER_WARN_CALLBACK : WarnCallback.NONE);
 		} catch (final SyntaxException ex) {
-			throw new TMException("Parsing regex pattern \"" + source + "\" failed with " + ex, ex);
+			throw new TMException("Parsing regex pattern \"" + pattern + "\" failed with " + ex, ex);
 		}
 	}
 
-	@Nullable
-	OnigResult search(final OnigString str, final int startPosition) {
+	/**
+	 * @return null if not found
+	 */
+	public @Nullable OnigResult search(final OnigString str, final int startPosition) {
 		if (hasGAnchor) {
 			// Should not use caching, because the regular expression
 			// targets the current search position (\G)
@@ -98,5 +116,16 @@ final class OnigRegExp {
 			return new OnigResult(region, -1);
 		}
 		return null;
+	}
+
+	public String pattern() {
+		return pattern;
+	}
+
+	@Override
+	public String toString() {
+		return StringUtils.toString(this, sb -> {
+			sb.append("pattern=").append(pattern);
+		});
 	}
 }

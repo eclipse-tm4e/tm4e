@@ -14,6 +14,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.StringReader;
 import java.nio.file.FileVisitResult;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -34,6 +35,32 @@ class ParsingTest {
 			assertNotNull(is);
 			return LanguageConfiguration.load(new InputStreamReader(is));
 		}
+	}
+
+	@Test
+	void testOniguramaFallback() throws Exception {
+		final var languageConfiguration = LanguageConfiguration.load(new StringReader("""
+			{
+			  "onEnterRules": [{
+			    "beforeText": "^[\\\\s]*///.*$",
+			    "action": {
+			      "indent": "none",
+			    }
+			  }],
+			  "folding": {
+			    "markers": {
+			      "start": "{%\\\\s*(block|filter|for|if|macro|raw)",
+			      "end": ""
+			    }
+			  }
+			}"""));
+		assertNotNull(languageConfiguration);
+
+		assertTrue(languageConfiguration.getOnEnterRules().get(0).beforeText.getClass().getSimpleName().endsWith("JavaRegExPattern"));
+
+		final var folding = languageConfiguration.getFolding();
+		assert folding != null;
+		assertTrue(folding.markersStart.getClass().getSimpleName().endsWith("OnigRegExPattern"));
 	}
 
 	@Test

@@ -16,7 +16,6 @@ import java.io.BufferedReader;
 import java.io.Reader;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 import org.eclipse.jdt.annotation.NonNull;
@@ -24,7 +23,6 @@ import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.tm4e.languageconfiguration.LanguageConfigurationPlugin;
 import org.eclipse.tm4e.languageconfiguration.internal.model.EnterAction.IndentAction;
-import org.eclipse.tm4e.languageconfiguration.internal.utils.RegExpUtils;
 
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonDeserializer;
@@ -244,12 +242,7 @@ public class LanguageConfiguration {
 				.fromJson(jsonString, LanguageConfiguration.class);
 	}
 
-	private static @Nullable Pattern getAsPattern(@Nullable final JsonElement element) {
-		final var pattern = getPattern(element);
-		return pattern == null ? null : RegExpUtils.create(pattern);
-	}
-
-	private static @Nullable String getPattern(@Nullable final JsonElement element) {
+	private static @Nullable RegExPattern getAsPattern(@Nullable final JsonElement element) {
 		if (element == null) {
 			return null;
 		}
@@ -260,10 +253,11 @@ public class LanguageConfiguration {
 				return null;
 			}
 			final var flags = getAsString(((JsonObject) element).get("flags"));
-			return flags != null ? pattern + "(?" + flags + ")" : pattern;
+			//return flags != null ? pattern + "(?" + flags + ")" : pattern;
+			return RegExPattern.of(pattern, flags);
 		}
 		// ex : "^<\\/([_:\\w][_:\\w-.\\d]*)\\s*>"
-		return getAsString(element);
+		return RegExPattern.ofNullable(getAsString(element), null);
 	}
 
 	private static @Nullable String getAsString(@Nullable final JsonElement element) {

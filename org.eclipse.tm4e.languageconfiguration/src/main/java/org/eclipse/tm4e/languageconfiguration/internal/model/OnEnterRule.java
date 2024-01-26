@@ -12,9 +12,8 @@
  */
 package org.eclipse.tm4e.languageconfiguration.internal.model;
 
-import java.util.regex.Pattern;
-
 import org.eclipse.jdt.annotation.Nullable;
+import org.eclipse.tm4e.core.TMException;
 import org.eclipse.tm4e.core.internal.utils.StringUtils;
 
 /**
@@ -29,26 +28,26 @@ public final class OnEnterRule {
 	/**
 	 * This rule will only execute if the text before the cursor matches this regular expression.
 	 */
-	public final Pattern beforeText;
+	public final RegExPattern beforeText;
 
 	/**
 	 * This rule will only execute if the text after the cursor matches this regular expression.
 	 */
-	@Nullable
-	public final Pattern afterText;
+	public final @Nullable RegExPattern afterText;
 
 	/**
 	 * This rule will only execute if the text above the current line matches this regular expression.
 	 */
-	@Nullable
-	public final Pattern previousLineText;
+
+	public final @Nullable RegExPattern previousLineText;
 
 	/**
 	 * The action to execute.
 	 */
 	public final EnterAction action;
 
-	public OnEnterRule(final Pattern beforeText, @Nullable final Pattern afterText, @Nullable final Pattern previousLineText, final EnterAction action) {
+	public OnEnterRule(final RegExPattern beforeText, final @Nullable RegExPattern afterText, final @Nullable RegExPattern previousLineText,
+			final EnterAction action) {
 		this.beforeText = beforeText;
 		this.afterText = afterText;
 		this.previousLineText = previousLineText;
@@ -58,12 +57,13 @@ public final class OnEnterRule {
 	/**
 	 * Only for unit tests
 	 *
-	 * @throws PatternSyntaxException if beforeText or afterText contain invalid regex pattern
+	 * @throws TMException if beforeText, afterText or previousLineText contain invalid regex pattern
 	 */
-	OnEnterRule(final String beforeText, @Nullable final String afterText, @Nullable final String previousLineText, final EnterAction action) {
-		this.beforeText = Pattern.compile(beforeText);
-		this.afterText = afterText == null ? null : Pattern.compile(afterText);
-		this.previousLineText = previousLineText == null ? null : Pattern.compile(previousLineText);
+	OnEnterRule(final String beforeText, final @Nullable String afterText, final @Nullable String previousLineText,
+			final EnterAction action) {
+		this.beforeText = RegExPattern.of(beforeText);
+		this.afterText = afterText == null ? null : RegExPattern.of(afterText);
+		this.previousLineText = previousLineText == null ? null : RegExPattern.of(previousLineText);
 		this.action = action;
 	}
 

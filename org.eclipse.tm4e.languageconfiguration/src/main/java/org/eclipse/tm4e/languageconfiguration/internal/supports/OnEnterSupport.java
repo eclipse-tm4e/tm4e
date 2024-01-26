@@ -58,15 +58,15 @@ public class OnEnterSupport {
 		// (1): `regExpRules`
 		// if (autoIndent >= EditorAutoIndentStrategy.Advanced) {
 		for (final OnEnterRule rule : regExpRules) {
-			if (!rule.beforeText.matcher(beforeEnterText).find())
+			if (!rule.beforeText.matchesPartially(beforeEnterText))
 				continue;
 
 			final var afterTextPattern = rule.afterText;
-			if (afterTextPattern != null && !afterTextPattern.matcher(afterEnterText).find())
+			if (afterTextPattern != null && !afterTextPattern.matchesPartially(afterEnterText))
 				continue;
 
 			final var previousLinePattern = rule.previousLineText;
-			if (previousLinePattern != null && !previousLinePattern.matcher(previousLineText).find())
+			if (previousLinePattern != null && !previousLinePattern.matchesPartially(previousLineText))
 				continue;
 
 			return rule.action;

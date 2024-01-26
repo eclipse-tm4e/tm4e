@@ -11,8 +11,6 @@
  */
 package org.eclipse.tm4e.languageconfiguration.internal.model;
 
-import java.util.regex.Pattern;
-
 import org.eclipse.tm4e.core.internal.utils.StringUtils;
 
 /**
@@ -30,10 +28,10 @@ public final class FoldingRules {
 	 * See [wikipedia](https://en.wikipedia.org/wiki/Off-side_rule) for more information.
 	 */
 	public final boolean offSide;
-	public final Pattern markersStart;
-	public final Pattern markersEnd;
+	public final RegExPattern markersStart;
+	public final RegExPattern markersEnd;
 
-	public FoldingRules(final boolean offSide, final Pattern markersStart, final Pattern markersEnd) {
+	public FoldingRules(final boolean offSide, final RegExPattern markersStart, final RegExPattern markersEnd) {
 		this.offSide = offSide;
 		this.markersStart = markersStart;
 		this.markersEnd = markersEnd;

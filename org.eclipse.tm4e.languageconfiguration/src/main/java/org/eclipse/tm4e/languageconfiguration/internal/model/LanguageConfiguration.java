@@ -55,7 +55,7 @@ public class LanguageConfiguration {
 		 *    }
 		 * --------------
 		 */
-		return jsonString.replaceAll("(,)(\\s*\\n(\\s*\\/\\/.*\\n)*\\s*})", "$2");
+		return jsonString.replaceAll("(,)(\\s*\\n(\\s*\\/\\/.*\\n)*\\s*[\\]}])", "$2");
 	}
 
 	/**

@@ -13,12 +13,11 @@ package org.eclipse.tm4e.languageconfiguration.internal.widgets;
 
 import static org.eclipse.tm4e.languageconfiguration.internal.LanguageConfigurationMessages.*;
 
-import java.util.List;
 import java.util.Objects;
 
 import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.eclipse.jdt.annotation.Nullable;
-import org.eclipse.jface.layout.TableColumnLayout;
+import org.eclipse.jface.layout.GridLayoutFactory;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
@@ -26,7 +25,6 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.TabFolder;
 import org.eclipse.swt.widgets.TabItem;
-import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.tm4e.languageconfiguration.internal.model.CharacterPair;
 import org.eclipse.tm4e.languageconfiguration.internal.model.CommentRule;
@@ -54,9 +52,9 @@ public class LanguageConfigurationInfoWidget extends Composite {
 	private CharacterPairsTableWidget surroundingPairsTable;
 
 	private TabItem foldingTab;
-	private Text offsideText;
-	private Text markersStartText;
-	private Text markersEndText;
+	private Text foldingOffsideText;
+	private Text foldingMarkersStartText;
+	private Text foldingMarkersEndText;
 
 	private TabItem wordPatternTab;
 	private Text wordPatternText;
@@ -66,12 +64,7 @@ public class LanguageConfigurationInfoWidget extends Composite {
 
 	public LanguageConfigurationInfoWidget(final Composite parent, final int style) {
 		super(parent, style);
-		final var layout = new GridLayout();
-		layout.marginHeight = 0;
-		layout.marginWidth = 0;
-		layout.marginLeft = 0;
-		layout.marginRight = 0;
-		super.setLayout(layout);
+		super.setLayout(GridLayoutFactory.fillDefaults().create());
 		super.setLayoutData(new GridData(GridData.FILL_BOTH));
 		createUI(this);
 	}
@@ -93,26 +86,25 @@ public class LanguageConfigurationInfoWidget extends Composite {
 	}
 
 	public void refresh(@Nullable final LanguageConfiguration configuration) {
-		lineCommentText.setText(""); //$NON-NLS-1$
-		blockCommentStartText.setText(""); //$NON-NLS-1$
-		blockCommentEndText.setText(""); //$NON-NLS-1$
+		lineCommentText.setText("");
+		blockCommentStartText.setText("");
+		blockCommentEndText.setText("");
 		bracketsTable.setInput(null);
 		autoClosingPairsTable.setInput(null);
-		autoCloseBeforeText.setText(""); //$NON-NLS-1$
+		autoCloseBeforeText.setText("");
 		surroundingPairsTable.setInput(null);
-		offsideText.setText(""); //$NON-NLS-1$
-		markersStartText.setText(""); //$NON-NLS-1$
-		markersEndText.setText(""); //$NON-NLS-1$
-		wordPatternText.setText(""); //$NON-NLS-1$
+		foldingOffsideText.setText("");
+		foldingMarkersStartText.setText("");
+		foldingMarkersEndText.setText("");
+		wordPatternText.setText("");
 		onEnterRuleTable.setInput(null);
 
-		if (configuration == null) {
+		if (configuration == null)
 			return;
-		}
 
 		final CommentRule comments = configuration.getComments();
 		if (comments != null) {
-			lineCommentText.setText(comments.lineComment == null ? "" : comments.lineComment);
+			lineCommentText.setText(Objects.toString(comments.lineComment, ""));
 			final CharacterPair blockComment = comments.blockComment;
 			if (blockComment != null) {
 				blockCommentStartText.setText(blockComment.open);
@@ -120,22 +112,22 @@ public class LanguageConfigurationInfoWidget extends Composite {
 			}
 		}
 
-		bracketsTable.setInput(removeNullElements(configuration.getBrackets()));
+		bracketsTable.setInput(configuration.getBrackets());
 
-		autoClosingPairsTable.setInput(removeNullElements(configuration.getAutoClosingPairs()));
+		autoClosingPairsTable.setInput(configuration.getAutoClosingPairs());
 
 		final String autoCloseBefore = configuration.getAutoCloseBefore();
 		if (autoCloseBefore != null) {
 			autoCloseBeforeText.setText(autoCloseBefore);
 		}
 
-		surroundingPairsTable.setInput(removeNullElements(configuration.getSurroundingPairs()));
+		surroundingPairsTable.setInput(configuration.getSurroundingPairs());
 
 		final FoldingRules folding = configuration.getFolding();
 		if (folding != null) {
-			offsideText.setText(Boolean.toString(folding.offSide));
-			markersStartText.setText(folding.markersStart.pattern());
-			markersEndText.setText(folding.markersEnd.pattern());
+			foldingOffsideText.setText(Boolean.toString(folding.offSide));
+			foldingMarkersStartText.setText(folding.markersStart.pattern());
+			foldingMarkersEndText.setText(folding.markersEnd.pattern());
 		}
 
 		final String wordPattern = configuration.getWordPattern();
@@ -143,19 +135,11 @@ public class LanguageConfigurationInfoWidget extends Composite {
 			wordPatternText.setText(wordPattern);
 		}
 
-		onEnterRuleTable.setInput(removeNullElements(configuration.getOnEnterRules()));
-	}
-
-	@Nullable
-	private List<?> removeNullElements(@Nullable final List<?> list) {
-		if (list == null) {
-			return null;
-		}
-		return list.stream().filter(Objects::nonNull).toList();
+		onEnterRuleTable.setInput(configuration.getOnEnterRules());
 	}
 
 	private void createCommentsTab(final TabFolder folder) {
-		commentsTab = createTab(folder, LanguageConfigurationInfoWidget_comments);
+		commentsTab = createTab(folder, LanguageConfigurationInfoWidget_comments_title);
 		final Composite parent = (Composite) commentsTab.getControl();
 
 		lineCommentText = createText(parent, LanguageConfigurationInfoWidget_lineComments);
@@ -164,15 +148,13 @@ public class LanguageConfigurationInfoWidget extends Composite {
 	}
 
 	private void createBracketsTab(final TabFolder folder) {
-		bracketsTab = createTab(folder, LanguageConfigurationInfoWidget_brackets);
-		bracketsTable = new CharacterPairsTableWidget(createTable((Composite) bracketsTab.getControl()));
+		bracketsTab = createTab(folder, LanguageConfigurationInfoWidget_brackets_title);
+		bracketsTable = new CharacterPairsTableWidget((Composite) bracketsTab.getControl());
 	}
 
 	protected void createAutoClosingPairsTab(final TabFolder folder) {
-		autoClosingPairsTab = createTab(folder,
-				LanguageConfigurationInfoWidget_autoClosingPairs);
-		autoClosingPairsTable = new AutoClosingPairConditionalTableWidget(
-				createTable((Composite) autoClosingPairsTab.getControl()));
+		autoClosingPairsTab = createTab(folder, LanguageConfigurationInfoWidget_autoClosingPairs_title);
+		autoClosingPairsTable = new AutoClosingPairConditionalTableWidget((Composite) autoClosingPairsTab.getControl());
 	}
 
 	private void createAutoCloseBeforeTab(final TabFolder folder) {
@@ -183,20 +165,19 @@ public class LanguageConfigurationInfoWidget extends Composite {
 	}
 
 	protected void createSurroundingPairsTab(final TabFolder folder) {
-		surroundingPairsTab = createTab(folder, LanguageConfigurationInfoWidget_surroundingPairs);
-		surroundingPairsTable = new CharacterPairsTableWidget(
-				createTable((Composite) surroundingPairsTab.getControl()));
+		surroundingPairsTab = createTab(folder, LanguageConfigurationInfoWidget_surroundingPairs_title);
+		surroundingPairsTable = new CharacterPairsTableWidget((Composite) surroundingPairsTab.getControl());
 	}
 
 	private void createFoldingTab(final TabFolder folder) {
 		foldingTab = createTab(folder, LanguageConfigurationInfoWidget_folding_title);
 		final Composite parent = (Composite) foldingTab.getControl();
 
-		offsideText = createText(parent, LanguageConfigurationInfoWidget_offSide);
-		offsideText.setToolTipText(LanguageConfigurationInfoWidget_offSide_tooltip);
+		foldingOffsideText = createText(parent, LanguageConfigurationInfoWidget_offSide);
+		foldingOffsideText.setToolTipText(LanguageConfigurationInfoWidget_offSide_tooltip);
 		new Label(parent, SWT.NONE).setText(LanguageConfigurationInfoWidget_markers);
-		markersStartText = createText(parent, LanguageConfigurationInfoWidget_start);
-		markersEndText = createText(parent, LanguageConfigurationInfoWidget_end);
+		foldingMarkersStartText = createText(parent, LanguageConfigurationInfoWidget_start);
+		foldingMarkersEndText = createText(parent, LanguageConfigurationInfoWidget_end);
 	}
 
 	private void createWordPatternTab(final TabFolder folder) {
@@ -207,19 +188,8 @@ public class LanguageConfigurationInfoWidget extends Composite {
 	}
 
 	protected void createOnEnterRulesTab(final TabFolder folder) {
-		onEnterRulesTab = createTab(folder, LanguageConfigurationInfoWidget_onEnterRules);
-		onEnterRuleTable = new OnEnterRuleTableWidget(createTable((Composite) onEnterRulesTab.getControl()));
-	}
-
-	private Table createTable(final Composite parent) {
-		final var tableComposite = new Composite(parent, SWT.NONE);
-		tableComposite.setLayoutData(new GridData(GridData.FILL_BOTH));
-		tableComposite.setLayout(new TableColumnLayout());
-		final var table = new Table(tableComposite,
-				SWT.BORDER | SWT.MULTI | SWT.FULL_SELECTION | SWT.H_SCROLL | SWT.V_SCROLL);
-		table.setHeaderVisible(true);
-		table.setLinesVisible(true);
-		return table;
+		onEnterRulesTab = createTab(folder, LanguageConfigurationInfoWidget_onEnterRules_title);
+		onEnterRuleTable = new OnEnterRuleTableWidget((Composite) onEnterRulesTab.getControl());
 	}
 
 	private TabItem createTab(final TabFolder folder, final String title) {

@@ -8,52 +8,33 @@
  *
  * Contributors:
  * Lucas Bullen (Red Hat Inc.) - initial API and implementation
+ * Sebastian Thomschke - refactored to extend AbstractTableWidget
  */
 package org.eclipse.tm4e.languageconfiguration.internal.widgets;
 
-import static org.eclipse.tm4e.languageconfiguration.internal.LanguageConfigurationMessages.*;
+import static org.eclipse.tm4e.languageconfiguration.internal.LanguageConfigurationMessages.AutoClosingPairConditionalTableWidget_notIn;
 
-import org.eclipse.jdt.annotation.Nullable;
-import org.eclipse.jface.layout.TableColumnLayout;
-import org.eclipse.jface.resource.JFaceResources;
-import org.eclipse.jface.viewers.ColumnWeightData;
-import org.eclipse.swt.SWT;
-import org.eclipse.swt.graphics.GC;
-import org.eclipse.swt.widgets.Table;
-import org.eclipse.swt.widgets.TableColumn;
+import org.eclipse.swt.widgets.Composite;
 import org.eclipse.tm4e.languageconfiguration.internal.model.AutoClosingPairConditional;
+import org.eclipse.tm4e.languageconfiguration.internal.model.CharacterPair;
 
 final class AutoClosingPairConditionalTableWidget extends CharacterPairsTableWidget {
 
-	AutoClosingPairConditionalTableWidget(final Table table) {
-		super(table);
-		setLabelProvider(new AutoClosingPairConditionalLabelProvider());
-
-		final GC gc = new GC(table.getShell());
-		gc.setFont(JFaceResources.getDialogFont());
-		final var columnLayout = new TableColumnLayout();
-
-		final var column2 = new TableColumn(table, SWT.NONE);
-		column2.setText(AutoClosingPairConditionalTableWidget_notIn);
-		final int minWidth = computeMinimumColumnWidth(gc, AutoClosingPairConditionalTableWidget_notIn);
-		columnLayout.setColumnData(column2, new ColumnWeightData(2, minWidth, true));
-
-		gc.dispose();
+	AutoClosingPairConditionalTableWidget(final Composite parent) {
+		super(parent);
 	}
 
-	private static final class AutoClosingPairConditionalLabelProvider extends CharacterPairLabelProvider {
+	@Override
+	protected void createColumns() {
+		super.createColumns();
+		createColumn(AutoClosingPairConditionalTableWidget_notIn, 2, 0, true);
+	}
 
-		@Nullable
-		@Override
-		public String getColumnText(@Nullable final Object element, final int columnIndex) {
-			if (columnIndex == 2) {
-				if (element instanceof final AutoClosingPairConditional conditionalPair) {
-					return String.join(", ", conditionalPair.notIn); //$NON-NLS-1$
-				}
-				return ""; //$NON-NLS-1$
-			}
-			return super.getColumnText(element, columnIndex);
+	@Override
+	protected String getColumnText(CharacterPair charPair, int columnIndex) {
+		if (columnIndex == 2 && charPair instanceof final AutoClosingPairConditional conditionalPair) {
+			return String.join(", ", conditionalPair.notIn);
 		}
+		return super.getColumnText(charPair, columnIndex);
 	}
-
 }

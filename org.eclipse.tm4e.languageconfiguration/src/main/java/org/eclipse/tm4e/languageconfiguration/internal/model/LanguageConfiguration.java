@@ -12,10 +12,14 @@
  */
 package org.eclipse.tm4e.languageconfiguration.internal.model;
 
+import static org.eclipse.tm4e.core.internal.utils.NullSafetyHelper.*;
+
 import java.io.BufferedReader;
 import java.io.Reader;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 import org.eclipse.jdt.annotation.NonNull;
@@ -66,7 +70,7 @@ public class LanguageConfiguration {
 	public static @Nullable LanguageConfiguration load(@NonNull final Reader reader) {
 		// GSON does not support trailing commas so we have to manually remove them -> maybe better switch to jackson json parser?
 		final var jsonString = removeTrailingCommas(new BufferedReader(reader).lines().collect(Collectors.joining("\n")));
-		return new GsonBuilder()
+		final LanguageConfiguration langCfg = new GsonBuilder()
 				.registerTypeAdapter(String.class, (JsonDeserializer<String>) (json, typeOfT, context) -> {
 					if (json.isJsonObject()) {
 						/* for example:
@@ -240,6 +244,32 @@ public class LanguageConfiguration {
 				})
 				.create()
 				.fromJson(jsonString, LanguageConfiguration.class);
+
+		if (castNullable(langCfg.autoClosingPairs) == null) {
+			langCfg.autoClosingPairs = Collections.emptyList();
+		} else {
+			langCfg.autoClosingPairs.removeIf(Objects::isNull);
+		}
+
+		if (castNullable(langCfg.brackets) == null) {
+			langCfg.brackets = Collections.emptyList();
+		} else {
+			langCfg.brackets.removeIf(Objects::isNull);
+		}
+
+		if (castNullable(langCfg.onEnterRules) == null) {
+			langCfg.onEnterRules = Collections.emptyList();
+		} else {
+			langCfg.onEnterRules.removeIf(Objects::isNull);
+		}
+
+		if (castNullable(langCfg.surroundingPairs) == null) {
+			langCfg.surroundingPairs = Collections.emptyList();
+		} else {
+			langCfg.surroundingPairs.removeIf(Objects::isNull);
+		}
+
+		return langCfg;
 	}
 
 	private static @Nullable RegExPattern getAsPattern(@Nullable final JsonElement element) {
@@ -261,39 +291,33 @@ public class LanguageConfiguration {
 	}
 
 	private static @Nullable String getAsString(@Nullable final JsonElement element) {
-		if (element == null) {
-			return null;
-		}
-		try {
-			return element.getAsString();
-		} catch (final Exception ex) {
-			LanguageConfigurationPlugin.logError("Failed to convert JSON element [" + element + "] to String.", ex);
-			return null;
-		}
+		if (element != null)
+			try {
+				return element.getAsString();
+			} catch (final Exception ex) {
+				LanguageConfigurationPlugin.logError("Failed to convert JSON element [" + element + "] to String.", ex);
+			}
+		return null;
 	}
 
 	private static boolean getAsBoolean(@Nullable final JsonElement element, final boolean defaultValue) {
-		if (element == null) {
-			return defaultValue;
-		}
-		try {
-			return element.getAsBoolean();
-		} catch (final Exception ex) {
-			LanguageConfigurationPlugin.logError("Failed to convert JSON element [" + element + "] to boolean.", ex);
-			return defaultValue;
-		}
+		if (element != null)
+			try {
+				return element.getAsBoolean();
+			} catch (final Exception ex) {
+				LanguageConfigurationPlugin.logError("Failed to convert JSON element [" + element + "] to boolean.", ex);
+			}
+		return defaultValue;
 	}
 
 	private static @Nullable Integer getAsInteger(@Nullable final JsonElement element) {
-		if (element == null) {
-			return null;
-		}
-		try {
-			return element.getAsInt();
-		} catch (final Exception ex) {
-			LanguageConfigurationPlugin.logError("Failed to convert JSON element [" + element + "] to Integer.", ex);
-			return null;
-		}
+		if (element != null)
+			try {
+				return element.getAsInt();
+			} catch (final Exception ex) {
+				LanguageConfigurationPlugin.logError("Failed to convert JSON element [" + element + "] to Integer.", ex);
+			}
+		return null;
 	}
 
 	private @Nullable CommentRule comments;
@@ -308,14 +332,14 @@ public class LanguageConfiguration {
 		return comments;
 	}
 
-	private @Nullable List<CharacterPair> brackets;
+	private List<CharacterPair> brackets = lazyNonNull();
 
 	/**
 	 * Returns the language's brackets. This configuration implicitly affects pressing Enter around these brackets.
 	 *
 	 * @return the language's brackets
 	 */
-	public @Nullable List<CharacterPair> getBrackets() {
+	public List<CharacterPair> getBrackets() {
 		return brackets;
 	}
 
@@ -332,18 +356,18 @@ public class LanguageConfiguration {
 
 	// TODO @Nullable IndentionRule getIndentionRules();
 
-	private @Nullable List<OnEnterRule> onEnterRules;
+	private List<OnEnterRule> onEnterRules = lazyNonNull();
 
 	/**
 	 * Returns the language's rules to be evaluated when pressing Enter.
 	 *
 	 * @return the language's rules to be evaluated when pressing Enter.
 	 */
-	public @Nullable List<OnEnterRule> getOnEnterRules() {
+	public List<OnEnterRule> getOnEnterRules() {
 		return onEnterRules;
 	}
 
-	private @Nullable List<AutoClosingPairConditional> autoClosingPairs;
+	private List<AutoClosingPairConditional> autoClosingPairs = lazyNonNull();
 
 	/**
 	 * Returns the language's auto closing pairs. The 'close' character is automatically inserted with the 'open'
@@ -351,12 +375,11 @@ public class LanguageConfiguration {
 	 *
 	 * @return the language's auto closing pairs.
 	 */
-
-	public @Nullable List<AutoClosingPairConditional> getAutoClosingPairs() {
+	public List<AutoClosingPairConditional> getAutoClosingPairs() {
 		return autoClosingPairs;
 	}
 
-	private @Nullable List<AutoClosingPair> surroundingPairs;
+	private List<AutoClosingPair> surroundingPairs = lazyNonNull();
 
 	/**
 	 * Returns the language's surrounding pairs. When the 'open' character is typed on a selection, the selected string
@@ -364,7 +387,7 @@ public class LanguageConfiguration {
 	 *
 	 * @return the language's surrounding pairs.
 	 */
-	public @Nullable List<AutoClosingPair> getSurroundingPairs() {
+	public List<AutoClosingPair> getSurroundingPairs() {
 		return surroundingPairs;
 	}
 

@@ -18,7 +18,6 @@ package org.eclipse.tm4e.languageconfiguration.internal.supports;
 
 import java.util.Collections;
 import java.util.List;
-import java.util.Objects;
 
 import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.tm4e.languageconfiguration.internal.model.AutoClosingPair;
@@ -44,18 +43,17 @@ public final class CharacterPairSupport {
 	@SuppressWarnings("unchecked")
 	public CharacterPairSupport(final LanguageConfiguration config) {
 		final var autoClosingPairs = config.getAutoClosingPairs();
-		final var brackets = config.getBrackets();
-
-		if (autoClosingPairs != null) {
-			this.autoClosingPairs = autoClosingPairs.stream().filter(Objects::nonNull)
-					.map(el -> new AutoClosingPairConditional(el.open, el.close, el.notIn))
-					.toList();
-		} else if (brackets != null) {
-			this.autoClosingPairs = brackets.stream().filter(Objects::nonNull)
-					.map(el -> new AutoClosingPairConditional(el.open, el.close, Collections.emptyList()))
-					.toList();
+		if (!autoClosingPairs.isEmpty()) {
+			this.autoClosingPairs = autoClosingPairs;
 		} else {
-			this.autoClosingPairs = Collections.emptyList();
+			final var brackets = config.getBrackets();
+			if (!brackets.isEmpty()) {
+				this.autoClosingPairs = brackets.stream()
+						.map(el -> new AutoClosingPairConditional(el.open, el.close, Collections.emptyList()))
+						.toList();
+			} else {
+				this.autoClosingPairs = Collections.emptyList();
+			}
 		}
 
 		final var autoCloseBefore = config.getAutoCloseBefore();
@@ -64,8 +62,8 @@ public final class CharacterPairSupport {
 				: CharacterPairSupport.DEFAULT_AUTOCLOSE_BEFORE_LANGUAGE_DEFINED;
 
 		final var surroundingPairs = config.getSurroundingPairs();
-		this.surroundingPairs = surroundingPairs != null
-				? surroundingPairs.stream().filter(Objects::nonNull).toList()
+		this.surroundingPairs = !surroundingPairs.isEmpty()
+				? surroundingPairs
 				: (List<AutoClosingPair>) (List<?>) this.autoClosingPairs;
 	}
 

@@ -71,12 +71,12 @@ class ParsingTest {
 		assertNotNull(comments);
 		assertNotNull(comments.blockComment);
 		assertEquals("//", comments.lineComment);
-		assertNotNull(languageConfiguration.getBrackets());
-		assertNotNull(languageConfiguration.getAutoClosingPairs());
+		assertEquals(3, languageConfiguration.getBrackets().size());
+		assertEquals(6, languageConfiguration.getAutoClosingPairs().size());
 		assertEquals(";:.,=}])>` \n\t", languageConfiguration.getAutoCloseBefore());
 		assertNotNull(languageConfiguration.getWordPattern());
-		assertNotNull(languageConfiguration.getOnEnterRules());
-		assertNotNull(languageConfiguration.getSurroundingPairs());
+		assertEquals(5, languageConfiguration.getOnEnterRules().size());
+		assertEquals(6, languageConfiguration.getSurroundingPairs().size());
 		assertNotNull(languageConfiguration.getFolding());
 	}
 
@@ -88,12 +88,12 @@ class ParsingTest {
 		assertNotNull(comments);
 		assertNotNull(comments.blockComment);
 		assertEquals("//", comments.lineComment);
-		assertNotNull(languageConfiguration.getBrackets());
-		assertNotNull(languageConfiguration.getAutoClosingPairs());
+		assertEquals(4, languageConfiguration.getBrackets().size());
+		assertEquals(6, languageConfiguration.getAutoClosingPairs().size());
 		assertNull(languageConfiguration.getAutoCloseBefore());
 		assertNull(languageConfiguration.getWordPattern());
-		assertNotNull(languageConfiguration.getOnEnterRules());
-		assertNotNull(languageConfiguration.getSurroundingPairs());
+		assertEquals(6, languageConfiguration.getOnEnterRules().size());
+		assertEquals(6, languageConfiguration.getSurroundingPairs().size());
 		assertNull(languageConfiguration.getFolding());
 	}
 

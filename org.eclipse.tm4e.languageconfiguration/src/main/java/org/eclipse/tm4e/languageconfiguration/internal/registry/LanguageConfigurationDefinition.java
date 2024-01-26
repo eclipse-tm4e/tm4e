@@ -98,7 +98,7 @@ public final class LanguageConfigurationDefinition extends TMResource implements
 	OnEnterSupport getOnEnter() {
 		if (this.onEnter == null) {
 			final LanguageConfiguration conf = getLanguageConfiguration();
-			if (conf == null || conf.getBrackets() == null && conf.getOnEnterRules() == null)
+			if (conf == null || conf.getBrackets().isEmpty() && conf.getOnEnterRules().isEmpty())
 				return null;
 
 			this.onEnter = new OnEnterSupport(conf.getBrackets(), conf.getOnEnterRules());

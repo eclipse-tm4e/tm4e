@@ -50,7 +50,8 @@ public class LanguageConfigurationInfoWidget extends Composite {
 		LanguageConfigurationInfoWidget_folding_title,
 		LanguageConfigurationInfoWidget_wordPattern_title,
 		LanguageConfigurationInfoWidget_onEnterRules_title,
-		LanguageConfigurationInfoWidget_indentationRules_title
+		LanguageConfigurationInfoWidget_indentationRules_title,
+		LanguageConfigurationInfoWidget_colorizedBracketPairs_title,
 	};
 
 	private Text lineCommentText;
@@ -80,6 +81,8 @@ public class LanguageConfigurationInfoWidget extends Composite {
 	private Text indentationIncreaseIndentPattern;
 	private Text indentationIndentNextLinePattern;
 	private Text indentationUnIndentedLinePattern;
+
+	private CharacterPairsTableWidget colorizedBracketPairsTable;
 
 	public LanguageConfigurationInfoWidget(final Composite parent, final int style) {
 		super(parent, style);
@@ -139,6 +142,7 @@ public class LanguageConfigurationInfoWidget extends Composite {
 			createStackLayer.apply(this::createWordPatternInfo),
 			createStackLayer.apply(this::createOnEnterRulesInfo),
 			createStackLayer.apply(this::createIndentationRulesInfo),
+			createStackLayer.apply(this::createColorizedBracketPairsInfo),
 		};
 
 		tableViewer.addSelectionChangedListener(event -> {
@@ -168,6 +172,7 @@ public class LanguageConfigurationInfoWidget extends Composite {
 		indentationIncreaseIndentPattern.setText("");
 		indentationIndentNextLinePattern.setText("");
 		indentationUnIndentedLinePattern.setText("");
+		colorizedBracketPairsTable.setInput(null);
 
 		if (configuration == null)
 			return;
@@ -214,6 +219,8 @@ public class LanguageConfigurationInfoWidget extends Composite {
 			indentationIndentNextLinePattern.setText(Objects.toString(indentationRules.indentNextLinePattern, ""));
 			indentationUnIndentedLinePattern.setText(Objects.toString(indentationRules.unIndentedLinePattern, ""));
 		}
+
+		colorizedBracketPairsTable.setInput(configuration.getColorizedBracketPairs());
 	}
 
 	private void createCommentsInfo(final Composite parent) {
@@ -259,6 +266,10 @@ public class LanguageConfigurationInfoWidget extends Composite {
 		indentationIncreaseIndentPattern = createText(parent, LanguageConfigurationInfoWidget_indentationRules_increaseIndentPattern);
 		indentationIndentNextLinePattern = createText(parent, LanguageConfigurationInfoWidget_indentationRules_indentNextLinePattern);
 		indentationUnIndentedLinePattern = createText(parent, LanguageConfigurationInfoWidget_indentationRules_unIndentedLinePattern);
+	}
+
+	private void createColorizedBracketPairsInfo(final Composite parent) {
+		colorizedBracketPairsTable = new CharacterPairsTableWidget(parent);
 	}
 
 	private Text createText(final Composite parent, final String s) {

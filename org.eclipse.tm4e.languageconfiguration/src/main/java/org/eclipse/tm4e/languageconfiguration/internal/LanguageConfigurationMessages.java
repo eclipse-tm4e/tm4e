@@ -31,6 +31,7 @@ public final class LanguageConfigurationMessages extends NLS {
 	public static String LanguageConfigurationInfoWidget_blockCommentsEnd;
 	public static String LanguageConfigurationInfoWidget_blockCommentsStart;
 	public static String LanguageConfigurationInfoWidget_brackets_title;
+	public static String LanguageConfigurationInfoWidget_colorizedBracketPairs_title;
 	public static String LanguageConfigurationInfoWidget_comments_title;
 	public static String LanguageConfigurationInfoWidget_end;
 	public static String LanguageConfigurationInfoWidget_folding_title;

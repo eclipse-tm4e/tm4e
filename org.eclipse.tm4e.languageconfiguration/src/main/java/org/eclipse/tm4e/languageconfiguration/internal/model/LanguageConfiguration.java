@@ -291,6 +291,11 @@ public class LanguageConfiguration {
 			langCfg.surroundingPairs.removeIf(Objects::isNull);
 		}
 
+		if (castNullable(langCfg.colorizedBracketPairs) == null) {
+			langCfg.colorizedBracketPairs = Collections.emptyList();
+		} else {
+			langCfg.colorizedBracketPairs.removeIf(Objects::isNull);
+		}
 		return langCfg;
 	}
 
@@ -420,7 +425,15 @@ public class LanguageConfiguration {
 		return surroundingPairs;
 	}
 
-	// TODO private @Nullable List<CharacterPair> getColorizedBracketPairs();
+	private List<CharacterPair> colorizedBracketPairs = lazyNonNull();
+
+	/**
+	 * Defines a list of bracket pairs that are colorized depending on their nesting level.
+	 * If not set, the configured brackets will be used.
+	 */
+	public List<CharacterPair> getColorizedBracketPairs() {
+		return colorizedBracketPairs;
+	}
 
 	private @Nullable String autoCloseBefore;
 

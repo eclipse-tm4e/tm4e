@@ -119,6 +119,24 @@ class ParsingTest {
 	}
 
 	@Test
+	void testParseColorizedBracketsPair() throws Exception {
+		final var languageConfiguration = LanguageConfiguration.load(new StringReader("""
+			{
+				"colorizedBracketPairs": [
+					["(",")"],
+					["[","]"],
+					["{","}"],
+					["<",">"]
+				],
+			}"""));
+		assertNotNull(languageConfiguration);
+
+		assertEquals(4, languageConfiguration.getColorizedBracketPairs().size());
+		assertEquals("(", languageConfiguration.getColorizedBracketPairs().get(0).open);
+		assertEquals(")", languageConfiguration.getColorizedBracketPairs().get(0).close);
+	}
+
+	@Test
 	void testIndentationRules() throws Exception {
 		final var languageConfiguration = LanguageConfiguration.load(new StringReader("""
 			{

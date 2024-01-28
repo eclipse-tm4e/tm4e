@@ -8,7 +8,7 @@
  *
  * Contributors:
  * Lucas Bullen (Red Hat Inc.) - initial API and implementation
- * Sebastian Thomschke (Vegard IT) - improve JSON parsing tolerance
+ * Sebastian Thomschke (Vegard IT) - improve JSON parsing tolerance, add indentation rules parsing
  */
 package org.eclipse.tm4e.languageconfiguration.internal.model;
 
@@ -37,6 +37,8 @@ import com.google.gson.JsonObject;
  * The language configuration interface defines the contract between extensions and various editor features, like
  * automatic bracket insertion, automatic indentation etc.
  *
+ * @see <a href=
+ *      "https://code.visualstudio.com/api/language-extensions/language-configuration-guide">code.visualstudio.com/api/language-extensions/language-configuration-guide</a>
  * @see <a href=
  *      "https://github.com/microsoft/vscode/blob/main/src/vs/editor/common/languages/languageConfiguration.ts">
  *      github.com/microsoft/vscode/blob/main/src/vs/editor/common/languages/languageConfiguration.ts</a>
@@ -178,7 +180,7 @@ public class LanguageConfiguration {
 						open = getAsString(charsPair.get(0));
 						close = getAsString(charsPair.get(1));
 					} else if (json.isJsonObject()) {
-						// ex: {"open":"'","close":"'", "notIn": ["string", "comment"]}
+						// ex: {"open":"'","close":"'"}
 						final var autoClosePair = json.getAsJsonObject();
 						open = getAsString(autoClosePair.get("open")); //$NON-NLS-1$
 						close = getAsString(autoClosePair.get("close")); //$NON-NLS-1$
@@ -241,6 +243,26 @@ public class LanguageConfiguration {
 						}
 					}
 					return null;
+				})
+
+				.registerTypeAdapter(IndentationRules.class, (JsonDeserializer<IndentationRules>) (json, typeT, context) -> {
+					if (!json.isJsonObject()) {
+						return null;
+					}
+
+					final var jsonObj = json.getAsJsonObject();
+					final var decreaseIndentPattern = getAsPattern(jsonObj.get("decreaseIndentPattern"));
+					if (decreaseIndentPattern == null)
+						return null;
+					final var increaseIndentPattern = getAsPattern(jsonObj.get("increaseIndentPattern"));
+					if (increaseIndentPattern == null)
+						return null;
+
+					return new IndentationRules(
+							decreaseIndentPattern,
+							increaseIndentPattern,
+							getAsPattern(jsonObj.get("indentNextLinePattern")),
+							getAsPattern(jsonObj.get("unIndentedLinePattern")));
 				})
 				.create()
 				.fromJson(jsonString, LanguageConfiguration.class);
@@ -354,7 +376,14 @@ public class LanguageConfiguration {
 		return wordPattern;
 	}
 
-	// TODO @Nullable IndentionRule getIndentionRules();
+	private @Nullable IndentationRules indentationRules;
+
+	/**
+	 * The language's indentation settings.
+	 */
+	public @Nullable IndentationRules getIndentationRules() {
+		return indentationRules;
+	}
 
 	private List<OnEnterRule> onEnterRules = lazyNonNull();
 

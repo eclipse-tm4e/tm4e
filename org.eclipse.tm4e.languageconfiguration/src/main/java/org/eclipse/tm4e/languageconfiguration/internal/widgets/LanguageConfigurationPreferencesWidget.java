@@ -20,7 +20,6 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.TabFolder;
 import org.eclipse.tm4e.languageconfiguration.internal.registry.ILanguageConfigurationDefinition;
 import org.eclipse.tm4e.languageconfiguration.internal.registry.ILanguageConfigurationRegistryManager;
 
@@ -61,9 +60,8 @@ public final class LanguageConfigurationPreferencesWidget extends LanguageConfig
 	}
 
 	@Override
-	protected void createOnEnterRulesTab(final TabFolder folder) {
-		super.createOnEnterRulesTab(folder);
-		final Composite parent = (Composite) onEnterRulesTab.getControl();
+	protected void createOnEnterRulesInfo(final Composite parent) {
+		super.createOnEnterRulesInfo(parent);
 		toggleOnEnterButton = new Button(parent, SWT.CHECK);
 		toggleOnEnterButton.setText(LanguageConfigurationPreferencesWidget_enableOnEnterActions);
 		toggleOnEnterButton.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
@@ -76,9 +74,8 @@ public final class LanguageConfigurationPreferencesWidget extends LanguageConfig
 	}
 
 	@Override
-	protected void createAutoClosingPairsTab(final TabFolder folder) {
-		super.createAutoClosingPairsTab(folder);
-		final Composite parent = (Composite) autoClosingPairsTab.getControl();
+	protected void createAutoClosingPairsInfo(final Composite parent) {
+		super.createAutoClosingPairsInfo(parent);
 		toggleBracketAutoClosingButton = new Button(parent, SWT.CHECK);
 		toggleBracketAutoClosingButton.setText(LanguageConfigurationPreferencesWidget_enableAutoClosing);
 		toggleBracketAutoClosingButton.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
@@ -91,9 +88,8 @@ public final class LanguageConfigurationPreferencesWidget extends LanguageConfig
 	}
 
 	@Override
-	protected void createSurroundingPairsTab(final TabFolder folder) {
-		super.createSurroundingPairsTab(folder);
-		final Composite parent = (Composite) surroundingPairsTab.getControl();
+	protected void createSurroundingPairsInfo(final Composite parent) {
+		super.createSurroundingPairsInfo(parent);
 		toggleMatchingPairsButton = new Button(parent, SWT.CHECK);
 		toggleMatchingPairsButton.setText(LanguageConfigurationPreferencesWidget_enableMatchingBrackets);
 		toggleMatchingPairsButton.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));

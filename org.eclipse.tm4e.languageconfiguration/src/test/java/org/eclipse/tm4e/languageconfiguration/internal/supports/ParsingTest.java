@@ -117,4 +117,21 @@ class ParsingTest {
 		System.out.println("Successfully parsed " + count.intValue() + " language configurations.");
 		assertTrue(count.intValue() > 10, "Only " + count.intValue() + " language configurations found, expected more than 10!");
 	}
+
+	@Test
+	void testIndentationRules() throws Exception {
+		final var languageConfiguration = LanguageConfiguration.load(new StringReader("""
+			{
+				"indentationRules": {
+					"increaseIndentPattern": "(^.*\\\\{[^}]*$)",
+					"decreaseIndentPattern": "^\\\\s*\\\\}"
+				},
+			}"""));
+		assertNotNull(languageConfiguration);
+
+		var indentationRules = languageConfiguration.getIndentationRules();
+		assert indentationRules != null;
+		assertEquals("(^.*\\{[^}]*$)", indentationRules.increaseIndentPattern.toString());
+		assertEquals("^\\s*\\}", indentationRules.decreaseIndentPattern.toString());
+	}
 }

@@ -34,6 +34,11 @@ public final class LanguageConfigurationMessages extends NLS {
 	public static String LanguageConfigurationInfoWidget_comments_title;
 	public static String LanguageConfigurationInfoWidget_end;
 	public static String LanguageConfigurationInfoWidget_folding_title;
+	public static String LanguageConfigurationInfoWidget_indentationRules_title;
+	public static String LanguageConfigurationInfoWidget_indentationRules_decreaseIndentPattern;
+	public static String LanguageConfigurationInfoWidget_indentationRules_increaseIndentPattern;
+	public static String LanguageConfigurationInfoWidget_indentationRules_indentNextLinePattern;
+	public static String LanguageConfigurationInfoWidget_indentationRules_unIndentedLinePattern;
 	public static String LanguageConfigurationInfoWidget_lineComments;
 	public static String LanguageConfigurationInfoWidget_markers;
 	public static String LanguageConfigurationInfoWidget_offSide;

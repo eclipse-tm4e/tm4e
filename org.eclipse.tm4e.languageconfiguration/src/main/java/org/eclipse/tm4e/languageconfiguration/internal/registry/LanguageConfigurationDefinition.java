@@ -25,6 +25,7 @@ import org.eclipse.tm4e.languageconfiguration.LanguageConfigurationPlugin;
 import org.eclipse.tm4e.languageconfiguration.internal.model.LanguageConfiguration;
 import org.eclipse.tm4e.languageconfiguration.internal.supports.CharacterPairSupport;
 import org.eclipse.tm4e.languageconfiguration.internal.supports.CommentSupport;
+import org.eclipse.tm4e.languageconfiguration.internal.supports.IndentRulesSupport;
 import org.eclipse.tm4e.languageconfiguration.internal.supports.OnEnterSupport;
 import org.eclipse.tm4e.registry.TMResource;
 import org.eclipse.tm4e.registry.XMLConstants;
@@ -42,6 +43,7 @@ public final class LanguageConfigurationDefinition extends TMResource implements
 
 	private @Nullable CharacterPairSupport characterPair;
 	private @Nullable OnEnterSupport onEnter;
+	private @Nullable IndentRulesSupport indentRules;
 	private @Nullable CommentSupport comment;
 
 	public LanguageConfigurationDefinition(final IContentType contentType, final String path) {
@@ -104,6 +106,21 @@ public final class LanguageConfigurationDefinition extends TMResource implements
 			this.onEnter = new OnEnterSupport(conf.getBrackets(), conf.getOnEnterRules());
 		}
 		return onEnter;
+	}
+
+	@Nullable
+	IndentRulesSupport getIndentRules() {
+		if (this.indentRules == null) {
+			final LanguageConfiguration conf = getLanguageConfiguration();
+			if (conf == null)
+				return null;
+
+			var indentRules = conf.getIndentationRules();
+			if (indentRules != null) {
+				this.indentRules = new IndentRulesSupport(indentRules);
+			}
+		}
+		return indentRules;
 	}
 
 	/**

@@ -18,6 +18,7 @@
 		<sonar.jacoco.reportPath>../target/jacoco.exec</sonar.jacoco.reportPath>
 		<tycho.scmUrl>scm:git:https://github.com/eclipse/tm4e.git</tycho.scmUrl>
 		<jgit.dirtyWorkingTree>error</jgit.dirtyWorkingTree>
+		<tycho-surefire-plugin.platformArgs></tycho-surefire-plugin.platformArgs>
 	</properties>
 	<organization>
 		<name>Eclipse TM4E project</name>
@@ -52,6 +53,21 @@
 		<defaultGoal>clean install</defaultGoal>
 		<!-- plain surefire tests without tycho -->
 		<testSourceDirectory>src/test/java</testSourceDirectory>
+		<pluginManagement>
+			<plugins>
+				<plugin>
+					<groupId>org.eclipse.tycho</groupId>
+					<artifactId>tycho-surefire-plugin</artifactId>
+					<version>${tycho-version}</version>
+					<configuration>
+						<!-- https://wiki.eclipse.org/Tycho/FAQ#How_to_use_SWTBot_or_some_UI_tool_for_testing.3F -->
+						<useUIHarness>true</useUIHarness>
+						<useUIThread>true</useUIThread>
+						<argLine>-Xms512m -Xmx512m ${tycho-surefire-plugin.platformArgs}</argLine>
+					</configuration>
+				</plugin>
+			</plugins>
+		</pluginManagement>
 		<plugins>
 			<plugin>
 				<groupId>org.eclipse.tycho</groupId>
@@ -304,6 +320,17 @@
 					</plugin>
 				</plugins>
 			</build>
+		</profile>
+		<profile>
+			<id>macosx</id>
+			<activation>
+				<os>
+					<family>mac</family>
+				</os>
+			</activation>
+			<properties>
+				<tycho-surefire-plugin.platformArgs>-XstartOnFirstThread</tycho-surefire-plugin.platformArgs>
+			</properties>
 		</profile>
 	</profiles>
 

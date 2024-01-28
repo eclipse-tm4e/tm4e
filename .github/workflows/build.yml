@@ -1,4 +1,4 @@
-# https://docs.github.com/en/free-pro-team@latest/actions/reference/workflow-syntax-for-github-actions
+# https://docs.github.com/en/actions/using-workflows/workflow-syntax-for-github-actions
 name: Build
 
 on:
@@ -47,7 +47,15 @@ jobs:
 
   build:
 
-    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        os: 
+        - ubuntu-latest
+        - macos-latest
+        - windows-latest
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 15
 
     steps:
     - name: Show environment variables
@@ -59,27 +67,28 @@ jobs:
         fetch-depth: 0 # required to prevent tycho-p2-extras-plugin:compare-version-with-baseline potentially failing the build
 
     - name: Configure Fast APT Mirror
+      if: runner.os == 'Linux'
       uses: vegardit/fast-apt-mirror.sh@v1
 
-    - name: "Install: xvfb"
-      run: sudo apt-get install --no-install-recommends -y xvfb
+    - name: "Install: Linux packages"
+      if: runner.os == 'Linux'
+      run: |
+        set -eux
+        sudo apt-get install --no-install-recommends -y xvfb
 
-    - name: "Install: dbus-x11"
-      # prevents: "Failed to execute child process “dbus-launch” (No such file or directory)"
-      run: sudo apt-get install --no-install-recommends -y dbus-x11
+        # prevents: "Failed to execute child process “dbus-launch” (No such file or directory)"
+        sudo apt-get install --no-install-recommends -y dbus-x11
 
-    - name: "Install: at-spi2-core"
-      # prevents: "dbind-WARNING **: 20:17:55.046: AT-SPI: Error retrieving accessibility bus address: org.freedesktop.DBus.Error.ServiceUnknown: The name org.a11y.Bus was not provided by any .service files"
-      # see https://gist.github.com/jeffcogswell/62395900725acef1c0a5a608f7eb7a05
-      run: sudo apt-get install --no-install-recommends -y at-spi2-core
+        # prevents: "dbind-WARNING **: 20:17:55.046: AT-SPI: Error retrieving accessibility bus address: org.freedesktop.DBus.Error.ServiceUnknown: The name org.a11y.Bus was not provided by any .service files"
+        # see https://gist.github.com/jeffcogswell/62395900725acef1c0a5a608f7eb7a05
+        sudo apt-get install --no-install-recommends -y at-spi2-core
 
-    - name: "Install: lib-swt-gtk-*-java"
-      # prevents:
-      #  java.lang.UnsatisfiedLinkError: Could not load SWT library. Reasons:
-      #    no swt-pi4-gtk-4956r13 in java.library.path: /usr/java/packages/lib:/usr/lib64:/lib64:/lib:/usr/lib
-      #    no swt-pi4-gtk in java.library.path: /usr/java/packages/lib:/usr/lib64:/lib64:/lib:/usr/lib
-      #    no swt-pi4 in java.library.path: /usr/java/packages/lib:/usr/lib64:/lib64:/lib:/usr/lib
-      run: sudo apt-get install --no-install-recommends -y libswt-gtk-*-java
+        # prevents:
+        #  java.lang.UnsatisfiedLinkError: Could not load SWT library. Reasons:
+        #    no swt-pi4-gtk-4956r13 in java.library.path: /usr/java/packages/lib:/usr/lib64:/lib64:/lib:/usr/lib
+        #    no swt-pi4-gtk in java.library.path: /usr/java/packages/lib:/usr/lib64:/lib64:/lib:/usr/lib
+        #    no swt-pi4 in java.library.path: /usr/java/packages/lib:/usr/lib64:/lib64:/lib:/usr/lib
+        sudo apt-get install --no-install-recommends -y libswt-gtk-*-java
 
     - name: "Install: JDK ${{ env.JAVA_VERSION }}"
       uses: actions/setup-java@v4 # https://github.com/actions/setup-java
@@ -105,11 +114,15 @@ jobs:
       run: |
         set -eu
 
-        MAVEN_OPTS+=" -Djava.security.egd=file:/dev/./urandom" # https://stackoverflow.com/questions/58991966/what-java-security-egd-option-is-for/59097932#59097932
+        if [[ "${{ runner.os }}" == "Windows" ]]; then
+          MAVEN_OPTS+=" -Djava.security.egd=file:/dev/urandom" # https://www.baeldung.com/java-security-egd#bd-testing-the-effect-of-javasecurityegd
+        else
+          MAVEN_OPTS+=" -Djava.security.egd=file:/dev/./urandom" # https://stackoverflow.com/questions/58991966/what-java-security-egd-option-is-for/59097932#59097932
+        fi
         MAVEN_OPTS+=" -Dorg.slf4j.simpleLogger.showDateTime=true -Dorg.slf4j.simpleLogger.dateTimeFormat=HH:mm:ss,SSS" # https://stackoverflow.com/questions/5120470/how-to-time-the-different-stages-of-maven-execution/49494561#49494561
         MAVEN_OPTS+=" -Xmx1024m -Djava.awt.headless=true -Djava.net.preferIPv4Stack=true -Dhttps.protocols=TLSv1.2"
-        echo "  -> MAVEN_OPTS: $MAVEN_OPTS"
         export MAVEN_OPTS
+        echo "MAVEN_OPTS: $MAVEN_OPTS"
 
         if [[ ${ACT:-} == "true" ]]; then # when running locally using nektos/act
            maven_args="-Djgit.dirtyWorkingTree=warning"
@@ -117,8 +130,9 @@ jobs:
            maven_args="--no-transfer-progress"
         fi
 
-        # prevent "org.eclipse.swt.SWTError: No more handles [gtk_init_check() failed]"
-        xvfb-run --server-args="-screen 0 1600x900x24" mvn \
+        # prevent "org.eclipse.swt.SWTError: No more handles [gtk_init_check() failed]" on Linux
+        ${{ runner.os == 'Linux' && 'xvfb-run --server-args="-screen 0 1600x900x24" \' || '' }}
+        mvn \
           --errors \
           --update-snapshots \
           --batch-mode \

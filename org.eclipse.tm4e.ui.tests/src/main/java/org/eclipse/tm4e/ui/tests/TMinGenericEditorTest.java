@@ -18,11 +18,11 @@ import java.io.IOException;
 
 import org.eclipse.swt.custom.StyledText;
 import org.eclipse.swt.widgets.Control;
+import org.eclipse.tm4e.ui.internal.utils.UI;
 import org.eclipse.tm4e.ui.tests.support.TestUtils;
 import org.eclipse.ui.IEditorDescriptor;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.PartInitException;
-import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.ide.IDE;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -53,15 +53,10 @@ class TMinGenericEditorTest {
 		try (var fileOutputStream = new FileOutputStream(f)) {
 			fileOutputStream.write("let a = '';\nlet b = 10;\nlet c = true;".getBytes());
 		}
-		editor = IDE.openEditor(
-				PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage(),
-				f.toURI(),
-				genericEditorDescr.getId(),
-				true);
+		editor = IDE.openEditor(UI.getActivePage(), f.toURI(), genericEditorDescr.getId(), true);
 
-		final StyledText text = (StyledText) editor.getAdapter(Control.class);
-		assertTrue(TestUtils.waitForCondition(3_000, text.getDisplay(),
-				() -> text.getStyleRanges().length > 1));
+		final var text = (StyledText) editor.getAdapter(Control.class);
+		assertTrue(TestUtils.waitForCondition(3_000, () -> text.getStyleRanges().length > 1));
 	}
 
 	@Test
@@ -70,20 +65,15 @@ class TMinGenericEditorTest {
 		try (var fileOutputStream = new FileOutputStream(f)) {
 			fileOutputStream.write("let a = '';".getBytes());
 		}
-		editor = IDE.openEditor(
-				PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage(), f.toURI(),
-				genericEditorDescr.getId(),
-				true);
+		editor = IDE.openEditor(UI.getActivePage(), f.toURI(), genericEditorDescr.getId(), true);
 
-		final StyledText text = (StyledText) editor.getAdapter(Control.class);
-		assertTrue(TestUtils.waitForCondition(3_000, text.getDisplay(),
-				() -> text.getStyleRanges().length > 1));
+		final var text = (StyledText) editor.getAdapter(Control.class);
+		TestUtils.waitForAndAssertCondition(3_000, () -> text.getStyleRanges().length > 1);
 
 		final int initialNumberOfRanges = text.getStyleRanges().length;
 		text.setText("let a = '';\nlet b = 10;\nlet c = true;");
-		assertTrue(TestUtils.waitForCondition(3_000, text.getDisplay(),
-				() -> text.getStyleRanges().length > initialNumberOfRanges + 3),
-				"More styles should have been added");
+		TestUtils.waitForAndAssertCondition("More styles should have been added", 3_000,
+				() -> text.getStyleRanges().length > initialNumberOfRanges + 3);
 	}
 
 	@Test

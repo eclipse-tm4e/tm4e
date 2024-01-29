@@ -187,26 +187,6 @@
   </extension>
 
   <!-- ======================================== -->
-  <!-- csharp/csharp: C# -->
-  <!-- ======================================== -->
-  <extension point="org.eclipse.core.contenttype.contentTypes">
-    <content-type id="org.eclipse.tm4e.language_pack.csharp" name="C#" base-type="org.eclipse.tm4e.language_pack.basetype" priority="low"
-                  file-extensions="cake,cs,csx" />
-  </extension>
-  <extension point="org.eclipse.tm4e.registry.grammars">
-    <grammar scopeName="source.cs" path="syntaxes/csharp/csharp.tmLanguage.json" />
-    <scopeNameContentTypeBinding scopeName="source.cs" contentTypeId="org.eclipse.tm4e.language_pack.csharp" />
-  </extension>
-
-  <extension point="org.eclipse.tm4e.languageconfiguration.languageConfigurations">
-    <languageConfiguration contentTypeId="org.eclipse.tm4e.language_pack.csharp" path="syntaxes/csharp/csharp.language-configuration.json" />
-  </extension>
-
-  <extension point="org.eclipse.tm4e.ui.snippets">
-    <snippet name="C# Example" path="syntaxes/csharp/csharp.example.cs" scopeName="source.cs" />
-  </extension>
-
-  <!-- ======================================== -->
   <!-- css/css: CSS -->
   <!-- ======================================== -->
   <extension point="org.eclipse.core.contenttype.contentTypes">

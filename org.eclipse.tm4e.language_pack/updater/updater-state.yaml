@@ -93,21 +93,6 @@ extensions:
         - .cuh
     inline-grammars:
     - source.c.platform
-  csharp:
-    github:
-      repo: microsoft/vscode
-      path: extensions/csharp
-      ref: 1.85.2
-      commit: 8b3775030ed1a69b13e4f4c628c612102e30a681
-    languages:
-      csharp:
-        label: C#
-        scope-name: source.cs
-        upstream-url: https://github.com/dotnet/csharp-tmLanguage/commit/6666eb1d5e6fb565a4110d6db645cc534fb3c6d2
-        file-extensions:
-        - .cake
-        - .cs
-        - .csx
   css:
     github:
       repo: microsoft/vscode

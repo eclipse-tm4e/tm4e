@@ -103,6 +103,9 @@ sources:
           bat:
             label: Batch File
 
+      csharp:
+        ignored: uses variable length look-behind not supported by joni, see https://github.com/eclipse/tm4e/issues/677
+
       diff:
         ignored: theme support required
 
@@ -136,9 +139,7 @@ sources:
         ignored: 'broken, maybe because of file extension: *.log.?'
 
       markdown-math:
-        ignored: >-
-          broken because math.block begin regex not supported by Joni. Re-enable
-          when the following is fixed and integrated: https://github.com/microsoft/vscode/issues/181662
+        ignored: uses variable length look-behind not supported by joni, see https://github.com/eclipse/tm4e/issues/677
         languages:
           markdown-math:
            label: Markdown Math

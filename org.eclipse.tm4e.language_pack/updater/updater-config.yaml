@@ -136,9 +136,6 @@ sources:
         ignored: 'broken, maybe because of file extension: *.log.?'
 
       markdown-math:
-        ignored: >-
-          broken because math.block begin regex not supported by Joni. Re-enable
-          when the following is fixed and integrated: https://github.com/microsoft/vscode/issues/181662
         languages:
           markdown-math:
            label: Markdown Math
@@ -162,7 +159,6 @@ sources:
             label: ASP.NET Razor
 
       search-result:
-        ignored: syntax highlighting broken
         languages:
           search-result:
             label: VS Code Search Result

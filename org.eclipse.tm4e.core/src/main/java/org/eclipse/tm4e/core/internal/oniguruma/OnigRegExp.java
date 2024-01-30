@@ -70,9 +70,9 @@ public final class OnigRegExp {
 	 * @throws TMException if parsing fails
 	 */
 	public OnigRegExp(final String pattern, final boolean ignoreCase) {
-		this.pattern = pattern;
-		hasGAnchor = pattern.contains("\\G");
-		final byte[] patternBytes = pattern.getBytes(StandardCharsets.UTF_8);
+		this.pattern = rewritePatternIfRequired(pattern);
+		hasGAnchor = this.pattern.contains("\\G");
+		final byte[] patternBytes = this.pattern.getBytes(StandardCharsets.UTF_8);
 		try {
 			int options = Option.CAPTURE_GROUP;
 			if (ignoreCase)
@@ -80,8 +80,30 @@ public final class OnigRegExp {
 			regex = new Regex(patternBytes, 0, patternBytes.length, options, UTF8Encoding.INSTANCE, Syntax.DEFAULT,
 					LOGGER.isLoggable(Level.WARNING) ? LOGGER_WARN_CALLBACK : WarnCallback.NONE);
 		} catch (final SyntaxException ex) {
-			throw new TMException("Parsing regex pattern \"" + pattern + "\" failed with " + ex, ex);
+			throw new TMException("Parsing regex pattern \"" + this.pattern + "\" failed with " + ex, ex);
 		}
+	}
+
+	/**
+	 * Rewrites the given pattern to workaround limitations of the joni library which for example does not support
+	 * negative variable-length lookbehinds
+	 *
+	 * @see <a href="https://github.com/eclipse/tm4e/issues/677">github.com/eclipse/tm4e/issue/677</a>
+	 */
+	private String rewritePatternIfRequired(final String pattern) {
+
+		// e.g. used in csharp.tmLanguage.json
+		final var lookbehind1 = "(?<!\\.\\s*)";
+		if (pattern.startsWith(lookbehind1)) {
+			return "(?<!\\.)\\s*" + pattern.substring(lookbehind1.length());
+		}
+
+		// e.g. used in markdown.math.inline.tmLanguage.json
+		final var lookbehind2 = "(?<=^\\s*)";
+		if (pattern.startsWith(lookbehind2)) {
+			return "(?<=^)\\s*" + pattern.substring(lookbehind2.length());
+		}
+		return pattern;
 	}
 
 	/**

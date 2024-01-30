@@ -817,6 +817,34 @@
   </extension>
 
   <!-- ======================================== -->
+  <!-- markdown-math/markdown-math: Markdown Math -->
+  <!-- ======================================== -->
+  <extension point="org.eclipse.core.contenttype.contentTypes">
+    <content-type id="org.eclipse.tm4e.language_pack.markdown-math" name="Markdown Math" base-type="org.eclipse.tm4e.language_pack.basetype" priority="low"
+                   />
+  </extension>
+  <extension point="org.eclipse.tm4e.registry.grammars">
+    <grammar scopeName="text.html.markdown.math" path="syntaxes/markdown-math/markdown-math.tmLanguage.json" />
+    <scopeNameContentTypeBinding scopeName="text.html.markdown.math" contentTypeId="org.eclipse.tm4e.language_pack.markdown-math" />
+  </extension>
+
+  <extension point="org.eclipse.ui.genericeditor.icons">
+    <icon contentType="org.eclipse.tm4e.language_pack.markdown-math" icon="syntaxes/markdown-math/icon.png"/>
+  </extension>
+
+  <extension point="org.eclipse.tm4e.ui.snippets">
+    <snippet name="Markdown Math Example" path="syntaxes/markdown-math/markdown-math.example.md" scopeName="text.html.markdown.math" />
+  </extension>
+
+  <!-- ======================================== -->
+  <!-- markdown-math: Inline Grammars -->
+  <!-- ======================================== -->
+  <extension point="org.eclipse.tm4e.registry.grammars">
+    <grammar scopeName="markdown.math.block" path="syntaxes/markdown-math/markdown.math.block.tmLanguage.json" />
+    <grammar scopeName="markdown.math.inline" path="syntaxes/markdown-math/markdown.math.inline.tmLanguage.json" />
+  </extension>
+
+  <!-- ======================================== -->
   <!-- objective-c/objective-c: Objective-C -->
   <!-- ======================================== -->
   <extension point="org.eclipse.core.contenttype.contentTypes">
@@ -1112,6 +1140,26 @@
   <!-- ======================================== -->
   <extension point="org.eclipse.tm4e.registry.grammars">
     <grammar scopeName="source.sassdoc" path="syntaxes/scss/source.sassdoc.tmLanguage.json" />
+  </extension>
+
+  <!-- ======================================== -->
+  <!-- search-result/search-result: VS Code Search Result -->
+  <!-- ======================================== -->
+  <extension point="org.eclipse.core.contenttype.contentTypes">
+    <content-type id="org.eclipse.tm4e.language_pack.search-result" name="VS Code Search Result" base-type="org.eclipse.tm4e.language_pack.basetype" priority="low"
+                  file-extensions="code-search" />
+  </extension>
+  <extension point="org.eclipse.tm4e.registry.grammars">
+    <grammar scopeName="text.searchResult" path="syntaxes/search-result/search-result.tmLanguage.json" />
+    <scopeNameContentTypeBinding scopeName="text.searchResult" contentTypeId="org.eclipse.tm4e.language_pack.search-result" />
+  </extension>
+
+  <extension point="org.eclipse.ui.genericeditor.icons">
+    <icon contentType="org.eclipse.tm4e.language_pack.search-result" icon="syntaxes/search-result/icon.png"/>
+  </extension>
+
+  <extension point="org.eclipse.tm4e.ui.snippets">
+    <snippet name="VS Code Search Result Example" path="syntaxes/search-result/search-result.example.code-search" scopeName="text.searchResult" />
   </extension>
 
   <!-- ======================================== -->

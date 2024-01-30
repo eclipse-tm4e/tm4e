@@ -541,6 +541,19 @@ extensions:
         - .mdwn
         - .mkd
         - .workbook
+  markdown-math:
+    github:
+      repo: microsoft/vscode
+      path: extensions/markdown-math
+      ref: 1.85.2
+      commit: 8b3775030ed1a69b13e4f4c628c612102e30a681
+    languages:
+      markdown-math:
+        label: Markdown Math
+        scope-name: text.html.markdown.math
+    inline-grammars:
+    - markdown.math.block
+    - markdown.math.inline
   objective-c:
     github:
       repo: microsoft/vscode
@@ -785,8 +798,14 @@ extensions:
     github:
       repo: microsoft/vscode
       path: extensions/search-result
-      ref: 1.84.0
-      commit: d037ac076cee195194f93ce6fe2bdfe2969cc82d
+      ref: 1.85.2
+      commit: 8b3775030ed1a69b13e4f4c628c612102e30a681
+    languages:
+      search-result:
+        label: VS Code Search Result
+        scope-name: text.searchResult
+        file-extensions:
+        - .code-search
   shaderlab:
     github:
       repo: microsoft/vscode

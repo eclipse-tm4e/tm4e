@@ -1,0 +1,38 @@
+# Query: driver
+# Flags: CaseSensitive
+# Including: ./apps/api
+# Excluding: coverage
+# ContextLines: 1
+
+11 results - 6 files
+
+apps/api/CHANGELOG.md:
+   31
+   32: - Adds `ignoreEvents` configuration option to driver
+   33
+
+   97
+   98: - adds notification handler for ReactionAssignments in hcl-connections driver
+   99
+
+  151
+  152:   - upgrades prisma (database driver) to version 5
+  153      Prisma's `where unique` type has changed with v5 and caused tsc issues
+
+apps/api/tsconfig.build.tsbuildinfo:
+  1: ⟪ 121356 characters skipped ⟫"../../node_modules/.pnpm/@nestjs+graphql@12.0.11_@nestjs+common@10.3.0_@nestjs+core@10.3.0_class-transformer@0.5.1_gra_wxctlts2722cmuutd77kwrpaku/node_modules/@nestjs/graphql/dist/interfaces/graphql-driver.interface.d.ts"
+
+apps/api/src/app.module.ts:
+  29          GraphQLModule.forRoot<ApolloDriverConfig>({
+  30:           driver: ApolloDriver,
+  31            autoSchemaFile:
+
+apps/api/src/modules/common/notifications/notifications.module.ts:
+  6
+  7: import { catalog } from './channel-drivers/catalog.js';
+  8  import { OnAnyListener } from './listeners/on-any.listener.js';
+
+apps/api/src/modules/common/__fixtures__/testing.app.module.ts:
+  12    imports: [GraphQLModule.forRoot<ApolloDriverConfig>({
+  13:     driver: ApolloDriver,
+  14      autoSchemaFile: true,

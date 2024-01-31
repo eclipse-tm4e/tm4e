@@ -6,6 +6,10 @@
  *
  * SPDX-License-Identifier: EPL-2.0
  *
+ * Initial code from https://github.com/microsoft/vscode-textmate/
+ * Initial copyright Copyright (C) Microsoft Corporation. All rights reserved.
+ * Initial license: MIT
+ *
  * Contributors:
  * Angelo Zerr <angelo.zerr@gmail.com> - initial API and implementation
  */
@@ -23,11 +27,34 @@ import org.junit.jupiter.api.TestMethodOrder;
 /**
  * {@link EncodedTokenAttributes} tests same than vscode-textmate.
  *
- * @see <a href="https://github.com/Microsoft/vscode-textmate/blob/master/src/tests/grammar.test.ts">
+ * @see <a href="https://github.com/microsoft/vscode-textmate/blob/09effd8b7429b71010e0fa34ea2e16e622692946/src/tests/grammar.test.ts">
  *      github.com/Microsoft/vscode-textmate/blob/master/src/tests/grammar.test.ts</a>
  */
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 class EncodedTokenAttributesTest {
+
+	private static void assertEquals(final int metadata, final int languageId, final int /*StandardTokenType*/ tokenType,
+			final boolean containsBalancedBrackets, final int /*FontStyle*/ fontStyle, final int foreground, final int background) {
+		final var actual = "{\n"
+				+ "languageId: " + EncodedTokenAttributes.getLanguageId(metadata) + ",\n"
+				+ "tokenType: " + EncodedTokenAttributes.getTokenType(metadata) + ",\n"
+				+ "containsBalancedBrackets: " + EncodedTokenAttributes.containsBalancedBrackets(metadata) + ",\n"
+				+ "fontStyle: " + EncodedTokenAttributes.getFontStyle(metadata) + ",\n"
+				+ "foreground: " + EncodedTokenAttributes.getForeground(metadata) + ",\n"
+				+ "background: " + EncodedTokenAttributes.getBackground(metadata) + ",\n"
+				+ "}";
+
+		final var expected = "{\n"
+				+ "languageId: " + languageId + ",\n"
+				+ "tokenType: " + tokenType + ",\n"
+				+ "containsBalancedBrackets: " + containsBalancedBrackets + ",\n"
+				+ "fontStyle: " + fontStyle + ",\n"
+				+ "foreground: " + foreground + ",\n"
+				+ "background: " + background + ",\n"
+				+ "}";
+
+		Assertions.assertEquals(expected, actual, "equals for " + EncodedTokenAttributes.toBinaryStr(metadata));
+	}
 
 	@Test
 	@Order(1)
@@ -129,30 +156,5 @@ class EncodedTokenAttributesTest {
 
 		final int value = EncodedTokenAttributes.set(0, maxLangId, maxTokenType, true, maxFontStyle, maxForeground, maxBackground);
 		assertEquals(value, maxLangId, maxTokenType, true, maxFontStyle, maxForeground, maxBackground);
-	}
-
-	private static void assertEquals(final int metadata, final int languageId,
-			final int /*StandardTokenType*/ tokenType,
-			final boolean containsBalancedBrackets, final int /*FontStyle*/ fontStyle, final int foreground,
-			final int background) {
-		final var actual = "{\n"
-				+ "languageId: " + EncodedTokenAttributes.getLanguageId(metadata) + ",\n"
-				+ "tokenType: " + EncodedTokenAttributes.getTokenType(metadata) + ",\n"
-				+ "containsBalancedBrackets: " + EncodedTokenAttributes.containsBalancedBrackets(metadata) + ",\n"
-				+ "fontStyle: " + EncodedTokenAttributes.getFontStyle(metadata) + ",\n"
-				+ "foreground: " + EncodedTokenAttributes.getForeground(metadata) + ",\n"
-				+ "background: " + EncodedTokenAttributes.getBackground(metadata) + ",\n"
-				+ "}";
-
-		final var expected = "{\n"
-				+ "languageId: " + languageId + ",\n"
-				+ "tokenType: " + tokenType + ",\n"
-				+ "containsBalancedBrackets: " + containsBalancedBrackets + ",\n"
-				+ "fontStyle: " + fontStyle + ",\n"
-				+ "foreground: " + foreground + ",\n"
-				+ "background: " + background + ",\n"
-				+ "}";
-
-		Assertions.assertEquals(expected, actual, "equals for " + EncodedTokenAttributes.toBinaryStr(metadata));
 	}
 }

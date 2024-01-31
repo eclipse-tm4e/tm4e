@@ -26,9 +26,8 @@ import java.util.regex.Pattern;
 import org.eclipse.jdt.annotation.Nullable;
 
 /**
- * Matcher utilities.
- *
- * @see <a href="https://github.com/microsoft/vscode-textmate/blob/main/src/matcher.ts">
+ * @see <a href=
+ *      "https://github.com/microsoft/vscode-textmate/blob/09effd8b7429b71010e0fa34ea2e16e622692946/src/matcher.ts#L14">
  *      github.com/microsoft/vscode-textmate/blob/main/src/matcher.ts</a>
  */
 final class MatcherBuilder<T> {
@@ -150,7 +149,9 @@ final class MatcherBuilder<T> {
 	}
 
 	/**
-	 * https://github.com/microsoft/vscode-textmate/blob/main/src/matcher.ts#L89
+	 * @see <a href=
+	 *      "https://github.com/microsoft/vscode-textmate/blob/09effd8b7429b71010e0fa34ea2e16e622692946/src/matcher.ts#L89">
+	 *      github.com/microsoft/vscode-textmate/blob/main/src/matcher.ts</a>
 	 */
 	private boolean isIdentifier(final String token) {
 		if (token.isEmpty())
@@ -175,11 +176,13 @@ final class MatcherBuilder<T> {
 		return true;
 	}
 
+	/**
+	 * @see <a href=
+	 *      "https://github.com/microsoft/vscode-textmate/blob/09effd8b7429b71010e0fa34ea2e16e622692946/src/matcher.ts#L93">
+	 *      github.com/microsoft/vscode-textmate/blob/main/src/matcher.ts</a>
+	 */
 	private static final class Tokenizer {
 
-		/**
-		 * https://github.com/microsoft/vscode-textmate/blob/main/src/matcher.ts#L94
-		 */
 		static final Pattern TOKEN_PATTERN = Pattern.compile("([LR]:|[\\w\\.:][\\w\\.:\\-]*|[\\,\\|\\-\\(\\)])");
 
 		final java.util.regex.Matcher regex;

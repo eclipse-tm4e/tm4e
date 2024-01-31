@@ -27,8 +27,8 @@ import com.google.gson.reflect.TypeToken;
 /**
  * VSCode TextMate matcher tests
  *
- * @see <a href="https://github.com/Microsoft/vscode-textmate/blob/master/src/tests/matcher.test.ts">
- *      github.com/Microsoft/vscode-textmate/blob/master/src/tests/matcher.test.ts</a>
+ * @see <a href="https://github.com/microsoft/vscode-textmate/blob/09effd8b7429b71010e0fa34ea2e16e622692946/src/tests/matcher.test.ts">
+ *      github.com/microsoft/vscode-textmate/blob/main/src/tests/matcher.test.ts</a>
  */
 public class MatcherTest {
 

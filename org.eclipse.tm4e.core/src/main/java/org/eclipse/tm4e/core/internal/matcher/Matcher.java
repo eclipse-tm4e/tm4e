@@ -18,6 +18,11 @@ package org.eclipse.tm4e.core.internal.matcher;
 
 import java.util.List;
 
+/**
+ * @see <a href=
+ *      "https://github.com/microsoft/vscode-textmate/blob/09effd8b7429b71010e0fa34ea2e16e622692946/src/matcher.ts#L10">
+ *      github.com/microsoft/vscode-textmate/blob/main/src/matcher.ts</a>
+ */
 @FunctionalInterface
 public interface Matcher<T> {
 

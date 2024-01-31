@@ -22,7 +22,7 @@ import org.eclipse.tm4e.core.internal.grammar.raw.IRawRepository;
 
 /**
  * @see <a href=
- *      "https://github.com/microsoft/vscode-textmate/blob/88baacf1a6637c5ec08dce18cea518d935fcf0a0/src/rule.ts#L17">
+ *      "https://github.com/microsoft/vscode-textmate/blob/09effd8b7429b71010e0fa34ea2e16e622692946/src/rule.ts#L17">
  *      github.com/microsoft/vscode-textmate/blob/main/src/rule.ts</a>
  */
 interface IGrammarRegistry {

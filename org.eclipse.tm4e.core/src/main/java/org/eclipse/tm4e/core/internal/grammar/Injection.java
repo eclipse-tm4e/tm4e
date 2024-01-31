@@ -24,14 +24,16 @@ import org.eclipse.tm4e.core.internal.rule.RuleId;
 
 /**
  * @see <a href=
- *      "https://github.com/microsoft/vscode-textmate/blob/88baacf1a6637c5ec08dce18cea518d935fcf0a0/src/grammar/grammar.ts#L49">
+ *      "https://github.com/microsoft/vscode-textmate/blob/09effd8b7429b71010e0fa34ea2e16e622692946/src/grammar/grammar.ts#L49">
  *      github.com/microsoft/vscode-textmate/blob/main/src/grammar/grammar.ts</a>
  */
 final class Injection {
 
 	final String debugSelector;
 	private final Matcher<List<String>> matcher;
-	final int priority; // -1 | 0 | 1; // 0 is the default. -1 for 'L' and 1 for 'R'
+
+	/** -1 | 0 | 1; // 0 is the default. -1 for 'L' and 1 for 'R' */
+	final int priority;
 	final RuleId ruleId;
 	final IRawGrammar grammar;
 

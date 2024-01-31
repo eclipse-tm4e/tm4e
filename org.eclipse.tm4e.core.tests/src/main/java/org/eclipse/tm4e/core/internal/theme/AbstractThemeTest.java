@@ -6,14 +6,6 @@
  * which is available at https://www.eclipse.org/legal/epl-2.0/
  *
  * SPDX-License-Identifier: EPL-2.0
- *
- * Initial code from https://github.com/Microsoft/vscode-textmate/
- * Initial copyright Copyright (C) Microsoft Corporation. All rights reserved.
- * Initial license: MIT
- *
- * Contributors:
- * - Microsoft Corporation: Initial code, written in TypeScript, licensed under MIT license
- * - Sebastian Thomschke - translation and adaptation to Java
  */
 package org.eclipse.tm4e.core.internal.theme;
 

@@ -31,7 +31,7 @@ import org.eclipse.tm4e.core.internal.utils.StringUtils;
  * TextMate theme.
  *
  * @see <a href=
- *      "https://github.com/microsoft/vscode-textmate/blob/88baacf1a6637c5ec08dce18cea518d935fcf0a0/src/theme.ts#L7">
+ *      "https://github.com/microsoft/vscode-textmate/blob/09effd8b7429b71010e0fa34ea2e16e622692946/src/theme.ts#L7">
  *      github.com/microsoft/vscode-textmate/blob/main/src/theme.ts</a>
  */
 public final class Theme {

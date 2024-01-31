@@ -6,8 +6,13 @@
  *
  * SPDX-License-Identifier: EPL-2.0
  *
+ * Initial code from https://github.com/microsoft/vscode-textmate/
+ * Initial copyright Copyright (C) Microsoft Corporation. All rights reserved.
+ * Initial license: MIT
+ *
  * Contributors:
- * Angelo Zerr <angelo.zerr@gmail.com> - initial API and implementation
+ * - Microsoft Corporation: Initial code, written in TypeScript, licensed under MIT license
+ * - Angelo Zerr <angelo.zerr@gmail.com> - initial API and implementation
  */
 package org.eclipse.tm4e.core.internal.theme;
 
@@ -21,8 +26,8 @@ import org.junit.jupiter.api.TestMethodOrder;
 
 /**
  * @see <a href=
- *      "https://github.com/Microsoft/vscode-textmate/blob/e8d1fc5d04b2fc91384c7a895f6c9ff296a38ac8/src/tests/themes.test.ts#L286">
- *      github.com/Microsoft/vscode-textmate/blob/master/src/tests/themes.test.ts</a>
+ *      "https://github.com/microsoft/vscode-textmate/blob/09effd8b7429b71010e0fa34ea2e16e622692946/src/tests/themes.test.ts#L286">
+ *      github.com/microsoft/vscode-textmate/blob/main/src/tests/themes.test.ts</a>
  */
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class ThemeParsingTest extends AbstractThemeTest {

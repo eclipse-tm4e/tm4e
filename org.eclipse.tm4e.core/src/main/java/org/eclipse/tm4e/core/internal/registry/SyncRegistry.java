@@ -33,7 +33,7 @@ import org.eclipse.tm4e.core.internal.utils.ScopeNames;
 
 /**
  * @see <a href=
- *      "https://github.com/microsoft/vscode-textmate/blob/88baacf1a6637c5ec08dce18cea518d935fcf0a0/src/registry.ts">
+ *      "https://github.com/microsoft/vscode-textmate/blob/09effd8b7429b71010e0fa34ea2e16e622692946/src/registry.ts#L11">
  *      github.com/microsoft/vscode-textmate/blob/main/src/registry.ts</a>
  */
 public class SyncRegistry implements IGrammarRepository, IThemeProvider {

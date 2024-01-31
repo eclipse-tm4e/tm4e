@@ -17,7 +17,7 @@ import org.eclipse.tm4e.core.internal.theme.IThemeSetting;
 /**
  * A single theme setting.
  *
- * @see <a href="https://github.com/microsoft/vscode-textmate/blob/b6bbee8d53c029d9279a0c9a998b78f05247d6d1/src/theme.ts#L91">
+ * @see <a href="https://github.com/microsoft/vscode-textmate/blob/09effd8b7429b71010e0fa34ea2e16e622692946/src/theme.ts#L91">
  *      github.com/microsoft/vscode-textmate/blob/main/src/theme.ts</a>
  */
 public interface IRawThemeSetting {

@@ -6,6 +6,10 @@
  *
  * SPDX-License-Identifier: EPL-2.0
  *
+ * Initial code from https://github.com/microsoft/vscode-textmate/
+ * Initial copyright Copyright (C) Microsoft Corporation. All rights reserved.
+ * Initial license: MIT
+ *
  * Contributors:
  * Angelo Zerr <angelo.zerr@gmail.com> - initial API and implementation
  */
@@ -26,8 +30,8 @@ import org.eclipse.tm4e.core.registry.IRegistryOptions;
 import org.eclipse.tm4e.core.registry.Registry;
 
 /**
- * @see <a href="https://github.com/Microsoft/vscode-textmate/blob/master/src/tests/tokenization.tests.ts">
- *      github.com/Microsoft/vscode-textmate/blob/master/src/tests/tokenization.tests.ts</a>
+ * @see <a href="https://github.com/microsoft/vscode-textmate/blob/09effd8b7429b71010e0fa34ea2e16e622692946/src/tests/tokenization.test.ts">
+ *      github.com/microsoft/vscode-textmate/blob/main/src/tests/tokenization.test.ts</a>
  */
 public class RawTestImpl {
 

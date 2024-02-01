@@ -7,7 +7,7 @@
  *
  * SPDX-License-Identifier: EPL-2.0
  **********************************************************************/
-package org.eclipse.tm4e.languageconfiguration.internal.supports;
+package org.eclipse.tm4e.languageconfiguration.internal.model;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -24,7 +24,6 @@ import java.nio.file.attribute.BasicFileAttributes;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import org.eclipse.jdt.annotation.Nullable;
-import org.eclipse.tm4e.languageconfiguration.internal.model.LanguageConfiguration;
 import org.junit.jupiter.api.Test;
 
 class ParsingTest {

@@ -1,33 +1,76 @@
 /**
  * Copyright (c) 2015-2017 Angelo ZERR.
+ *
  * This program and the accompanying materials are made
  * available under the terms of the Eclipse Public License 2.0
  * which is available at https://www.eclipse.org/legal/epl-2.0/
  *
  * SPDX-License-Identifier: EPL-2.0
  *
+ * Initial code from https://github.com/microsoft/vscode/
+ * Initial copyright Copyright (C) Microsoft Corporation. All rights reserved.
+ * Initial license: MIT
+ *
  * Contributors:
- * Angelo Zerr <angelo.zerr@gmail.com> - initial API and implementation
- * Sebastian Thomschke (Vegard IT GmbH) - refactor and extend test cases
+ * - Microsoft Corporation: Initial code, written in TypeScript, licensed under MIT license
+ * - Angelo Zerr <angelo.zerr@gmail.com> - translation and adaptation to Java
+ * - Sebastian Thomschke (Vegard IT GmbH) - refactor and extend test cases
  */
-package org.eclipse.tm4e.languageconfiguration.internal.model;
+package org.eclipse.tm4e.languageconfiguration.internal.supports;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.List;
 
 import org.eclipse.jdt.annotation.Nullable;
+import org.eclipse.tm4e.languageconfiguration.internal.model.CharacterPair;
+import org.eclipse.tm4e.languageconfiguration.internal.model.EnterAction;
 import org.eclipse.tm4e.languageconfiguration.internal.model.EnterAction.IndentAction;
-import org.eclipse.tm4e.languageconfiguration.internal.supports.OnEnterSupport;
+import org.eclipse.tm4e.languageconfiguration.internal.model.OnEnterRule;
+import org.eclipse.tm4e.languageconfiguration.internal.model.RegExPattern;
 import org.junit.jupiter.api.Test;
 
 /**
  * {@link OnEnterSupport} tests.
  *
- * @see <a href="https://github.com/microsoft/vscode/blob/main/src/vs/editor/test/common/modes/supports/onEnter.test.ts">
- *      https://github.com/microsoft/vscode/blob/main/src/vs/editor/test/common/modes/supports/onEnter.test.ts</a>
+ * @see <a href=
+ *      "https://github.com/microsoft/vscode/blob/ba2cf46e20df3edf77bdd905acde3e175d985f70/src/vs/editor/test/common/modes/supports/onEnter.test.ts">
+ *      github.com/microsoft/vscode/blob/main/src/vs/editor/test/common/modes/supports/onEnter.test.ts</a>
  */
 class OnEnterSupportTest {
+
+	/**
+	 * @see <a href=
+	 *      "https://github.com/microsoft/vscode/blob/ba2cf46e20df3edf77bdd905acde3e175d985f70/src/vs/editor/test/common/modes/supports/javascriptOnEnterRules.ts">
+	 *      github.com/microsoft/vscode/blob/main/src/vs/editor/test/common/modes/supports/javascriptOnEnterRules.ts</a>
+	 */
+	static final List<OnEnterRule> javaScriptOnEnterRules = List.of(
+			new OnEnterRule( // e.g. /** | */
+					RegExPattern.of("^\\s*\\/\\*\\*(?!\\/)([^\\*]|\\*(?!\\/))*$"),
+					RegExPattern.of("^\\s*\\*\\/$"),
+					null,
+					new EnterAction(IndentAction.IndentOutdent, " * ", null)),
+			new OnEnterRule( // e.g. /** ...|
+					RegExPattern.of("^\\s*\\/\\*\\*(?!\\/)([^\\*]|\\*(?!\\/))*$"),
+					null,
+					null,
+					new EnterAction(IndentAction.None, " * ", null)),
+			new OnEnterRule(
+					// e.g.  * ...|
+					RegExPattern.of("^(\\t|(\\ \\ ))*\\ \\*(\\ ([^\\*]|\\*(?!\\/))*)?$"),
+					null,
+					RegExPattern.of("(?=^(\\s*(\\/\\*\\*|\\*)).*)(?=(?!(\\s*\\*\\/)))"),
+					new EnterAction(IndentAction.None, "* ", null)),
+			new OnEnterRule( // e.g.  */|
+					RegExPattern.of("^(\\t|(\\ \\ ))*\\ \\*\\/\\s*$"),
+					null,
+					null,
+					new EnterAction(IndentAction.None, null, 1)),
+			new OnEnterRule( // e.g.  *-----*/|
+					RegExPattern.of("^(\\t|(\\ \\ ))*\\ \\*[^/]*\\*\\/\\s*$"),
+					null,
+					null,
+					new EnterAction(IndentAction.None, null, 1)));
 
 	@Test
 	void testUseBrackets() {
@@ -74,42 +117,20 @@ class OnEnterSupportTest {
 	}
 
 	@Test
-	void testRegExpRules() {
+	void testUseRegExpRules() {
 
 		class Support extends OnEnterSupport {
 			Support() {
-				super(null, List.of(
-						// see https://github.com/microsoft/vscode/blob/main/src/vs/editor/test/common/modes/supports/javascriptOnEnterRules.ts
-						new OnEnterRule( // e.g. /** | */
-								"^\\s*\\/\\*\\*(?!\\/)([^\\*]|\\*(?!\\/))*$",
-								"^\\s*\\*\\/$", null,
-								new EnterAction(IndentAction.IndentOutdent, " * ", null)),
-						new OnEnterRule( // e.g. /** ...|
-								"^\\s*\\/\\*\\*(?!\\/)([^\\*]|\\*(?!\\/))*$",
-								null, null,
-								new EnterAction(IndentAction.None, " * ", null)),
-						new OnEnterRule(
-								// e.g.  * ...|
-								"^(\\t|(\\ \\ ))*\\ \\*(\\ ([^\\*]|\\*(?!\\/))*)?$",
-								null, "(?=^(\\s*(\\/\\*\\*|\\*)).*)(?=(?!(\\s*\\*\\/)))",
-								new EnterAction(IndentAction.None, "* ", null)),
-						new OnEnterRule( // e.g.  */|
-								"^(\\t|(\\ \\ ))*\\ \\*\\/\\s*$",
-								null, null,
-								new EnterAction(IndentAction.None, null, 1)),
-						new OnEnterRule( // e.g.  *-----*/|
-								"^(\\t|(\\ \\ ))*\\ \\*[^/]*\\*\\/\\s*$",
-								null, null,
-								new EnterAction(IndentAction.None, null, 1))));
+				super(null, javaScriptOnEnterRules);
 			}
 
 			void testIndentAction(final String previousLineText, final String beforeText, final String afterText,
-					@Nullable final IndentAction expectedIndentAction, @Nullable final String expectedAppendText) {
+					final @Nullable IndentAction expectedIndentAction, final @Nullable String expectedAppendText) {
 				testIndentAction(previousLineText, beforeText, afterText, expectedIndentAction, expectedAppendText, 0);
 			}
 
 			void testIndentAction(final String previousLineText, final String beforeText, final String afterText,
-					@Nullable final IndentAction expectedIndentAction, @Nullable final String expectedAppendText,
+					final @Nullable IndentAction expectedIndentAction, final @Nullable String expectedAppendText,
 					final int removeText) {
 				final EnterAction actual = onEnter(previousLineText, beforeText, afterText);
 				if (expectedIndentAction == null) {
@@ -196,5 +217,30 @@ class OnEnterSupportTest {
 		support.testIndentAction("class A {", "  * test() {", "", IndentAction.Indent, null, 0);
 		support.testIndentAction("", "  * test() {", "", IndentAction.Indent, null, 0);
 		support.testIndentAction("  ", "  * test() {", "", IndentAction.Indent, null, 0);
+	}
+
+	@Test
+	void testVscodeIssue43469() {
+
+		class Support extends OnEnterSupport {
+			Support() {
+				super(null, javaScriptOnEnterRules);
+			}
+
+			void testIndentAction(final String beforeText, final String afterText, final @Nullable IndentAction expected) {
+				final EnterAction actual = onEnter("", beforeText, afterText);
+				if (expected == IndentAction.None) {
+					assertNull(actual);
+				} else {
+					assertNotNull(actual);
+					assertEquals(expected, actual.indentAction);
+				}
+			}
+		}
+
+		final var support = new Support();
+		support.testIndentAction("const r = /{/;", "", IndentAction.None);
+		support.testIndentAction("const r = /{[0-9]/;", "", IndentAction.None);
+		support.testIndentAction("const r = /[a-zA-Z]{/;", "", IndentAction.None);
 	}
 }

@@ -18,66 +18,47 @@ import org.eclipse.tm4e.core.internal.utils.StringUtils;
  * Describes what to do when pressing Enter.
  *
  * @see <a href=
- *      "https://github.com/microsoft/vscode/blob/8e2ec5a7ee1ae5500c645c05145359f2a814611c/src/vs/editor/common/languages/languageConfiguration.ts#L232">
+ *      "https://github.com/microsoft/vscode/blob/ba2cf46e20df3edf77bdd905acde3e175d985f70/src/vs/editor/common/languages/languageConfiguration.ts#L232">
  *      github.com/microsoft/vscode/blob/main/src/vs/editor/common/languages/languageConfiguration.ts#L232</a>
  */
 public class EnterAction {
 
 	public enum IndentAction {
-		/**
-		 * Insert new line and copy the previous line's indentation.
-		 */
+		/** Insert new line and copy the previous line's indentation. */
 		None,
-		/**
-		 * Insert new line and indent once (relative to the previous line's
-		 * indentation).
-		 */
+
+		/** Insert new line and indent once (relative to the previous line's indentation). */
 		Indent,
-		/**
-		 * Insert two new lines: - the first one indented which will hold the cursor -
-		 * the second one at the same indentation level
-		 */
+
+		/** Insert two new lines: the first one indented which will hold the cursor; the second one at the same indentation level */
 		IndentOutdent,
-		/**
-		 * Insert new line and outdent once (relative to the previous line's
-		 * indentation).
-		 */
+
+		/** Insert new line and outdent once (relative to the previous line's indentation). */
 		Outdent;
 
 		public static IndentAction get(final @Nullable String value) {
 			// see
-			// https://github.com/microsoft/vscode/blob/13ba7bb446a638d37ebccb1a7d74e31c32bb9790/src/vs/workbench/contrib/codeEditor/browser/languageConfigurationExtensionPoint.ts#L341
+			// https://github.com/microsoft/vscode/blob/ba2cf46e20df3edf77bdd905acde3e175d985f70/src/vs/workbench/contrib/codeEditor/browser/languageConfigurationExtensionPoint.ts#L336
 			if (value == null) {
 				return IndentAction.None;
 			}
-			switch (value) {
-				case "none":
-					return IndentAction.None;
-				case "indent":
-					return IndentAction.Indent;
-				case "indentOutdent":
-					return IndentAction.IndentOutdent;
-				case "outdent":
-					return IndentAction.Outdent;
-				default:
-					return IndentAction.None;
-			}
+			return switch (value) {
+				case "none" -> IndentAction.None;
+				case "indent" -> IndentAction.Indent;
+				case "indentOutdent" -> IndentAction.IndentOutdent;
+				case "outdent" -> IndentAction.Outdent;
+				default -> IndentAction.None;
+			};
 		}
 	}
 
-	/**
-	 * Describe what to do with the indentation.
-	 */
+	/** Describe what to do with the indentation. */
 	public final IndentAction indentAction;
 
-	/**
-	 * Describes text to be appended after the new line and after the indentation.
-	 */
+	/** Describes text to be appended after the new line and after the indentation. */
 	public final @Nullable String appendText;
 
-	/**
-	 * Describes the number of characters to remove from the new line's indentation.
-	 */
+	/** Describes the number of characters to remove from the new line's indentation. */
 	public final @Nullable Integer removeText;
 
 	public EnterAction(final IndentAction indentAction) {

@@ -6,7 +6,7 @@
  *
  * SPDX-License-Identifier: EPL-2.0
  *
- * Initial code from https://github.com/microsoft/vscode-textmate/
+ * Initial code from https://github.com/microsoft/vscode/
  * Initial copyright Copyright (C) Microsoft Corporation. All rights reserved.
  * Initial license: MIT
  *
@@ -22,7 +22,7 @@ import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.tm4e.core.grammar.IStateStack;
 
 /**
- * @see <a href="https://github.com/microsoft/vscode/blob/d81ca6dfcae29a9bf0f648b94dff145b3665fac1/src/vs/editor/common/languages.ts#L101">
+ * @see <a href="https://github.com/microsoft/vscode/blob/ba2cf46e20df3edf77bdd905acde3e175d985f70/src/vs/editor/common/languages.ts#L87">
  *      github.com/microsoft/vscode/main/src/vs/editor/common/languages.ts</a>
  */
 public interface ITokenizationSupport {

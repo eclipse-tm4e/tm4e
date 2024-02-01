@@ -21,7 +21,7 @@ import org.eclipse.tm4e.languageconfiguration.internal.model.IndentationRules;
 
 /**
  * @see <a href=
- *      "https://github.com/microsoft/vscode/blob/main/src/vs/editor/common/languages/supports/indentRules.ts">
+ *      "https://github.com/microsoft/vscode/blob/ba2cf46e20df3edf77bdd905acde3e175d985f70/src/vs/editor/common/languages/supports/indentRules.ts">
  *      github.com/microsoft/vscode/blob/main/src/vs/editor/common/languages/supports/indentRules.ts</a>
  */
 public class IndentRulesSupport {

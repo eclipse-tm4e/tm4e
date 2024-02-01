@@ -70,7 +70,7 @@ public abstract class RegExPattern {
 	}
 
 	/**
-	 * @param pattern {@link Pattern} or {@link OnigRegExp} compatible pattern
+	 * @param pattern {@link java.util.regex.Pattern} or {@link OnigRegExp} compatible pattern
 	 *
 	 * @throws TMException if pattern parsing fails
 	 */
@@ -79,7 +79,7 @@ public abstract class RegExPattern {
 	}
 
 	/**
-	 * @param pattern {@link Pattern} or {@link OnigRegExp} compatible pattern
+	 * @param pattern {@link java.util.regex.Pattern} or {@link OnigRegExp} compatible pattern
 	 *
 	 * @throws TMException if pattern parsing fails
 	 */
@@ -93,7 +93,7 @@ public abstract class RegExPattern {
 	}
 
 	/**
-	 * @param pattern {@link Pattern} or {@link OnigRegExp} compatible pattern
+	 * @param pattern {@link java.util.regex.Pattern} or {@link OnigRegExp} compatible pattern
 	 *
 	 * @return null if pattern is null or the pattern is invalid
 	 */
@@ -102,7 +102,7 @@ public abstract class RegExPattern {
 	}
 
 	/**
-	 * @param pattern {@link Pattern} or {@link OnigRegExp} compatible pattern
+	 * @param pattern {@link java.util.regex.Pattern} or {@link OnigRegExp} compatible pattern
 	 *
 	 * @return null if pattern is null or the pattern is invalid
 	 */

@@ -34,20 +34,12 @@ public abstract class AbstractLanguageConfigurationRegistryManager implements IL
 
 	@Override
 	public void registerLanguageConfigurationDefinition(final ILanguageConfigurationDefinition definition) {
-		if (definition.getPluginId() == null) {
-			userDefinitions.put(definition.getContentType(), definition);
-		} else {
-			pluginDefinitions.put(definition.getContentType(), definition);
-		}
+		(definition.getPluginId() == null ? userDefinitions : pluginDefinitions).put(definition.getContentType(), definition);
 	}
 
 	@Override
 	public void unregisterLanguageConfigurationDefinition(final ILanguageConfigurationDefinition definition) {
-		if (definition.getPluginId() == null) {
-			userDefinitions.remove(definition.getContentType());
-		} else {
-			pluginDefinitions.remove(definition.getContentType());
-		}
+		(definition.getPluginId() == null ? userDefinitions : pluginDefinitions).remove(definition.getContentType());
 	}
 
 	@Nullable

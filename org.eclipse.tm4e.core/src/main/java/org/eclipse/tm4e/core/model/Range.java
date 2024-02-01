@@ -6,7 +6,7 @@
  *
  * SPDX-License-Identifier: EPL-2.0
  *
- * Initial code from https://github.com/microsoft/vscode-textmate/
+ * Initial code from https://github.com/microsoft/vscode/
  * Initial copyright Copyright (C) Microsoft Corporation. All rights reserved.
  * Initial license: MIT
  *
@@ -19,6 +19,13 @@ package org.eclipse.tm4e.core.model;
 import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.tm4e.core.internal.utils.StringUtils;
 
+/**
+ * Line ranges represented through line numbers (1-based) and NOT line indexes (0-based)
+ *
+ * @see <a href=
+ *      "https://github.com/microsoft/vscode/blob/ba2cf46e20df3edf77bdd905acde3e175d985f70/src/vs/editor/common/textModelEvents.ts#L103">
+ *      github.com/microsoft/vscode/main/src/vs/editor/common/textModelEvents.ts</a>
+ */
 public final class Range {
 
 	public final int fromLineNumber;

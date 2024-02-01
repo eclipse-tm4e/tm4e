@@ -18,24 +18,18 @@ import org.eclipse.tm4e.core.internal.utils.StringUtils;
  * Describes how comments for a language work.
  *
  * @see <a href=
- *      "https://github.com/microsoft/vscode/blob/8e2ec5a7ee1ae5500c645c05145359f2a814611c/src/vs/editor/common/languages/languageConfiguration.ts#L13">
- *      github.com/microsoft/vscode/blob/main/src/vs/editor/common/languages/languageConfiguration.ts#L13</a>
+ *      "https://github.com/microsoft/vscode/blob/ba2cf46e20df3edf77bdd905acde3e175d985f70/src/vs/editor/common/languages/languageConfiguration.ts#L13">
+ *      github.com/microsoft/vscode/blob/main/src/vs/editor/common/languages/languageConfiguration.ts</a>
  */
 public final class CommentRule {
 
-	/**
-	 * The line comment token, like `// this is a comment`
-	 */
-	@Nullable
-	public final String lineComment;
+	/** The line comment token, like `// this is a comment` */
+	public final @Nullable String lineComment;
 
-	/**
-	 * The block comment character pair, like `/* block comment *&#47;`
-	 */
-	@Nullable
-	public final CharacterPair blockComment;
+	/** The block comment character pair, like `/* block comment *&#47;` */
+	public final @Nullable CharacterPair blockComment;
 
-	public CommentRule(@Nullable final String lineComment, @Nullable final CharacterPair blockComment) {
+	public CommentRule(final @Nullable String lineComment, final @Nullable CharacterPair blockComment) {
 		this.lineComment = lineComment;
 		this.blockComment = blockComment;
 	}

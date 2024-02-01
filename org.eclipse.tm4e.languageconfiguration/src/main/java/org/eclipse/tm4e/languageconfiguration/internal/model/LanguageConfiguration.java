@@ -40,12 +40,12 @@ import com.google.gson.JsonObject;
  * @see <a href=
  *      "https://code.visualstudio.com/api/language-extensions/language-configuration-guide">code.visualstudio.com/api/language-extensions/language-configuration-guide</a>
  * @see <a href=
- *      "https://github.com/microsoft/vscode/blob/main/src/vs/editor/common/languages/languageConfiguration.ts">
+ *      "https://github.com/microsoft/vscode/blob/ba2cf46e20df3edf77bdd905acde3e175d985f70/src/vs/editor/common/languages/languageConfiguration.ts#L28">
  *      github.com/microsoft/vscode/blob/main/src/vs/editor/common/languages/languageConfiguration.ts</a>
  */
 public class LanguageConfiguration {
 
-	private static String removeTrailingCommas(String jsonString) {
+	private static String removeTrailingCommas(final String jsonString) {
 		/* matches:
 		 * --------------
 		 * },
@@ -69,7 +69,7 @@ public class LanguageConfiguration {
 	 *         reader.
 	 */
 	@NonNullByDefault({})
-	public static @Nullable LanguageConfiguration load(@NonNull final Reader reader) {
+	public static @Nullable LanguageConfiguration load(final @NonNull Reader reader) {
 		// GSON does not support trailing commas so we have to manually remove them -> maybe better switch to jackson json parser?
 		final var jsonString = removeTrailingCommas(new BufferedReader(reader).lines().collect(Collectors.joining("\n")));
 		final LanguageConfiguration langCfg = new GsonBuilder()
@@ -299,7 +299,7 @@ public class LanguageConfiguration {
 		return langCfg;
 	}
 
-	private static @Nullable RegExPattern getAsPattern(@Nullable final JsonElement element) {
+	private static @Nullable RegExPattern getAsPattern(final @Nullable JsonElement element) {
 		if (element == null) {
 			return null;
 		}
@@ -317,7 +317,7 @@ public class LanguageConfiguration {
 		return RegExPattern.ofNullable(getAsString(element), null);
 	}
 
-	private static @Nullable String getAsString(@Nullable final JsonElement element) {
+	private static @Nullable String getAsString(final @Nullable JsonElement element) {
 		if (element != null)
 			try {
 				return element.getAsString();
@@ -327,7 +327,7 @@ public class LanguageConfiguration {
 		return null;
 	}
 
-	private static boolean getAsBoolean(@Nullable final JsonElement element, final boolean defaultValue) {
+	private static boolean getAsBoolean(final @Nullable JsonElement element, final boolean defaultValue) {
 		if (element != null)
 			try {
 				return element.getAsBoolean();
@@ -337,7 +337,7 @@ public class LanguageConfiguration {
 		return defaultValue;
 	}
 
-	private static @Nullable Integer getAsInteger(@Nullable final JsonElement element) {
+	private static @Nullable Integer getAsInteger(final @Nullable JsonElement element) {
 		if (element != null)
 			try {
 				return element.getAsInt();

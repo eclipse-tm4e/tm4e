@@ -14,8 +14,7 @@ package org.eclipse.tm4e.languageconfiguration.internal.utils;
 import org.eclipse.jface.text.BadLocationException;
 import org.eclipse.jface.text.DocumentCommand;
 import org.eclipse.jface.text.IDocument;
-import org.eclipse.jface.text.TextUtilities;
-import org.eclipse.tm4e.languageconfiguration.internal.utils.TextEditorPrefs.TabPrefs;
+import org.eclipse.tm4e.languageconfiguration.internal.model.CursorConfiguration;
 
 public final class TextUtils {
 
@@ -23,42 +22,17 @@ public final class TextUtils {
 	 * @return true if text of the command is an enter and false otherwise.
 	 */
 	public static boolean isEnter(final IDocument doc, final DocumentCommand cmd) {
-		return cmd.length == 0 && cmd.text != null && TextUtilities.equals(doc.getLegalLineDelimiters(), cmd.text) != -1;
+		return cmd.length == 0 && cmd.text != null && isLegalLineDelimiter(doc, cmd.text);
 	}
 
-	public static String normalizeIndentation(final String text, final TabPrefs tabPrefs) {
-		int firstNonWhitespaceIndex = firstNonWhitespaceIndex(text);
-		if (firstNonWhitespaceIndex == -1) {
-			firstNonWhitespaceIndex = text.length();
+	private static boolean isLegalLineDelimiter(final IDocument doc, final String delimiter) {
+		if (delimiter.length() > 2)
+			return false;
+		for (final String d : doc.getLegalLineDelimiters()) {
+			if (d.equals(delimiter))
+				return true;
 		}
-		return normalizeIndentationFromWhitespace(text.substring(0, firstNonWhitespaceIndex), tabPrefs)
-				+ text.substring(firstNonWhitespaceIndex);
-	}
-
-	private static String normalizeIndentationFromWhitespace(final String text, final TabPrefs tabPrefs) {
-		int spacesCnt = 0;
-		for (int i = 0; i < text.length(); i++) {
-			if (text.charAt(i) == '\t') {
-				spacesCnt += tabPrefs.tabWidth;
-			} else {
-				spacesCnt++;
-			}
-		}
-
-		final var result = new StringBuilder();
-		if (!tabPrefs.useSpacesForTabs) {
-			final long tabsCnt = spacesCnt / tabPrefs.tabWidth;
-			spacesCnt = spacesCnt % tabPrefs.tabWidth;
-			for (int i = 0; i < tabsCnt; i++) {
-				result.append('\t');
-			}
-		}
-
-		for (int i = 0; i < spacesCnt; i++) {
-			result.append(' ');
-		}
-
-		return result.toString();
+		return false;
 	}
 
 	/**
@@ -83,30 +57,17 @@ public final class TextUtils {
 		}
 	}
 
-	/**
-	 * @returns first index of the string that is not whitespace or -1 if string is empty or contains only whitespaces
-	 */
-	private static int firstNonWhitespaceIndex(final String text) {
-		for (int i = 0, len = text.length(); i < len; i++) {
-			final char c = text.charAt(i);
-			if (c != ' ' && c != '\t') {
-				return i;
-			}
-		}
-		return -1;
-	}
-
-	public static String getIndentationFromWhitespace(final String whitespace, final TabPrefs tabPrefs) {
+	public static String getIndentationFromWhitespace(final String whitespace, final CursorConfiguration cursorCfg) {
 		final var tab = "\t";
 		int indentOffset = 0;
 		boolean startsWithTab = true;
 		boolean startsWithSpaces = true;
-		final String spaces = tabPrefs.useSpacesForTabs
-				? " ".repeat(tabPrefs.tabWidth)
+		final String spaces = cursorCfg.insertSpaces
+				? " ".repeat(cursorCfg.indentSize)
 				: "";
 		while (startsWithTab || startsWithSpaces) {
 			startsWithTab = whitespace.startsWith(tab, indentOffset);
-			startsWithSpaces = tabPrefs.useSpacesForTabs && whitespace.startsWith(spaces, indentOffset);
+			startsWithSpaces = cursorCfg.insertSpaces && whitespace.startsWith(spaces, indentOffset);
 			if (startsWithTab) {
 				indentOffset += tab.length();
 			}
@@ -117,6 +78,11 @@ public final class TextUtils {
 		return whitespace.substring(0, indentOffset);
 	}
 
+	/**
+	 * @see <a href=
+	 *      "https://github.com/microsoft/vscode/blob/ba2cf46e20df3edf77bdd905acde3e175d985f70/src/vs/base/common/strings.ts">
+	 *      github.com/microsoft/vscode/blob/main/src/vs/editor/common/languages/languageConfigurationRegistry.ts</a>
+	 */
 	public static String getIndentationAtPosition(final IDocument doc, final int offset) {
 		try {
 			// find start offset of current line
@@ -127,9 +93,8 @@ public final class TextUtils {
 
 			return doc.get(lineStartOffset, indentationEndOffset - lineStartOffset);
 		} catch (final BadLocationException excp) {
-			// stop work
+			return "";
 		}
-		return "";
 	}
 
 	/**
@@ -145,13 +110,12 @@ public final class TextUtils {
 	 *
 	 * @exception BadLocationException if position is an invalid range in the given document
 	 */
-	private static int findEndOfWhiteSpace(final IDocument doc, int startAt, final int endAt) throws BadLocationException {
-		while (startAt < endAt) {
-			final char c = doc.getChar(startAt);
-			if (c != ' ' && c != '\t') {
-				return startAt;
+	private static int findEndOfWhiteSpace(final IDocument doc, final int startAt, final int endAt) throws BadLocationException {
+		for (int i = startAt; i < endAt; i++) {
+			final char ch = doc.getChar(i);
+			if (ch != ' ' && ch != '\t') {
+				return i;
 			}
-			startAt++;
 		}
 		return endAt;
 	}

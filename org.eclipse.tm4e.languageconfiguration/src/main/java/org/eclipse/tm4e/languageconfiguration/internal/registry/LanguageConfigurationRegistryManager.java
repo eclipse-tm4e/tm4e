@@ -21,22 +21,17 @@ import org.eclipse.core.runtime.Platform;
 import org.eclipse.core.runtime.content.IContentType;
 import org.eclipse.core.runtime.preferences.InstanceScope;
 import org.eclipse.jdt.annotation.Nullable;
-import org.eclipse.jface.text.BadLocationException;
 import org.eclipse.jface.text.IDocument;
-import org.eclipse.jface.text.IRegion;
 import org.eclipse.tm4e.languageconfiguration.LanguageConfigurationPlugin;
 import org.eclipse.tm4e.languageconfiguration.internal.model.AutoClosingPair;
 import org.eclipse.tm4e.languageconfiguration.internal.model.AutoClosingPairConditional;
 import org.eclipse.tm4e.languageconfiguration.internal.model.CompleteEnterAction;
-import org.eclipse.tm4e.languageconfiguration.internal.model.EnterAction;
-import org.eclipse.tm4e.languageconfiguration.internal.model.EnterAction.IndentAction;
 import org.eclipse.tm4e.languageconfiguration.internal.preferences.PreferenceConstants;
 import org.eclipse.tm4e.languageconfiguration.internal.preferences.PreferenceHelper;
 import org.eclipse.tm4e.languageconfiguration.internal.supports.CharacterPairSupport;
 import org.eclipse.tm4e.languageconfiguration.internal.supports.CommentSupport;
+import org.eclipse.tm4e.languageconfiguration.internal.supports.EnterActionHelper;
 import org.eclipse.tm4e.languageconfiguration.internal.supports.OnEnterSupport;
-import org.eclipse.tm4e.languageconfiguration.internal.utils.TextUtils;
-import org.eclipse.tm4e.ui.internal.model.DocumentHelper;
 import org.osgi.service.prefs.BackingStoreException;
 
 public final class LanguageConfigurationRegistryManager extends AbstractLanguageConfigurationRegistryManager {
@@ -44,9 +39,7 @@ public final class LanguageConfigurationRegistryManager extends AbstractLanguage
 	private static final String EXTENSION_LANGUAGE_CONFIGURATIONS = "languageConfigurations"; //$NON-NLS-1$
 	private static final String LANGUAGE_CONFIGURATION_ELT = "languageConfiguration"; //$NON-NLS-1$
 
-	/**
-	 * see https://en.wikipedia.org/wiki/Double-checked_locking#Usage_in_Java
-	 */
+	/** see https://en.wikipedia.org/wiki/Double-checked_locking#Usage_in_Java */
 	private static final class InstanceHolder {
 		static final LanguageConfigurationRegistryManager INSTANCE = new LanguageConfigurationRegistryManager();
 		static {
@@ -140,74 +133,16 @@ public final class LanguageConfigurationRegistryManager extends AbstractLanguage
 	}
 
 	/**
-	 * @see <a href="https://github.com/microsoft/vscode/blob/main/src/vs/editor/common/languages/enterAction.ts">
-	 *      https://github.com/microsoft/vscode/blob/main/src/vs/editor/common/languages/enterAction.ts</a>
+	 * @see <a href=
+	 *      "https://github.com/microsoft/vscode/blob/ba2cf46e20df3edf77bdd905acde3e175d985f70/src/vs/editor/common/languages/enterAction.ts">
+	 *      github.com/microsoft/vscode/src/vs/editor/common/languages/enterAction.ts</a>
 	 */
-	public @Nullable CompleteEnterAction getEnterAction(final IDocument document, final int offset, final IContentType contentType) {
-		// let scopedLineTokens = this.getScopedLineTokens(model, range.startLineNumber, range.startColumn);
-		final var onEnterSupport = this._getOnEnterSupport(contentType /* scopedLineTokens.languageId */);
+	public @Nullable CompleteEnterAction getEnterAction(final IDocument doc, final int offset, final IContentType contentType) {
+		final OnEnterSupport onEnterSupport = _getOnEnterSupport(contentType /* scopedLineTokens.languageId */);
 		if (onEnterSupport == null) {
 			return null;
 		}
-
-		try {
-			final IRegion lineInfo = document.getLineInformationOfOffset(offset);
-
-			// String scopeLineText = DocumentHelper.getLineTextOfOffset(document, offset, false);
-			final String beforeEnterText = document.get(lineInfo.getOffset(), offset - lineInfo.getOffset());
-
-			// selection support
-			String afterEnterText = null;
-			// if (range.isEmpty()) {
-			afterEnterText = document.get(offset, lineInfo.getLength() - (offset - lineInfo.getOffset()));
-			//    afterEnterText = scopedLineText.substr(range.startColumn - 1 - scopedLineTokens.firstCharOffset);
-			// } else {
-			//    const endScopedLineTokens = this.getScopedLineTokens(model, range.endLineNumber, range.endColumn);
-			//    afterEnterText = endScopedLineTokens.getLineContent().substr(range.endColumn - 1 - scopedLineTokens.firstCharOffset);
-			// }
-
-			String previousLineText = "";
-			// if (range.startLineNumber > 1 && scopedLineTokens.firstCharOffset === 0) {
-			//    // This is not the first line and the entire line belongs to this mode
-			// 	const oneLineAboveScopedLineTokens = getScopedLineTokens(model, range.startLineNumber - 1);
-			// 	if (oneLineAboveScopedLineTokens.languageId === scopedLineTokens.languageId) {
-			// 		// The line above ends with text belonging to the same mode
-			// 		previousLineText = oneLineAboveScopedLineTokens.getLineContent();
-			previousLineText = DocumentHelper.getLineText(document, document.getLineOfOffset(offset), false);
-			// 	}
-			// }
-
-			final @Nullable EnterAction enterResult = onEnterSupport.onEnter(previousLineText, beforeEnterText, afterEnterText);
-			if (enterResult == null) {
-				return null;
-			}
-
-			final IndentAction indentAction = enterResult.indentAction;
-			String appendText = enterResult.appendText;
-			final Integer removeText = enterResult.removeText;
-
-			// Here we add `\t` to appendText first because enterAction is leveraging appendText and removeText to change indentation.
-			if (appendText == null) {
-				if (indentAction == IndentAction.Indent
-						|| indentAction == IndentAction.IndentOutdent) {
-					appendText = "\t";
-				} else {
-					appendText = "";
-				}
-			} else if (indentAction == IndentAction.Indent) {
-				appendText = "\t" + appendText;
-			}
-
-			String indentation = TextUtils.getIndentationAtPosition(document, offset);
-			if (removeText != null) {
-				indentation = indentation.substring(0, indentation.length() - removeText);
-			}
-
-			return new CompleteEnterAction(indentAction, appendText, removeText, indentation);
-		} catch (final BadLocationException | RuntimeException ex) {
-			// ignore
-		}
-		return null;
+		return EnterActionHelper.getEnterAction(doc, offset, onEnterSupport);
 	}
 
 	public @Nullable CommentSupport getCommentSupport(final IContentType contentType) {

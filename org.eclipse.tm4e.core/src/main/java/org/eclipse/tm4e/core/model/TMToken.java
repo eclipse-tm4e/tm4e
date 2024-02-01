@@ -6,7 +6,7 @@
  *
  * SPDX-License-Identifier: EPL-2.0
  *
- * Initial code from https://github.com/microsoft/vscode-textmate/
+ * Initial code from https://github.com/microsoft/vscode/
  * Initial copyright Copyright (C) Microsoft Corporation. All rights reserved.
  * Initial license: MIT
  *
@@ -19,13 +19,15 @@ package org.eclipse.tm4e.core.model;
 import org.eclipse.jdt.annotation.Nullable;
 
 /**
- * @see <a href="https://github.com/microsoft/vscode/blob/d81ca6dfcae29a9bf0f648b94dff145b3665fac1/src/vs/editor/common/languages.ts#L35">
+ * @see <a href="https://github.com/microsoft/vscode/blob/ba2cf46e20df3edf77bdd905acde3e175d985f70/src/vs/editor/common/languages.ts#L37">
  *      github.com/microsoft/vscode/main/src/vs/editor/common/languages.ts <code>#Token</code></a>
  */
 public final class TMToken {
 
+	/** line offset */
 	public final int startIndex;
 	public final String type;
+	// public readonly language: string
 
 	public TMToken(final int startIndex, final String type) {
 		this.startIndex = startIndex;

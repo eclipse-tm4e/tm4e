@@ -28,17 +28,21 @@ import org.eclipse.tm4e.languageconfiguration.internal.model.LanguageConfigurati
  * The "character pair" support.
  *
  * @see <a href=
- *      "https://github.com/microsoft/vscode/blob/main/src/vs/editor/common/languages/supports/characterPair.ts">
- *      https://github.com/microsoft/vscode/blob/main/src/vs/editor/common/languages/supports/characterPair.ts</a>
+ *      "https://github.com/microsoft/vscode/blob/ba2cf46e20df3edf77bdd905acde3e175d985f70/src/vs/editor/common/languages/supports/characterPair.ts">
+ *      github.com/microsoft/vscode/blob/main/src/vs/editor/common/languages/supports/characterPair.ts</a>
  */
 public final class CharacterPairSupport {
 
 	public static final String DEFAULT_AUTOCLOSE_BEFORE_LANGUAGE_DEFINED = ";:.,=}])> \r\n\t";
+	//public static final String DEFAULT_AUTOCLOSE_BEFORE_LANGUAGE_DEFINED_QUOTES = ";:.,=}])> \n\t";
+	//public static final String DEFAULT_AUTOCLOSE_BEFORE_LANGUAGE_DEFINED_BRACKETS = "'\"`;:.,=}])> \n\t";
 	public static final String DEFAULT_AUTOCLOSE_BEFORE_WHITESPACE = " \r\n\t";
 
 	public final List<AutoClosingPairConditional> autoClosingPairs;
 	public final List<AutoClosingPair> surroundingPairs;
 	public final String autoCloseBefore;
+	//public final String autoCloseBeforeForBrackets;
+	//public final String autoCloseBeforeForQuotes;
 
 	@SuppressWarnings("unchecked")
 	public CharacterPairSupport(final LanguageConfiguration config) {
@@ -60,6 +64,12 @@ public final class CharacterPairSupport {
 		this.autoCloseBefore = autoCloseBefore != null
 				? autoCloseBefore
 				: CharacterPairSupport.DEFAULT_AUTOCLOSE_BEFORE_LANGUAGE_DEFINED;
+		//this.autoCloseBeforeForQuotes = autoCloseBefore != null
+		//		? autoCloseBefore
+		//		: CharacterPairSupport.DEFAULT_AUTOCLOSE_BEFORE_LANGUAGE_DEFINED_QUOTES;
+		//this.autoCloseBeforeForBrackets = autoCloseBefore != null
+		//		? autoCloseBefore
+		//		: CharacterPairSupport.DEFAULT_AUTOCLOSE_BEFORE_LANGUAGE_DEFINED_BRACKETS;
 
 		final var surroundingPairs = config.getSurroundingPairs();
 		this.surroundingPairs = !surroundingPairs.isEmpty()
@@ -70,9 +80,7 @@ public final class CharacterPairSupport {
 	/**
 	 * TODO not declared in upstream project
 	 */
-	@Nullable
-	public AutoClosingPairConditional getAutoClosingPair(final String text, final int offset,
-			final String newCharacter) {
+	public @Nullable AutoClosingPairConditional getAutoClosingPair(final String text, final int offset, final String newCharacter) {
 		if (newCharacter.isEmpty()) {
 			return null;
 		}

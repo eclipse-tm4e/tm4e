@@ -64,9 +64,8 @@ public final class LanguageConfigurationDefinition extends TMResource implements
 	/**
 	 * Constructor for user preferences (loaded from Json with Gson).
 	 */
-	public LanguageConfigurationDefinition(final IContentType contentType, final String path,
-			@Nullable final String pluginId, final boolean onEnterEnabled, final boolean bracketAutoClosingEnabled,
-			final boolean matchingPairsEnabled) {
+	public LanguageConfigurationDefinition(final IContentType contentType, final String path, final @Nullable String pluginId,
+			final boolean onEnterEnabled, final boolean bracketAutoClosingEnabled, final boolean matchingPairsEnabled) {
 		super(path, pluginId);
 		this.contentType = contentType;
 		this.onEnterEnabled = onEnterEnabled;

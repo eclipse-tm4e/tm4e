@@ -17,8 +17,8 @@ import org.eclipse.tm4e.core.internal.utils.StringUtils;
  * A tuple of two characters, like a pair of opening and closing brackets.
  *
  * @see <a href=
- *      "https://github.com/microsoft/vscode/blob/8e2ec5a7ee1ae5500c645c05145359f2a814611c/src/vs/editor/common/languages/languageConfiguration.ts#L194">
- *      github.com/microsoft/vscode/blob/main/src/vs/editor/common/languages/languageConfiguration.ts#L194</a>
+ *      "https://github.com/microsoft/vscode/blob/ba2cf46e20df3edf77bdd905acde3e175d985f70/src/vs/editor/common/languages/languageConfiguration.ts#L194">
+ *      github.com/microsoft/vscode/blob/main/src/vs/editor/common/languages/languageConfiguration.ts</a>
  */
 public class CharacterPair {
 

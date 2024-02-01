@@ -13,22 +13,32 @@ package org.eclipse.tm4e.languageconfiguration.internal.model;
 
 import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.tm4e.core.internal.utils.StringUtils;
+import org.eclipse.tm4e.languageconfiguration.internal.model.EnterAction.IndentAction;
 
 /**
  * @see <a href=
- *      "https://github.com/microsoft/vscode/blob/8e2ec5a7ee1ae5500c645c05145359f2a814611c/src/vs/editor/common/languages/languageConfiguration.ts#L250">
+ *      "https://github.com/microsoft/vscode/blob/ba2cf46e20df3edf77bdd905acde3e175d985f70/src/vs/editor/common/languages/languageConfiguration.ts#L250">
  *      github.com/microsoft/vscode/blob/main/src/vs/editor/common/languages/languageConfiguration.ts#L250</a>
  */
-public final class CompleteEnterAction extends EnterAction {
+public final class CompleteEnterAction {
 
-	/**
-	 * The line's indentation minus removeText
-	 */
+	/** Describe what to do with the indentation. */
+	public final IndentAction indentAction;
+
+	/** Describes text to be appended after the new line and after the indentation. */
+	public final String appendText;
+
+	/** Describes the number of characters to remove from the new line's indentation. */
+	public final @Nullable Integer removeText;
+
+	/** The line's indentation minus removeText. */
 	public final String indentation;
 
-	public CompleteEnterAction(IndentAction indentAction, @Nullable String appendText, @Nullable Integer removeText,
+	public CompleteEnterAction(final IndentAction indentAction, final String appendText, final @Nullable Integer removeText,
 			final String indentation) {
-		super(indentAction, appendText, removeText);
+		this.indentAction = indentAction;
+		this.appendText = appendText;
+		this.removeText = removeText;
 		this.indentation = indentation;
 	}
 

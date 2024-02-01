@@ -8,7 +8,7 @@
  *
  * Contributors:
  * Lucas Bullen (Red Hat Inc.) - initial API and implementation
- * Sebastian Thomschke (Vegard IT GmbH) - fixed content type selection
+ * Sebastian Thomschke (Vegard IT) - fixed content type selection
  */
 package org.eclipse.tm4e.languageconfiguration.internal.wizards;
 

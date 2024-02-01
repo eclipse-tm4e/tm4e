@@ -37,14 +37,16 @@ import org.eclipse.tm4e.core.internal.utils.StringUtils;
  * The {@link TMModel} runs a background thread tokenizing out-of-date lines of the text model.
  *
  * Concrete implementations of this class are supposed to announce editor's content changes using the
- * {@link #onLinesReplaced(int, int, int)}
- * method. This results in (re)tokenization of the changed lines resulting in {@link ModelTokensChangedEvent}s being emitted.
+ * {@link #onLinesReplaced(int, int, int)} method.
+ * This results in (re)tokenization of the changed lines resulting in {@link ModelTokensChangedEvent}s being emitted.
  *
  * UI elements are supposed to subscribe and react to the events with
  * {@link TMModel#addModelTokensChangedListener(ModelTokensChangedEvent.Listener)}.
  *
- * @see <a href="https://github.com/microsoft/vscode/blob/main/src/vs/editor/common/model/tokenizationTextModelPart.ts">
- *      github.com/microsoft/vscode/src/vs/editor/common/model/tokenizationTextModelPart.ts <code>#TokenizationTextModelPart</code></a>
+ * @see <a href=
+ *      "https://github.com/microsoft/vscode/blob/ba2cf46e20df3edf77bdd905acde3e175d985f70/src/vs/editor/common/model/tokenizationTextModelPart.ts#L37">
+ *      github.com/microsoft/vscode/main/src/vs/editor/common/model/tokenizationTextModelPart.ts
+ *      <code>#TokenizationTextModelPart</code></a>
  */
 public abstract class TMModel implements ITMModel {
 

@@ -25,90 +25,90 @@ import org.eclipse.jface.text.IDocument;
 import org.eclipse.jface.text.ITextViewer;
 import org.eclipse.tm4e.core.model.TMToken;
 import org.eclipse.tm4e.languageconfiguration.internal.model.AutoClosingPairConditional;
+import org.eclipse.tm4e.languageconfiguration.internal.model.CursorConfiguration;
 import org.eclipse.tm4e.languageconfiguration.internal.registry.LanguageConfigurationRegistryManager;
 import org.eclipse.tm4e.languageconfiguration.internal.utils.TextEditorPrefs;
-import org.eclipse.tm4e.languageconfiguration.internal.utils.TextEditorPrefs.TabPrefs;
 import org.eclipse.tm4e.ui.internal.model.TMModelManager;
 import org.eclipse.tm4e.ui.internal.utils.ContentTypeHelper;
-import org.eclipse.tm4e.ui.internal.utils.ContentTypeInfo;
 import org.eclipse.tm4e.ui.internal.utils.UI;
-import org.eclipse.ui.texteditor.ITextEditor;
 
 /**
  * {@link IAutoEditStrategy} which uses VSCode language-configuration.json.
  */
 public class LanguageConfigurationAutoEditStrategy implements IAutoEditStrategy {
 
-	@Nullable
-	private IDocument document;
+	private static final IContentType[] EMPTY_CONTENT_TYPES = new IContentType[0];
 
-	private IContentType @Nullable [] contentTypes;
+	private IContentType[] contentTypes = EMPTY_CONTENT_TYPES;
+	private @Nullable IDocument document;
+	private @Nullable ITextViewer viewer;
 
-	@Nullable
-	private ITextViewer viewer;
-
+	/**
+	 * @see <a href=
+	 *      "https://github.com/microsoft/vscode/blob/ba2cf46e20df3edf77bdd905acde3e175d985f70/src/vs/editor/common/cursor/cursorTypeOperations.ts#L934">
+	 *      github.com/microsoft/vscode/src/vs/editor/common/cursor/cursorTypeOperations.ts</a>
+	 */
 	@Override
-	public void customizeDocumentCommand(@Nullable final IDocument document, @Nullable final DocumentCommand command) {
-		if (document == null || command == null)
+	public void customizeDocumentCommand(@Nullable final IDocument doc, @Nullable final DocumentCommand command) {
+		if (doc == null || command == null || command.text.isEmpty())
 			return;
 
-		final IContentType[] contentTypes = findContentTypes(document);
-		if (contentTypes == null || command.text.isEmpty()) {
-			return;
+		if (!doc.equals(this.document)) {
+			final var contentTypeInfo = ContentTypeHelper.findContentTypes(doc);
+			this.contentTypes = contentTypeInfo == null ? EMPTY_CONTENT_TYPES : contentTypeInfo.getContentTypes();
+			this.document = doc;
 		}
+
+		if (contentTypes.length == 0)
+			return;
+
 		installViewer();
 
-		if (isEnter(document, command)) {
+		if (isEnter(doc, command)) {
 			// key enter pressed
-			onEnter(document, command, UI.getActiveTextEditor());
+			final var cursorCfg = TextEditorPrefs.getCursorConfiguration(UI.getActiveTextEditor());
+			onEnter(cursorCfg, doc, contentTypes, command);
 			return;
 		}
 
 		// Auto close pair
 		final var registry = LanguageConfigurationRegistryManager.getInstance();
 		for (final IContentType contentType : contentTypes) {
-			final var autoClosingPair = registry.getAutoClosingPair(document.get(), command.offset,
-					command.text, contentType);
+			final var autoClosingPair = registry.getAutoClosingPair(doc.get(), command.offset, command.text, contentType);
 			if (autoClosingPair == null) {
 				continue;
 			}
 			command.caretOffset = command.offset + command.text.length();
 			command.shiftsCaret = false;
-			if (command.text.equals(autoClosingPair.open)
-					&& isFollowedBy(document, command.offset, autoClosingPair.open)) {
+			if (command.text.equals(autoClosingPair.open) && isFollowedBy(doc, command.offset, autoClosingPair.open)) {
 				command.text = "";
-			} else if (command.text.equals(autoClosingPair.close)
-					&& isFollowedBy(document, command.offset, autoClosingPair.close)) {
+			} else if (command.text.equals(autoClosingPair.close) && isFollowedBy(doc, command.offset, autoClosingPair.close)) {
 				command.text = "";
-			} else if (isAutoClosingAllowed(document, contentType, command.offset, autoClosingPair)) {
+			} else if (isAutoClosingAllowed(doc, contentType, command.offset, autoClosingPair)) {
 				command.text += autoClosingPair.close;
 			}
 			return;
 		}
 
-		Arrays.stream(contentTypes)
+		if (Arrays.stream(contentTypes)
 				.flatMap(contentType -> registry.getEnabledAutoClosingPairs(contentType).stream())
-				.map(cp -> cp.close)
-				.filter(command.text::equals)
-				.filter(closing -> isFollowedBy(document, command.offset, closing))
-				.findFirst()
-				.ifPresent(closing -> {
-					command.caretOffset = command.offset + command.text.length();
-					command.shiftsCaret = false;
-					command.text = "";
-				});
+				.anyMatch(charPair -> charPair.close.equals(command.text)
+						&& isFollowedBy(doc, command.offset, charPair.close))) {
+			command.caretOffset = command.offset + command.text.length();
+			command.shiftsCaret = false;
+			command.text = "";
+		}
 	}
 
 	/**
-	 * @return true if auto closing is enabled for the given {@link AutoClosingPairConditional} at the given
-	 *         offset
+	 * @return true if auto closing is enabled for the given {@link AutoClosingPairConditional} at the given offset
 	 */
-	private boolean isAutoClosingAllowed(final IDocument document, final IContentType contentType, final int offset,
+	private boolean isAutoClosingAllowed(final IDocument doc, final IContentType contentType, final int offset,
 			final AutoClosingPairConditional pair) {
 
 		// only consider auto-closing if the next char is configured in autoCloseBefore
 		try {
-			final var ch = document.getChar(offset);
+			final var ch = doc.getChar(offset);
 			if (!Character.isWhitespace(ch)) {
 				final var registry = LanguageConfigurationRegistryManager.getInstance();
 				if (registry.getAutoCloseBefore(contentType).indexOf(ch) < 0)
@@ -119,12 +119,12 @@ public class LanguageConfigurationAutoEditStrategy implements IAutoEditStrategy 
 		}
 
 		if (!pair.notIn.isEmpty()) {
-			final var docModel = TMModelManager.INSTANCE.connect(document);
+			final var docModel = TMModelManager.INSTANCE.connect(doc);
 			try {
-				final var lineIndex = document.getLineOfOffset(offset);
+				final var lineIndex = doc.getLineOfOffset(offset);
 				final var tokens = docModel.getLineTokens(lineIndex);
 				if (tokens != null) {
-					final var lineCharOffset = offset - document.getLineOffset(lineIndex) - 1;
+					final var lineCharOffset = offset - doc.getLineOffset(lineIndex) - 1;
 					TMToken tokenAtOffset = null;
 					for (final var token : tokens) {
 						if (token.startIndex > lineCharOffset)
@@ -133,9 +133,8 @@ public class LanguageConfigurationAutoEditStrategy implements IAutoEditStrategy 
 					}
 					if (tokenAtOffset != null) {
 						for (final var notIn : pair.notIn) {
-							if (tokenAtOffset.type.contains(notIn)) {
+							if (tokenAtOffset.type.contains(notIn))
 								return false;
-							}
 						}
 					}
 				}
@@ -150,22 +149,21 @@ public class LanguageConfigurationAutoEditStrategy implements IAutoEditStrategy 
 	 * Returns <code>true</code> if the content after the given offset is followed
 	 * by the given <code>value</code> and false otherwise.
 	 *
-	 * @param document the document
+	 * @param doc the document
 	 * @param offset the offset
 	 * @param value the content value to check
 	 *
 	 * @return <code>true</code> if the content after the given offset is followed
 	 *         by the given <code>value</code> and false otherwise.
 	 */
-	private static boolean isFollowedBy(final IDocument document, int offset, final String value) {
+	private static boolean isFollowedBy(final IDocument doc, int offset, final String value) {
 		for (int i = 0; i < value.length(); i++) {
-			if (document.getLength() <= offset) {
+			if (doc.getLength() <= offset)
 				return false;
-			}
+
 			try {
-				if (document.getChar(offset) != value.charAt(i)) {
+				if (doc.getChar(offset) != value.charAt(i))
 					return false;
-				}
 			} catch (final BadLocationException e) {
 				return false;
 			}
@@ -176,53 +174,51 @@ public class LanguageConfigurationAutoEditStrategy implements IAutoEditStrategy 
 
 	/**
 	 * @see <a href=
-	 *      "https://github.com/microsoft/vscode/blob/bf63ea1932dd253745f38a4cbe26bb9be01801b1/src/vs/editor/common/cursor/cursorTypeOperations.ts#L309">
-	 *      github.com/microsoft/vscode/src/vs/editor/common/cursor/cursorTypeOperations.ts#L309</a>
+	 *      "https://github.com/microsoft/vscode/blob/ba2cf46e20df3edf77bdd905acde3e175d985f70/src/vs/editor/common/cursor/cursorTypeOperations.ts#L299">
+	 *      github.com/microsoft/vscode/src/vs/editor/common/cursor/cursorTypeOperations.ts</a>
 	 */
-	private void onEnter(final IDocument document, final DocumentCommand command, final @Nullable ITextEditor editor) {
-		final var contentTypes = this.contentTypes;
-		if (contentTypes != null) {
+	private static void onEnter(final CursorConfiguration cursorCfg, final IDocument doc, final IContentType[] contentTypes,
+			final DocumentCommand command) {
+		if (contentTypes.length > 0) {
 			final var registry = LanguageConfigurationRegistryManager.getInstance();
 			for (final IContentType contentType : contentTypes) {
 				if (!registry.shouldEnterAction(contentType)) {
 					continue;
 				}
 
-				final var enterAction = registry.getEnterAction(document, command.offset, contentType);
+				final var enterAction = registry.getEnterAction(doc, command.offset, contentType);
 				if (enterAction != null) {
-					final String delim = command.text;
-					final TabPrefs tabPrefs = TextEditorPrefs.getTabPrefs(editor);
 					command.shiftsCaret = false;
+					final String newLine = command.text;
 					switch (enterAction.indentAction) {
 						case None: {
 							// Nothing special
-							final String increasedIndent = normalizeIndentation(enterAction.indentation + enterAction.appendText, tabPrefs);
-							command.text = delim + increasedIndent;
-							command.caretOffset = command.offset + (delim + increasedIndent).length();
+							final String increasedIndent = cursorCfg.normalizeIndentation(enterAction.indentation + enterAction.appendText);
+							command.text = newLine + increasedIndent;
+							command.caretOffset = command.offset + (newLine + increasedIndent).length();
 							break;
 						}
 						case Indent: {
 							// Indent once
-							final String increasedIndent = normalizeIndentation(enterAction.indentation + enterAction.appendText, tabPrefs);
-							command.text = delim + increasedIndent;
-							command.caretOffset = command.offset + (delim + increasedIndent).length();
+							final String increasedIndent = cursorCfg.normalizeIndentation(enterAction.indentation + enterAction.appendText);
+							command.text = newLine + increasedIndent;
+							command.caretOffset = command.offset + (newLine + increasedIndent).length();
 							break;
 						}
 						case IndentOutdent: {
 							// Ultra special
-							final String normalIndent = normalizeIndentation(enterAction.indentation, tabPrefs);
-							final String increasedIndent = normalizeIndentation(enterAction.indentation + enterAction.appendText, tabPrefs);
-							command.text = delim + increasedIndent + delim + normalIndent;
-							command.caretOffset = command.offset + (delim + increasedIndent).length();
+							final String normalIndent = cursorCfg.normalizeIndentation(enterAction.indentation);
+							final String increasedIndent = cursorCfg.normalizeIndentation(enterAction.indentation + enterAction.appendText);
+							command.text = newLine + increasedIndent + newLine + normalIndent;
+							command.caretOffset = command.offset + (newLine + increasedIndent).length();
 							break;
 						}
 						case Outdent:
-							final String indentation = getIndentationFromWhitespace(enterAction.indentation, tabPrefs);
-							final String outdentedText = outdentString(normalizeIndentation(indentation + enterAction.appendText, tabPrefs),
-									editor);
-
-							command.text = delim + outdentedText;
-							command.caretOffset = command.offset + (delim + outdentedText).length();
+							final String indentation = getIndentationFromWhitespace(enterAction.indentation, cursorCfg);
+							final String outdentedText = outdentString(cursorCfg.normalizeIndentation(indentation + enterAction.appendText),
+									cursorCfg);
+							command.text = newLine + outdentedText;
+							command.caretOffset = command.offset + (newLine + outdentedText).length();
 							break;
 					}
 					return;
@@ -231,32 +227,17 @@ public class LanguageConfigurationAutoEditStrategy implements IAutoEditStrategy 
 		}
 
 		// fail back to default for indentation
-		new DefaultIndentLineAutoEditStrategy().customizeDocumentCommand(document, command);
+		new DefaultIndentLineAutoEditStrategy().customizeDocumentCommand(doc, command);
 	}
 
-	private IContentType @Nullable [] findContentTypes(final IDocument document) {
-		if (this.document != null && this.document.equals(document)) {
-			return contentTypes;
-		}
-
-		final ContentTypeInfo info = ContentTypeHelper.findContentTypes(document);
-		this.contentTypes = info == null ? null : info.getContentTypes();
-		this.document = document;
-		return contentTypes;
-	}
-
-	private String outdentString(final String str, final @Nullable ITextEditor editor) {
-		if (str.startsWith("\t")) {
+	private static String outdentString(final String str, final CursorConfiguration cursorCfg) {
+		if (str.startsWith("\t"))
 			return str.substring(1);
-		}
-		final var tabPrefs = TextEditorPrefs.getTabPrefs(editor);
-		if (tabPrefs.useSpacesForTabs) {
-			final var chars = new char[tabPrefs.tabWidth];
-			Arrays.fill(chars, ' ');
-			final var spaces = new String(chars);
-			if (str.startsWith(spaces)) {
-				return str.substring(spaces.length());
-			}
+
+		if (cursorCfg.insertSpaces) {
+			final var indent = cursorCfg.getIndent();
+			if (str.startsWith(indent))
+				return str.substring(indent.length());
 		}
 		return str;
 	}

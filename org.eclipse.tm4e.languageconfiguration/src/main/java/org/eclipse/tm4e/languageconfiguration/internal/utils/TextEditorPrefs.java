@@ -16,26 +16,13 @@ import static org.eclipse.ui.texteditor.AbstractDecoratedTextEditorPreferenceCon
 
 import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.jface.preference.IPreferenceStore;
+import org.eclipse.tm4e.languageconfiguration.internal.model.CursorConfiguration;
 import org.eclipse.ui.editors.text.EditorsUI;
 import org.eclipse.ui.texteditor.ITextEditor;
 
 public final class TextEditorPrefs {
 
-	public static final class TabPrefs {
-
-		/** Specifies if the text editor uses spaces for tabs. */
-		public final boolean useSpacesForTabs;
-
-		/** The number of spaces used per tab in the text editor. */
-		public final int tabWidth;
-
-		public TabPrefs(boolean useSpacesForTabs, int tabWidth) {
-			this.useSpacesForTabs = useSpacesForTabs;
-			this.tabWidth = tabWidth;
-		}
-	}
-
-	public static TabPrefs getTabPrefs(final @Nullable ITextEditor editor) {
+	public static CursorConfiguration getCursorConfiguration(final @Nullable ITextEditor editor) {
 		final var editorPrefStore = editor == null ? null : editor.getAdapter(IPreferenceStore.class);
 		final var useSpacesPrefStore = editorPrefStore != null && editorPrefStore.contains(EDITOR_SPACES_FOR_TABS)
 				? editorPrefStore
@@ -43,7 +30,7 @@ public final class TextEditorPrefs {
 		final var tabWidthPrefStore = editorPrefStore != null && editorPrefStore.contains(EDITOR_TAB_WIDTH)
 				? editorPrefStore
 				: EditorsUI.getPreferenceStore();
-		return new TabPrefs(useSpacesPrefStore.getBoolean(EDITOR_SPACES_FOR_TABS),
+		return new CursorConfiguration(useSpacesPrefStore.getBoolean(EDITOR_SPACES_FOR_TABS),
 				tabWidthPrefStore.getInt(EDITOR_TAB_WIDTH));
 	}
 

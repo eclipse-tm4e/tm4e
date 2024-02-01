@@ -6,7 +6,7 @@
  *
  * SPDX-License-Identifier: EPL-2.0
  *
- * Initial code from https://github.com/microsoft/vscode-textmate/
+ * Initial code from https://github.com/microsoft/vscode/
  * Initial copyright Copyright (C) Microsoft Corporation. All rights reserved.
  * Initial license: MIT
  *
@@ -35,7 +35,7 @@ import org.eclipse.tm4e.core.internal.utils.StringUtils;
 
 /**
  * @see <a href=
- *      "https://github.com/microsoft/vscode/blob/b22c1ee2ac18b1446e8710edecd5b29cc4a3ed19/src/vs/workbench/services/textMate/browser/tokenizationSupport/textMateTokenizationSupport.ts">
+ *      "https://github.com/microsoft/vscode/blob/ba2cf46e20df3edf77bdd905acde3e175d985f70/src/vs/workbench/services/textMate/browser/tokenizationSupport/textMateTokenizationSupport.ts#L14">
  *      github.com/microsoft/vscode/main/src/vs/workbench/services/textMate/browser/tokenizationSupport/textMateTokenizationSupport.ts
  *      <code>#TextMateTokenizationSupport</code></a>
  * @see <a href=

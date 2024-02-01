@@ -17,8 +17,8 @@ import org.eclipse.tm4e.core.internal.utils.StringUtils;
  * Describes folding rules for a language.
  *
  * @see <a href=
- *      "https://github.com/microsoft/vscode/blob/8e2ec5a7ee1ae5500c645c05145359f2a814611c/src/vs/editor/common/languages/languageConfiguration.ts#L139">
- *      github.com/microsoft/vscode/blob/main/src/vs/editor/common/languages/languageConfiguration.ts#L139</a>
+ *      "https://github.com/microsoft/vscode/blob/ba2cf46e20df3edf77bdd905acde3e175d985f70/src/vs/editor/common/languages/languageConfiguration.ts#L139">
+ *      github.com/microsoft/vscode/blob/main/src/vs/editor/common/languages/languageConfiguration.ts</a>
  */
 public final class FoldingRules {
 
@@ -26,6 +26,8 @@ public final class FoldingRules {
 	 * Used by the indentation based strategy to decide whether empty lines belong to the previous or the next block.
 	 * A language adheres to the off-side rule if blocks in that language are expressed by their indentation.
 	 * See [wikipedia](https://en.wikipedia.org/wiki/Off-side_rule) for more information.
+	 * <p>
+	 * If not set, `false` is used and empty lines belong to the previous block.
 	 */
 	public final boolean offSide;
 	public final RegExPattern markersStart;

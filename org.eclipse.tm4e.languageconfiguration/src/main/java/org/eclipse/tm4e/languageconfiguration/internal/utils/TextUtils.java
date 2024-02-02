@@ -35,28 +35,6 @@ public final class TextUtils {
 		return false;
 	}
 
-	/**
-	 * Returns the start of searchFor at the offset in the searchIn.
-	 * If the searchFor is not in the searchIn at the offset, returns -1.
-	 * <p>
-	 * Example:
-	 *
-	 * <pre>
-	 * text="apple banana", offset=8, string="banana" -> returns 6
-	 * </pre>
-	 */
-	public static int startIndexOfOffsetTouchingString(final String searchIn, final int offset, final String searchFor) {
-		final int start = Math.max(0, offset - searchFor.length());
-		int end = offset + searchFor.length();
-		end = end >= searchIn.length() ? searchIn.length() : end;
-		try {
-			final int indexInSubtext = searchIn.substring(start, end).indexOf(searchFor);
-			return indexInSubtext == -1 ? -1 : start + indexInSubtext;
-		} catch (final IndexOutOfBoundsException e) {
-			return -1;
-		}
-	}
-
 	public static String getIndentationFromWhitespace(final String whitespace, final CursorConfiguration cursorCfg) {
 		final var tab = "\t";
 		int indentOffset = 0;
@@ -80,7 +58,7 @@ public final class TextUtils {
 
 	/**
 	 * @see <a href=
-	 *      "https://github.com/microsoft/vscode/blob/ba2cf46e20df3edf77bdd905acde3e175d985f70/src/vs/base/common/strings.ts">
+	 *      "https://github.com/microsoft/vscode/blob/ba2cf46e20df3edf77bdd905acde3e175d985f70/src/vs/editor/common/languages/languageConfigurationRegistry.ts">
 	 *      github.com/microsoft/vscode/blob/main/src/vs/editor/common/languages/languageConfigurationRegistry.ts</a>
 	 */
 	public static String getIndentationAtPosition(final IDocument doc, final int offset) {
@@ -120,6 +98,12 @@ public final class TextUtils {
 		return endAt;
 	}
 
+	public static String getLeadingWhitespace(final IDocument doc, int lineIndex) throws BadLocationException {
+		final int lineStartOffset = doc.getLineOffset(lineIndex);
+		final int lineLength = doc.getLineLength(lineIndex);
+		return doc.get(lineStartOffset, findEndOfWhiteSpace(doc, lineStartOffset, lineStartOffset + lineLength) - lineStartOffset);
+	}
+
 	/**
 	 * Determines if all the characters at any offset of the specified document line are the whitespace characters.
 	 *
@@ -143,6 +127,22 @@ public final class TextUtils {
 			// Ignore, forcing a positive result
 		}
 		return true;
+	}
+
+	public static boolean isEmptyLine(final IDocument doc, final int lineIndex) {
+		try {
+			final int lineLength = doc.getLineLength(lineIndex);
+			if (lineLength > 2)
+				return false;
+			if (lineLength == 0)
+				return true;
+
+			final int lineOffset = doc.getLineOffset(lineIndex);
+			return isLegalLineDelimiter(doc, doc.get(lineOffset, lineLength));
+		} catch (final BadLocationException e) {
+			// Ignore, forcing a positive result
+			return true;
+		}
 	}
 
 	private TextUtils() {

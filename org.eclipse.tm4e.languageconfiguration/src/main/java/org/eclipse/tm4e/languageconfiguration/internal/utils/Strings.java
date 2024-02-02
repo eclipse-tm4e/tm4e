@@ -13,7 +13,7 @@
  *
  * Contributors:
  * - Microsoft Corporation: Initial code, written in TypeScript, licensed under MIT license
- * - Sebastian Thomschke - translation and adaptation to Java
+ * - Sebastian Thomschke (Vegard IT) - translation and adaptation to Java
  */
 package org.eclipse.tm4e.languageconfiguration.internal.utils;
 
@@ -32,41 +32,45 @@ public final class Strings {
 	}
 
 	/**
-	 * @returns first index of the string that is not whitespace or -1 if string is empty or contains only whitespaces
+	 * @returns first index of the string that is not whitespace; or -1 if string is empty or contains only whitespaces.
 	 */
 	public static int firstNonWhitespaceIndex(final String text) {
 		for (int i = 0, len = text.length(); i < len; i++) {
 			final char ch = text.charAt(i);
-			if (!Character.isWhitespace(ch)) {
+			if (!Character.isWhitespace(ch))
 				return i;
-			}
 		}
 		return -1;
 	}
 
 	/**
-	 * @return the leading whitespace of the string. If the string contains only whitespaces, returns entire string.
+	 * @return the leading whitespace of the string; or the entire string if the string contains only whitespaces.
 	 */
 	public static String getLeadingWhitespace(final String searchIn) {
 		return getLeadingWhitespace(searchIn, 0, searchIn.length());
 	}
 
 	/**
-	 * @return the leading whitespace of the string. If the string contains only whitespaces, returns entire string.
+	 * @return the leading whitespace of the string; or the entire string if the string contains only whitespaces.
+	 */
+	public static String getLeadingWhitespace(final String searchIn, final int startAt) {
+		return getLeadingWhitespace(searchIn, startAt, searchIn.length());
+	}
+
+	/**
+	 * @return the leading whitespace of the string; or the entire string if the string contains only whitespaces.
 	 */
 	public static String getLeadingWhitespace(final String searchIn, final int startAt, final int endAt) {
 		for (int i = startAt; i < endAt; i++) {
-			final char ch = searchIn.charAt(endAt);
-			if (ch != ' ' && ch != '\t') {
+			final char ch = searchIn.charAt(i);
+			if (!Character.isWhitespace(ch))
 				return searchIn.substring(startAt, i);
-			}
 		}
 		return searchIn.substring(startAt, endAt);
 	}
 
 	/**
-	 * @return the last index of the string that is not whitespace.
-	 *         If the string is empty or contains only whitespaces, returns -1.
+	 * @return the last index of the string that is not whitespace; or -1 if string is empty or contains only whitespaces.
 	 *         Defaults to starting from the end of the string.
 	 */
 	public static int lastNonWhitespaceIndex(final String str) {
@@ -74,8 +78,7 @@ public final class Strings {
 	}
 
 	/**
-	 * @return the last index of the string that is not whitespace.
-	 *         If the string is empty or contains only whitespaces, returns -1.
+	 * @return the last index of the string that is not whitespace; or -1 if string is empty or contains only whitespaces.
 	 */
 	public static int lastNonWhitespaceIndex(final String str, final int startIndex) {
 		for (int i = startIndex; i >= 0; i--) {

@@ -23,14 +23,20 @@ import org.eclipse.ui.texteditor.ITextEditor;
 public final class TextEditorPrefs {
 
 	public static CursorConfiguration getCursorConfiguration(final @Nullable ITextEditor editor) {
-		final var editorPrefStore = editor == null ? null : editor.getAdapter(IPreferenceStore.class);
+		final var editorPrefStore = editor == null
+				? null
+				: editor.getAdapter(IPreferenceStore.class);
+
 		final var useSpacesPrefStore = editorPrefStore != null && editorPrefStore.contains(EDITOR_SPACES_FOR_TABS)
 				? editorPrefStore
 				: EditorsUI.getPreferenceStore();
+
 		final var tabWidthPrefStore = editorPrefStore != null && editorPrefStore.contains(EDITOR_TAB_WIDTH)
 				? editorPrefStore
 				: EditorsUI.getPreferenceStore();
-		return new CursorConfiguration(useSpacesPrefStore.getBoolean(EDITOR_SPACES_FOR_TABS),
+
+		return new CursorConfiguration(
+				useSpacesPrefStore.getBoolean(EDITOR_SPACES_FOR_TABS),
 				tabWidthPrefStore.getInt(EDITOR_TAB_WIDTH));
 	}
 

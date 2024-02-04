@@ -44,6 +44,17 @@ public class MockDocument implements IDocument {
 		this.text = text;
 	}
 
+	public int getOffsetAfter(final String searchFor) {
+		var idx = text.indexOf(searchFor);
+		if (idx > -1)
+			return idx + searchFor.length();
+		return idx;
+	}
+
+	public int getOffsetOf(final String searchFor) {
+		return text.indexOf(searchFor);
+	}
+
 	@Override
 	public void addDocumentListener(IDocumentListener listener) {
 		throw new UnsupportedOperationException();

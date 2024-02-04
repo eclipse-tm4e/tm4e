@@ -51,6 +51,7 @@ public final class PreferenceHelper {
 								object.get("path").getAsString(),
 								pluginId == null ? null : pluginId.getAsString(),
 								getAsBoolean(object, "onEnterEnabled", true),
+								getAsBoolean(object, "indentRulesEnabled", true),
 								getAsBoolean(object, "bracketAutoClosingEnabled", true),
 								getAsBoolean(object, "matchingPairsEnabled", true));
 					})
@@ -61,6 +62,7 @@ public final class PreferenceHelper {
 						object.addProperty("pluginId", definition.getPluginId());
 						object.addProperty("contentTypeId", definition.getContentType().getId());
 						object.addProperty("onEnterEnabled", definition.isOnEnterEnabled());
+						object.addProperty("indentRulesEnabled", definition.isIndentRulesEnabled());
 						object.addProperty("bracketAutoClosingEnabled", definition.isBracketAutoClosingEnabled());
 						object.addProperty("matchingPairsEnabled", definition.isMatchingPairsEnabled());
 						return object;
@@ -68,7 +70,7 @@ public final class PreferenceHelper {
 			.create();
 
 	private static boolean getAsBoolean(final JsonObject obj, final String property, final boolean defaultValue) {
-		var elem = obj.get(property);
+		final JsonElement elem = obj.get(property);
 		if (elem == null)
 			return defaultValue;
 		return elem.getAsBoolean();

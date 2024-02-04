@@ -58,8 +58,9 @@ public final class LanguageConfigurationMessages extends NLS {
 	public static String LanguageConfigurationPreferencePage_path;
 	public static String LanguageConfigurationPreferencePage_pluginId;
 	public static String LanguageConfigurationPreferencePage_remove;
-	public static String LanguageConfigurationPreferencesWidget_enableOnEnterActions;
 	public static String LanguageConfigurationPreferencesWidget_enableAutoClosing;
+	public static String LanguageConfigurationPreferencesWidget_enableIndentRules;
+	public static String LanguageConfigurationPreferencesWidget_enableOnEnterActions;
 	public static String LanguageConfigurationPreferencesWidget_enableMatchingBrackets;
 	public static String OnEnterRuleTableWidget_beforeText;
 	public static String OnEnterRuleTableWidget_afterText;

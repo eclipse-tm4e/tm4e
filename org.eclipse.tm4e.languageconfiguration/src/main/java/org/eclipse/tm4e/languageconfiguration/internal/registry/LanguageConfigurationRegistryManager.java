@@ -21,16 +21,21 @@ import org.eclipse.core.runtime.Platform;
 import org.eclipse.core.runtime.content.IContentType;
 import org.eclipse.core.runtime.preferences.InstanceScope;
 import org.eclipse.jdt.annotation.Nullable;
+import org.eclipse.jface.text.BadLocationException;
 import org.eclipse.jface.text.IDocument;
 import org.eclipse.tm4e.languageconfiguration.LanguageConfigurationPlugin;
 import org.eclipse.tm4e.languageconfiguration.internal.model.AutoClosingPair;
 import org.eclipse.tm4e.languageconfiguration.internal.model.AutoClosingPairConditional;
 import org.eclipse.tm4e.languageconfiguration.internal.model.CompleteEnterAction;
+import org.eclipse.tm4e.languageconfiguration.internal.model.IndentForEnter;
 import org.eclipse.tm4e.languageconfiguration.internal.preferences.PreferenceConstants;
 import org.eclipse.tm4e.languageconfiguration.internal.preferences.PreferenceHelper;
 import org.eclipse.tm4e.languageconfiguration.internal.supports.CharacterPairSupport;
 import org.eclipse.tm4e.languageconfiguration.internal.supports.CommentSupport;
 import org.eclipse.tm4e.languageconfiguration.internal.supports.EnterActionHelper;
+import org.eclipse.tm4e.languageconfiguration.internal.supports.IndentForEnterHelper;
+import org.eclipse.tm4e.languageconfiguration.internal.supports.IndentForEnterHelper.IIndentConverter;
+import org.eclipse.tm4e.languageconfiguration.internal.supports.IndentRulesSupport;
 import org.eclipse.tm4e.languageconfiguration.internal.supports.OnEnterSupport;
 import org.osgi.service.prefs.BackingStoreException;
 
@@ -97,6 +102,11 @@ public final class LanguageConfigurationRegistryManager extends AbstractLanguage
 		return definition != null && definition.isOnEnterEnabled();
 	}
 
+	public boolean shouldIndentForEnter(final IContentType contentType) {
+		final var definition = getDefinition(contentType);
+		return definition != null && definition.isIndentRulesEnabled();
+	}
+
 	public boolean shouldComment(final IContentType contentType) {
 		final var definition = getDefinition(contentType);
 		return definition != null && definition.isOnEnterEnabled();
@@ -127,10 +137,39 @@ public final class LanguageConfigurationRegistryManager extends AbstractLanguage
 	 */
 	public @Nullable CompleteEnterAction getEnterAction(final IDocument doc, final int offset, final IContentType contentType) {
 		final OnEnterSupport onEnterSupport = _getOnEnterSupport(contentType /* scopedLineTokens.languageId */);
-		if (onEnterSupport == null) {
+		return onEnterSupport == null
+				? null
+				: EnterActionHelper.getEnterAction(doc, offset, onEnterSupport);
+	}
+
+	/**
+	 * @see <a href=
+	 *      "https://github.com/microsoft/vscode/blob/ba2cf46e20df3edf77bdd905acde3e175d985f70/src/vs/editor/common/languages/autoIndent.ts#L301">
+	 *      github.com/microsoft/vscode/blob/main/src/vs/editor/common/languages/autoIndent.ts</a>
+	 */
+	public @Nullable String getGoodIndentForLine(final IDocument doc, final int offset, final IContentType contentType,
+			final IIndentConverter indentConverter) throws BadLocationException {
+		final OnEnterSupport onEnterSupport = _getOnEnterSupport(contentType /* scopedLineTokens.languageId */);
+		if (onEnterSupport == null)
 			return null;
-		}
-		return EnterActionHelper.getEnterAction(doc, offset, onEnterSupport);
+		final var indentRulesSupport = this._getIndentRulesSupport(contentType /* scopedLineTokens.languageId */);
+		if (indentRulesSupport == null)
+			return null;
+
+		return IndentForEnterHelper.getGoodIndentForLine(doc, offset, indentConverter, indentRulesSupport, onEnterSupport);
+	}
+
+	/**
+	 * @see <a href=
+	 *      "https://github.com/microsoft/vscode/blob/ba2cf46e20df3edf77bdd905acde3e175d985f70/src/vs/editor/common/languages/autoIndent.ts#L301">
+	 *      github.com/microsoft/vscode/blob/main/src/vs/editor/common/languages/autoIndent.ts</a>
+	 */
+	public @Nullable IndentForEnter getIndentForEnter(final IDocument doc, final int offset, final IContentType contentType,
+			final IIndentConverter indentConverter) {
+		final var indentRulesSupport = this._getIndentRulesSupport(contentType /* scopedLineTokens.languageId */);
+		return indentRulesSupport == null
+				? null
+				: IndentForEnterHelper.getIndentForEnter(doc, offset, indentConverter, indentRulesSupport);
 	}
 
 	public @Nullable CommentSupport getCommentSupport(final IContentType contentType) {
@@ -141,6 +180,11 @@ public final class LanguageConfigurationRegistryManager extends AbstractLanguage
 	private @Nullable OnEnterSupport _getOnEnterSupport(final IContentType contentType) {
 		final var definition = this.getDefinition(contentType);
 		return definition == null ? null : definition.getOnEnter();
+	}
+
+	private @Nullable IndentRulesSupport _getIndentRulesSupport(final IContentType contentType) {
+		final var definition = this.getDefinition(contentType);
+		return definition == null ? null : definition.getIndentRules();
 	}
 
 	private @Nullable CharacterPairSupport _getCharacterPairSupport(final IContentType contentType) {

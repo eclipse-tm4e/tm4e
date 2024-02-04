@@ -95,4 +95,31 @@ class TextUtilsTest {
 		assertFalse(isEmptyLine(newDoc("word"), 0));
 		assertFalse(isEmptyLine(newDoc("\nword\n"), 1));
 	}
+
+	@Test
+	void testReplaceIndent() {
+		assertEquals("  ", replaceIndent("\t\t", 2, "  ").toString());
+
+		assertEquals("", replaceIndent("\t\t", 2, "").toString().toString());
+		assertEquals("foo  ", replaceIndent("foo  ", 2, "").toString());
+		assertEquals("foo", replaceIndent(" \t foo", 2, "").toString());
+		assertEquals("foo\nbar", replaceIndent(" foo\n bar", 2, "").toString());
+		assertEquals("foo\nbar", replaceIndent("  foo\n\tbar", 2, "").toString());
+		assertEquals("foo\nbar", replaceIndent(" foo\n\tbar", 2, "").toString());
+		assertEquals("foo\n\tbar", replaceIndent("\tfoo\n\t\tbar", 2, "").toString());
+		assertEquals("foo\n\tbar", replaceIndent("\tfoo\n  \tbar", 2, "").toString());
+
+		assertEquals("  ", replaceIndent("\t\t", 2, "  ").toString());
+		assertEquals("  foo  ", replaceIndent("foo  ", 2, "  ").toString());
+		assertEquals("  foo", replaceIndent(" \t foo", 2, "  ").toString());
+		assertEquals("  foo\n  bar", replaceIndent(" foo\n bar", 2, "  ").toString());
+		assertEquals("  foo\n  bar", replaceIndent("  foo\n\tbar", 2, "  ").toString());
+		assertEquals("  foo\n  bar", replaceIndent(" foo\n\tbar", 2, "  ").toString());
+		assertEquals("  foo\n  \tbar", replaceIndent("\tfoo\n\t\tbar", 2, "  ").toString());
+		assertEquals("  foo\n  \tbar", replaceIndent("\tfoo\n  \tbar", 2, "  ").toString());
+
+		assertEquals("  \n  \n", replaceIndent("\n\n", 2, "  ").toString());
+		assertEquals("  foo\n  bar\n", replaceIndent("\tfoo\n\tbar\n", 2, "  ").toString());
+
+	}
 }

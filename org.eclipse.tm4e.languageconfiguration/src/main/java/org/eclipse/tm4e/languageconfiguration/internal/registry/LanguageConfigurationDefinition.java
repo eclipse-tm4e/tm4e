@@ -38,6 +38,7 @@ public final class LanguageConfigurationDefinition extends TMResource implements
 
 	private final IContentType contentType;
 	private boolean onEnterEnabled = true;
+	private boolean indentRulesEnabled = true;
 	private boolean bracketAutoClosingEnabled = true;
 	private boolean matchingPairsEnabled = true;
 
@@ -67,11 +68,13 @@ public final class LanguageConfigurationDefinition extends TMResource implements
 	public LanguageConfigurationDefinition(final IContentType contentType,
 			final String path, final @Nullable String pluginId,
 			final boolean onEnterEnabled,
+			final boolean indentRulesEnabled,
 			final boolean bracketAutoClosingEnabled,
 			final boolean matchingPairsEnabled) {
 		super(path, pluginId);
 		this.contentType = contentType;
 		this.onEnterEnabled = onEnterEnabled;
+		this.indentRulesEnabled = indentRulesEnabled;
 		this.bracketAutoClosingEnabled = bracketAutoClosingEnabled;
 		this.matchingPairsEnabled = matchingPairsEnabled;
 	}
@@ -165,6 +168,16 @@ public final class LanguageConfigurationDefinition extends TMResource implements
 	@Override
 	public void setOnEnterEnabled(final boolean onEnterEnabled) {
 		this.onEnterEnabled = onEnterEnabled;
+	}
+
+	@Override
+	public boolean isIndentRulesEnabled() {
+		return indentRulesEnabled;
+	}
+
+	@Override
+	public void setIndentRulesEnabled(boolean indentRulesEnabled) {
+		this.indentRulesEnabled = indentRulesEnabled;
 	}
 
 	@Override

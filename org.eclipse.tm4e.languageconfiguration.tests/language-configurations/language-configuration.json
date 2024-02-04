@@ -25,6 +25,10 @@
        ["'", "'"],
        ["\"", "\""]
    ],
+   "indentationRules": {
+      "increaseIndentPattern": "({(?!.*}).*|\\(|\\[|((else(\\s)?)?if|else|for(each)?|while|switch|case).*:)\\s*((/[/*].*|)?$|\\?>)",
+      "decreaseIndentPattern": "^(.*\\*\\/)?\\s*((\\})|(\\)+[;,])|(\\]\\)*[;,])|\\b(else:)|\\b((end(if|for(each)?|while|switch));))"
+   },
    "onEnterRules":[
        {"beforeText": "^\\s*/{3}.*$", "action":{ "indent": "none", "appendText": "/// " }},
        {"beforeText": "^\\s*/{2}\\!.*$", "action": { "indent": "none", "appendText": "//! " }},

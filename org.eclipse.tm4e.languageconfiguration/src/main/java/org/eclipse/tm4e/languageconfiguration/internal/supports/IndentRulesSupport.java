@@ -13,7 +13,7 @@
  *
  * Contributors:
  * - Microsoft Corporation: Initial code, written in TypeScript, licensed under MIT license
- * - Sebastian Thomschke - translation and adaptation to Java
+ * - Sebastian Thomschke (Vegard IT) - translation and adaptation to Java
  */
 package org.eclipse.tm4e.languageconfiguration.internal.supports;
 
@@ -31,6 +31,9 @@ public class IndentRulesSupport {
 		public static final int DECREASE_MASK = 0b00000010;
 		public static final int INDENT_NEXTLINE_MASK = 0b00000100;
 		public static final int UNINDENT_MASK = 0b00001000;
+
+		private IndentConsts() {
+		}
 	}
 
 	private final IndentationRules _indentationRules;
@@ -40,7 +43,7 @@ public class IndentRulesSupport {
 	}
 
 	public boolean shouldIncrease(final String text) {
-		return _indentationRules.increaseIndentPattern.matchesFully(text);
+		return _indentationRules.increaseIndentPattern.matchesPartially(text);
 
 		// if (this._indentationRules.indentNextLinePattern && this._indentationRules.indentNextLinePattern.test(text)) {
 		// 	return true;
@@ -48,16 +51,16 @@ public class IndentRulesSupport {
 	}
 
 	public boolean shouldDecrease(final String text) {
-		return _indentationRules.decreaseIndentPattern.matchesFully(text);
+		return _indentationRules.decreaseIndentPattern.matchesPartially(text);
 	}
 
 	public boolean shouldIndentNextLine(final String text) {
-		return this._indentationRules.indentNextLinePattern != null && this._indentationRules.indentNextLinePattern.matchesFully(text);
+		return this._indentationRules.indentNextLinePattern != null && this._indentationRules.indentNextLinePattern.matchesPartially(text);
 	}
 
 	public boolean shouldIgnore(final String text) {
 		// the text matches `unIndentedLinePattern`
-		return this._indentationRules.unIndentedLinePattern != null && this._indentationRules.unIndentedLinePattern.matchesFully(text);
+		return this._indentationRules.unIndentedLinePattern != null && this._indentationRules.unIndentedLinePattern.matchesPartially(text);
 	}
 
 	public int getIndentMetadata(final String text) {

@@ -46,6 +46,16 @@ public interface ILanguageConfigurationDefinition extends ITMResource {
 	void setOnEnterEnabled(boolean onEnterEnabled);
 
 	/**
+	 * @return <code>true</code> if indent rules are enabled, <code>false</code> otherwise
+	 */
+	boolean isIndentRulesEnabled();
+
+	/**
+	 * Set whether indent-rules are enabled for this language configuration content type pair
+	 */
+	void setIndentRulesEnabled(boolean indentRulesEnabled);
+
+	/**
 	 * Returns whether the bracket auto closing action is enabled for this language configuration content type pair
 	 *
 	 * @return <code>true</code> if bracket auto closing is enabled, <code>false</code> otherwise

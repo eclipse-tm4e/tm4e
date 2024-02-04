@@ -26,7 +26,9 @@ import org.eclipse.tm4e.core.internal.utils.StringUtils;
  */
 public class IndentForEnter {
 
+	/** existing indentation of the line in which enter was pressed */
 	public final String beforeEnter;
+	/** indentation of the newly inserted line */
 	public final String afterEnter;
 
 	public IndentForEnter(final String beforeEnter, final String afterEnter) {

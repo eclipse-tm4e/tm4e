@@ -51,6 +51,18 @@ public class CursorConfiguration {
 		return Indentation.normalizeIndentation(str, this.indentSize, this.insertSpaces);
 	}
 
+	public String outdentString(final String str) {
+		if (str.startsWith("\t"))
+			return str.substring(1);
+
+		if (insertSpaces) {
+			final var indent = getIndent();
+			if (str.startsWith(indent))
+				return str.substring(indent.length());
+		}
+		return str;
+	}
+
 	public String getIndent() {
 		return insertSpaces
 				? " ".repeat(indentSize)

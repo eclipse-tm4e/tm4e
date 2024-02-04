@@ -24,10 +24,13 @@ import org.eclipse.jface.text.IAutoEditStrategy;
 import org.eclipse.jface.text.IDocument;
 import org.eclipse.jface.text.ITextViewer;
 import org.eclipse.tm4e.core.model.TMToken;
+import org.eclipse.tm4e.languageconfiguration.LanguageConfigurationPlugin;
 import org.eclipse.tm4e.languageconfiguration.internal.model.AutoClosingPairConditional;
 import org.eclipse.tm4e.languageconfiguration.internal.model.CursorConfiguration;
 import org.eclipse.tm4e.languageconfiguration.internal.registry.LanguageConfigurationRegistryManager;
+import org.eclipse.tm4e.languageconfiguration.internal.supports.IndentForEnterHelper.IIndentConverter;
 import org.eclipse.tm4e.languageconfiguration.internal.utils.TextEditorPrefs;
+import org.eclipse.tm4e.languageconfiguration.internal.utils.TextUtils;
 import org.eclipse.tm4e.ui.internal.model.TMModelManager;
 import org.eclipse.tm4e.ui.internal.utils.ContentTypeHelper;
 import org.eclipse.tm4e.ui.internal.utils.UI;
@@ -71,32 +74,63 @@ public class LanguageConfigurationAutoEditStrategy implements IAutoEditStrategy 
 			return;
 		}
 
-		// Auto close pair
 		final var registry = LanguageConfigurationRegistryManager.getInstance();
-		for (final IContentType contentType : contentTypes) {
-			final var autoClosingPair = registry.getAutoClosingPair(doc.get(), command.offset, command.text, contentType);
-			if (autoClosingPair == null) {
-				continue;
-			}
-			command.caretOffset = command.offset + command.text.length();
-			command.shiftsCaret = false;
-			if (command.text.equals(autoClosingPair.open) && isFollowedBy(doc, command.offset, autoClosingPair.open)) {
-				command.text = "";
-			} else if (command.text.equals(autoClosingPair.close) && isFollowedBy(doc, command.offset, autoClosingPair.close)) {
-				command.text = "";
-			} else if (isAutoClosingAllowed(doc, contentType, command.offset, autoClosingPair)) {
-				command.text += autoClosingPair.close;
-			}
-			return;
-		}
 
-		if (Arrays.stream(contentTypes)
-				.flatMap(contentType -> registry.getEnabledAutoClosingPairs(contentType).stream())
-				.anyMatch(charPair -> charPair.close.equals(command.text)
-						&& isFollowedBy(doc, command.offset, charPair.close))) {
-			command.caretOffset = command.offset + command.text.length();
-			command.shiftsCaret = false;
-			command.text = "";
+		// auto close pair
+		if (command.text.length() == 1) {
+			for (final IContentType contentType : contentTypes) {
+				final var autoClosingPair = registry.getAutoClosingPair(doc.get(), command.offset, command.text, contentType);
+				if (autoClosingPair == null) {
+					continue;
+				}
+				command.caretOffset = command.offset + command.text.length();
+				command.shiftsCaret = false;
+				if (command.text.equals(autoClosingPair.open) && isFollowedBy(doc, command.offset, autoClosingPair.open)) {
+					command.text = "";
+				} else if (command.text.equals(autoClosingPair.close) && isFollowedBy(doc, command.offset, autoClosingPair.close)) {
+					command.text = "";
+				} else if (isAutoClosingAllowed(doc, contentType, command.offset, autoClosingPair)) {
+					command.text += autoClosingPair.close;
+				}
+				return;
+			}
+
+			if (Arrays.stream(contentTypes)
+					.flatMap(contentType -> registry.getEnabledAutoClosingPairs(contentType).stream())
+					.anyMatch(charPair -> charPair.close.equals(command.text)
+							&& isFollowedBy(doc, command.offset, charPair.close))) {
+				command.caretOffset = command.offset + command.text.length();
+				command.shiftsCaret = false;
+				command.text = "";
+			}
+
+		} else {
+			// auto-indent pasted text
+			final var cursorCfg = TextEditorPrefs.getCursorConfiguration(UI.getActiveTextEditor());
+			for (final IContentType contentType : contentTypes) {
+				if (!registry.shouldIndentForEnter(contentType))
+					continue;
+				try {
+					final var lineIndex = doc.getLineOfOffset(command.offset);
+					final var newIndent = registry.getGoodIndentForLine(doc, lineIndex, contentType, IIndentConverter.of(cursorCfg));
+					if (newIndent != null) {
+						final var lineStartOffset = doc.getLineOffset(lineIndex);
+
+						// check if the content was pasted into a line while the cursor was not at the beginning of the line
+						// but inside or at the end of an existing line indentation
+						final var offsetInLine = command.offset - lineStartOffset;
+						if (offsetInLine > 0 && doc.get(lineStartOffset, offsetInLine).isBlank()) {
+							command.offset = lineStartOffset;
+							command.length += offsetInLine;
+						}
+						command.text = TextUtils.replaceIndent(command.text, cursorCfg.indentSize,
+								cursorCfg.normalizeIndentation(newIndent)).toString();
+						command.shiftsCaret = true;
+					}
+				} catch (BadLocationException ex) {
+					LanguageConfigurationPlugin.logError(ex);
+				}
+			}
 		}
 	}
 
@@ -182,64 +216,49 @@ public class LanguageConfigurationAutoEditStrategy implements IAutoEditStrategy 
 		if (contentTypes.length > 0) {
 			final var registry = LanguageConfigurationRegistryManager.getInstance();
 			for (final IContentType contentType : contentTypes) {
-				if (!registry.shouldEnterAction(contentType)) {
-					continue;
+				if (registry.shouldEnterAction(contentType)) {
+					final var enterAction = registry.getEnterAction(doc, command.offset, contentType);
+					if (enterAction != null) {
+						command.shiftsCaret = false;
+						final String newLine = command.text;
+						command.text = switch (enterAction.indentAction) {
+							case None // Nothing special
+									-> newLine + cursorCfg.normalizeIndentation(enterAction.indentation + enterAction.appendText);
+							case Indent // Indent once
+									-> newLine + cursorCfg.normalizeIndentation(enterAction.indentation + enterAction.appendText);
+							case IndentOutdent -> {
+								// Ultra special
+								final String normalIndent = cursorCfg.normalizeIndentation(enterAction.indentation);
+								final String increasedIndent = cursorCfg
+										.normalizeIndentation(enterAction.indentation + enterAction.appendText);
+								yield newLine + increasedIndent + newLine + normalIndent;
+							}
+							case Outdent -> {
+								final String indentation = getIndentationFromWhitespace(enterAction.indentation, cursorCfg);
+								final String outdentedText = cursorCfg
+										.outdentString(cursorCfg.normalizeIndentation(indentation + enterAction.appendText));
+								yield newLine + outdentedText;
+							}
+						};
+						command.caretOffset = command.offset + command.text.length();
+						return;
+					}
 				}
 
-				final var enterAction = registry.getEnterAction(doc, command.offset, contentType);
-				if (enterAction != null) {
-					command.shiftsCaret = false;
-					final String newLine = command.text;
-					switch (enterAction.indentAction) {
-						case None: {
-							// Nothing special
-							final String increasedIndent = cursorCfg.normalizeIndentation(enterAction.indentation + enterAction.appendText);
-							command.text = newLine + increasedIndent;
-							command.caretOffset = command.offset + (newLine + increasedIndent).length();
-							break;
-						}
-						case Indent: {
-							// Indent once
-							final String increasedIndent = cursorCfg.normalizeIndentation(enterAction.indentation + enterAction.appendText);
-							command.text = newLine + increasedIndent;
-							command.caretOffset = command.offset + (newLine + increasedIndent).length();
-							break;
-						}
-						case IndentOutdent: {
-							// Ultra special
-							final String normalIndent = cursorCfg.normalizeIndentation(enterAction.indentation);
-							final String increasedIndent = cursorCfg.normalizeIndentation(enterAction.indentation + enterAction.appendText);
-							command.text = newLine + increasedIndent + newLine + normalIndent;
-							command.caretOffset = command.offset + (newLine + increasedIndent).length();
-							break;
-						}
-						case Outdent:
-							final String indentation = getIndentationFromWhitespace(enterAction.indentation, cursorCfg);
-							final String outdentedText = outdentString(cursorCfg.normalizeIndentation(indentation + enterAction.appendText),
-									cursorCfg);
-							command.text = newLine + outdentedText;
-							command.caretOffset = command.offset + (newLine + outdentedText).length();
-							break;
+				if (registry.shouldIndentForEnter(contentType)) {
+					final var indentForEnter = registry.getIndentForEnter(doc, command.offset, contentType, IIndentConverter.of(cursorCfg));
+					if (indentForEnter != null) {
+						final String newLine = command.text;
+						command.text = newLine + cursorCfg.normalizeIndentation(indentForEnter.afterEnter);
+						command.caretOffset = command.offset;
+						return;
 					}
-					return;
 				}
 			}
 		}
 
 		// fail back to default for indentation
 		new DefaultIndentLineAutoEditStrategy().customizeDocumentCommand(doc, command);
-	}
-
-	private static String outdentString(final String str, final CursorConfiguration cursorCfg) {
-		if (str.startsWith("\t"))
-			return str.substring(1);
-
-		if (cursorCfg.insertSpaces) {
-			final var indent = cursorCfg.getIndent();
-			if (str.startsWith(indent))
-				return str.substring(indent.length());
-		}
-		return str;
 	}
 
 	private void installViewer() {

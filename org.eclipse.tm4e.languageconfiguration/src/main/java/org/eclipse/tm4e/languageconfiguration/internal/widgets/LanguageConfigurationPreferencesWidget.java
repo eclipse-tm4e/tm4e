@@ -15,6 +15,7 @@ import static org.eclipse.swt.events.SelectionListener.widgetSelectedAdapter;
 import static org.eclipse.tm4e.core.internal.utils.NullSafetyHelper.lazyNonNull;
 import static org.eclipse.tm4e.languageconfiguration.internal.LanguageConfigurationMessages.*;
 
+import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
@@ -25,9 +26,10 @@ import org.eclipse.tm4e.languageconfiguration.internal.registry.ILanguageConfigu
 
 public final class LanguageConfigurationPreferencesWidget extends LanguageConfigurationInfoWidget {
 
-	private Button toggleOnEnterButton = lazyNonNull();
-	private Button toggleBracketAutoClosingButton = lazyNonNull();
-	private Button toggleMatchingPairsButton = lazyNonNull();
+	private @NonNullByDefault({}) Button toggleOnEnterButton;
+	private @NonNullByDefault({}) Button toggleIdentRulesButton;
+	private @NonNullByDefault({}) Button toggleBracketAutoClosingButton;
+	private @NonNullByDefault({}) Button toggleMatchingPairsButton;
 
 	private ILanguageConfigurationDefinition definition = lazyNonNull();
 	private ILanguageConfigurationRegistryManager manager = lazyNonNull();
@@ -42,6 +44,8 @@ public final class LanguageConfigurationPreferencesWidget extends LanguageConfig
 		if (definition == null) {
 			toggleOnEnterButton.setEnabled(false);
 			toggleOnEnterButton.setSelection(false);
+			toggleIdentRulesButton.setEnabled(false);
+			toggleIdentRulesButton.setSelection(false);
 			toggleBracketAutoClosingButton.setEnabled(false);
 			toggleBracketAutoClosingButton.setSelection(false);
 			toggleMatchingPairsButton.setEnabled(false);
@@ -50,6 +54,8 @@ public final class LanguageConfigurationPreferencesWidget extends LanguageConfig
 		}
 		toggleOnEnterButton.setSelection(definition.isOnEnterEnabled());
 		toggleOnEnterButton.setEnabled(langcfg != null && !langcfg.getOnEnterRules().isEmpty());
+		toggleIdentRulesButton.setSelection(definition.isIndentRulesEnabled());
+		toggleIdentRulesButton.setEnabled(langcfg != null && langcfg.getIndentationRules() != null);
 		toggleBracketAutoClosingButton.setSelection(definition.isBracketAutoClosingEnabled());
 		toggleBracketAutoClosingButton.setEnabled(langcfg != null && !langcfg.getAutoClosingPairs().isEmpty());
 		toggleMatchingPairsButton.setSelection(definition.isMatchingPairsEnabled());
@@ -68,6 +74,20 @@ public final class LanguageConfigurationPreferencesWidget extends LanguageConfig
 		toggleOnEnterButton.addSelectionListener(widgetSelectedAdapter(e -> {
 			manager.unregisterLanguageConfigurationDefinition(definition);
 			definition.setOnEnterEnabled(toggleOnEnterButton.getSelection());
+			manager.registerLanguageConfigurationDefinition(definition);
+		}));
+	}
+
+	@Override
+	protected void createIndentationRulesInfo(final Composite parent) {
+		super.createIndentationRulesInfo(parent);
+		toggleIdentRulesButton = new Button(parent, SWT.CHECK);
+		toggleIdentRulesButton.setText(LanguageConfigurationPreferencesWidget_enableIndentRules);
+		toggleIdentRulesButton.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		toggleIdentRulesButton.setEnabled(false);
+		toggleIdentRulesButton.addSelectionListener(widgetSelectedAdapter(e -> {
+			manager.unregisterLanguageConfigurationDefinition(definition);
+			definition.setIndentRulesEnabled(toggleIdentRulesButton.getSelection());
 			manager.registerLanguageConfigurationDefinition(definition);
 		}));
 	}

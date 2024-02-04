@@ -7,9 +7,13 @@
  * SPDX-License-Identifier: EPL-2.0
  *
  * Contributors:
- * Angelo Zerr <angelo.zerr@gmail.com> - initial API and implementation
+ * - Angelo Zerr <angelo.zerr@gmail.com> - initial API and implementation
+ * - Sebastian Thomschke (Vegard IT) - added methods replaceIndent, and isEmptyLine
  */
 package org.eclipse.tm4e.languageconfiguration.internal.utils;
+
+import java.util.function.IntConsumer;
+import java.util.function.IntPredicate;
 
 import org.eclipse.jface.text.BadLocationException;
 import org.eclipse.jface.text.DocumentCommand;
@@ -143,6 +147,114 @@ public final class TextUtils {
 			// Ignore, forcing a positive result
 			return true;
 		}
+	}
+
+	public static CharSequence replaceIndent(final CharSequence multiLineString, final int tabSize, final String newIndent) {
+		final int effectiveTabSize = Math.max(1, tabSize);
+
+		abstract class CharConsumer implements IntConsumer {
+
+			char prevChar = 0;
+
+			@Override
+			public void accept(final int value) {
+				char ch = (char) value;
+				onChar(ch);
+				prevChar = ch;
+			}
+
+			abstract void onChar(char ch);
+
+		}
+		/*
+		 * determine common indentation of all lines
+		 */
+		final class IndentDetector extends CharConsumer implements IntPredicate {
+			int existingIndent = Integer.MAX_VALUE;
+			int indentOfLine = 0;
+			boolean isEmptyLine = true;
+			boolean skipToLineEnd = false;
+			int lineCount = 1;
+
+			@Override
+			void onChar(final char ch) {
+				if (ch == '\r' && prevChar != '\n' || ch == '\n' && prevChar != '\r') {
+					lineCount++;
+					skipToLineEnd = false;
+					if (!isEmptyLine && indentOfLine < existingIndent)
+						existingIndent = indentOfLine;
+					indentOfLine = 0;
+					isEmptyLine = true;
+					if (existingIndent == 0)
+						return;
+				} else {
+					isEmptyLine = false;
+					if (!skipToLineEnd) {
+						if (ch == '\t') {
+							indentOfLine += effectiveTabSize;
+						} else if (Character.isWhitespace(ch)) {
+							indentOfLine++;
+						} else {
+							skipToLineEnd = true;
+						}
+					}
+				}
+			}
+
+			@Override
+			public boolean test(final int value) {
+				return existingIndent > 0;
+			}
+		}
+
+		final var indentDetector = new IndentDetector();
+		multiLineString.chars().takeWhile(indentDetector).forEach(indentDetector);
+
+		final var existingIndent = indentDetector.isEmptyLine
+				? indentDetector.existingIndent
+				: Math.min(indentDetector.indentOfLine, indentDetector.existingIndent);
+		if (existingIndent == 0 && newIndent.isEmpty())
+			return multiLineString;
+
+		/*
+		 * replace common indentation of all lines
+		 */
+		final var sb = new StringBuilder(Math.max(0, multiLineString.length() - (indentDetector.lineCount * existingIndent)));
+		sb.append(newIndent);
+		final class IdentReplacer extends CharConsumer {
+			int indentOfLineSkipped = 0;
+
+			@Override
+			public void onChar(final char ch) {
+				if (ch == '\n') {
+					sb.append(ch);
+					sb.append(newIndent);
+					indentOfLineSkipped = 0;
+					return;
+				}
+				if (prevChar == '\r') {
+					sb.append(newIndent);
+					indentOfLineSkipped = 0;
+				}
+				if (indentOfLineSkipped >= existingIndent) {
+					sb.append(ch);
+				} else {
+					if (ch == '\t') {
+						indentOfLineSkipped += effectiveTabSize;
+					} else {
+						indentOfLineSkipped++;
+					}
+				}
+			}
+		}
+
+		final var indentReplacer = new IdentReplacer();
+		multiLineString.chars().forEach(indentReplacer);
+
+		// don't indent trailing new line
+		if (indentReplacer.prevChar == '\n' || indentReplacer.prevChar == '\r')
+			sb.setLength(sb.length() - newIndent.length());
+		return sb;
 	}
 
 	private TextUtils() {

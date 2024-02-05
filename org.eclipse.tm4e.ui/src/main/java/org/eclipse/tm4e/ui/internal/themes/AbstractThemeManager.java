@@ -19,6 +19,7 @@ import java.util.Map;
 
 import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.swt.graphics.RGB;
+import org.eclipse.tm4e.registry.ITMScope;
 import org.eclipse.tm4e.ui.internal.utils.PreferenceUtils;
 import org.eclipse.tm4e.ui.themes.ITheme;
 import org.eclipse.tm4e.ui.themes.IThemeAssociation;
@@ -87,7 +88,9 @@ public abstract class AbstractThemeManager implements IThemeManager {
 	}
 
 	@Override
-	public ITheme getThemeForScope(final String scopeName, final boolean dark) {
+	public ITheme getThemeForScope(String scopeName, final boolean dark) {
+		scopeName = ITMScope.parse(scopeName).getName();
+
 		final IThemeAssociation association = themeAssociationRegistry.getThemeAssociationFor(scopeName, dark);
 		if (association != null) {
 			final String themeId = association.getThemeId();
@@ -105,7 +108,9 @@ public abstract class AbstractThemeManager implements IThemeManager {
 	}
 
 	@Override
-	public IThemeAssociation[] getThemeAssociationsForScope(final String scopeName) {
+	public IThemeAssociation[] getThemeAssociationsForScope(String scopeName) {
+		scopeName = ITMScope.parse(scopeName).getName();
+
 		final var associations = new ArrayList<IThemeAssociation>();
 		IThemeAssociation light = themeAssociationRegistry.getThemeAssociationFor(scopeName, false);
 		if (light == null) {

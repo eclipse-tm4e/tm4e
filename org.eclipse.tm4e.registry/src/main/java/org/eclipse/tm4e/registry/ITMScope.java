@@ -13,11 +13,19 @@
 package org.eclipse.tm4e.registry;
 
 import org.eclipse.jdt.annotation.Nullable;
+import org.eclipse.tm4e.registry.internal.TMScope;
 
 /**
  * TextMate grammar scope API
  */
 public interface ITMScope {
+
+	/**
+	 * @param scopeName fully qualified ("source.batchfile@com.example.myplugin") or unqualified scopeName ("source.batchfile")
+	 */
+	static ITMScope parse(String scopeName) {
+		return TMScope.parse(scopeName);
+	}
 
 	String getName();
 

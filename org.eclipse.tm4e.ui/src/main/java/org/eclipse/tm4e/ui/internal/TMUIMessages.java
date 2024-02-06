@@ -66,6 +66,7 @@ public final class TMUIMessages extends NLS {
 	public static String ThemePreferencePage_title;
 	public static String ThemePreferencePage_description;
 	public static String ThemePreferencePage_column_name;
+	public static String ThemePreferencePage_column_type;
 	public static String ThemePreferencePage_column_path;
 	public static String ThemePreferencePage_column_pluginId;
 	public static String ThemePreferencePage_darkThemeButton_label;

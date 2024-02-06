@@ -11,16 +11,14 @@
  */
 package org.eclipse.tm4e.ui.tests.themes;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import org.eclipse.tm4e.ui.internal.themes.AbstractThemeManager;
 import org.eclipse.tm4e.ui.themes.ITheme;
-import org.eclipse.tm4e.ui.themes.IThemeManager;
 import org.eclipse.tm4e.ui.themes.Theme;
 import org.eclipse.tm4e.ui.themes.ThemeIdConstants;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.osgi.service.prefs.BackingStoreException;
 
 /**
  * Test for theme manager.
@@ -28,22 +26,39 @@ import org.osgi.service.prefs.BackingStoreException;
 class ThemeManagerTest implements ThemeIdConstants {
 
 	private static final class MockThemeManager extends AbstractThemeManager {
+
 		@Override
-		public void save() throws BackingStoreException {
+		protected void registerTheme(ITheme theme) {
+			super.registerTheme(theme);
+		}
+
+		@Override
+		public EditSession createEditSession() {
+			throw new UnsupportedOperationException();
 		}
 	}
 
-	private IThemeManager manager;
+	private MockThemeManager manager;
 
 	@BeforeEach
 	public void setup() {
 		manager = new MockThemeManager();
 
 		// Register theme
-		manager.registerTheme(new Theme(SolarizedLight, "./themes/SolarizedLight.css", "SolarizedLight", false, true));
-		manager.registerTheme(new Theme(Light, "./themes/Light.css", "Light", false, false));
-		manager.registerTheme(new Theme(Dark, "./themes/Dark.css", "Dark", true, true));
-		manager.registerTheme(new Theme(Monokai, "./themes/Monokai.css", "Monokai", true, false));
+		manager.registerTheme(new Theme(SolarizedLight, "./themes/SolarizedLight.css", "SolarizedLight", false) {
+			@Override
+			public boolean isDefault() {
+				return true;
+			}
+		});
+		manager.registerTheme(new Theme(Light, "./themes/Light.css", "Light", false));
+		manager.registerTheme(new Theme(Dark, "./themes/Dark.css", "Dark", true) {
+			@Override
+			public boolean isDefault() {
+				return true;
+			}
+		});
+		manager.registerTheme(new Theme(Monokai, "./themes/Monokai.css", "Monokai", true));
 	}
 
 	@Test

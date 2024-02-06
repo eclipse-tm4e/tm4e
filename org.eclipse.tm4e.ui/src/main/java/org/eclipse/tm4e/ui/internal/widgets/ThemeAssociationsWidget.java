@@ -11,7 +11,7 @@
  */
 package org.eclipse.tm4e.ui.internal.widgets;
 
-import static org.eclipse.tm4e.core.internal.utils.NullSafetyHelper.*;
+import static org.eclipse.tm4e.core.internal.utils.NullSafetyHelper.lazyNonNull;
 
 import java.util.Iterator;
 
@@ -39,7 +39,7 @@ import org.eclipse.tm4e.ui.themes.IThemeManager;
  */
 public final class ThemeAssociationsWidget extends TableAndButtonsWidget {
 
-	private final IThemeManager themeManager;
+	private final IThemeManager.EditSession themeManager;
 
 	private Button editButton = lazyNonNull();
 	private Button removeButton = lazyNonNull();
@@ -47,7 +47,7 @@ public final class ThemeAssociationsWidget extends TableAndButtonsWidget {
 	@Nullable
 	private IGrammarDefinition definition;
 
-	public ThemeAssociationsWidget(final IThemeManager themeManager, final Composite parent, final int style) {
+	public ThemeAssociationsWidget(final IThemeManager.EditSession themeManager, final Composite parent, final int style) {
 		super(parent, style, TMUIMessages.ThemeAssociationsWidget_description);
 		this.themeManager = themeManager;
 		super.setContentProvider(ArrayContentProvider.getInstance());
@@ -61,11 +61,10 @@ public final class ThemeAssociationsWidget extends TableAndButtonsWidget {
 		editButton.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		editButton.addListener(SWT.Selection, e -> {
 			// Open the wizard to create association between theme and grammar.
-			final var wizard = new CreateThemeAssociationWizard(false);
+			final var wizard = new CreateThemeAssociationWizard(themeManager, false);
 			wizard.setInitialDefinition(definition);
 			final IStructuredSelection selection = super.getSelection();
 			wizard.setInitialAssociation(selection.isEmpty() ? null : (IThemeAssociation) selection.getFirstElement());
-			wizard.setThemeManager(themeManager);
 			final var dialog = new WizardDialog(getShell(), wizard);
 			if (dialog.open() == Window.OK) {
 				final IThemeAssociation association = wizard.getCreatedThemeAssociation();

@@ -17,23 +17,70 @@ import org.osgi.service.prefs.BackingStoreException;
 
 /**
  * TextMate theme manager API.
- *
  */
 public interface IThemeManager {
 
-	/**
-	 * Register the given theme.
-	 *
-	 * @param theme to unregister.
-	 */
-	void registerTheme(ITheme theme);
+	interface EditSession extends IThemeManager {
+		/**
+		 * resets this session to the current state of the singleton theme manager
+		 */
+		void reset();
+
+		/**
+		 * Register the given theme.
+		 *
+		 * @param theme to register.
+		 */
+		void registerTheme(ITheme theme);
+
+		/**
+		 * Unregister the given theme.
+		 *
+		 * @param theme to unregister.
+		 */
+		void unregisterTheme(ITheme theme);
+
+		/**
+		 * Sets the TextMate theme with the given themeId as default dark or light theme.
+		 */
+		void setDefaultTheme(String themeId, boolean dark);
+
+		/**
+		 * Register the given theme association.
+		 *
+		 * @param association to register.
+		 */
+		void registerThemeAssociation(IThemeAssociation association);
+
+		/**
+		 * Unregister the given theme association.
+		 *
+		 * @param association to unregister.
+		 */
+		void unregisterThemeAssociation(IThemeAssociation association);
+
+		/**
+		 * Applies changes to the singleton theme manager and persists them to disk
+		 */
+		void save() throws BackingStoreException;
+
+		/**
+		 * @throws UnsupportedOperationException
+		 */
+		@Override
+		default EditSession createEditSession() {
+			throw new UnsupportedOperationException();
+		}
+	}
+
+	IThemeManager.EditSession createEditSession();
 
 	/**
-	 * Unregister the given theme.
-	 *
-	 * @param theme to unregister.
+	 * @return the default light or dark TextMate theme depending on the selected Eclipse UI theme.
 	 */
-	void unregisterTheme(ITheme theme);
+	ITheme getDefaultTheme();
+
+	ITheme getDefaultTheme(boolean dark);
 
 	/**
 	 * Returns the {@link ITheme} by the theme id.
@@ -49,13 +96,6 @@ public interface IThemeManager {
 	 * @return the list of all registered TextMate themes.
 	 */
 	ITheme[] getThemes();
-
-	/**
-	 * Returns the default theme.
-	 *
-	 * @return the default theme.
-	 */
-	ITheme getDefaultTheme();
 
 	/**
 	 * Returns the list of TextMate themes for the given eclipse theme id.
@@ -92,20 +132,6 @@ public interface IThemeManager {
 	ITheme getThemeForScope(String scopeName);
 
 	/**
-	 * Register the given theme association.
-	 *
-	 * @param association to register.
-	 */
-	void registerThemeAssociation(IThemeAssociation association);
-
-	/**
-	 * Unregister the given theme association.
-	 *
-	 * @param association to unregister.
-	 */
-	void unregisterThemeAssociation(IThemeAssociation association);
-
-	/**
 	 * Returns list of all theme associations.
 	 *
 	 * @return list of all theme associations.
@@ -122,15 +148,4 @@ public interface IThemeManager {
 	 *         <code>scopeName</code>.
 	 */
 	IThemeAssociation[] getThemeAssociationsForScope(String scopeName);
-
-	/**
-	 * Save the themes definitions.
-	 *
-	 * @throws BackingStoreException
-	 */
-	void save() throws BackingStoreException;
-
-	boolean isDarkEclipseTheme();
-
-	boolean isDarkEclipseTheme(@Nullable String eclipseThemeId);
 }

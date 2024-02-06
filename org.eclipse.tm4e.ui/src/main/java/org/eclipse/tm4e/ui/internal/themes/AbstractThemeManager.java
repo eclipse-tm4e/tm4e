@@ -12,10 +12,10 @@
 package org.eclipse.tm4e.ui.internal.themes;
 
 import java.util.ArrayList;
-import java.util.Collection;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
-import java.util.List;
 import java.util.Map;
+import java.util.stream.Stream;
 
 import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.swt.graphics.RGB;
@@ -28,20 +28,20 @@ import org.eclipse.tm4e.ui.themes.ThemeAssociation;
 
 /**
  * TextMate theme manager implementation.
- *
  */
 public abstract class AbstractThemeManager implements IThemeManager {
 
-	private final Map<String /* theme id */, ITheme> themes = new LinkedHashMap<>();
-	private final ThemeAssociationRegistry themeAssociationRegistry = new ThemeAssociationRegistry();
+	protected final Map<String /* theme id */, ITheme> themes = new LinkedHashMap<>();
+	protected final Map<@Nullable String, @Nullable IThemeAssociation> darkThemeAssociations = new HashMap<>();
+	protected final Map<@Nullable String, @Nullable IThemeAssociation> lightThemeAssociations = new HashMap<>();
+	protected @Nullable String defaultDarkThemeId;
+	protected @Nullable String defaultLightThemeId;
 
-	@Override
-	public void registerTheme(final ITheme theme) {
+	protected void registerTheme(final ITheme theme) {
 		themes.put(theme.getId(), theme);
 	}
 
-	@Override
-	public void unregisterTheme(final ITheme theme) {
+	protected void unregisterTheme(final ITheme theme) {
 		themes.remove(theme.getId());
 	}
 
@@ -57,11 +57,17 @@ public abstract class AbstractThemeManager implements IThemeManager {
 
 	@Override
 	public ITheme getDefaultTheme() {
-		final boolean dark = isDarkEclipseTheme();
-		return getDefaultTheme(dark);
+		return getDefaultTheme(PreferenceUtils.isDarkEclipseTheme());
 	}
 
-	ITheme getDefaultTheme(final boolean dark) {
+	@Override
+	public ITheme getDefaultTheme(final boolean dark) {
+		final var defaultThemeId = dark ? defaultDarkThemeId : defaultLightThemeId;
+		final var defaultTheme = defaultThemeId == null ? null : themes.get(defaultThemeId);
+		if (defaultTheme != null) {
+			return defaultTheme;
+		}
+
 		for (final ITheme theme : themes.values()) {
 			if (theme.isDark() == dark && theme.isDefault()) {
 				return theme;
@@ -70,31 +76,30 @@ public abstract class AbstractThemeManager implements IThemeManager {
 		throw new IllegalStateException("Should never be reached");
 	}
 
+	protected void setDefaultTheme(final String themeId, final boolean dark) {
+		if (dark)
+			defaultDarkThemeId = themeId;
+		else
+			defaultLightThemeId = themeId;
+	}
+
 	@Override
 	public ITheme[] getThemes(final boolean dark) {
 		return themes.values().stream().filter(theme -> theme.isDark() == dark).toArray(ITheme[]::new);
 	}
 
 	@Override
-	public boolean isDarkEclipseTheme() {
-		return isDarkEclipseTheme(PreferenceUtils.getE4PreferenceCSSThemeId());
-	}
-
-	@Override
-	public boolean isDarkEclipseTheme(@Nullable final String eclipseThemeId) {
-		return eclipseThemeId != null && eclipseThemeId.toLowerCase().contains("dark");
-	}
-
-	@Override
 	public ITheme getThemeForScope(final String scopeName) {
-		return getThemeForScope(scopeName, isDarkEclipseTheme());
+		return getThemeForScope(scopeName, PreferenceUtils.isDarkEclipseTheme());
 	}
 
 	@Override
 	public ITheme getThemeForScope(String scopeName, final boolean dark) {
 		scopeName = ITMScope.parse(scopeName).getName();
 
-		final IThemeAssociation association = themeAssociationRegistry.getThemeAssociationFor(scopeName, dark);
+		final IThemeAssociation association = dark
+				? darkThemeAssociations.get(scopeName)
+				: lightThemeAssociations.get(scopeName);
 		if (association != null) {
 			final String themeId = association.getThemeId();
 			final var theme = getThemeById(themeId);
@@ -117,12 +122,12 @@ public abstract class AbstractThemeManager implements IThemeManager {
 		scopeName = ITMScope.parse(scopeName).getName();
 
 		final var associations = new ArrayList<IThemeAssociation>();
-		IThemeAssociation light = themeAssociationRegistry.getThemeAssociationFor(scopeName, false);
+		IThemeAssociation light = lightThemeAssociations.get(scopeName);
 		if (light == null) {
 			light = new ThemeAssociation(getDefaultTheme(false).getId(), scopeName, false);
 		}
 		associations.add(light);
-		IThemeAssociation dark = themeAssociationRegistry.getThemeAssociationFor(scopeName, true);
+		IThemeAssociation dark = darkThemeAssociations.get(scopeName);
 		if (dark == null) {
 			dark = new ThemeAssociation(getDefaultTheme(true).getId(), scopeName, true);
 		}
@@ -130,19 +135,25 @@ public abstract class AbstractThemeManager implements IThemeManager {
 		return associations.toArray(IThemeAssociation[]::new);
 	}
 
-	@Override
-	public void registerThemeAssociation(final IThemeAssociation association) {
-		themeAssociationRegistry.register(association);
+	protected void registerThemeAssociation(final IThemeAssociation association) {
+		if (association.isWhenDark()) {
+			darkThemeAssociations.put(association.getScopeName(), association);
+		} else {
+			lightThemeAssociations.put(association.getScopeName(), association);
+		}
 	}
 
-	@Override
-	public void unregisterThemeAssociation(final IThemeAssociation association) {
-		themeAssociationRegistry.unregister(association);
+	protected void unregisterThemeAssociation(final IThemeAssociation association) {
+		if (association.isWhenDark()) {
+			darkThemeAssociations.remove(association.getScopeName(), association);
+		} else {
+			lightThemeAssociations.remove(association.getScopeName(), association);
+		}
 	}
 
 	@Override
 	public IThemeAssociation[] getAllThemeAssociations() {
-		final List<IThemeAssociation> associations = themeAssociationRegistry.getThemeAssociations();
-		return associations.toArray(IThemeAssociation[]::new);
+		return Stream.concat(darkThemeAssociations.values().stream(), lightThemeAssociations.values().stream())
+				.toArray(IThemeAssociation[]::new);
 	}
 }

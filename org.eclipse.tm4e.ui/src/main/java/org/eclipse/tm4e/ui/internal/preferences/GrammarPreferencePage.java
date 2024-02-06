@@ -45,7 +45,6 @@ import org.eclipse.tm4e.registry.TMEclipseRegistryPlugin;
 import org.eclipse.tm4e.registry.WorkingCopyGrammarRegistryManager;
 import org.eclipse.tm4e.ui.TMUIPlugin;
 import org.eclipse.tm4e.ui.internal.TMUIMessages;
-import org.eclipse.tm4e.ui.internal.themes.WorkingCopyThemeManager;
 import org.eclipse.tm4e.ui.internal.themes.ThemeManager;
 import org.eclipse.tm4e.ui.internal.widgets.ContentTypesBindingWidget;
 import org.eclipse.tm4e.ui.internal.widgets.GrammarInfoWidget;
@@ -74,7 +73,7 @@ public final class GrammarPreferencePage extends PreferencePage implements IWork
 	// Managers
 	private IGrammarRegistryManager grammarRegistryManager = new WorkingCopyGrammarRegistryManager(
 			TMEclipseRegistryPlugin.getGrammarRegistryManager());
-	private IThemeManager themeManager = new WorkingCopyThemeManager(TMUIPlugin.getThemeManager());
+	private final IThemeManager.EditSession themeManager = ThemeManager.getInstance().createEditSession();
 	private ISnippetManager snippetManager = TMUIPlugin.getSnippetManager();
 
 	// Grammar list

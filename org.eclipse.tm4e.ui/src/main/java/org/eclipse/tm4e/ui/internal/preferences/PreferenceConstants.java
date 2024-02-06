@@ -24,6 +24,9 @@ public final class PreferenceConstants {
 
 	public static final String E4_THEME_ID = "themeid";
 
+	public static final String DEFAULT_DARK_THEME = "org.eclipse.tm4e.ui.themes.defaultDarkTheme";
+	public static final String DEFAULT_LIGHT_THEME = "org.eclipse.tm4e.ui.themes.defaultLightTheme";
+
 	public static final String EDITOR_CURRENTLINE_HIGHLIGHT = "currentLineColor";
 
 	private PreferenceConstants() {

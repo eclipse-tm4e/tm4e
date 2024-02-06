@@ -77,13 +77,12 @@ public final class ThemePreferencePage extends PreferencePage implements IWorkbe
 	private TMViewer previewViewer = lazyNonNull();
 
 	private final IGrammarRegistryManager grammarRegistryManager = TMEclipseRegistryPlugin.getGrammarRegistryManager();
-	private final IThemeManager themeManager = TMUIPlugin.getThemeManager();
+	private final IThemeManager.EditSession themeManager = ThemeManager.getInstance().createEditSession();
 
 	private Button darkThemeButton = lazyNonNull();
 	private Button defaultThemeButton = lazyNonNull();
 
-	@Nullable
-	private ITheme selectedTheme;
+	private @Nullable ITheme selectedTheme;
 
 	public ThemePreferencePage() {
 		setDescription(TMUIMessages.ThemePreferencePage_description);
@@ -149,6 +148,7 @@ public final class ThemePreferencePage extends PreferencePage implements IWorkbe
 			@Override
 			protected void createColumns() {
 				createAutoResizeColumn(TMUIMessages.ThemePreferencePage_column_name);
+				createAutoResizeColumn(TMUIMessages.ThemePreferencePage_column_type, 0);
 				createAutoResizeColumn(TMUIMessages.ThemePreferencePage_column_path);
 				createAutoResizeColumn(TMUIMessages.ThemePreferencePage_column_pluginId, 0);
 			}
@@ -157,8 +157,9 @@ public final class ThemePreferencePage extends PreferencePage implements IWorkbe
 			protected @Nullable String getColumnText(ITheme theme, int columnIndex) {
 				return switch (columnIndex) {
 					case 0 -> theme.getName();
-					case 1 -> theme.getPath();
-					case 2 -> theme.getPluginId();
+					case 1 -> theme.isDark() ? "dark" : "light";
+					case 2 -> theme.getPath();
+					case 3 -> theme.getPluginId();
 					default -> null;
 				};
 			}
@@ -171,9 +172,10 @@ public final class ThemePreferencePage extends PreferencePage implements IWorkbe
 			}
 		};
 		themesTable.onSelected(selection -> {
-			final ITheme selectedTheme = selection.get(0);
+			final var selectedTheme = this.selectedTheme = selection.get(0);
 			darkThemeButton.setSelection(selectedTheme.isDark());
-			defaultThemeButton.setSelection(selectedTheme.isDefault());
+			darkThemeButton.setEnabled(selectedTheme.getPluginId() == null);
+			defaultThemeButton.setSelection(themeManager.getDefaultTheme(selectedTheme.isDark()) == selectedTheme);
 			themeRemoveButton.setEnabled(selectedTheme.getPluginId() == null);
 			preview();
 		});
@@ -211,7 +213,7 @@ public final class ThemePreferencePage extends PreferencePage implements IWorkbe
 				}
 				final var file = new File(res);
 				final String name = file.getName().substring(0, file.getName().length() - ".css".length());
-				return new Theme(name, file.getAbsolutePath(), name, false, false);
+				return new Theme(name, file.getAbsolutePath(), name, false);
 			}
 		});
 
@@ -248,7 +250,13 @@ public final class ThemePreferencePage extends PreferencePage implements IWorkbe
 
 		defaultThemeButton = new Button(parent, SWT.CHECK);
 		defaultThemeButton.setText(TMUIMessages.ThemePreferencePage_defaultThemeButton_label);
-		defaultThemeButton.setEnabled(false);
+		defaultThemeButton.setEnabled(true);
+		defaultThemeButton.addListener(SWT.Selection, e -> {
+			final var selectedTheme = ThemePreferencePage.this.selectedTheme;
+			if (selectedTheme != null) {
+				themeManager.setDefaultTheme(selectedTheme.getId(), selectedTheme.isDark());
+			}
+		});
 	}
 
 	/**

@@ -62,7 +62,6 @@ import org.eclipse.tm4e.ui.internal.utils.MarkerUtils;
 import org.eclipse.tm4e.ui.internal.utils.PreferenceUtils;
 import org.eclipse.tm4e.ui.model.ITMDocumentModel;
 import org.eclipse.tm4e.ui.themes.ITheme;
-import org.eclipse.tm4e.ui.themes.IThemeManager;
 import org.eclipse.tm4e.ui.themes.ITokenProvider;
 import org.eclipse.ui.IEditorPart;
 
@@ -131,28 +130,23 @@ public class TMPresentationReconciler implements IPresentationReconciler {
 				return;
 
 			switch (event.getKey()) {
-				case PreferenceConstants.E4_THEME_ID:
-					preferenceThemeChange((String) event.getNewValue(), TMUIPlugin.getThemeManager());
-					break;
-				case PreferenceConstants.THEME_ASSOCIATIONS:
-					preferenceThemeChange(PreferenceUtils.getE4PreferenceCSSThemeId(), TMUIPlugin.getThemeManager());
+				case PreferenceConstants.E4_THEME_ID, //
+						PreferenceConstants.THEME_ASSOCIATIONS, //
+						PreferenceConstants.DEFAULT_DARK_THEME, //
+						PreferenceConstants.DEFAULT_LIGHT_THEME:
+					final IDocument doc = getViewerDocument();
+					if (doc == null)
+						return;
+
+					final var grammar = TMPresentationReconciler.this.grammar;
+					if (grammar == null)
+						return;
+
+					// select the best TextMate theme from the current Eclipse UI theme
+					final ITheme newTheme = TMUIPlugin.getThemeManager().getThemeForScope(grammar.getScopeName());
+					setTheme(newTheme);
 					break;
 			}
-		}
-
-		void preferenceThemeChange(final @Nullable String eclipseThemeId, final IThemeManager themeManager) {
-			final IDocument doc = getViewerDocument();
-			if (doc == null)
-				return;
-
-			final var grammar = TMPresentationReconciler.this.grammar;
-			if (grammar == null)
-				return;
-
-			// Select the well TextMate theme from the given E4 theme id.
-			final boolean dark = themeManager.isDarkEclipseTheme(eclipseThemeId);
-			final ITheme newTheme = themeManager.getThemeForScope(grammar.getScopeName(), dark);
-			setTheme(newTheme);
 		}
 	};
 

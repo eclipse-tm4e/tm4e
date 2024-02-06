@@ -17,12 +17,12 @@ import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.core.runtime.preferences.IEclipsePreferences.IPreferenceChangeListener;
 import org.eclipse.core.runtime.preferences.InstanceScope;
-import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.tm4e.ui.TMUIPlugin;
 import org.eclipse.tm4e.ui.internal.preferences.PreferenceConstants;
 import org.eclipse.tm4e.ui.internal.preferences.PreferenceHelper;
 import org.eclipse.tm4e.ui.internal.utils.PreferenceUtils;
 import org.eclipse.tm4e.ui.themes.IThemeAssociation;
+import org.eclipse.tm4e.ui.themes.IThemeManager;
 import org.eclipse.tm4e.ui.themes.Theme;
 import org.eclipse.tm4e.ui.themes.ThemeAssociation;
 import org.osgi.service.prefs.BackingStoreException;
@@ -127,8 +127,10 @@ public final class ThemeManager extends AbstractThemeManager {
 		if (json != null) {
 			for (final var jsonElem : new Gson().fromJson(json, JsonObject[].class)) {
 				final String name = jsonElem.get("id").getAsString();
-				super.registerTheme(new Theme(name, jsonElem.get("path").getAsString(), name,
-				   jsonElem.get("dark").getAsBoolean(), false));
+				super.registerTheme(new Theme(name,
+						jsonElem.get("path").getAsString(),
+						name,
+						jsonElem.get("dark").getAsBoolean()));
 			}
 		}
 
@@ -139,13 +141,16 @@ public final class ThemeManager extends AbstractThemeManager {
 				super.registerThemeAssociation(association);
 			}
 		}
+
+		defaultDarkThemeId = prefs.get(PreferenceConstants.DEFAULT_DARK_THEME, null);
+		defaultLightThemeId = prefs.get(PreferenceConstants.DEFAULT_LIGHT_THEME, null);
 	}
 
-	@Override
-	public void save() throws BackingStoreException {
+	void save() throws BackingStoreException {
+		// save config to "${workspace_loc}/metadata/.plugins/org.eclipse.core.runtime/.settings/org.eclipse.tm4e.ui.prefs"
 		final var prefs = InstanceScope.INSTANCE.getNode(TMUIPlugin.PLUGIN_ID);
-		// Save Themes in the
-		// "${workspace_loc}/metadata/.plugins/org.eclipse.core.runtime/.settings/org.eclipse.tm4e.ui.prefs"
+
+		// manually registered themes
 		prefs.put(PreferenceConstants.THEMES, Arrays.stream(getThemes()) //
 				.filter(t -> t.getPluginId() == null) //
 				.map(theme -> {
@@ -158,13 +163,28 @@ public final class ThemeManager extends AbstractThemeManager {
 				})
 				.toString());
 
-		// Save Theme associations in the
-		// "${workspace_loc}/metadata/.plugins/org.eclipse.core.runtime/.settings/org.eclipse.tm4e.ui.prefs"
+		// manually modified theme associations
 		final String json = PreferenceHelper.toJsonThemeAssociations(Arrays.stream(getAllThemeAssociations())
-				.filter(t -> t.getPluginId() == null).toList());
+				.filter(t -> t.getPluginId() == null)
+				.toList());
 		prefs.put(PreferenceConstants.THEME_ASSOCIATIONS, json);
 
-		// Save preferences
+		// manually set default themes
+		if (defaultDarkThemeId != null)
+			prefs.put(PreferenceConstants.DEFAULT_DARK_THEME, defaultDarkThemeId);
+		else
+			prefs.remove(PreferenceConstants.DEFAULT_DARK_THEME);
+		if (defaultLightThemeId != null)
+			prefs.put(PreferenceConstants.DEFAULT_LIGHT_THEME, defaultLightThemeId);
+		else
+			prefs.remove(PreferenceConstants.DEFAULT_LIGHT_THEME);
+
+		// save preferences
 		prefs.flush();
+	}
+
+	@Override
+	public IThemeManager.EditSession createEditSession() {
+		return new WorkingCopyThemeManager(this);
 	}
 }

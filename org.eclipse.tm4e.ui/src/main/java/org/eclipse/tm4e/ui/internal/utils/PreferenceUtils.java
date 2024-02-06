@@ -27,6 +27,15 @@ public final class PreferenceUtils {
 	private static @Nullable Boolean isDebugGenerateTest;
 	private static @Nullable Boolean isDebugThrowError;
 
+	/**
+	 * @return if Eclipse is currently using a dark UI theme
+	 */
+	public static boolean isDarkEclipseTheme() {
+		final IEclipsePreferences prefs = getE4PreferenceStore();
+		final String eclipseThemeId = prefs == null ? null : prefs.get(PreferenceConstants.E4_THEME_ID, null);
+		return eclipseThemeId != null && eclipseThemeId.toLowerCase().contains("dark");
+	}
+
 	public static boolean isDebugGenerateTest() {
 		var isDebugGenerateTest = PreferenceUtils.isDebugGenerateTest;
 		if (isDebugGenerateTest == null)
@@ -51,17 +60,6 @@ public final class PreferenceUtils {
 	@Nullable
 	public static IEclipsePreferences getE4PreferenceStore() {
 		return InstanceScope.INSTANCE.getNode(E4_CSS_PREFERENCE_NAME);
-	}
-
-	/**
-	 * Get Id of the current eclipse theme
-	 *
-	 * @return themeIf of the current eclipse theme
-	 */
-	@Nullable
-	public static String getE4PreferenceCSSThemeId() {
-		final IEclipsePreferences preferences = getE4PreferenceStore();
-		return preferences != null ? preferences.get(PreferenceConstants.E4_THEME_ID, null) : null;
 	}
 
 	/**

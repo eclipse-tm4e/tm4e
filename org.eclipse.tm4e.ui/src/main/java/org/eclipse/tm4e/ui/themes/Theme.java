@@ -51,14 +51,14 @@ public class Theme extends TMResource implements ITheme {
 	}
 
 	/**
-    * Constructor for manually registered themes
+	 * Constructor for manually registered themes
 	 */
-	public Theme(final String id, final String path, final String name, final boolean dark, final boolean isDefault) {
+	public Theme(final String id, final String path, final String name, final boolean dark) {
 		super(path);
 		this.id = id;
 		this.name = name;
 		this.dark = dark;
-		this.isDefault = isDefault;
+		this.isDefault = false;
 	}
 
 	/**

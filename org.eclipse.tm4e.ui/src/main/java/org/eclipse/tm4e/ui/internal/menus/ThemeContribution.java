@@ -21,7 +21,9 @@ import org.eclipse.jface.action.ActionContributionItem;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.action.IContributionItem;
 import org.eclipse.tm4e.core.grammar.IGrammar;
+import org.eclipse.tm4e.registry.ITMScope;
 import org.eclipse.tm4e.ui.TMUIPlugin;
+import org.eclipse.tm4e.ui.internal.utils.PreferenceUtils;
 import org.eclipse.tm4e.ui.text.TMPresentationReconciler;
 import org.eclipse.tm4e.ui.themes.ITheme;
 import org.eclipse.tm4e.ui.themes.IThemeManager;
@@ -57,8 +59,8 @@ public final class ThemeContribution extends CompoundContributionItem implements
 					final IGrammar grammar = presentationReconciler.getGrammar();
 					if (grammar != null) {
 						final IThemeManager manager = TMUIPlugin.getThemeManager();
-						final boolean dark = manager.isDarkEclipseTheme();
-						final String scopeName = grammar.getScopeName();
+						final boolean dark = PreferenceUtils.isDarkEclipseTheme();
+						final String scopeName = ITMScope.parse(grammar.getScopeName()).getName();
 						final ITheme selectedTheme = manager.getThemeForScope(scopeName, dark);
 						for (final ITheme theme : manager.getThemes()) {
 							final IAction action = createAction(scopeName, theme, dark);
@@ -79,7 +81,7 @@ public final class ThemeContribution extends CompoundContributionItem implements
 		return new Action(theme.getName()) {
 			@Override
 			public void run() {
-				final IThemeManager manager = TMUIPlugin.getThemeManager();
+				final IThemeManager.EditSession manager = TMUIPlugin.getThemeManager().createEditSession();
 				final var association = new ThemeAssociation(theme.getId(), scopeName, whenDark);
 				manager.registerThemeAssociation(association);
 				try {

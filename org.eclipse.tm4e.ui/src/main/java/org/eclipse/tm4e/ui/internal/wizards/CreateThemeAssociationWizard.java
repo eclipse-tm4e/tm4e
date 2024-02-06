@@ -26,7 +26,7 @@ import org.osgi.service.prefs.BackingStoreException;
  */
 public final class CreateThemeAssociationWizard extends Wizard {
 
-	private IThemeManager themeManager = TMUIPlugin.getThemeManager();
+	private final IThemeManager.EditSession themeManager;
 	private final boolean saveOnFinish;
 
 	private CreateThemeAssociationWizardPage mainPage = lazyNonNull();
@@ -34,15 +34,9 @@ public final class CreateThemeAssociationWizard extends Wizard {
 	private @Nullable IGrammarDefinition initialDefinition;
 	private @Nullable IThemeAssociation initialAssociation;
 
-	public CreateThemeAssociationWizard(final boolean saveOnFinish) {
-		this.saveOnFinish = saveOnFinish;
-	}
-
-	/**
-	 * Set theme manager to use to add the created theme associations.
-	 */
-	public void setThemeManager(final IThemeManager themeManager) {
+	public CreateThemeAssociationWizard(final IThemeManager.EditSession themeManager, final boolean saveOnFinish) {
 		this.themeManager = themeManager;
+		this.saveOnFinish = saveOnFinish;
 	}
 
 	@Override

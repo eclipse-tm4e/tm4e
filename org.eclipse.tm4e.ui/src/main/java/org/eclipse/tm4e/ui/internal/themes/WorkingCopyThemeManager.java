@@ -14,7 +14,6 @@ package org.eclipse.tm4e.ui.internal.themes;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.tm4e.ui.themes.ITheme;
 import org.eclipse.tm4e.ui.themes.IThemeAssociation;
 import org.eclipse.tm4e.ui.themes.IThemeManager;
@@ -22,116 +21,115 @@ import org.osgi.service.prefs.BackingStoreException;
 
 /**
  * Working copy of theme manager.
- *
  */
-public final class WorkingCopyThemeManager extends AbstractThemeManager {
+final class WorkingCopyThemeManager extends AbstractThemeManager implements IThemeManager.EditSession {
 
-	private final IThemeManager manager;
+	private final ThemeManager manager;
+	private final List<ITheme> themesAdded = new ArrayList<>(2);
+	private final List<ITheme> themesRemoved = new ArrayList<>(2);
+	private final List<IThemeAssociation> associationsAdded = new ArrayList<>(2);
+	private final List<IThemeAssociation> associationsRemoved = new ArrayList<>(2);
 
-	@Nullable
-	private List<ITheme> themeAdded;
+	private boolean isDefaultDarkThemeModified = false;
+	private boolean isDefaultLightThemeModified = false;
+	private boolean isDirty = false;
 
-	@Nullable
-	private List<ITheme> themeRemoved;
-
-	@Nullable
-	private List<IThemeAssociation> associationAdded;
-
-	@Nullable
-	private List<IThemeAssociation> associationRemoved;
-
-	public WorkingCopyThemeManager(final IThemeManager manager) {
+	WorkingCopyThemeManager(final ThemeManager manager) {
 		this.manager = manager;
-		load();
+		reset();
 	}
 
-	private void load() {
-		// Copy themes
-		final ITheme[] themes = manager.getThemes();
-		for (final ITheme theme : themes) {
-			super.registerTheme(theme);
-		}
-		// Copy theme associations
-		final IThemeAssociation[] associations = manager.getAllThemeAssociations();
-		for (final IThemeAssociation association : associations) {
-			super.registerThemeAssociation(association);
-		}
+	@Override
+	public void reset() {
+		themes.clear();
+		themes.putAll(manager.themes);
+		darkThemeAssociations.clear();
+		darkThemeAssociations.putAll(manager.darkThemeAssociations);
+		lightThemeAssociations.clear();
+		lightThemeAssociations.putAll(manager.lightThemeAssociations);
+		defaultDarkThemeId = manager.defaultDarkThemeId;
+		defaultLightThemeId = manager.defaultLightThemeId;
+		themesAdded.clear();
+		themesRemoved.clear();
+		associationsAdded.clear();
+		associationsRemoved.clear();
+		isDirty = false;
 	}
 
 	@Override
 	public void registerTheme(final ITheme theme) {
 		super.registerTheme(theme);
-		var themeAdded = this.themeAdded;
-		if (themeAdded == null) {
-			themeAdded = this.themeAdded = new ArrayList<>();
-		}
-		themeAdded.add(theme);
+		themesAdded.add(theme);
+		isDirty = true;
 	}
 
 	@Override
 	public void unregisterTheme(final ITheme theme) {
 		super.unregisterTheme(theme);
-		final var themeAdded = this.themeAdded;
-		if (themeAdded != null && themeAdded.contains(theme)) {
-			themeAdded.remove(theme);
+		if (themesAdded.contains(theme)) {
+			themesAdded.remove(theme);
 		} else {
-			var themeRemoved = this.themeRemoved;
-			if (themeRemoved == null) {
-				themeRemoved = this.themeRemoved = new ArrayList<>();
-			}
-			themeRemoved.add(theme);
+			themesRemoved.add(theme);
 		}
+		isDirty = true;
 	}
 
 	@Override
 	public void registerThemeAssociation(final IThemeAssociation association) {
 		super.registerThemeAssociation(association);
-		var associationAdded = this.associationAdded;
-		if (associationAdded == null) {
-			associationAdded = this.associationAdded = new ArrayList<>();
-		}
-		associationAdded.add(association);
+		associationsAdded.add(association);
+		isDirty = true;
 	}
 
 	@Override
 	public void unregisterThemeAssociation(final IThemeAssociation association) {
 		super.unregisterThemeAssociation(association);
-		final var associationAdded = this.associationAdded;
-		if (associationAdded != null && associationAdded.contains(association)) {
-			associationAdded.remove(association);
+		if (associationsAdded.contains(association)) {
+			associationsAdded.remove(association);
 		} else {
-			var associationRemoved = this.associationRemoved;
-			if (associationRemoved == null) {
-				associationRemoved = this.associationRemoved = new ArrayList<>();
-			}
-			associationRemoved.add(association);
+			associationsRemoved.add(association);
 		}
+		isDirty = true;
+	}
+
+	@Override
+	public void setDefaultTheme(String themeId, boolean dark) {
+		super.setDefaultTheme(themeId, dark);
+		if (dark)
+			isDefaultDarkThemeModified = true;
+		else
+			isDefaultLightThemeModified = true;
+		isDirty = true;
 	}
 
 	@Override
 	public void save() throws BackingStoreException {
-		if (themeAdded != null) {
-			for (final var theme : themeAdded) {
-				manager.registerTheme(theme);
-			}
+		if (!isDirty)
+			return;
+
+		for (final var theme : themesAdded) {
+			manager.registerTheme(theme);
 		}
-		if (themeRemoved != null) {
-			for (final var theme : themeRemoved) {
-				manager.unregisterTheme(theme);
-			}
+		for (final var theme : themesRemoved) {
+			manager.unregisterTheme(theme);
 		}
-		if (associationAdded != null) {
-			for (final var association : associationAdded) {
-				manager.registerThemeAssociation(association);
-			}
+		for (final var association : associationsAdded) {
+			manager.registerThemeAssociation(association);
 		}
-		if (associationRemoved != null) {
-			for (final var association : associationRemoved) {
-				manager.unregisterThemeAssociation(association);
-			}
+		for (final var association : associationsRemoved) {
+			manager.unregisterThemeAssociation(association);
 		}
-		if (themeAdded != null || themeRemoved != null || associationAdded != null || associationRemoved != null) {
-			manager.save();
-		}
+
+		// this if checks ensures that in case two separate working copies exist, e.g. for different prefs pages
+		// the changes are not overwritten with old values if both copies are saved
+		if (isDefaultDarkThemeModified)
+			manager.defaultDarkThemeId = defaultDarkThemeId;
+
+		if (isDefaultLightThemeModified)
+			manager.defaultLightThemeId = defaultLightThemeId;
+
+		manager.save();
+
+		reset();
 	}
 }

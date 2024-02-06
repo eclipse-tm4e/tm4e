@@ -20,19 +20,14 @@ import java.util.Collections;
 
 import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.jface.dialogs.Dialog;
-import org.eclipse.jface.layout.TableColumnLayout;
 import org.eclipse.jface.preference.PreferencePage;
-import org.eclipse.jface.resource.JFaceResources;
-import org.eclipse.jface.util.BidiUtils;
-import org.eclipse.jface.viewers.ColumnWeightData;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
-import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.window.Window;
 import org.eclipse.jface.wizard.WizardDialog;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.graphics.GC;
+import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
@@ -41,8 +36,6 @@ import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Listener;
-import org.eclipse.swt.widgets.Table;
-import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.tm4e.languageconfiguration.LanguageConfigurationPlugin;
 import org.eclipse.tm4e.languageconfiguration.internal.registry.ILanguageConfigurationDefinition;
 import org.eclipse.tm4e.languageconfiguration.internal.registry.ILanguageConfigurationRegistryManager;
@@ -50,9 +43,7 @@ import org.eclipse.tm4e.languageconfiguration.internal.registry.LanguageConfigur
 import org.eclipse.tm4e.languageconfiguration.internal.registry.WorkingCopyLanguageConfigurationRegistryManager;
 import org.eclipse.tm4e.languageconfiguration.internal.widgets.LanguageConfigurationPreferencesWidget;
 import org.eclipse.tm4e.languageconfiguration.internal.wizards.LanguageConfigurationImportWizard;
-import org.eclipse.tm4e.ui.internal.utils.UI;
-import org.eclipse.tm4e.ui.internal.widgets.ColumnSelectionAdapter;
-import org.eclipse.tm4e.ui.internal.widgets.ColumnViewerComparator;
+import org.eclipse.tm4e.ui.internal.widgets.TableWidget;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchPreferencePage;
 import org.osgi.service.prefs.BackingStoreException;
@@ -69,7 +60,7 @@ public final class LanguageConfigurationPreferencePage extends PreferencePage im
 	private final ILanguageConfigurationRegistryManager manager = new WorkingCopyLanguageConfigurationRegistryManager(
 			LanguageConfigurationRegistryManager.getInstance());
 
-	private TableViewer definitionViewer = lazyNonNull();
+	private TableWidget<ILanguageConfigurationDefinition> definitionsTable = lazyNonNull();
 	private LanguageConfigurationPreferencesWidget infoWidget = lazyNonNull();
 
 	public LanguageConfigurationPreferencePage() {
@@ -105,8 +96,8 @@ public final class LanguageConfigurationPreferencePage extends PreferencePage im
 		Dialog.applyDialogFont(parent);
 		innerParent.layout();
 
-		definitionViewer.setInput(manager);
-		UI.selectFirstElement(definitionViewer);
+		definitionsTable.setInput(manager);
+		definitionsTable.selectFirstRow();
 
 		return parent;
 	}
@@ -119,55 +110,40 @@ public final class LanguageConfigurationPreferencePage extends PreferencePage im
 		description.setText(LanguageConfigurationPreferencePage_description2);
 		description.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, false, false, 2, 1));
 		final var tableComposite = new Composite(parent, SWT.NONE);
+		tableComposite.setLayout(new FillLayout());
 		final var data = new GridData(GridData.FILL_BOTH);
 		data.widthHint = 360;
 		data.heightHint = convertHeightInCharsToPixels(10);
 		tableComposite.setLayoutData(data);
 
-		final var columnLayout = new TableColumnLayout();
-		tableComposite.setLayout(columnLayout);
-		final var table = new Table(tableComposite,
-				SWT.BORDER | SWT.MULTI | SWT.FULL_SELECTION | SWT.H_SCROLL | SWT.V_SCROLL);
+		definitionsTable = new TableWidget<>(tableComposite) {
 
-		table.setHeaderVisible(true);
-		table.setLinesVisible(true);
-
-		final GC gc = new GC(getShell());
-		gc.setFont(JFaceResources.getDialogFont());
-
-		final var viewerComparator = new ColumnViewerComparator();
-
-		this.definitionViewer = new TableViewer(table);
-
-		for (int i = 0; i < 4; i++) {
-			final var column = new TableColumn(table, SWT.NONE);
-			final String label = switch (i) {
-				case 0 -> LanguageConfigurationPreferencePage_contentTypeName;
-				case 1 -> LanguageConfigurationPreferencePage_contentTypeId;
-				case 2 -> LanguageConfigurationPreferencePage_pluginId;
-				case 3 -> LanguageConfigurationPreferencePage_path;
-				default -> throw new IllegalArgumentException("Unexpected value: " + i);
-			};
-
-			column.setText(label);
-			final int minWidth = computeMinimumColumnWidth(gc, label);
-			columnLayout.setColumnData(column, new ColumnWeightData(2, minWidth, true));
-			column.addSelectionListener(new ColumnSelectionAdapter(definitionViewer, viewerComparator, 0));
-
-			if (i == 0) {
-				// Specify default sorting
-				table.setSortColumn(column);
-				table.setSortDirection(viewerComparator.getDirection());
+			@Override
+			protected void createColumns() {
+				createAutoResizeColumn(LanguageConfigurationPreferencePage_contentTypeName);
+				createAutoResizeColumn(LanguageConfigurationPreferencePage_contentTypeId);
+				createAutoResizeColumn(LanguageConfigurationPreferencePage_pluginId, 0);
+				createAutoResizeColumn(LanguageConfigurationPreferencePage_path, 0);
 			}
-		}
 
-		gc.dispose();
+			@Override
+			protected @Nullable String getColumnText(ILanguageConfigurationDefinition definition, int columnIndex) {
+				return switch (columnIndex) {
+					case 0 -> definition.getContentType().getName();
+					case 1 -> definition.getContentType().getId();
+					case 2 -> definition.getPluginId();
+					case 3 -> definition.getPath();
+					default -> null;
+				};
+			}
 
-		definitionViewer.setLabelProvider(new LanguageConfigurationLabelProvider());
-		definitionViewer.setContentProvider(new LanguageConfigurationContentProvider());
-		definitionViewer.setComparator(viewerComparator);
-
-		BidiUtils.applyTextDirection(definitionViewer.getControl(), BidiUtils.BTD_DEFAULT);
+			@Override
+			protected Object[] getElements(@Nullable Object input) {
+				if (input instanceof ILanguageConfigurationRegistryManager manager)
+					return manager.getDefinitions();
+				return super.getElements(input);
+			}
+		};
 
 		final var buttons = new Composite(parent, SWT.NONE);
 		buttons.setLayoutData(new GridData(GridData.VERTICAL_ALIGN_BEGINNING));
@@ -192,8 +168,8 @@ public final class LanguageConfigurationPreferencePage extends PreferencePage im
 				final var dialog = new WizardDialog(getShell(), wizard);
 				if (dialog.open() == Window.OK) {
 					final var created = wizard.getCreatedDefinition();
-					definitionViewer.refresh();
-					definitionViewer.setSelection(new StructuredSelection(created));
+					definitionsTable.refresh();
+					definitionsTable.setSelection(created);
 				}
 			}
 		});
@@ -208,25 +184,24 @@ public final class LanguageConfigurationPreferencePage extends PreferencePage im
 			}
 
 			private void remove() {
-				final var definitions = getSelectedUserDefinitions(definitionViewer);
+				final var definitions = getSelectedUserDefinitions(definitionsTable);
 				if (!definitions.isEmpty()) {
 					for (final var definition : definitions) {
 						manager.unregisterLanguageConfigurationDefinition(definition);
 					}
-					definitionViewer.refresh();
+					definitionsTable.refresh();
 				}
 			}
 		});
 
-		definitionViewer.addSelectionChangedListener(new ISelectionChangedListener() {
+		definitionsTable.addSelectionChangedListener(new ISelectionChangedListener() {
 			@Override
 			public void selectionChanged(@Nullable final SelectionChangedEvent e) {
-				final var selection = definitionViewer.getStructuredSelection();
+				final var definition = definitionsTable.getFirstSelectedElement();
 				infoWidget.refresh(null, manager);
-				if (selection.isEmpty()) {
+				if (definition == null) {
 					return;
 				}
-				final var definition = (ILanguageConfigurationDefinition) selection.getFirstElement();
 				// Update button
 				assert definitionRemoveButton != null;
 				definitionRemoveButton.setEnabled(definition.getPluginId() == null);
@@ -237,10 +212,6 @@ public final class LanguageConfigurationPreferencePage extends PreferencePage im
 				infoWidget.refresh(definition, manager);
 			}
 		});
-	}
-
-	private int computeMinimumColumnWidth(final GC gc, final String string) {
-		return gc.stringExtent(string).x + 10; // pad 10 to accommodate table header trimmings
 	}
 
 	/**
@@ -278,6 +249,5 @@ public final class LanguageConfigurationPreferencePage extends PreferencePage im
 
 	@Override
 	public void init(@Nullable final IWorkbench workbench) {
-
 	}
 }

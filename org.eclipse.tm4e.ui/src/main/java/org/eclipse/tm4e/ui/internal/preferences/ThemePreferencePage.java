@@ -14,7 +14,7 @@
  *******************************************************************************/
 package org.eclipse.tm4e.ui.internal.preferences;
 
-import static org.eclipse.tm4e.core.internal.utils.NullSafetyHelper.*;
+import static org.eclipse.tm4e.core.internal.utils.NullSafetyHelper.lazyNonNull;
 
 import java.io.File;
 
@@ -23,12 +23,9 @@ import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.layout.TableColumnLayout;
 import org.eclipse.jface.preference.PreferencePage;
 import org.eclipse.jface.resource.JFaceResources;
-import org.eclipse.jface.util.BidiUtils;
 import org.eclipse.jface.viewers.ColumnWeightData;
 import org.eclipse.jface.viewers.ComboViewer;
 import org.eclipse.jface.viewers.IStructuredSelection;
-import org.eclipse.jface.viewers.StructuredSelection;
-import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.viewers.ViewerComparator;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.SashForm;
@@ -43,7 +40,6 @@ import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.FileDialog;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Listener;
-import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.tm4e.core.grammar.IGrammar;
 import org.eclipse.tm4e.registry.IGrammarDefinition;
@@ -51,14 +47,11 @@ import org.eclipse.tm4e.registry.IGrammarRegistryManager;
 import org.eclipse.tm4e.registry.TMEclipseRegistryPlugin;
 import org.eclipse.tm4e.ui.TMUIPlugin;
 import org.eclipse.tm4e.ui.internal.TMUIMessages;
-import org.eclipse.tm4e.ui.internal.utils.UI;
-import org.eclipse.tm4e.ui.internal.widgets.ColumnSelectionAdapter;
-import org.eclipse.tm4e.ui.internal.widgets.ColumnViewerComparator;
+import org.eclipse.tm4e.ui.internal.themes.ThemeManager;
 import org.eclipse.tm4e.ui.internal.widgets.GrammarDefinitionContentProvider;
 import org.eclipse.tm4e.ui.internal.widgets.GrammarDefinitionLabelProvider;
 import org.eclipse.tm4e.ui.internal.widgets.TMViewer;
-import org.eclipse.tm4e.ui.internal.widgets.ThemeContentProvider;
-import org.eclipse.tm4e.ui.internal.widgets.ThemeLabelProvider;
+import org.eclipse.tm4e.ui.internal.widgets.TableWidget;
 import org.eclipse.tm4e.ui.snippets.ISnippet;
 import org.eclipse.tm4e.ui.themes.ITheme;
 import org.eclipse.tm4e.ui.themes.IThemeManager;
@@ -76,7 +69,7 @@ public final class ThemePreferencePage extends PreferencePage implements IWorkbe
 	static final String PAGE_ID = "org.eclipse.tm4e.ui.preferences.ThemePreferencePage";
 
 	// Theme content
-	private TableViewer themesTable = lazyNonNull();
+	private TableWidget<ITheme> themesTable = lazyNonNull();
 	private Button themeRemoveButton = lazyNonNull();
 
 	// Preview content
@@ -117,12 +110,25 @@ public final class ThemePreferencePage extends PreferencePage implements IWorkbe
 		parent.setWeights(2, 1);
 
 		themesTable.setInput(themeManager);
-		UI.selectFirstElement(themesTable);
+		themesTable.selectFirstRow();
 
 		Dialog.applyDialogFont(parent);
 		innerParent.layout();
 
 		return parent;
+	}
+
+	protected void createColumn(TableColumnLayout tableColumnLayout, String label, int columnWeight, int minColWidth, boolean resizable) {
+		final var col = new TableColumn(themesTable.getTable(), SWT.NONE);
+		col.setText(label);
+		final GC gc = new GC(themesTable.getTable().getShell());
+		try {
+			gc.setFont(JFaceResources.getDialogFont());
+			final int labelWidth = gc.stringExtent(label).x + 15;
+			tableColumnLayout.setColumnData(col, new ColumnWeightData(columnWeight, Math.max(labelWidth, minColWidth), resizable));
+		} finally {
+			gc.dispose();
+		}
 	}
 
 	/**
@@ -137,62 +143,40 @@ public final class ThemePreferencePage extends PreferencePage implements IWorkbe
 		data.widthHint = 360;
 		data.heightHint = convertHeightInCharsToPixels(10);
 		tableComposite.setLayoutData(data);
+		tableComposite.setLayout(new FillLayout());
 
-		final var columnLayout = new TableColumnLayout();
-		tableComposite.setLayout(columnLayout);
-		final var table = new Table(tableComposite,
-				SWT.BORDER | SWT.MULTI | SWT.FULL_SELECTION | SWT.H_SCROLL | SWT.V_SCROLL);
-
-		table.setHeaderVisible(true);
-		table.setLinesVisible(true);
-
-		final GC gc = new GC(getShell());
-		gc.setFont(JFaceResources.getDialogFont());
-
-		final var viewerComparator = new ColumnViewerComparator();
-
-		themesTable = new TableViewer(table);
-
-		final var column1 = new TableColumn(table, SWT.NONE);
-		column1.setText(TMUIMessages.ThemePreferencePage_column_name);
-		int minWidth = computeMinimumColumnWidth(gc, TMUIMessages.ThemePreferencePage_column_name);
-		columnLayout.setColumnData(column1, new ColumnWeightData(2, minWidth, true));
-		column1.addSelectionListener(new ColumnSelectionAdapter(themesTable, viewerComparator));
-
-		final var column2 = new TableColumn(table, SWT.NONE);
-		column2.setText(TMUIMessages.ThemePreferencePage_column_path);
-		minWidth = computeMinimumColumnWidth(gc, TMUIMessages.ThemePreferencePage_column_path);
-		columnLayout.setColumnData(column2, new ColumnWeightData(2, minWidth, true));
-		column2.addSelectionListener(new ColumnSelectionAdapter(themesTable, viewerComparator, 0));
-
-		final var column3 = new TableColumn(table, SWT.NONE);
-		column3.setText(TMUIMessages.ThemePreferencePage_column_pluginId);
-		minWidth = computeMinimumColumnWidth(gc, TMUIMessages.ThemePreferencePage_column_pluginId);
-		columnLayout.setColumnData(column3, new ColumnWeightData(2, minWidth, true));
-		column3.addSelectionListener(new ColumnSelectionAdapter(themesTable, viewerComparator, 0));
-
-		gc.dispose();
-
-		themesTable.setLabelProvider(new ThemeLabelProvider());
-		themesTable.setContentProvider(new ThemeContentProvider());
-		themesTable.setComparator(viewerComparator);
-		themesTable.addSelectionChangedListener(e -> {
-			// Fill Theme details
-			final var selectedTheme = ThemePreferencePage.this.selectedTheme = (ITheme) ((IStructuredSelection) themesTable
-					.getSelection()).getFirstElement();
-			if (selectedTheme != null) {
-				darkThemeButton.setSelection(selectedTheme.isDark());
-				defaultThemeButton.setSelection(selectedTheme.isDefault());
-				themeRemoveButton.setEnabled(selectedTheme.getPluginId() == null);
+		themesTable = new TableWidget<>(tableComposite) {
+			@Override
+			protected void createColumns() {
+				createAutoResizeColumn(TMUIMessages.ThemePreferencePage_column_name);
+				createAutoResizeColumn(TMUIMessages.ThemePreferencePage_column_path);
+				createAutoResizeColumn(TMUIMessages.ThemePreferencePage_column_pluginId, 0);
 			}
+
+			@Override
+			protected @Nullable String getColumnText(ITheme theme, int columnIndex) {
+				return switch (columnIndex) {
+					case 0 -> theme.getName();
+					case 1 -> theme.getPath();
+					case 2 -> theme.getPluginId();
+					default -> null;
+				};
+			}
+
+			@Override
+			protected Object[] getElements(@Nullable Object input) {
+				if (input instanceof IThemeManager themeManager)
+					return themeManager.getThemes();
+				return super.getElements(input);
+			}
+		};
+		themesTable.onSelected(selection -> {
+			final ITheme selectedTheme = selection.get(0);
+			darkThemeButton.setSelection(selectedTheme.isDark());
+			defaultThemeButton.setSelection(selectedTheme.isDefault());
+			themeRemoveButton.setEnabled(selectedTheme.getPluginId() == null);
 			preview();
 		});
-
-		// Specify default sorting
-		table.setSortColumn(column1);
-		table.setSortDirection(viewerComparator.getDirection());
-
-		BidiUtils.applyTextDirection(themesTable.getControl(), BidiUtils.BTD_DEFAULT);
 
 		final var buttons = new Composite(parent, SWT.NONE);
 		buttons.setLayoutData(new GridData(GridData.VERTICAL_ALIGN_BEGINNING));
@@ -212,7 +196,7 @@ public final class ThemePreferencePage extends PreferencePage implements IWorkbe
 					themeManager.registerTheme(newTheme);
 					selectedTheme = newTheme;
 					themesTable.refresh();
-					themesTable.setSelection(new StructuredSelection(newTheme));
+					themesTable.setSelection(newTheme);
 				}
 			}
 
@@ -303,10 +287,6 @@ public final class ThemePreferencePage extends PreferencePage implements IWorkbe
 		data.horizontalSpan = 2;
 		data.heightHint = convertHeightInCharsToPixels(5);
 		control.setLayoutData(data);
-	}
-
-	private int computeMinimumColumnWidth(final GC gc, final String string) {
-		return gc.stringExtent(string).x + 10; // pad 10 to accommodate table header trimmings
 	}
 
 	/**

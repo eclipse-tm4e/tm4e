@@ -14,6 +14,7 @@ package org.eclipse.tm4e.languageconfiguration.internal.widgets;
 
 import static org.eclipse.tm4e.languageconfiguration.internal.LanguageConfigurationMessages.AutoClosingPairConditionalTableWidget_notIn;
 
+import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.tm4e.languageconfiguration.internal.model.AutoClosingPairConditional;
 import org.eclipse.tm4e.languageconfiguration.internal.model.CharacterPair;
@@ -27,11 +28,11 @@ final class AutoClosingPairConditionalTableWidget extends CharacterPairsTableWid
 	@Override
 	protected void createColumns() {
 		super.createColumns();
-		createColumn(AutoClosingPairConditionalTableWidget_notIn, 2, 0, true);
+		createColumn(AutoClosingPairConditionalTableWidget_notIn, 2, 0);
 	}
 
 	@Override
-	protected String getColumnText(CharacterPair charPair, int columnIndex) {
+	protected @Nullable String getColumnText(final CharacterPair charPair, final int columnIndex) {
 		if (columnIndex == 2 && charPair instanceof final AutoClosingPairConditional conditionalPair) {
 			return String.join(", ", conditionalPair.notIn);
 		}

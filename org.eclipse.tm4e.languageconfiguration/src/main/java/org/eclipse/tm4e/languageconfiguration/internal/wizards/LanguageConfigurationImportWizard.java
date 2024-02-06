@@ -11,6 +11,8 @@
  */
 package org.eclipse.tm4e.languageconfiguration.internal.wizards;
 
+import static org.eclipse.tm4e.core.internal.utils.NullSafetyHelper.lazyNonNull;
+
 import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.wizard.Wizard;
@@ -30,8 +32,7 @@ public final class LanguageConfigurationImportWizard extends Wizard implements I
 	@Nullable
 	private SelectLanguageConfigurationWizardPage mainPage;
 
-	@Nullable
-	private ILanguageConfigurationDefinition createdDefinition;
+	private ILanguageConfigurationDefinition createdDefinition = lazyNonNull();
 
 	private ILanguageConfigurationRegistryManager registryManager;
 
@@ -77,7 +78,6 @@ public final class LanguageConfigurationImportWizard extends Wizard implements I
 
 	}
 
-	@Nullable
 	public ILanguageConfigurationDefinition getCreatedDefinition() {
 		return createdDefinition;
 	}

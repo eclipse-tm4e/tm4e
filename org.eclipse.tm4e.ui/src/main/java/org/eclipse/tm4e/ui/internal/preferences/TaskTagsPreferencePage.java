@@ -13,7 +13,6 @@ package org.eclipse.tm4e.ui.internal.preferences;
 
 import static org.eclipse.tm4e.core.internal.utils.NullSafetyHelper.*;
 
-import java.util.Collection;
 import java.util.Set;
 import java.util.stream.Stream;
 
@@ -23,15 +22,9 @@ import org.eclipse.jface.dialogs.IMessageProvider;
 import org.eclipse.jface.dialogs.TitleAreaDialog;
 import org.eclipse.jface.preference.PreferencePage;
 import org.eclipse.jface.resource.JFaceResources;
-import org.eclipse.jface.viewers.IStructuredContentProvider;
-import org.eclipse.jface.viewers.IStructuredSelection;
-import org.eclipse.jface.viewers.ITableLabelProvider;
-import org.eclipse.jface.viewers.LabelProvider;
-import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.window.Window;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.GC;
-import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
@@ -41,15 +34,16 @@ import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
-import org.eclipse.swt.widgets.Table;
-import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.tm4e.ui.internal.TMUIMessages;
 import org.eclipse.tm4e.ui.internal.utils.MarkerConfig;
-import org.eclipse.tm4e.ui.internal.utils.MarkerConfig.*;
+import org.eclipse.tm4e.ui.internal.utils.MarkerConfig.ProblemMarkerConfig;
+import org.eclipse.tm4e.ui.internal.utils.MarkerConfig.ProblemSeverity;
+import org.eclipse.tm4e.ui.internal.utils.MarkerConfig.TaskMarkerConfig;
+import org.eclipse.tm4e.ui.internal.utils.MarkerConfig.TaskPriority;
+import org.eclipse.tm4e.ui.internal.utils.MarkerConfig.Type;
 import org.eclipse.tm4e.ui.internal.utils.MarkerUtils;
-import org.eclipse.tm4e.ui.internal.widgets.ColumnSelectionAdapter;
-import org.eclipse.tm4e.ui.internal.widgets.ColumnViewerComparator;
+import org.eclipse.tm4e.ui.internal.widgets.TableWidget;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchPreferencePage;
 
@@ -59,35 +53,6 @@ import org.eclipse.ui.IWorkbenchPreferencePage;
 public final class TaskTagsPreferencePage extends PreferencePage implements IWorkbenchPreferencePage {
 
 	static final String PAGE_ID = "org.eclipse.tm4e.ui.preferences.TaskTagsPreferencePage";
-
-	private static final class TableLabelProvider extends LabelProvider implements ITableLabelProvider {
-		@Override
-		public @Nullable Image getColumnImage(final @Nullable Object element, final int columnIndex) {
-			return null;
-		}
-
-		@Override
-		public @Nullable String getText(final @Nullable Object element) {
-			return getColumnText(element, 0);
-		}
-
-		@Override
-		public @Nullable String getColumnText(final @Nullable Object element, final int columnIndex) {
-			if (element == null)
-				return "";
-
-			final MarkerConfig item = (MarkerConfig) element;
-			return switch (columnIndex) {
-				case 0 -> item.tag;
-				case 1 -> item.type.name().charAt(0) + item.type.name().substring(1).toLowerCase();
-				case 2 -> switch (item.type) {
-					case PROBLEM -> item.asProblemMarkerConfig().severity.toString();
-					case TASK -> item.asTaskMarkerConfig().priority.toString();
-				};
-				default -> "";
-			};
-		}
-	}
 
 	private final class MarkerConfigEditDialog extends TitleAreaDialog {
 
@@ -211,7 +176,7 @@ public final class TaskTagsPreferencePage extends PreferencePage implements IWor
 	}
 
 	private final Set<MarkerConfig> markerConfigs = PreferenceHelper.loadMarkerConfigs();
-	private TableViewer markerConfigsTable = lazyNonNull();
+	private TableWidget<MarkerConfig> markerConfigsTable = lazyNonNull();
 
 	public TaskTagsPreferencePage() {
 		setDescription(TMUIMessages.TaskTagsPreferencePage_description);
@@ -226,42 +191,28 @@ public final class TaskTagsPreferencePage extends PreferencePage implements IWor
 		layout.marginWidth = 0;
 		parent.setLayout(layout);
 
-		final var table = new Table(parent, SWT.BORDER | SWT.FULL_SELECTION | SWT.H_SCROLL | SWT.V_SCROLL | SWT.SINGLE);
-		table.setLayoutData(new GridData(GridData.FILL_BOTH));
-		table.setHeaderVisible(true);
-		table.setLinesVisible(true);
+		markerConfigsTable = new TableWidget<>(parent) {
 
-		markerConfigsTable = new TableViewer(table);
-		markerConfigsTable.setLabelProvider(new TableLabelProvider());
-		markerConfigsTable.setContentProvider(new IStructuredContentProvider() {
-			@SuppressWarnings("unchecked")
 			@Override
-			public Object[] getElements(final @Nullable Object inputElement) {
-				return inputElement == null ? new MarkerConfig[0] : ((Collection<MarkerConfig>) inputElement).toArray();
+			protected void createColumns() {
+				createColumn(TMUIMessages.TaskTagsPreferencePage_column_tag, 33, 50);
+				createColumn(TMUIMessages.TaskTagsPreferencePage_column_type, 33, 50, 0);
+				createColumn(TMUIMessages.TaskTagsPreferencePage_column_level, 33, 50, 0);
 			}
-		});
 
-		final var tableColumnSorter = new ColumnViewerComparator();
-		markerConfigsTable.setComparator(tableColumnSorter);
-
-		final var column1 = new TableColumn(table, SWT.NONE);
-		column1.setText(TMUIMessages.TaskTagsPreferencePage_column_tag);
-		column1.setWidth(computeMinimumColumnWidth("1234567890"));
-		column1.addSelectionListener(new ColumnSelectionAdapter(markerConfigsTable, tableColumnSorter));
-
-		final var column2 = new TableColumn(table, SWT.NONE);
-		column2.setText(TMUIMessages.TaskTagsPreferencePage_column_type);
-		column2.setWidth(column1.getWidth());
-		column2.addSelectionListener(new ColumnSelectionAdapter(markerConfigsTable, tableColumnSorter, 0));
-
-		final var column3 = new TableColumn(table, SWT.NONE);
-		column3.setText(TMUIMessages.TaskTagsPreferencePage_column_level);
-		column3.setWidth(column1.getWidth());
-		column3.addSelectionListener(new ColumnSelectionAdapter(markerConfigsTable, tableColumnSorter, 0));
-
-		// Specify default sorting
-		table.setSortColumn(column1);
-		table.setSortDirection(tableColumnSorter.getDirection());
+			@Override
+			protected @Nullable Object getColumnText(final MarkerConfig taskTag, final int columnIndex) {
+				return switch (columnIndex) {
+					case 0 -> taskTag.tag;
+					case 1 -> taskTag.type.name().charAt(0) + taskTag.type.name().substring(1).toLowerCase();
+					case 2 -> switch (taskTag.type) {
+						case PROBLEM -> taskTag.asProblemMarkerConfig().severity;
+						case TASK -> taskTag.asTaskMarkerConfig().priority;
+					};
+					default -> null;
+				};
+			}
+		};
 
 		final var buttons = new Composite(parent, SWT.NONE);
 		buttons.setLayoutData(new GridData(GridData.VERTICAL_ALIGN_BEGINNING));
@@ -280,7 +231,7 @@ public final class TaskTagsPreferencePage extends PreferencePage implements IWor
 		editTagButton.setText(TMUIMessages.Button_edit);
 		editTagButton.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		editTagButton.addListener(SWT.Selection, (final @Nullable Event e) -> {
-			final var selection = (MarkerConfig) ((IStructuredSelection) markerConfigsTable.getSelection()).getFirstElement();
+			final MarkerConfig selection = markerConfigsTable.getFirstSelectedElement();
 			if (selection != null) {
 				final var dlg = new MarkerConfigEditDialog(getShell(), selection);
 				if (dlg.open() == Window.OK) {
@@ -296,7 +247,7 @@ public final class TaskTagsPreferencePage extends PreferencePage implements IWor
 		removeTagButton.setText(TMUIMessages.Button_remove);
 		removeTagButton.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		removeTagButton.addListener(SWT.Selection, (final @Nullable Event e) -> {
-			final var selection = (MarkerConfig) ((IStructuredSelection) markerConfigsTable.getSelection()).getFirstElement();
+			final MarkerConfig selection = markerConfigsTable.getFirstSelectedElement();
 			if (selection != null) {
 				markerConfigs.remove(selection);
 				markerConfigsTable.refresh();

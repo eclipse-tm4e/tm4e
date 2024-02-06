@@ -14,27 +14,29 @@ package org.eclipse.tm4e.languageconfiguration.internal.widgets;
 
 import static org.eclipse.tm4e.languageconfiguration.internal.LanguageConfigurationMessages.*;
 
+import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.tm4e.languageconfiguration.internal.model.CharacterPair;
+import org.eclipse.tm4e.ui.internal.widgets.TableWidget;
 
-class CharacterPairsTableWidget extends AbstractTableWidget<CharacterPair> {
+class CharacterPairsTableWidget extends TableWidget<CharacterPair> {
 
 	CharacterPairsTableWidget(final Composite parent) {
 		super(parent);
 	}
 
 	@Override
-	protected String getColumnText(CharacterPair charPair, int columnIndex) {
+	protected @Nullable String getColumnText(final CharacterPair charPair, final int columnIndex) {
 		return switch (columnIndex) {
 			case 0 -> charPair.open;
 			case 1 -> charPair.close;
-			default -> "";
+			default -> null;
 		};
 	}
 
 	@Override
 	protected void createColumns() {
-		createColumn(CharacterPairsTableWidget_start, 1, 0, true);
-		createColumn(CharacterPairsTableWidget_end, 1, 0, true);
+		createColumn(CharacterPairsTableWidget_start, 1, 0);
+		createColumn(CharacterPairsTableWidget_end, 1, 0);
 	}
 }

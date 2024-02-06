@@ -14,11 +14,13 @@ package org.eclipse.tm4e.languageconfiguration.internal.widgets;
 
 import static org.eclipse.tm4e.languageconfiguration.internal.LanguageConfigurationMessages.*;
 
+import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.tm4e.languageconfiguration.internal.model.EnterAction;
 import org.eclipse.tm4e.languageconfiguration.internal.model.OnEnterRule;
+import org.eclipse.tm4e.ui.internal.widgets.TableWidget;
 
-final class OnEnterRuleTableWidget extends AbstractTableWidget<OnEnterRule> {
+final class OnEnterRuleTableWidget extends TableWidget<OnEnterRule> {
 
 	OnEnterRuleTableWidget(final Composite parent) {
 		super(parent);
@@ -26,26 +28,26 @@ final class OnEnterRuleTableWidget extends AbstractTableWidget<OnEnterRule> {
 
 	@Override
 	protected void createColumns() {
-		createColumn(OnEnterRuleTableWidget_beforeText, 2, 100, true);
-		createColumn(OnEnterRuleTableWidget_afterText, 2, 100, true);
-		createColumn(OnEnterRuleTableWidget_previousLineText, 2, 100, true);
-		createColumn(OnEnterRuleTableWidget_indentAction, 1, 0, true);
-		createColumn(OnEnterRuleTableWidget_appendText, 1, 0, true);
-		createColumn(OnEnterRuleTableWidget_removeText, 1, 0, true);
+		createColumn(OnEnterRuleTableWidget_beforeText, 2, 100);
+		createColumn(OnEnterRuleTableWidget_afterText, 2, 100);
+		createColumn(OnEnterRuleTableWidget_previousLineText, 2, 100);
+		createColumn(OnEnterRuleTableWidget_indentAction, 1, 0);
+		createColumn(OnEnterRuleTableWidget_appendText, 1, 0);
+		createColumn(OnEnterRuleTableWidget_removeText, 1, 0);
 	}
 
 	@Override
-	protected String getColumnText(OnEnterRule rule, int columnIndex) {
+	protected @Nullable Object getColumnText(OnEnterRule rule, int columnIndex) {
 		final EnterAction action = rule.action;
 
 		return switch (columnIndex) {
-			case 0 -> rule.beforeText.pattern();
-			case 1 -> rule.afterText != null ? rule.afterText.pattern() : "";
-			case 2 -> rule.previousLineText != null ? rule.previousLineText.pattern() : "";
-			case 3 -> action.indentAction.toString();
-			case 4 -> action.appendText != null ? action.appendText : "";
-			case 5 -> action.removeText != null ? action.removeText.toString() : "";
-			default -> "";
+			case 0 -> rule.beforeText;
+			case 1 -> rule.afterText;
+			case 2 -> rule.previousLineText;
+			case 3 -> action.indentAction;
+			case 4 -> action.appendText;
+			case 5 -> action.removeText;
+			default -> null;
 		};
 	}
 }

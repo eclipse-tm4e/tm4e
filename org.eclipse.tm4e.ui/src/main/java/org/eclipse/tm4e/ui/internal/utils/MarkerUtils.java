@@ -83,7 +83,7 @@ public final class MarkerUtils {
 		if (res == null)
 			return;
 
-		final var numberOfLines = doc.getNumberOfLines();
+		final int numberOfLines = doc.getNumberOfLines();
 
 		// collect affected markers
 		final var markersByLineNumber = new HashMap<Integer, List<IMarker>>();
@@ -94,7 +94,7 @@ public final class MarkerUtils {
 				continue;
 			}
 
-			final var lineNumber = lineNumberObj.intValue();
+			final int lineNumber = lineNumberObj.intValue();
 			if (lineNumber < startLineNumber) {
 				continue; // this marker needs no update
 			}
@@ -113,11 +113,11 @@ public final class MarkerUtils {
 		// iterate over all lines
 		for (int lineNumber = startLineNumber; lineNumber <= numberOfLines; lineNumber++) {
 			final var lineNumberObj = Integer.valueOf(lineNumber);
-			final var lineIndex = lineNumber - 1;
+			final int lineIndex = lineNumber - 1;
 			final var tokens = docModel.getLineTokens(lineIndex);
 			if (tokens == null)
 				continue;
-			final var tokensCount = tokens.size();
+			final int tokensCount = tokens.size();
 			final var outdatedMarkers = markersByLineNumber.getOrDefault(lineNumberObj, Collections.emptyList());
 
 			// iterate over all tokens of the current line
@@ -129,7 +129,7 @@ public final class MarkerUtils {
 
 				final TMToken nextToken = tokenIndex + 1 < tokensCount ? tokens.get(tokenIndex + 1) : null;
 				try {
-					final var lineOffset = doc.getLineOffset(lineIndex);
+					final int lineOffset = doc.getLineOffset(lineIndex);
 					final var commentText = doc.get(
 							lineOffset + token.startIndex,
 							(nextToken == null ? doc.getLineLength(lineIndex) : nextToken.startIndex) - token.startIndex);
@@ -159,7 +159,7 @@ public final class MarkerUtils {
 						case TASK -> TASKMARKER_TYPE;
 					};
 					if (!removeMatchingMarker(outdatedMarkers, markerTypeId, attrs)) {
-						final var markerTextStartOffset = lineOffset + token.startIndex + matcher.start();
+						final int markerTextStartOffset = lineOffset + token.startIndex + matcher.start();
 						attrs.put(IMarker.CHAR_START, markerTextStartOffset);
 						attrs.put(IMarker.CHAR_END, markerTextStartOffset + markerText.length());
 						res.createMarker(markerTypeId, attrs);
@@ -178,10 +178,9 @@ public final class MarkerUtils {
 		}
 	}
 
-	@Nullable
-	private static Integer getLineNumber(final IMarker marker) {
+	private static @Nullable Integer getLineNumber(final IMarker marker) {
 		try {
-			final var lineNumberAttr = marker.getAttribute(IMarker.LINE_NUMBER);
+			final Object lineNumberAttr = marker.getAttribute(IMarker.LINE_NUMBER);
 			if (lineNumberAttr instanceof final Integer lineNumber)
 				return lineNumber;
 		} catch (final CoreException ex) {
@@ -195,8 +194,8 @@ public final class MarkerUtils {
 	 *
 	 * @return true if a matching marker was found and removed.
 	 */
-	private static boolean removeMatchingMarker(final List<IMarker> markers, final String type,
-			final Map<String, ?> attributes) throws CoreException {
+	private static boolean removeMatchingMarker(final List<IMarker> markers, final String type, final Map<String, ?> attributes)
+			throws CoreException {
 		if (markers.isEmpty())
 			return false;
 

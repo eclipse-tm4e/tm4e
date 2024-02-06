@@ -11,7 +11,7 @@
  */
 package org.eclipse.tm4e.ui.internal.wizards;
 
-import static org.eclipse.tm4e.core.internal.utils.NullSafetyHelper.*;
+import static org.eclipse.tm4e.core.internal.utils.NullSafetyHelper.lazyNonNull;
 
 import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.jface.wizard.Wizard;
@@ -23,27 +23,19 @@ import org.osgi.service.prefs.BackingStoreException;
 
 /**
  * Wizard to create association between grammar and theme.
- *
  */
 public final class CreateThemeAssociationWizard extends Wizard {
 
-	private CreateThemeAssociationWizardPage mainPage = lazyNonNull();
-
-	@Nullable
-	private IThemeAssociation createdThemeAssociation;
-
 	private IThemeManager themeManager = TMUIPlugin.getThemeManager();
+	private final boolean saveOnFinish;
 
-	private final boolean save;
+	private CreateThemeAssociationWizardPage mainPage = lazyNonNull();
+	private @Nullable IThemeAssociation createdThemeAssociation;
+	private @Nullable IGrammarDefinition initialDefinition;
+	private @Nullable IThemeAssociation initialAssociation;
 
-	@Nullable
-	private IGrammarDefinition initialDefinition;
-
-	@Nullable
-	private IThemeAssociation initialAssociation;
-
-	public CreateThemeAssociationWizard(final boolean save) {
-		this.save = save;
+	public CreateThemeAssociationWizard(final boolean saveOnFinish) {
+		this.saveOnFinish = saveOnFinish;
 	}
 
 	/**
@@ -63,11 +55,11 @@ public final class CreateThemeAssociationWizard extends Wizard {
 	public boolean performFinish() {
 		final IThemeAssociation association = mainPage.getThemeAssociation();
 		themeManager.registerThemeAssociation(association);
-		if (save) {
+		if (saveOnFinish) {
 			try {
 				themeManager.save();
-			} catch (final BackingStoreException e) {
-				e.printStackTrace();
+			} catch (final BackingStoreException ex) {
+				TMUIPlugin.logError(ex);
 				return false;
 			}
 		}

@@ -20,7 +20,6 @@ import java.util.Map;
 
 import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.Platform;
-import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.tm4e.ui.TMUIPlugin;
 import org.eclipse.tm4e.ui.snippets.ISnippet;
 import org.eclipse.tm4e.ui.snippets.ISnippetManager;
@@ -32,26 +31,18 @@ public final class SnippetManager implements ISnippetManager {
 	private static final String SNIPPET_ELT = "snippet";
 
 	// "snippets" extension point
-	private static final String EXTENSION_SNIPPETS = "snippets"; //$NON-NLS-1$
+	private static final String EXTENSION_SNIPPETS = "snippets";
 
-	@Nullable
-	private static ISnippetManager INSTANCE;
-
-	public static ISnippetManager getInstance() {
-		if (INSTANCE != null) {
-			return INSTANCE;
+	/** see https://en.wikipedia.org/wiki/Double-checked_locking#Usage_in_Java */
+	private static final class InstanceHolder {
+		static final SnippetManager INSTANCE = new SnippetManager();
+		static {
+			INSTANCE.load();
 		}
-		INSTANCE = createInstance();
-		return INSTANCE;
 	}
 
-	private static synchronized ISnippetManager createInstance() {
-		if (INSTANCE != null) {
-			return INSTANCE;
-		}
-		final var manager = new SnippetManager();
-		manager.load();
-		return manager;
+	public static ISnippetManager getInstance() {
+		return InstanceHolder.INSTANCE;
 	}
 
 	private final Map<String, List<ISnippet>> snippets = new HashMap<>();

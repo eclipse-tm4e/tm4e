@@ -14,7 +14,6 @@ package org.eclipse.tm4e.registry.internal;
 import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.core.runtime.content.IContentType;
-import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.tm4e.registry.GrammarDefinition;
 import org.eclipse.tm4e.registry.IGrammarDefinition;
 import org.eclipse.tm4e.registry.TMEclipseRegistryPlugin;
@@ -28,24 +27,16 @@ public final class GrammarRegistryManager extends AbstractGrammarRegistryManager
 
 	private static final String EXTENSION_GRAMMARS = "grammars";
 
-	@Nullable
-	private static GrammarRegistryManager INSTANCE;
-
-	public static GrammarRegistryManager getInstance() {
-		if (INSTANCE != null) {
-			return INSTANCE;
+	/** see https://en.wikipedia.org/wiki/Double-checked_locking#Usage_in_Java */
+	private static final class InstanceHolder {
+		static final GrammarRegistryManager INSTANCE = new GrammarRegistryManager();
+		static {
+			INSTANCE.load();
 		}
-		INSTANCE = createInstance();
-		return INSTANCE;
 	}
 
-	private static synchronized GrammarRegistryManager createInstance() {
-		if (INSTANCE != null) {
-			return INSTANCE;
-		}
-		final var manager = new GrammarRegistryManager();
-		manager.load();
-		return manager;
+	public static GrammarRegistryManager getInstance() {
+		return InstanceHolder.INSTANCE;
 	}
 
 	private GrammarRegistryManager() {

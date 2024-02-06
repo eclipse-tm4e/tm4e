@@ -45,16 +45,14 @@ public abstract class AbstractThemeManager implements IThemeManager {
 		themes.remove(theme.getId());
 	}
 
-	@Nullable
 	@Override
-	public ITheme getThemeById(final String themeId) {
+	public @Nullable ITheme getThemeById(final String themeId) {
 		return themes.get(themeId);
 	}
 
 	@Override
 	public ITheme[] getThemes() {
-		final Collection<ITheme> themes = this.themes.values();
-		return themes.toArray(ITheme[]::new);
+		return themes.values().toArray(ITheme[]::new);
 	}
 
 	@Override
@@ -64,7 +62,7 @@ public abstract class AbstractThemeManager implements IThemeManager {
 	}
 
 	ITheme getDefaultTheme(final boolean dark) {
-		for (final ITheme theme : this.themes.values()) {
+		for (final ITheme theme : themes.values()) {
 			if (theme.isDark() == dark && theme.isDefault()) {
 				return theme;
 			}
@@ -88,6 +86,11 @@ public abstract class AbstractThemeManager implements IThemeManager {
 	}
 
 	@Override
+	public ITheme getThemeForScope(final String scopeName) {
+		return getThemeForScope(scopeName, isDarkEclipseTheme());
+	}
+
+	@Override
 	public ITheme getThemeForScope(String scopeName, final boolean dark) {
 		scopeName = ITMScope.parse(scopeName).getName();
 
@@ -103,8 +106,10 @@ public abstract class AbstractThemeManager implements IThemeManager {
 	}
 
 	@Override
-	public ITheme getThemeForScope(final String scopeName) {
-		return getThemeForScope(scopeName, isDarkEclipseTheme());
+	public ITheme getThemeForScope(final String scopeName, final RGB background) {
+		return getThemeForScope(scopeName, 0.299 * background.red
+				+ 0.587 * background.green
+				+ 0.114 * background.blue < 128);
 	}
 
 	@Override
@@ -139,12 +144,5 @@ public abstract class AbstractThemeManager implements IThemeManager {
 	public IThemeAssociation[] getAllThemeAssociations() {
 		final List<IThemeAssociation> associations = themeAssociationRegistry.getThemeAssociations();
 		return associations.toArray(IThemeAssociation[]::new);
-	}
-
-	@Override
-	public ITheme getThemeForScope(final String scopeName, final RGB background) {
-		return getThemeForScope(scopeName, 0.299 * background.red
-				+ 0.587 * background.green
-				+ 0.114 * background.blue < 128);
 	}
 }

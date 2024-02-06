@@ -43,7 +43,7 @@ import com.google.gson.JsonObject;
  *      "https://github.com/microsoft/vscode/blob/ba2cf46e20df3edf77bdd905acde3e175d985f70/src/vs/editor/common/languages/languageConfiguration.ts#L28">
  *      github.com/microsoft/vscode/blob/main/src/vs/editor/common/languages/languageConfiguration.ts</a>
  */
-public class LanguageConfiguration {
+public final class LanguageConfiguration {
 
 	private static String removeTrailingCommas(final String jsonString) {
 		/* matches:

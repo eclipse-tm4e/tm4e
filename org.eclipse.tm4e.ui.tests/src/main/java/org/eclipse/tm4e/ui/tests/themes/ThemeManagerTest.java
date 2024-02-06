@@ -49,14 +49,12 @@ class ThemeManagerTest implements ThemeIdConstants {
 	@Test
 	void testGetAllThemes() {
 		final ITheme[] themes = manager.getThemes();
-		assertNotNull(themes);
 		assertEquals(4, themes.length);
 	}
 
 	@Test
 	void testDefaultThemeAssociation() {
 		final ITheme theme = manager.getDefaultTheme();
-		assertNotNull(theme);
 		assertEquals(SolarizedLight, theme.getId());
 	}
 
@@ -64,14 +62,12 @@ class ThemeManagerTest implements ThemeIdConstants {
 	void testDarkThemes() {
 		// All themes for Dark E4 CSS Theme
 		final ITheme[] darkThemes = manager.getThemes(true);
-		assertNotNull(darkThemes);
 		assertEquals(2, darkThemes.length);
 		assertEquals(Dark, darkThemes[0].getId());
 		assertEquals(Monokai, darkThemes[1].getId());
 
 		// All themes for Other E4 CSS Theme
 		final ITheme[] otherThemes = manager.getThemes(false);
-		assertNotNull(otherThemes);
 		assertEquals(2, otherThemes.length);
 		assertEquals(SolarizedLight, otherThemes[0].getId());
 		assertEquals(Light, otherThemes[1].getId());

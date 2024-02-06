@@ -21,13 +21,18 @@ import org.eclipse.tm4e.ui.internal.preferences.PreferenceConstants;
 
 public final class PreferenceUtils {
 
-	private static final String E4_CSS_PREFERENCE_NAME = "org.eclipse.e4.ui.css.swt.theme"; //$NON-NLS-1$
-	private static final String EDITORS_PREFERENCE_NAME = "org.eclipse.ui.editors"; //$NON-NLS-1$
+	private static final String E4_CSS_PREFERENCE_NAME = "org.eclipse.e4.ui.css.swt.theme";
+	private static final String EDITORS_PREFERENCE_NAME = "org.eclipse.ui.editors";
 
+	private static @Nullable Boolean isDebugGenerateTest;
 	private static @Nullable Boolean isDebugThrowError;
 
 	public static boolean isDebugGenerateTest() {
-		return Boolean.parseBoolean(Platform.getDebugOption(TMUIPlugin.PLUGIN_ID + "/debug/log/GenerateTest"));
+		var isDebugGenerateTest = PreferenceUtils.isDebugGenerateTest;
+		if (isDebugGenerateTest == null)
+			isDebugGenerateTest = PreferenceUtils.isDebugGenerateTest = Boolean.parseBoolean(
+					Platform.getDebugOption(TMUIPlugin.PLUGIN_ID + "/debug/log/GenerateTest"));
+		return isDebugGenerateTest;
 	}
 
 	public static boolean isDebugThrowError() {

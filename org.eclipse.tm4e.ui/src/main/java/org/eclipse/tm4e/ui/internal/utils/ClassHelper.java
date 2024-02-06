@@ -17,13 +17,11 @@ import org.eclipse.jdt.annotation.Nullable;
 
 /**
  * Class Reflection utilities.
- *
  */
 public final class ClassHelper {
 
-	@Nullable
 	@SuppressWarnings("unchecked")
-	public static <T> T getFieldValue(final Object object, final String name, final Class<?> clazz) {
+	public static <T> @Nullable T getFieldValue(final Object object, final String name, final Class<?> clazz) {
 		final Field f = getDeclaredField(clazz, name);
 		if (f != null) {
 			try {
@@ -35,13 +33,11 @@ public final class ClassHelper {
 		return null;
 	}
 
-	@Nullable
-	public static <T> T getFieldValue(final Object object, final String name) {
+	public static @Nullable <T> T getFieldValue(final Object object, final String name) {
 		return getFieldValue(object, name, object.getClass());
 	}
 
-	@Nullable
-	public static Field getDeclaredField(@Nullable final Class<?> clazz, final String name) {
+	public static @Nullable Field getDeclaredField(final @Nullable Class<?> clazz, final String name) {
 		if (clazz == null) {
 			return null;
 		}

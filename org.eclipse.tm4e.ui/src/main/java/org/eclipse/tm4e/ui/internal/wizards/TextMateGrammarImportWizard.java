@@ -31,8 +31,7 @@ public final class TextMateGrammarImportWizard extends Wizard implements IImport
 
 	private SelectGrammarWizardPage mainPage = lazyNonNull();
 
-	@Nullable
-	private IGrammarDefinition createdDefinition;
+	private IGrammarDefinition createdDefinition = lazyNonNull();
 
 	private IGrammarRegistryManager grammarRegistryManager = TMEclipseRegistryPlugin.getGrammarRegistryManager();
 
@@ -78,7 +77,6 @@ public final class TextMateGrammarImportWizard extends Wizard implements IImport
 
 	}
 
-	@Nullable
 	public IGrammarDefinition getCreatedDefinition() {
 		return createdDefinition;
 	}

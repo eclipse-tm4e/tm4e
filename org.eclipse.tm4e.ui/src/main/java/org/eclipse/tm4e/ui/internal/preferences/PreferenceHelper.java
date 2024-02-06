@@ -40,44 +40,40 @@ import com.google.gson.stream.JsonWriter;
  */
 public final class PreferenceHelper {
 
-	private static final Gson DEFAULT_GSON;
+	private static final Gson DEFAULT_GSON = new GsonBuilder() //
+			.registerTypeAdapter(IThemeAssociation.class, (InstanceCreator<ThemeAssociation>) type -> new ThemeAssociation())
+			.registerTypeAdapterFactory(new TypeAdapterFactory() {
+				@SuppressWarnings("unchecked")
+				@Override
+				@NonNullByDefault({})
+				public @Nullable <T> TypeAdapter<T> create(final Gson gson, final TypeToken<T> type) {
+					if (!MarkerConfig.class.isAssignableFrom(type.getRawType()))
+						return null;
 
-	static {
-		DEFAULT_GSON = new GsonBuilder() //
-				.registerTypeAdapter(IThemeAssociation.class, (InstanceCreator<ThemeAssociation>) type -> new ThemeAssociation())
-				.registerTypeAdapterFactory(new TypeAdapterFactory() {
-					@SuppressWarnings("unchecked")
-					@Override
-					@NonNullByDefault({})
-					public @Nullable <T> TypeAdapter<T> create(final Gson gson, final TypeToken<T> type) {
-						if (!MarkerConfig.class.isAssignableFrom(type.getRawType()))
-							return null;
-
-						final var jsonElementAdapter = gson.getAdapter(JsonElement.class);
-						final var problemAdapter = gson.getDelegateAdapter(this, TypeToken.get(MarkerConfig.ProblemMarkerConfig.class));
-						final var taskAdapter = gson.getDelegateAdapter(this, TypeToken.get(MarkerConfig.TaskMarkerConfig.class));
-						return (TypeAdapter<T>) new TypeAdapter<MarkerConfig>() {
-							@Override
-							public void write(final JsonWriter out, final MarkerConfig value) throws IOException {
-								if (value.getClass().isAssignableFrom(MarkerConfig.ProblemMarkerConfig.class)) {
-									problemAdapter.write(out, (MarkerConfig.ProblemMarkerConfig) value);
-								} else if (value.getClass().isAssignableFrom(MarkerConfig.TaskMarkerConfig.class)) {
-									taskAdapter.write(out, (MarkerConfig.TaskMarkerConfig) value);
-								}
+					final var jsonElementAdapter = gson.getAdapter(JsonElement.class);
+					final var problemAdapter = gson.getDelegateAdapter(this, TypeToken.get(MarkerConfig.ProblemMarkerConfig.class));
+					final var taskAdapter = gson.getDelegateAdapter(this, TypeToken.get(MarkerConfig.TaskMarkerConfig.class));
+					return (TypeAdapter<T>) new TypeAdapter<MarkerConfig>() {
+						@Override
+						public void write(final JsonWriter out, final MarkerConfig value) throws IOException {
+							if (value.getClass().isAssignableFrom(MarkerConfig.ProblemMarkerConfig.class)) {
+								problemAdapter.write(out, (MarkerConfig.ProblemMarkerConfig) value);
+							} else if (value.getClass().isAssignableFrom(MarkerConfig.TaskMarkerConfig.class)) {
+								taskAdapter.write(out, (MarkerConfig.TaskMarkerConfig) value);
 							}
+						}
 
-							@Override
-							public MarkerConfig read(final JsonReader in) throws IOException {
-								final var objectJson = jsonElementAdapter.read(in).getAsJsonObject();
-								return switch (MarkerConfig.Type.valueOf(objectJson.get("type").getAsString())) {
-									case PROBLEM -> problemAdapter.fromJsonTree(objectJson);
-									case TASK -> taskAdapter.fromJsonTree(objectJson);
-								};
-							}
-						};
-					}
-				}).create();
-	}
+						@Override
+						public MarkerConfig read(final JsonReader in) throws IOException {
+							final var objectJson = jsonElementAdapter.read(in).getAsJsonObject();
+							return switch (MarkerConfig.Type.valueOf(objectJson.get("type").getAsString())) {
+								case PROBLEM -> problemAdapter.fromJsonTree(objectJson);
+								case TASK -> taskAdapter.fromJsonTree(objectJson);
+							};
+						}
+					};
+				}
+			}).create();
 
 	public static IThemeAssociation[] loadThemeAssociations(final String json) {
 		return DEFAULT_GSON.fromJson(json, ThemeAssociation[].class);

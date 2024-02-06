@@ -13,6 +13,7 @@ package org.eclipse.tm4e.ui.internal.themes;
 
 import java.util.Arrays;
 
+import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.core.runtime.preferences.IEclipsePreferences.IPreferenceChangeListener;
 import org.eclipse.core.runtime.preferences.InstanceScope;
@@ -35,33 +36,63 @@ import com.google.gson.JsonObject;
  */
 public final class ThemeManager extends AbstractThemeManager {
 
-	// "themes" extension point
-	private static final String EXTENSION_THEMES = "themes"; //$NON-NLS-1$
+	/** "themes" extension point */
+	private static final String EXTENSION_THEMES = "themes";
 
-	// "theme" declaration
-	private static final String THEME_ELT = "theme"; //$NON-NLS-1$
+	/** "theme" declaration */
+	private static final String THEME_ELT = "theme";
 
-	// "themeAssociation" declaration
-	private static final String THEME_ASSOCIATION_ELT = "themeAssociation"; //$NON-NLS-1$
+	/** "themeAssociation" declaration */
+	private static final String THEME_ASSOCIATION_ELT = "themeAssociation";
 
-	@Nullable
-	private static ThemeManager INSTANCE;
-
-	public static ThemeManager getInstance() {
-		if (INSTANCE != null) {
-			return INSTANCE;
+	/** see https://en.wikipedia.org/wiki/Double-checked_locking#Usage_in_Java */
+	private static final class InstanceHolder {
+		static final ThemeManager INSTANCE = new ThemeManager();
+		static {
+			INSTANCE.load();
 		}
-		INSTANCE = createInstance();
-		return INSTANCE;
 	}
 
-	private static synchronized ThemeManager createInstance() {
-		if (INSTANCE != null) {
-			return INSTANCE;
+	public static ThemeManager getInstance() {
+		return InstanceHolder.INSTANCE;
+	}
+
+	/**
+	 * Add preference change listener to observe changed of Eclipse E4 Theme and
+	 * TextMate theme association with grammar.
+	 *
+	 * @param themeChangeListener
+	 */
+	public static void addPreferenceChangeListener(final IPreferenceChangeListener themeChangeListener) {
+		// Observe change of Eclipse E4 Theme
+		var prefs = PreferenceUtils.getE4PreferenceStore();
+		if (prefs != null) {
+			prefs.addPreferenceChangeListener(themeChangeListener);
 		}
-		final var manager = new ThemeManager();
-		manager.load();
-		return manager;
+		// Observe change of TextMate Theme association
+		prefs = InstanceScope.INSTANCE.getNode(TMUIPlugin.PLUGIN_ID);
+		if (prefs != null) {
+			prefs.addPreferenceChangeListener(themeChangeListener);
+		}
+	}
+
+	/**
+	 * Remove preference change listener to observe changed of Eclipse E4 Theme and
+	 * TextMate theme association with grammar.
+	 *
+	 * @param themeChangeListener
+	 */
+	public static void removePreferenceChangeListener(final IPreferenceChangeListener themeChangeListener) {
+		// Observe change of Eclipse E4 Theme
+		var prefs = PreferenceUtils.getE4PreferenceStore();
+		if (prefs != null) {
+			prefs.removePreferenceChangeListener(themeChangeListener);
+		}
+		// Observe change of TextMate Theme association
+		prefs = InstanceScope.INSTANCE.getNode(TMUIPlugin.PLUGIN_ID);
+		if (prefs != null) {
+			prefs.removePreferenceChangeListener(themeChangeListener);
+		}
 	}
 
 	private ThemeManager() {
@@ -76,17 +107,11 @@ public final class ThemeManager extends AbstractThemeManager {
 	 * Load TextMate Themes from extension point.
 	 */
 	private void loadThemesFromExtensionPoints() {
-		final var config = Platform.getExtensionRegistry().getConfigurationElementsFor(TMUIPlugin.PLUGIN_ID,
-				EXTENSION_THEMES);
-		for (final var configElement : config) {
-			final String name = configElement.getName();
-			switch (name) {
-				case THEME_ELT:
-					super.registerTheme(new Theme(configElement));
-					break;
-				case THEME_ASSOCIATION_ELT:
-					super.registerThemeAssociation(new ThemeAssociation(configElement));
-					break;
+		final var config = Platform.getExtensionRegistry().getConfigurationElementsFor(TMUIPlugin.PLUGIN_ID, EXTENSION_THEMES);
+		for (final IConfigurationElement elem : config) {
+			switch (elem.getName()) {
+				case THEME_ELT -> super.registerTheme(new Theme(elem));
+				case THEME_ASSOCIATION_ELT -> super.registerThemeAssociation(new ThemeAssociation(elem));
 			}
 		}
 	}
@@ -100,10 +125,10 @@ public final class ThemeManager extends AbstractThemeManager {
 		final var prefs = InstanceScope.INSTANCE.getNode(TMUIPlugin.PLUGIN_ID);
 		String json = prefs.get(PreferenceConstants.THEMES, null);
 		if (json != null) {
-			for (final var element : new Gson().fromJson(json, JsonObject[].class)) {
-				final String name = element.get("id").getAsString();
-				super.registerTheme(new Theme(name, element.get("path").getAsString(), name,
-						element.get("dark").getAsBoolean(), false));
+			for (final var jsonElem : new Gson().fromJson(json, JsonObject[].class)) {
+				final String name = jsonElem.get("id").getAsString();
+				super.registerTheme(new Theme(name, jsonElem.get("path").getAsString(), name,
+				   jsonElem.get("dark").getAsBoolean(), false));
 			}
 		}
 
@@ -141,43 +166,5 @@ public final class ThemeManager extends AbstractThemeManager {
 
 		// Save preferences
 		prefs.flush();
-	}
-
-	/**
-	 * Add preference change listener to observe changed of Eclipse E4 Theme and
-	 * TextMate theme association with grammar.
-	 *
-	 * @param themeChangeListener
-	 */
-	public void addPreferenceChangeListener(final IPreferenceChangeListener themeChangeListener) {
-		// Observe change of Eclipse E4 Theme
-		var preferences = PreferenceUtils.getE4PreferenceStore();
-		if (preferences != null) {
-			preferences.addPreferenceChangeListener(themeChangeListener);
-		}
-		// Observe change of TextMate Theme association
-		preferences = InstanceScope.INSTANCE.getNode(TMUIPlugin.PLUGIN_ID);
-		if (preferences != null) {
-			preferences.addPreferenceChangeListener(themeChangeListener);
-		}
-	}
-
-	/**
-	 * Remove preference change listener to observe changed of Eclipse E4 Theme and
-	 * TextMate theme association with grammar.
-	 *
-	 * @param themeChangeListener
-	 */
-	public void removePreferenceChangeListener(final IPreferenceChangeListener themeChangeListener) {
-		// Observe change of Eclipse E4 Theme
-		var preferences = PreferenceUtils.getE4PreferenceStore();
-		if (preferences != null) {
-			preferences.removePreferenceChangeListener(themeChangeListener);
-		}
-		// Observe change of TextMate Theme association
-		preferences = InstanceScope.INSTANCE.getNode(TMUIPlugin.PLUGIN_ID);
-		if (preferences != null) {
-			preferences.removePreferenceChangeListener(themeChangeListener);
-		}
 	}
 }

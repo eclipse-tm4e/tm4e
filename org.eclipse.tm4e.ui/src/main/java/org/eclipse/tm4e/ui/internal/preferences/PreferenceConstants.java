@@ -13,7 +13,6 @@ package org.eclipse.tm4e.ui.internal.preferences;
 
 /**
  * Preferences constants for theme.
- *
  */
 public final class PreferenceConstants {
 
@@ -23,9 +22,9 @@ public final class PreferenceConstants {
 
 	public static final String THEME_ASSOCIATIONS = "org.eclipse.tm4e.ui.themeAssociations";
 
-	public static final String E4_THEME_ID = "themeid"; //$NON-NLS-1$
+	public static final String E4_THEME_ID = "themeid";
 
-	public static final String EDITOR_CURRENTLINE_HIGHLIGHT = "currentLineColor"; //$NON-NLS-1$
+	public static final String EDITOR_CURRENTLINE_HIGHLIGHT = "currentLineColor";
 
 	private PreferenceConstants() {
 	}

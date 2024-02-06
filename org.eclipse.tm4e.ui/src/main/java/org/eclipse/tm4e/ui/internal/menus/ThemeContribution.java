@@ -14,11 +14,13 @@ package org.eclipse.tm4e.ui.internal.menus;
 import java.util.ArrayList;
 
 import org.eclipse.core.expressions.IEvaluationContext;
+import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.ActionContributionItem;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.action.IContributionItem;
+import org.eclipse.tm4e.core.grammar.IGrammar;
 import org.eclipse.tm4e.ui.TMUIPlugin;
 import org.eclipse.tm4e.ui.text.TMPresentationReconciler;
 import org.eclipse.tm4e.ui.themes.ITheme;
@@ -34,16 +36,13 @@ import org.osgi.service.prefs.BackingStoreException;
 
 /**
  * Contribute "Switch to theme" menu item with list of available themes.
- *
  */
 public final class ThemeContribution extends CompoundContributionItem implements IWorkbenchContribution {
 
-	@Nullable
-	private IHandlerService handlerService;
+	private @Nullable IHandlerService handlerService;
 
 	@Override
-	public void initialize(@Nullable final IServiceLocator serviceLocator) {
-		assert serviceLocator != null;
+	public void initialize(@NonNullByDefault({}) final IServiceLocator serviceLocator) {
 		handlerService = serviceLocator.getService(IHandlerService.class);
 	}
 
@@ -53,17 +52,15 @@ public final class ThemeContribution extends CompoundContributionItem implements
 		if (handlerService != null) {
 			final IEditorPart editorPart = getActivePart(handlerService.getCurrentState());
 			if (editorPart != null) {
-				final TMPresentationReconciler presentationReconciler = TMPresentationReconciler
-						.getTMPresentationReconciler(editorPart);
+				final var presentationReconciler = TMPresentationReconciler.getTMPresentationReconciler(editorPart);
 				if (presentationReconciler != null) {
-					final var grammar = presentationReconciler.getGrammar();
+					final IGrammar grammar = presentationReconciler.getGrammar();
 					if (grammar != null) {
 						final IThemeManager manager = TMUIPlugin.getThemeManager();
 						final boolean dark = manager.isDarkEclipseTheme();
-						final ITheme[] themes = manager.getThemes();
 						final String scopeName = grammar.getScopeName();
 						final ITheme selectedTheme = manager.getThemeForScope(scopeName, dark);
-						for (final ITheme theme : themes) {
+						for (final ITheme theme : manager.getThemes()) {
 							final IAction action = createAction(scopeName, theme, dark);
 							if (theme.equals(selectedTheme)) {
 								action.setChecked(true);
@@ -73,7 +70,6 @@ public final class ThemeContribution extends CompoundContributionItem implements
 						}
 					}
 				}
-
 			}
 		}
 		return items.toArray(IContributionItem[]::new);
@@ -88,24 +84,17 @@ public final class ThemeContribution extends CompoundContributionItem implements
 				manager.registerThemeAssociation(association);
 				try {
 					manager.save();
-				} catch (final BackingStoreException e) {
-					e.printStackTrace();
+				} catch (final BackingStoreException ex) {
+					TMUIPlugin.logError(ex);
 				}
 			}
 		};
 	}
 
-	@Nullable
-	private static IEditorPart getActivePart(@Nullable final IEvaluationContext context) {
-		if (context == null)
-			return null;
-
-		final Object activePart = context.getVariable(ISources.ACTIVE_PART_NAME);
-		if (activePart instanceof final IEditorPart editorPart) {
+	private static @Nullable IEditorPart getActivePart(final IEvaluationContext context) {
+		if (context.getVariable(ISources.ACTIVE_PART_NAME) instanceof final IEditorPart editorPart) {
 			return editorPart;
 		}
-
 		return null;
 	}
-
 }

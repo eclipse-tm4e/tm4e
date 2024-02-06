@@ -46,9 +46,7 @@ public interface IThemeManager {
 	ITheme getThemeById(String themeId);
 
 	/**
-	 * Returns the list of TextMate themes.
-	 *
-	 * @return the list of TextMate themes.
+	 * @return the list of all registered TextMate themes.
 	 */
 	ITheme[] getThemes();
 
@@ -76,6 +74,11 @@ public interface IThemeManager {
 	 *         <code>scopeName</code> and E4 Theme <code>eclipseThemeId</code>.
 	 */
 	ITheme getThemeForScope(String scopeName, boolean dark);
+
+	/**
+	 * @return the theme that will fit best for the defined background color
+	 */
+	ITheme getThemeForScope(String scopeName, RGB background);
 
 	/**
 	 * Returns the TextMate theme {@link ITheme} for the given TextMate grammar
@@ -130,13 +133,4 @@ public interface IThemeManager {
 	boolean isDarkEclipseTheme();
 
 	boolean isDarkEclipseTheme(@Nullable String eclipseThemeId);
-
-	/**
-	 *
-	 * @param scopeName
-	 * @param background
-	 *
-	 * @return the theme that will fit best for the defined background color
-	 */
-	ITheme getThemeForScope(String scopeName, RGB background);
 }

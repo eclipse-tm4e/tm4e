@@ -18,6 +18,7 @@ import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.jface.text.rules.IToken;
 import org.eclipse.swt.custom.StyledText;
 import org.eclipse.swt.graphics.Color;
+import org.eclipse.tm4e.core.internal.utils.StringUtils;
 import org.eclipse.tm4e.registry.TMResource;
 import org.eclipse.tm4e.registry.XMLConstants;
 import org.eclipse.tm4e.ui.TMUIPlugin;
@@ -34,8 +35,7 @@ public class Theme extends TMResource implements ITheme {
 	private static final String DARK_ATTR = "dark";
 	private static final String DEFAULT_ATTR = "default";
 
-	@Nullable
-	private ITokenProvider tokenProvider;
+	private @Nullable ITokenProvider tokenProvider;
 
 	private final String id;
 	private final String name;
@@ -51,9 +51,7 @@ public class Theme extends TMResource implements ITheme {
 	}
 
 	/**
-	 * Constructor for extension point.
-	 *
-	 * @param id
+    * Constructor for manually registered themes
 	 */
 	public Theme(final String id, final String path, final String name, final boolean dark, final boolean isDefault) {
 		super(path);
@@ -63,6 +61,9 @@ public class Theme extends TMResource implements ITheme {
 		this.isDefault = isDefault;
 	}
 
+	/**
+	 * Constructor for extension point.
+	 */
 	public Theme(final IConfigurationElement ce) {
 		super(ce);
 		id = ce.getAttribute(XMLConstants.ID_ATTR);
@@ -184,5 +185,15 @@ public class Theme extends TMResource implements ITheme {
 		if (color != null) {
 			styledText.setSelectionForeground(color);
 		}
+	}
+
+	@Override
+	public String toString() {
+		return StringUtils.toString(this, sb -> {
+			sb.append("id=").append(getId());
+			sb.append(",name=").append(getName());
+			sb.append(",dark=").append(isDark());
+			sb.append(",default=").append(isDefault());
+		});
 	}
 }

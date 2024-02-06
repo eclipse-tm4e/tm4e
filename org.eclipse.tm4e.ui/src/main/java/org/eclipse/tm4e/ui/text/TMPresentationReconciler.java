@@ -80,8 +80,7 @@ public class TMPresentationReconciler implements IPresentationReconciler {
 		if (editorPart == null)
 			return null;
 
-		final @Nullable ITextOperationTarget target = editorPart.getAdapter(ITextOperationTarget.class);
-		return target instanceof final ITextViewer textViewer
+		return editorPart.getAdapter(ITextOperationTarget.class) instanceof final ITextViewer textViewer
 				? TMPresentationReconciler.getTMPresentationReconciler(textViewer)
 				: null;
 	}
@@ -355,7 +354,7 @@ public class TMPresentationReconciler implements IPresentationReconciler {
 		if (newGrammar == null && this.grammar == null)
 			return;
 
-		this.isForcedGrammar = newGrammar != null;
+		isForcedGrammar = newGrammar != null;
 		if (Objects.equals(newGrammar, this.grammar))
 			return;
 
@@ -409,7 +408,7 @@ public class TMPresentationReconciler implements IPresentationReconciler {
 		if (doc != null) {
 			viewerListener.inputDocumentChanged(null, doc);
 		}
-		ThemeManager.getInstance().addPreferenceChangeListener(themeChangeListener);
+		ThemeManager.addPreferenceChangeListener(themeChangeListener);
 	}
 
 	@Override
@@ -418,7 +417,7 @@ public class TMPresentationReconciler implements IPresentationReconciler {
 		viewer.removeTextInputListener(viewerListener);
 
 		viewerListener.inputDocumentAboutToBeChanged(viewer.getDocument(), null);
-		ThemeManager.getInstance().removePreferenceChangeListener(themeChangeListener);
+		ThemeManager.removePreferenceChangeListener(themeChangeListener);
 
 		this.viewer = null;
 	}

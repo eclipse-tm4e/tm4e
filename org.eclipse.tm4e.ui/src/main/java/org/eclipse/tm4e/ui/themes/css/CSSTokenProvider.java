@@ -53,27 +53,20 @@ public class CSSTokenProvider implements ITokenProvider {
 
 	public CSSTokenProvider(final InputStream in) {
 		CSSParser parser = null;
+		final var colors = ColorManager.getInstance();
 		try {
 			parser = new CSSParser(in);
 			for (final IStyle style : parser.getStyles()) {
-				final RGB color = style.getColor();
-				if (color != null) {
-					int s = SWT.NORMAL;
-					if (style.isBold()) {
-						s = s | SWT.BOLD;
-					}
-					if (style.isItalic()) {
-						s = s | SWT.ITALIC;
-					}
-					if (style.isUnderline()) {
-						s = s | TextAttribute.UNDERLINE;
-					}
-					if (style.isStrikeThrough()) {
-						s = s | TextAttribute.STRIKETHROUGH;
-					}
-					tokenMaps.put(style,
-							new Token(new TextAttribute(ColorManager.getInstance().getColor(color), null, s)));
-				}
+				final @Nullable RGB styleFGColor = style.getColor();
+				final @Nullable RGB styleBGColor = style.getBackgroundColor();
+				tokenMaps.put(style, new Token(new TextAttribute(
+						styleFGColor == null ? null : colors.getColor(styleFGColor),
+						styleBGColor == null ? null : colors.getColor(styleBGColor),
+						SWT.NORMAL
+								| (style.isBold() ? SWT.BOLD : 0)
+								| (style.isItalic() ? SWT.ITALIC : 0)
+								| (style.isUnderline() ? TextAttribute.UNDERLINE : 0)
+								| (style.isStrikeThrough() ? TextAttribute.STRIKETHROUGH : 0))));
 			}
 		} catch (final Exception ex) {
 			TMUIPlugin.logError(ex);

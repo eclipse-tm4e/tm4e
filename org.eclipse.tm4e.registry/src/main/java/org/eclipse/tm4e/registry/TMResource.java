@@ -19,6 +19,7 @@ import java.io.InputStream;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 
+import org.eclipse.core.runtime.FileLocator;
 import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.jdt.annotation.Nullable;
 
@@ -27,7 +28,7 @@ import org.eclipse.jdt.annotation.Nullable;
  */
 public abstract class TMResource implements ITMResource {
 
-	private static final String PLATFORM_PLUGIN = "platform:/plugin/"; //$NON-NLS-1$
+	private static final String PLATFORM_PLUGIN = "platform:/plugin/";
 
 	private String path;
 	private @Nullable String pluginId;
@@ -48,7 +49,7 @@ public abstract class TMResource implements ITMResource {
 		this.path = path;
 	}
 
-	protected TMResource(final String path, @Nullable final String pluginId) {
+	protected TMResource(final String path, final @Nullable String pluginId) {
 		this.path = path;
 		this.pluginId = pluginId;
 	}
@@ -66,13 +67,24 @@ public abstract class TMResource implements ITMResource {
 	@Override
 	@SuppressWarnings("resource")
 	public InputStream getInputStream() throws IOException {
-		return new BufferedInputStream(pluginId != null
-				? new URL(PLATFORM_PLUGIN + pluginId + "/" + path).openStream()
-				: new FileInputStream(new File(path)));
+		return new BufferedInputStream(pluginId == null
+				? new FileInputStream(new File(path))
+				: new URL(PLATFORM_PLUGIN + pluginId + '/' + path).openStream());
+	}
+
+	protected long getLastModified() {
+		try {
+			return new File(pluginId == null
+					? path
+					: FileLocator.resolve(new URL(PLATFORM_PLUGIN + pluginId + '/' + path)).getFile() //
+			).lastModified();
+		} catch (final Exception ex) {
+			return 0;
+		}
 	}
 
 	protected @Nullable String getResourceContent() {
-		try (InputStream in = this.getInputStream()) {
+		try (InputStream in = getInputStream()) {
 			return new String(in.readAllBytes(), StandardCharsets.UTF_8);
 		} catch (final Exception ex) {
 			TMEclipseRegistryPlugin.logError(ex);

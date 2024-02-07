@@ -28,7 +28,6 @@ import org.eclipse.ui.texteditor.AbstractTextEditor;
 
 /**
  * {@link ITheme} implementation.
- *
  */
 public class Theme extends TMResource implements ITheme {
 
@@ -137,7 +136,7 @@ public class Theme extends TMResource implements ITheme {
 
 	@Nullable
 	private ITokenProvider getTokenProvider() {
-		if (tokenProvider == null) {
+		if (tokenProvider == null || isModified()) {
 			try (InputStream in = super.getInputStream()) {
 				tokenProvider = new CSSTokenProvider(in);
 			} catch (final Exception ex) {
@@ -146,6 +145,20 @@ public class Theme extends TMResource implements ITheme {
 			}
 		}
 		return tokenProvider;
+	}
+
+	private long lastModified = -1;
+	private long lastModifiedRecheck = -1;
+
+	private boolean isModified() {
+		final long now = System.currentTimeMillis();
+		if (now > lastModifiedRecheck) {
+			lastModifiedRecheck = now + 5_000;
+			final long oldModified = lastModified;
+			lastModified = getLastModified();
+			return lastModified != oldModified;
+		}
+		return false;
 	}
 
 	@Nullable

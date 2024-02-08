@@ -144,7 +144,7 @@
   <!-- ======================================== -->
   <extension point="org.eclipse.core.contenttype.contentTypes">
     <content-type id="org.eclipse.tm4e.language_pack.cpp" name="C++" base-type="org.eclipse.tm4e.language_pack.basetype" priority="low"
-                  file-extensions="c++,cc,cpp,cxx,h,h++,h.in,hh,hpp,hpp.in,hxx,ii,inl,ino,ipp,ixx,tpp,txx" />
+                  file-extensions="c++,cc,cpp,cxx,h,h++,hh,hpp,hxx,ii,inl,ino,ipp,ixx,tpp,txx" file-patterns="*.h.in,*.hpp.in" />
   </extension>
   <extension point="org.eclipse.tm4e.registry.grammars">
     <grammar scopeName="source.cpp" path="syntaxes/cpp/cpp.tmLanguage.json" />
@@ -557,7 +557,7 @@
   <!-- ======================================== -->
   <extension point="org.eclipse.core.contenttype.contentTypes">
     <content-type id="org.eclipse.tm4e.language_pack.json" name="JSON" base-type="org.eclipse.tm4e.language_pack.basetype" priority="low"
-                  file-extensions="bowerrc,css.map,geojson,har,ipynb,js.map,jscsrc,jslintrc,json,jsonld,ts.map,vuerc,webmanifest" file-names=".watchmanconfig,composer.lock" />
+                  file-extensions="bowerrc,geojson,har,ipynb,jscsrc,jslintrc,json,jsonld,vuerc,webmanifest" file-names=".watchmanconfig,composer.lock" file-patterns="*.css.map,*.js.map,*.ts.map" />
   </extension>
   <extension point="org.eclipse.tm4e.registry.grammars">
     <grammar scopeName="source.json" path="syntaxes/json/json.tmLanguage.json" />
@@ -577,7 +577,7 @@
   <!-- ======================================== -->
   <extension point="org.eclipse.core.contenttype.contentTypes">
     <content-type id="org.eclipse.tm4e.language_pack.jsonc" name="JSON with Comments" base-type="org.eclipse.tm4e.language_pack.basetype" priority="low"
-                  file-extensions="babelrc,eslintrc,eslintrc.json,hintrc,jsfmtrc,jshintrc,jsonc,swcrc" file-names=".babelrc.json,.ember-cli,babel.config.json,typedoc.json" />
+                  file-extensions="babelrc,eslintrc,hintrc,jsfmtrc,jshintrc,jsonc,swcrc" file-names=".babelrc.json,.ember-cli,babel.config.json,typedoc.json" file-patterns="*.eslintrc.json" />
   </extension>
   <extension point="org.eclipse.tm4e.registry.grammars">
     <grammar scopeName="source.json.comments" path="syntaxes/json/jsonc.tmLanguage.json" />
@@ -1315,7 +1315,7 @@
   <!-- ======================================== -->
   <extension point="org.eclipse.core.contenttype.contentTypes">
     <content-type id="org.eclipse.tm4e.language_pack.xml" name="XML" base-type="org.eclipse.tm4e.language_pack.basetype" priority="low"
-                  file-extensions="ascx,atom,axaml,axml,bpmn,cpt,csl,csproj,csproj.user,dita,ditamap,dtd,dtml,ent,fsproj,fxml,iml,isml,jmx,launch,menu,mod,mxml,nuspec,opml,owl,proj,props,pt,publishsettings,pubxml,pubxml.user,rbxlx,rbxmx,rdf,rng,rss,shproj,storyboard,svg,targets,tld,tmx,vbproj,vbproj.user,vcxproj,vcxproj.filters,wsdl,wxi,wxl,wxs,xaml,xbl,xib,xlf,xliff,xml,xoml,xpdl,xsd,xul" />
+                  file-extensions="ascx,atom,axaml,axml,bpmn,cpt,csl,csproj,dita,ditamap,dtd,dtml,ent,fsproj,fxml,iml,isml,jmx,launch,menu,mod,mxml,nuspec,opml,owl,proj,props,pt,publishsettings,pubxml,rbxlx,rbxmx,rdf,rng,rss,shproj,storyboard,svg,targets,tld,tmx,vbproj,vcxproj,wsdl,wxi,wxl,wxs,xaml,xbl,xib,xlf,xliff,xml,xoml,xpdl,xsd,xul" file-patterns="*.csproj.user,*.pubxml.user,*.vbproj.user,*.vcxproj.filters" />
   </extension>
   <extension point="org.eclipse.tm4e.registry.grammars">
     <grammar scopeName="text.xml" path="syntaxes/xml/xml.tmLanguage.json" />

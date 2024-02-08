@@ -21,6 +21,7 @@ import static updater.utils.Validation.*;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
@@ -374,13 +375,39 @@ public class Updater {
 				templateVars.put("icon_filename", iconFileName);
 				templateVars.put("example_filename", exampleFile.isPresent() ? exampleFile.get().getFileName() : null);
 
+				List<String> fileExtensions = new ArrayList<>();
+				List<String> fileNames = new ArrayList<>();
+				List<String> filePatterns = new ArrayList<>();
+
+				if (langState.fileExtensions != null) {
+					fileExtensions.addAll(langState.fileExtensions.stream() //
+							.map(Strings::removeLeadingDot) //
+							.filter(e -> !e.contains(".")) // ignore extensions with dot, e.g. html.jinja2
+							.toList());
+
+					filePatterns.addAll(langState.fileExtensions.stream() //
+							.map(Strings::removeLeadingDot) //
+							.filter(e -> e.contains(".")) // select extensions with dot, e.g. html.jinja2
+							.map(e -> "*." + e) // convert them to a pattern, e.g. "*.html.jinja2"
+							.toList());
+				}
+
+				if (langState.fileNames != null) {
+					fileNames.addAll(langState.fileNames);
+				}
+
+				if (langState.filePatterns != null) {
+					filePatterns.addAll(langState.filePatterns);
+				}
+
+				fileExtensions = fileExtensions.stream().distinct().sorted().toList();
+				fileNames = fileNames.stream().distinct().sorted().toList();
+				filePatterns = filePatterns.stream().distinct().sorted().toList();
+
 				templateVars.put("file_associations", Arrays.asList( //
-						isEmpty(langState.fileExtensions) ? null
-								: "file-extensions=\""
-										+ join(langState.fileExtensions.stream().map(Strings::removeLeadingDot).distinct().sorted(), ",")
-										+ "\"", //
-						isEmpty(langState.fileNames) ? null : "file-names=\"" + join(langState.fileNames, ",") + "\"", //
-						isEmpty(langState.filePatterns) ? null : "file-patterns=\"" + join(langState.filePatterns, ",") + "\"" //
+						fileExtensions.isEmpty() ? null : "file-extensions=\"" + join(fileExtensions, ",") + "\"", //
+						fileNames.isEmpty() ? null : "file-names=\"" + join(fileNames, ",") + "\"", //
+						filePatterns.isEmpty() ? null : "file-patterns=\"" + join(filePatterns, ",") + "\"" //
 				).stream().filter(Objects::nonNull).collect(Collectors.joining(" ")));
 
 				pluginLines.append(render(

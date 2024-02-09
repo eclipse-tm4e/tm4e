@@ -38,9 +38,9 @@ public final class TMUIMessages extends NLS {
 	// Grammar preferences page
 	public static String GrammarPreferencePage_title;
 	public static String GrammarPreferencePage_description;
+	public static String GrammarPreferencePage_column_contentTypes;
 	public static String GrammarPreferencePage_column_scopeName;
-	public static String GrammarPreferencePage_column_path;
-	public static String GrammarPreferencePage_column_pluginId;
+	public static String GrammarPreferencePage_column_source;
 	public static String GrammarPreferencePage_tab_general_text;
 	public static String GrammarInfoWidget_name_text;
 	public static String GrammarInfoWidget_scopeName_text;
@@ -67,8 +67,7 @@ public final class TMUIMessages extends NLS {
 	public static String ThemePreferencePage_description;
 	public static String ThemePreferencePage_column_name;
 	public static String ThemePreferencePage_column_type;
-	public static String ThemePreferencePage_column_path;
-	public static String ThemePreferencePage_column_pluginId;
+	public static String ThemePreferencePage_column_source;
 	public static String ThemePreferencePage_darkThemeButton_label;
 	public static String ThemePreferencePage_defaultThemeButton_label;
 	public static String ThemePreferencePage_preview;

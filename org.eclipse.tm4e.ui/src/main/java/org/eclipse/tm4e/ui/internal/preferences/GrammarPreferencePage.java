@@ -6,21 +6,22 @@
  * http://www.eclipse.org/legal/epl-v10.html
  *
  * Contributors:
- * IBM Corporation - initial API and implementation
- * Nicolaj Hoess <nicohoess@gmail.com> - Editor templates pref page: Allow to sort by column -
- * https://bugs.eclipse.org/203722
- * Angelo Zerr <angelo.zerr@gmail.com> - Adapt org.eclipse.ui.texteditor.templates.TemplatePreferencePage for TextMate
- * grammar
+ * - IBM Corporation - initial API and implementation
+ * - Nicolaj Hoess <nicohoess@gmail.com> - Editor templates pref page: Allow to sort by column - https://bugs.eclipse.org/203722
+ * - Angelo Zerr <angelo.zerr@gmail.com> - Adapt org.eclipse.ui.texteditor.templates.TemplatePreferencePage for TextMate grammar
+ * - Sebastian Thomschke (Vegard IT) - major cleanup/refactoring, added table filtering and performDefaults support
  *******************************************************************************/
 package org.eclipse.tm4e.ui.internal.preferences;
 
 import static org.eclipse.tm4e.core.internal.utils.NullSafetyHelper.lazyNonNull;
 
 import java.util.Arrays;
+import java.util.stream.Collectors;
 
+import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.jface.dialogs.Dialog;
-import org.eclipse.jface.preference.PreferencePage;
+import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
@@ -28,13 +29,10 @@ import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.window.Window;
 import org.eclipse.jface.wizard.WizardDialog;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
-import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
-import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.TabFolder;
 import org.eclipse.swt.widgets.TabItem;
@@ -50,162 +48,148 @@ import org.eclipse.tm4e.ui.internal.widgets.ContentTypesBindingWidget;
 import org.eclipse.tm4e.ui.internal.widgets.GrammarInfoWidget;
 import org.eclipse.tm4e.ui.internal.widgets.TMViewer;
 import org.eclipse.tm4e.ui.internal.widgets.TableWidget;
+import org.eclipse.tm4e.ui.internal.widgets.TableWithControlsWidget;
 import org.eclipse.tm4e.ui.internal.widgets.ThemeAssociationsWidget;
+import org.eclipse.tm4e.ui.internal.widgets.VerticalSplitPane;
 import org.eclipse.tm4e.ui.internal.wizards.TextMateGrammarImportWizard;
 import org.eclipse.tm4e.ui.snippets.ISnippet;
 import org.eclipse.tm4e.ui.snippets.ISnippetManager;
 import org.eclipse.tm4e.ui.themes.ITheme;
 import org.eclipse.tm4e.ui.themes.IThemeAssociation;
 import org.eclipse.tm4e.ui.themes.IThemeManager;
-import org.eclipse.ui.IWorkbench;
-import org.eclipse.ui.IWorkbenchPreferencePage;
 import org.osgi.service.prefs.BackingStoreException;
 
 /**
- * A grammar preference page allows configuration of the TextMate grammar It
- * provides controls for adding, removing and changing grammar as well as
- * enablement, default management.
+ * A grammar preference page allows configuration of the TextMate grammar.
+ * It provides controls for adding, removing and changing grammar as well as enablement, default management.
  */
-public final class GrammarPreferencePage extends PreferencePage implements IWorkbenchPreferencePage {
+public final class GrammarPreferencePage extends AbstractPreferencePage {
 
 	static final String PAGE_ID = "org.eclipse.tm4e.ui.preferences.GrammarPreferencePage";
 
 	// Managers
-	private IGrammarRegistryManager grammarRegistryManager = new WorkingCopyGrammarRegistryManager(
+	private IGrammarRegistryManager grammarManager = new WorkingCopyGrammarRegistryManager(
 			TMEclipseRegistryPlugin.getGrammarRegistryManager());
-	private final IThemeManager.EditSession themeManager = ThemeManager.getInstance().createEditSession();
+	private IThemeManager.EditSession themeManager = ThemeManager.getInstance().newEditSession();
 	private ISnippetManager snippetManager = TMUIPlugin.getSnippetManager();
 
-	// Grammar list
 	private TableWidget<IGrammarDefinition> grammarsTable = lazyNonNull();
-	private Button grammarRemoveButton = lazyNonNull();
 
-	// General tab
+	// Grammar info tabs
 	private GrammarInfoWidget grammarInfoWidget = lazyNonNull();
-	// Content type tab
 	private ContentTypesBindingWidget contentTypesWidget = lazyNonNull();
-	// Theme associations tab
 	private ThemeAssociationsWidget themeAssociationsWidget = lazyNonNull();
-	// Preview
-	private TMViewer previewViewer = lazyNonNull();
+
+	private TMViewer grammarPreview = lazyNonNull();
 
 	public GrammarPreferencePage() {
-		setDescription(TMUIMessages.GrammarPreferencePage_description);
+		super(TMUIMessages.GrammarPreferencePage_title, TMUIMessages.GrammarPreferencePage_description);
 	}
 
 	@Override
-	protected Control createContents(final @Nullable Composite ancestor) {
-		final var parent = new Composite(ancestor, SWT.NONE);
-		final var layout = new GridLayout();
-		layout.numColumns = 2;
-		layout.marginHeight = 0;
-		layout.marginWidth = 0;
-		parent.setLayout(layout);
-
-		final var innerParent = new Composite(parent, SWT.NONE);
-		final var innerLayout = new GridLayout();
-		innerLayout.numColumns = 2;
-		innerLayout.marginHeight = 0;
-		innerLayout.marginWidth = 0;
-		innerParent.setLayout(innerLayout);
-		final var gd = new GridData(GridData.FILL_BOTH);
-		gd.horizontalSpan = 2;
-		innerParent.setLayoutData(gd);
-
-		createGrammarListContent(innerParent);
-		createGrammarDetailContent(innerParent);
-
-		previewViewer = doCreateViewer(innerParent);
-		grammarsTable.setInput(grammarRegistryManager);
-		grammarsTable.selectFirstRow();
-
-		updateButtons();
-		Dialog.applyDialogFont(parent);
-		innerParent.layout();
-
-		return parent;
-	}
-
-	/**
-	 * Create grammar list content.
-	 */
-	private void createGrammarListContent(final Composite parent) {
-		final var tableComposite = new Composite(parent, SWT.NONE);
-		tableComposite.setLayout(new FillLayout());
-		final var data = new GridData(GridData.FILL_BOTH);
-		data.widthHint = 360;
-		data.heightHint = convertHeightInCharsToPixels(10);
-		tableComposite.setLayoutData(data);
-
-		grammarsTable = new TableWidget<>(tableComposite, false) {
+	protected Control createContents(final @NonNullByDefault({}) Composite parent) {
+		final var control = new VerticalSplitPane(parent, 1, 1) {
 
 			@Override
-			protected void createColumns() {
-				createAutoResizeColumn(TMUIMessages.GrammarPreferencePage_column_scopeName);
-				createAutoResizeColumn(TMUIMessages.GrammarPreferencePage_column_path);
-				createAutoResizeColumn(TMUIMessages.GrammarPreferencePage_column_pluginId, 0);
+			protected void configureUpperArea(final Composite parent) {
+				createGrammarsTable(parent);
 			}
 
 			@Override
-			protected @Nullable String getColumnText(final IGrammarDefinition definition, final int columnIndex) {
-				return switch (columnIndex) {
-					case 0 -> definition.getScope().getName();
-					case 1 -> definition.getPath();
-					case 2 -> definition.getPluginId();
-					default -> null;
+			protected void configureLowerArea(final Composite parent) {
+				createGrammarDetailsView(parent);
+				createThemePreview(parent);
+			}
+		}.getControl();
+
+		Dialog.applyDialogFont(control);
+
+		grammarsTable.setInput(grammarManager);
+		grammarsTable.selectFirstRow();
+
+		return control;
+	}
+
+	private void createGrammarsTable(final Composite parent) {
+		final var tableWithControls = new TableWithControlsWidget<IGrammarDefinition>(parent, null, true) {
+
+			@Override
+			protected TableWidget<IGrammarDefinition> createTable(final Composite parent) {
+				return new TableWidget<>(parent, false) {
+
+					@Override
+					protected void createColumns() {
+						createAutoResizeColumn(TMUIMessages.GrammarPreferencePage_column_contentTypes, 1);
+						createAutoResizeColumn(TMUIMessages.GrammarPreferencePage_column_scopeName, 2);
+						createAutoResizeColumn(TMUIMessages.GrammarPreferencePage_column_source, 0, 1);
+					}
+
+					@Override
+					protected @Nullable String getColumnText(final IGrammarDefinition def, final int columnIndex) {
+						return switch (columnIndex) {
+							case 0 -> {
+								final var contentTypes = grammarManager.getContentTypesForScope(def.getScope());
+								yield contentTypes == null
+										? null
+										: contentTypes.stream().map(ct -> ct.getName())
+												.distinct()
+												.sorted()
+												.collect(Collectors.joining(", "));
+							}
+							case 1 -> def.getScope().getName();
+							case 2 -> (def.getPluginId() == null ? "" : "" + def.getPluginId() + " > ") + def.getPath();
+							default -> null;
+						};
+					}
+
+					@Override
+					protected Object[] getElements(final @Nullable Object input) {
+						if (input instanceof final IGrammarRegistryManager manager)
+							return manager.getDefinitions();
+						return super.getElements(input);
+					}
 				};
 			}
 
 			@Override
-			protected Object[] getElements(final @Nullable Object input) {
-				if (input instanceof final IGrammarRegistryManager manager)
-					return manager.getDefinitions();
-				return super.getElements(input);
+			protected void createButtons() {
+				// Add Grammar
+				createButton(TMUIMessages.Button_new, () -> {
+					// Open import wizard for TextMate grammar.
+					final var wizard = new TextMateGrammarImportWizard(false);
+					wizard.setGrammarRegistryManager(grammarManager);
+					final var dialog = new WizardDialog(getShell(), wizard);
+					if (dialog.open() == Window.OK) {
+						// User grammar was saved, refresh the list of grammar and select the created grammar.
+						final var created = wizard.getCreatedDefinition();
+						table.refresh();
+						table.setSelection(true, created);
+					}
+				});
+
+				// Remove Grammar
+				final var removeBtn = createButton(TMUIMessages.Button_remove, () -> {
+					final var definition = table.getFirstSelectedElement();
+					if (definition != null) {
+						grammarManager.unregisterGrammarDefinition(definition);
+						table.refresh();
+					}
+				});
+				table.onSelectionChanged(sel -> removeBtn.setEnabled(!sel.isEmpty() && sel.get(0).getPluginId() == null));
 			}
 		};
 
-		grammarsTable.onSelected(selection -> {
-			final IGrammarDefinition definition = selection.get(0);
+		tableWithControls.setLayoutData(GridDataFactory.fillDefaults()
+				.align(SWT.FILL, SWT.FILL)
+				.grab(true, true)
+				.hint(360, convertHeightInCharsToPixels(10))
+				.create());
 
-			// Update button
-			grammarRemoveButton.setEnabled(definition.getPluginId() == null);
-			themeAssociationsWidget.getNewButton().setEnabled(false);
-			themeAssociationsWidget.getRemoveButton().setEnabled(false);
+		grammarsTable = tableWithControls.getTable();
 
-			selectGrammar(definition);
-		});
-
-		final var buttons = new Composite(parent, SWT.NONE);
-		buttons.setLayoutData(new GridData(GridData.VERTICAL_ALIGN_BEGINNING));
-		final var layout = new GridLayout();
-		layout.marginHeight = 0;
-		layout.marginWidth = 0;
-		buttons.setLayout(layout);
-
-		final var grammarNewButton = new Button(buttons, SWT.PUSH);
-		grammarNewButton.setText(TMUIMessages.Button_new);
-		grammarNewButton.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-		grammarNewButton.addListener(SWT.Selection, (final @Nullable Event e) -> {
-			// Open import wizard for TextMate grammar.
-			final var wizard = new TextMateGrammarImportWizard(false);
-			wizard.setGrammarRegistryManager(grammarRegistryManager);
-			final var dialog = new WizardDialog(getShell(), wizard);
-			if (dialog.open() == Window.OK) {
-				// User grammar was saved, refresh the list of grammar and select the created grammar.
-				final IGrammarDefinition created = wizard.getCreatedDefinition();
-				grammarsTable.refresh();
-				grammarsTable.setSelection(created);
-			}
-		});
-
-		grammarRemoveButton = new Button(buttons, SWT.PUSH);
-		grammarRemoveButton.setText(TMUIMessages.Button_remove);
-		grammarRemoveButton.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-		grammarRemoveButton.addListener(SWT.Selection, (final @Nullable Event e) -> {
-			final var definition = grammarsTable.getFirstSelectedElement();
-			if (definition != null) {
-				grammarRegistryManager.unregisterGrammarDefinition(definition);
-				grammarsTable.refresh();
+		grammarsTable.onSelectionChanged(selectedGrammarDefinitions -> {
+			if (!selectedGrammarDefinitions.isEmpty()) {
+				selectGrammar(selectedGrammarDefinitions.get(0));
 			}
 		});
 	}
@@ -213,7 +197,7 @@ public final class GrammarPreferencePage extends PreferencePage implements IWork
 	/**
 	 * Create detail grammar content which is filled when a grammar is selected in the grammar list.
 	 */
-	private void createGrammarDetailContent(final Composite parent) {
+	private void createGrammarDetailsView(final Composite parent) {
 		final var folder = new TabFolder(parent, SWT.NONE);
 
 		final var gd = new GridData(GridData.FILL_HORIZONTAL);
@@ -286,10 +270,8 @@ public final class GrammarPreferencePage extends PreferencePage implements IWork
 			}
 
 			private void selectTheme(final @Nullable IThemeAssociation association) {
-				themeAssociationsWidget.getNewButton()
-						.setEnabled(association != null /* && association.getPluginId() == null */);
-				themeAssociationsWidget.getRemoveButton()
-						.setEnabled(association != null /* && association.getPluginId() == null */);
+				themeAssociationsWidget.getNewButton().setEnabled(association != null /* && association.getPluginId() == null */);
+				themeAssociationsWidget.getRemoveButton().setEnabled(association != null /* && association.getPluginId() == null */);
 				if (association != null) {
 					setPreviewTheme(association.getThemeId());
 				}
@@ -297,19 +279,22 @@ public final class GrammarPreferencePage extends PreferencePage implements IWork
 		});
 
 		tab.setControl(parent);
+
+		grammarsTable.onSelectionChanged(selectedGrammarDefinitions -> {
+			themeAssociationsWidget.getNewButton().setEnabled(false);
+			themeAssociationsWidget.getRemoveButton().setEnabled(false);
+		});
 	}
 
 	private void setPreviewTheme(final String themeId) {
 		final ITheme theme = themeManager.getThemeById(themeId);
 		if (theme != null) {
-			previewViewer.setTheme(theme);
+			grammarPreview.setTheme(theme);
 		}
 	}
 
 	/**
 	 * Create "Injection" tab
-	 *
-	 * @param folder
 	 */
 	private void createInjectionTab(final TabFolder folder) {
 		final var tab = new TabItem(folder, SWT.NONE);
@@ -328,17 +313,17 @@ public final class GrammarPreferencePage extends PreferencePage implements IWork
 		fillGeneralTab(definition);
 		fillContentTypeTab(definition);
 		final IThemeAssociation selectedAssociation = fillThemeTab(definition);
-		fillPreview(definition, selectedAssociation);
+		preview(definition, selectedAssociation);
 	}
 
 	private void fillGeneralTab(final IGrammarDefinition definition) {
-		final IGrammar grammar = grammarRegistryManager.getGrammarForScope(definition.getScope());
+		final IGrammar grammar = grammarManager.getGrammarForScope(definition.getScope());
 		grammarInfoWidget.refresh(grammar);
 	}
 
 	private void fillContentTypeTab(final IGrammarDefinition definition) {
 		// Load the content type binding for the given grammar
-		contentTypesWidget.setInput(grammarRegistryManager.getContentTypesForScope(definition.getScope()));
+		contentTypesWidget.setInput(grammarManager.getContentTypesForScope(definition.getScope()));
 	}
 
 	@Nullable
@@ -348,8 +333,7 @@ public final class GrammarPreferencePage extends PreferencePage implements IWork
 		// Load the theme associations for the given grammar
 		final IThemeAssociation[] themeAssociations = themeAssociationsWidget.setGrammarDefinition(definition);
 		// Try to keep selection
-		if (!oldSelection.isEmpty()
-				&& Arrays.asList(themeAssociations).contains(oldSelection.getFirstElement())) {
+		if (!oldSelection.isEmpty() && Arrays.asList(themeAssociations).contains(oldSelection.getFirstElement())) {
 			selectedAssociation = (IThemeAssociation) oldSelection.getFirstElement();
 			themeAssociationsWidget.setSelection(oldSelection);
 		} else {
@@ -363,82 +347,57 @@ public final class GrammarPreferencePage extends PreferencePage implements IWork
 		return selectedAssociation;
 	}
 
-	private void fillPreview(final IGrammarDefinition definition, final @Nullable IThemeAssociation selectedAssociation) {
-		// Preview the grammar
-		final IGrammar grammar = grammarRegistryManager.getGrammarForScope(definition.getScope());
-		if (selectedAssociation != null) {
-			setPreviewTheme(selectedAssociation.getThemeId());
-		}
-		previewViewer.setGrammar(grammar);
-		// Snippet
-		final ISnippet[] snippets = snippetManager.getSnippets(definition.getScope().getName());
-		if (snippets.length == 0) {
-			previewViewer.setText("");
-		} else {
-			// TODO: manage list of snippet for the given scope.
-			previewViewer.setText(snippets[0].getContent());
-		}
-	}
-
-	private void updateButtons() {
-		grammarRemoveButton.setEnabled(false);
-	}
-
-	@Override
-	public void setVisible(final boolean visible) {
-		super.setVisible(visible);
-		if (visible)
-			setTitle(TMUIMessages.GrammarPreferencePage_title);
-	}
-
-	@Override
-	public void init(final @Nullable IWorkbench workbench) {
-
-	}
-
-	private TMViewer doCreateViewer(final Composite parent) {
+	private void createThemePreview(final Composite parent) {
 		final var label = new Label(parent, SWT.NONE);
 		label.setText(TMUIMessages.GrammarPreferencePage_preview);
 		var data = new GridData();
 		data.horizontalSpan = 2;
 		label.setLayoutData(data);
 
-		final TMViewer viewer = createViewer(parent);
+		grammarPreview = new TMViewer(parent, null, null, false, SWT.BORDER | SWT.V_SCROLL | SWT.H_SCROLL);
 
-		// Don't set caret to 'null' as this causes
-		// https://bugs.eclipse.org/293263
+		// Don't set caret to 'null' as this causes https://bugs.eclipse.org/293263
 		// viewer.getTextWidget().setCaret(null);
 
-		final var control = viewer.getControl();
-		data = new GridData(GridData.FILL_BOTH);
-		data.horizontalSpan = 2;
-		data.heightHint = convertHeightInCharsToPixels(5);
-		control.setLayoutData(data);
-
-		return viewer;
+		final var control = grammarPreview.getControl();
+		control.setLayoutData(GridDataFactory.fillDefaults()
+				.align(SWT.FILL, SWT.FILL)
+				.grab(true, true)
+				.hint(SWT.DEFAULT, convertHeightInCharsToPixels(5))
+				.create());
 	}
 
-	/**
-	 * Creates, configures and returns a source viewer to present the template
-	 * pattern on the preference page. Clients may override to provide a custom
-	 * source viewer featuring e.g. syntax coloring.
-	 *
-	 * @param parent the parent control
-	 *
-	 * @return a configured source viewer
-	 */
-	private TMViewer createViewer(final Composite parent) {
-		return new TMViewer(parent, null, null, false, SWT.BORDER | SWT.V_SCROLL | SWT.H_SCROLL);
+	private void preview(final IGrammarDefinition definition, final @Nullable IThemeAssociation selectedAssociation) {
+		// Preview the grammar
+		final IGrammar grammar = grammarManager.getGrammarForScope(definition.getScope());
+		if (selectedAssociation != null) {
+			setPreviewTheme(selectedAssociation.getThemeId());
+		}
+		grammarPreview.setGrammar(grammar);
+		// Snippet
+		final ISnippet[] snippets = snippetManager.getSnippets(definition.getScope().getName());
+		if (snippets.length == 0) {
+			grammarPreview.setText("");
+		} else {
+			// TODO: manage list of snippet for the given scope.
+			grammarPreview.setText(snippets[0].getContent());
+		}
+	}
+
+	@Override
+	protected void performDefaults() {
+		grammarManager = new WorkingCopyGrammarRegistryManager(TMEclipseRegistryPlugin.getGrammarRegistryManager());
+		themeManager = ThemeManager.getInstance().newEditSession();
+		grammarsTable.setInput(themeManager);
 	}
 
 	@Override
 	public boolean performOk() {
 		try {
-			// Save the working copy if there are some changed.
-			grammarRegistryManager.save();
+			grammarManager.save();
 			themeManager.save();
 		} catch (final BackingStoreException ex) {
-			ex.printStackTrace();
+			TMUIPlugin.logError(ex);
 			return false;
 		}
 		return super.performOk();

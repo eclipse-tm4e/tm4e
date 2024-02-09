@@ -25,6 +25,7 @@ public final class LanguageConfigurationMessages extends NLS {
 	public static String AutoClosingPairConditionalTableWidget_notIn;
 	public static String CharacterPairsTableWidget_end;
 	public static String CharacterPairsTableWidget_start;
+
 	public static String LanguageConfigurationInfoWidget_autoClosingPairs_title;
 	public static String LanguageConfigurationInfoWidget_autoCloseBefore_message;
 	public static String LanguageConfigurationInfoWidget_autoCloseBefore_title;
@@ -49,25 +50,29 @@ public final class LanguageConfigurationMessages extends NLS {
 	public static String LanguageConfigurationInfoWidget_surroundingPairs_title;
 	public static String LanguageConfigurationInfoWidget_wordPattern_message;
 	public static String LanguageConfigurationInfoWidget_wordPattern_title;
-	public static String LanguageConfigurationPreferencePage_contentTypeName;
-	public static String LanguageConfigurationPreferencePage_contentTypeId;
+
 	public static String LanguageConfigurationPreferencePage_title;
+	public static String LanguageConfigurationPreferencePage_column_contentTypeName;
+	public static String LanguageConfigurationPreferencePage_column_contentTypeId;
 	public static String LanguageConfigurationPreferencePage_description;
 	public static String LanguageConfigurationPreferencePage_description2;
-	public static String LanguageConfigurationPreferencePage_new;
+	public static String LanguageConfigurationPreferencePage_button_add;
 	public static String LanguageConfigurationPreferencePage_path;
-	public static String LanguageConfigurationPreferencePage_pluginId;
-	public static String LanguageConfigurationPreferencePage_remove;
+	public static String LanguageConfigurationPreferencePage_column_source;
+	public static String LanguageConfigurationPreferencePage_button_remove;
+
 	public static String LanguageConfigurationPreferencesWidget_enableAutoClosing;
 	public static String LanguageConfigurationPreferencesWidget_enableIndentRules;
 	public static String LanguageConfigurationPreferencesWidget_enableOnEnterActions;
 	public static String LanguageConfigurationPreferencesWidget_enableMatchingBrackets;
+
 	public static String OnEnterRuleTableWidget_beforeText;
 	public static String OnEnterRuleTableWidget_afterText;
 	public static String OnEnterRuleTableWidget_previousLineText;
 	public static String OnEnterRuleTableWidget_indentAction;
 	public static String OnEnterRuleTableWidget_appendText;
 	public static String OnEnterRuleTableWidget_removeText;
+
 	public static String SelectLanguageConfigurationWizardPage_browse_fileSystem;
 	public static String SelectLanguageConfigurationWizardPage_browse_workspace;
 	public static String SelectLanguageConfigurationWizardPage_contentType;

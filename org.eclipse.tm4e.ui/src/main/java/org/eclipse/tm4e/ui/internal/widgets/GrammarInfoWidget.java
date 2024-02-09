@@ -16,6 +16,7 @@ import java.util.Collection;
 import java.util.stream.Collectors;
 
 import org.eclipse.jdt.annotation.Nullable;
+import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
@@ -66,7 +67,8 @@ public final class GrammarInfoWidget extends Composite {
 		final var grammarFileTypesLabel = new Label(container, SWT.NONE);
 		grammarFileTypesLabel.setText(TMUIMessages.GrammarInfoWidget_fileTypes_text);
 		fileTypesText = new Text(container, SWT.BORDER | SWT.READ_ONLY);
-		fileTypesText.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		//fileTypesText.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		fileTypesText.setLayoutData(GridDataFactory.fillDefaults().hint(100, SWT.DEFAULT).create());
 	}
 
 	public void refresh(@Nullable final IGrammar grammar) {

@@ -49,7 +49,7 @@ public final class ColumnSelectionAdapter extends SelectionAdapter {
 			if (columnIndex == -1)
 				return;
 
-			viewerComparator.setColumns(columnIndex, secondarySortColumns);
+			viewerComparator.setColumnsOrDirection(columnIndex, secondarySortColumns);
 			final int dir = viewerComparator.getDirection();
 			final Table table = tableViewer.getTable();
 			table.setSortDirection(dir);

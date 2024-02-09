@@ -33,7 +33,7 @@ class ThemeManagerTest implements ThemeIdConstants {
 		}
 
 		@Override
-		public EditSession createEditSession() {
+		public EditSession newEditSession() {
 			throw new UnsupportedOperationException();
 		}
 	}

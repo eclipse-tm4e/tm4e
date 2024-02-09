@@ -81,7 +81,7 @@ public final class ThemeContribution extends CompoundContributionItem implements
 		return new Action(theme.getName()) {
 			@Override
 			public void run() {
-				final IThemeManager.EditSession manager = TMUIPlugin.getThemeManager().createEditSession();
+				final IThemeManager.EditSession manager = TMUIPlugin.getThemeManager().newEditSession();
 				final var association = new ThemeAssociation(theme.getId(), scopeName, whenDark);
 				manager.registerThemeAssociation(association);
 				try {

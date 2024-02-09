@@ -8,10 +8,11 @@
  * SPDX-License-Identifier: EPL-2.0
  *
  * Contributors:
- * - Sebastian Thomschke - initial implementation
+ * - Sebastian Thomschke (Vegard IT) - initial implementation
  */
 package org.eclipse.tm4e.ui.internal.widgets;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
@@ -21,7 +22,6 @@ import java.util.function.Consumer;
 
 import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.jface.layout.TableColumnLayout;
-import org.eclipse.jface.resource.JFaceResources;
 import org.eclipse.jface.util.BidiUtils;
 import org.eclipse.jface.viewers.ColumnWeightData;
 import org.eclipse.jface.viewers.ISelection;
@@ -32,7 +32,6 @@ import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.graphics.GC;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
@@ -65,6 +64,7 @@ public abstract class TableWidget<T> extends TableViewer {
 
 	private final TableColumnLayout tableColumnLayout = new TableColumnLayout();
 	private final Set<TableColumn> autoResizeColumns = new HashSet<>();
+	private final List<int[]> secondarySortColumns = new ArrayList<>();
 	private final ColumnViewerComparator viewerComparator = new ColumnViewerComparator();
 
 	protected TableWidget(final Composite parent, final boolean allowMultiSelection) {
@@ -89,8 +89,7 @@ public abstract class TableWidget<T> extends TableViewer {
 		createColumns();
 
 		setComparator(viewerComparator);
-		table.setSortDirection(viewerComparator.getDirection());
-		setSortColumn(0);
+		setSortColumn(0, SWT.DOWN);
 
 		BidiUtils.applyTextDirection(getControl(), BidiUtils.BTD_DEFAULT);
 	}
@@ -105,16 +104,11 @@ public abstract class TableWidget<T> extends TableViewer {
 			final int... secondarySortColumns) {
 		final var col = new TableColumn(getTable(), SWT.NONE);
 		col.setText(label);
+		this.secondarySortColumns.add(secondarySortColumns);
 		col.addSelectionListener(new ColumnSelectionAdapter(this, viewerComparator, secondarySortColumns));
 
-		final GC gc = new GC(getTable().getShell());
-		try {
-			gc.setFont(JFaceResources.getDialogFont());
-			final int labelWidth = gc.stringExtent(label).x + 15;
-			tableColumnLayout.setColumnData(col, new ColumnWeightData(columnWeight, Math.max(labelWidth, minColWidth), true));
-		} finally {
-			gc.dispose();
-		}
+		tableColumnLayout.setColumnData(col,
+				new ColumnWeightData(columnWeight, Math.max(UI.getTextWidth(label) + 15, minColWidth), true));
 	}
 
 	protected abstract void createColumns();
@@ -132,6 +126,20 @@ public abstract class TableWidget<T> extends TableViewer {
 		return (Object[]) input;
 	}
 
+	@SuppressWarnings("unchecked")
+	@Override
+	public T getElementAt(int index) {
+		return (T) super.getElementAt(index);
+	}
+
+	public int getElementCount() {
+		return doGetItemCount();
+	}
+
+	public boolean isEmpty() {
+		return doGetItemCount() == 0;
+	}
+
 	@Override
 	protected void inputChanged(final @Nullable Object input, final @Nullable Object oldInput) {
 		super.inputChanged(input, oldInput);
@@ -140,14 +148,26 @@ public abstract class TableWidget<T> extends TableViewer {
 				column.pack();
 			}
 		}
+
+		// auto refresh when input has changed
+		refresh();
 	}
 
-	public void onSelected(final Consumer<List<T>> consumer) {
+	public TableWidget<T> onSelectionChanged(final Consumer<List<T>> consumer) {
 		addSelectionChangedListener(e -> {
-			if (e.getSelection() instanceof final IStructuredSelection sel && !sel.isEmpty()) {
-				consumer.accept(sel.toList());
+			if (e.getSelection() instanceof final IStructuredSelection sel) {
+				if (sel.isEmpty())
+					consumer.accept(Collections.emptyList());
+				else
+					consumer.accept(sel.toList());
 			}
 		});
+		return this;
+	}
+
+	public TableWidget<T> selectFirstRow() {
+		UI.selectFirstElement(this);
+		return this;
 	}
 
 	@SuppressWarnings("unchecked")
@@ -155,6 +175,15 @@ public abstract class TableWidget<T> extends TableViewer {
 		if (super.getSelection() instanceof final IStructuredSelection selection)
 			return (T) selection.getFirstElement();
 		return null;
+	}
+
+	/**
+	 * @deprecated use {@link #getTypedSelection()}
+	 */
+	@Deprecated
+	@Override
+	public ISelection getSelection() {
+		return super.getSelection();
 	}
 
 	public List<T> getTypedSelection() {
@@ -167,23 +196,40 @@ public abstract class TableWidget<T> extends TableViewer {
 		setSelection(new StructuredSelection(selection));
 	}
 
-	/**
-	 * @deprecated use {@link #getTypedSelection()}
-	 */
-	@Deprecated
-	@Override
-	public ISelection getSelection() {
-		return super.getSelection();
-	}
-
-	public void selectFirstRow() {
-		UI.selectFirstElement(this);
+	public void setSelection(boolean reveal, @SuppressWarnings("unchecked") final T... selection) {
+		setSelection(selection);
+		if (reveal) {
+			reveal(selection[0]);
+		}
 	}
 
 	/**
 	 * @param col 0-based column index
+	 * @param sortDirection {@link SWT#DOWN} or {@link SWT#UP}
 	 */
-	public void setSortColumn(final int col) {
+	public void setSortColumn(final int col, int sortDirection) {
+		viewerComparator.setColumns(col, secondarySortColumns.get(col));
+		viewerComparator.setDirection(sortDirection);
+		getTable().setSortDirection(viewerComparator.getDirection());
 		getTable().setSortColumn(getTable().getColumn(col));
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public void refresh(final @Nullable Object object) {
+		final var swtTable = getTable();
+		var selectedIndex = swtTable.getSelectionIndex();
+
+		super.refresh(object);
+
+		// restore selection
+		if (selectedIndex > -1 && !isEmpty()) {
+			if (selectedIndex >= getElementCount()) {
+				selectedIndex--;
+			}
+			final var newSelection = getElementAt(selectedIndex);
+			if (newSelection != null)
+				setSelection(newSelection);
+		}
 	}
 }

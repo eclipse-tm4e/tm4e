@@ -22,6 +22,7 @@ Bundle-RequiredExecutionEnvironment: JavaSE-17
 Export-Package: org.eclipse.tm4e.ui,
  org.eclipse.tm4e.ui.internal.model;x-friends:="org.eclipse.tm4e.languageconfiguration,org.eclipse.tm4e.ui.tests",
  org.eclipse.tm4e.ui.internal.themes;x-friends:="org.eclipse.tm4e.ui.tests",
+ org.eclipse.tm4e.ui.internal.preferences;x-friends:="org.eclipse.tm4e.languageconfiguration",
  org.eclipse.tm4e.ui.internal.utils;x-friends:="org.eclipse.tm4e.ui.tests,org.eclipse.tm4e.languageconfiguration,org.eclipse.tm4e.languageconfiguration.tests",
  org.eclipse.tm4e.ui.internal.widgets;x-friends:="org.eclipse.tm4e.languageconfiguration",
  org.eclipse.tm4e.ui.model,

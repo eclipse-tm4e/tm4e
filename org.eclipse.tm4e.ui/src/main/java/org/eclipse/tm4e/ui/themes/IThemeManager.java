@@ -68,12 +68,12 @@ public interface IThemeManager {
 		 * @throws UnsupportedOperationException
 		 */
 		@Override
-		default EditSession createEditSession() {
+		default EditSession newEditSession() {
 			throw new UnsupportedOperationException();
 		}
 	}
 
-	IThemeManager.EditSession createEditSession();
+	IThemeManager.EditSession newEditSession();
 
 	/**
 	 * @return the default light or dark TextMate theme depending on the selected Eclipse UI theme.

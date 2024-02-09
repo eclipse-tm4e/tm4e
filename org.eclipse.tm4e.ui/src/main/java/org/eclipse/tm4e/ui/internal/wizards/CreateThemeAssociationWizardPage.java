@@ -11,11 +11,12 @@
  */
 package org.eclipse.tm4e.ui.internal.wizards;
 
-import static org.eclipse.tm4e.core.internal.utils.NullSafetyHelper.*;
+import static org.eclipse.tm4e.core.internal.utils.NullSafetyHelper.lazyNonNull;
 
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.jdt.annotation.Nullable;
+import org.eclipse.jface.viewers.ArrayContentProvider;
 import org.eclipse.jface.viewers.ComboViewer;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.swt.SWT;
@@ -29,9 +30,7 @@ import org.eclipse.tm4e.registry.IGrammarDefinition;
 import org.eclipse.tm4e.registry.TMEclipseRegistryPlugin;
 import org.eclipse.tm4e.ui.TMUIPlugin;
 import org.eclipse.tm4e.ui.internal.TMUIMessages;
-import org.eclipse.tm4e.ui.internal.widgets.GrammarDefinitionContentProvider;
 import org.eclipse.tm4e.ui.internal.widgets.GrammarDefinitionLabelProvider;
-import org.eclipse.tm4e.ui.internal.widgets.ThemeContentProvider;
 import org.eclipse.tm4e.ui.internal.widgets.ThemeLabelProvider;
 import org.eclipse.tm4e.ui.themes.ITheme;
 import org.eclipse.tm4e.ui.themes.IThemeAssociation;
@@ -45,7 +44,7 @@ final class CreateThemeAssociationWizardPage extends AbstractWizardPage {
 	private static final String PAGE_NAME = CreateThemeAssociationWizardPage.class.getName();
 
 	private ComboViewer themeViewer = lazyNonNull();
-	private ComboViewer grammarViewer = lazyNonNull();
+	private ComboViewer grammarsCombo = lazyNonNull();
 
 	@Nullable
 	private final IGrammarDefinition initialDefinition;
@@ -75,23 +74,23 @@ final class CreateThemeAssociationWizardPage extends AbstractWizardPage {
 		var label = new Label(parent, SWT.NONE);
 		label.setText(TMUIMessages.CreateThemeAssociationWizardPage_theme_text);
 		themeViewer = new ComboViewer(parent);
+		themeViewer.setContentProvider(ArrayContentProvider.getInstance());
 		themeViewer.setLabelProvider(new ThemeLabelProvider());
-		themeViewer.setContentProvider(new ThemeContentProvider());
-		themeViewer.setInput(TMUIPlugin.getThemeManager());
+		themeViewer.setInput(TMUIPlugin.getThemeManager().getThemes());
 		themeViewer.getControl().setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		themeViewer.getControl().addListener(SWT.Selection, this);
 
 		label = new Label(parent, SWT.NONE);
 		label.setText(TMUIMessages.CreateThemeAssociationWizardPage_grammar_text);
-		grammarViewer = new ComboViewer(parent);
-		grammarViewer.setLabelProvider(new GrammarDefinitionLabelProvider());
-		grammarViewer.setContentProvider(new GrammarDefinitionContentProvider());
-		grammarViewer.setInput(TMEclipseRegistryPlugin.getGrammarRegistryManager());
-		grammarViewer.getControl().setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-		grammarViewer.getControl().addListener(SWT.Selection, this);
+		grammarsCombo = new ComboViewer(parent);
+		grammarsCombo.setContentProvider(ArrayContentProvider.getInstance());
+		grammarsCombo.setLabelProvider(new GrammarDefinitionLabelProvider());
+		grammarsCombo.setInput(TMEclipseRegistryPlugin.getGrammarRegistryManager().getDefinitions());
+		grammarsCombo.getControl().setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		grammarsCombo.getControl().addListener(SWT.Selection, this);
 
 		if (initialDefinition != null) {
-			grammarViewer.setSelection(new StructuredSelection(initialDefinition));
+			grammarsCombo.setSelection(new StructuredSelection(initialDefinition));
 		}
 
 		whenDarkButton = new Button(parent, SWT.CHECK);
@@ -123,7 +122,7 @@ final class CreateThemeAssociationWizardPage extends AbstractWizardPage {
 					TMUIMessages.CreateThemeAssociationWizardPage_theme_error_required);
 		}
 
-		if (grammarViewer.getSelection().isEmpty()) {
+		if (grammarsCombo.getSelection().isEmpty()) {
 			return new Status(IStatus.ERROR, TMUIPlugin.PLUGIN_ID,
 					TMUIMessages.CreateThemeAssociationWizardPage_grammar_error_required);
 		}
@@ -132,7 +131,7 @@ final class CreateThemeAssociationWizardPage extends AbstractWizardPage {
 
 	IThemeAssociation getThemeAssociation() {
 		final String themeId = ((ITheme) themeViewer.getStructuredSelection().getFirstElement()).getId();
-		final String scopeName = ((IGrammarDefinition) grammarViewer.getStructuredSelection()
+		final String scopeName = ((IGrammarDefinition) grammarsCombo.getStructuredSelection()
 				.getFirstElement()).getScope().getName();
 		final boolean whenDark = whenDarkButton.getSelection();
 		return new ThemeAssociation(themeId, scopeName, whenDark);

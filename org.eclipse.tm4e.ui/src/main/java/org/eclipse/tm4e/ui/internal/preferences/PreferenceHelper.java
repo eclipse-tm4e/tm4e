@@ -104,14 +104,10 @@ public final class PreferenceHelper {
 		return DEFAULT_GSON.toJson(markerConfigs);
 	}
 
-	public static void saveMarkerConfigs(final Set<MarkerConfig> markerConfigs) {
+	public static void saveMarkerConfigs(final Set<MarkerConfig> markerConfigs) throws BackingStoreException {
 		final var prefs = InstanceScope.INSTANCE.getNode(TMUIPlugin.PLUGIN_ID);
 		prefs.put(PreferenceConstants.TASK_TAGS, toJsonMarkerConfigs(markerConfigs));
-		try {
-			prefs.flush();
-		} catch (final BackingStoreException ex) {
-			TMUIPlugin.logError(ex);
-		}
+		prefs.flush();
 	}
 
 	private PreferenceHelper() {

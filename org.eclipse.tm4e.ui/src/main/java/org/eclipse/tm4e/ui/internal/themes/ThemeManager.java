@@ -184,7 +184,7 @@ public final class ThemeManager extends AbstractThemeManager {
 	}
 
 	@Override
-	public IThemeManager.EditSession createEditSession() {
+	public IThemeManager.EditSession newEditSession() {
 		return new WorkingCopyThemeManager(this);
 	}
 }

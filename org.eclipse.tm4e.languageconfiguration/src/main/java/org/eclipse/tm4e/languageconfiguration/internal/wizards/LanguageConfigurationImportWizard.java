@@ -18,35 +18,25 @@ import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.wizard.Wizard;
 import org.eclipse.tm4e.languageconfiguration.internal.registry.ILanguageConfigurationDefinition;
 import org.eclipse.tm4e.languageconfiguration.internal.registry.ILanguageConfigurationRegistryManager;
-import org.eclipse.tm4e.languageconfiguration.internal.registry.LanguageConfigurationRegistryManager;
 import org.eclipse.ui.IImportWizard;
 import org.eclipse.ui.IWorkbench;
 import org.osgi.service.prefs.BackingStoreException;
 
 /**
  * Wizard to import language configurations
- *
  */
 public final class LanguageConfigurationImportWizard extends Wizard implements IImportWizard {
 
-	@Nullable
-	private SelectLanguageConfigurationWizardPage mainPage;
+	private final ILanguageConfigurationRegistryManager registryManager;
+
+	private SelectLanguageConfigurationWizardPage mainPage = lazyNonNull();
 
 	private ILanguageConfigurationDefinition createdDefinition = lazyNonNull();
 
-	private ILanguageConfigurationRegistryManager registryManager;
-
 	private final boolean save;
 
-	public LanguageConfigurationImportWizard(final boolean save) {
+	public LanguageConfigurationImportWizard(final ILanguageConfigurationRegistryManager registryManager, final boolean save) {
 		this.save = save;
-		this.registryManager = LanguageConfigurationRegistryManager.getInstance();
-	}
-
-	/**
-	 * Set registry to use to add the created grammar definitions.
-	 */
-	public void setRegistryManager(final ILanguageConfigurationRegistryManager registryManager) {
 		this.registryManager = registryManager;
 	}
 
@@ -58,7 +48,6 @@ public final class LanguageConfigurationImportWizard extends Wizard implements I
 
 	@Override
 	public boolean performFinish() {
-		assert mainPage != null;
 		final ILanguageConfigurationDefinition definition = mainPage.getDefinition();
 		registryManager.registerLanguageConfigurationDefinition(definition);
 		if (save) {
@@ -74,8 +63,7 @@ public final class LanguageConfigurationImportWizard extends Wizard implements I
 	}
 
 	@Override
-	public void init(@Nullable final IWorkbench workbench, @Nullable final IStructuredSelection selection) {
-
+	public void init(final @Nullable IWorkbench workbench, final @Nullable IStructuredSelection selection) {
 	}
 
 	public ILanguageConfigurationDefinition getCreatedDefinition() {

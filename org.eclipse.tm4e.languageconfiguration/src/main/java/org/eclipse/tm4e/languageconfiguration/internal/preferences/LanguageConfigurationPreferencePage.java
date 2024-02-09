@@ -7,35 +7,25 @@
  * SPDX-License-Identifier: EPL-2.0
  *
  * Contributors:
- * Angelo Zerr <angelo.zerr@gmail.com> - initial API and implementation
- * Lucas Bullen (Red Hat Inc.) - configuration viewing and editing
+ * - Angelo Zerr <angelo.zerr@gmail.com> - initial API and implementation
+ * - Lucas Bullen (Red Hat Inc.) - configuration viewing and editing
+ * - Sebastian Thomschke (Vegard IT) - major cleanup/refactoring, added table filtering and performDefaults support
  */
 package org.eclipse.tm4e.languageconfiguration.internal.preferences;
 
 import static org.eclipse.tm4e.core.internal.utils.NullSafetyHelper.lazyNonNull;
 import static org.eclipse.tm4e.languageconfiguration.internal.LanguageConfigurationMessages.*;
 
-import java.util.Collection;
-import java.util.Collections;
-
+import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.jface.dialogs.Dialog;
-import org.eclipse.jface.preference.PreferencePage;
-import org.eclipse.jface.viewers.ISelectionChangedListener;
-import org.eclipse.jface.viewers.SelectionChangedEvent;
-import org.eclipse.jface.viewers.TableViewer;
+import org.eclipse.jface.layout.GridDataFactory;
+import org.eclipse.jface.layout.GridLayoutFactory;
 import org.eclipse.jface.window.Window;
 import org.eclipse.jface.wizard.WizardDialog;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.layout.FillLayout;
-import org.eclipse.swt.layout.GridData;
-import org.eclipse.swt.layout.GridLayout;
-import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
-import org.eclipse.swt.widgets.Event;
-import org.eclipse.swt.widgets.Label;
-import org.eclipse.swt.widgets.Listener;
 import org.eclipse.tm4e.languageconfiguration.LanguageConfigurationPlugin;
 import org.eclipse.tm4e.languageconfiguration.internal.registry.ILanguageConfigurationDefinition;
 import org.eclipse.tm4e.languageconfiguration.internal.registry.ILanguageConfigurationRegistryManager;
@@ -43,198 +33,124 @@ import org.eclipse.tm4e.languageconfiguration.internal.registry.LanguageConfigur
 import org.eclipse.tm4e.languageconfiguration.internal.registry.WorkingCopyLanguageConfigurationRegistryManager;
 import org.eclipse.tm4e.languageconfiguration.internal.widgets.LanguageConfigurationPreferencesWidget;
 import org.eclipse.tm4e.languageconfiguration.internal.wizards.LanguageConfigurationImportWizard;
+import org.eclipse.tm4e.ui.internal.preferences.AbstractPreferencePage;
 import org.eclipse.tm4e.ui.internal.widgets.TableWidget;
-import org.eclipse.ui.IWorkbench;
-import org.eclipse.ui.IWorkbenchPreferencePage;
+import org.eclipse.tm4e.ui.internal.widgets.TableWithControlsWidget;
 import org.osgi.service.prefs.BackingStoreException;
 
 /**
- * A language configuration preference page allows configuration of the language
- * configuration It provides controls for adding, removing and changing language
- * configuration as well as enablement, default management.
+ * A language configuration preference page allows configuration of the language configuration.
+ * It provides controls for adding, removing and changing language configuration as well as enablement, default management.
  */
-public final class LanguageConfigurationPreferencePage extends PreferencePage implements IWorkbenchPreferencePage {
+public final class LanguageConfigurationPreferencePage extends AbstractPreferencePage {
 
 	static final String PAGE_ID = "org.eclipse.tm4e.languageconfiguration.preferences.LanguageConfigurationPreferencePage"; //$NON-NLS-1$
 
-	private final ILanguageConfigurationRegistryManager manager = new WorkingCopyLanguageConfigurationRegistryManager(
+	private ILanguageConfigurationRegistryManager manager = new WorkingCopyLanguageConfigurationRegistryManager(
 			LanguageConfigurationRegistryManager.getInstance());
-
-	private TableWidget<ILanguageConfigurationDefinition> definitionsTable = lazyNonNull();
-	private LanguageConfigurationPreferencesWidget infoWidget = lazyNonNull();
+	private TableWidget<ILanguageConfigurationDefinition> langCfgsTable = lazyNonNull();
 
 	public LanguageConfigurationPreferencePage() {
-		setDescription(LanguageConfigurationPreferencePage_description);
+		super(LanguageConfigurationPreferencePage_title, LanguageConfigurationPreferencePage_description);
 	}
 
 	@Override
-	protected Control createContents(@Nullable final Composite ancestor) {
-		final var parent = new Composite(ancestor, SWT.NONE);
-		final var layout = new GridLayout();
-		layout.numColumns = 2;
-		layout.marginHeight = 0;
-		layout.marginWidth = 0;
-		parent.setLayout(layout);
+	protected Control createContents(final @NonNullByDefault({}) Composite parent) {
+		final var control = new Composite(parent, SWT.NONE);
+		control.setLayout(GridLayoutFactory.fillDefaults().create());
 
-		final var innerParent = new Composite(parent, SWT.NONE);
-		final var innerLayout = new GridLayout();
-		innerLayout.numColumns = 2;
-		innerLayout.marginHeight = 0;
-		innerLayout.marginWidth = 0;
-		innerParent.setLayout(innerLayout);
-		final var gd = new GridData(SWT.FILL, SWT.FILL, true, false);
-		gd.horizontalSpan = 2;
-		innerParent.setLayoutData(gd);
+		createLanguageConfigsTable(control);
 
-		createDefinitionsListContent(parent);
+		final var infoWidget = new LanguageConfigurationPreferencesWidget(control, SWT.NONE);
+		infoWidget.setLayoutData(GridDataFactory.fillDefaults().create());
 
-		infoWidget = new LanguageConfigurationPreferencesWidget(parent, SWT.NONE);
-		final var data = new GridData(GridData.FILL_HORIZONTAL);
-		data.horizontalSpan = 2;
-		infoWidget.setLayoutData(data);
+		Dialog.applyDialogFont(control);
 
-		Dialog.applyDialogFont(parent);
-		innerParent.layout();
+		langCfgsTable.onSelectionChanged(selectedDefinitions -> {
+			infoWidget.refresh(selectedDefinitions.isEmpty()
+					? null
+					: selectedDefinitions.get(0), manager);
+		});
+		langCfgsTable.setInput(manager);
+		langCfgsTable.selectFirstRow();
 
-		definitionsTable.setInput(manager);
-		definitionsTable.selectFirstRow();
-
-		return parent;
+		return control;
 	}
 
-	/**
-	 * Create grammar list content.
-	 */
-	private void createDefinitionsListContent(final Composite parent) {
-		final var description = new Label(parent, SWT.NONE);
-		description.setText(LanguageConfigurationPreferencePage_description2);
-		description.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, false, false, 2, 1));
-		final var tableComposite = new Composite(parent, SWT.NONE);
-		tableComposite.setLayout(new FillLayout());
-		final var data = new GridData(GridData.FILL_BOTH);
-		data.widthHint = 360;
-		data.heightHint = convertHeightInCharsToPixels(10);
-		tableComposite.setLayoutData(data);
+	private void createLanguageConfigsTable(final Composite parent) {
 
-		definitionsTable = new TableWidget<>(tableComposite, false) {
+		final var tableWithControls = new TableWithControlsWidget<ILanguageConfigurationDefinition>(parent,
+				LanguageConfigurationPreferencePage_description2, true) {
 
 			@Override
-			protected void createColumns() {
-				createAutoResizeColumn(LanguageConfigurationPreferencePage_contentTypeName);
-				createAutoResizeColumn(LanguageConfigurationPreferencePage_contentTypeId);
-				createAutoResizeColumn(LanguageConfigurationPreferencePage_pluginId, 0);
-				createAutoResizeColumn(LanguageConfigurationPreferencePage_path, 0);
-			}
+			protected TableWidget<ILanguageConfigurationDefinition> createTable(final Composite parent) {
+				return new TableWidget<>(parent, false) {
 
-			@Override
-			protected @Nullable String getColumnText(final ILanguageConfigurationDefinition definition, final int columnIndex) {
-				return switch (columnIndex) {
-					case 0 -> definition.getContentType().getName();
-					case 1 -> definition.getContentType().getId();
-					case 2 -> definition.getPluginId();
-					case 3 -> definition.getPath();
-					default -> null;
+					@Override
+					protected void createColumns() {
+						createAutoResizeColumn(LanguageConfigurationPreferencePage_column_contentTypeName, 1);
+						createAutoResizeColumn(LanguageConfigurationPreferencePage_column_contentTypeId, 2);
+						createAutoResizeColumn(LanguageConfigurationPreferencePage_column_source, 1);
+					}
+
+					@Override
+					protected @Nullable String getColumnText(final ILanguageConfigurationDefinition def, final int columnIndex) {
+						return switch (columnIndex) {
+							case 0 -> def.getContentType().getName();
+							case 1 -> def.getContentType().getId();
+							case 2 -> (def.getPluginId() == null ? "" : "" + def.getPluginId() + " > ") + def.getPath();
+							default -> null;
+						};
+					}
+
+					@Override
+					protected Object[] getElements(@Nullable final Object input) {
+						if (input instanceof final ILanguageConfigurationRegistryManager manager)
+							return manager.getDefinitions();
+						return super.getElements(input);
+					}
 				};
 			}
 
 			@Override
-			protected Object[] getElements(@Nullable final Object input) {
-				if (input instanceof final ILanguageConfigurationRegistryManager manager)
-					return manager.getDefinitions();
-				return super.getElements(input);
+			protected void createButtons() {
+				// Add config
+				createButton(LanguageConfigurationPreferencePage_button_add, () -> {
+					// Open import wizard for language configurations.
+					final var wizard = new LanguageConfigurationImportWizard(manager, false);
+					final var dialog = new WizardDialog(getShell(), wizard);
+					if (dialog.open() == Window.OK) {
+						final var newLangCfgDef = wizard.getCreatedDefinition();
+						table.refresh();
+						table.setSelection(true, newLangCfgDef);
+					}
+				});
+
+				// Remove config
+				final var removeBtn = createButton(LanguageConfigurationPreferencePage_button_remove, () -> {
+					final var langCfgDef = table.getFirstSelectedElement();
+					if (langCfgDef != null && langCfgDef.getPluginId() == null) {
+						manager.unregisterLanguageConfigurationDefinition(langCfgDef);
+						table.refresh();
+					}
+				});
+				table.onSelectionChanged(sel -> removeBtn.setEnabled(!sel.isEmpty() && sel.get(0).getPluginId() == null));
 			}
 		};
 
-		final var buttons = new Composite(parent, SWT.NONE);
-		buttons.setLayoutData(new GridData(GridData.VERTICAL_ALIGN_BEGINNING));
-		final var layout = new GridLayout();
-		layout.marginHeight = 0;
-		layout.marginWidth = 0;
-		buttons.setLayout(layout);
+		tableWithControls.setLayoutData(GridDataFactory.fillDefaults()
+				.align(SWT.FILL, SWT.FILL)
+				.grab(true, true)
+				.hint(360, convertHeightInCharsToPixels(10))
+				.create());
 
-		final var definitionNewButton = new Button(buttons, SWT.PUSH);
-		definitionNewButton.setText(LanguageConfigurationPreferencePage_new);
-		definitionNewButton.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-		definitionNewButton.addListener(SWT.Selection, new Listener() {
-			@Override
-			public void handleEvent(@Nullable final Event e) {
-				add();
-			}
-
-			private void add() {
-				// Open import wizard for language configurations.
-				final var wizard = new LanguageConfigurationImportWizard(false);
-				wizard.setRegistryManager(manager);
-				final var dialog = new WizardDialog(getShell(), wizard);
-				if (dialog.open() == Window.OK) {
-					final var created = wizard.getCreatedDefinition();
-					definitionsTable.refresh();
-					definitionsTable.setSelection(created);
-				}
-			}
-		});
-
-		final var definitionRemoveButton = new Button(buttons, SWT.PUSH);
-		definitionRemoveButton.setText(LanguageConfigurationPreferencePage_remove);
-		definitionRemoveButton.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-		definitionRemoveButton.addListener(SWT.Selection, new Listener() {
-			@Override
-			public void handleEvent(@Nullable final Event e) {
-				remove();
-			}
-
-			private void remove() {
-				final var definitions = getSelectedUserDefinitions(definitionsTable);
-				if (!definitions.isEmpty()) {
-					for (final var definition : definitions) {
-						manager.unregisterLanguageConfigurationDefinition(definition);
-					}
-					definitionsTable.refresh();
-				}
-			}
-		});
-
-		definitionsTable.addSelectionChangedListener(new ISelectionChangedListener() {
-			@Override
-			public void selectionChanged(@Nullable final SelectionChangedEvent e) {
-				final var definition = definitionsTable.getFirstSelectedElement();
-				infoWidget.refresh(null, manager);
-				if (definition == null) {
-					return;
-				}
-				// Update button
-				assert definitionRemoveButton != null;
-				definitionRemoveButton.setEnabled(definition.getPluginId() == null);
-				selectDefinition(definition);
-			}
-
-			private void selectDefinition(final ILanguageConfigurationDefinition definition) {
-				infoWidget.refresh(definition, manager);
-			}
-		});
-	}
-
-	/**
-	 * Returns list of selected definitions which was created by the user.
-	 *
-	 * @return list of selected definitions which was created by the user.
-	 */
-	private Collection<ILanguageConfigurationDefinition> getSelectedUserDefinitions(
-			final TableViewer definitionViewer) {
-		final var selection = definitionViewer.getStructuredSelection();
-		if (selection.isEmpty()) {
-			return Collections.emptyList();
-		}
-		return ((Collection<ILanguageConfigurationDefinition>) selection.toList()).stream()
-				.filter(definition -> definition.getPluginId() == null).toList();
+		langCfgsTable = tableWithControls.getTable();
 	}
 
 	@Override
-	public void setVisible(final boolean visible) {
-		super.setVisible(visible);
-		if (visible) {
-			setTitle(LanguageConfigurationPreferencePage_title);
-		}
+	protected void performDefaults() {
+		manager = new WorkingCopyLanguageConfigurationRegistryManager(LanguageConfigurationRegistryManager.getInstance());
+		langCfgsTable.setInput(manager);
 	}
 
 	@Override
@@ -243,11 +159,8 @@ public final class LanguageConfigurationPreferencePage extends PreferencePage im
 			manager.save();
 		} catch (final BackingStoreException ex) {
 			LanguageConfigurationPlugin.logError(ex);
+			return false;
 		}
 		return super.performOk();
-	}
-
-	@Override
-	public void init(@Nullable final IWorkbench workbench) {
 	}
 }

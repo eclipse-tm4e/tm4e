@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2021, 2022 Vegard IT GmbH and others.
+ * Copyright (c) 2021-2024 Vegard IT GmbH and others.
  * This program and the accompanying materials are made
  * available under the terms of the Eclipse Public License 2.0
  * which is available at https://www.eclipse.org/legal/epl-2.0/
@@ -7,14 +7,20 @@
  * SPDX-License-Identifier: EPL-2.0
  *
  * Contributors:
- *  Sebastian Thomschke (Vegard IT GmbH) - initial implementation
+ * Sebastian Thomschke (Vegard IT) - initial implementation
  *******************************************************************************/
 package org.eclipse.tm4e.ui.internal.utils;
 
 import org.eclipse.jdt.annotation.Nullable;
+import org.eclipse.jface.dialogs.Dialog;
+import org.eclipse.jface.resource.JFaceResources;
 import org.eclipse.jface.text.ITextViewer;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.viewers.TableViewer;
+import org.eclipse.swt.events.ModifyEvent;
+import org.eclipse.swt.events.ModifyListener;
+import org.eclipse.swt.graphics.FontMetrics;
+import org.eclipse.swt.graphics.GC;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.IWorkbenchPage;
@@ -99,6 +105,50 @@ public final class UI {
 			return false;
 		viewer.setSelection(new StructuredSelection(firstElement), true);
 		return true;
+	}
+
+	public static ModifyListener debounceModifyListener(final int delay, final ModifyListener listener) {
+		return new ModifyListener() {
+			private Runnable later = () -> {
+			};
+
+			@Override
+			public void modifyText(final @Nullable ModifyEvent e) {
+				final var display = UI.getDisplay();
+				// Cancel previous scheduled call
+				display.timerExec(-1, later);
+
+				later = () -> listener.modifyText(e);
+
+				// Schedule a new call to execute after the delay
+				display.timerExec(delay, later);
+			}
+		};
+	}
+
+	private static @Nullable FontMetrics fontMetrics;
+
+	public static int convertHeightInCharsToPixels(int chars) {
+		if (fontMetrics == null) {
+			final GC gc = new GC(getActiveShell());
+			try {
+				gc.setFont(JFaceResources.getDialogFont());
+				fontMetrics = gc.getFontMetrics();
+			} finally {
+				gc.dispose();
+			}
+		}
+		return Dialog.convertHeightInCharsToPixels(fontMetrics, chars);
+	}
+
+	public static int getTextWidth(final String string) {
+		final GC gc = new GC(getActiveShell());
+		try {
+			gc.setFont(JFaceResources.getDialogFont());
+			return gc.stringExtent(string).x;
+		} finally {
+			gc.dispose();
+		}
 	}
 
 	private UI() {

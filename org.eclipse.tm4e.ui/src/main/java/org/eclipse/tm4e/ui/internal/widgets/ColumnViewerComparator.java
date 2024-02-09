@@ -39,24 +39,39 @@ public final class ColumnViewerComparator extends ViewerComparator {
 	}
 
 	/**
+	 * @param value {@link SWT#DOWN} or {@link SWT#UP}
+	 */
+	public void setDirection(final int value) {
+		this.sortOrder = value == SWT.DOWN ? 1 : -1;
+	}
+
+	/**
 	 * Sets the sort column. If the newly set sort column equals the previous
 	 * set sort column, the sort direction changes.
 	 *
-	 * @param primaryColumn
-	 *            New sort column
+	 * @param primaryColumn New sort column
 	 */
-	public void setColumns(final int primaryColumn, final int... secondaryColumns) {
+	public void setColumnsOrDirection(final int primaryColumn, final int... secondaryColumns) {
 		if (primaryColumn == sortColumns[0]) {
 			sortOrder *= -1;
 		} else {
-			if (secondaryColumns.length == 0) {
-				sortColumns = new int[] { primaryColumn };
-			} else {
-				sortColumns = new int[secondaryColumns.length + 1];
-				System.arraycopy(secondaryColumns, 0, sortColumns, 1, secondaryColumns.length);
-				sortColumns[0] = primaryColumn;
-			}
 			sortOrder = 1;
+		}
+		setColumns(primaryColumn, secondaryColumns);
+	}
+
+	/**
+	 * Sets the sort column.
+	 *
+	 * @param primaryColumn New sort column
+	 */
+	public void setColumns(final int primaryColumn, final int... secondaryColumns) {
+		if (secondaryColumns.length == 0) {
+			sortColumns = new int[] { primaryColumn };
+		} else {
+			sortColumns = new int[secondaryColumns.length + 1];
+			System.arraycopy(secondaryColumns, 0, sortColumns, 1, secondaryColumns.length);
+			sortColumns[0] = primaryColumn;
 		}
 	}
 
@@ -65,9 +80,18 @@ public final class ColumnViewerComparator extends ViewerComparator {
 		if (viewer instanceof final TableViewer tableViewer
 				&& tableViewer.getLabelProvider() instanceof final ITableLabelProvider labelProvider) {
 			for (final var column : sortColumns) {
-				final String left = labelProvider.getColumnText(e1, column);
-				final String right = labelProvider.getColumnText(e2, column);
-				final int sortResult = getComparator().compare(nullToEmpty(left), nullToEmpty(right));
+				final String left = nullToEmpty(labelProvider.getColumnText(e1, column));
+				final String right = nullToEmpty(labelProvider.getColumnText(e2, column));
+
+				// make empty strings to come after non-empty strings
+				if (left.isEmpty() && right.isEmpty())
+					continue;
+				if (left.isEmpty())
+					return 1 * sortOrder;
+				if (right.isEmpty())
+					return -1 * sortOrder;
+
+				final int sortResult = getComparator().compare(left, right);
 				if (sortResult != 0)
 					return sortResult * sortOrder;
 			}

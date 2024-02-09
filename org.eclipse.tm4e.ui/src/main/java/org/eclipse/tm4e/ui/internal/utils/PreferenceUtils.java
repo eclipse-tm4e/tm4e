@@ -11,12 +11,16 @@
  */
 package org.eclipse.tm4e.ui.internal.utils;
 
+import static org.eclipse.ui.themes.IThemeManager.DEFAULT_THEME;
+
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.core.runtime.preferences.IEclipsePreferences;
 import org.eclipse.core.runtime.preferences.InstanceScope;
 import org.eclipse.jdt.annotation.Nullable;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.tm4e.ui.TMUIPlugin;
 import org.eclipse.tm4e.ui.internal.preferences.PreferenceConstants;
+import org.eclipse.ui.PlatformUI;
 
 public final class PreferenceUtils {
 
@@ -32,7 +36,14 @@ public final class PreferenceUtils {
 	public static boolean isDarkEclipseTheme() {
 		final IEclipsePreferences prefs = getE4PreferenceStore();
 		final String eclipseThemeId = prefs == null ? null : prefs.get(PreferenceConstants.E4_THEME_ID, null);
-		return eclipseThemeId != null && eclipseThemeId.toLowerCase().contains("dark");
+
+		if (eclipseThemeId != null) {
+			return eclipseThemeId.toLowerCase().contains("dark");
+		}
+
+		// If the default Eclipse theme is active, return the system's dark mode setting
+		return DEFAULT_THEME == PlatformUI.getWorkbench().getThemeManager().getCurrentTheme().getId() //
+				&& Display.isSystemDarkTheme();
 	}
 
 	public static boolean isDebugGenerateTest() {

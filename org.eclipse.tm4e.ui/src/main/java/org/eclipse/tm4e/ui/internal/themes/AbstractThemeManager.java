@@ -26,14 +26,11 @@ import org.eclipse.tm4e.ui.themes.IThemeAssociation;
 import org.eclipse.tm4e.ui.themes.IThemeManager;
 import org.eclipse.tm4e.ui.themes.ThemeAssociation;
 
-/**
- * TextMate theme manager implementation.
- */
 public abstract class AbstractThemeManager implements IThemeManager {
 
-	protected final Map<String /* theme id */, ITheme> themes = new LinkedHashMap<>();
-	protected final Map<@Nullable String, @Nullable IThemeAssociation> darkThemeAssociations = new HashMap<>();
-	protected final Map<@Nullable String, @Nullable IThemeAssociation> lightThemeAssociations = new HashMap<>();
+	final Map<String /* theme id */, ITheme> themes = new LinkedHashMap<>();
+	final Map<@Nullable String, @Nullable IThemeAssociation> darkThemeAssociations = new HashMap<>();
+	final Map<@Nullable String, @Nullable IThemeAssociation> lightThemeAssociations = new HashMap<>();
 	protected @Nullable String defaultDarkThemeId;
 	protected @Nullable String defaultLightThemeId;
 
@@ -41,7 +38,7 @@ public abstract class AbstractThemeManager implements IThemeManager {
 		themes.put(theme.getId(), theme);
 	}
 
-	protected void unregisterTheme(final ITheme theme) {
+	void unregisterTheme(final ITheme theme) {
 		themes.remove(theme.getId());
 	}
 
@@ -76,7 +73,7 @@ public abstract class AbstractThemeManager implements IThemeManager {
 		throw new IllegalStateException("Should never be reached");
 	}
 
-	protected void setDefaultTheme(final String themeId, final boolean dark) {
+	void setDefaultTheme(final String themeId, final boolean dark) {
 		if (dark)
 			defaultDarkThemeId = themeId;
 		else
@@ -135,7 +132,7 @@ public abstract class AbstractThemeManager implements IThemeManager {
 		return associations.toArray(IThemeAssociation[]::new);
 	}
 
-	protected void registerThemeAssociation(final IThemeAssociation association) {
+	void registerThemeAssociation(final IThemeAssociation association) {
 		if (association.isWhenDark()) {
 			darkThemeAssociations.put(association.getScopeName(), association);
 		} else {
@@ -143,7 +140,7 @@ public abstract class AbstractThemeManager implements IThemeManager {
 		}
 	}
 
-	protected void unregisterThemeAssociation(final IThemeAssociation association) {
+	void unregisterThemeAssociation(final IThemeAssociation association) {
 		if (association.isWhenDark()) {
 			darkThemeAssociations.remove(association.getScopeName(), association);
 		} else {

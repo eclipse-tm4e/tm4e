@@ -7,7 +7,7 @@
  * SPDX-License-Identifier: EPL-2.0
  *
  * Contributors:
- * Lucas Bullen (Red Hat Inc.) - initial API and implementation
+ * - Lucas Bullen (Red Hat Inc.) - initial API and implementation
  */
 package org.eclipse.tm4e.languageconfiguration.internal.registry;
 
@@ -21,8 +21,8 @@ import org.eclipse.tm4e.languageconfiguration.internal.model.LanguageConfigurati
 
 abstract class AbstractLanguageConfigurationRegistryManager implements ILanguageConfigurationRegistryManager {
 
-	protected final Map<IContentType, ILanguageConfigurationDefinition> pluginDefinitions = new HashMap<>();
-	protected final Map<IContentType, ILanguageConfigurationDefinition> userDefinitions = new HashMap<>();
+	final Map<IContentType, ILanguageConfigurationDefinition> pluginDefinitions = new HashMap<>();
+	final Map<IContentType, ILanguageConfigurationDefinition> userDefinitions = new HashMap<>();
 
 	@Override
 	public ILanguageConfigurationDefinition[] getDefinitions() {
@@ -32,13 +32,11 @@ abstract class AbstractLanguageConfigurationRegistryManager implements ILanguage
 		return definitions.toArray(ILanguageConfigurationDefinition[]::new);
 	}
 
-	@Override
-	public void registerLanguageConfigurationDefinition(final ILanguageConfigurationDefinition definition) {
+	void registerLanguageConfigurationDefinition(final ILanguageConfigurationDefinition definition) {
 		(definition.getPluginId() == null ? userDefinitions : pluginDefinitions).put(definition.getContentType(), definition);
 	}
 
-	@Override
-	public void unregisterLanguageConfigurationDefinition(final ILanguageConfigurationDefinition definition) {
+	void unregisterLanguageConfigurationDefinition(final ILanguageConfigurationDefinition definition) {
 		(definition.getPluginId() == null ? userDefinitions : pluginDefinitions).remove(definition.getContentType());
 	}
 

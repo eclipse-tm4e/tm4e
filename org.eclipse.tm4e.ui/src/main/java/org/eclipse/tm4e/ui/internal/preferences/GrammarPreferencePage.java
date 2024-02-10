@@ -40,7 +40,6 @@ import org.eclipse.tm4e.core.grammar.IGrammar;
 import org.eclipse.tm4e.registry.IGrammarDefinition;
 import org.eclipse.tm4e.registry.IGrammarRegistryManager;
 import org.eclipse.tm4e.registry.TMEclipseRegistryPlugin;
-import org.eclipse.tm4e.registry.WorkingCopyGrammarRegistryManager;
 import org.eclipse.tm4e.ui.TMUIPlugin;
 import org.eclipse.tm4e.ui.internal.TMUIMessages;
 import org.eclipse.tm4e.ui.internal.themes.ThemeManager;
@@ -68,8 +67,7 @@ public final class GrammarPreferencePage extends AbstractPreferencePage {
 	static final String PAGE_ID = "org.eclipse.tm4e.ui.preferences.GrammarPreferencePage";
 
 	// Managers
-	private IGrammarRegistryManager grammarManager = new WorkingCopyGrammarRegistryManager(
-			TMEclipseRegistryPlugin.getGrammarRegistryManager());
+	private IGrammarRegistryManager.EditSession grammarManager = TMEclipseRegistryPlugin.getGrammarRegistryManager().newEditSession();
 	private IThemeManager.EditSession themeManager = ThemeManager.getInstance().newEditSession();
 	private ISnippetManager snippetManager = TMUIPlugin.getSnippetManager();
 
@@ -156,8 +154,7 @@ public final class GrammarPreferencePage extends AbstractPreferencePage {
 				// Add Grammar
 				createButton(TMUIMessages.Button_new, () -> {
 					// Open import wizard for TextMate grammar.
-					final var wizard = new TextMateGrammarImportWizard(false);
-					wizard.setGrammarRegistryManager(grammarManager);
+					final var wizard = new TextMateGrammarImportWizard(grammarManager, false);
 					final var dialog = new WizardDialog(getShell(), wizard);
 					if (dialog.open() == Window.OK) {
 						// User grammar was saved, refresh the list of grammar and select the created grammar.
@@ -386,7 +383,7 @@ public final class GrammarPreferencePage extends AbstractPreferencePage {
 
 	@Override
 	protected void performDefaults() {
-		grammarManager = new WorkingCopyGrammarRegistryManager(TMEclipseRegistryPlugin.getGrammarRegistryManager());
+		grammarManager = TMEclipseRegistryPlugin.getGrammarRegistryManager().newEditSession();
 		themeManager = ThemeManager.getInstance().newEditSession();
 		grammarsTable.setInput(themeManager);
 	}

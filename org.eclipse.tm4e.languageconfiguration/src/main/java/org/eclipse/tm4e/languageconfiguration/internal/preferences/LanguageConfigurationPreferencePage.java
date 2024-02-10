@@ -30,7 +30,6 @@ import org.eclipse.tm4e.languageconfiguration.LanguageConfigurationPlugin;
 import org.eclipse.tm4e.languageconfiguration.internal.registry.ILanguageConfigurationDefinition;
 import org.eclipse.tm4e.languageconfiguration.internal.registry.ILanguageConfigurationRegistryManager;
 import org.eclipse.tm4e.languageconfiguration.internal.registry.LanguageConfigurationRegistryManager;
-import org.eclipse.tm4e.languageconfiguration.internal.registry.WorkingCopyLanguageConfigurationRegistryManager;
 import org.eclipse.tm4e.languageconfiguration.internal.widgets.LanguageConfigurationPreferencesWidget;
 import org.eclipse.tm4e.languageconfiguration.internal.wizards.LanguageConfigurationImportWizard;
 import org.eclipse.tm4e.ui.internal.preferences.AbstractPreferencePage;
@@ -46,8 +45,7 @@ public final class LanguageConfigurationPreferencePage extends AbstractPreferenc
 
 	static final String PAGE_ID = "org.eclipse.tm4e.languageconfiguration.preferences.LanguageConfigurationPreferencePage"; //$NON-NLS-1$
 
-	private ILanguageConfigurationRegistryManager manager = new WorkingCopyLanguageConfigurationRegistryManager(
-			LanguageConfigurationRegistryManager.getInstance());
+	private ILanguageConfigurationRegistryManager.EditSession manager = LanguageConfigurationRegistryManager.getInstance().newEditSession();
 	private TableWidget<ILanguageConfigurationDefinition> langCfgsTable = lazyNonNull();
 
 	public LanguageConfigurationPreferencePage() {
@@ -149,7 +147,7 @@ public final class LanguageConfigurationPreferencePage extends AbstractPreferenc
 
 	@Override
 	protected void performDefaults() {
-		manager = new WorkingCopyLanguageConfigurationRegistryManager(LanguageConfigurationRegistryManager.getInstance());
+		manager = LanguageConfigurationRegistryManager.getInstance().newEditSession();
 		langCfgsTable.setInput(manager);
 	}
 

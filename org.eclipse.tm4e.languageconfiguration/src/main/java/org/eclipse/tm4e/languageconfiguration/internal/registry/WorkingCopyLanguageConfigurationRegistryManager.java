@@ -7,74 +7,66 @@
  * SPDX-License-Identifier: EPL-2.0
  *
  * Contributors:
- * Lucas Bullen (Red Hat Inc.) - initial API and implementation
+ * - Lucas Bullen (Red Hat Inc.) - initial API and implementation
+ * - Sebastian Thomschke (Vegard IT) - code cleanup, refactoring, simplification
  */
 package org.eclipse.tm4e.languageconfiguration.internal.registry;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
-import org.eclipse.jdt.annotation.Nullable;
 import org.osgi.service.prefs.BackingStoreException;
 
-public class WorkingCopyLanguageConfigurationRegistryManager extends AbstractLanguageConfigurationRegistryManager {
+class WorkingCopyLanguageConfigurationRegistryManager extends AbstractLanguageConfigurationRegistryManager
+		implements ILanguageConfigurationRegistryManager.EditSession {
 
-	private final ILanguageConfigurationRegistryManager manager;
+	private final LanguageConfigurationRegistryManager manager;
+	private final Set<ILanguageConfigurationDefinition> added = new HashSet<>();
+	private final Set<ILanguageConfigurationDefinition> removed = new HashSet<>();
+	private boolean isDirty = false;
 
-	@Nullable
-	private List<ILanguageConfigurationDefinition> added;
-
-	@Nullable
-	private List<ILanguageConfigurationDefinition> removed;
-
-	public WorkingCopyLanguageConfigurationRegistryManager(final ILanguageConfigurationRegistryManager manager) {
+	WorkingCopyLanguageConfigurationRegistryManager(final LanguageConfigurationRegistryManager manager) {
 		this.manager = manager;
+		reset();
+	}
 
-		// Copy definitions
-		final ILanguageConfigurationDefinition[] definitions = manager.getDefinitions();
-		for (final ILanguageConfigurationDefinition definition : definitions) {
-			super.registerLanguageConfigurationDefinition(definition);
-		}
+	@Override
+	public void reset() {
+		pluginDefinitions.clear();
+		pluginDefinitions.putAll(manager.pluginDefinitions);
+		userDefinitions.clear();
+		userDefinitions.putAll(manager.userDefinitions);
+
+		added.clear();
+		removed.clear();
+		isDirty = false;
 	}
 
 	@Override
 	public void registerLanguageConfigurationDefinition(final ILanguageConfigurationDefinition definition) {
 		super.registerLanguageConfigurationDefinition(definition);
-		var added = this.added;
-		if (added == null) {
-			added = this.added = new ArrayList<>();
-		}
+		removed.remove(definition);
 		added.add(definition);
+		isDirty = true;
 	}
 
 	@Override
 	public void unregisterLanguageConfigurationDefinition(final ILanguageConfigurationDefinition definition) {
 		super.unregisterLanguageConfigurationDefinition(definition);
-		var removed = this.added;
-		if (removed == null) {
-			removed = this.removed = new ArrayList<>();
-		}
-		if (added != null) {
-			added.remove(definition);
-		} else {
-			removed.add(definition);
-		}
+		added.remove(definition);
+		removed.add(definition);
+		isDirty = true;
 	}
 
 	@Override
 	public void save() throws BackingStoreException {
-		if (removed != null) {
-			for (final ILanguageConfigurationDefinition definition : removed) {
-				manager.unregisterLanguageConfigurationDefinition(definition);
-			}
-		}
-		if (added != null) {
-			for (final ILanguageConfigurationDefinition definition : added) {
-				manager.registerLanguageConfigurationDefinition(definition);
-			}
-		}
-		if (added != null || removed != null) {
-			manager.save();
-		}
+		if (!isDirty)
+			return;
+
+		removed.forEach(manager::unregisterLanguageConfigurationDefinition);
+		added.forEach(manager::registerLanguageConfigurationDefinition);
+
+		manager.save();
+		reset();
 	}
 }

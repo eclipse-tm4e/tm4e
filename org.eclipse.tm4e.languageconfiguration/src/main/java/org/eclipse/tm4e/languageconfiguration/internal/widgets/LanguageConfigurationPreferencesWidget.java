@@ -32,13 +32,14 @@ public final class LanguageConfigurationPreferencesWidget extends LanguageConfig
 	private @NonNullByDefault({}) Button toggleMatchingPairsButton;
 
 	private ILanguageConfigurationDefinition definition = lazyNonNull();
-	private ILanguageConfigurationRegistryManager manager = lazyNonNull();
+	private ILanguageConfigurationRegistryManager.EditSession manager = lazyNonNull();
 
 	public LanguageConfigurationPreferencesWidget(final Composite parent, final int style) {
 		super(parent, style);
 	}
 
-	public void refresh(final @Nullable ILanguageConfigurationDefinition definition, final ILanguageConfigurationRegistryManager manager) {
+	public void refresh(final @Nullable ILanguageConfigurationDefinition definition,
+			final ILanguageConfigurationRegistryManager.EditSession manager) {
 		final var langcfg = definition == null ? null : definition.getLanguageConfiguration();
 		super.refresh(langcfg);
 		if (definition == null) {

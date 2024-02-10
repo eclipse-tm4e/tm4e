@@ -7,8 +7,9 @@
  * SPDX-License-Identifier: EPL-2.0
  *
  * Contributors:
- * Angelo Zerr <angelo.zerr@gmail.com> - initial API and implementation
- * Lucas Bullen (Red Hat Inc.) - language configuration preferences
+ * - Angelo Zerr <angelo.zerr@gmail.com> - initial API and implementation
+ * - Lucas Bullen (Red Hat Inc.) - language configuration preferences
+ * - Sebastian Thomschke (Vegard IT) - code cleanup, refactoring
  */
 package org.eclipse.tm4e.languageconfiguration.internal.registry;
 
@@ -225,8 +226,7 @@ public final class LanguageConfigurationRegistryManager extends AbstractLanguage
 		}
 	}
 
-	@Override
-	public void save() throws BackingStoreException {
+	void save() throws BackingStoreException {
 		// Save grammar definitions in the
 		// "${workspace_loc}/metadata/.plugins/org.eclipse.core.runtime/.settings/org.eclipse.tm4e.languageconfiguration.prefs"
 		final var definitions = new ArrayList<ILanguageConfigurationDefinition>();
@@ -240,5 +240,10 @@ public final class LanguageConfigurationRegistryManager extends AbstractLanguage
 		final var prefs = InstanceScope.INSTANCE.getNode(LanguageConfigurationPlugin.PLUGIN_ID);
 		prefs.put(PreferenceConstants.LANGUAGE_CONFIGURATIONS, json);
 		prefs.flush();
+	}
+
+	@Override
+	public ILanguageConfigurationRegistryManager.EditSession newEditSession() {
+		return new WorkingCopyLanguageConfigurationRegistryManager(this);
 	}
 }

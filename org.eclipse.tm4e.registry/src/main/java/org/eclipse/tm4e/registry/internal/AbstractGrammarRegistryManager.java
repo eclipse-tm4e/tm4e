@@ -36,16 +36,13 @@ import org.eclipse.tm4e.registry.IGrammarDefinition;
 import org.eclipse.tm4e.registry.IGrammarRegistryManager;
 import org.eclipse.tm4e.registry.ITMScope;
 
-/**
- * Eclipse grammar registry.
- */
-public abstract class AbstractGrammarRegistryManager implements IGrammarRegistryManager {
+abstract class AbstractGrammarRegistryManager implements IGrammarRegistryManager {
 
-	private static final class ContentTypeToScopeBinding {
+	static final class ContentTypeToScopeBinding {
 		final IContentType contentType;
 		final TMScope scope;
 
-		public ContentTypeToScopeBinding(String pluginId, IContentType contentType, String scopeName) {
+		ContentTypeToScopeBinding(final String pluginId, final IContentType contentType, final String scopeName) {
 			this.contentType = contentType;
 			this.scope = new TMScope(scopeName, pluginId);
 		}
@@ -115,8 +112,8 @@ public abstract class AbstractGrammarRegistryManager implements IGrammarRegistry
 	protected final GrammarDefinitions pluginDefinitions = new GrammarDefinitions();
 	protected final GrammarDefinitions userDefinitions = new GrammarDefinitions();
 
-	private final Map<IContentType, ContentTypeToScopeBinding> contentTypeToScopeBindings = new HashMap<>();
-	private final Map<String /*scopeName*/, Collection<String>> injections = new HashMap<>();
+	protected final Map<IContentType, ContentTypeToScopeBinding> contentTypeToScopeBindings = new HashMap<>();
+	protected final Map<String /*scopeName*/, Collection<String>> injections = new HashMap<>();
 
 	private final Registry registry;
 
@@ -156,7 +153,7 @@ public abstract class AbstractGrammarRegistryManager implements IGrammarRegistry
 		});
 	}
 
-	protected AbstractGrammarRegistryManager(final IRegistryOptions options) {
+	AbstractGrammarRegistryManager(final IRegistryOptions options) {
 		registry = new Registry(options);
 	}
 
@@ -267,7 +264,7 @@ public abstract class AbstractGrammarRegistryManager implements IGrammarRegistry
 	/**
 	 * Register the given <code>scopeName</code> to inject to the given scope name <code>injectTo</code>.
 	 */
-	protected void registerInjection(final String scopeName, final String injectTo) {
+	void registerInjection(final String scopeName, final String injectTo) {
 		// -> used by GrammarRegistryManager.loadGrammarsFromExtensionPoints()
 		@Nullable
 		Collection<String> injectionsOfScope = getInjections(injectTo);
@@ -286,13 +283,12 @@ public abstract class AbstractGrammarRegistryManager implements IGrammarRegistry
 				.map(binding -> binding.contentType).toList();
 	}
 
-	protected void registerContentTypeToScopeBinding(String pluginId, IContentType contentType, String scopeName) {
+	void registerContentTypeToScopeBinding(String pluginId, IContentType contentType, String scopeName) {
 		// -> used by GrammarRegistryManager.loadGrammarsFromExtensionPoints()
 		contentTypeToScopeBindings.put(contentType, new ContentTypeToScopeBinding(pluginId, contentType, scopeName));
 	}
 
-	@Override
-	public void registerGrammarDefinition(final IGrammarDefinition definition) {
+	void registerGrammarDefinition(final IGrammarDefinition definition) {
 		// -> used by GrammarRegistryManager.loadGrammarsFromExtensionPoints()
 		// -> used by TextMateGrammarImportWizard.performFinish()
 		if (definition.getPluginId() == null) {
@@ -302,8 +298,7 @@ public abstract class AbstractGrammarRegistryManager implements IGrammarRegistry
 		}
 	}
 
-	@Override
-	public void unregisterGrammarDefinition(final IGrammarDefinition definition) {
+	void unregisterGrammarDefinition(final IGrammarDefinition definition) {
 		// -> used by GrammarPreferencePage.grammarRemoveButton
 		if (definition.getPluginId() == null) {
 			userDefinitions.remove(definition);

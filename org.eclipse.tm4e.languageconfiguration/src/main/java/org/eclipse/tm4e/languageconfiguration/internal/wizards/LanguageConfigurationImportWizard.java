@@ -16,6 +16,7 @@ import static org.eclipse.tm4e.core.internal.utils.NullSafetyHelper.lazyNonNull;
 import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.wizard.Wizard;
+import org.eclipse.tm4e.languageconfiguration.LanguageConfigurationPlugin;
 import org.eclipse.tm4e.languageconfiguration.internal.registry.ILanguageConfigurationDefinition;
 import org.eclipse.tm4e.languageconfiguration.internal.registry.ILanguageConfigurationRegistryManager;
 import org.eclipse.ui.IImportWizard;
@@ -27,34 +28,32 @@ import org.osgi.service.prefs.BackingStoreException;
  */
 public final class LanguageConfigurationImportWizard extends Wizard implements IImportWizard {
 
-	private final ILanguageConfigurationRegistryManager registryManager;
+	private final ILanguageConfigurationRegistryManager.EditSession manager;
+	private final boolean saveOnFinish;
 
 	private SelectLanguageConfigurationWizardPage mainPage = lazyNonNull();
-
 	private ILanguageConfigurationDefinition createdDefinition = lazyNonNull();
 
-	private final boolean save;
-
-	public LanguageConfigurationImportWizard(final ILanguageConfigurationRegistryManager registryManager, final boolean save) {
-		this.save = save;
-		this.registryManager = registryManager;
+	public LanguageConfigurationImportWizard(final ILanguageConfigurationRegistryManager.EditSession manager, final boolean saveOnFinish) {
+		this.manager = manager;
+		this.saveOnFinish = saveOnFinish;
 	}
 
 	@Override
 	public void addPages() {
-		mainPage = new SelectLanguageConfigurationWizardPage(registryManager);
+		mainPage = new SelectLanguageConfigurationWizardPage(manager);
 		addPage(mainPage);
 	}
 
 	@Override
 	public boolean performFinish() {
 		final ILanguageConfigurationDefinition definition = mainPage.getDefinition();
-		registryManager.registerLanguageConfigurationDefinition(definition);
-		if (save) {
+		manager.registerLanguageConfigurationDefinition(definition);
+		if (saveOnFinish) {
 			try {
-				registryManager.save();
-			} catch (final BackingStoreException e) {
-				e.printStackTrace();
+				manager.save();
+			} catch (final BackingStoreException ex) {
+				LanguageConfigurationPlugin.logError(ex);
 				return false;
 			}
 		}

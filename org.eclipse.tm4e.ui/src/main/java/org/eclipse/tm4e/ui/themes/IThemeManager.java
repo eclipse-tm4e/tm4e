@@ -7,7 +7,8 @@
  * SPDX-License-Identifier: EPL-2.0
  *
  * Contributors:
- * Angelo Zerr <angelo.zerr@gmail.com> - initial API and implementation
+ * - Angelo Zerr <angelo.zerr@gmail.com> - initial API and implementation
+ * - Sebastian Thomschke (Vegard IT) - add concept of EditSession
  */
 package org.eclipse.tm4e.ui.themes;
 
@@ -68,7 +69,7 @@ public interface IThemeManager {
 		 * @throws UnsupportedOperationException
 		 */
 		@Override
-		default EditSession newEditSession() {
+		default IThemeManager.EditSession newEditSession() {
 			throw new UnsupportedOperationException();
 		}
 	}

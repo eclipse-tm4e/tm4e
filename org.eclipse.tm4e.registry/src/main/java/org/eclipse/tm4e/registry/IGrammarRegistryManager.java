@@ -7,7 +7,8 @@
  * SPDX-License-Identifier: EPL-2.0
  *
  * Contributors:
- * Angelo Zerr <angelo.zerr@gmail.com> - initial API and implementation
+ * - Angelo Zerr <angelo.zerr@gmail.com> - initial API and implementation
+ * - Sebastian Thomschke (Vegard IT) - add concept of EditSession
  */
 package org.eclipse.tm4e.registry;
 
@@ -23,33 +24,46 @@ import org.osgi.service.prefs.BackingStoreException;
  */
 public interface IGrammarRegistryManager {
 
-	// --------------- TextMate grammar definitions methods
+	interface EditSession extends IGrammarRegistryManager {
+		/**
+		 * resets this session to the current state of the singleton grammar registry manager
+		 */
+		void reset();
+
+		/**
+		 * Add grammar definition to the registry.
+		 * <p/>
+		 * <b>NOTE:</b> you must call {@link #save()} method to make the changes persistent.
+		 */
+		void registerGrammarDefinition(IGrammarDefinition definition);
+
+		/**
+		 * Remove grammar definition from the registry.
+		 * <p/>
+		 * <b>NOTE:</b> you must call {@link #save()} method to make the changes persistent.
+		 */
+		void unregisterGrammarDefinition(IGrammarDefinition definition);
+
+		/**
+		 * Applies changes to the singleton grammar registry manager and persists them to disk
+		 */
+		void save() throws BackingStoreException;
+
+		/**
+		 * @throws UnsupportedOperationException
+		 */
+		@Override
+		default IGrammarRegistryManager.EditSession newEditSession() {
+			throw new UnsupportedOperationException();
+		}
+	}
+
+	IGrammarRegistryManager.EditSession newEditSession();
 
 	/**
 	 * @return the list of registered TextMate grammar definitions.
 	 */
 	IGrammarDefinition[] getDefinitions();
-
-	/**
-	 * Add grammar definition to the registry.
-	 * <p/>
-	 * <b>NOTE:</b> you must call {@link #save()} method to make the changes persistent.
-	 */
-	void registerGrammarDefinition(IGrammarDefinition definition);
-
-	/**
-	 * Remove grammar definition from the registry.
-	 * <p/>
-	 * <b>NOTE:</b> you must call {@link #save()} method to make the changes persistent.
-	 */
-	void unregisterGrammarDefinition(IGrammarDefinition definition);
-
-	/**
-	 * Save the grammar definitions
-	 */
-	void save() throws BackingStoreException;
-
-	// --------------- TextMate grammar queries methods.
 
 	/**
 	 * @param contentTypes the content types to lookup for grammar association.

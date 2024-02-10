@@ -7,7 +7,8 @@
  * SPDX-License-Identifier: EPL-2.0
  *
  * Contributors:
- * Lucas Bullen (Red Hat Inc.) - initial API and implementation
+ * - Lucas Bullen (Red Hat Inc.) - initial API and implementation
+ * - Sebastian Thomschke (Vegard IT) - add concept of EditSession
  */
 package org.eclipse.tm4e.languageconfiguration.internal.registry;
 
@@ -21,7 +22,41 @@ import org.osgi.service.prefs.BackingStoreException;
  */
 public interface ILanguageConfigurationRegistryManager {
 
-	// --------------- Language configuration definitions methods
+	interface EditSession extends ILanguageConfigurationRegistryManager {
+		/**
+		 * resets this session to the current state of the singleton language configuration manager
+		 */
+		void reset();
+
+		/**
+		 * Add language configuration definition to the registry.
+		 *
+		 * NOTE: you must call save() method if you wish to save in the preferences.
+		 */
+		void registerLanguageConfigurationDefinition(ILanguageConfigurationDefinition definition);
+
+		/**
+		 * Remove language configuration definition from the registry.
+		 *
+		 * NOTE: you must call save() method if you wish to save in the preferences.
+		 */
+		void unregisterLanguageConfigurationDefinition(ILanguageConfigurationDefinition definition);
+
+		/**
+		 * Applies changes to the singleton language configuration manager and persists them to disk
+		 */
+		void save() throws BackingStoreException;
+
+		/**
+		 * @throws UnsupportedOperationException
+		 */
+		@Override
+		default ILanguageConfigurationRegistryManager.EditSession newEditSession() {
+			throw new UnsupportedOperationException();
+		}
+	}
+
+	ILanguageConfigurationRegistryManager.EditSession newEditSession();
 
 	/**
 	 * Returns the list of registered language configuration definitions.
@@ -29,27 +64,6 @@ public interface ILanguageConfigurationRegistryManager {
 	 * @return the list of registered language configuration definitions.
 	 */
 	ILanguageConfigurationDefinition[] getDefinitions();
-
-	/**
-	 * Add language configuration definition to the registry.
-	 *
-	 * NOTE: you must call save() method if you wish to save in the preferences.
-	 */
-	void registerLanguageConfigurationDefinition(ILanguageConfigurationDefinition definition);
-
-	/**
-	 * Remove language configuration definition from the registry.
-	 *
-	 * NOTE: you must call save() method if you wish to save in the preferences.
-	 */
-	void unregisterLanguageConfigurationDefinition(ILanguageConfigurationDefinition definition);
-
-	/**
-	 * Save the language configuration definitions.
-	 */
-	void save() throws BackingStoreException;
-
-	// --------------- Language configuration queries methods.
 
 	/**
 	 * Returns the {@link LanguageConfiguration} for the given content types and null otherwise.

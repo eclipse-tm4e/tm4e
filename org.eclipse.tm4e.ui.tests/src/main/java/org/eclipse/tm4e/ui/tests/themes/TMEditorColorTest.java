@@ -73,9 +73,10 @@ class TMEditorColorTest implements ThemeIdConstants {
 		assertNull(theme.getEditorSelectionBackground(), "System default selection background should be null");
 		assertNull(theme.getEditorSelectionForeground(), "System default selection foreground should be null");
 
-		final Color lineHighlight = ColorManager.getInstance().getPreferenceEditorColor(EDITOR_CURRENTLINE_HIGHLIGHT);
-		assertNotNull(theme.getEditorCurrentLineHighlight(), "Highlight shouldn't be a null");
-		assertNotEquals(lineHighlight, theme.getEditorCurrentLineHighlight(), "Default Line highlight should be from TM theme");
+		final Color eclipseLineHighlight = ColorManager.getInstance().getPreferenceEditorColor(EDITOR_CURRENTLINE_HIGHLIGHT);
+		final Color themeLineHighlight = theme.getEditorCurrentLineHighlight();
+		assertNotNull(themeLineHighlight, "Highlight shouldn't be a null");
+		assertNotEquals(eclipseLineHighlight, themeLineHighlight, "Default Line highlight should be from TM theme");
 	}
 
 	@Test

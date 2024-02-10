@@ -23,7 +23,7 @@ import org.eclipse.jface.action.IContributionItem;
 import org.eclipse.tm4e.core.grammar.IGrammar;
 import org.eclipse.tm4e.registry.ITMScope;
 import org.eclipse.tm4e.ui.TMUIPlugin;
-import org.eclipse.tm4e.ui.internal.utils.PreferenceUtils;
+import org.eclipse.tm4e.ui.internal.utils.UI;
 import org.eclipse.tm4e.ui.text.TMPresentationReconciler;
 import org.eclipse.tm4e.ui.themes.ITheme;
 import org.eclipse.tm4e.ui.themes.IThemeManager;
@@ -59,7 +59,7 @@ public final class ThemeContribution extends CompoundContributionItem implements
 					final IGrammar grammar = presentationReconciler.getGrammar();
 					if (grammar != null) {
 						final IThemeManager manager = TMUIPlugin.getThemeManager();
-						final boolean dark = PreferenceUtils.isDarkEclipseTheme();
+						final boolean dark = UI.isDarkEclipseTheme();
 						final String scopeName = ITMScope.parse(grammar.getScopeName()).getName();
 						final ITheme selectedTheme = manager.getThemeForScope(scopeName, dark);
 						for (final ITheme theme : manager.getThemes()) {

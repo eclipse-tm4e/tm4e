@@ -22,9 +22,10 @@ import org.eclipse.tm4e.core.internal.utils.StringUtils;
 import org.eclipse.tm4e.registry.TMResource;
 import org.eclipse.tm4e.registry.XMLConstants;
 import org.eclipse.tm4e.ui.TMUIPlugin;
-import org.eclipse.tm4e.ui.internal.preferences.PreferenceConstants;
+import org.eclipse.tm4e.ui.internal.utils.UI;
 import org.eclipse.tm4e.ui.themes.css.CSSTokenProvider;
 import org.eclipse.ui.texteditor.AbstractTextEditor;
+import org.eclipse.ui.texteditor.AbstractDecoratedTextEditorPreferenceConstants;
 
 /**
  * {@link ITheme} implementation.
@@ -87,40 +88,47 @@ public class Theme extends TMResource implements ITheme {
 		return provider == null ? ITokenProvider.DEFAULT_TOKEN : provider.getToken(type);
 	}
 
+	private @Nullable Color getPriorityColor(final @Nullable Color themeColor, final String prefStoreKey) {
+		// if the theme is light but Eclipse is in dark mode (or vice versa) we cannot use the pref settings and always use the theme colors
+		return UI.isDarkEclipseTheme() == isDark()
+				? ColorManager.getInstance().getPriorityColor(themeColor, prefStoreKey)
+				: themeColor;
+	}
+
 	@Nullable
 	@Override
 	public Color getEditorForeground() {
 		final ITokenProvider provider = getTokenProvider();
-		final Color themeColor = provider != null ? provider.getEditorForeground() : null;
-		return ColorManager.getInstance()
-				.getPriorityColor(themeColor, AbstractTextEditor.PREFERENCE_COLOR_FOREGROUND);
+		return getPriorityColor(
+				provider != null ? provider.getEditorForeground() : null,
+				AbstractTextEditor.PREFERENCE_COLOR_FOREGROUND);
 	}
 
 	@Nullable
 	@Override
 	public Color getEditorBackground() {
 		final ITokenProvider provider = getTokenProvider();
-		final Color themeColor = provider != null ? provider.getEditorBackground() : null;
-		return ColorManager.getInstance()
-				.getPriorityColor(themeColor, AbstractTextEditor.PREFERENCE_COLOR_BACKGROUND);
+		return getPriorityColor(
+				provider != null ? provider.getEditorBackground() : null,
+				AbstractTextEditor.PREFERENCE_COLOR_BACKGROUND);
 	}
 
 	@Nullable
 	@Override
 	public Color getEditorSelectionForeground() {
 		final ITokenProvider provider = getTokenProvider();
-		final Color themeColor = provider != null ? provider.getEditorSelectionForeground() : null;
-		return ColorManager.getInstance()
-				.getPriorityColor(themeColor, AbstractTextEditor.PREFERENCE_COLOR_SELECTION_FOREGROUND);
+		return getPriorityColor(
+				provider != null ? provider.getEditorSelectionForeground() : null,
+				AbstractTextEditor.PREFERENCE_COLOR_SELECTION_FOREGROUND);
 	}
 
 	@Nullable
 	@Override
 	public Color getEditorSelectionBackground() {
 		final ITokenProvider provider = getTokenProvider();
-		final Color themeColor = provider != null ? provider.getEditorSelectionBackground() : null;
-		return ColorManager.getInstance()
-				.getPriorityColor(themeColor, AbstractTextEditor.PREFERENCE_COLOR_SELECTION_BACKGROUND);
+		return getPriorityColor(
+				provider != null ? provider.getEditorSelectionBackground() : null,
+				AbstractTextEditor.PREFERENCE_COLOR_SELECTION_BACKGROUND);
 	}
 
 	@Nullable
@@ -130,7 +138,7 @@ public class Theme extends TMResource implements ITheme {
 		final Color themeColor = provider != null ? provider.getEditorCurrentLineHighlight() : null;
 		final ColorManager manager = ColorManager.getInstance();
 		return manager.isColorUserDefined(AbstractTextEditor.PREFERENCE_COLOR_BACKGROUND)
-				? manager.getPreferenceEditorColor(PreferenceConstants.EDITOR_CURRENTLINE_HIGHLIGHT)
+				? manager.getPreferenceEditorColor(AbstractDecoratedTextEditorPreferenceConstants.EDITOR_CURRENT_LINE_COLOR)
 				: themeColor;
 	}
 

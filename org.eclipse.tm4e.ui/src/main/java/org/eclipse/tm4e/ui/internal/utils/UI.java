@@ -19,8 +19,10 @@ import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
+import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.FontMetrics;
 import org.eclipse.swt.graphics.GC;
+import org.eclipse.swt.graphics.RGB;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.IWorkbenchPage;
@@ -149,6 +151,29 @@ public final class UI {
 		} finally {
 			gc.dispose();
 		}
+	}
+
+	/**
+	 * @return 0-255
+	 */
+	private static int getBrightness(final int red, final int green, final int blue) {
+		// https://www.w3.org/TR/AERT/#color-contrast
+		return (int) (0.299 * red + 0.587 * green + 0.114 * blue);
+	}
+
+	public static boolean isDarkColor(final RGB color) {
+		return getBrightness(color.red, color.green, color.blue) < 128;
+	}
+
+	public static boolean isDarkColor(final Color color) {
+		return getBrightness(color.getRed(), color.getGreen(), color.getBlue()) < 128;
+	}
+
+	public static boolean isDarkEclipseTheme() {
+		final var shell = getActiveShell();
+		if (shell == null)
+			throw new IllegalStateException("No active shell found!");
+		return isDarkColor(shell.getBackground());
 	}
 
 	private UI() {

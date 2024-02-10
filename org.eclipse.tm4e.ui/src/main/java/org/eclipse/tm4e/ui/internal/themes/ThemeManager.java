@@ -65,7 +65,7 @@ public final class ThemeManager extends AbstractThemeManager {
 	 */
 	public static void addPreferenceChangeListener(final IPreferenceChangeListener themeChangeListener) {
 		// Observe change of Eclipse E4 Theme
-		var prefs = PreferenceUtils.getE4PreferenceStore();
+		var prefs = PreferenceUtils.getE4ThemesPreferenceStore();
 		if (prefs != null) {
 			prefs.addPreferenceChangeListener(themeChangeListener);
 		}
@@ -84,7 +84,7 @@ public final class ThemeManager extends AbstractThemeManager {
 	 */
 	public static void removePreferenceChangeListener(final IPreferenceChangeListener themeChangeListener) {
 		// Observe change of Eclipse E4 Theme
-		var prefs = PreferenceUtils.getE4PreferenceStore();
+		var prefs = PreferenceUtils.getE4ThemesPreferenceStore();
 		if (prefs != null) {
 			prefs.removePreferenceChangeListener(themeChangeListener);
 		}

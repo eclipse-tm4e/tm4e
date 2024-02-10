@@ -16,24 +16,20 @@ import org.eclipse.core.runtime.preferences.IEclipsePreferences;
 import org.eclipse.core.runtime.preferences.InstanceScope;
 import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.tm4e.ui.TMUIPlugin;
-import org.eclipse.tm4e.ui.internal.preferences.PreferenceConstants;
+import org.eclipse.ui.editors.text.EditorsUI;
 
 public final class PreferenceUtils {
 
+	/** see {@link org.eclipse.e4.ui.css.swt.internal.theme.ThemeEngine#THEMEID_KEY} */
+	@SuppressWarnings({ "restriction", "javadoc" })
+	public static final String E4_THEME_ID = "themeid";
+
+	/** see {@link org.eclipse.e4.ui.css.swt.internal.theme.ThemeEngine#THEME_PLUGIN_ID} */
+	@SuppressWarnings({ "restriction" })
 	private static final String E4_CSS_PREFERENCE_NAME = "org.eclipse.e4.ui.css.swt.theme";
-	private static final String EDITORS_PREFERENCE_NAME = "org.eclipse.ui.editors";
 
 	private static @Nullable Boolean isDebugGenerateTest;
 	private static @Nullable Boolean isDebugThrowError;
-
-	/**
-	 * @return if Eclipse is currently using a dark UI theme
-	 */
-	public static boolean isDarkEclipseTheme() {
-		final IEclipsePreferences prefs = getE4PreferenceStore();
-		final String eclipseThemeId = prefs == null ? null : prefs.get(PreferenceConstants.E4_THEME_ID, null);
-		return eclipseThemeId != null && eclipseThemeId.toLowerCase().contains("dark");
-	}
 
 	public static boolean isDebugGenerateTest() {
 		var isDebugGenerateTest = PreferenceUtils.isDebugGenerateTest;
@@ -52,12 +48,12 @@ public final class PreferenceUtils {
 	}
 
 	/**
-	 * Get e4 preferences store
+	 * Get e4 themes preferences store
 	 *
 	 * @return preferences store
 	 */
 	@Nullable
-	public static IEclipsePreferences getE4PreferenceStore() {
+	public static IEclipsePreferences getE4ThemesPreferenceStore() {
 		return InstanceScope.INSTANCE.getNode(E4_CSS_PREFERENCE_NAME);
 	}
 
@@ -68,7 +64,7 @@ public final class PreferenceUtils {
 	 */
 	@Nullable
 	public static IEclipsePreferences getEditorsPreferenceStore() {
-		return InstanceScope.INSTANCE.getNode(EDITORS_PREFERENCE_NAME);
+		return InstanceScope.INSTANCE.getNode(EditorsUI.PLUGIN_ID);
 	}
 
 	private PreferenceUtils() {

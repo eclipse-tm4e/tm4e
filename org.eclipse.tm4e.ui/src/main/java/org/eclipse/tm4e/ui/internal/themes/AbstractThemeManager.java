@@ -20,7 +20,7 @@ import java.util.stream.Stream;
 import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.swt.graphics.RGB;
 import org.eclipse.tm4e.registry.ITMScope;
-import org.eclipse.tm4e.ui.internal.utils.PreferenceUtils;
+import org.eclipse.tm4e.ui.internal.utils.UI;
 import org.eclipse.tm4e.ui.themes.ITheme;
 import org.eclipse.tm4e.ui.themes.IThemeAssociation;
 import org.eclipse.tm4e.ui.themes.IThemeManager;
@@ -54,7 +54,7 @@ public abstract class AbstractThemeManager implements IThemeManager {
 
 	@Override
 	public ITheme getDefaultTheme() {
-		return getDefaultTheme(PreferenceUtils.isDarkEclipseTheme());
+		return getDefaultTheme(UI.isDarkEclipseTheme());
 	}
 
 	@Override
@@ -87,7 +87,7 @@ public abstract class AbstractThemeManager implements IThemeManager {
 
 	@Override
 	public ITheme getThemeForScope(final String scopeName) {
-		return getThemeForScope(scopeName, PreferenceUtils.isDarkEclipseTheme());
+		return getThemeForScope(scopeName, UI.isDarkEclipseTheme());
 	}
 
 	@Override
@@ -109,9 +109,7 @@ public abstract class AbstractThemeManager implements IThemeManager {
 
 	@Override
 	public ITheme getThemeForScope(final String scopeName, final RGB background) {
-		return getThemeForScope(scopeName, 0.299 * background.red
-				+ 0.587 * background.green
-				+ 0.114 * background.blue < 128);
+		return getThemeForScope(scopeName, UI.isDarkColor(background));
 	}
 
 	@Override

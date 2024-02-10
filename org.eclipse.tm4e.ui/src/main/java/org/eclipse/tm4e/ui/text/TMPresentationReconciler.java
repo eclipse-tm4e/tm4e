@@ -128,7 +128,7 @@ public class TMPresentationReconciler implements IPresentationReconciler {
 			return;
 
 		switch (event.getKey()) {
-			case PreferenceConstants.E4_THEME_ID, //
+			case PreferenceUtils.E4_THEME_ID, //
 					PreferenceConstants.THEME_ASSOCIATIONS, //
 					PreferenceConstants.DEFAULT_DARK_THEME, //
 					PreferenceConstants.DEFAULT_LIGHT_THEME:

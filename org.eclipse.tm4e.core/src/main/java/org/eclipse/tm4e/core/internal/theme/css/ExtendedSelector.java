@@ -15,11 +15,6 @@ import org.w3c.css.sac.SimpleSelector;
 
 public interface ExtendedSelector extends SimpleSelector {
 
-	/**
-	 * Returns the specificity of this selector.
-	 */
-	int getSpecificity();
-
 	int nbClass();
 
 	int nbMatch(String... names);

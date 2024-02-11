@@ -25,11 +25,6 @@ final class CSSElementSelector extends AbstractElementSelector {
 	}
 
 	@Override
-	public int getSpecificity() {
-		return getLocalName() == null ? 0 : 1;
-	}
-
-	@Override
 	public int nbClass() {
 		return 0;
 	}

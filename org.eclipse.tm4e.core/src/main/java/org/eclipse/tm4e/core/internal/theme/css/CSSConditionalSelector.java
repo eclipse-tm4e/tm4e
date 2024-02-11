@@ -41,11 +41,6 @@ final class CSSConditionalSelector implements ConditionalSelector, ExtendedSelec
 	}
 
 	@Override
-	public int getSpecificity() {
-		return selector.getSpecificity() + condition.getSpecificity();
-	}
-
-	@Override
 	public int nbClass() {
 		return selector.nbClass() + condition.nbClass();
 	}

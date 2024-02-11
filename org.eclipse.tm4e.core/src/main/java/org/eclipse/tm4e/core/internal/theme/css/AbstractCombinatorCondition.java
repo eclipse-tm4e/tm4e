@@ -40,9 +40,4 @@ abstract class AbstractCombinatorCondition implements CombinatorCondition, Exten
 	public Condition getSecondCondition() {
 		return secondCondition;
 	}
-
-	@Override
-	public int getSpecificity() {
-		return firstCondition.getSpecificity() + secondCondition.getSpecificity();
-	}
 }

@@ -15,11 +15,6 @@ import org.w3c.css.sac.Condition;
 
 interface ExtendedCondition extends Condition {
 
-	/**
-	 * Returns the specificity of this condition.
-	 */
-	int getSpecificity();
-
 	int nbClass();
 
 	int nbMatch(String... names);

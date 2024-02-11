@@ -30,11 +30,6 @@ abstract class AbstractAttributeCondition implements AttributeCondition, Extende
 	}
 
 	@Override
-	public int getSpecificity() {
-		return 1 << 8;
-	}
-
-	@Override
 	public String getValue() {
 		return value;
 	}

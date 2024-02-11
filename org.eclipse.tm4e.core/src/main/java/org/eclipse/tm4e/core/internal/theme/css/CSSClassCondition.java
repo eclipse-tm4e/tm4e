@@ -35,9 +35,9 @@ final class CSSClassCondition extends AbstractAttributeCondition {
 	}
 
 	@Override
-	public int nbMatch(final String... names) {
+	public int nbMatch(final String... cssClassNames) {
 		final String value = getValue();
-		for (final String name : names) {
+		for (final String name : cssClassNames) {
 			if (name.equals(value)) {
 				return 1;
 			}

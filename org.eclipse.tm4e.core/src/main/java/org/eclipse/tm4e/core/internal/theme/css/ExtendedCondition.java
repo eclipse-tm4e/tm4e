@@ -15,7 +15,15 @@ import org.w3c.css.sac.Condition;
 
 interface ExtendedCondition extends Condition {
 
+	/**
+	 * @return Total number of {@link CSSClassCondition}s evaluated via {@link #nbMatch(String...)}
+	 */
+	@SuppressWarnings("javadoc")
 	int nbClass();
 
-	int nbMatch(String... names);
+	/**
+	 * @return Number of recursively matching {@link CSSClassCondition}s
+	 */
+	@SuppressWarnings("javadoc")
+	int nbMatch(String... cssClassNames);
 }

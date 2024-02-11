@@ -31,8 +31,8 @@ final class CSSAndCondition extends AbstractCombinatorCondition {
 	}
 
 	@Override
-	public int nbMatch(final String... names) {
-		return firstCondition.nbMatch(names) + secondCondition.nbMatch(names);
+	public int nbMatch(final String... cssClassNames) {
+		return firstCondition.nbMatch(cssClassNames) + secondCondition.nbMatch(cssClassNames);
 	}
 
 	@Override

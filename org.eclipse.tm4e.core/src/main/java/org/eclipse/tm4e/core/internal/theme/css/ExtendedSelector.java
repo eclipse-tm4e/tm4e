@@ -15,7 +15,15 @@ import org.w3c.css.sac.SimpleSelector;
 
 public interface ExtendedSelector extends SimpleSelector {
 
+	/**
+	 * @return Total number of {@link CSSClassCondition}s evaluated via {@link #nbMatch(String...)}
+	 */
+	@SuppressWarnings("javadoc")
 	int nbClass();
 
-	int nbMatch(String... names);
+	/**
+	 * @return Number of matching {@link CSSClassCondition}s
+	 */
+	@SuppressWarnings("javadoc")
+	int nbMatch(String... cssClassNames);
 }

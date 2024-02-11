@@ -7,9 +7,12 @@
  * SPDX-License-Identifier: EPL-2.0
  *
  * Contributors:
- * Angelo Zerr <angelo.zerr@gmail.com> - initial API and implementation
+ * - Angelo Zerr <angelo.zerr@gmail.com> - initial API and implementation
+ * - Sebastian Thomschke (Vegard IT) - add hashCode/equals methods
  */
 package org.eclipse.tm4e.core.theme;
+
+import org.eclipse.jdt.annotation.Nullable;
 
 public class RGB {
 
@@ -26,5 +29,33 @@ public class RGB {
 	@Override
 	public String toString() {
 		return "RGB(" + red + "," + green + "," + blue + ")";
+	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + blue;
+		result = prime * result + green;
+		result = prime * result + red;
+		return result;
+	}
+
+	@Override
+	public boolean equals(final @Nullable Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		final RGB other = (RGB) obj;
+		if (blue != other.blue)
+			return false;
+		if (green != other.green)
+			return false;
+		if (red != other.red)
+			return false;
+		return true;
 	}
 }

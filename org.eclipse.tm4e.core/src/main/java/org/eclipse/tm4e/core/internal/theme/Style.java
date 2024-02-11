@@ -25,28 +25,22 @@ public class Style implements IStyle {
 	private boolean underline;
 	private boolean strikeThrough;
 
-	public void setColor(final RGB color) {
-		this.color = color;
-	}
-
-	@Nullable
 	@Override
-	public RGB getColor() {
+	public @Nullable RGB getColor() {
 		return color;
 	}
 
-	@Nullable
+	public void setColor(final @Nullable RGB value) {
+		color = value;
+	}
+
 	@Override
-	public RGB getBackgroundColor() {
+	public @Nullable RGB getBackgroundColor() {
 		return backgroundColor;
 	}
 
-	public void setBackgroundColor(final RGB backgroundColor) {
-		this.backgroundColor = backgroundColor;
-	}
-
-	public void setBold(final boolean bold) {
-		this.bold = bold;
+	public void setBackgroundColor(final @Nullable RGB value) {
+		backgroundColor = value;
 	}
 
 	@Override
@@ -54,8 +48,8 @@ public class Style implements IStyle {
 		return bold;
 	}
 
-	public void setItalic(final boolean italic) {
-		this.italic = italic;
+	public void setBold(final boolean enabled) {
+		bold = enabled;
 	}
 
 	@Override
@@ -63,13 +57,17 @@ public class Style implements IStyle {
 		return italic;
 	}
 
+	public void setItalic(final boolean enabled) {
+		italic = enabled;
+	}
+
 	@Override
 	public boolean isUnderline() {
 		return underline;
 	}
 
-	public void setUnderline(final boolean underline) {
-		this.underline = underline;
+	public void setUnderline(final boolean enabled) {
+		underline = enabled;
 	}
 
 	@Override
@@ -77,7 +75,7 @@ public class Style implements IStyle {
 		return strikeThrough;
 	}
 
-	public void setStrikeThrough(final boolean strikeThrough) {
-		this.strikeThrough = strikeThrough;
+	public void setStrikeThrough(final boolean enabled) {
+		strikeThrough = enabled;
 	}
 }

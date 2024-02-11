@@ -91,8 +91,8 @@ public class CSSTokenProvider implements ITokenProvider {
 		return token == null ? DEFAULT_TOKEN : token;
 	}
 
-	private @Nullable Color getColor(final boolean isForeground, final String... styles) {
-		final var style = parser.getBestStyle(styles);
+	private @Nullable Color getColor(final boolean isForeground, final String... cssClassNames) {
+		final var style = parser.getBestStyle(cssClassNames);
 		if (style == null)
 			return null;
 

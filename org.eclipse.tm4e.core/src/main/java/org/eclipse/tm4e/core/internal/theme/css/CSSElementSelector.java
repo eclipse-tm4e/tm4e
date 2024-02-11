@@ -30,7 +30,7 @@ final class CSSElementSelector extends AbstractElementSelector {
 	}
 
 	@Override
-	public int nbMatch(final String... names) {
+	public int nbMatch(final String... cssClassNames) {
 		return 0;
 	}
 }

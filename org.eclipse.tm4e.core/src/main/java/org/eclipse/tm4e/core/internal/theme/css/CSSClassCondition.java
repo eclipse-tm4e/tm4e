@@ -13,10 +13,20 @@ package org.eclipse.tm4e.core.internal.theme.css;
 
 import org.eclipse.jdt.annotation.Nullable;
 
-final class CSSClassCondition extends CSSAttributeCondition {
+final class CSSClassCondition extends AbstractAttributeCondition {
 
-	CSSClassCondition(@Nullable final String localName, final String namespaceURI, final String value) {
-		super(localName, namespaceURI, true, value);
+	protected CSSClassCondition(final @Nullable String localName, final @Nullable String namespaceURI, final String value) {
+		super(localName, namespaceURI, value);
+	}
+
+	@Override
+	public short getConditionType() {
+		return SAC_CLASS_CONDITION;
+	}
+
+	@Override
+	public boolean getSpecified() {
+		return true;
 	}
 
 	@Override

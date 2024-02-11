@@ -11,6 +11,7 @@
  */
 package org.eclipse.tm4e.core.internal.theme.css;
 
+import org.eclipse.jdt.annotation.Nullable;
 import org.w3c.css.sac.AttributeCondition;
 
 /**
@@ -19,19 +20,40 @@ import org.w3c.css.sac.AttributeCondition;
  */
 abstract class AbstractAttributeCondition implements AttributeCondition, ExtendedCondition {
 
+	/**
+	 * The attribute's local name.
+	 */
+	protected final @Nullable String localName;
+
+	/**
+	 * The attribute's namespace URI.
+	 */
+	protected final @Nullable String namespaceURI;
+
 	/** The attribute value */
 	private final String value;
 
 	/**
 	 * Creates a new AbstractAttributeCondition object.
 	 */
-	AbstractAttributeCondition(final String value) {
+	AbstractAttributeCondition(final @Nullable String localName, final @Nullable String namespaceURI, final String value) {
+		this.localName = localName;
+		this.namespaceURI = namespaceURI;
 		this.value = value;
+	}
+
+	@Override
+	public @Nullable String getLocalName() {
+		return localName;
+	}
+
+	@Override
+	public @Nullable String getNamespaceURI() {
+		return namespaceURI;
 	}
 
 	@Override
 	public String getValue() {
 		return value;
 	}
-
 }

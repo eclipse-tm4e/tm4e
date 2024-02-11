@@ -37,7 +37,7 @@ public final class CSSConditionFactory implements ConditionFactory {
 	@Override
 	public AttributeCondition createAttributeCondition(final String localName, final String namespaceURI, final boolean specified,
 			final String value) throws CSSException {
-		return new CSSAttributeCondition(localName, namespaceURI, specified, value);
+		throw new CSSException("Not implemented.");
 	}
 
 	@Override

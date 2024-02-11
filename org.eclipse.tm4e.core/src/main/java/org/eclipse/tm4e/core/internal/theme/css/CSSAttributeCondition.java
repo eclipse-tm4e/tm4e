@@ -75,4 +75,9 @@ class CSSAttributeCondition extends AbstractAttributeCondition {
 		// return e.getAttribute(getLocalName()).equals(val);
 		return 0;
 	}
+
+	@Override
+	public String toString() {
+		return "CSSAttr(" + getLocalName() + ")=='" + getValue() + "'";
+	}
 }

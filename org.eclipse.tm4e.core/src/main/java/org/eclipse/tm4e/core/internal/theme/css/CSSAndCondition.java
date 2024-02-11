@@ -34,4 +34,9 @@ final class CSSAndCondition extends AbstractCombinatorCondition {
 	public int nbMatch(final String... names) {
 		return firstCondition.nbMatch(names) + secondCondition.nbMatch(names);
 	}
+
+	@Override
+	public String toString() {
+		return "(" + getFirstCondition() + " and " + getSecondCondition() + ")";
+	}
 }

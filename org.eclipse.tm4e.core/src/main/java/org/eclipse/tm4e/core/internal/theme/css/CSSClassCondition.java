@@ -34,4 +34,9 @@ final class CSSClassCondition extends CSSAttributeCondition {
 		}
 		return 0;
 	}
+
+	@Override
+	public String toString() {
+		return "CSSClass=='" + getValue() + "'";
+	}
 }

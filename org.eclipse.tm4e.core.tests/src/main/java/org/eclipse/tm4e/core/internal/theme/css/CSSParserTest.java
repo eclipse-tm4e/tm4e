@@ -24,7 +24,7 @@ class CSSParserTest {
 	void testCSSParser() throws Exception {
 		final var parser = new CSSParser("""
 			.invalid { background-color: rgb(255,128,128); }
-			.storage.invalid { background-color: rgb(255,0,0); }
+			.storage.invalid { background-color: red; }
 			""");
 
 		assertEquals(null, parser.getBestStyle("undefined"));

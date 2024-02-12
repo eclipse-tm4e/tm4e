@@ -7,7 +7,8 @@
  * SPDX-License-Identifier: EPL-2.0
  *
  * Contributors:
- * Angelo Zerr <angelo.zerr@gmail.com> - initial API and implementation
+ * - Angelo Zerr <angelo.zerr@gmail.com> - initial API and implementation
+ * - Sebastian Thomschke (Vegard IT) - add support for named CSS colors
  */
 package org.eclipse.tm4e.core.internal.theme.css;
 
@@ -28,6 +29,13 @@ import org.w3c.dom.css.CSSPrimitiveValue;
 public final class CSSDocumentHandler extends AbstractDocumentHandler {
 
 	private static RGB createRGB(final LexicalUnit value) {
+		if (value.getLexicalUnitType() == LexicalUnit.SAC_IDENT) {
+			final String colorName = value.getStringValue();
+			final RGB color = CSSColors.getByName(value.getStringValue());
+			if (color == null)
+				throw new IllegalArgumentException("Unkown CSS color '" + colorName + "'");
+			return color;
+		}
 		final var rgbColor = new RGBColorImpl(value);
 		final int green = (int) rgbColor.getGreen().getFloatValue(CSSPrimitiveValue.CSS_NUMBER);
 		final int red = (int) rgbColor.getRed().getFloatValue(CSSPrimitiveValue.CSS_NUMBER);

@@ -27,8 +27,15 @@ import org.w3c.dom.css.CSSPrimitiveValue;
 @NonNullByDefault({})
 public final class CSSDocumentHandler extends AbstractDocumentHandler {
 
-	private final List<IStyle> list = new ArrayList<>();
+	private static RGB createRGB(final LexicalUnit value) {
+		final var rgbColor = new RGBColorImpl(value);
+		final int green = (int) rgbColor.getGreen().getFloatValue(CSSPrimitiveValue.CSS_NUMBER);
+		final int red = (int) rgbColor.getRed().getFloatValue(CSSPrimitiveValue.CSS_NUMBER);
+		final int blue = (int) rgbColor.getBlue().getFloatValue(CSSPrimitiveValue.CSS_NUMBER);
+		return new RGB(red, green, blue);
+	}
 
+	private final List<IStyle> styles = new ArrayList<>();
 	private @Nullable CSSStyle currentStyle;
 
 	@Override
@@ -66,21 +73,13 @@ public final class CSSDocumentHandler extends AbstractDocumentHandler {
 		}
 	}
 
-	private RGB createRGB(final LexicalUnit value) {
-		final var rgbColor = new RGBColorImpl(value);
-		final int green = (int) rgbColor.getGreen().getFloatValue(CSSPrimitiveValue.CSS_NUMBER);
-		final int red = (int) rgbColor.getRed().getFloatValue(CSSPrimitiveValue.CSS_NUMBER);
-		final int blue = (int) rgbColor.getBlue().getFloatValue(CSSPrimitiveValue.CSS_NUMBER);
-		return new RGB(red, green, blue);
-	}
-
 	@Override
 	public void startSelector(final SelectorList selector) throws CSSException {
 		currentStyle = new CSSStyle(selector);
-		list.add(currentStyle);
+		styles.add(currentStyle);
 	}
 
-	public List<IStyle> getList() {
-		return list;
+	public List<IStyle> getStyles() {
+		return styles;
 	}
 }

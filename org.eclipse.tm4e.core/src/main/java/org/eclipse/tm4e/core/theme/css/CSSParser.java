@@ -68,7 +68,7 @@ public class CSSParser {
 	public IStyle getBestStyle(final String... cssClassNames) {
 		int bestSpecificity = 0;
 		IStyle bestStyle = null;
-		for (final IStyle style : handler.getList()) {
+		for (final IStyle style : handler.getStyles()) {
 			final SelectorList list = ((CSSStyle) style).selectorList;
 			for (int i = 0, l = list.getLength(); i < l; i++) {
 				final var selector = (ExtendedSelector) list.item(i);
@@ -88,6 +88,6 @@ public class CSSParser {
 	}
 
 	public List<IStyle> getStyles() {
-		return handler.getList();
+		return handler.getStyles();
 	}
 }

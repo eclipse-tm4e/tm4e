@@ -9,7 +9,7 @@
  * Angelo Zerr <angelo.zerr@gmail.com> - initial API and implementation
  * IBM Corporation - ongoing development
  *******************************************************************************/
-package org.eclipse.tm4e.core.internal.theme.css;
+package org.eclipse.tm4e.core.internal.theme.css.util;
 
 import org.eclipse.jdt.annotation.Nullable;
 import org.w3c.dom.DOMException;
@@ -22,9 +22,9 @@ import org.w3c.dom.css.Rect;
  * @see <a href=
  *      "https://github.com/eclipse-platform/eclipse.platform.ui/blob/master/bundles/org.eclipse.e4.ui.css.core/src/org/eclipse/e4/ui/css/core/impl/dom/CSSValueImpl.java">github.com/eclipse-platform/eclipse.platform.ui/blob/master/bundles/org.eclipse.e4.ui.css.core/src/org/eclipse/e4/ui/css/core/impl/dom/CSSValueImpl.java</a>
  */
-abstract class AbstractCSSValue implements CSSPrimitiveValue {
+public abstract class AbstractCSSValue implements CSSPrimitiveValue {
 
-	private static final String NOT_YET_IMPLEMENTED = "NOT YET IMPLEMENTED"; //$NON-NLS-1$
+	private static final String NOT_YET_IMPLEMENTED = "NOT YET IMPLEMENTED";
 
 	// W3C CSSValue API methods
 

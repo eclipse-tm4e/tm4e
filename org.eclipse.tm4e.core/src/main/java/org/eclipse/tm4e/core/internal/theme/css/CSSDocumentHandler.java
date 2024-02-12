@@ -16,42 +16,20 @@ import java.util.List;
 
 import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.eclipse.jdt.annotation.Nullable;
+import org.eclipse.tm4e.core.internal.theme.css.util.AbstractDocumentHandler;
 import org.eclipse.tm4e.core.theme.IStyle;
 import org.eclipse.tm4e.core.theme.RGB;
 import org.w3c.css.sac.CSSException;
-import org.w3c.css.sac.DocumentHandler;
-import org.w3c.css.sac.InputSource;
 import org.w3c.css.sac.LexicalUnit;
-import org.w3c.css.sac.SACMediaList;
 import org.w3c.css.sac.SelectorList;
 import org.w3c.dom.css.CSSPrimitiveValue;
 
 @NonNullByDefault({})
-public final class CSSDocumentHandler implements DocumentHandler {
+public final class CSSDocumentHandler extends AbstractDocumentHandler {
 
 	private final List<IStyle> list = new ArrayList<>();
 
 	private @Nullable CSSStyle currentStyle;
-
-	@Override
-	public void comment(final String arg0) throws CSSException {
-	}
-
-	@Override
-	public void endDocument(final InputSource arg0) throws CSSException {
-	}
-
-	@Override
-	public void endFontFace() throws CSSException {
-	}
-
-	@Override
-	public void endMedia(final SACMediaList arg0) throws CSSException {
-	}
-
-	@Override
-	public void endPage(final String arg0, final String arg1) throws CSSException {
-	}
 
 	@Override
 	public void endSelector(final SelectorList selector) throws CSSException {
@@ -59,21 +37,7 @@ public final class CSSDocumentHandler implements DocumentHandler {
 	}
 
 	@Override
-	public void ignorableAtRule(final String arg0) throws CSSException {
-	}
-
-	@Override
-	public void importStyle(final String arg0, final SACMediaList arg1, final String arg2)
-			throws CSSException {
-	}
-
-	@Override
-	public void namespaceDeclaration(final String arg0, final String arg1) throws CSSException {
-	}
-
-	@Override
-	public void property(final String name, final LexicalUnit value, final boolean arg2)
-			throws CSSException {
+	public void property(final String name, final LexicalUnit value, final boolean arg2) throws CSSException {
 		final var currentStyle = this.currentStyle;
 		if (currentStyle != null && name != null && value != null) {
 			switch (name) {
@@ -108,22 +72,6 @@ public final class CSSDocumentHandler implements DocumentHandler {
 		final int red = (int) rgbColor.getRed().getFloatValue(CSSPrimitiveValue.CSS_NUMBER);
 		final int blue = (int) rgbColor.getBlue().getFloatValue(CSSPrimitiveValue.CSS_NUMBER);
 		return new RGB(red, green, blue);
-	}
-
-	@Override
-	public void startDocument(final InputSource arg0) throws CSSException {
-	}
-
-	@Override
-	public void startFontFace() throws CSSException {
-	}
-
-	@Override
-	public void startMedia(final SACMediaList arg0) throws CSSException {
-	}
-
-	@Override
-	public void startPage(final String arg0, final String arg1) throws CSSException {
 	}
 
 	@Override

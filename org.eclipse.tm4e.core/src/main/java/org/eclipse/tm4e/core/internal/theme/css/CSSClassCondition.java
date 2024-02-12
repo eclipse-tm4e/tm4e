@@ -12,8 +12,9 @@
 package org.eclipse.tm4e.core.internal.theme.css;
 
 import org.eclipse.jdt.annotation.Nullable;
+import org.eclipse.tm4e.core.internal.theme.css.util.AbstractAttributeCondition;
 
-final class CSSClassCondition extends AbstractAttributeCondition {
+final class CSSClassCondition extends AbstractAttributeCondition implements ExtendedCondition {
 
 	protected CSSClassCondition(final @Nullable String localName, final @Nullable String namespaceURI, final String value) {
 		super(localName, namespaceURI, value);

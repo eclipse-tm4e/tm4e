@@ -9,7 +9,7 @@
  * Contributors:
  * Angelo Zerr <angelo.zerr@gmail.com> - initial API and implementation
  */
-package org.eclipse.tm4e.core.internal.theme.css;
+package org.eclipse.tm4e.core.internal.theme.css.util;
 
 import org.eclipse.jdt.annotation.Nullable;
 import org.w3c.css.sac.AttributeCondition;
@@ -18,7 +18,7 @@ import org.w3c.css.sac.AttributeCondition;
  * @see <a href=
  *      "https://github.com/eclipse-platform/eclipse.platform.ui/blob/master/bundles/org.eclipse.e4.ui.css.core/src/org/eclipse/e4/ui/css/core/impl/sac/AbstractAttributeCondition.java">github.com/eclipse-platform/eclipse.platform.ui/blob/master/bundles/org.eclipse.e4.ui.css.core/src/org/eclipse/e4/ui/css/core/impl/sac/AbstractAttributeCondition.java</a>
  */
-abstract class AbstractAttributeCondition implements AttributeCondition, ExtendedCondition {
+public abstract class AbstractAttributeCondition implements AttributeCondition {
 
 	/**
 	 * The attribute's local name.
@@ -36,7 +36,7 @@ abstract class AbstractAttributeCondition implements AttributeCondition, Extende
 	/**
 	 * Creates a new AbstractAttributeCondition object.
 	 */
-	AbstractAttributeCondition(final @Nullable String localName, final @Nullable String namespaceURI, final String value) {
+	protected AbstractAttributeCondition(final @Nullable String localName, final @Nullable String namespaceURI, final String value) {
 		this.localName = localName;
 		this.namespaceURI = namespaceURI;
 		this.value = value;

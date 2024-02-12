@@ -9,7 +9,7 @@
  * Contributors:
  * Angelo Zerr <angelo.zerr@gmail.com> - initial API and implementation
  */
-package org.eclipse.tm4e.core.internal.theme.css;
+package org.eclipse.tm4e.core.internal.theme.css.util;
 
 import org.eclipse.jdt.annotation.Nullable;
 import org.w3c.css.sac.ElementSelector;
@@ -18,7 +18,7 @@ import org.w3c.css.sac.ElementSelector;
  * @see <a href=
  *      "https://github.com/eclipse-platform/eclipse.platform.ui/blob/master/bundles/org.eclipse.e4.ui.css.core/src/org/eclipse/e4/ui/css/core/impl/sac/AbstractElementSelector.java">github.com/eclipse-platform/eclipse.platform.ui/blob/master/bundles/org.eclipse.e4.ui.css.core/src/org/eclipse/e4/ui/css/core/impl/sac/AbstractElementSelector.java</a>
  */
-abstract class AbstractElementSelector implements ElementSelector, ExtendedSelector {
+public abstract class AbstractElementSelector implements ElementSelector {
 
 	/** The namespace URI */
 	private final @Nullable String namespaceURI;
@@ -29,7 +29,7 @@ abstract class AbstractElementSelector implements ElementSelector, ExtendedSelec
 	/**
 	 * Creates a new ElementSelector object.
 	 */
-	AbstractElementSelector(final @Nullable String uri, final @Nullable String name) {
+	protected AbstractElementSelector(final @Nullable String uri, final @Nullable String name) {
 		namespaceURI = uri;
 		localName = name;
 	}

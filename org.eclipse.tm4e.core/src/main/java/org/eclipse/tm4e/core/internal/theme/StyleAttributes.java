@@ -24,7 +24,7 @@ import org.eclipse.jdt.annotation.Nullable;
  *      github.com/microsoft/vscode-textmate/blob/main/src/theme.ts</a>
  */
 public class StyleAttributes {
-	private static final StyleAttributes NO_STYLE = new StyleAttributes(-1, 0, 0);
+	public static final StyleAttributes NO_STYLE = new StyleAttributes(-1, 0, 0);
 
 	/** @see FontStyle */
 	public final int fontStyle;

@@ -7,32 +7,25 @@
  * SPDX-License-Identifier: EPL-2.0
  *
  * Contributors:
- * Angelo Zerr <angelo.zerr@gmail.com> - initial API and implementation
+ * - Angelo Zerr <angelo.zerr@gmail.com> - initial API and implementation
+ * - Sebastian Thomschke (Vegard IT) - reusable code pushed down to AbstractTokenProvider
  */
 package org.eclipse.tm4e.ui.themes.css;
 
 import java.io.InputStream;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
 
 import org.eclipse.jdt.annotation.Nullable;
-import org.eclipse.jface.text.TextAttribute;
-import org.eclipse.jface.text.rules.IToken;
-import org.eclipse.jface.text.rules.Token;
-import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.tm4e.core.internal.utils.StringUtils;
 import org.eclipse.tm4e.core.theme.IStyle;
-import org.eclipse.tm4e.core.theme.RGB;
 import org.eclipse.tm4e.core.theme.css.CSSParser;
 import org.eclipse.tm4e.ui.TMUIPlugin;
+import org.eclipse.tm4e.ui.internal.themes.AbstractTokenProvider;
 import org.eclipse.tm4e.ui.themes.ColorManager;
-import org.eclipse.tm4e.ui.themes.ITokenProvider;
 
-public class CSSTokenProvider implements ITokenProvider {
+public class CSSTokenProvider extends AbstractTokenProvider {
 
 	private static final class NoopCSSParser extends CSSParser {
 		@Override
@@ -46,28 +39,12 @@ public class CSSTokenProvider implements ITokenProvider {
 		}
 	}
 
-	private final Map<IStyle, @Nullable IToken> tokenMaps = new HashMap<>();
-	private final Map<String, IToken> getTokenReturnValueCache = new ConcurrentHashMap<>();
-
 	private final CSSParser parser;
 
 	public CSSTokenProvider(final InputStream in) {
 		CSSParser parser = null;
-		final var colors = ColorManager.getInstance();
 		try {
 			parser = new CSSParser(in);
-			for (final IStyle style : parser.getStyles()) {
-				final @Nullable RGB styleFGColor = style.getColor();
-				final @Nullable RGB styleBGColor = style.getBackgroundColor();
-				tokenMaps.put(style, new Token(new TextAttribute(
-						styleFGColor == null ? null : colors.getColor(styleFGColor),
-						styleBGColor == null ? null : colors.getColor(styleBGColor),
-						SWT.NORMAL
-								| (style.isBold() ? SWT.BOLD : 0)
-								| (style.isItalic() ? SWT.ITALIC : 0)
-								| (style.isUnderline() ? TextAttribute.UNDERLINE : 0)
-								| (style.isStrikeThrough() ? TextAttribute.STRIKETHROUGH : 0))));
-			}
 		} catch (final Exception ex) {
 			TMUIPlugin.logError(ex);
 		}
@@ -76,19 +53,8 @@ public class CSSTokenProvider implements ITokenProvider {
 	}
 
 	@Override
-	public IToken getToken(final String textMateTokenType) {
-		if (textMateTokenType.isEmpty())
-			return DEFAULT_TOKEN;
-
-		return getTokenReturnValueCache.computeIfAbsent(textMateTokenType, this::getTokenInternal);
-	}
-
-	private IToken getTokenInternal(final String type) {
-		final IStyle style = parser.getBestStyle(StringUtils.splitToArray(type, '.'));
-		if (style == null)
-			return DEFAULT_TOKEN;
-		final IToken token = tokenMaps.get(style);
-		return token == null ? DEFAULT_TOKEN : token;
+	protected @Nullable IStyle getBestStyle(String textMateTokenType) {
+		return parser.getBestStyle(StringUtils.splitToArray(textMateTokenType, '.'));
 	}
 
 	private @Nullable Color getColor(final boolean isForeground, final String... cssClassNames) {

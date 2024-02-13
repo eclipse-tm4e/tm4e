@@ -12,6 +12,9 @@
 package org.eclipse.tm4e.core.internal.theme.raw;
 
 import java.util.Collection;
+import java.util.Collections;
+import java.util.Map;
+import java.util.Objects;
 
 import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.tm4e.core.internal.parser.PropertySettable;
@@ -32,7 +35,30 @@ public final class RawTheme extends PropertySettable.HashMap<@Nullable Object>
 	@Override
 	@SuppressWarnings("unchecked")
 	public @Nullable Collection<IRawThemeSetting> getSettings() {
-		return (Collection<IRawThemeSetting>) super.get("settings");
+		// vscode themes only
+		if (get("tokenColors") instanceof final Collection settings)
+			return settings;
+
+		return (Collection<IRawThemeSetting>) get("settings");
+	}
+
+	// custom tm4e code, not from upstream
+	@Override
+	@SuppressWarnings("unchecked")
+	public Map<String, String> getEditorColors() {
+		// vscode themes only
+		if (get("colors") instanceof final Map colors)
+			return colors;
+
+		final var settings = getSettings();
+		return settings == null
+				? Collections.emptyMap()
+				: settings.stream()
+						.filter(s -> s.getScope() == null)
+						.map(s -> ((Map<String, Map<String, String>>) s).get("settings"))
+						.filter(Objects::nonNull)
+						.findFirst()
+						.orElse(Collections.emptyMap());
 	}
 
 	/*

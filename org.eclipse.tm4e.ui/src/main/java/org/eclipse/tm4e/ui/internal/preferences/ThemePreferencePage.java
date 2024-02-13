@@ -13,14 +13,15 @@
  *******************************************************************************/
 package org.eclipse.tm4e.ui.internal.preferences;
 
-import static org.eclipse.tm4e.core.internal.utils.NullSafetyHelper.lazyNonNull;
+import static org.eclipse.tm4e.core.internal.utils.NullSafetyHelper.*;
 
-import java.io.File;
+import java.nio.file.Path;
 import java.util.stream.Stream;
 
 import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.jface.dialogs.Dialog;
+import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.jface.viewers.ArrayContentProvider;
 import org.eclipse.jface.viewers.ComboViewer;
@@ -34,6 +35,8 @@ import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.FileDialog;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.tm4e.core.grammar.IGrammar;
+import org.eclipse.tm4e.core.internal.theme.raw.RawThemeReader;
+import org.eclipse.tm4e.core.registry.IThemeSource;
 import org.eclipse.tm4e.registry.IGrammarDefinition;
 import org.eclipse.tm4e.registry.IGrammarRegistryManager;
 import org.eclipse.tm4e.registry.TMEclipseRegistryPlugin;
@@ -156,14 +159,24 @@ public final class ThemePreferencePage extends AbstractPreferencePage {
 			private @Nullable ITheme openBrowseForThemeDialog() {
 				final var dialog = new FileDialog(getShell());
 				dialog.setText("Select textmate theme file");
-				dialog.setFilterExtensions(new String[] { "*.css" });
+				dialog.setFilterExtensions(new String[] { "*.css;*.json;*.plist;*.tmTheme;*.YAML-tmTheme" });
 				final String res = dialog.open();
 				if (res == null) {
 					return null;
 				}
-				final var file = new File(res);
-				final String name = file.getName().substring(0, file.getName().length() - ".css".length());
-				return new Theme(name, file.getAbsolutePath(), name, false);
+				final var themePath = Path.of(res);
+				final var themeFileName = themePath.getFileName().toString();
+				try {
+					final var rawTheme = RawThemeReader.readTheme(IThemeSource.fromFile(themePath));
+					final String name = castNonNull(rawTheme.getName() == null
+							? themeFileName.substring(0, themeFileName.lastIndexOf('.'))
+							: rawTheme.getName());
+					return new Theme(name, themePath.toAbsolutePath().toString(), name, false);
+				} catch (Exception ex) {
+					MessageDialog.openError(getShell(), "Invalid theme file", "Failed to parse [" + themePath + "]: " + ex);
+					return null;
+				}
+
 			}
 		};
 

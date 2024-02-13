@@ -19,9 +19,11 @@ import org.eclipse.jface.text.rules.IToken;
 import org.eclipse.swt.custom.StyledText;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.tm4e.core.internal.utils.StringUtils;
+import org.eclipse.tm4e.core.registry.IThemeSource.ContentType;
 import org.eclipse.tm4e.registry.TMResource;
 import org.eclipse.tm4e.registry.XMLConstants;
 import org.eclipse.tm4e.ui.TMUIPlugin;
+import org.eclipse.tm4e.ui.internal.themes.TMThemeTokenProvider;
 import org.eclipse.tm4e.ui.internal.utils.UI;
 import org.eclipse.tm4e.ui.themes.css.CSSTokenProvider;
 import org.eclipse.ui.texteditor.AbstractDecoratedTextEditorPreferenceConstants;
@@ -146,7 +148,16 @@ public class Theme extends TMResource implements ITheme {
 	private ITokenProvider getTokenProvider() {
 		if (tokenProvider == null || isModified()) {
 			try (InputStream in = getInputStream()) {
-				tokenProvider = new CSSTokenProvider(in);
+				final var path = getPath();
+				final String extension = path.substring(path.lastIndexOf('.') + 1).trim().toLowerCase();
+
+				tokenProvider = switch (extension) {
+					case "css" -> new CSSTokenProvider(in);
+					case "json" -> new TMThemeTokenProvider(ContentType.JSON, in);
+					case "yaml", "yaml-tmtheme", "yml" -> new TMThemeTokenProvider(ContentType.YAML, in);
+					case "plist", "tmtheme", "xml" -> new TMThemeTokenProvider(ContentType.XML, in);
+					default -> throw new IllegalArgumentException("Unsupported file type: " + path);
+				};
 			} catch (final Exception ex) {
 				TMUIPlugin.logError(ex);
 				return null;

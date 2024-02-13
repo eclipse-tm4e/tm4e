@@ -13,6 +13,7 @@
 package org.eclipse.tm4e.core.internal.utils;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
@@ -73,6 +74,10 @@ public final class MoreCollections {
 	 */
 	public static <T> T getLastElement(final List<T> list) {
 		return list.get(list.size() - 1);
+	}
+
+	public static <T> Collection<T> nullToEmpty(@Nullable final Collection<T> coll) {
+		return coll == null ? Collections.emptyList() : coll;
 	}
 
 	public static <T> List<T> nullToEmpty(@Nullable final List<T> list) {

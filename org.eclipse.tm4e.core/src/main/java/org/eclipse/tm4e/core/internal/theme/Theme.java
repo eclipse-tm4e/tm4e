@@ -40,7 +40,14 @@ import org.eclipse.tm4e.core.internal.utils.StringUtils;
 public final class Theme {
 
 	public static Theme createFromRawTheme(@Nullable final IRawTheme source, @Nullable final List<String> colorMap) {
-		return createFromParsedTheme(parseTheme(source), colorMap);
+		final var theme = createFromParsedTheme(parseTheme(source), colorMap);
+
+		// custom tm4e code, not from upstream
+		if (source != null) {
+			theme.editorColors = source.getEditorColors();
+		}
+
+		return theme;
 	}
 
 	public static Theme createFromParsedTheme(final List<ParsedThemeRule> source, @Nullable final List<String> colorMap) {
@@ -52,6 +59,7 @@ public final class Theme {
 	private final ColorMap _colorMap;
 	private final StyleAttributes _defaults;
 	private final ThemeTrieElement _root;
+	private Map<String, String> editorColors = Collections.emptyMap(); // custom tm4e code, not from upstream
 
 	public Theme(final ColorMap colorMap, final StyleAttributes defaults, final ThemeTrieElement root) {
 		this._colorMap = colorMap;
@@ -65,6 +73,10 @@ public final class Theme {
 
 	public StyleAttributes getDefaults() {
 		return this._defaults;
+	}
+
+	public Map<String, String> getEditorColors() { // custom tm4e code, not from upstream
+		return editorColors;
 	}
 
 	public @Nullable StyleAttributes match(@Nullable final ScopeStack scopePath) {
@@ -153,11 +165,11 @@ public final class Theme {
 			}
 
 			int fontStyle = FontStyle.NotSet;
-			final var settingsFontStyle = entrySetting.getFontStyle();
-			if (settingsFontStyle instanceof final String style) {
+			final String settingsFontStyle = entrySetting.getFontStyle();
+			if (settingsFontStyle != null) {
 				fontStyle = FontStyle.None;
 
-				final var segments = StringUtils.splitToArray(style, ' ');
+				final var segments = StringUtils.splitToArray(settingsFontStyle, ' ');
 				for (final var segment : segments) {
 					switch (segment) {
 						case "italic":

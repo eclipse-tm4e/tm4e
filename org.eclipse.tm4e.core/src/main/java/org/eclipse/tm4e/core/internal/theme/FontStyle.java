@@ -7,7 +7,8 @@
  * SPDX-License-Identifier: EPL-2.0
  *
  * Contributors:
- * Angelo Zerr <angelo.zerr@gmail.com> - initial API and implementation
+ * - Angelo Zerr <angelo.zerr@gmail.com> - initial API and implementation
+ * - Sebastian Thomschke - added isBold/isItalic/isStrikethrough/isUnderline
  */
 package org.eclipse.tm4e.core.internal.theme;
 
@@ -38,16 +39,16 @@ public final class FontStyle {
 		}
 
 		final var style = new StringBuilder();
-		if ((fontStyle & Italic) == Italic) {
+		if (isItalic(fontStyle)) {
 			style.append("italic ");
 		}
-		if ((fontStyle & Bold) == Bold) {
+		if (isBold(fontStyle)) {
 			style.append("bold ");
 		}
-		if ((fontStyle & Underline) == Underline) {
+		if (isUnderline(fontStyle)) {
 			style.append("underline ");
 		}
-		if ((fontStyle & Strikethrough) == Strikethrough) {
+		if (isStrikethrough(fontStyle)) {
 			style.append("strikethrough ");
 		}
 		if (style.isEmpty()) {
@@ -55,6 +56,22 @@ public final class FontStyle {
 		}
 		style.setLength(style.length() - 1);
 		return style.toString();
+	}
+
+	public static boolean isBold(final int fontStyle) {
+		return (fontStyle & Bold) == Bold;
+	}
+
+	public static boolean isItalic(final int fontStyle) {
+		return (fontStyle & Italic) == Italic;
+	}
+
+	public static boolean isUnderline(final int fontStyle) {
+		return (fontStyle & Underline) == Underline;
+	}
+
+	public static boolean isStrikethrough(final int fontStyle) {
+		return (fontStyle & Strikethrough) == Strikethrough;
 	}
 
 	private FontStyle() {

@@ -12,6 +12,7 @@
 package org.eclipse.tm4e.core.internal.theme.raw;
 
 import java.util.Collection;
+import java.util.Map;
 
 import org.eclipse.jdt.annotation.Nullable;
 
@@ -27,4 +28,5 @@ public interface IRawTheme {
 	@Nullable
 	Collection<IRawThemeSetting> getSettings();
 
+	Map<String, String> getEditorColors(); // custom tm4e code, not from upstream
 }

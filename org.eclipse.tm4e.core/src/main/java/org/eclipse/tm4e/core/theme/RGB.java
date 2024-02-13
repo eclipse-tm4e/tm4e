@@ -8,13 +8,25 @@
  *
  * Contributors:
  * - Angelo Zerr <angelo.zerr@gmail.com> - initial API and implementation
- * - Sebastian Thomschke (Vegard IT) - add hashCode/equals methods
+ * - Sebastian Thomschke (Vegard IT) - add methods hashCode/equals, fromHex(String)
  */
 package org.eclipse.tm4e.core.theme;
 
 import org.eclipse.jdt.annotation.Nullable;
 
 public class RGB {
+
+	public static @Nullable RGB fromHex(final @Nullable String hex) {
+		if (hex == null || hex.isBlank())
+			return null;
+
+		final var offset = hex.startsWith("#") ? 1 : 0;
+		final int r = Integer.parseInt(hex.substring(offset + 0, offset + 2), 16);
+		final int g = Integer.parseInt(hex.substring(offset + 2, offset + 4), 16);
+		final int b = Integer.parseInt(hex.substring(offset + 4, offset + 6), 16);
+
+		return new RGB(r, g, b);
+	}
 
 	public final int red;
 	public final int green;

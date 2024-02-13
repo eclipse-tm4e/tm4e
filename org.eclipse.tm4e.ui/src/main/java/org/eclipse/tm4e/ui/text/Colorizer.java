@@ -211,7 +211,7 @@ class Colorizer {
 			isViewerStyleColorsInitialized = true;
 		}
 
-		if (isViewerHighlightColorInitialized) {
+		if (!isViewerHighlightColorInitialized) {
 			try {
 				// Ugly code to update "current line highlight" :
 				// - get the PaintManager from the ITextViewer with reflection.

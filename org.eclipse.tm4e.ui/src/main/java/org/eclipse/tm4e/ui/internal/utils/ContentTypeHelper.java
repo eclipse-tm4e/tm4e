@@ -11,6 +11,9 @@
  */
 package org.eclipse.tm4e.ui.internal.utils;
 
+import java.io.BufferedInputStream;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.util.Arrays;
 import java.util.LinkedHashSet;
@@ -145,10 +148,21 @@ public final class ContentTypeHelper {
 	private static InputStream getContents(final ITextFileBuffer buffer) throws CoreException {
 		final IPath path = buffer.getLocation();
 		if (path != null) {
-			final IWorkspaceRoot workspaceRoot = ResourcesPlugin.getWorkspace().getRoot();
-			final IFile file = workspaceRoot.getFile(path);
-			if (file.exists() && buffer.isSynchronized()) {
-				return file.getContents();
+			if (path.isAbsolute()) {
+				final var file = path.toFile();
+				if(file.exists()) {
+					try {
+						return new BufferedInputStream(new FileInputStream(file));
+					} catch (FileNotFoundException ex) {
+						TMUIPlugin.logError(ex);
+					}
+				}
+			} else {
+				final IWorkspaceRoot workspaceRoot = ResourcesPlugin.getWorkspace().getRoot();
+				final IFile file = workspaceRoot.getFile(path);
+				if (file.exists() && buffer.isSynchronized()) {
+					return file.getContents();
+				}
 			}
 		}
 		return buffer.getFileStore().openInputStream(EFS.NONE, null);

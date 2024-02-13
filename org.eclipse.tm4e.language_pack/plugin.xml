@@ -45,6 +45,13 @@
     <scopeNameContentTypeBinding scopeName="source.jikespg" contentTypeId="org.eclipse.tm4e.language_pack.jikespg" />
   </extension>
 
+  <!-- ======================================== -->
+  <!-- XML                                      -->
+  <!-- ======================================== -->
+  <extension point="org.eclipse.tm4e.registry.grammars">
+    <scopeNameContentTypeBinding scopeName="text.xml" contentTypeId="org.eclipse.core.runtime.xml"  />
+  </extension>
+
   <!-- START-GENERATED -->
 
   <!-- ======================================== -->

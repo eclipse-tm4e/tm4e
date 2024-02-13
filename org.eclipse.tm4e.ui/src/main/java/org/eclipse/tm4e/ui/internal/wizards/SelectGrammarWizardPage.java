@@ -15,6 +15,8 @@ package org.eclipse.tm4e.ui.internal.wizards;
 import static org.eclipse.tm4e.core.internal.utils.NullSafetyHelper.lazyNonNull;
 
 import java.nio.file.Paths;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IFile;
@@ -57,6 +59,7 @@ final class SelectGrammarWizardPage extends AbstractWizardPage {
 	private static final String PAGE_NAME = SelectGrammarWizardPage.class.getName();
 
 	private static final String[] TEXTMATE_GRAMMAR_FILE_FILTERS = {
+		"*.plist",
 		"*.tmLanguage",
 		"*.json",
 		"*.YAML-tmLanguage",
@@ -97,7 +100,7 @@ final class SelectGrammarWizardPage extends AbstractWizardPage {
 			@Override
 			public void widgetSelected(final @Nullable SelectionEvent e) {
 				final var dialog = new FileDialog(parent.getShell());
-				dialog.setFilterExtensions(TEXTMATE_GRAMMAR_FILE_FILTERS);
+				dialog.setFilterExtensions(new String[] { Stream.of(TEXTMATE_GRAMMAR_FILE_FILTERS).collect(Collectors.joining(";")) });
 				dialog.setFilterPath(grammarFileText.getText());
 				final String result = dialog.open();
 				if (result != null && !result.isEmpty()) {
@@ -124,7 +127,7 @@ final class SelectGrammarWizardPage extends AbstractWizardPage {
 							return false;
 						ext = "*." + ext.toLowerCase();
 						for (final var pattern : TEXTMATE_GRAMMAR_FILE_FILTERS) {
-							if (pattern.equals(ext))
+							if (pattern.toLowerCase().equals(ext))
 								return true;
 						}
 						return false;

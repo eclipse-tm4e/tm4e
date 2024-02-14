@@ -403,12 +403,16 @@ public class Updater {
 				fileExtensions = fileExtensions.stream().distinct().sorted().toList();
 				fileNames = fileNames.stream().distinct().sorted().toList();
 				filePatterns = filePatterns.stream().distinct().sorted().toList();
-
-				templateVars.put("file_associations", Arrays.asList( //
+				final String fileAssociations = Arrays.asList( //
 						fileExtensions.isEmpty() ? null : "file-extensions=\"" + join(fileExtensions, ",") + "\"", //
 						fileNames.isEmpty() ? null : "file-names=\"" + join(fileNames, ",") + "\"", //
 						filePatterns.isEmpty() ? null : "file-patterns=\"" + join(filePatterns, ",") + "\"" //
-				).stream().filter(Objects::nonNull).collect(Collectors.joining(" ")));
+				).stream().filter(Objects::nonNull).collect(Collectors.joining(" "));
+
+				templateVars.put("file_associations",
+						fileAssociations.isBlank()
+								? "file-names=\"WORKAROUND_SO_THAT_THIS_CONTENTTYPE_IS_NOT_ASSOCIATED_WITH_TXT_FILES_SEE_ISSUE_703\""
+								: fileAssociations);
 
 				pluginLines.append(render(
 						"""

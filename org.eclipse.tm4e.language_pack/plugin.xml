@@ -9,7 +9,8 @@
     <content-type id="org.eclipse.tm4e.language_pack.basetype"
       base-type="org.eclipse.core.runtime.text"
       name="Text (Syntax Highlighting)"
-      priority="low" />
+      priority="low"
+      file-names="WORKAROUND_SO_THAT_THIS_CONTENTTYPE_IS_NOT_ASSOCIATED_WITH_TXT_FILES_SEE_ISSUE_703" />
   </extension>
 
   <!-- use "Generic Text Editor" for all contributes languages -->
@@ -679,7 +680,7 @@
   <!-- ======================================== -->
   <extension point="org.eclipse.core.contenttype.contentTypes">
     <content-type id="org.eclipse.tm4e.language_pack.cpp_embedded_latex" name="C++ embedded Latex" base-type="org.eclipse.tm4e.language_pack.basetype" priority="low"
-                   />
+                  file-names="WORKAROUND_SO_THAT_THIS_CONTENTTYPE_IS_NOT_ASSOCIATED_WITH_TXT_FILES_SEE_ISSUE_703" />
   </extension>
   <extension point="org.eclipse.tm4e.registry.grammars">
     <grammar scopeName="source.cpp.embedded.latex" path="syntaxes/latex/cpp_embedded_latex.tmLanguage.json" />
@@ -715,7 +716,7 @@
   <!-- ======================================== -->
   <extension point="org.eclipse.core.contenttype.contentTypes">
     <content-type id="org.eclipse.tm4e.language_pack.markdown_latex_combined" name="Markdown Latex combined" base-type="org.eclipse.tm4e.language_pack.basetype" priority="low"
-                   />
+                  file-names="WORKAROUND_SO_THAT_THIS_CONTENTTYPE_IS_NOT_ASSOCIATED_WITH_TXT_FILES_SEE_ISSUE_703" />
   </extension>
   <extension point="org.eclipse.tm4e.registry.grammars">
     <grammar scopeName="text.tex.markdown_latex_combined" path="syntaxes/latex/markdown_latex_combined.tmLanguage.json" />
@@ -831,7 +832,7 @@
   <!-- ======================================== -->
   <extension point="org.eclipse.core.contenttype.contentTypes">
     <content-type id="org.eclipse.tm4e.language_pack.markdown-math" name="Markdown Math" base-type="org.eclipse.tm4e.language_pack.basetype" priority="low"
-                   />
+                  file-names="WORKAROUND_SO_THAT_THIS_CONTENTTYPE_IS_NOT_ASSOCIATED_WITH_TXT_FILES_SEE_ISSUE_703" />
   </extension>
   <extension point="org.eclipse.tm4e.registry.grammars">
     <grammar scopeName="text.html.markdown.math" path="syntaxes/markdown-math/markdown-math.tmLanguage.json" />

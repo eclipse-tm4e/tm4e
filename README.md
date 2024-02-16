@@ -19,6 +19,18 @@ You can install TM4E with the update site [https://download.eclipse.org/tm4e/sna
 
 [more information coming soon]
 
+### Eclipse IDE compatibility
+
+TM4E version | Min. Eclipse version
+-------------|--------------------
+[latest](https://download.eclipse.org/tm4e/releases/latest/) | [2023-09](https://projects.eclipse.org/releases/2023-09) ([4.29](https://projects.eclipse.org/projects/eclipse/releases/4.29.0))
+[0.9.0](https://download.eclipse.org/tm4e/releases/0.9/)+    | [2023-09](https://projects.eclipse.org/releases/2023-09) ([4.29](https://projects.eclipse.org/projects/eclipse/releases/4.29.0))
+[0.8.1](https://download.eclipse.org/tm4e/releases/0.8.1/)+  | [2023-06](https://projects.eclipse.org/releases/2023-06) ([4.28](https://projects.eclipse.org/projects/eclipse/releases/4.28.0))
+[0.8](https://download.eclipse.org/tm4e/releases/0.8/)+      | [2023-03](https://projects.eclipse.org/releases/2023-03) ([4.27](https://projects.eclipse.org/projects/eclipse/releases/4.27.0))
+[0.6.3](https://download.eclipse.org/tm4e/releases/0.6.3/)+  | [2022-12](https://projects.eclipse.org/releases/2022-12) ([4.26](https://projects.eclipse.org/projects/eclipse/releases/4.26.0))
+[0.6.2](https://download.eclipse.org/tm4e/releases/0.6.2/)+  | [2022-09](https://projects.eclipse.org/releases/2022-09) ([4.25](https://projects.eclipse.org/projects/eclipse/releases/4.25.0))
+[0.6.0](https://download.eclipse.org/tm4e/releases/0.6.0/)+  | [2022-03](https://projects.eclipse.org/releases/2022-03) ([4.23](https://projects.eclipse.org/projects/eclipse/releases/4.23.0))
+
 
 ## ⌨️ Code
 

@@ -279,6 +279,14 @@ public class Updater {
 		logHeader("** DONE **");
 	}
 
+	private String getIconFileName(final Path syntaxDir, final String langId) {
+		return Files.exists(syntaxDir.resolve(langId + ".icon.png"))
+				? langId + ".icon.png"
+				: Files.exists(syntaxDir.resolve("icon.png"))
+						? "icon.png"
+						: null;
+	}
+
 	private void updateAboutHTML() throws IOException {
 		logHeader("Updating [about.html.]...");
 
@@ -295,8 +303,7 @@ public class Updater {
 				}
 
 				final var syntaxDir = syntaxesDir.resolve(extId);
-				final var iconFileName = Files.exists(syntaxDir.resolve(langId + ".png")) ? langId + ".png"
-						: Files.exists(syntaxDir.resolve("icon.png")) ? "icon.png" : null;
+				final var iconFileName = getIconFileName(syntaxDir, langId);
 
 				final var templateVars = new HashMap<String, Object>();
 
@@ -357,8 +364,7 @@ public class Updater {
 				final var grammarFile = findFirstFile(syntaxDir, //
 						f -> f.matches(Pattern.quote(langId) + "[.]tmLanguage[.](yaml|json|plist)"));
 
-				final var iconFileName = Files.exists(syntaxDir.resolve(langId + ".png")) ? langId + ".png"
-						: Files.exists(syntaxDir.resolve("icon.png")) ? "icon.png" : null;
+				final var iconFileName = getIconFileName(syntaxDir, langId);
 
 				final var exampleFile = findFirstFile(syntaxDir, //
 						f -> f.matches(Pattern.quote(langId) + "[.]example[.].*"));
@@ -509,8 +515,7 @@ public class Updater {
 				}
 
 				final var syntaxDir = syntaxesDir.resolve(extId);
-				final var iconFileName = Files.exists(syntaxDir.resolve(langId + ".png")) ? langId + ".png"
-						: Files.exists(syntaxDir.resolve("icon.png")) ? "icon.png" : null;
+				final var iconFileName = getIconFileName(syntaxDir, langId);
 
 				final var templateVars = new HashMap<String, Object>();
 

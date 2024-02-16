@@ -88,7 +88,7 @@
   </extension>
 
   <extension point="org.eclipse.ui.genericeditor.icons">
-    <icon contentType="org.eclipse.tm4e.language_pack.bat" icon="syntaxes/bat/bat.png"/>
+    <icon contentType="org.eclipse.tm4e.language_pack.bat" icon="syntaxes/bat/bat.icon.png"/>
   </extension>
 
   <extension point="org.eclipse.tm4e.ui.snippets">
@@ -112,7 +112,7 @@
   </extension>
 
   <extension point="org.eclipse.ui.genericeditor.icons">
-    <icon contentType="org.eclipse.tm4e.language_pack.clojure" icon="syntaxes/clojure/clojure.png"/>
+    <icon contentType="org.eclipse.tm4e.language_pack.clojure" icon="syntaxes/clojure/clojure.icon.png"/>
   </extension>
 
   <extension point="org.eclipse.tm4e.ui.snippets">
@@ -136,7 +136,7 @@
   </extension>
 
   <extension point="org.eclipse.ui.genericeditor.icons">
-    <icon contentType="org.eclipse.tm4e.language_pack.coffeescript" icon="syntaxes/coffeescript/coffeescript.png"/>
+    <icon contentType="org.eclipse.tm4e.language_pack.coffeescript" icon="syntaxes/coffeescript/coffeescript.icon.png"/>
   </extension>
 
   <extension point="org.eclipse.tm4e.ui.snippets">
@@ -1132,7 +1132,7 @@
   </extension>
 
   <extension point="org.eclipse.ui.genericeditor.icons">
-    <icon contentType="org.eclipse.tm4e.language_pack.rust" icon="syntaxes/rust/rust.png"/>
+    <icon contentType="org.eclipse.tm4e.language_pack.rust" icon="syntaxes/rust/rust.icon.png"/>
   </extension>
 
   <extension point="org.eclipse.tm4e.ui.snippets">

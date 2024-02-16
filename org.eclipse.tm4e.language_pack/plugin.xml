@@ -50,10 +50,23 @@
   </extension>
 
   <!-- ======================================== -->
+  <!-- Eclipse Simrel Aggregator Model          -->
+  <!-- ======================================== -->
+  <extension point="org.eclipse.core.contenttype.contentTypes">
+    <content-type id="org.eclipse.tm4e.language_pack.aggr" name="Eclipse Simrel Aggregator Model" base-type="org.eclipse.core.runtime.xml" priority="low"
+                  file-extensions="aggr,aggrcon">
+      <!-- see https://wiki.eclipse.org/Simrel/Contributing_to_Simrel_Aggregation_Build#Configuring_the_workspace_content_types -->
+    </content-type>
+  </extension>
+
+  <!-- ======================================== -->
   <!-- XML                                      -->
   <!-- ======================================== -->
   <extension point="org.eclipse.tm4e.registry.grammars">
-    <scopeNameContentTypeBinding scopeName="text.xml" contentTypeId="org.eclipse.core.runtime.xml"  />
+    <scopeNameContentTypeBinding scopeName="text.xml" contentTypeId="org.eclipse.core.runtime.xml">
+      <!-- this binds XML content type to the text.xml TextMate grammar scope. -->
+      <!-- this allows automatic syntax highlighting of all XML files when opened with the GenericEditor -->
+    </scopeNameContentTypeBinding>
   </extension>
 
   <!-- START-GENERATED -->

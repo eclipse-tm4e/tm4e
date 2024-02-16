@@ -19,6 +19,7 @@
 		<tycho.scmUrl>scm:git:https://github.com/eclipse/tm4e.git</tycho.scmUrl>
 		<jgit.dirtyWorkingTree>error</jgit.dirtyWorkingTree>
 		<tycho-surefire-plugin.platformArgs></tycho-surefire-plugin.platformArgs>
+		<tm4e.target-platform>oldest</tm4e.target-platform>
 	</properties>
 	<organization>
 		<name>Eclipse TM4E project</name>
@@ -34,7 +35,6 @@
 		</license>
 	</licenses>
 	<modules>
-		<module>target-platform</module>
 		<module>org.eclipse.tm4e.core</module>
 		<module>org.eclipse.tm4e.core.tests</module>
 		<module>org.eclipse.tm4e.registry</module>
@@ -83,11 +83,7 @@
 				<configuration>
 					<pomDependencies>consider</pomDependencies>
 					<target>
-						<artifact>
-							<groupId>org.eclipse.tm4e</groupId>
-							<artifactId>tm4e-target</artifactId>
-							<version>0.10.1-SNAPSHOT</version>
-						</artifact>
+						<file>${maven.multiModuleProjectDirectory}/target-platforms/${tm4e.target-platform}.target</file>
 					</target>
 				</configuration>
 			</plugin>

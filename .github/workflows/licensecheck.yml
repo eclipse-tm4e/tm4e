@@ -44,10 +44,23 @@ jobs:
     - name: "Cache: Local Maven Repository"
       uses: actions/cache@v4
       with:
+        # Excluded sub directory not working https://github.com/actions/cache/issues/494#issuecomment-948783891
         path: |
-          ~/.m2/repository
-          !~/.m2/**/*SNAPSHOT*
-        key: ${{ runner.os }}-mvnrepo-${{ hashFiles('**/pom.xml') }}-${{ hashFiles('**/target-platform/tm4e-target.target') }}
+          ~/.m2/repository/*
+          !~/.m2/repository/.cache/tycho
+          !~/.m2/repository/.meta/p2-artifacts.properties
+          !~/.m2/repository/p2
+          !~/.m2/repository/*SNAPSHOT*
+        key: ${{ runner.os }}-repo-mvn-${{ hashFiles('**/pom.xml') }}
+
+    - name: "Cache: Local Tycho Repository"
+      uses: actions/cache@v4
+      with:
+        path: |
+          ~/.m2/repository/.cache/tycho
+          ~/.m2/repository/.meta/p2-artifacts.properties
+          ~/.m2/repository/p2
+        key: ${{ runner.os }}-repo-tycho-${{ hashFiles('target-platforms/oldest.target') }}
 
     - name: "Install: Maven"
       uses: stCarolas/setup-maven@v4.5 # https://github.com/stCarolas/setup-maven

@@ -17,7 +17,6 @@ import static updater.utils.Validation.*;
 
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
-import java.awt.Transparency;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -28,7 +27,6 @@ import java.util.TreeSet;
 
 import javax.imageio.ImageIO;
 
-import net.coobird.thumbnailator.Thumbnails;
 import updater.Updater.Config;
 import updater.Updater.State.ExtensionState;
 import updater.Updater.State.LanguageState;
@@ -107,8 +105,8 @@ class VSCodeSingleExtensionSourceHandler extends AbstractSourceHandler<Config.VS
 			final var targetIcon = targetSyntaxDir.resolve("icon.png");
 			logInfo("Copying file [icon.png]...");
 			final var sourceIcon = ImageIO.read(sourceExtensionDir.resolve(pkgJson.icon()).toFile());
-			Thumbnails.of(sourceIcon).size(16, 16).outputFormat("png").toFile(targetIcon.toFile());
-			Thumbnails.of(sourceIcon).size(32, 32).outputFormat("png").toFile(targetSyntaxDir.resolve("icon@2x.png").toFile());
+			ImageIO.write(resizeImage(sourceIcon, 16, 16), "png", targetIcon.toFile());
+			ImageIO.write(resizeImage(sourceIcon, 32, 32), "png", targetSyntaxDir.resolve("icon@2x.png").toFile());
 		}
 
 		for (final Entry<String, Contributions.Language> lang : pkgJsonLangs.entrySet()) {
@@ -149,9 +147,8 @@ class VSCodeSingleExtensionSourceHandler extends AbstractSourceHandler<Config.VS
 					logInfo("Copying image [" + langCfg.icon().light() + "] -> [" + targetIcon.getFileName() + "]...", false);
 					try {
 						final var sourceIcon = ImageIO.read(sourceExtensionDir.resolve(langCfg.icon().light()).toFile());
-						Thumbnails.of(sourceIcon).size(16, 16).outputFormat("png").toFile(targetIcon.toFile());
-						Thumbnails.of(sourceIcon).size(32, 32).outputFormat("png")
-								.toFile(ctx.targetDir().resolve(langId + "@2x.png").toFile());
+						ImageIO.write(resizeImage(sourceIcon, 16, 16), "png", targetIcon.toFile());
+						ImageIO.write(resizeImage(sourceIcon, 32, 32), "png", ctx.targetDir().resolve(langId + "@2x.png").toFile());
 						logInfo(" OK", true, false);
 					} catch (final Exception ex) {
 						logInfo(" ERROR [" + ex.getMessage().replace("\n", " | ") + "]", true, false);
@@ -184,8 +181,8 @@ class VSCodeSingleExtensionSourceHandler extends AbstractSourceHandler<Config.VS
 			final var grammarOverrides = defaultIfNull(source.inlineGrammars.get(scopeName), Config.InlineGrammarIgnoreable::new);
 
 			if (!isBlank(grammarOverrides.ignoredReason) && !"false".equals(grammarOverrides.ignoredReason)) {
-				logInfo("Ignoring inline grammar contribution [" + scopeName + "] as per user config" + ("true".equals(
-						grammarOverrides.ignoredReason) ? "." : ": " + grammarOverrides.ignoredReason));
+				logInfo("Ignoring inline grammar contribution [" + scopeName + "] as per user config"
+						+ ("true".equals(grammarOverrides.ignoredReason) ? "." : ": " + grammarOverrides.ignoredReason));
 				continue;
 			}
 			final var grammarCfg = inlineGrammar.getValue();
@@ -197,10 +194,10 @@ class VSCodeSingleExtensionSourceHandler extends AbstractSourceHandler<Config.VS
 	}
 
 	BufferedImage resizeImage(final BufferedImage originalImage, final int targetWidth, final int targetHeight) {
-		final BufferedImage resizedImage = new BufferedImage(targetWidth, targetHeight, Transparency.TRANSLUCENT);
+		final var resizedImage = new BufferedImage(targetWidth, targetHeight, BufferedImage.TYPE_INT_ARGB);
 		final Graphics2D g2d = resizedImage.createGraphics();
 
-		// Use RenderingHints to improve image quality
+		// use RenderingHints to improve image quality
 		g2d.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BICUBIC);
 		g2d.drawImage(originalImage, 0, 0, targetWidth, targetHeight, null);
 		g2d.dispose();

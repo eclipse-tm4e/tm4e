@@ -84,14 +84,14 @@ public final class PreferenceHelper {
 	}
 
 	public static Set<MarkerConfig> loadMarkerConfigs() {
-		final var prefs = InstanceScope.INSTANCE.getNode(TMUIPlugin.PLUGIN_ID);
-		final var json = prefs.get(PreferenceConstants.TASK_TAGS, null);
+		final var json = TMUIPlugin.getPreference(PreferenceConstants.TASK_TAGS, null);
 		Set<MarkerConfig> result = null;
-		try {
-			result = loadMarkerConfigs(json);
-		} catch (final JsonSyntaxException ex) {
-			TMUIPlugin.logError(ex);
-		}
+		if (json != null)
+			try {
+				result = loadMarkerConfigs(json);
+			} catch (final JsonSyntaxException ex) {
+				TMUIPlugin.logError(ex);
+			}
 		return result == null ? MarkerConfig.getDefaults() : result;
 	}
 

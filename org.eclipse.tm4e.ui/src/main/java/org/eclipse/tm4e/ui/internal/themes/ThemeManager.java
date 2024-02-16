@@ -120,10 +120,8 @@ public final class ThemeManager extends AbstractThemeManager {
 	 * Load TextMate Themes from preferences.
 	 */
 	private void loadThemesFromPreferences() {
-		// Load Theme definitions from the
-		// "${workspace_loc}/metadata/.plugins/org.eclipse.core.runtime/.settings/org.eclipse.tm4e.ui.prefs"
-		final var prefs = InstanceScope.INSTANCE.getNode(TMUIPlugin.PLUGIN_ID);
-		String json = prefs.get(PreferenceConstants.THEMES, null);
+		// Load Theme definitions from preferences
+		String json = TMUIPlugin.getPreference(PreferenceConstants.THEMES, null);
 		if (json != null) {
 			for (final var jsonElem : new Gson().fromJson(json, JsonObject[].class)) {
 				final String name = jsonElem.get("id").getAsString();
@@ -134,7 +132,7 @@ public final class ThemeManager extends AbstractThemeManager {
 			}
 		}
 
-		json = prefs.get(PreferenceConstants.THEME_ASSOCIATIONS, null);
+		json = TMUIPlugin.getPreference(PreferenceConstants.THEME_ASSOCIATIONS, null);
 		if (json != null) {
 			final var themeAssociations = PreferenceHelper.loadThemeAssociations(json);
 			for (final IThemeAssociation association : themeAssociations) {
@@ -142,8 +140,8 @@ public final class ThemeManager extends AbstractThemeManager {
 			}
 		}
 
-		defaultDarkThemeId = prefs.get(PreferenceConstants.DEFAULT_DARK_THEME, null);
-		defaultLightThemeId = prefs.get(PreferenceConstants.DEFAULT_LIGHT_THEME, null);
+		defaultDarkThemeId = TMUIPlugin.getPreference(PreferenceConstants.DEFAULT_DARK_THEME, null);
+		defaultLightThemeId = TMUIPlugin.getPreference(PreferenceConstants.DEFAULT_LIGHT_THEME, null);
 	}
 
 	void save() throws BackingStoreException {

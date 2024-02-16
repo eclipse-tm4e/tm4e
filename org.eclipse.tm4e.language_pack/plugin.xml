@@ -525,6 +525,10 @@
     <languageConfiguration contentTypeId="org.eclipse.tm4e.language_pack.java" path="syntaxes/java/java.language-configuration.json" />
   </extension>
 
+  <extension point="org.eclipse.ui.genericeditor.icons">
+    <icon contentType="org.eclipse.tm4e.language_pack.java" icon="syntaxes/java/java.icon.png"/>
+  </extension>
+
   <extension point="org.eclipse.tm4e.ui.snippets">
     <snippet name="Java Example" path="syntaxes/java/java.example.java" scopeName="source.java" />
   </extension>
@@ -834,6 +838,10 @@
 
   <extension point="org.eclipse.tm4e.languageconfiguration.languageConfigurations">
     <languageConfiguration contentTypeId="org.eclipse.tm4e.language_pack.markdown" path="syntaxes/markdown/markdown.language-configuration.json" />
+  </extension>
+
+  <extension point="org.eclipse.ui.genericeditor.icons">
+    <icon contentType="org.eclipse.tm4e.language_pack.markdown" icon="syntaxes/markdown/icon.png"/>
   </extension>
 
   <extension point="org.eclipse.tm4e.ui.snippets">
@@ -1350,6 +1358,10 @@
     <languageConfiguration contentTypeId="org.eclipse.tm4e.language_pack.xml" path="syntaxes/xml/xml.language-configuration.json" />
   </extension>
 
+  <extension point="org.eclipse.ui.genericeditor.icons">
+    <icon contentType="org.eclipse.tm4e.language_pack.xml" icon="syntaxes/xml/icon.png"/>
+  </extension>
+
   <extension point="org.eclipse.tm4e.ui.snippets">
     <snippet name="XML Example" path="syntaxes/xml/xml.example.xml" scopeName="text.xml" />
   </extension>
@@ -1368,6 +1380,10 @@
 
   <extension point="org.eclipse.tm4e.languageconfiguration.languageConfigurations">
     <languageConfiguration contentTypeId="org.eclipse.tm4e.language_pack.xsl" path="syntaxes/xml/xsl.language-configuration.json" />
+  </extension>
+
+  <extension point="org.eclipse.ui.genericeditor.icons">
+    <icon contentType="org.eclipse.tm4e.language_pack.xsl" icon="syntaxes/xml/icon.png"/>
   </extension>
 
   <extension point="org.eclipse.tm4e.ui.snippets">

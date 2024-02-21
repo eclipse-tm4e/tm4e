@@ -4,7 +4,7 @@ Bundle-Name: %pluginName
 Bundle-Vendor: %providerName
 Bundle-Localization: plugin
 Bundle-SymbolicName: org.eclipse.tm4e.core.tests;singleton:=true
-Bundle-Version: 0.10.2.qualifier
+Bundle-Version: 0.10.3.qualifier
 Require-Bundle: org.apache.batik.css;resolution:=optional,
  org.apache.batik.util;resolution:=optional,
  com.google.gson;resolution:=optional,

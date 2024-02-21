@@ -221,26 +221,40 @@ public class LanguageConfigurationAutoEditStrategy implements IAutoEditStrategy 
 					if (enterAction != null) {
 						command.shiftsCaret = false;
 						final String newLine = command.text;
-						command.text = switch (enterAction.indentAction) {
-							case None // Nothing special
-									-> newLine + cursorCfg.normalizeIndentation(enterAction.indentation + enterAction.appendText);
-							case Indent // Indent once
-									-> newLine + cursorCfg.normalizeIndentation(enterAction.indentation + enterAction.appendText);
-							case IndentOutdent -> {
+						switch (enterAction.indentAction) {
+							case None: {
+								// Nothing special
+								final String increasedIndent = cursorCfg
+										.normalizeIndentation(enterAction.indentation + enterAction.appendText);
+								command.text = newLine + increasedIndent;
+								command.caretOffset = command.offset + command.text.length();
+								break;
+							}
+							case Indent: {
+								// Indent once
+								final String increasedIndent = cursorCfg
+										.normalizeIndentation(enterAction.indentation + enterAction.appendText);
+								command.text = newLine + increasedIndent;
+								command.caretOffset = command.offset + command.text.length();
+								break;
+							}
+							case IndentOutdent: {
 								// Ultra special
 								final String normalIndent = cursorCfg.normalizeIndentation(enterAction.indentation);
 								final String increasedIndent = cursorCfg
 										.normalizeIndentation(enterAction.indentation + enterAction.appendText);
-								yield newLine + increasedIndent + newLine + normalIndent;
+								command.text = newLine + increasedIndent + newLine + normalIndent;
+								command.caretOffset = command.offset + (newLine + increasedIndent).length();
+								break;
 							}
-							case Outdent -> {
+							case Outdent:
 								final String indentation = getIndentationFromWhitespace(enterAction.indentation, cursorCfg);
 								final String outdentedText = cursorCfg
 										.outdentString(cursorCfg.normalizeIndentation(indentation + enterAction.appendText));
-								yield newLine + outdentedText;
-							}
-						};
-						command.caretOffset = command.offset + command.text.length();
+								command.text = newLine + outdentedText;
+								command.caretOffset = command.offset + command.text.length();
+								break;
+						}
 						return;
 					}
 				}

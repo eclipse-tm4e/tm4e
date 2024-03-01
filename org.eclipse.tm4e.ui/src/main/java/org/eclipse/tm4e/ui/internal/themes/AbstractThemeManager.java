@@ -54,7 +54,7 @@ public abstract class AbstractThemeManager implements IThemeManager {
 
 	@Override
 	public ITheme getDefaultTheme() {
-		return getDefaultTheme(UI.isDarkEclipseTheme());
+		return getDefaultTheme(UI.runSync(UI::isDarkEclipseTheme));
 	}
 
 	@Override
@@ -87,7 +87,7 @@ public abstract class AbstractThemeManager implements IThemeManager {
 
 	@Override
 	public ITheme getThemeForScope(final String scopeName) {
-		return getThemeForScope(scopeName, UI.isDarkEclipseTheme());
+		return getThemeForScope(scopeName, UI.runSync(UI::isDarkEclipseTheme));
 	}
 
 	@Override

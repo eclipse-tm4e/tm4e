@@ -11,12 +11,16 @@
  *******************************************************************************/
 package org.eclipse.tm4e.ui.internal.utils;
 
+import java.util.concurrent.atomic.AtomicReference;
+import java.util.function.Supplier;
+
 import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.resource.JFaceResources;
 import org.eclipse.jface.text.ITextViewer;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.viewers.TableViewer;
+import org.eclipse.swt.SWTException;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.graphics.Color;
@@ -174,6 +178,36 @@ public final class UI {
 		if (shell == null)
 			throw new IllegalStateException("No active shell found!");
 		return isDarkColor(shell.getBackground());
+	}
+
+	public static boolean isUIThread() {
+		return Display.getCurrent() != null;
+	}
+
+	/**
+	 * Runs the given runnable synchronously on the UI thread
+	 *
+	 * @throws SWTException if the {@link Display} has been disposed
+	 */
+	public static <T> T runSync(final Supplier<T> runnable) {
+		if (isUIThread())
+			return runnable.get();
+
+		final var resultRef = new AtomicReference<T>();
+		final var exRef = new AtomicReference<@Nullable RuntimeException>();
+		getDisplay().syncExec(() -> {
+			try {
+				resultRef.set(runnable.get());
+			} catch (final RuntimeException ex) {
+				exRef.set(ex);
+			}
+		});
+
+		final @Nullable RuntimeException ex = exRef.get();
+		if (ex != null) {
+			throw ex;
+		}
+		return resultRef.get();
 	}
 
 	private UI() {

@@ -34,7 +34,7 @@ public final class IncludeReference {
 	}
 
 	private static final IncludeReference BASE = new IncludeReference(Kind.Base, RawRepository.DOLLAR_BASE, "");
-	private static final IncludeReference SELF = new IncludeReference(Kind.Base, RawRepository.DOLLAR_SELF, "");
+	private static final IncludeReference SELF = new IncludeReference(Kind.Self, RawRepository.DOLLAR_SELF, "");
 
 	public static IncludeReference parseInclude(final String include) {
 		return switch (include) {

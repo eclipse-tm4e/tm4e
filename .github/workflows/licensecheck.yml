@@ -35,7 +35,7 @@ jobs:
     - name: Git Checkout
       uses: actions/checkout@v4 #https://github.com/actions/checkout
 
-    - name: "Install: JDK ${{ env.JAVA_VERSION }}"
+    - name: "Install: JDK ${{ env.JAVA_VERSION }} ☕"
       uses: actions/setup-java@v4 # https://github.com/actions/setup-java
       with:
         distribution: temurin

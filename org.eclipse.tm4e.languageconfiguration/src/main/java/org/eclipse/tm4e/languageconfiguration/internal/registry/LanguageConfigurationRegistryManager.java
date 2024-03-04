@@ -224,7 +224,10 @@ public final class LanguageConfigurationRegistryManager extends AbstractLanguage
 		final var definitions = new ArrayList<ILanguageConfigurationDefinition>();
 		userDefinitions.values().forEach(definitions::add);
 		pluginDefinitions.values().forEach(def -> {
-			if (!(def.isBracketAutoClosingEnabled() && def.isMatchingPairsEnabled() && def.isOnEnterEnabled())) {
+			if (!(def.isBracketAutoClosingEnabled()
+					&& def.isMatchingPairsEnabled()
+					&& def.isOnEnterEnabled()
+					&& def.isIndentRulesEnabled())) {
 				definitions.add(def);
 			}
 		});

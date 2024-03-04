@@ -15,7 +15,9 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Objects;
 
+import org.eclipse.core.runtime.Platform;
 import org.eclipse.jdt.annotation.NonNullByDefault;
+import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.tm4e.languageconfiguration.LanguageConfigurationPlugin;
 import org.eclipse.tm4e.languageconfiguration.internal.registry.ILanguageConfigurationDefinition;
 import org.eclipse.tm4e.languageconfiguration.internal.registry.LanguageConfigurationDefinition;
@@ -29,7 +31,7 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonSerializer;
 
 /**
- * Helper class load, save language configuration preferences with Json format.
+ * Helper class load, save language configuration preferences in JSON format.
  */
 public final class PreferenceHelper {
 
@@ -84,6 +86,11 @@ public final class PreferenceHelper {
 
 	public static String toJson(final Collection<ILanguageConfigurationDefinition> definitions) {
 		return DEFAULT_GSON.toJson(definitions);
+	}
+
+	public static @Nullable String getPreferenceString(final String key, final @Nullable String defaultValue) {
+		return Platform.getPreferencesService().getString(LanguageConfigurationPlugin.PLUGIN_ID, key, defaultValue,
+				null /* = search in all available scopes */);
 	}
 
 	private PreferenceHelper() {

@@ -43,14 +43,10 @@ import org.osgi.service.prefs.BackingStoreException;
 public final class LanguageConfigurationRegistryManager extends AbstractLanguageConfigurationRegistryManager {
 
 	private static final String EXTENSION_LANGUAGE_CONFIGURATIONS = "languageConfigurations";
-	private static final String LANGUAGE_CONFIGURATION_ELT = "languageConfiguration";
 
 	/** see https://en.wikipedia.org/wiki/Double-checked_locking#Usage_in_Java */
 	private static final class InstanceHolder {
 		static final LanguageConfigurationRegistryManager INSTANCE = new LanguageConfigurationRegistryManager();
-		static {
-			INSTANCE.load();
-		}
 	}
 
 	public static LanguageConfigurationRegistryManager getInstance() {
@@ -69,6 +65,35 @@ public final class LanguageConfigurationRegistryManager extends AbstractLanguage
 			}
 		}
 		return bestFit;
+	}
+
+	private LanguageConfigurationRegistryManager() {
+		/*
+		 * load from extension point
+		 */
+		final var xmlConfig = Platform.getExtensionRegistry().getConfigurationElementsFor(LanguageConfigurationPlugin.PLUGIN_ID,
+				EXTENSION_LANGUAGE_CONFIGURATIONS);
+		for (final var xmlElem : xmlConfig) {
+			if ("languageConfiguration".equals(xmlElem.getName())) {
+				try {
+					registerLanguageConfigurationDefinition(new LanguageConfigurationDefinition(xmlElem));
+				} catch (final CoreException ex) {
+					LanguageConfigurationPlugin.log(ex.getStatus());
+				}
+			}
+		}
+
+		/*
+		 * Load grammar definitions from the
+		 * "${workspace_loc}/metadata/.plugins/org.eclipse.core.runtime/.settings/org.eclipse.tm4e.languageconfiguration.prefs"
+		 */
+		final String jsonConfig = PreferenceHelper.getPreferenceString(PreferenceConstants.LANGUAGE_CONFIGURATIONS, null);
+		if (jsonConfig != null && !jsonConfig.isBlank()) {
+			final var definitions = PreferenceHelper.loadLanguageConfigurationDefinitions(jsonConfig);
+			for (final var definition : definitions) {
+				registerLanguageConfigurationDefinition(definition);
+			}
+		}
 	}
 
 	public @Nullable AutoClosingPairConditional getAutoClosingPair(final String text, final int offset, final String newCharacter,
@@ -191,39 +216,6 @@ public final class LanguageConfigurationRegistryManager extends AbstractLanguage
 	private @Nullable CharacterPairSupport _getCharacterPairSupport(final IContentType contentType) {
 		final var definition = this.getDefinition(contentType);
 		return definition == null ? null : definition.getCharacterPair();
-	}
-
-	private void load() {
-		loadFromExtensionPoints();
-		loadFromPreferences();
-	}
-
-	private void loadFromExtensionPoints() {
-		final var config = Platform.getExtensionRegistry().getConfigurationElementsFor(
-				LanguageConfigurationPlugin.PLUGIN_ID, EXTENSION_LANGUAGE_CONFIGURATIONS);
-		for (final var configElem : config) {
-			final String name = configElem.getName();
-			if (LANGUAGE_CONFIGURATION_ELT.equals(name)) {
-				try {
-					registerLanguageConfigurationDefinition(new LanguageConfigurationDefinition(configElem));
-				} catch (final CoreException ex) {
-					LanguageConfigurationPlugin.log(ex.getStatus());
-				}
-			}
-		}
-	}
-
-	private void loadFromPreferences() {
-		// Load grammar definitions from the
-		// "${workspace_loc}/metadata/.plugins/org.eclipse.core.runtime/.settings/org.eclipse.tm4e.languageconfiguration.prefs"
-		final var prefs = InstanceScope.INSTANCE.getNode(LanguageConfigurationPlugin.PLUGIN_ID);
-		final String json = prefs.get(PreferenceConstants.LANGUAGE_CONFIGURATIONS, null);
-		if (json != null) {
-			final var definitions = PreferenceHelper.loadLanguageConfigurationDefinitions(json);
-			for (final var definition : definitions) {
-				registerLanguageConfigurationDefinition(definition);
-			}
-		}
 	}
 
 	void save() throws BackingStoreException {

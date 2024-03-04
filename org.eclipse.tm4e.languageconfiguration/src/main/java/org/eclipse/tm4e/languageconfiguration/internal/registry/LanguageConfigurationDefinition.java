@@ -66,7 +66,8 @@ public final class LanguageConfigurationDefinition extends TMResource implements
 	 * Constructor for user preferences loaded via {@link PreferenceHelper}.
 	 */
 	public LanguageConfigurationDefinition(final IContentType contentType,
-			final String path, final @Nullable String pluginId,
+			final String path,
+			final @Nullable String pluginId,
 			final boolean onEnterEnabled,
 			final boolean indentRulesEnabled,
 			final boolean bracketAutoClosingEnabled,

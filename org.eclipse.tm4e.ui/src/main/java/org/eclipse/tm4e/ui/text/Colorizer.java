@@ -67,6 +67,8 @@ class Colorizer {
 			return;
 
 		if (event.model instanceof final ITMDocumentModel docModel) {
+			if (docModel.getDocument() != doc)
+				return;
 			for (final Range range : event.ranges) {
 				try {
 					final int length = doc.getLineOffset(range.toLineNumber - 1) + doc.getLineLength(range.toLineNumber - 1)

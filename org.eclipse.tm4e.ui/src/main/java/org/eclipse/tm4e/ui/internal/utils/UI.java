@@ -17,6 +17,7 @@ import java.util.function.Supplier;
 import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.resource.JFaceResources;
+import org.eclipse.jface.text.ITextSelection;
 import org.eclipse.jface.text.ITextViewer;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.viewers.TableViewer;
@@ -74,6 +75,15 @@ public final class UI {
 				return textEditor;
 			}
 		}
+		return null;
+	}
+
+	public static @Nullable ITextSelection getActiveTextSelection() {
+		final var editor = getActiveTextEditor();
+		if (editor == null)
+			return null;
+		if (editor.getSelectionProvider().getSelection() instanceof final ITextSelection sel)
+			return sel;
 		return null;
 	}
 

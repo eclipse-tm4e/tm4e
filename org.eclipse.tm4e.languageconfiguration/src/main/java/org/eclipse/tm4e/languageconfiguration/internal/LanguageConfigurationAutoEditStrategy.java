@@ -14,6 +14,7 @@ package org.eclipse.tm4e.languageconfiguration.internal;
 import static org.eclipse.tm4e.languageconfiguration.internal.utils.TextUtils.*;
 
 import java.util.Arrays;
+import java.util.List;
 
 import org.eclipse.core.runtime.content.IContentType;
 import org.eclipse.jdt.annotation.Nullable;
@@ -22,9 +23,9 @@ import org.eclipse.jface.text.DefaultIndentLineAutoEditStrategy;
 import org.eclipse.jface.text.DocumentCommand;
 import org.eclipse.jface.text.IAutoEditStrategy;
 import org.eclipse.jface.text.IDocument;
-import org.eclipse.jface.text.ITextViewer;
 import org.eclipse.tm4e.core.model.TMToken;
 import org.eclipse.tm4e.languageconfiguration.LanguageConfigurationPlugin;
+import org.eclipse.tm4e.languageconfiguration.internal.model.AutoClosingPair;
 import org.eclipse.tm4e.languageconfiguration.internal.model.AutoClosingPairConditional;
 import org.eclipse.tm4e.languageconfiguration.internal.model.CursorConfiguration;
 import org.eclipse.tm4e.languageconfiguration.internal.registry.LanguageConfigurationRegistryManager;
@@ -44,12 +45,11 @@ public class LanguageConfigurationAutoEditStrategy implements IAutoEditStrategy 
 
 	private IContentType[] contentTypes = EMPTY_CONTENT_TYPES;
 	private @Nullable IDocument document;
-	private @Nullable ITextViewer viewer;
 
 	/**
 	 * @see <a href=
 	 *      "https://github.com/microsoft/vscode/blob/ba2cf46e20df3edf77bdd905acde3e175d985f70/src/vs/editor/common/cursor/cursorTypeOperations.ts#L934">
-	 *      github.com/microsoft/vscode/src/vs/editor/common/cursor/cursorTypeOperations.ts</a>
+	 *      github.com/microsoft/vscode/src/vs/editor/common/cursor/cursorTypeOperations.ts#typeWithInterceptors</a>
 	 */
 	@Override
 	public void customizeDocumentCommand(@Nullable final IDocument doc, @Nullable final DocumentCommand command) {
@@ -62,13 +62,11 @@ public class LanguageConfigurationAutoEditStrategy implements IAutoEditStrategy 
 			this.document = doc;
 		}
 
-		if (contentTypes.length == 0)
+		if (contentTypes.length == 0 || command.getCommandCount() > 1)
 			return;
 
-		installViewer();
-
 		if (isEnter(doc, command)) {
-			// key enter pressed
+			// enter-key pressed
 			final var cursorCfg = TextEditorPrefs.getCursorConfiguration(UI.getActiveTextEditor());
 			onEnter(cursorCfg, doc, contentTypes, command);
 			return;
@@ -76,8 +74,36 @@ public class LanguageConfigurationAutoEditStrategy implements IAutoEditStrategy 
 
 		final var registry = LanguageConfigurationRegistryManager.getInstance();
 
-		// auto close pair
 		if (command.text.length() == 1) {
+			// auto surround pair
+			final var textSelection = UI.getActiveTextSelection();
+			if (textSelection != null && textSelection.getLength() > 0) {
+				for (final IContentType contentType : contentTypes) {
+					if (!registry.shouldSurroundingPairs(contentType))
+						continue;
+
+					final List<AutoClosingPair> surroundingPairs = registry.getSurroundingPairs(contentType);
+					if (surroundingPairs.isEmpty())
+						continue;
+
+					for (final AutoClosingPair pair : surroundingPairs) {
+						if (command.text.equals(pair.open)) {
+							// surround selection with pairs
+							try {
+								command.addCommand(command.offset + textSelection.getLength(), 0, pair.close, null);
+								command.length = 0;
+								command.caretOffset = command.offset + textSelection.getLength() + pair.open.length();
+								command.shiftsCaret = false;
+							} catch (final BadLocationException ex) {
+								LanguageConfigurationPlugin.logError(ex);
+							}
+							return;
+						}
+					}
+				}
+			}
+
+			// auto close pair
 			for (final IContentType contentType : contentTypes) {
 				final var autoClosingPair = registry.getAutoClosingPair(doc.get(), command.offset, command.text, contentType);
 				if (autoClosingPair == null) {
@@ -273,11 +299,5 @@ public class LanguageConfigurationAutoEditStrategy implements IAutoEditStrategy 
 
 		// fail back to default for indentation
 		new DefaultIndentLineAutoEditStrategy().customizeDocumentCommand(doc, command);
-	}
-
-	private void installViewer() {
-		if (viewer == null) {
-			viewer = UI.getActiveTextViewer();
-		}
 	}
 }

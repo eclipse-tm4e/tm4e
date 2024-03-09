@@ -149,7 +149,8 @@ public final class TextUtils {
 		}
 	}
 
-	public static CharSequence replaceIndent(final CharSequence multiLineString, final int tabSize, final String newIndent) {
+	public static CharSequence replaceIndent(final CharSequence multiLineString, final int tabSize, final String newIndent,
+			final boolean indentEmptyLines) {
 		final int effectiveTabSize = Math.max(1, tabSize);
 
 		abstract class CharConsumer implements IntConsumer {
@@ -164,8 +165,8 @@ public final class TextUtils {
 			}
 
 			abstract void onChar(char ch);
-
 		}
+
 		/*
 		 * determine common indentation of all lines
 		 */
@@ -178,25 +179,30 @@ public final class TextUtils {
 
 			@Override
 			void onChar(final char ch) {
-				if (ch == '\r' && prevChar != '\n' || ch == '\n' && prevChar != '\r') {
+				// handle new line chars
+				if (ch == '\n' || ch == '\r') {
+					if (ch == '\n' && prevChar == '\r'
+							|| ch == '\r' && prevChar == '\n') {
+						return;
+					}
 					lineCount++;
 					skipToLineEnd = false;
 					if (!isEmptyLine && indentOfLine < existingIndent)
 						existingIndent = indentOfLine;
 					indentOfLine = 0;
 					isEmptyLine = true;
-					if (existingIndent == 0)
-						return;
-				} else {
-					isEmptyLine = false;
-					if (!skipToLineEnd) {
-						if (ch == '\t') {
-							indentOfLine += effectiveTabSize;
-						} else if (Character.isWhitespace(ch)) {
-							indentOfLine++;
-						} else {
-							skipToLineEnd = true;
-						}
+					return;
+				}
+
+				// handle other chars
+				isEmptyLine = false;
+				if (!skipToLineEnd) {
+					if (ch == '\t') {
+						indentOfLine += effectiveTabSize;
+					} else if (Character.isWhitespace(ch)) {
+						indentOfLine++;
+					} else {
+						skipToLineEnd = true;
 					}
 				}
 			}
@@ -220,29 +226,39 @@ public final class TextUtils {
 		 * replace common indentation of all lines
 		 */
 		final var sb = new StringBuilder(Math.max(0, multiLineString.length() - (indentDetector.lineCount * existingIndent)));
-		sb.append(newIndent);
 		final class IdentReplacer extends CharConsumer {
-			int indentOfLineSkipped = 0;
+			int skippedIndentOfLine = 0;
+			boolean isEmptyLine = true;
 
 			@Override
 			public void onChar(final char ch) {
+				if (ch == '\r')
+					return;
+
 				if (ch == '\n') {
+					if (isEmptyLine && indentEmptyLines) {
+						sb.append(newIndent);
+					}
+					if (prevChar == '\r') {
+						sb.append('\r');
+					}
 					sb.append(ch);
-					sb.append(newIndent);
-					indentOfLineSkipped = 0;
+					skippedIndentOfLine = 0;
+					isEmptyLine = true;
 					return;
 				}
-				if (prevChar == '\r') {
-					sb.append(newIndent);
-					indentOfLineSkipped = 0;
-				}
-				if (indentOfLineSkipped >= existingIndent) {
+
+				if (skippedIndentOfLine >= existingIndent) {
+					if (isEmptyLine) {
+						sb.append(newIndent);
+						isEmptyLine = false;
+					}
 					sb.append(ch);
 				} else {
 					if (ch == '\t') {
-						indentOfLineSkipped += effectiveTabSize;
+						skippedIndentOfLine += effectiveTabSize;
 					} else {
-						indentOfLineSkipped++;
+						skippedIndentOfLine++;
 					}
 				}
 			}
@@ -251,9 +267,10 @@ public final class TextUtils {
 		final var indentReplacer = new IdentReplacer();
 		multiLineString.chars().forEach(indentReplacer);
 
-		// don't indent trailing new line
-		if (indentReplacer.prevChar == '\n' || indentReplacer.prevChar == '\r')
-			sb.setLength(sb.length() - newIndent.length());
+		// special case
+		if (indentEmptyLines && sb.isEmpty() && !multiLineString.isEmpty()) {
+			sb.append(newIndent);
+		}
 		return sb;
 	}
 

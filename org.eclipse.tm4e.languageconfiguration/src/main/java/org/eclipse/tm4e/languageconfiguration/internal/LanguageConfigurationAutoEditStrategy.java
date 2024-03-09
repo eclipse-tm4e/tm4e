@@ -150,7 +150,7 @@ public class LanguageConfigurationAutoEditStrategy implements IAutoEditStrategy 
 							command.length += offsetInLine;
 						}
 						command.text = TextUtils.replaceIndent(command.text, cursorCfg.indentSize,
-								cursorCfg.normalizeIndentation(newIndent)).toString();
+								cursorCfg.normalizeIndentation(newIndent), false).toString();
 						command.shiftsCaret = true;
 					}
 				} catch (final BadLocationException ex) {

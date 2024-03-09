@@ -97,29 +97,72 @@ class TextUtilsTest {
 	}
 
 	@Test
-	void testReplaceIndent() {
-		assertEquals("  ", replaceIndent("\t\t", 2, "  ").toString());
+	void testReplaceIndent_IndentEmptyLines() {
+		assertEquals("", replaceIndent("\t\t", 2, "", true).toString());
+		assertEquals("foo  ", replaceIndent("foo  ", 2, "", true).toString());
+		assertEquals("foo", replaceIndent(" \t foo", 2, "", true).toString());
+		assertEquals("foo\nbar", replaceIndent(" foo\n bar", 2, "", true).toString());
+		assertEquals("foo\nbar", replaceIndent("  foo\n\tbar", 2, "", true).toString());
+		assertEquals("foo\nbar", replaceIndent(" foo\n\tbar", 2, "", true).toString());
+		assertEquals("foo\n\tbar", replaceIndent("\tfoo\n\t\tbar", 2, "", true).toString());
+		assertEquals("foo\n\tbar", replaceIndent("\tfoo\n  \tbar", 2, "", true).toString());
 
-		assertEquals("", replaceIndent("\t\t", 2, "").toString().toString());
-		assertEquals("foo  ", replaceIndent("foo  ", 2, "").toString());
-		assertEquals("foo", replaceIndent(" \t foo", 2, "").toString());
-		assertEquals("foo\nbar", replaceIndent(" foo\n bar", 2, "").toString());
-		assertEquals("foo\nbar", replaceIndent("  foo\n\tbar", 2, "").toString());
-		assertEquals("foo\nbar", replaceIndent(" foo\n\tbar", 2, "").toString());
-		assertEquals("foo\n\tbar", replaceIndent("\tfoo\n\t\tbar", 2, "").toString());
-		assertEquals("foo\n\tbar", replaceIndent("\tfoo\n  \tbar", 2, "").toString());
+		assertEquals("foo\r\nbar", replaceIndent(" foo\r\n bar", 2, "", true).toString());
+		assertEquals("foo\r\nbar", replaceIndent("  foo\r\n\tbar", 2, "", true).toString());
+		assertEquals("foo\r\nbar", replaceIndent(" foo\r\n\tbar", 2, "", true).toString());
+		assertEquals("foo\r\n\tbar", replaceIndent("\tfoo\r\n\t\tbar", 2, "", true).toString());
+		assertEquals("foo\r\n\tbar", replaceIndent("\tfoo\r\n  \tbar", 2, "", true).toString());
 
-		assertEquals("  ", replaceIndent("\t\t", 2, "  ").toString());
-		assertEquals("  foo  ", replaceIndent("foo  ", 2, "  ").toString());
-		assertEquals("  foo", replaceIndent(" \t foo", 2, "  ").toString());
-		assertEquals("  foo\n  bar", replaceIndent(" foo\n bar", 2, "  ").toString());
-		assertEquals("  foo\n  bar", replaceIndent("  foo\n\tbar", 2, "  ").toString());
-		assertEquals("  foo\n  bar", replaceIndent(" foo\n\tbar", 2, "  ").toString());
-		assertEquals("  foo\n  \tbar", replaceIndent("\tfoo\n\t\tbar", 2, "  ").toString());
-		assertEquals("  foo\n  \tbar", replaceIndent("\tfoo\n  \tbar", 2, "  ").toString());
+		assertEquals("..", replaceIndent("\t\t", 2, "..", true).toString());
+		assertEquals("..foo  ", replaceIndent("foo  ", 2, "..", true).toString());
+		assertEquals("..foo", replaceIndent(" \t foo", 2, "..", true).toString());
+		assertEquals("..foo\n..bar", replaceIndent(" foo\n bar", 2, "..", true).toString());
+		assertEquals("..foo\n..bar", replaceIndent("  foo\n\tbar", 2, "..", true).toString());
+		assertEquals("..foo\n..bar", replaceIndent(" foo\n\tbar", 2, "..", true).toString());
+		assertEquals("..foo\n..\tbar", replaceIndent("\tfoo\n\t\tbar", 2, "..", true).toString());
+		assertEquals("..foo\n..\tbar", replaceIndent("\tfoo\n  \tbar", 2, "..", true).toString());
 
-		assertEquals("  \n  \n", replaceIndent("\n\n", 2, "  ").toString());
-		assertEquals("  foo\n  bar\n", replaceIndent("\tfoo\n\tbar\n", 2, "  ").toString());
+		assertEquals("..\n", replaceIndent("\n", 2, "..", true).toString());
+		assertEquals("..\n..\n", replaceIndent("\n\n", 2, "..", true).toString());
+		assertEquals("..foo\n..bar\n", replaceIndent("\tfoo\n\tbar\n", 2, "..", true).toString());
 
+		assertEquals("..\r\n", replaceIndent("\r\n", 2, "..", true).toString());
+		assertEquals("..\r\n..\r\n", replaceIndent("\r\n\r\n", 2, "..", true).toString());
+		assertEquals("..foo\r\n..bar\r\n", replaceIndent("\tfoo\r\n\tbar\r\n", 2, "..", true).toString());
+	}
+
+	@Test
+	void testReplaceIndent_DoNotIndentEmptyLines() {
+		assertEquals("", replaceIndent("\t\t", 2, "", false).toString());
+		assertEquals("foo  ", replaceIndent("foo  ", 2, "", false).toString());
+		assertEquals("foo", replaceIndent(" \t foo", 2, "", false).toString());
+		assertEquals("foo\nbar", replaceIndent(" foo\n bar", 2, "", false).toString());
+		assertEquals("foo\nbar", replaceIndent("  foo\n\tbar", 2, "", false).toString());
+		assertEquals("foo\nbar", replaceIndent(" foo\n\tbar", 2, "", false).toString());
+		assertEquals("foo\n\tbar", replaceIndent("\tfoo\n\t\tbar", 2, "", false).toString());
+		assertEquals("foo\n\tbar", replaceIndent("\tfoo\n  \tbar", 2, "", false).toString());
+
+		assertEquals("foo\r\nbar", replaceIndent(" foo\r\n bar", 2, "", false).toString());
+		assertEquals("foo\r\nbar", replaceIndent("  foo\r\n\tbar", 2, "", false).toString());
+		assertEquals("foo\r\nbar", replaceIndent(" foo\r\n\tbar", 2, "", false).toString());
+		assertEquals("foo\r\n\tbar", replaceIndent("\tfoo\r\n\t\tbar", 2, "", false).toString());
+		assertEquals("foo\r\n\tbar", replaceIndent("\tfoo\r\n  \tbar", 2, "", false).toString());
+
+		assertEquals("", replaceIndent("\t\t", 2, "..", false).toString());
+		assertEquals("..foo  ", replaceIndent("foo  ", 2, "..", false).toString());
+		assertEquals("..foo", replaceIndent(" \t foo", 2, "..", false).toString());
+		assertEquals("..foo\n..bar", replaceIndent(" foo\n bar", 2, "..", false).toString());
+		assertEquals("..foo\n..bar", replaceIndent("  foo\n\tbar", 2, "..", false).toString());
+		assertEquals("..foo\n..bar", replaceIndent(" foo\n\tbar", 2, "..", false).toString());
+		assertEquals("..foo\n..\tbar", replaceIndent("\tfoo\n\t\tbar", 2, "..", false).toString());
+		assertEquals("..foo\n..\tbar", replaceIndent("\tfoo\n  \tbar", 2, "..", false).toString());
+
+		assertEquals("\n", replaceIndent("\n", 2, "..", false).toString());
+		assertEquals("\n\n", replaceIndent("\n\n", 2, "..", false).toString());
+		assertEquals("..foo\n..bar\n", replaceIndent("\tfoo\n\tbar\n", 2, "..", false).toString());
+
+		assertEquals("\r\n", replaceIndent("\r\n", 2, "..", false).toString());
+		assertEquals("\r\n\r\n", replaceIndent("\r\n\r\n", 2, "..", false).toString());
+		assertEquals("..foo\r\n..bar\r\n", replaceIndent("\tfoo\r\n\tbar\r\n", 2, "..", false).toString());
 	}
 }

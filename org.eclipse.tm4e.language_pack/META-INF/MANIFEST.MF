@@ -10,6 +10,7 @@ Require-Bundle: org.eclipse.tm4e.ui;bundle-version="0.10.4",
  org.eclipse.tm4e.languageconfiguration;bundle-version="0.10.4",
  org.eclipse.ui.editors;bundle-version="[3.3.0,4.0.0)",
  org.eclipse.ui.genericeditor;bundle-version="[1.0.0,2.0.0)",
- org.eclipse.core.contenttype;bundle-version="[3.2.0,4.0.0)"
+ org.eclipse.core.contenttype;bundle-version="[3.2.0,4.0.0)",
+ org.eclipse.compare;resolution:=optional
 Bundle-ActivationPolicy: lazy
 Automatic-Module-Name: org.eclipse.tm4e.language_pack

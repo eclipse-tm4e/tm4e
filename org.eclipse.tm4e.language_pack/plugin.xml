@@ -19,6 +19,16 @@
       contentTypeId="org.eclipse.tm4e.language_pack.basetype"
       editorId="org.eclipse.ui.genericeditor.GenericEditor" />
   </extension>
+  <extension point="org.eclipse.compare.contentViewers">
+    <contentTypeBinding
+      contentTypeId="org.eclipse.tm4e.language_pack.basetype"
+      contentViewerId="org.eclipse.ui.genericeditor.compareViewer" />
+  </extension>
+  <extension point="org.eclipse.compare.contentMergeViewers">
+    <contentTypeBinding
+      contentTypeId="org.eclipse.tm4e.language_pack.basetype"
+      contentMergeViewerId="org.eclipse.ui.genericeditor.compareViewer" />
+  </extension>
 
   <!-- ======================================== -->
   <!-- TextMate                                 -->

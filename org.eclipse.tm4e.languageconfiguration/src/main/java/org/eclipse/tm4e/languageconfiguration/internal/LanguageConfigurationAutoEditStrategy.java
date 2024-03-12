@@ -137,21 +137,26 @@ public class LanguageConfigurationAutoEditStrategy implements IAutoEditStrategy 
 				if (!registry.shouldIndentForEnter(contentType))
 					continue;
 				try {
+					final var isPastedTextMultiLine = command.text.contains("\n");
 					final var lineIndex = doc.getLineOfOffset(command.offset);
-					final var newIndent = registry.getGoodIndentForLine(doc, lineIndex, contentType, IIndentConverter.of(cursorCfg));
-					if (newIndent != null) {
-						final var lineStartOffset = doc.getLineOffset(lineIndex);
+					final var isTargetLineBlank = TextUtils.isBlankLine(doc, lineIndex);
 
-						// check if the content was pasted into a line while the cursor was not at the beginning of the line
-						// but inside or at the end of an existing line indentation
-						final var offsetInLine = command.offset - lineStartOffset;
-						if (offsetInLine > 0 && doc.get(lineStartOffset, offsetInLine).isBlank()) {
-							command.offset = lineStartOffset;
-							command.length += offsetInLine;
+					if (isPastedTextMultiLine || isTargetLineBlank) {
+						final var newIndent = registry.getGoodIndentForLine(doc, lineIndex, contentType, IIndentConverter.of(cursorCfg));
+						if (newIndent != null) {
+							final var lineStartOffset = doc.getLineOffset(lineIndex);
+
+							// check if the content was pasted into a line while the cursor was not at the beginning of the line
+							// but inside or at the end of an existing line indentation
+							final var offsetInLine = command.offset - lineStartOffset;
+							if (offsetInLine > 0 && doc.get(lineStartOffset, offsetInLine).isBlank()) {
+								command.offset = lineStartOffset;
+								command.length += offsetInLine;
+							}
+							command.text = TextUtils.replaceIndent(command.text, cursorCfg.indentSize,
+									cursorCfg.normalizeIndentation(newIndent), false).toString();
+							command.shiftsCaret = true;
 						}
-						command.text = TextUtils.replaceIndent(command.text, cursorCfg.indentSize,
-								cursorCfg.normalizeIndentation(newIndent), false).toString();
-						command.shiftsCaret = true;
 					}
 				} catch (final BadLocationException ex) {
 					LanguageConfigurationPlugin.logError(ex);

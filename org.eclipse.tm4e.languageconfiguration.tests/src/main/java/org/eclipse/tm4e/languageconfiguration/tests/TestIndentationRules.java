@@ -57,6 +57,14 @@ public class TestIndentationRules {
 		text.setSelection(19);
 		text.insert("function bar() {\n}");
 		assertEquals("public class Foo {\n\tfunction bar() {\n\t}\n}", text.getText());
+
+		// insert single line text and ensure the text is only indented in blank lines
+		text.setText("public class Foo {\n\n}");
+		text.setSelection(19);
+		text.insert("bar");
+		text.setSelection(16);
+		text.insert("bar");
+		assertEquals("public class Foobar {\n\tbar\n}", text.getText());
 	}
 
 	@Test

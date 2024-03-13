@@ -255,10 +255,14 @@ abstract class AbstractGrammarRegistryManager implements IGrammarRegistryManager
 				.toArray(IGrammarDefinition[]::new);
 	}
 
+
+	/**
+	 * @param scopeName an unqualified (sources.batchfile) or qualified (sources.batchfile@plugin) scope name
+	 */
 	@Override
 	public @Nullable Collection<String> getInjections(final String scopeName) {
-		// -> is effectively unused at the moment
-		return injections.get(scopeName);
+		// -> indirectly used by org.eclipse.tm4e.core.registry.Registry._doLoadSingleGrammar(String)
+		return injections.get(TMScope.parse(scopeName).getName());
 	}
 
 	/**
@@ -283,7 +287,7 @@ abstract class AbstractGrammarRegistryManager implements IGrammarRegistryManager
 				.map(binding -> binding.contentType).toList();
 	}
 
-	void registerContentTypeToScopeBinding(String pluginId, IContentType contentType, String scopeName) {
+	void registerContentTypeToScopeBinding(final String pluginId, final IContentType contentType, final String scopeName) {
 		// -> used by GrammarRegistryManager.loadGrammarsFromExtensionPoints()
 		contentTypeToScopeBindings.put(contentType, new ContentTypeToScopeBinding(pluginId, contentType, scopeName));
 	}

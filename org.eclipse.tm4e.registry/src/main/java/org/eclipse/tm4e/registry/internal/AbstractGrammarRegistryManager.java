@@ -233,7 +233,7 @@ abstract class AbstractGrammarRegistryManager implements IGrammarRegistryManager
 		 * as a fallback try to lookup a matching grammar via the fileType property inside the TextMate grammar file.
 		 * this can be expensive as it results in potentially loading/parsing all registered grammar files
 		 */
-		return Stream //
+		final var result = Stream //
 				.concat(userDefinitions.stream(), pluginDefinitions.stream())
 				.map(definition -> {
 					final var grammarForScope = getGrammarForScope(definition.getScope());
@@ -242,8 +242,11 @@ abstract class AbstractGrammarRegistryManager implements IGrammarRegistryManager
 							: null;
 				})
 				.filter(Objects::nonNull)
-				.findFirst()
-				.orElse(null);
+				.findFirst();
+
+		// workaround for "Null type mismatch: required '@NonNull IGrammar' but the provided value is null" when using:
+		// return result.orElse(null);
+		return result.isPresent() ? result.get() : null;
 	}
 
 	@Override
@@ -254,7 +257,6 @@ abstract class AbstractGrammarRegistryManager implements IGrammarRegistryManager
 				userDefinitions.stream())
 				.toArray(IGrammarDefinition[]::new);
 	}
-
 
 	/**
 	 * @param scopeName an unqualified (sources.batchfile) or qualified (sources.batchfile@plugin) scope name

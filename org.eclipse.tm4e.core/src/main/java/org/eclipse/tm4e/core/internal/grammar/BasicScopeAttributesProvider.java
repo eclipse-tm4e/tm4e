@@ -20,6 +20,8 @@ import static org.eclipse.tm4e.core.internal.utils.NullSafetyHelper.defaultIfNul
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
 import java.util.regex.Pattern;
 
 import org.eclipse.jdt.annotation.Nullable;
@@ -37,7 +39,7 @@ final class BasicScopeAttributesProvider {
 	private final BasicScopeAttributes _defaultAttributes;
 	private final ScopeMatcher<Integer /* languageId */> _embeddedLanguagesMatcher;
 
-	private final Map<String /*scopeName*/, BasicScopeAttributes> cache = new HashMap<>();
+	private final ConcurrentMap<String /*scopeName*/, BasicScopeAttributes> cache = new ConcurrentHashMap<>();
 
 	BasicScopeAttributesProvider(final int initialLanguage, @Nullable final Map<String, Integer> embeddedLanguages) {
 		this._defaultAttributes = new BasicScopeAttributes(initialLanguage, OptionalStandardTokenType.NotSet);

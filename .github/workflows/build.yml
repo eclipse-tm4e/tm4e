@@ -3,9 +3,9 @@ name: Build
 
 on:
   push:
-    branches-ignore: # build all branches except:
-      - 'dependabot/**' # prevent GHA triggered twice (once for commit to the branch and once for opening/syncing the PR)
-    tags-ignore: # don't build tags
+    branches-ignore:  # build all branches except:
+    - 'dependabot/**'  # prevent GHA triggered twice (once for commit to the branch and once for opening/syncing the PR)
+    tags-ignore:  # don't build tags
     - '**'
     paths-ignore:
     - '**/*.md'
@@ -35,24 +35,40 @@ on:
         description: 'Additional Maven Args'
         required: false
         default: ''
+      debug-with-ssh:
+        description: "Start an SSH session for debugging purposes at the end of the build:"
+        default: never
+        type: choice
+        options: [ always, on_failure, on_failure_or_cancelled, never ]
+      debug-with-ssh-only-for-actor:
+        description: "Limit access to the SSH session to the GitHub user that triggered the job."
+        default: true
+        type: boolean
+
 
 defaults:
   run:
     shell: bash
 
+
 env:
   JAVA_VERSION: 17
 
+
 jobs:
 
+  ###########################################################
   build:
+  ###########################################################
 
     strategy:
       fail-fast: false
       matrix:
         os: 
+        # https://github.com/actions/runner-images#available-images
         - ubuntu-latest
-        - macos-11 # macos-latest  -> more macos-11 runners than macos-12 available 
+        - macos-12 # Intel
+        - macos-14 # ARM
         - windows-latest
         target-platform:
         - oldest
@@ -63,17 +79,24 @@ jobs:
     timeout-minutes: 15
 
     steps:
-    - name: Show environment variables
+    - name: "Show: GitHub context"
+      run: echo '${{ toJSON(github) }}'
+
+
+    - name: "Show: environment variables"
       run: env | sort
 
+
     - name: Git Checkout
-      uses: actions/checkout@v4 #https://github.com/actions/checkout
+      uses: actions/checkout@v4  # https://github.com/actions/checkout
       with:
         fetch-depth: 0 # required to prevent tycho-p2-extras-plugin:compare-version-with-baseline potentially failing the build
 
-    - name: Configure Fast APT Mirror
+
+    - name: Configure fast APT repository mirror
       if: runner.os == 'Linux'
       uses: vegardit/fast-apt-mirror.sh@v1
+
 
     - name: "Install: Linux packages 📦"
       if: runner.os == 'Linux'
@@ -95,23 +118,36 @@ jobs:
         #    no swt-pi4 in java.library.path: /usr/java/packages/lib:/usr/lib64:/lib64:/lib:/usr/lib
         sudo apt-get install --no-install-recommends -y libswt-gtk-*-java
 
+        # prevents: 
+        #   java.io.IOException: Cannot run program "xdg-mime": error=2, No such file or directory
+        #     at java.base/java.lang.ProcessBuilder.start(ProcessBuilder.java:1143)
+        #     at java.base/java.lang.ProcessBuilder.start(ProcessBuilder.java:1073)
+        #     at org.eclipse.urischeme.internal.registration.ProcessExecutor.execute(ProcessExecutor.java:36)
+        #     at org.eclipse.urischeme.internal.registration.RegistrationLinux.getRegisteredDesktopFileForScheme(RegistrationLinux.java:144)
+        #     at org.eclipse.urischeme.internal.registration.RegistrationLinux.determineHandlerLocation(RegistrationLinux.java:86)
+        #     at org.eclipse.urischeme.internal.registration.RegistrationLinux.getSchemesInformation(RegistrationLinux.java:75)
+        #     at org.eclipse.urischeme.AutoRegisterSchemeHandlersJob.run(AutoRegisterSchemeHandlersJob.java:85)
+        sudo apt-get install --no-install-recommends -y xdg-utils
+
     - name: "Install: JDK ${{ env.JAVA_VERSION }} ☕"
-      uses: actions/setup-java@v4 # https://github.com/actions/setup-java
+      uses: actions/setup-java@v4  # https://github.com/actions/setup-java
       with:
         distribution: temurin
         java-version: ${{ env.JAVA_VERSION }}
 
+
     - name: "Cache: Local Maven Repository"
       uses: actions/cache@v4
       with:
-        # Excluded sub directory not working https://github.com/actions/cache/issues/494#issuecomment-948783891
+        # Excluded sub directory not working https://github.com/actions/toolkit/issues/713
         path: |
           ~/.m2/repository/*
           !~/.m2/repository/.cache/tycho
           !~/.m2/repository/.meta/p2-artifacts.properties
           !~/.m2/repository/p2
           !~/.m2/repository/*SNAPSHOT*
-        key: ${{ runner.os }}-repo-mvn-${{ hashFiles('**/pom.xml') }}
+        key: ${{ runner.os }}-${{ runner.arch }}-repo-mvn-${{ hashFiles('**/pom.xml') }}
+
 
     - name: "Cache: Local Tycho Repository"
       uses: actions/cache@v4
@@ -120,25 +156,28 @@ jobs:
           ~/.m2/repository/.cache/tycho
           ~/.m2/repository/.meta/p2-artifacts.properties
           ~/.m2/repository/p2
-        key: ${{ runner.os }}-repo-tycho-${{ hashFiles(format('target-platforms/{0}.target', matrix.target-platform)) }}
+        key: ${{ runner.os }}-${{ runner.arch }}-repo-tycho-${{ hashFiles(format('target-platforms/{0}.target', matrix.target-platform)) }}
+
 
     - name: "Install: Maven"
-      uses: stCarolas/setup-maven@v5 # https://github.com/stCarolas/setup-maven
+      uses: stCarolas/setup-maven@v5  # https://github.com/stCarolas/setup-maven
       with:
         maven-version: 3.9.6
+
 
     - name: "Build with Maven 🔨"
       continue-on-error: ${{ matrix.target-platform == 'unstable' }}
       run: |
         set -eu
 
+        MAVEN_OPTS="${MAVEN_OPTS:-}"
         if [[ "${{ runner.os }}" == "Windows" ]]; then
           MAVEN_OPTS+=" -Djava.security.egd=file:/dev/urandom" # https://www.baeldung.com/java-security-egd#bd-testing-the-effect-of-javasecurityegd
         else
           MAVEN_OPTS+=" -Djava.security.egd=file:/dev/./urandom" # https://stackoverflow.com/questions/58991966/what-java-security-egd-option-is-for/59097932#59097932
         fi
         MAVEN_OPTS+=" -Dorg.slf4j.simpleLogger.showDateTime=true -Dorg.slf4j.simpleLogger.dateTimeFormat=HH:mm:ss,SSS" # https://stackoverflow.com/questions/5120470/how-to-time-the-different-stages-of-maven-execution/49494561#49494561
-        MAVEN_OPTS+=" -Xmx1024m -Djava.awt.headless=true -Djava.net.preferIPv4Stack=true -Dhttps.protocols=TLSv1.2"
+        MAVEN_OPTS+=" -Xmx1024m -Djava.awt.headless=true -Djava.net.preferIPv4Stack=true -Dhttps.protocols=TLSv1.3,TLSv1.2"
         export MAVEN_OPTS
         echo "MAVEN_OPTS: $MAVEN_OPTS"
 
@@ -149,7 +188,7 @@ jobs:
         fi
 
         # prevent "org.eclipse.swt.SWTError: No more handles [gtk_init_check() failed]" on Linux
-        ${{ runner.os == 'Linux' && 'xvfb-run --server-args="-screen 0 1600x900x24" \' || '' }}
+        ${{ runner.os == 'Linux' && 'xvfb-run --auto-servernum --server-args="-screen 0 1600x900x24" \' || '' }}
         mvn \
           --errors \
           --update-snapshots \
@@ -160,4 +199,41 @@ jobs:
           -Dtm4e.target-platform=${{ matrix.target-platform }} \
           $maven_args \
           ${{ github.event.inputs.additional_maven_args }} \
-          clean verify
+          clean verify || (
+            rc=$?
+            if [[ ${ACT:-} != "true" ]]; then
+              find . -path "*/target/work/data/.metadata/.log" | while IFS= read -r file; do
+                echo "::group::$file"
+                  cat "$file"
+                echo "::endgroup::"
+              done
+            fi
+            exit $rc
+          )
+
+
+    ##################################################
+    # Setup SSH debug session
+    ##################################################
+    - name: "SSH session for debugging: check"
+      id: DEBUG_SSH_SESSSION_CHECK
+      if: always()
+      run: |
+        set -eu
+
+        when="${{ inputs.debug-with-ssh }}"
+
+        if [[ $when == "always" ]] || case "${{ job.status }}" in
+          success)   [[ $when == "always" ]] ;;
+          cancelled) [[ $when == "on_failure_or_cancelled" ]] ;;
+          failure)   [[ $when == "on_failure"* ]] ;;
+        esac; then
+          echo "start_ssh_session=true" | tee -a "$GITHUB_OUTPUT"
+        fi
+
+
+    - name: "SSH session for debugging: start"
+      uses: mxschmitt/action-tmate@v3  # https://github.com/mxschmitt/action-tmate
+      if: always() && steps.DEBUG_SSH_SESSSION_CHECK.outputs.start_ssh_session
+      with:
+        limit-access-to-actor: ${{ inputs.debug-with-ssh-only-for-actor }}

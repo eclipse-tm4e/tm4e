@@ -19,8 +19,11 @@ import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 import org.eclipse.core.resources.IMarker;
+import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.jdt.annotation.Nullable;
+import org.eclipse.jface.text.BadLocationException;
+import org.eclipse.jface.text.IDocument;
 import org.eclipse.tm4e.core.model.ITMModel;
 import org.eclipse.tm4e.core.model.ModelTokensChangedEvent;
 import org.eclipse.tm4e.core.model.TMToken;
@@ -62,7 +65,7 @@ public final class MarkerUtils {
 		if (model instanceof final ITMDocumentModel docModel) {
 			try {
 				updateTextMarkers(docModel, event.ranges.get(0).fromLineNumber);
-			} catch (final CoreException ex) {
+			} catch (final Exception ex) {
 				TMUIPlugin.logError(ex);
 			}
 		}
@@ -74,12 +77,11 @@ public final class MarkerUtils {
 	 *
 	 * @param startLineNumber 1-based
 	 */
-	private static void updateTextMarkers(final ITMDocumentModel docModel, final int startLineNumber)
-			throws CoreException {
+	private static void updateTextMarkers(final ITMDocumentModel docModel, final int startLineNumber) throws CoreException {
 
-		final var doc = docModel.getDocument();
+		final IDocument doc = docModel.getDocument();
 
-		final var res = ResourceUtils.findResource(doc);
+		final IResource res = ResourceUtils.findResource(doc);
 		if (res == null)
 			return;
 
@@ -87,7 +89,7 @@ public final class MarkerUtils {
 
 		// collect affected markers
 		final var markersByLineNumber = new HashMap<Integer, List<IMarker>>();
-		for (final var marker : res.findMarkers(TEXTMARKER_TYPE, true, 0)) {
+		for (final IMarker marker : res.findMarkers(TEXTMARKER_TYPE, true, 0)) {
 			final var lineNumberObj = getLineNumber(marker);
 			if (lineNumberObj == null) {
 				marker.delete(); // this marker is missing line information, should never happen
@@ -121,13 +123,14 @@ public final class MarkerUtils {
 			final var outdatedMarkers = markersByLineNumber.getOrDefault(lineNumberObj, Collections.emptyList());
 
 			// iterate over all tokens of the current line
-			for (int tokenIndex = 0; tokenIndex < tokensCount; tokenIndex++) {
-				final var token = tokens.get(tokenIndex);
+			int tokenIndex = -1;
+			for (final TMToken token : tokens) {
+				tokenIndex++;
 
 				if (!token.type.contains("comment") || token.type.contains("definition"))
 					continue;
 
-				final TMToken nextToken = tokenIndex + 1 < tokensCount ? tokens.get(tokenIndex + 1) : null;
+				final @Nullable TMToken nextToken = tokenIndex + 1 < tokensCount ? tokens.get(tokenIndex + 1) : null;
 				try {
 					final int lineOffset = doc.getLineOffset(lineIndex);
 					final var commentText = doc.get(
@@ -164,7 +167,7 @@ public final class MarkerUtils {
 						attrs.put(IMarker.CHAR_END, markerTextStartOffset + markerText.length());
 						res.createMarker(markerTypeId, attrs);
 					}
-				} catch (final Exception ex) {
+				} catch (final BadLocationException ex) {
 					TMUIPlugin.logError(ex);
 				}
 			}
@@ -183,8 +186,9 @@ public final class MarkerUtils {
 			final Object lineNumberAttr = marker.getAttribute(IMarker.LINE_NUMBER);
 			if (lineNumberAttr instanceof final Integer lineNumber)
 				return lineNumber;
-		} catch (final CoreException ex) {
-			TMUIPlugin.logError(ex);
+		} catch (CoreException ex) {
+			if (marker.exists())
+				TMUIPlugin.logError(ex);
 		}
 		return null;
 	}
@@ -194,27 +198,31 @@ public final class MarkerUtils {
 	 *
 	 * @return true if a matching marker was found and removed.
 	 */
-	private static boolean removeMatchingMarker(final List<IMarker> markers, final String type, final Map<String, ?> attributes)
-			throws CoreException {
+	private static boolean removeMatchingMarker(final List<IMarker> markers, final String type, final Map<String, ?> attributes) {
 		if (markers.isEmpty())
 			return false;
 
 		for (final var it = markers.iterator(); it.hasNext();) {
-			final var marker = it.next();
-			if (!marker.getType().equals(type))
-				continue;
+			final IMarker marker = it.next();
+			try {
+				if (!marker.getType().equals(type))
+					continue;
 
-			boolean hasMatchingAttrs = true;
-			for (final var attr : attributes.entrySet()) {
-				if (!Objects.equals(marker.getAttribute(attr.getKey()), attr.getValue())) {
-					hasMatchingAttrs = false;
-					break;
+				boolean hasMatchingAttrs = true;
+				for (final var attr : attributes.entrySet()) {
+					if (!Objects.equals(marker.getAttribute(attr.getKey()), attr.getValue())) {
+						hasMatchingAttrs = false;
+						break;
+					}
 				}
-			}
 
-			if (hasMatchingAttrs) {
-				it.remove();
-				return true;
+				if (hasMatchingAttrs) {
+					it.remove();
+					return true;
+				}
+			} catch (CoreException ex) {
+				if (marker.exists())
+					TMUIPlugin.logError(ex);
 			}
 		}
 		return false;

@@ -11,117 +11,124 @@
  */
 package org.eclipse.tm4e.ui.internal.widgets;
 
-import static org.eclipse.tm4e.core.internal.utils.NullSafetyHelper.lazyNonNull;
-
-import java.util.Iterator;
+import static org.eclipse.tm4e.core.internal.utils.NullSafetyHelper.castNonNull;
 
 import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.jface.dialogs.MessageDialog;
-import org.eclipse.jface.viewers.ArrayContentProvider;
-import org.eclipse.jface.viewers.IStructuredSelection;
-import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.window.Window;
 import org.eclipse.jface.wizard.WizardDialog;
-import org.eclipse.swt.SWT;
-import org.eclipse.swt.layout.GridData;
+import org.eclipse.osgi.util.NLS;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.tm4e.registry.IGrammarDefinition;
+import org.eclipse.tm4e.ui.TMUIPlugin;
 import org.eclipse.tm4e.ui.internal.TMUIMessages;
 import org.eclipse.tm4e.ui.internal.wizards.CreateThemeAssociationWizard;
+import org.eclipse.tm4e.ui.themes.ITheme;
 import org.eclipse.tm4e.ui.themes.IThemeAssociation;
 import org.eclipse.tm4e.ui.themes.IThemeManager;
 
 /**
- * Widget which displays theme associations list on the left and "New", "Remove"
+ * Widget which displays theme associations list on the left and "Edit", "Remove"
  * buttons on the right.
- *
  */
-public final class ThemeAssociationsWidget extends TableAndButtonsWidget {
+public final class ThemeAssociationsWidget extends TableWithControlsWidget<IThemeAssociation> {
 
 	private final IThemeManager.EditSession themeManager;
 
-	private Button editButton = lazyNonNull();
-	private Button removeButton = lazyNonNull();
-
-	@Nullable
-	private IGrammarDefinition definition;
-
-	public ThemeAssociationsWidget(final IThemeManager.EditSession themeManager, final Composite parent, final int style) {
-		super(parent, style, TMUIMessages.ThemeAssociationsWidget_description);
+	public ThemeAssociationsWidget(final IThemeManager.EditSession themeManager, final Composite parent) {
+		super(parent, TMUIMessages.ThemeAssociationsWidget_description, false);
 		this.themeManager = themeManager;
-		super.setContentProvider(ArrayContentProvider.getInstance());
-		super.setLabelProvider(new ThemeAssociationLabelProvider());
-		createButtons();
 	}
 
-	private void createButtons() {
-		editButton = new Button(getButtonsArea(), SWT.PUSH);
-		editButton.setText(TMUIMessages.Button_edit);
-		editButton.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-		editButton.addListener(SWT.Selection, e -> {
+	@Override
+	protected TableWidget<IThemeAssociation> createTable(Composite parent) {
+		return new TableWidget<>(parent, false) {
+			{
+				getTable().setHeaderVisible(false);
+			}
+
+			@Override
+			protected void createColumns() {
+				createColumn("", 100, 0);
+			}
+
+			@Override
+			protected @Nullable String getColumnText(final IThemeAssociation association, final int columnIndex) {
+				return switch (columnIndex) {
+					case 0 -> {
+						final String themeId = association.getThemeId();
+						final ITheme theme = TMUIPlugin.getThemeManager().getThemeById(themeId);
+						final String themeName = theme != null ? theme.getName() : themeId;
+
+						final boolean isDefaultThemeAssociation = themeId
+								.equals(themeManager.getDefaultTheme(association.isWhenDark()).getId());
+
+						yield NLS.bind(association.isWhenDark()
+								? TMUIMessages.ThemeAssociationLabelProvider_dark
+								: TMUIMessages.ThemeAssociationLabelProvider_light,
+								(isDefaultThemeAssociation ? "default " : ""),
+								themeName);
+					}
+					default -> null;
+				};
+			}
+
+			@Override
+			protected Object[] getElements(@Nullable Object input) {
+				if (input instanceof IGrammarDefinition grammarDef) {
+					return themeManager
+							.getThemeAssociationsForScope(grammarDef.getScope().getName());
+				}
+				return super.getElements(input);
+			}
+		};
+	}
+
+	@Override
+	protected void createButtons() {
+		final Button editButton = createButton(TMUIMessages.Button_edit, () -> {
 			// Open the wizard to create association between theme and grammar.
 			final var wizard = new CreateThemeAssociationWizard(themeManager, false);
-			wizard.setInitialDefinition(definition);
-			final IStructuredSelection selection = super.getSelection();
-			wizard.setInitialAssociation(selection.isEmpty() ? null : (IThemeAssociation) selection.getFirstElement());
+			wizard.setInitialDefinition(getGrammarDefinition());
+			wizard.setInitialAssociation(getTable().getFirstSelectedElement());
 			final var dialog = new WizardDialog(getShell(), wizard);
 			if (dialog.open() == Window.OK) {
-				final IThemeAssociation association = wizard.getCreatedThemeAssociation();
-				refresh(association);
+				getTable().refresh();
+				getTable().setSelection(castNonNull(wizard.getCreatedThemeAssociation()));
 			}
 		});
-		editButton.setEnabled(false);
 
-		removeButton = new Button(getButtonsArea(), SWT.PUSH);
-		removeButton.setText(TMUIMessages.Button_remove);
-		removeButton.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-		removeButton.addListener(SWT.Selection, e -> {
-			if (MessageDialog.openConfirm(getShell(), TMUIMessages.ThemeAssociationsWidget_remove_dialog_title,
+		final Button removeButton = createButton(TMUIMessages.Button_remove, () -> {
+			if (MessageDialog.openConfirm(getShell(),
+					TMUIMessages.ThemeAssociationsWidget_remove_dialog_title,
 					TMUIMessages.ThemeAssociationsWidget_remove_dialog_message)) {
-				final IStructuredSelection selection = super.getSelection();
-				final Iterator<IThemeAssociation> it = selection.iterator();
-				while (it.hasNext()) {
-					final IThemeAssociation association = it.next();
-					themeManager.unregisterThemeAssociation(association);
-				}
-				refresh(null);
+				themeManager.unregisterThemeAssociation(castNonNull(getTable().getFirstSelectedElement()));
+				getTable().refresh();
 			}
-
 		});
-		removeButton.setEnabled(false);
+
+		getTable().onSelectionChanged(associations -> {
+			if (associations.isEmpty()) {
+				editButton.setEnabled(false);
+				removeButton.setEnabled(false);
+			} else {
+				editButton.setEnabled(true);
+				final IThemeAssociation association = associations.get(0);
+				boolean isDefaultThemeAssociation = association.getThemeId()
+						.equals(themeManager.getDefaultTheme(association.isWhenDark()).getId());
+				removeButton.setEnabled(!isDefaultThemeAssociation);
+			}
+		});
 	}
 
-	public Button getNewButton() {
-		return editButton;
+	public @Nullable IGrammarDefinition getGrammarDefinition() {
+		return getTable().getInput() instanceof IGrammarDefinition def
+				? def
+				: null;
 	}
 
-	public Button getRemoveButton() {
-		return removeButton;
+	public void setGrammarDefinition(final IGrammarDefinition definition) {
+		getTable().setInput(definition);
 	}
-
-	public IThemeAssociation[] setGrammarDefinition(final IGrammarDefinition definition) {
-		this.definition = definition;
-		return refresh(null);
-	}
-
-	private IThemeAssociation[] refresh(@Nullable IThemeAssociation association) {
-		final var definition = this.definition;
-		if (definition == null) {
-			return new IThemeAssociation[0];
-		}
-		final IThemeAssociation[] themeAssociations = themeManager
-				.getThemeAssociationsForScope(definition.getScope().getName());
-		// Refresh the list of associations
-		super.setInput(themeAssociations);
-		// Select the first of given association
-		if (association == null && themeAssociations.length > 0) {
-			association = themeAssociations[0];
-		}
-		if (association != null) {
-			super.setSelection(new StructuredSelection(association));
-		}
-		return themeAssociations;
-	}
-
 }

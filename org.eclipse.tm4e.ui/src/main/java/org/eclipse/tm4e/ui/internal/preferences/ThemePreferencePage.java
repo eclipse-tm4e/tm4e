@@ -95,7 +95,6 @@ public final class ThemePreferencePage extends AbstractPreferencePage {
 		Dialog.applyDialogFont(control);
 
 		themesTable.setInput(themeManager);
-		themesTable.selectFirstRow();
 
 		return control;
 	}

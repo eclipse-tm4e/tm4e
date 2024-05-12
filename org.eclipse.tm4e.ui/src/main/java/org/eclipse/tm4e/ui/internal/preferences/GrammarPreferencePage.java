@@ -15,17 +15,13 @@ package org.eclipse.tm4e.ui.internal.preferences;
 
 import static org.eclipse.tm4e.core.internal.utils.NullSafetyHelper.lazyNonNull;
 
-import java.util.Arrays;
 import java.util.stream.Collectors;
 
+import org.eclipse.core.runtime.content.IContentType;
 import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.layout.GridDataFactory;
-import org.eclipse.jface.viewers.ISelectionChangedListener;
-import org.eclipse.jface.viewers.IStructuredSelection;
-import org.eclipse.jface.viewers.SelectionChangedEvent;
-import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.window.Window;
 import org.eclipse.jface.wizard.WizardDialog;
 import org.eclipse.swt.SWT;
@@ -43,7 +39,6 @@ import org.eclipse.tm4e.registry.TMEclipseRegistryPlugin;
 import org.eclipse.tm4e.ui.TMUIPlugin;
 import org.eclipse.tm4e.ui.internal.TMUIMessages;
 import org.eclipse.tm4e.ui.internal.themes.ThemeManager;
-import org.eclipse.tm4e.ui.internal.widgets.ContentTypesBindingWidget;
 import org.eclipse.tm4e.ui.internal.widgets.GrammarInfoWidget;
 import org.eclipse.tm4e.ui.internal.widgets.TMViewer;
 import org.eclipse.tm4e.ui.internal.widgets.TableWidget;
@@ -75,7 +70,7 @@ public final class GrammarPreferencePage extends AbstractPreferencePage {
 
 	// Grammar info tabs
 	private GrammarInfoWidget grammarInfoWidget = lazyNonNull();
-	private ContentTypesBindingWidget contentTypesWidget = lazyNonNull();
+	private TableWithControlsWidget<IContentType> contentTypesWidget = lazyNonNull();
 	private ThemeAssociationsWidget themeAssociationsWidget = lazyNonNull();
 
 	private TMViewer grammarPreview = lazyNonNull();
@@ -103,7 +98,6 @@ public final class GrammarPreferencePage extends AbstractPreferencePage {
 		Dialog.applyDialogFont(control);
 
 		grammarsTable.setInput(grammarManager);
-		grammarsTable.selectFirstRow();
 
 		return control;
 	}
@@ -235,7 +229,30 @@ public final class GrammarPreferencePage extends AbstractPreferencePage {
 		parent.setLayout(new GridLayout());
 		parent.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 
-		contentTypesWidget = new ContentTypesBindingWidget(parent, SWT.NONE);
+		contentTypesWidget = new TableWithControlsWidget<>(parent, TMUIMessages.ContentTypesBindingWidget_description, false) {
+
+			@Override
+			protected TableWidget<IContentType> createTable(final Composite parent) {
+				return new TableWidget<>(parent, false) {
+					{
+						getTable().setHeaderVisible(false);
+					}
+
+					@Override
+					protected void createColumns() {
+						createColumn("", 100, 0);
+					}
+
+					@Override
+					protected @Nullable String getColumnText(final IContentType contentType, final int columnIndex) {
+						return switch (columnIndex) {
+							case 0 -> contentType.getName() + " (" + contentType.getId() + ")";
+							default -> null;
+						};
+					}
+				};
+			}
+		};
 		contentTypesWidget.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 
 		tab.setControl(parent);
@@ -252,35 +269,17 @@ public final class GrammarPreferencePage extends AbstractPreferencePage {
 		parent.setLayout(new GridLayout());
 		parent.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 
-		themeAssociationsWidget = new ThemeAssociationsWidget(themeManager, parent, SWT.NONE);
+		themeAssociationsWidget = new ThemeAssociationsWidget(themeManager, parent);
 		final var data = new GridData(GridData.FILL_HORIZONTAL);
 		data.horizontalSpan = 2;
 		themeAssociationsWidget.setLayoutData(data);
-		themeAssociationsWidget.addSelectionChangedListener(new ISelectionChangedListener() {
-
-			@Override
-			public void selectionChanged(final @Nullable SelectionChangedEvent e) {
-				if (e == null)
-					return;
-				final var association = (IThemeAssociation) ((IStructuredSelection) e.getSelection()).getFirstElement();
-				selectTheme(association);
-			}
-
-			private void selectTheme(final @Nullable IThemeAssociation association) {
-				themeAssociationsWidget.getNewButton().setEnabled(association != null /* && association.getPluginId() == null */);
-				themeAssociationsWidget.getRemoveButton().setEnabled(association != null /* && association.getPluginId() == null */);
-				if (association != null) {
-					setPreviewTheme(association.getThemeId());
-				}
+		themeAssociationsWidget.getTable().onSelectionChanged(associations -> {
+			if (!associations.isEmpty()) {
+				setPreviewTheme(associations.get(0).getThemeId());
 			}
 		});
 
 		tab.setControl(parent);
-
-		grammarsTable.onSelectionChanged(selectedGrammarDefinitions -> {
-			themeAssociationsWidget.getNewButton().setEnabled(false);
-			themeAssociationsWidget.getRemoveButton().setEnabled(false);
-		});
 	}
 
 	private void setPreviewTheme(final String themeId) {
@@ -309,8 +308,8 @@ public final class GrammarPreferencePage extends AbstractPreferencePage {
 	private void selectGrammar(final IGrammarDefinition definition) {
 		fillGeneralTab(definition);
 		fillContentTypeTab(definition);
-		final IThemeAssociation selectedAssociation = fillThemeTab(definition);
-		preview(definition, selectedAssociation);
+		fillThemeTab(definition);
+		preview(definition, themeAssociationsWidget.getTable().getFirstSelectedElement());
 	}
 
 	private void fillGeneralTab(final IGrammarDefinition definition) {
@@ -320,28 +319,22 @@ public final class GrammarPreferencePage extends AbstractPreferencePage {
 
 	private void fillContentTypeTab(final IGrammarDefinition definition) {
 		// Load the content type binding for the given grammar
-		contentTypesWidget.setInput(grammarManager.getContentTypesForScope(definition.getScope()));
+		contentTypesWidget.getTable().setInput(grammarManager.getContentTypesForScope(definition.getScope()));
 	}
 
-	@Nullable
-	private IThemeAssociation fillThemeTab(final IGrammarDefinition definition) {
-		IThemeAssociation selectedAssociation = null;
-		final IStructuredSelection oldSelection = themeAssociationsWidget.getSelection();
-		// Load the theme associations for the given grammar
-		final IThemeAssociation[] themeAssociations = themeAssociationsWidget.setGrammarDefinition(definition);
-		// Try to keep selection
-		if (!oldSelection.isEmpty() && Arrays.asList(themeAssociations).contains(oldSelection.getFirstElement())) {
-			selectedAssociation = (IThemeAssociation) oldSelection.getFirstElement();
-			themeAssociationsWidget.setSelection(oldSelection);
-		} else {
-			selectedAssociation = themeAssociations.length > 0
-					? themeAssociations[0]
-					: null;
-			if (selectedAssociation != null) {
-				themeAssociationsWidget.setSelection(new StructuredSelection(selectedAssociation));
+	private void fillThemeTab(final IGrammarDefinition definition) {
+		final var selectedAssociation = themeAssociationsWidget.getTable().getFirstSelectedElement();
+		themeAssociationsWidget.setGrammarDefinition(definition);
+
+		// restore theme selection
+		if (selectedAssociation != null) {
+			for (IThemeAssociation association : themeAssociationsWidget.getTable().getElements()) {
+				if (association.getThemeId().equals(selectedAssociation.getThemeId())) {
+					themeAssociationsWidget.getTable().setSelection(association);
+					break;
+				}
 			}
 		}
-		return selectedAssociation;
 	}
 
 	private void createThemePreview(final Composite parent) {

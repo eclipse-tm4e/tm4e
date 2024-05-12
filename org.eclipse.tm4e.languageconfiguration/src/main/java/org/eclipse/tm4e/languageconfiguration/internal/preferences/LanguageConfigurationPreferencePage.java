@@ -70,7 +70,6 @@ public final class LanguageConfigurationPreferencePage extends AbstractPreferenc
 					: selectedDefinitions.get(0), manager);
 		});
 		langCfgsTable.setInput(manager);
-		langCfgsTable.selectFirstRow();
 
 		return control;
 	}

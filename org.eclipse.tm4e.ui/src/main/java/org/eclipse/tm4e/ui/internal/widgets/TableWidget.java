@@ -100,15 +100,15 @@ public abstract class TableWidget<T> extends TableViewer {
 		autoResizeColumns.add(col);
 	}
 
-	protected void createColumn(final String label, final int columnWeight, final int minColWidth,
+	protected void createColumn(final @Nullable String label, final int columnWeight, final int minColWidth,
 			final int... secondarySortColumns) {
 		final var col = new TableColumn(getTable(), SWT.NONE);
-		col.setText(label);
+		col.setText(label == null ? "" : label);
 		this.secondarySortColumns.add(secondarySortColumns);
 		col.addSelectionListener(new ColumnSelectionAdapter(this, viewerComparator, secondarySortColumns));
 
 		tableColumnLayout.setColumnData(col,
-				new ColumnWeightData(columnWeight, Math.max(UI.getTextWidth(label) + 15, minColWidth), true));
+				new ColumnWeightData(columnWeight, Math.max(UI.getTextWidth(col.getText()) + 15, minColWidth), true));
 	}
 
 	protected abstract void createColumns();
@@ -117,6 +117,11 @@ public abstract class TableWidget<T> extends TableViewer {
 	 * @return an object whose #toString() method is called to get the element's text for the given column
 	 */
 	protected abstract @Nullable Object getColumnText(T element, int columnIndex);
+
+	@SuppressWarnings({ "unchecked" })
+	public List<T> getElements() {
+		return (List<T>) List.of(getElements(getInput()));
+	}
 
 	protected Object[] getElements(final @Nullable Object input) {
 		if (input == null)
@@ -151,6 +156,10 @@ public abstract class TableWidget<T> extends TableViewer {
 
 		// auto refresh when input has changed
 		refresh();
+
+		if (getFirstSelectedElement() == null) {
+			selectFirstRow();
+		}
 	}
 
 	public TableWidget<T> onSelectionChanged(final Consumer<List<T>> consumer) {

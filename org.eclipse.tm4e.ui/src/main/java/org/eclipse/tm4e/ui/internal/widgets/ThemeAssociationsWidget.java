@@ -42,7 +42,7 @@ public final class ThemeAssociationsWidget extends TableWithControlsWidget<IThem
 	}
 
 	@Override
-	protected TableWidget<IThemeAssociation> createTable(Composite parent) {
+	protected TableWidget<IThemeAssociation> createTable(final Composite parent) {
 		return new TableWidget<>(parent, false) {
 			{
 				getTable().setHeaderVisible(false);
@@ -75,8 +75,8 @@ public final class ThemeAssociationsWidget extends TableWithControlsWidget<IThem
 			}
 
 			@Override
-			protected Object[] getElements(@Nullable Object input) {
-				if (input instanceof IGrammarDefinition grammarDef) {
+			protected Object[] getElements(@Nullable final Object input) {
+				if (input instanceof final IGrammarDefinition grammarDef) {
 					return themeManager
 							.getThemeAssociationsForScope(grammarDef.getScope().getName());
 				}
@@ -115,7 +115,7 @@ public final class ThemeAssociationsWidget extends TableWithControlsWidget<IThem
 			} else {
 				editButton.setEnabled(true);
 				final IThemeAssociation association = associations.get(0);
-				boolean isDefaultThemeAssociation = association.getThemeId()
+				final boolean isDefaultThemeAssociation = association.getThemeId()
 						.equals(themeManager.getDefaultTheme(association.isWhenDark()).getId());
 				removeButton.setEnabled(!isDefaultThemeAssociation);
 			}
@@ -123,7 +123,7 @@ public final class ThemeAssociationsWidget extends TableWithControlsWidget<IThem
 	}
 
 	public @Nullable IGrammarDefinition getGrammarDefinition() {
-		return getTable().getInput() instanceof IGrammarDefinition def
+		return getTable().getInput() instanceof final IGrammarDefinition def
 				? def
 				: null;
 	}

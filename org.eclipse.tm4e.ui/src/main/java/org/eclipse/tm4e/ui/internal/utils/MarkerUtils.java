@@ -186,7 +186,7 @@ public final class MarkerUtils {
 			final Object lineNumberAttr = marker.getAttribute(IMarker.LINE_NUMBER);
 			if (lineNumberAttr instanceof final Integer lineNumber)
 				return lineNumber;
-		} catch (CoreException ex) {
+		} catch (final CoreException ex) {
 			if (marker.exists())
 				TMUIPlugin.logError(ex);
 		}
@@ -220,7 +220,7 @@ public final class MarkerUtils {
 					it.remove();
 					return true;
 				}
-			} catch (CoreException ex) {
+			} catch (final CoreException ex) {
 				if (marker.exists())
 					TMUIPlugin.logError(ex);
 			}

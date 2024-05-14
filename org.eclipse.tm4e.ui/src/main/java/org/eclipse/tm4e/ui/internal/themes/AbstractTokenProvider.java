@@ -53,7 +53,7 @@ public abstract class AbstractTokenProvider implements ITokenProvider {
 		return getJFaceTextTokenReturnValueCache.computeIfAbsent(style, this::getJFaceTextTokenUncached);
 	}
 
-	private IToken getJFaceTextTokenUncached(IStyle style) {
+	private IToken getJFaceTextTokenUncached(final IStyle style) {
 		final @Nullable RGB styleFGColor = style.getColor();
 		final @Nullable RGB styleBGColor = style.getBackgroundColor();
 		final var colors = ColorManager.getInstance();

@@ -83,7 +83,7 @@ public class TMThemeTokenProvider extends AbstractTokenProvider {
 	}
 
 	protected @Nullable Color getEditorColor(final String... names) {
-		for (String name : names) {
+		for (final String name : names) {
 			final String colorHexCode = castNullable(theme.getEditorColors().get(name));
 			if (colorHexCode == null)
 				continue;

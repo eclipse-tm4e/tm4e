@@ -64,7 +64,7 @@ public abstract class TableWithControlsWidget<T> extends Composite {
 	protected void createButtons() {
 	}
 
-	protected Button createButton(String title, Runnable onClick) {
+	protected Button createButton(final String title, final Runnable onClick) {
 		final var button = new Button(buttonsArea, SWT.PUSH);
 		button.setText(title);
 		button.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
@@ -81,7 +81,7 @@ public abstract class TableWithControlsWidget<T> extends Composite {
 	}
 
 	private void createFilter(final Composite parent) {
-		var filterInput = new Text(this, SWT.SEARCH | SWT.ICON_CANCEL | SWT.ICON_SEARCH | SWT.FLAT);
+		final var filterInput = new Text(this, SWT.SEARCH | SWT.ICON_CANCEL | SWT.ICON_SEARCH | SWT.FLAT);
 		filterInput.setMessage(" type filter text");
 		filterInput.addModifyListener(e -> onFilterChanged(filterInput.getText()));
 		filterInput.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
@@ -104,7 +104,7 @@ public abstract class TableWithControlsWidget<T> extends Composite {
 			table.setFilters(new ViewerFilter() {
 				@NonNullByDefault({})
 				@Override
-				public boolean select(Viewer viewer, Object parentElement, Object element) {
+				public boolean select(final Viewer viewer, final Object parentElement, final Object element) {
 					for (int i = 0, l = swtTable.getItemCount(); i < l; i++) {
 						if (table.getElementAt(i) == element) {
 							final var row = swtTable.getItem(i);

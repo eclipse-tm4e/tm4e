@@ -81,13 +81,13 @@ public final class ThemePreferencePage extends AbstractPreferencePage {
 		final var control = new VerticalSplitPane(parent, 1, 1) {
 
 			@Override
-			protected void configureUpperArea(Composite parent) {
+			protected void configureUpperArea(final Composite parent) {
 				createThemesTable(parent);
 				createThemeDetailsView(parent);
 			}
 
 			@Override
-			protected void configureLowerArea(Composite parent) {
+			protected void configureLowerArea(final Composite parent) {
 				createThemePreview(parent);
 			}
 		}.getControl();
@@ -171,7 +171,7 @@ public final class ThemePreferencePage extends AbstractPreferencePage {
 							? themeFileName.substring(0, themeFileName.lastIndexOf('.'))
 							: rawTheme.getName());
 					return new Theme(name, themePath.toAbsolutePath().toString(), name, false);
-				} catch (Exception ex) {
+				} catch (final Exception ex) {
 					MessageDialog.openError(getShell(), "Invalid theme file", "Failed to parse [" + themePath + "]: " + ex);
 					return null;
 				}

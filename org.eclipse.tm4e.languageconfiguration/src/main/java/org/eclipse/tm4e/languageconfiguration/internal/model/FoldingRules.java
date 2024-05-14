@@ -28,11 +28,11 @@ public final class FoldingRules {
 	 * - the regex should start with '^'
 	 * - regexp flags (i, g) are ignored
 	 */
-	public final class FoldingMarkers {
+	public static final class FoldingMarkers {
 		public final RegExPattern start;
 		public final RegExPattern end;
 
-		public FoldingMarkers(RegExPattern start, RegExPattern end) {
+		public FoldingMarkers(final RegExPattern start, final RegExPattern end) {
 			this.start = start;
 			this.end = end;
 		}

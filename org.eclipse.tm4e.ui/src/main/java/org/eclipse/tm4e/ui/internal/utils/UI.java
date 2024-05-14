@@ -144,7 +144,7 @@ public final class UI {
 
 	private static @Nullable FontMetrics fontMetrics;
 
-	public static int convertHeightInCharsToPixels(int chars) {
+	public static int convertHeightInCharsToPixels(final int chars) {
 		if (fontMetrics == null) {
 			final GC gc = new GC(getActiveShell());
 			try {

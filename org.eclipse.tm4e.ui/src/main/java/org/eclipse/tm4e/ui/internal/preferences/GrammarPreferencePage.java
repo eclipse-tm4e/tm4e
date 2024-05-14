@@ -64,7 +64,7 @@ public final class GrammarPreferencePage extends AbstractPreferencePage {
 	// Managers
 	private IGrammarRegistryManager.EditSession grammarManager = TMEclipseRegistryPlugin.getGrammarRegistryManager().newEditSession();
 	private IThemeManager.EditSession themeManager = ThemeManager.getInstance().newEditSession();
-	private ISnippetManager snippetManager = TMUIPlugin.getSnippetManager();
+	private final ISnippetManager snippetManager = TMUIPlugin.getSnippetManager();
 
 	private TableWidget<IGrammarDefinition> grammarsTable = lazyNonNull();
 
@@ -341,7 +341,7 @@ public final class GrammarPreferencePage extends AbstractPreferencePage {
 	private void createThemePreview(final Composite parent) {
 		final var label = new Label(parent, SWT.NONE);
 		label.setText(TMUIMessages.GrammarPreferencePage_preview);
-		var data = new GridData();
+		final var data = new GridData();
 		data.horizontalSpan = 2;
 		label.setLayoutData(data);
 

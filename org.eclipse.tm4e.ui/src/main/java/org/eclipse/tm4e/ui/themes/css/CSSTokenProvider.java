@@ -53,7 +53,7 @@ public class CSSTokenProvider extends AbstractTokenProvider {
 	}
 
 	@Override
-	protected @Nullable IStyle getBestStyle(String textMateTokenType) {
+	protected @Nullable IStyle getBestStyle(final String textMateTokenType) {
 		return parser.getBestStyle(StringUtils.splitToArray(textMateTokenType, '.'));
 	}
 

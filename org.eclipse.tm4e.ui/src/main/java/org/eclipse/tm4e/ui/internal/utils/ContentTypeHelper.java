@@ -150,10 +150,10 @@ public final class ContentTypeHelper {
 		if (path != null) {
 			if (path.isAbsolute()) {
 				final var file = path.toFile();
-				if(file.exists()) {
+				if (file.exists()) {
 					try {
 						return new BufferedInputStream(new FileInputStream(file));
-					} catch (FileNotFoundException ex) {
+					} catch (final FileNotFoundException ex) {
 						TMUIPlugin.logError(ex);
 					}
 				}

@@ -134,7 +134,7 @@ public abstract class TableWidget<T> extends TableViewer {
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public T getElementAt(int index) {
+	public T getElementAt(final int index) {
 		return (T) super.getElementAt(index);
 	}
 
@@ -214,7 +214,7 @@ public abstract class TableWidget<T> extends TableViewer {
 		setSelection(getElements().stream().filter(selector).toList());
 	}
 
-	public void setSelection(boolean reveal, @SuppressWarnings("unchecked") final T... selection) {
+	public void setSelection(final boolean reveal, @SuppressWarnings("unchecked") final T... selection) {
 		setSelection(selection);
 		if (reveal) {
 			reveal(selection[0]);
@@ -225,7 +225,7 @@ public abstract class TableWidget<T> extends TableViewer {
 	 * @param col 0-based column index
 	 * @param sortDirection {@link SWT#DOWN} or {@link SWT#UP}
 	 */
-	public void setSortColumn(final int col, int sortDirection) {
+	public void setSortColumn(final int col, final int sortDirection) {
 		viewerComparator.setColumns(col, secondarySortColumns.get(col));
 		viewerComparator.setDirection(sortDirection);
 		getTable().setSortDirection(viewerComparator.getDirection());

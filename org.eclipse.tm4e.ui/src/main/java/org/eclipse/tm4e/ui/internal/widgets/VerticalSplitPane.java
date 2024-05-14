@@ -23,7 +23,7 @@ public abstract class VerticalSplitPane {
 
 	private final SashForm sash;
 
-	protected VerticalSplitPane(final Composite parent, int upperAreaWeight, int lowerAreaWeight) {
+	protected VerticalSplitPane(final Composite parent, final int upperAreaWeight, final int lowerAreaWeight) {
 		sash = new SashForm(parent, SWT.VERTICAL | SWT.SMOOTH);
 		sash.setBackground(parent.getDisplay().getSystemColor(SWT.COLOR_GRAY));
 		sash.setSashWidth(5);

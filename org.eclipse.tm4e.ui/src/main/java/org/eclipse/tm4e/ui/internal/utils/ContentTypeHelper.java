@@ -226,8 +226,7 @@ public final class ContentTypeHelper {
 			if (listeners != null) {
 				// Get AbstractDocumentProvider#ElementInfo
 				final Object[] l = listeners.getListeners();
-				for (int i = 0; i < l.length; i++) {
-					final Object /* AbstractDocumentProvider#ElementInfo */ info = l[i];
+				for (final Object /* AbstractDocumentProvider#ElementInfo */ info : l) {
 					try {
 						/* The element for which the info is stored */
 						final Object input = ClassHelper.getFieldValue(info, "fElement");

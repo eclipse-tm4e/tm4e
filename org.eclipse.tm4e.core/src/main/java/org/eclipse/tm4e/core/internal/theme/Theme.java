@@ -268,8 +268,7 @@ public final class Theme {
 		final var defaults = StyleAttributes.of(defaultFontStyle, colorMap.getId(defaultForeground), colorMap.getId(defaultBackground));
 
 		final var root = new ThemeTrieElement(new ThemeTrieElementRule(0, null, FontStyle.NotSet, 0, 0), Collections.emptyList());
-		for (int i = 0, len = parsedThemeRules.size(); i < len; i++) {
-			final var rule = parsedThemeRules.get(i);
+		for (final ParsedThemeRule rule : parsedThemeRules) {
 			root.insert(0, rule.scope, rule.parentScopes, rule.fontStyle, colorMap.getId(rule.foreground), colorMap.getId(rule.background));
 		}
 

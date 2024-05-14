@@ -44,8 +44,8 @@ public final class ScopeStack {
 	@Nullable
 	public static ScopeStack from(final String... segments) {
 		ScopeStack result = null;
-		for (var i = 0; i < segments.length; i++) {
-			result = new ScopeStack(result, segments[i]);
+		for (final String segment : segments) {
+			result = new ScopeStack(result, segment);
 		}
 		return result;
 	}

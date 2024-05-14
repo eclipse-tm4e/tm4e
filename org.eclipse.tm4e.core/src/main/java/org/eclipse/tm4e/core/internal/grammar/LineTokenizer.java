@@ -371,8 +371,7 @@ final class LineTokenizer {
 		final List<String> scopes = stack.contentNameScopesList != null ? stack.contentNameScopesList.getScopeNames()
 				: Collections.emptyList();
 
-		for (int i = 0, len = injections.size(); i < len; i++) {
-			final var injection = injections.get(i);
+		for (final Injection injection : injections) {
 			if (!injection.matches(scopes)) {
 				// injection selector doesn't match stack
 				continue;

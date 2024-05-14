@@ -344,7 +344,7 @@ public final class GrammarPreferencePage extends AbstractPreferencePage {
 		data.horizontalSpan = 2;
 		label.setLayoutData(data);
 
-		grammarPreview = new TMViewer(parent, null, null, false, SWT.BORDER | SWT.V_SCROLL | SWT.H_SCROLL);
+		grammarPreview = new TMViewer(parent, SWT.BORDER | SWT.V_SCROLL | SWT.H_SCROLL);
 
 		// Don't set caret to 'null' as this causes https://bugs.eclipse.org/293263
 		// viewer.getTextWidget().setCaret(null);

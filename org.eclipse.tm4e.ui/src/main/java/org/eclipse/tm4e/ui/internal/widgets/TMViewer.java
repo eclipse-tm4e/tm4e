@@ -31,45 +31,44 @@ import org.eclipse.tm4e.ui.themes.ITheme;
  */
 public final class TMViewer extends SourceViewer {
 
-	private final TMPresentationReconciler reconciler = new TMPresentationReconciler();
-
-	public TMViewer(final Composite parent, final IVerticalRuler ruler, final int styles) {
-		this(parent, ruler, null, false, styles);
+	private final class TMSourceViewerConfiguration extends SourceViewerConfiguration {
+		@Override
+		public IPresentationReconciler getPresentationReconciler(final @Nullable ISourceViewer sourceViewer) {
+			return reconciler;
+		}
 	}
 
-	public TMViewer(final Composite parent, @Nullable final IVerticalRuler verticalRuler,
-			@Nullable final IOverviewRuler overviewRuler,
+	private final TMPresentationReconciler reconciler = new TMPresentationReconciler();
+
+	public TMViewer(final Composite parent, final int styles) {
+		this(parent, null, null, false, styles);
+	}
+
+	public TMViewer(final Composite parent, final @Nullable IVerticalRuler verticalRuler, final @Nullable IOverviewRuler overviewRuler,
 			final boolean showAnnotationsOverview, final int styles) {
 		super(parent, verticalRuler, overviewRuler, showAnnotationsOverview, styles);
 		configure(new TMSourceViewerConfiguration());
 	}
 
-	private final class TMSourceViewerConfiguration extends SourceViewerConfiguration {
-		@Override
-		public IPresentationReconciler getPresentationReconciler(@Nullable final ISourceViewer sourceViewer) {
-			return reconciler;
-		}
-	}
-
-	public void setGrammar(@Nullable final IGrammar grammar) {
+	public void setGrammar(final @Nullable IGrammar grammar) {
 		reconciler.setGrammar(grammar);
 		if (getDocument() == null) {
-			super.setDocument(new Document());
+			setDocument(new Document());
 		}
 	}
 
 	public void setTheme(final ITheme theme) {
 		reconciler.setTheme(theme);
 		final StyledText styledText = getTextWidget();
+		styledText.setFont(JFaceResources.getTextFont());
 		styledText.setForeground(null);
 		styledText.setBackground(null);
 		theme.initializeViewerColors(styledText);
-		getTextWidget().setFont(JFaceResources.getTextFont());
 	}
 
 	public void setText(final String text) {
 		if (getDocument() == null) {
-			super.setDocument(new Document());
+			setDocument(new Document());
 		}
 		getDocument().set(text);
 	}

@@ -252,7 +252,7 @@ public final class ThemePreferencePage extends AbstractPreferencePage {
 			grammarsCombo.getCombo().select(0);
 		}
 
-		themePreview = new TMViewer(parent, null, null, false, SWT.BORDER | SWT.V_SCROLL | SWT.H_SCROLL);
+		themePreview = new TMViewer(parent, SWT.BORDER | SWT.V_SCROLL | SWT.H_SCROLL);
 
 		// Don't set caret to 'null' as this causes https://bugs.eclipse.org/293263
 		// viewer.getTextWidget().setCaret(null);

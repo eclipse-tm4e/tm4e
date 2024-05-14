@@ -57,7 +57,6 @@ public final class LanguageConfigurationMessages extends NLS {
 	public static String LanguageConfigurationPreferencePage_description;
 	public static String LanguageConfigurationPreferencePage_description2;
 	public static String LanguageConfigurationPreferencePage_button_add;
-	public static String LanguageConfigurationPreferencePage_path;
 	public static String LanguageConfigurationPreferencePage_column_source;
 	public static String LanguageConfigurationPreferencePage_button_remove;
 

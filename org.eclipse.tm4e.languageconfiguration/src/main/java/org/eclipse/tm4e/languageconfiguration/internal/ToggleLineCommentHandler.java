@@ -77,8 +77,8 @@ public class ToggleLineCommentHandler extends AbstractHandler {
 			}
 
 			final ContentTypeInfo info = ContentTypeHelper.findContentTypes(document);
-				if (info == null)
-					return null;
+			if (info == null)
+				return null;
 
 			final var contentTypes = info.getContentTypes();
 			final var command = event.getCommand();

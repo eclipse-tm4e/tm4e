@@ -123,7 +123,7 @@ public final class GrammarPreferencePage extends AbstractPreferencePage {
 								final var contentTypes = grammarManager.getContentTypesForScope(def.getScope());
 								yield contentTypes == null
 										? null
-										: contentTypes.stream().map(ct -> ct.getName())
+										: contentTypes.stream().map(IContentType::getName)
 												.distinct()
 												.sorted()
 												.collect(Collectors.joining(", "));

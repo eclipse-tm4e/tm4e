@@ -115,7 +115,9 @@ class Colorizer {
 				final int startLineOffset = doc.getLineOffset(lineIndex);
 				for (int i = 0; i < tokens.size(); i++) {
 					final TMToken currentToken = tokens.get(i);
-					final TMToken nextToken = (i + 1 < tokens.size()) ? tokens.get(i + 1) : null;
+					final TMToken nextToken = i + 1 < tokens.size()
+							? tokens.get(i + 1)
+							: null;
 					int tokenStartIndex = currentToken.startIndex;
 
 					// check if the current token is before the damaged region

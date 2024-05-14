@@ -67,7 +67,7 @@ public final class ThemeAssociationsWidget extends TableWithControlsWidget<IThem
 						yield NLS.bind(association.isWhenDark()
 								? TMUIMessages.ThemeAssociationLabelProvider_dark
 								: TMUIMessages.ThemeAssociationLabelProvider_light,
-								(isDefaultThemeAssociation ? "default " : ""),
+								isDefaultThemeAssociation ? "default " : "",
 								themeName);
 					}
 					default -> null;

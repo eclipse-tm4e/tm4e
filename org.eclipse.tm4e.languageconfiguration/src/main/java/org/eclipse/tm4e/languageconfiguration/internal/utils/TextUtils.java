@@ -225,7 +225,7 @@ public final class TextUtils {
 		/*
 		 * replace common indentation of all lines
 		 */
-		final var sb = new StringBuilder(Math.max(0, multiLineString.length() - (indentDetector.lineCount * existingIndent)));
+		final var sb = new StringBuilder(Math.max(0, multiLineString.length() - indentDetector.lineCount * existingIndent));
 		final class IdentReplacer extends CharConsumer {
 			int skippedIndentOfLine = 0;
 			boolean isEmptyLine = true;

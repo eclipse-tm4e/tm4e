@@ -62,7 +62,7 @@ public class OnEnterSupport {
 	private final List<OnEnterRule> regExpRules;
 
 	public OnEnterSupport(final @Nullable List<CharacterPair> brackets, final @Nullable List<OnEnterRule> regExpRules) {
-		for (final var charPair : (brackets != null ? brackets : DEFAULT_BRACKETS)) {
+		for (final var charPair : brackets != null ? brackets : DEFAULT_BRACKETS) {
 			final var openRegExp = createOpenBracketRegExp(charPair.open);
 			final var closeRegExp = createCloseBracketRegExp(charPair.close);
 			if (openRegExp != null && closeRegExp != null)

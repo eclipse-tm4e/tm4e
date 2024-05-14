@@ -323,17 +323,18 @@ public final class GrammarPreferencePage extends AbstractPreferencePage {
 	}
 
 	private void fillThemeTab(final IGrammarDefinition definition) {
-		final var selectedAssociation = themeAssociationsWidget.getTable().getFirstSelectedElement();
+		final TableWidget<IThemeAssociation> themeAssociationsTable = themeAssociationsWidget.getTable();
+		final IThemeAssociation selectedAssociation = themeAssociationsTable.getFirstSelectedElement();
+
 		themeAssociationsWidget.setGrammarDefinition(definition);
 
-		// restore theme selection
-		if (selectedAssociation != null) {
-			for (IThemeAssociation association : themeAssociationsWidget.getTable().getElements()) {
-				if (association.getThemeId().equals(selectedAssociation.getThemeId())) {
-					themeAssociationsWidget.getTable().setSelection(association);
-					break;
-				}
-			}
+		if (selectedAssociation == null) {
+			// ensure that by default a TM theme is selected that matches the Eclipse theme's dark/light mode
+			final boolean isDarkEclipse = themeManager.getDefaultTheme().isDark();
+			themeAssociationsTable.setSelection(association -> association.isWhenDark() == isDarkEclipse);
+		} else {
+			// restore theme selection
+			themeAssociationsTable.setSelection(association -> association.getThemeId().equals(selectedAssociation.getThemeId()));
 		}
 	}
 

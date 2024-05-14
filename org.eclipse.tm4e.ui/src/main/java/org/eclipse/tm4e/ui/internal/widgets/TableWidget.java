@@ -19,6 +19,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.function.Consumer;
+import java.util.function.Predicate;
 
 import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.jface.layout.TableColumnLayout;
@@ -203,6 +204,14 @@ public abstract class TableWidget<T> extends TableViewer {
 
 	public void setSelection(@SuppressWarnings("unchecked") final T... selection) {
 		setSelection(new StructuredSelection(selection));
+	}
+
+	public void setSelection(final List<T> selection) {
+		setSelection(new StructuredSelection(selection));
+	}
+
+	public void setSelection(final Predicate<T> selector) {
+		setSelection(getElements().stream().filter(selector).toList());
 	}
 
 	public void setSelection(boolean reveal, @SuppressWarnings("unchecked") final T... selection) {

@@ -168,7 +168,7 @@ public final class MarkerUtils {
 						res.createMarker(markerTypeId, attrs);
 					}
 				} catch (final BadLocationException ex) {
-					TMUIPlugin.logError(ex);
+					TMUIPlugin.logTrace(ex);
 				}
 			}
 

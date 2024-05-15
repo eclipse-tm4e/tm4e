@@ -80,7 +80,9 @@ jobs:
 
     steps:
     - name: "Show: GitHub context"
-      run: echo '${{ toJSON(github) }}'
+      env:
+        GITHUB_CONTEXT: ${{ toJSON(github) }}
+      run: echo $GITHUB_CONTEXT
 
 
     - name: "Show: environment variables"

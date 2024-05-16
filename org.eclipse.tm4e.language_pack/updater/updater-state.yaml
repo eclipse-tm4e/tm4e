@@ -138,8 +138,17 @@ extensions:
     github:
       repo: microsoft/vscode
       path: extensions/diff
-      ref: 1.84.0
-      commit: d037ac076cee195194f93ce6fe2bdfe2969cc82d
+      ref: 1.87.0
+      commit: 019f4d1419fbc8219a181fab7892ebccf7ee29a2
+    languages:
+      diff:
+        label: Diff
+        scope-name: source.diff
+        upstream-url: https://github.com/textmate/diff.tmbundle/commit/0593bb775eab1824af97ef2172fd38822abd97d7
+        file-extensions:
+        - .diff
+        - .patch
+        - .rej
   docker:
     github:
       repo: microsoft/vscode

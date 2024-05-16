@@ -281,6 +281,26 @@
   </extension>
 
   <!-- ======================================== -->
+  <!-- diff/diff: Diff -->
+  <!-- ======================================== -->
+  <extension point="org.eclipse.core.contenttype.contentTypes">
+    <content-type id="org.eclipse.tm4e.language_pack.diff" name="Diff" base-type="org.eclipse.tm4e.language_pack.basetype" priority="low"
+                  file-extensions="diff,patch,rej" />
+  </extension>
+  <extension point="org.eclipse.tm4e.registry.grammars">
+    <grammar scopeName="source.diff" path="syntaxes/diff/diff.tmLanguage.json" />
+    <scopeNameContentTypeBinding scopeName="source.diff" contentTypeId="org.eclipse.tm4e.language_pack.diff" />
+  </extension>
+
+  <extension point="org.eclipse.tm4e.languageconfiguration.languageConfigurations">
+    <languageConfiguration contentTypeId="org.eclipse.tm4e.language_pack.diff" path="syntaxes/diff/diff.language-configuration.json" />
+  </extension>
+
+  <extension point="org.eclipse.tm4e.ui.snippets">
+    <snippet name="Diff Example" path="syntaxes/diff/diff.example.diff" scopeName="source.diff" />
+  </extension>
+
+  <!-- ======================================== -->
   <!-- docker/dockerfile: Docker -->
   <!-- ======================================== -->
   <extension point="org.eclipse.core.contenttype.contentTypes">

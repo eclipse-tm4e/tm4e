@@ -103,9 +103,6 @@ sources:
           bat:
             label: Batch File
 
-      diff:
-        ignored: theme support required
-
       git-base:
         languages:
           ignore:

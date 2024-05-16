@@ -1,0 +1,14 @@
+--- script1.py  2024-05-16 10:00:00.000000000 +0000
++++ script2.py  2024-05-16 10:00:00.000000000 +0000
+@@ -1,6 +1,9 @@
+ # script1.py
+ def greet(name):
+-    print("Hello, " + name + "!")
++    print("Hi, " + name + "!")
+
+ def calculate_sum(a, b):
+-    return a + b
++    result = a + b
++    print("The sum of", a, "and", b, "is", result)
++    return result * 2
++

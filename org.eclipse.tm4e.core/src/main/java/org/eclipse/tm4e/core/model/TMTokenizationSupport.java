@@ -29,6 +29,7 @@ import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.tm4e.core.grammar.IGrammar;
 import org.eclipse.tm4e.core.grammar.IStateStack;
+import org.eclipse.tm4e.core.grammar.IToken;
 import org.eclipse.tm4e.core.internal.grammar.StateStack;
 import org.eclipse.tm4e.core.internal.utils.MoreCollections;
 import org.eclipse.tm4e.core.internal.utils.StringUtils;
@@ -83,13 +84,12 @@ public class TMTokenizationSupport implements ITokenizationSupport {
 		// Create the result early and fill in the tokens later
 		final var tmTokens = new ArrayList<TMToken>(tokens.length < 10 ? tokens.length : 10);
 		String lastTokenType = null;
-		for (final var token : tokens) {
+		for (final IToken token : tokens) {
 			final String tokenType = decodeTextMateTokenCached.apply(decodeMap, token.getScopes());
 
 			// do not push a new token if the type is exactly the same (also helps with ligatures)
 			if (!tokenType.equals(lastTokenType)) {
-				final int tokenStartIndex = token.getStartIndex();
-				tmTokens.add(new TMToken(tokenStartIndex + offsetDelta, tokenType));
+				tmTokens.add(new TMToken(token.getStartIndex() + offsetDelta, tokenType, token.getScopes()));
 				lastTokenType = tokenType;
 			}
 		}

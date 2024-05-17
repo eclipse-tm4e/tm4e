@@ -16,6 +16,8 @@
  */
 package org.eclipse.tm4e.core.model;
 
+import java.util.List;
+
 import org.eclipse.jdt.annotation.Nullable;
 
 /**
@@ -28,10 +30,12 @@ public final class TMToken {
 	public final int startIndex;
 	public final String type;
 	// public readonly language: string
+	public final List<String> scopes;
 
-	public TMToken(final int startIndex, final String type) {
+	public TMToken(final int startIndex, final String type, final List<String> scopes) {
 		this.startIndex = startIndex;
 		this.type = type;
+		this.scopes = scopes;
 	}
 
 	@Override

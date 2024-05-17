@@ -20,6 +20,7 @@ import static org.eclipse.tm4e.core.internal.utils.NullSafetyHelper.*;
 import java.lang.System.Logger;
 import java.time.Duration;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 import java.util.concurrent.BlockingQueue;
@@ -255,7 +256,7 @@ public abstract class TMModel implements ITMModel {
 				// check if complete line was tokenized
 				if (r.stoppedEarly) {
 					// treat the rest of the line as one default token
-					r.tokens.add(new TMToken(r.actualStopOffset, ""));
+					r.tokens.add(new TMToken(r.actualStopOffset, "", Collections.emptyList()));
 					// Use the line's starting state as end state in case of incomplete tokenization
 					r.endState = currLineTokens.startState;
 				}

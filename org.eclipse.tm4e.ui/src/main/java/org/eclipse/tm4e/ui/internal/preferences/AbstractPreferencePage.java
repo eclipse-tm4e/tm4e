@@ -22,7 +22,7 @@ public abstract class AbstractPreferencePage extends PreferencePage implements I
 
 	private final @Nullable String title;
 
-	protected AbstractPreferencePage(final @Nullable String title, final String description) {
+	protected AbstractPreferencePage(final @Nullable String title, final @Nullable String description) {
 		this.title = title;
 		setDescription(description);
 	}

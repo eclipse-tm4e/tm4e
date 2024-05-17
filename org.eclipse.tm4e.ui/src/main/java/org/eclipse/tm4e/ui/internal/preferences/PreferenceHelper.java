@@ -110,6 +110,16 @@ public final class PreferenceHelper {
 		prefs.flush();
 	}
 
+	public static boolean isTMTokenHoverEnabled() {
+		return TMUIPlugin.getPreference(PreferenceConstants.TMTOKEN_HOVER_ENABLED, false);
+	}
+
+	public static void saveTMTokenHoverEnabled(boolean isEnabled) throws BackingStoreException {
+		final var prefs = InstanceScope.INSTANCE.getNode(TMUIPlugin.PLUGIN_ID);
+		prefs.putBoolean(PreferenceConstants.TMTOKEN_HOVER_ENABLED, isEnabled);
+		prefs.flush();
+	}
+
 	private PreferenceHelper() {
 	}
 }

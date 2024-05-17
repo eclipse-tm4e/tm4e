@@ -16,6 +16,7 @@ import static org.eclipse.tm4e.core.internal.utils.NullSafetyHelper.castNullable
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
+import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.jface.text.IDocument;
 import org.eclipse.tm4e.ui.model.ITMModelManager;
 
@@ -42,6 +43,10 @@ public final class TMModelManager implements ITMModelManager {
 		if (model != null) {
 			model.dispose();
 		}
+	}
+
+	public @Nullable TMDocumentModel getConnectedModel(final IDocument document) {
+		return models.get(document);
 	}
 
 	@Override

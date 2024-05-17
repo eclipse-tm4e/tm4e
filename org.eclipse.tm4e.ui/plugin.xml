@@ -37,7 +37,7 @@
              path="./themes/Eclipse-light.css" />
       <theme id="org.eclipse.tm4e.ui.themes.WtpXmlClassic"
              name="%Theme.WtpXmlClassic.name"
-             path="./themes/WTP-XML-Classic.css" />  
+             path="./themes/WTP-XML-Classic.css" />
       <!-- "Dark" themes -->
       <theme id="org.eclipse.tm4e.ui.themes.Dark"
              name="%Theme.Dark.name"
@@ -137,5 +137,11 @@
       <super type="org.eclipse.core.resources.taskmarker"/>
       <super type="org.eclipse.tm4e.ui.textmarker"/>
       <persistent value="true"/>
+   </extension>
+
+   <extension point="org.eclipse.ui.genericeditor.hoverProviders">
+      <hoverProvider
+            class="org.eclipse.tm4e.ui.internal.hover.TMTokenTextHover"
+            contentType="org.eclipse.core.runtime.text" />
    </extension>
 </plugin>

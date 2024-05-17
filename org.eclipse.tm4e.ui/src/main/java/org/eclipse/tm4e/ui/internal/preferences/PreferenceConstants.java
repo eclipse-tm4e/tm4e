@@ -25,6 +25,8 @@ public final class PreferenceConstants {
 	public static final String DEFAULT_DARK_THEME = "org.eclipse.tm4e.ui.themes.defaultDarkTheme";
 	public static final String DEFAULT_LIGHT_THEME = "org.eclipse.tm4e.ui.themes.defaultLightTheme";
 
+	public static final String TMTOKEN_HOVER_ENABLED = "org.eclipse.tm4e.ui.tmScopeHoverEnabled";
+
 	private PreferenceConstants() {
 	}
 }

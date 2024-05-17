@@ -34,6 +34,7 @@ public final class TMUIMessages extends NLS {
 	public static String TextMatePreferencePage_LanguageConfigurationRelatedLink;
 	public static String TextMatePreferencePage_TaskTagsRelatedLink;
 	public static String TextMatePreferencePage_ThemeRelatedLink;
+	public static String TextMatePreferencePage_ShowTextMateTokenInfoHover;
 
 	// Grammar preferences page
 	public static String GrammarPreferencePage_title;

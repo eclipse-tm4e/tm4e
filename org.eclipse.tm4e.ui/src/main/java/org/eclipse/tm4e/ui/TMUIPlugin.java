@@ -43,6 +43,10 @@ public class TMUIPlugin extends AbstractUIPlugin {
 	@Nullable
 	private static volatile TMUIPlugin plugin;
 
+	public static boolean getPreference(final String key, final boolean defaultValue) {
+		return Platform.getPreferencesService().getBoolean(PLUGIN_ID, key, defaultValue, null /* = search in all available scopes */);
+	}
+
 	public static @Nullable String getPreference(final String key, final @Nullable String defaultValue) {
 		return Platform.getPreferencesService().getString(PLUGIN_ID, key, defaultValue, null /* = search in all available scopes */);
 	}

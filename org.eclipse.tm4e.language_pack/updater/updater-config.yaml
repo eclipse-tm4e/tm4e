@@ -94,7 +94,7 @@ sources:
     github:
       repo: microsoft/vscode
       path: extensions
-      ref: "1.87.0" # https://gitlab.eclipse.org/eclipsefdn/emo-team/iplab/-/issues/13522#note_1986676
+      ref: "1.89.1" # https://gitlab.eclipse.org/eclipsefdn/emo-team/iplab/-/issues/14687
     license-download: false
     include-all-by-default: true
     extensions:

@@ -11,12 +11,16 @@
  */
 package org.eclipse.tm4e.core.internal.grammar.raw;
 
+import java.lang.System.Logger;
+import java.lang.System.Logger.Level;
 import java.util.NoSuchElementException;
 
 import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.tm4e.core.internal.parser.PropertySettable;
 
 public final class RawRepository extends PropertySettable.HashMap<IRawRule> implements IRawRepository {
+
+	private static final Logger LOGGER = System.getLogger(RawRepository.class.getName());
 
 	private static final long serialVersionUID = 1L;
 
@@ -35,7 +39,13 @@ public final class RawRepository extends PropertySettable.HashMap<IRawRule> impl
 	@Override
 	@Nullable
 	public IRawRule getRule(final String name) {
-		return get(name);
+		try {
+			return get(name);
+		} catch (final ClassCastException ex) {
+			// log ClassCastException with some context, to better troubleshoot issues like https://github.com/eclipse/tm4e/issues/754
+			LOGGER.log(Level.ERROR, "Unexpected ClassCastException in RawRepository.getRule(\"" + name + "\")", ex);
+			throw ex;
+		}
 	}
 
 	@Override

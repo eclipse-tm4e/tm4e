@@ -1,5 +1,5 @@
 /**
- * Types in this package are modeled after <a href=
+ * Types in this package are modelled after <a href=
  * "https://github.com/microsoft/vscode-textmate/blob/main/src/grammar/grammar.ts">
  * github.com/microsoft/vscode-textmate/blob/main/src/grammar/grammar.ts</a>
  */

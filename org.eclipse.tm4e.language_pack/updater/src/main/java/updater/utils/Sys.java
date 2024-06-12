@@ -149,9 +149,11 @@ public abstract class Sys {
 	}
 
 	public static Optional<Path> findFirstFile(final Path path, final Predicate<String> nameFilter) throws IOException {
-		return Files.list(path) //
-				.filter(Files::isRegularFile) //
-				.filter(file -> nameFilter.test(file.getFileName().toString())).findFirst();
+		try (Stream<Path> files = Files.walk(path)) {
+			return files //
+					.filter(Files::isRegularFile) //
+					.filter(file -> nameFilter.test(file.getFileName().toString())).findFirst();
+		}
 	}
 
 	public static String getFileExtension(final Path path) {
@@ -165,10 +167,11 @@ public abstract class Sys {
 
 	public static void rmDir(final Path dir) throws IOException {
 		if (Files.exists(dir)) {
-			Files.walk(dir) //
-					.sorted(Comparator.reverseOrder()) //
-					.map(Path::toFile) //
-					.forEach(File::delete);
+			try (Stream<Path> files = Files.walk(dir)) {
+				files.sorted(Comparator.reverseOrder()) //
+						.map(Path::toFile) //
+						.forEach(File::delete);
+			}
 		}
 	}
 

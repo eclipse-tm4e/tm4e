@@ -51,8 +51,8 @@ class VSCodeMultiExtensionsSourceHandler extends AbstractSourceHandler<Config.VS
 		logInfo("Locating valid VSCode grammar extensions...");
 		final Map<String, VsCodeExtensionPackageJson> pkgJsonByExtId = new HashMap<>();
 		final Map<String, Path> pkgJsonPathByExtId = new HashMap<>();
-		try (var l = withLogIndented()) {
-			for (final var dir : Files.list(sourceExtensionDir).filter(Files::isDirectory).toList()) {
+		try (var l = withLogIndented(); var files = Files.list(sourceExtensionDir)) {
+			for (final var dir : files.filter(Files::isDirectory).toList()) {
 				final var pkgJSONPath = dir.resolve("package.json");
 				if (!Files.exists(pkgJSONPath)) {
 					logInfo("Ignoring extension directory [" + dir.getFileName() + "] - no package.json found");

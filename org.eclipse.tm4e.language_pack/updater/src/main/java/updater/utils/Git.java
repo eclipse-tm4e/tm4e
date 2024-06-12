@@ -21,6 +21,7 @@ import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.regex.Pattern;
+import java.util.stream.Stream;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
@@ -114,10 +115,11 @@ public abstract class Git {
 				}
 
 				// delete local git repo if not in desired state
-				Files.walk(localPath) //
-						.sorted(Comparator.reverseOrder()) //
-						.map(Path::toFile) //
-						.forEach(File::delete);
+				try (Stream<Path> files = Files.walk(localPath)) {
+					files.sorted(Comparator.reverseOrder()) //
+							.map(Path::toFile) //
+							.forEach(File::delete);
+				}
 			}
 
 			Files.createDirectories(localPath);

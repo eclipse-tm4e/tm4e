@@ -28,7 +28,7 @@ import com.google.gson.InstanceCreator;
 import com.google.gson.reflect.TypeToken;
 
 /**
- * Helper class load, save grammar preferences with Json format.
+ * Helper class load, save grammar preferences with JSON format.
  */
 final class PreferenceHelper {
 
@@ -40,10 +40,7 @@ final class PreferenceHelper {
 			.create();
 
 	static @Nullable List<IGrammarDefinition> loadGrammars() {
-		// Load grammar definitions from the
-		// "${workspace_loc}/metadata/.plugins/org.eclipse.core.runtime/.settings/org.eclipse.tm4e.registry.prefs"
-		final var prefs = InstanceScope.INSTANCE.getNode(TMEclipseRegistryPlugin.PLUGIN_ID);
-		final var json = prefs.get(GRAMMARS, null);
+		final var json = TMEclipseRegistryPlugin.getPreference(GRAMMARS, null);
 		if (json == null)
 			return null;
 		return DEFAULT_GSON.fromJson(json, new TypeToken<ArrayList<GrammarDefinition>>() {

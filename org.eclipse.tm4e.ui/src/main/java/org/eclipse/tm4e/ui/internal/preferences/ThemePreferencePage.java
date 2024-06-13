@@ -18,7 +18,6 @@ import static org.eclipse.tm4e.core.internal.utils.NullSafetyHelper.*;
 import java.nio.file.Path;
 import java.util.stream.Stream;
 
-import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.dialogs.MessageDialog;
@@ -77,7 +76,7 @@ public final class ThemePreferencePage extends AbstractPreferencePage {
 	}
 
 	@Override
-	protected Control createContents(final @NonNullByDefault({}) Composite parent) {
+	protected Control createContents(final Composite parent) {
 		final var control = new VerticalSplitPane(parent, 1, 1) {
 
 			@Override
@@ -167,9 +166,10 @@ public final class ThemePreferencePage extends AbstractPreferencePage {
 				final var themeFileName = themePath.getFileName().toString();
 				try {
 					final var rawTheme = RawThemeReader.readTheme(IThemeSource.fromFile(themePath));
-					final String name = castNonNull(rawTheme.getName() == null
+					final var rawThemeName = rawTheme.getName();
+					final String name = rawThemeName == null
 							? themeFileName.substring(0, themeFileName.lastIndexOf('.'))
-							: rawTheme.getName());
+							: rawThemeName;
 					return new Theme(name, themePath.toAbsolutePath().toString(), name, false);
 				} catch (final Exception ex) {
 					MessageDialog.openError(getShell(), "Invalid theme file", "Failed to parse [" + themePath + "]: " + ex);
@@ -273,23 +273,20 @@ public final class ThemePreferencePage extends AbstractPreferencePage {
 			return;
 
 		final var selection = grammarsCombo.getStructuredSelection();
-		if (selection.isEmpty())
-			return;
+		if (selection.getFirstElement() instanceof IGrammarDefinition definition) {
+			// Preview the grammar
+			final IGrammar grammar = grammarManager.getGrammarForScope(definition.getScope());
+			themePreview.setTheme(theme);
+			themePreview.setGrammar(grammar);
 
-		final IGrammarDefinition definition = (IGrammarDefinition) selection.getFirstElement();
-
-		// Preview the grammar
-		final IGrammar grammar = grammarManager.getGrammarForScope(definition.getScope());
-		themePreview.setTheme(theme);
-		themePreview.setGrammar(grammar);
-
-		// Snippet
-		final ISnippet[] snippets = TMUIPlugin.getSnippetManager().getSnippets(definition.getScope().getName());
-		if (snippets.length == 0) {
-			themePreview.setText("");
-		} else {
-			// TODO: manage list of snippet for the given scope.
-			themePreview.setText(snippets[0].getContent());
+			// Snippet
+			final ISnippet[] snippets = TMUIPlugin.getSnippetManager().getSnippets(definition.getScope().getName());
+			if (snippets.length == 0) {
+				themePreview.setText("");
+			} else {
+				// TODO: manage list of snippet for the given scope.
+				themePreview.setText(snippets[0].getContent());
+			}
 		}
 	}
 

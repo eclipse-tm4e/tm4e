@@ -12,6 +12,7 @@
  */
 package org.eclipse.tm4e.languageconfiguration.internal.wizards;
 
+import static org.eclipse.tm4e.core.internal.utils.NullSafetyHelper.*;
 import static org.eclipse.tm4e.languageconfiguration.internal.LanguageConfigurationMessages.*;
 
 import java.io.FileReader;
@@ -62,14 +63,9 @@ final class SelectLanguageConfigurationWizardPage extends WizardPage implements 
 
 	private static final String[] TEXTMATE_EXTENSIONS = { "*language-configuration.json" }; //$NON-NLS-1$
 
-	@Nullable
-	private Text fileText;
-
-	@Nullable
-	private Text contentTypeText;
-
-	@Nullable
-	private LanguageConfigurationInfoWidget infoWidget;
+	private Text fileText = lazyNonNull();
+	private Text contentTypeText = lazyNonNull();
+	private LanguageConfigurationInfoWidget infoWidget = lazyNonNull();
 
 	private final ILanguageConfigurationRegistryManager registryManager;
 
@@ -81,8 +77,7 @@ final class SelectLanguageConfigurationWizardPage extends WizardPage implements 
 	}
 
 	@Override
-	public void createControl(@Nullable final Composite parent) {
-		assert parent != null;
+	public void createControl(final Composite parent) {
 		initializeDialogUnits(parent);
 		final var topLevel = new Composite(parent, SWT.NONE);
 		topLevel.setLayout(new GridLayout());
@@ -95,7 +90,7 @@ final class SelectLanguageConfigurationWizardPage extends WizardPage implements 
 	}
 
 	@Override
-	public void handleEvent(@Nullable final Event event) {
+	public void handleEvent(final Event event) {
 		validateAndUpdateStatus();
 	}
 
@@ -137,8 +132,7 @@ final class SelectLanguageConfigurationWizardPage extends WizardPage implements 
 		parent.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		parent.setLayout(new GridLayout(2, false));
 
-		final var fileText = createText(parent, SelectLanguageConfigurationWizardPage_file);
-		this.fileText = fileText;
+		fileText = createText(parent, SelectLanguageConfigurationWizardPage_file);
 		fileText.addListener(SWT.Modify, this);
 
 		final var buttons = new Composite(parent, SWT.NONE);
@@ -148,8 +142,7 @@ final class SelectLanguageConfigurationWizardPage extends WizardPage implements 
 		gd.horizontalAlignment = SWT.RIGHT;
 		buttons.setLayoutData(gd);
 
-		final var infoWidget = new LanguageConfigurationInfoWidget(parent, SWT.NONE);
-		this.infoWidget = infoWidget;
+		infoWidget = new LanguageConfigurationInfoWidget(parent, SWT.NONE);
 		final var data = new GridData(GridData.FILL_HORIZONTAL);
 		data.horizontalSpan = 2;
 		infoWidget.setLayoutData(data);
@@ -158,7 +151,7 @@ final class SelectLanguageConfigurationWizardPage extends WizardPage implements 
 		browseFileSystemButton.setText(SelectLanguageConfigurationWizardPage_browse_fileSystem);
 		browseFileSystemButton.addSelectionListener(new SelectionAdapter() {
 			@Override
-			public void widgetSelected(@Nullable final SelectionEvent e) {
+			public void widgetSelected(final SelectionEvent e) {
 				final var dialog = new FileDialog(parent.getShell());
 				dialog.setFilterExtensions(TEXTMATE_EXTENSIONS);
 				dialog.setFilterPath(fileText.getText());
@@ -173,7 +166,7 @@ final class SelectLanguageConfigurationWizardPage extends WizardPage implements 
 		browseWorkspaceButton.setText(SelectLanguageConfigurationWizardPage_browse_workspace);
 		browseWorkspaceButton.addSelectionListener(new SelectionAdapter() {
 			@Override
-			public void widgetSelected(@Nullable final SelectionEvent e) {
+			public void widgetSelected(final SelectionEvent e) {
 				final var dialog = new ResourceSelectionDialog(browseWorkspaceButton.getShell(),
 						ResourcesPlugin.getWorkspace().getRoot(),
 						SelectLanguageConfigurationWizardPage_workspace_description);
@@ -185,8 +178,7 @@ final class SelectLanguageConfigurationWizardPage extends WizardPage implements 
 				}
 			}
 		});
-		contentTypeText = createText(parent,
-				SelectLanguageConfigurationWizardPage_contentType);
+		contentTypeText = createText(parent, SelectLanguageConfigurationWizardPage_contentType);
 		contentTypeText.addListener(SWT.Modify, this);
 		createContentTypeTreeViewer(parent);
 	}
@@ -204,20 +196,16 @@ final class SelectLanguageConfigurationWizardPage extends WizardPage implements 
 		contentTypesViewer.getControl().setLayoutData(data);
 
 		contentTypesViewer.addSelectionChangedListener(event -> {
-			final var contentTypeText = this.contentTypeText;
-			if (contentTypeText != null) {
-				contentTypeText.setText(((IContentType) event.getStructuredSelection().getFirstElement()).toString());
-			}
+			contentTypeText.setText(event.getStructuredSelection().getFirstElement() instanceof IContentType ct ? ct.toString() : "");
 		});
 	}
 
 	private static final class ContentTypesLabelProvider extends LabelProvider {
 		@Override
-		public String getText(@Nullable final Object element) {
-			if (element == null)
-				return "";
-			final IContentType contentType = (IContentType) element;
-			return contentType.getName();
+		public @Nullable String getText(@Nullable final Object element) {
+			return element == null
+					? ""
+					: ((IContentType) element).getName();
 		}
 	}
 
@@ -237,9 +225,8 @@ final class SelectLanguageConfigurationWizardPage extends WizardPage implements 
 			return elements.toArray();
 		}
 
-		@Nullable
 		@Override
-		public Object getParent(@Nullable final Object element) {
+		public @Nullable Object getParent(@Nullable final Object element) {
 			if (element == null)
 				return null;
 			final IContentType contentType = (IContentType) element;
@@ -257,8 +244,7 @@ final class SelectLanguageConfigurationWizardPage extends WizardPage implements 
 		}
 
 		@Override
-		public void inputChanged(@Nullable final Viewer viewer, @Nullable final Object oldInput,
-				@Nullable final Object newInput) {
+		public void inputChanged(final Viewer viewer, @Nullable final Object oldInput, @Nullable final Object newInput) {
 			manager = newInput == null ? Platform.getContentTypeManager() : (IContentTypeManager) newInput;
 		}
 	}
@@ -275,12 +261,8 @@ final class SelectLanguageConfigurationWizardPage extends WizardPage implements 
 
 	@Nullable
 	private IStatus validatePage() {
-		final var infoWidget = this.infoWidget;
-		assert infoWidget != null;
 		infoWidget.refresh(null);
 
-		final var fileText = this.fileText;
-		assert fileText != null;
 		final String path = fileText.getText();
 		if (path.length() == 0) {
 			return new Status(IStatus.ERROR, LanguageConfigurationPlugin.PLUGIN_ID,
@@ -288,7 +270,7 @@ final class SelectLanguageConfigurationWizardPage extends WizardPage implements 
 		}
 		IPath p = new Path(path);
 		if (!p.isAbsolute()) {
-			p = ResourcesPlugin.getWorkspace().getRoot().getFile(p).getLocation();
+			p = castNonNull(ResourcesPlugin.getWorkspace().getRoot().getFile(p).getLocation());
 		}
 		try (var file = new FileReader(p.toFile())) {
 			final var configuration = LanguageConfiguration.load(file);
@@ -302,8 +284,7 @@ final class SelectLanguageConfigurationWizardPage extends WizardPage implements 
 					SelectLanguageConfigurationWizardPage_fileError_error + e.getLocalizedMessage());
 		}
 
-		final var contentTypeText = this.contentTypeText;
-		if (contentTypeText == null || contentTypeText.getText().isEmpty()) {
+		if (contentTypeText.getText().isEmpty()) {
 			return new Status(IStatus.ERROR, LanguageConfigurationPlugin.PLUGIN_ID,
 					SelectLanguageConfigurationWizardPage_contentTypeError_noSelection);
 		}
@@ -320,15 +301,12 @@ final class SelectLanguageConfigurationWizardPage extends WizardPage implements 
 	}
 
 	ILanguageConfigurationDefinition getDefinition() {
-		assert fileText != null;
 		IPath path = new Path(fileText.getText());
 		if (!path.isAbsolute()) {
-			path = ResourcesPlugin.getWorkspace().getRoot().getFile(path).getLocation();
+			path = castNonNull(ResourcesPlugin.getWorkspace().getRoot().getFile(path).getLocation());
 		}
 
-		assert contentTypeText != null;
-		final var contentType = ContentTypeHelper.getContentTypeById(contentTypeText.getText());
-		assert contentType != null;
+		final var contentType = assertNonNull(ContentTypeHelper.getContentTypeById(contentTypeText.getText()));
 		return new LanguageConfigurationDefinition(contentType, path.toString());
 	}
 }

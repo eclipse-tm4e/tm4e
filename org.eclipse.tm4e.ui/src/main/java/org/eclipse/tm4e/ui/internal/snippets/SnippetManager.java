@@ -11,8 +11,6 @@
  */
 package org.eclipse.tm4e.ui.internal.snippets;
 
-import static org.eclipse.tm4e.core.internal.utils.NullSafetyHelper.castNullable;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -75,7 +73,7 @@ public final class SnippetManager implements ISnippetManager {
 
 	@Override
 	public ISnippet[] getSnippets(final String scopeName) {
-		final List<ISnippet> snippets = castNullable(this.snippets.get(scopeName));
+		final List<ISnippet> snippets = this.snippets.get(scopeName);
 		return snippets != null ? snippets.toArray(ISnippet[]::new) : EMPTY_SNIPPETS;
 	}
 }

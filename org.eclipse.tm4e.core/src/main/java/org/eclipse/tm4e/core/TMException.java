@@ -11,6 +11,8 @@
  */
 package org.eclipse.tm4e.core;
 
+import org.eclipse.jdt.annotation.Nullable;
+
 /**
  * TextMate exception.
  *
@@ -19,11 +21,11 @@ public class TMException extends RuntimeException {
 
 	private static final long serialVersionUID = 1L;
 
-	public TMException(final String message) {
+	public TMException(final @Nullable String message) {
 		super(message);
 	}
 
-	public TMException(final String message, final Throwable cause) {
+	public TMException(final @Nullable String message, final @Nullable Throwable cause) {
 		super(message, cause);
 	}
 }

@@ -9,9 +9,7 @@
  */
 package org.eclipse.tm4e.core.registry;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.io.Reader;
 import java.io.StringReader;
 import java.nio.charset.Charset;
@@ -20,6 +18,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 
 import org.eclipse.jdt.annotation.Nullable;
+import org.eclipse.tm4e.core.internal.utils.ResourceUtils;
 
 public interface IThemeSource {
 
@@ -86,9 +85,7 @@ public interface IThemeSource {
 		return new IThemeSource() {
 			@Override
 			public Reader getReader() {
-				return new BufferedReader(new InputStreamReader(
-						clazz.getResourceAsStream(resourceName),
-						charset == null ? StandardCharsets.UTF_8 : charset));
+				return ResourceUtils.getResourceReader(clazz, resourceName, charset);
 			}
 
 			@Override

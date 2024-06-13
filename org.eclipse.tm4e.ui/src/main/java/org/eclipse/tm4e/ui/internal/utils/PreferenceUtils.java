@@ -52,8 +52,7 @@ public final class PreferenceUtils {
 	 *
 	 * @return preferences store
 	 */
-	@Nullable
-	public static IEclipsePreferences getE4ThemesPreferenceStore() {
+	public static @Nullable IEclipsePreferences getE4ThemesPreferenceStore() {
 		return InstanceScope.INSTANCE.getNode(E4_CSS_PREFERENCE_NAME);
 	}
 
@@ -62,8 +61,7 @@ public final class PreferenceUtils {
 	 *
 	 * @return preferences store
 	 */
-	@Nullable
-	public static IEclipsePreferences getEditorsPreferenceStore() {
+	public static @Nullable IEclipsePreferences getEditorsPreferenceStore() {
 		return InstanceScope.INSTANCE.getNode(EditorsUI.PLUGIN_ID);
 	}
 

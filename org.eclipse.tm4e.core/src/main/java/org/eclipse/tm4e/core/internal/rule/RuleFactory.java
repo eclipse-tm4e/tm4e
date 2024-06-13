@@ -124,14 +124,13 @@ public final class RuleFactory {
 		}
 
 		// Fill out result
-		for (final String captureId : captures.getCaptureIds()) {
+		captures.forEachCapture((captureId, rule) -> {
 			final int numericCaptureId = parseInt(captureId, 10);
-			final IRawRule rule = captures.getCapture(captureId);
 			final RuleId retokenizeCapturedWithRuleId = rule.getPatterns() == null
 					? RuleId.NO_RULE
-					: getCompiledRuleId(captures.getCapture(captureId), helper, repository);
+					: getCompiledRuleId(rule, helper, repository);
 			r.set(numericCaptureId, createCaptureRule(helper, rule.getName(), rule.getContentName(), retokenizeCapturedWithRuleId));
-		}
+		});
 		return r;
 	}
 

@@ -41,9 +41,7 @@ abstract class AbstractWizardPage extends WizardPage implements Listener {
 	}
 
 	@Override
-	public final void createControl(@Nullable final Composite parent) {
-		assert parent != null;
-
+	public final void createControl(final Composite parent) {
 		initializeDialogUnits(parent);
 		// top level group
 		final var topLevel = new Composite(parent, SWT.NONE);
@@ -61,9 +59,8 @@ abstract class AbstractWizardPage extends WizardPage implements Listener {
 	}
 
 	@Override
-	public void handleEvent(@Nullable final Event event) {
-		if (event != null)
-			validateAndUpdateStatus(event);
+	public void handleEvent(final Event event) {
+		validateAndUpdateStatus(event);
 	}
 
 	private void validateAndUpdateStatus(final Event event) {
@@ -108,7 +105,6 @@ abstract class AbstractWizardPage extends WizardPage implements Listener {
 
 	protected abstract void initializeDefaultValues();
 
-	@Nullable
-	protected abstract IStatus validatePage(Event event);
+	protected abstract @Nullable IStatus validatePage(Event event);
 
 }

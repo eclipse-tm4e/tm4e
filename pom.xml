@@ -55,6 +55,16 @@
 		<developerConnection>scm:git:https://github.com/eclipse/tm4e</developerConnection>
 	</scm>
 
+	<dependencies>
+		<!-- External Eclipse null Annotations, see https://github.com/vegardit/no-npe -->
+		<dependency>
+			<groupId>com.vegardit.no-npe</groupId>
+			<artifactId>no-npe-eea-all</artifactId>
+			<version>1.0.0</version>
+			<scope>provided</scope>
+		</dependency>
+	</dependencies>
+
 	<build>
 		<defaultGoal>clean verify</defaultGoal>
 
@@ -273,6 +283,21 @@
 			<plugins>
 				<plugin>
 					<groupId>org.eclipse.tycho</groupId>
+					<artifactId>tycho-compiler-plugin</artifactId>
+					<version>${tycho-version}</version>
+					<configuration>
+						<optimize>true</optimize>
+						<compilerArgs>
+							<arg>-annotationpath</arg>
+							<arg>CLASSPATH</arg> <!-- read Eclipse External null Annotations from JARs on the classpath -->
+						</compilerArgs>
+
+						<!-- respect settings in .settings/org.eclipse.jdt.core.prefs -->
+						<useProjectSettings>true</useProjectSettings>
+					</configuration>
+				</plugin>
+				<plugin>
+					<groupId>org.eclipse.tycho</groupId>
 					<artifactId>tycho-surefire-plugin</artifactId>
 					<version>${tycho-version}</version>
 					<configuration>
@@ -368,11 +393,11 @@
 			<releases><enabled>false</enabled></releases>
 		</pluginRepository>
 		<pluginRepository>
-		  	<id>dash-licenses-snapshots</id>
-		  	<url>https://repo.eclipse.org/content/repositories/dash-licenses-snapshots/</url>
+			<id>dash-licenses-snapshots</id>
+			<url>https://repo.eclipse.org/content/repositories/dash-licenses-snapshots/</url>
 			<snapshots><enabled>true</enabled></snapshots>
 			<releases><enabled>false</enabled></releases>
-  		</pluginRepository>
+		</pluginRepository>
 	</pluginRepositories>
 
 </project>

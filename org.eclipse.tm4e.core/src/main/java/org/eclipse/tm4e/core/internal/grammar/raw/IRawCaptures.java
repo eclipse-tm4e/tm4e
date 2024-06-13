@@ -16,6 +16,10 @@
  */
 package org.eclipse.tm4e.core.internal.grammar.raw;
 
+import java.util.function.BiConsumer;
+
+import org.eclipse.jdt.annotation.Nullable;
+
 /**
  * @see <a href=
  *      "https://github.com/microsoft/vscode-textmate/blob/09effd8b7429b71010e0fa34ea2e16e622692946/src/rawGrammar.ts#L62">
@@ -23,7 +27,10 @@ package org.eclipse.tm4e.core.internal.grammar.raw;
  */
 public interface IRawCaptures {
 
+	@Nullable
 	IRawRule getCapture(String captureId);
 
 	Iterable<String> getCaptureIds();
+
+	void forEachCapture(BiConsumer<String, IRawRule> action);
 }

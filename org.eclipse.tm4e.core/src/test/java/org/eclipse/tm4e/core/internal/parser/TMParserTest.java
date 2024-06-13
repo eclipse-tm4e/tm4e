@@ -16,7 +16,6 @@ import static org.eclipse.tm4e.core.internal.utils.NullSafetyHelper.castNonNull;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.io.StringReader;
 import java.nio.file.FileVisitResult;
 import java.nio.file.Files;
@@ -32,6 +31,7 @@ import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.eclipse.tm4e.core.Data;
 import org.eclipse.tm4e.core.internal.grammar.raw.RawGrammar;
 import org.eclipse.tm4e.core.internal.grammar.raw.RawGrammarReader;
+import org.eclipse.tm4e.core.internal.utils.ResourceUtils;
 import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
@@ -158,8 +158,8 @@ class TMParserTest {
 
 	@Test
 	void testParseJSON() throws Exception {
-		try (var is = Data.class.getResourceAsStream("csharp.json")) {
-			final var grammar = TMParserJSON.INSTANCE.parse(new InputStreamReader(is), RawGrammarReader.OBJECT_FACTORY);
+		try (var reader = ResourceUtils.getResourceReader(Data.class, "csharp.json")) {
+			final var grammar = TMParserJSON.INSTANCE.parse(reader, RawGrammarReader.OBJECT_FACTORY);
 			assertNotNull(grammar.getRepository());
 			assertFalse(grammar.getFileTypes().isEmpty());
 			assertEquals(List.of("cs"), grammar.getFileTypes());
@@ -173,8 +173,8 @@ class TMParserTest {
 
 	@Test
 	void testParsePlist() throws Exception {
-		try (var is = Data.class.getResourceAsStream("JavaScript.tmLanguage")) {
-			final var grammar = TMParserPList.INSTANCE.parse(new InputStreamReader(is), RawGrammarReader.OBJECT_FACTORY);
+		try (var reader = ResourceUtils.getResourceReader(Data.class, "JavaScript.tmLanguage")) {
+			final var grammar = TMParserPList.INSTANCE.parse(reader, RawGrammarReader.OBJECT_FACTORY);
 			assertNotNull(grammar);
 			assertNotNull(grammar.getRepository());
 			assertFalse(grammar.getFileTypes().isEmpty());
@@ -187,8 +187,8 @@ class TMParserTest {
 
 	@Test
 	void testParseYAML() throws Exception {
-		try (var is = Data.class.getResourceAsStream("JavaScript.tmLanguage.yaml")) {
-			final var grammar = TMParserYAML.INSTANCE.parse(new InputStreamReader(is), RawGrammarReader.OBJECT_FACTORY);
+		try (var reader = ResourceUtils.getResourceReader(Data.class, "JavaScript.tmLanguage.yaml")) {
+			final var grammar = TMParserYAML.INSTANCE.parse(reader, RawGrammarReader.OBJECT_FACTORY);
 			assertNotNull(grammar.getRepository());
 			assertFalse(grammar.getFileTypes().isEmpty());
 			assertEquals(List.of("js", "jsx"), grammar.getFileTypes());

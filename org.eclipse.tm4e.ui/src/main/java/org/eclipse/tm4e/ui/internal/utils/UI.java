@@ -42,6 +42,13 @@ import org.eclipse.ui.texteditor.ITextEditor;
  */
 public final class UI {
 
+	public static GC createGC() {
+		final var shell = getActiveShell();
+		if (shell == null)
+			throw new IllegalStateException("No active shell found.");
+		return new GC(shell);
+	}
+
 	@Nullable
 	public static IWorkbenchPage getActivePage() {
 		final var window = getActiveWindow();
@@ -129,7 +136,7 @@ public final class UI {
 			};
 
 			@Override
-			public void modifyText(final @Nullable ModifyEvent e) {
+			public void modifyText(final ModifyEvent e) {
 				final var display = UI.getDisplay();
 				// Cancel previous scheduled call
 				display.timerExec(-1, later);
@@ -145,11 +152,12 @@ public final class UI {
 	private static @Nullable FontMetrics fontMetrics;
 
 	public static int convertHeightInCharsToPixels(final int chars) {
+		var fontMetrics = UI.fontMetrics;
 		if (fontMetrics == null) {
-			final GC gc = new GC(getActiveShell());
+			final GC gc = createGC();
 			try {
 				gc.setFont(JFaceResources.getDialogFont());
-				fontMetrics = gc.getFontMetrics();
+				fontMetrics = UI.fontMetrics = gc.getFontMetrics();
 			} finally {
 				gc.dispose();
 			}
@@ -158,7 +166,7 @@ public final class UI {
 	}
 
 	public static int getTextWidth(final String string) {
-		final GC gc = new GC(getActiveShell());
+		final GC gc = createGC();
 		try {
 			gc.setFont(JFaceResources.getDialogFont());
 			return gc.stringExtent(string).x;

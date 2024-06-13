@@ -16,7 +16,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Objects;
 
-import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.eclipse.jface.text.BadLocationException;
 import org.eclipse.jface.text.IDocument;
 
@@ -33,7 +32,7 @@ final class DocumentInputStream extends InputStream {
 	}
 
 	@Override
-	public int read(@NonNullByDefault({}) final byte[] buff, final int buffOffset, final int len) throws IOException {
+	public int read(final byte[] buff, final int buffOffset, final int len) throws IOException {
 		Objects.checkFromIndexSize(buffOffset, len, buff.length);
 
 		if (len == 0)

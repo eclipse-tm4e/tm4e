@@ -11,8 +11,6 @@
  *******************************************************************************/
 package org.eclipse.tm4e.ui.internal.themes;
 
-import static org.eclipse.tm4e.core.internal.utils.NullSafetyHelper.castNullable;
-
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
@@ -84,7 +82,7 @@ public class TMThemeTokenProvider extends AbstractTokenProvider {
 
 	protected @Nullable Color getEditorColor(final String... names) {
 		for (final String name : names) {
-			final String colorHexCode = castNullable(theme.getEditorColors().get(name));
+			final String colorHexCode = theme.getEditorColors().get(name);
 			if (colorHexCode == null)
 				continue;
 			final var rgb = RGB.fromHex(colorHexCode);

@@ -18,7 +18,6 @@ import static org.eclipse.tm4e.core.internal.utils.NullSafetyHelper.lazyNonNull;
 import java.util.stream.Collectors;
 
 import org.eclipse.core.runtime.content.IContentType;
-import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.layout.GridDataFactory;
@@ -80,7 +79,7 @@ public final class GrammarPreferencePage extends AbstractPreferencePage {
 	}
 
 	@Override
-	protected Control createContents(final @NonNullByDefault({}) Composite parent) {
+	protected Control createContents(final Composite parent) {
 		final var control = new VerticalSplitPane(parent, 1, 1) {
 
 			@Override

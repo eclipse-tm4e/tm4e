@@ -26,16 +26,14 @@ public final class LanguageConfigurationPlugin extends AbstractUIPlugin {
 	public static final String PLUGIN_ID = "org.eclipse.tm4e.languageconfiguration"; //$NON-NLS-1$
 
 	/** The shared instance */
-	@Nullable
-	private static volatile LanguageConfigurationPlugin plugin;
+	private static volatile @Nullable LanguageConfigurationPlugin plugin;
 
 	/**
 	 * Returns the shared instance
 	 *
 	 * @return the shared instance
 	 */
-	@Nullable
-	public static LanguageConfigurationPlugin getDefault() {
+	public static @Nullable LanguageConfigurationPlugin getDefault() {
 		return plugin;
 	}
 
@@ -48,22 +46,22 @@ public final class LanguageConfigurationPlugin extends AbstractUIPlugin {
 		}
 	}
 
-	public static void logError(final Exception ex) {
+	public static void logError(final Throwable ex) {
 		log(new Status(IStatus.ERROR, PLUGIN_ID, null, ex));
 	}
 
-	public static void logError(final String message, @Nullable final Exception ex) {
+	public static void logError(final String message, @Nullable final Throwable ex) {
 		log(new Status(IStatus.ERROR, PLUGIN_ID, message, ex));
 	}
 
 	@Override
-	public void start(@Nullable final BundleContext context) throws Exception {
+	public void start(final BundleContext context) throws Exception {
 		super.start(context);
 		plugin = this;
 	}
 
 	@Override
-	public void stop(@Nullable final BundleContext context) throws Exception {
+	public void stop(final BundleContext context) throws Exception {
 		plugin = null;
 		super.stop(context);
 	}

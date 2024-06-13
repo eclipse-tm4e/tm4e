@@ -19,8 +19,7 @@ import org.eclipse.tm4e.languageconfiguration.internal.model.CommentRule;
 
 public final class CommentSupport {
 
-	@Nullable
-	private final CommentRule comments;
+	private final @Nullable CommentRule comments;
 
 	public CommentSupport(@Nullable final CommentRule comments) {
 		this.comments = comments;
@@ -39,14 +38,12 @@ public final class CommentSupport {
 		}
 	}
 
-	@Nullable
-	public String getLineComment() {
+	public @Nullable String getLineComment() {
 		final var comments = this.comments;
 		return comments == null ? null : comments.lineComment;
 	}
 
-	@Nullable
-	public CharacterPair getBlockComment() {
+	public @Nullable CharacterPair getBlockComment() {
 		final var comments = this.comments;
 		return comments == null ? null : comments.blockComment;
 	}
@@ -55,7 +52,12 @@ public final class CommentSupport {
 		final var comments = this.comments;
 		if (comments == null)
 			return false;
-		return indexLinePrefix.indexOf(comments.lineComment) != -1;
+
+		final var lineComment = comments.lineComment;
+		if (lineComment == null)
+			return false;
+
+		return indexLinePrefix.indexOf(lineComment) != -1;
 	}
 
 	private boolean isInBlockComment(final String indexPrefix) {

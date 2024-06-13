@@ -22,21 +22,19 @@ public class TMMarkdownPlugin implements BundleActivator {
 
 	public static final String PLUGIN_ID = "org.eclipse.tm4e.markdown";
 
-	@Nullable
-	private static BundleContext context;
+	private static volatile @Nullable BundleContext context;
 
-	@Nullable
-	static BundleContext getContext() {
+	static @Nullable BundleContext getContext() {
 		return context;
 	}
 
 	@Override
-	public void start(@Nullable final BundleContext bundleContext) throws Exception {
+	public void start(final BundleContext bundleContext) throws Exception {
 		TMMarkdownPlugin.context = bundleContext;
 	}
 
 	@Override
-	public void stop(@Nullable final BundleContext bundleContext) throws Exception {
+	public void stop(final BundleContext bundleContext) throws Exception {
 		TMMarkdownPlugin.context = null;
 	}
 }

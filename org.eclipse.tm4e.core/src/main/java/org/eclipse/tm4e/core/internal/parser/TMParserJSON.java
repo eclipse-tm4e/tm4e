@@ -12,6 +12,8 @@
  */
 package org.eclipse.tm4e.core.internal.parser;
 
+import static org.eclipse.tm4e.core.internal.utils.NullSafetyHelper.assertNonNull;
+
 import java.io.Reader;
 import java.util.List;
 import java.util.Map;
@@ -30,7 +32,7 @@ public class TMParserJSON implements TMParser {
 	}
 
 	protected Map<String, Object> loadRaw(final Reader source) {
-		return LOADER.fromJson(source, Map.class);
+		return assertNonNull(LOADER.fromJson(source, Map.class));
 	}
 
 	@Override

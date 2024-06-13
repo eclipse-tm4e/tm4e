@@ -27,8 +27,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import org.eclipse.jdt.annotation.NonNull;
-import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.tm4e.core.internal.oniguruma.OnigCaptureIndex;
 import org.eclipse.tm4e.core.internal.oniguruma.OnigScannerMatch;
@@ -72,9 +70,8 @@ final class LineTokenizer {
 		}
 	}
 
-	@NonNullByDefault({})
 	private record WhileCheckResult(
-			@NonNull StateStack stack,
+			StateStack stack,
 			int linePos,
 			int anchorPosition,
 			boolean isFirstLine) {

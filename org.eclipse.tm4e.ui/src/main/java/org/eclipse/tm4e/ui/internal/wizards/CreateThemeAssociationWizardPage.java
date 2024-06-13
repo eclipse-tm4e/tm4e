@@ -11,7 +11,7 @@
  */
 package org.eclipse.tm4e.ui.internal.wizards;
 
-import static org.eclipse.tm4e.core.internal.utils.NullSafetyHelper.lazyNonNull;
+import static org.eclipse.tm4e.core.internal.utils.NullSafetyHelper.*;
 
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
@@ -130,9 +130,9 @@ final class CreateThemeAssociationWizardPage extends AbstractWizardPage {
 	}
 
 	IThemeAssociation getThemeAssociation() {
-		final String themeId = ((ITheme) themeViewer.getStructuredSelection().getFirstElement()).getId();
-		final String scopeName = ((IGrammarDefinition) grammarsCombo.getStructuredSelection()
-				.getFirstElement()).getScope().getName();
+		final String themeId = ((ITheme) assertNonNull(themeViewer.getStructuredSelection().getFirstElement())).getId();
+		final var grammar = (IGrammarDefinition) assertNonNull(grammarsCombo.getStructuredSelection().getFirstElement());
+		final String scopeName = grammar.getScope().getName();
 		final boolean whenDark = whenDarkButton.getSelection();
 		return new ThemeAssociation(themeId, scopeName, whenDark);
 	}

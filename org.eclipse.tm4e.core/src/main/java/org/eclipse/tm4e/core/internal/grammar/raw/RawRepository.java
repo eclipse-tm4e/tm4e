@@ -27,8 +27,7 @@ public final class RawRepository extends PropertySettable.HashMap<IRawRule> impl
 	public static final String DOLLAR_BASE = "$base";
 	public static final String DOLLAR_SELF = "$self";
 
-	@SuppressWarnings({ "null", "unused" })
-	private IRawRule getSafe(final String key) {
+	private IRawRule getOrThrow(final String key) {
 		final IRawRule obj = get(key);
 		if (obj == null) {
 			throw new NoSuchElementException("Key '" + key + "' does not exit found");
@@ -50,7 +49,7 @@ public final class RawRepository extends PropertySettable.HashMap<IRawRule> impl
 
 	@Override
 	public IRawRule getBase() {
-		return getSafe(DOLLAR_BASE);
+		return getOrThrow(DOLLAR_BASE);
 	}
 
 	@Override
@@ -60,7 +59,7 @@ public final class RawRepository extends PropertySettable.HashMap<IRawRule> impl
 
 	@Override
 	public IRawRule getSelf() {
-		return getSafe(DOLLAR_SELF);
+		return getOrThrow(DOLLAR_SELF);
 	}
 
 	@Override

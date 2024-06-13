@@ -33,25 +33,16 @@ public class LanguageConfigurationCharacterPairMatcher
 
 	private static DefaultCharacterPairMatcher NOOP_MATCHER = new DefaultCharacterPairMatcher(new char[0]);
 
-	@Nullable
-	private DefaultCharacterPairMatcher matcher;
+	private @Nullable DefaultCharacterPairMatcher matcher;
+	private @Nullable IDocument document;
 
-	@Nullable
-	private IDocument document;
-
-	@Nullable
 	@Override
-	public IRegion match(@Nullable final IDocument document, final int offset) {
-		if (document == null)
-			return null;
+	public @Nullable IRegion match(final IDocument document, final int offset) {
 		return getMatcher(document).match(document, offset);
 	}
 
-	@Nullable
 	@Override
-	public IRegion match(@Nullable final IDocument document, final int offset, final int length) {
-		if (document == null)
-			return null;
+	public @Nullable IRegion match(final IDocument document, final int offset, final int length) {
 		return getMatcher(document).match(document, offset, length);
 	}
 
@@ -60,11 +51,8 @@ public class LanguageConfigurationCharacterPairMatcher
 		return matcher != null ? matcher.getAnchor() : -1;
 	}
 
-	@Nullable
 	@Override
-	public IRegion findEnclosingPeerCharacters(@Nullable final IDocument document, final int offset, final int length) {
-		if (document == null)
-			return null;
+	public @Nullable IRegion findEnclosingPeerCharacters(final IDocument document, final int offset, final int length) {
 		return getMatcher(document).findEnclosingPeerCharacters(document, offset, length);
 	}
 
@@ -77,17 +65,13 @@ public class LanguageConfigurationCharacterPairMatcher
 	}
 
 	@Override
-	public boolean isMatchedChar(final char ch, @Nullable final IDocument document, final int offset) {
-		if (document == null)
-			return false;
+	public boolean isMatchedChar(final char ch, final IDocument document, final int offset) {
 		return getMatcher(document).isMatchedChar(ch, document, offset);
 	}
 
 	@Override
-	public boolean isRecomputationOfEnclosingPairRequired(@Nullable final IDocument document,
-			@Nullable final IRegion currentSelection, @Nullable final IRegion previousSelection) {
-		if (document == null)
-			return false;
+	public boolean isRecomputationOfEnclosingPairRequired(final IDocument document, final IRegion currentSelection,
+			final IRegion previousSelection) {
 		return getMatcher(document)
 				.isRecomputationOfEnclosingPairRequired(document, currentSelection, previousSelection);
 	}
@@ -142,7 +126,7 @@ public class LanguageConfigurationCharacterPairMatcher
 				} else {
 					final var bracketsChars = new char[surroundingBracketsChars.length()];
 					surroundingBracketsChars.getChars(0, surroundingBracketsChars.length(), bracketsChars, 0);
-					// TODO handle surroundingQuotesChars, DefaultCharacterPairMatcher cannot handle pairs correctly when open and close chars 
+					// TODO handle surroundingQuotesChars, DefaultCharacterPairMatcher cannot handle pairs correctly when open and close chars
 					//      are identically, see https://github.com/eclipse/tm4e/issues/470
 					this.matcher = matcher = new DefaultCharacterPairMatcher(bracketsChars);
 				}

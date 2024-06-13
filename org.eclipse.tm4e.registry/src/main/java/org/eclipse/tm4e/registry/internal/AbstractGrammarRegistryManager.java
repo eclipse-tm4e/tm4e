@@ -13,7 +13,7 @@
  */
 package org.eclipse.tm4e.registry.internal;
 
-import static org.eclipse.tm4e.core.internal.utils.NullSafetyHelper.*;
+import static org.eclipse.tm4e.core.internal.utils.NullSafetyHelper.defaultIfNull;
 
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -24,6 +24,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.stream.Stream;
 
 import org.eclipse.core.runtime.content.IContentType;
@@ -76,22 +77,22 @@ abstract class AbstractGrammarRegistryManager implements IGrammarRegistryManager
 		@Nullable
 		IGrammarDefinition getBestForScope(final String scopeName) {
 			// check if the scopeName is qualified and a grammar definition exists
-			final var definition = byQualifiedScopeName.get(scopeName);
+			final IGrammarDefinition definition = byQualifiedScopeName.get(scopeName);
 			if (definition != null)
 				return definition;
 
 			// check if the scopeName is unqualified return the first grammar bound to it
-			final @Nullable List<IGrammarDefinition> definitionsOfScope = castNullable(byUnqualifiedScopeName.get(scopeName));
+			final List<IGrammarDefinition> definitionsOfScope = byUnqualifiedScopeName.get(scopeName);
 			return definitionsOfScope == null ? null : definitionsOfScope.get(0);
 		}
 
 		void remove(final IGrammarDefinition definition) {
-			final var scope = definition.getScope();
+			final ITMScope scope = definition.getScope();
 
 			if (scope.isQualified())
 				byQualifiedScopeName.remove(scope.getQualifiedName());
 
-			final var definitionsOfScope = castNullable(byUnqualifiedScopeName.get(scope.getName()));
+			final List<IGrammarDefinition> definitionsOfScope = byUnqualifiedScopeName.get(scope.getName());
 			if (definitionsOfScope != null) {
 				definitionsOfScope.remove(definition);
 				if (definitionsOfScope.isEmpty()) {
@@ -129,7 +130,6 @@ abstract class AbstractGrammarRegistryManager implements IGrammarRegistryManager
 			 */
 			@Override
 			public @Nullable IGrammarSource getGrammarSource(final String scopeName) {
-				@Nullable
 				IGrammarDefinition definition = userDefinitions.getBestForScope(scopeName);
 				if (definition == null) {
 					definition = pluginDefinitions.getBestForScope(scopeName);
@@ -160,16 +160,16 @@ abstract class AbstractGrammarRegistryManager implements IGrammarRegistryManager
 	@Override
 	public @Nullable IGrammar getGrammarFor(final IContentType... contentTypes) {
 		// -> used by TMPresentationReconciler
-		for (var contentType : contentTypes) {
+		for (@Nullable IContentType contentType : contentTypes) {
 			while (contentType != null) {
-				final var binding = castNullable(contentTypeToScopeBindings.get(contentType));
+				final ContentTypeToScopeBinding binding = contentTypeToScopeBindings.get(contentType);
 				if (binding == null) {
 					contentType = contentType.getBaseType();
 					continue;
 				}
 
 				// look for a grammar provided by the same plugin as the content-type
-				var grammar = getGrammarForScope(binding.scope.getQualifiedName());
+				IGrammar grammar = getGrammarForScope(binding.scope.getQualifiedName());
 				if (grammar != null) {
 					return grammar;
 				}
@@ -195,7 +195,7 @@ abstract class AbstractGrammarRegistryManager implements IGrammarRegistryManager
 	 * @param scopeName an unqualified (sources.batchfile) or qualified (sources.batchfile@plugin) scope name
 	 */
 	private @Nullable IGrammar getGrammarForScope(final String scopeName) {
-		final var grammar = registry.grammarForScopeName(scopeName);
+		final IGrammar grammar = registry.grammarForScopeName(scopeName);
 		if (grammar != null) {
 			return grammar;
 		}
@@ -205,18 +205,18 @@ abstract class AbstractGrammarRegistryManager implements IGrammarRegistryManager
 	@Override
 	public @Nullable IGrammar getGrammarForFileExtension(final String fileExt) {
 		// -> used by TMPresentationReconciler as fallback if #getGrammarFor(contentTypes) returns nothing
-		final var desiredFileExtension = fileExt.startsWith(".") ? fileExt.substring(1) : fileExt;
-		if (desiredFileExtension.isBlank())
+		final String desiredFileExt = fileExt.startsWith(".") ? fileExt.substring(1) : fileExt;
+		if (desiredFileExt.isBlank())
 			return null;
 
 		/*
 		 * first try to lookup grammar via contentTypes that match the file extension
 		 */
-		for (final var binding : contentTypeToScopeBindings.values()) {
-			for (final var contentTypeFileExtension : binding.contentType.getFileSpecs(IContentType.FILE_EXTENSION_SPEC)) {
-				if (contentTypeFileExtension.equals(desiredFileExtension)) {
+		for (final ContentTypeToScopeBinding binding : contentTypeToScopeBindings.values()) {
+			for (final String contentTypeFileExt : binding.contentType.getFileSpecs(IContentType.FILE_EXTENSION_SPEC)) {
+				if (contentTypeFileExt.equals(desiredFileExt)) {
 					// look for a grammar provided by the same plugin as the content-type
-					var grammar = getGrammarForScope(binding.scope.getQualifiedName());
+					IGrammar grammar = getGrammarForScope(binding.scope.getQualifiedName());
 					if (grammar != null)
 						return grammar;
 
@@ -233,11 +233,11 @@ abstract class AbstractGrammarRegistryManager implements IGrammarRegistryManager
 		 * as a fallback try to lookup a matching grammar via the fileType property inside the TextMate grammar file.
 		 * this can be expensive as it results in potentially loading/parsing all registered grammar files
 		 */
-		final var result = Stream //
+		final Optional<IGrammar> result = Stream //
 				.concat(userDefinitions.stream(), pluginDefinitions.stream())
 				.map(definition -> {
-					final var grammarForScope = getGrammarForScope(definition.getScope());
-					return grammarForScope != null && grammarForScope.getFileTypes().contains(desiredFileExtension)
+					final IGrammar grammarForScope = getGrammarForScope(definition.getScope());
+					return grammarForScope != null && grammarForScope.getFileTypes().contains(desiredFileExt)
 							? grammarForScope
 							: null;
 				})
@@ -250,7 +250,7 @@ abstract class AbstractGrammarRegistryManager implements IGrammarRegistryManager
 	}
 
 	@Override
-	public @Nullable IGrammarDefinition[] getDefinitions() {
+	public IGrammarDefinition[] getDefinitions() {
 		// -> used by grammars table in GrammarPreferencePage
 		return Stream.concat(
 				pluginDefinitions.stream(),
@@ -272,7 +272,6 @@ abstract class AbstractGrammarRegistryManager implements IGrammarRegistryManager
 	 */
 	void registerInjection(final String scopeName, final String injectTo) {
 		// -> used by GrammarRegistryManager.loadGrammarsFromExtensionPoints()
-		@Nullable
 		Collection<String> injectionsOfScope = getInjections(injectTo);
 		if (injectionsOfScope == null) {
 			injectionsOfScope = new ArrayList<>();

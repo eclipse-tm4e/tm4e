@@ -11,11 +11,10 @@
  */
 package org.eclipse.tm4e.core.grammar;
 
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
 import java.util.ArrayList;
 
 import org.eclipse.tm4e.core.Data;
+import org.eclipse.tm4e.core.internal.utils.ResourceUtils;
 import org.eclipse.tm4e.core.registry.IGrammarSource;
 import org.eclipse.tm4e.core.registry.Registry;
 
@@ -26,7 +25,7 @@ public final class MarkDown {
 		final IGrammar grammar = registry.addGrammar(IGrammarSource.fromResource(Data.class, "Markdown.tmLanguage"));
 
 		final var lines = new ArrayList<String>();
-		try (var reader = new BufferedReader(new InputStreamReader(Data.class.getResourceAsStream("test.md.txt")))) {
+		try (var reader = ResourceUtils.getResourceReader(Data.class, "test.md.txt")) {
 			String line = null;
 			while ((line = reader.readLine()) != null) {
 				lines.add(line);

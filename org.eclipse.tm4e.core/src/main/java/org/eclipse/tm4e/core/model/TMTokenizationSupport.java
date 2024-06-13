@@ -16,6 +16,8 @@
  */
 package org.eclipse.tm4e.core.model;
 
+import static org.eclipse.tm4e.core.internal.utils.NullSafetyHelper.castNonNull;
+
 import java.time.Duration;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -25,7 +27,6 @@ import java.util.Map;
 import java.util.function.BiFunction;
 
 import org.eclipse.jdt.annotation.NonNull;
-import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.tm4e.core.grammar.IGrammar;
 import org.eclipse.tm4e.core.grammar.IStateStack;
@@ -152,7 +153,7 @@ public class TMTokenizationSupport implements ITokenizationSupport {
 
 			if (sameAsPrev) {
 				if (level < prevTokenScopesLength && prevTokenScopes.get(level).equals(scope)) {
-					prevScopeTokensMaps = prevTokenScopeTokensMaps.get(level);
+					prevScopeTokensMaps = castNonNull(prevTokenScopeTokensMaps.get(level));
 					scopeTokensMaps.put(level, prevScopeTokensMaps);
 					continue;
 				}
@@ -171,16 +172,14 @@ public class TMTokenizationSupport implements ITokenizationSupport {
 		return decodeMap.getToken(prevScopeTokensMaps);
 	}
 
-	@NonNullByDefault({})
 	private record TMTokenDecodeData(
-			@NonNull List<String> scopes,
-			@NonNull Map<Integer /* level */, Map<Integer, Boolean>> scopeTokensMaps) {
+			List<String> scopes,
+			Map<Integer /* level */, Map<Integer, Boolean>> scopeTokensMaps) {
 	}
 
 	/**
 	 * https://github.com/microsoft/vscode/blob/70d250824ef66ef09f04c4084b804d5f353fb704/src/vs/editor/node/textMate/TMSyntax.ts#L129
 	 */
-	@NonNullByDefault({})
 	private static final class DecodeMap {
 
 		private int lastAssignedTokenId = 0;
@@ -189,14 +188,14 @@ public class TMTokenizationSupport implements ITokenizationSupport {
 		private final List<String> tokenIdToToken = MoreCollections.asArrayList("element-at-index-zero-is-unused");
 		TMTokenDecodeData prevToken = new TMTokenDecodeData(Collections.emptyList(), Collections.emptyMap());
 
-		Integer[] getTokenIds(final String scope) {
+		private Integer[] getTokenIds(final String scope) {
 			Integer[] tokens = this.scopeToTokenIds.get(scope);
 			if (tokens != null) {
 				return tokens;
 			}
 
 			final String[] tmpTokens = StringUtils.splitToArray(scope, '.');
-			tokens = new Integer[tmpTokens.length];
+			tokens = new @NonNull Integer[tmpTokens.length];
 			for (int i = 0; i < tmpTokens.length; i++) {
 				final String token = tmpTokens[i];
 				Integer tokenId = this.tokenToTokenId.get(token);

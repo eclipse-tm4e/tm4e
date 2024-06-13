@@ -11,7 +11,7 @@
  */
 package org.eclipse.tm4e.ui.internal.text;
 
-import static org.eclipse.tm4e.core.internal.utils.NullSafetyHelper.*;
+import static org.eclipse.tm4e.core.internal.utils.NullSafetyHelper.lazyNonNull;
 
 import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.jface.text.DocumentEvent;
@@ -32,12 +32,12 @@ public final class TMPresentationReconcilerTestGenerator
 	private final StringBuilder code = new StringBuilder();
 
 	/*private List<Command> commands = new ArrayList<>();
-	
+
 	private static final class Command {
 		final String command;
 		StyleRange[] ranges;
 		Throwable error;
-	
+
 		Command(String command) {
 			this.command = command;
 		}
@@ -174,14 +174,11 @@ public final class TMPresentationReconcilerTestGenerator
 	}
 
 	@Override
-	public void documentAboutToBeChanged(@Nullable final DocumentEvent event) {
-
+	public void documentAboutToBeChanged(final DocumentEvent event) {
 	}
 
 	@Override
-	public void documentChanged(@Nullable final DocumentEvent event) {
-		if (event == null)
-			return;
+	public void documentChanged(final DocumentEvent event) {
 		final String command = "document.replace(" + event.getOffset() + ", " + event.getLength() + ", \""
 				+ toText(event.getText()) + "\");";
 		write("\t\t" + command, true);
@@ -190,8 +187,8 @@ public final class TMPresentationReconcilerTestGenerator
 	}
 
 	@Override
-	public void textChanged(@Nullable final TextEvent event) {
-		if (event == null || event.getDocumentEvent() != null) {
+	public void textChanged(final TextEvent event) {
+		if (event.getDocumentEvent() != null) {
 			return;
 		}
 

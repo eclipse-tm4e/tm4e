@@ -18,6 +18,7 @@ package org.eclipse.tm4e.core.internal.oniguruma;
 
 import java.util.Arrays;
 
+import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 
 /**
@@ -40,7 +41,7 @@ public final class OnigScannerMatch {
 	 */
 	private OnigCaptureIndex[] captureIndicesOfMatch(final OnigResult result, final OnigString source) {
 		final int resultCount = result.count();
-		final var captures = new OnigCaptureIndex[resultCount];
+		final var captures = new @NonNull OnigCaptureIndex[resultCount];
 		for (int i = 0; i < resultCount; i++) {
 			final int loc = result.locationAt(i);
 			final int captureStart = source.getCharIndexOfByte(loc);

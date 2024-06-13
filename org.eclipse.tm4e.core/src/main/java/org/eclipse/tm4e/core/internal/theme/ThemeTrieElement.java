@@ -104,8 +104,9 @@ public final class ThemeTrieElement {
 			tail = scope.substring(dotIndex + 1);
 		}
 
-		if (this._children.containsKey(head)) {
-			return this._children.get(head).match(tail);
+		final ThemeTrieElement child = this._children.get(head);
+		if (child != null) {
+			return child.match(tail);
 		}
 
 		return ThemeTrieElement._sortBySpecificity(asArrayList(this._mainRule, this._rulesWithParentScopes));
@@ -129,10 +130,8 @@ public final class ThemeTrieElement {
 			tail = scope.substring(dotIndex + 1);
 		}
 
-		final ThemeTrieElement child;
-		if (this._children.containsKey(head)) {
-			child = this._children.get(head);
-		} else {
+		ThemeTrieElement child = this._children.get(head);
+		if (child == null) {
 			child = new ThemeTrieElement(this._mainRule.clone(), ThemeTrieElementRule.cloneArr(this._rulesWithParentScopes));
 			this._children.put(head, child);
 		}

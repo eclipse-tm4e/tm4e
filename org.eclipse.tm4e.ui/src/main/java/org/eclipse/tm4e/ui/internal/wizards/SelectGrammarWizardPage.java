@@ -12,7 +12,7 @@
  */
 package org.eclipse.tm4e.ui.internal.wizards;
 
-import static org.eclipse.tm4e.core.internal.utils.NullSafetyHelper.lazyNonNull;
+import static org.eclipse.tm4e.core.internal.utils.NullSafetyHelper.*;
 
 import java.nio.file.Paths;
 import java.util.stream.Collectors;
@@ -23,7 +23,6 @@ import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
-import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.jface.viewers.ViewerFilter;
@@ -151,8 +150,7 @@ final class SelectGrammarWizardPage extends AbstractWizardPage {
 					}
 
 					@Override
-					@NonNullByDefault({})
-					public boolean select(final Viewer viewer, final Object parentElement, final Object element) {
+					public boolean select(final Viewer viewer, final @Nullable Object parentElement, final Object element) {
 						if (element instanceof final IContainer container)
 							return containsGrammarFile(container);
 						if (element instanceof final IFile file)
@@ -162,7 +160,7 @@ final class SelectGrammarWizardPage extends AbstractWizardPage {
 				});
 
 				if (dialog.open() == ElementTreeSelectionDialog.OK && dialog.getFirstResult() instanceof final IFile file) {
-					grammarFileText.setText(file.getLocation().toOSString());
+					grammarFileText.setText(assertNonNull(file.getLocation()).toOSString());
 				}
 			}
 		});

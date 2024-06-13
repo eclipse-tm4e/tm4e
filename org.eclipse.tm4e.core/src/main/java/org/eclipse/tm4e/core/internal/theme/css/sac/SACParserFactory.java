@@ -10,6 +10,8 @@
  *******************************************************************************/
 package org.eclipse.tm4e.core.internal.theme.css.sac;
 
+import static org.eclipse.tm4e.core.internal.utils.NullSafetyHelper.castNonNull;
+
 import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
 import java.util.Map;
@@ -20,7 +22,7 @@ import org.w3c.css.sac.Parser;
 /**
  * SAC Parser factory implementation.
  *
- * By default, this SAC FActory support Flute, SteadyState and Batik SAC Parser.
+ * By default, this SAC FActory supports Flute, SteadyState and Batik SAC Parser.
  *
  * @see <a href=
  *      "https://github.com/eclipse-platform/eclipse.platform.ui/blob/master/bundles/org.eclipse.e4.ui.css.core/src/org/eclipse/e4/ui/css/core/impl/sac/SACParserFactoryImpl.java">github.com/eclipse-platform/eclipse.platform.ui/blob/master/bundles/org.eclipse.e4.ui.css.core/src/org/eclipse/e4/ui/css/core/impl/sac/SACParserFactoryImpl.java</a>
@@ -50,11 +52,9 @@ public final class SACParserFactory extends AbstractSACParserFactory {
 			InstantiationException, ClassCastException {
 		final String classNameParser = parsers.get(name);
 		if (classNameParser != null) {
-			final Class<?> classParser = super.getClass().getClassLoader().loadClass(classNameParser);
+			final Class<?> classParser = castNonNull(super.getClass().getClassLoader()).loadClass(classNameParser);
 			try {
-				final var parser = (Parser) classParser.getDeclaredConstructor().newInstance();
-				assert parser != null;
-				return parser;
+				return (Parser) classParser.getDeclaredConstructor().newInstance();
 			} catch (InvocationTargetException | NoSuchMethodException ex) {
 				throw (InstantiationException) new InstantiationException().initCause(ex);
 			}

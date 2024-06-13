@@ -14,7 +14,6 @@ package org.eclipse.tm4e.ui.internal.menus;
 import java.util.ArrayList;
 
 import org.eclipse.core.expressions.IEvaluationContext;
-import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.ActionContributionItem;
@@ -44,7 +43,7 @@ public final class ThemeContribution extends CompoundContributionItem implements
 	private @Nullable IHandlerService handlerService;
 
 	@Override
-	public void initialize(@NonNullByDefault({}) final IServiceLocator serviceLocator) {
+	public void initialize(final IServiceLocator serviceLocator) {
 		handlerService = serviceLocator.getService(IHandlerService.class);
 	}
 

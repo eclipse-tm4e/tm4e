@@ -52,8 +52,8 @@ public class LanguageConfigurationAutoEditStrategy implements IAutoEditStrategy 
 	 *      github.com/microsoft/vscode/src/vs/editor/common/cursor/cursorTypeOperations.ts#typeWithInterceptors</a>
 	 */
 	@Override
-	public void customizeDocumentCommand(@Nullable final IDocument doc, @Nullable final DocumentCommand command) {
-		if (doc == null || command == null || command.text.isEmpty())
+	public void customizeDocumentCommand(final IDocument doc, final DocumentCommand command) {
+		if (command.text.isEmpty())
 			return;
 
 		if (!doc.equals(this.document)) {

@@ -3,7 +3,9 @@
  * "https://github.com/microsoft/vscode-textmate/blob/main/src/grammar/grammarDependencies.ts">
  * github.com/microsoft/vscode-textmate/blob/main/src/grammar/grammarDependencies.ts</a>
  */
-@NonNullByDefault
+@NonNullByDefault({ ARRAY_CONTENTS, PARAMETER, RETURN_TYPE, FIELD, TYPE_BOUND, TYPE_ARGUMENT })
 package org.eclipse.tm4e.core.internal.grammar.dependencies;
+
+import static org.eclipse.jdt.annotation.DefaultLocation.*;
 
 import org.eclipse.jdt.annotation.NonNullByDefault;

@@ -9,6 +9,8 @@
  */
 package org.eclipse.tm4e.core.internal.utils;
 
+import static org.eclipse.tm4e.core.internal.utils.NullSafetyHelper.castNonNull;
+
 import java.lang.reflect.Array;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
@@ -66,7 +68,7 @@ public final class ObjectCloner {
 
 		if (obj.getClass().isArray()) {
 			final int len = Array.getLength(obj);
-			final var arrayType = obj.getClass().getComponentType();
+			final var arrayType = castNonNull(obj.getClass().getComponentType());
 			final var arrayClone = Array.newInstance(arrayType, len);
 			clones.put(obj, arrayClone);
 			for (int i = 0; i < len; i++) {
@@ -89,7 +91,7 @@ public final class ObjectCloner {
 	}
 
 	@SuppressWarnings("unchecked")
-	private static <@NonNull T> T shallowClone(final T obj, final Supplier<T> fallback) {
+	private static <T> T shallowClone(final T obj, final Supplier<T> fallback) {
 		if (obj instanceof Cloneable) {
 			try {
 				final var cloneMethod = CLONE_METHODS_CACHE.computeIfAbsent(obj.getClass(), cls -> {

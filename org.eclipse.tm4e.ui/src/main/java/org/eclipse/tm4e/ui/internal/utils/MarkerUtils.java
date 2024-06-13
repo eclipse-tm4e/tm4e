@@ -9,6 +9,8 @@
  */
 package org.eclipse.tm4e.ui.internal.utils;
 
+import static org.eclipse.tm4e.core.internal.utils.NullSafetyHelper.castNonNull;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -104,7 +106,7 @@ public final class MarkerUtils {
 				marker.delete(); // this marker is for a non-existing line
 				continue;
 			}
-			final var markersOfLine = markersByLineNumber.computeIfAbsent(lineNumberObj, l -> new ArrayList<>(1));
+			final var markersOfLine = markersByLineNumber.computeIfAbsent(lineNumberObj, k -> new ArrayList<>(1));
 			markersOfLine.add(marker);
 		}
 
@@ -143,15 +145,19 @@ public final class MarkerUtils {
 					if (!matcher.find())
 						continue;
 
-					final var markerConfig = markerConfigByTag.get(matcher.group(1));
+					final var markerConfig = castNonNull(markerConfigByTag.get(matcher.group(1)));
 					final var markerText = commentText.substring(matcher.start()).trim();
 
 					final var attrs = new HashMap<String, Object>();
 					attrs.put(IMarker.LINE_NUMBER, lineNumberObj);
 					attrs.put(IMarker.MESSAGE, markerText);
 					switch (markerConfig.type) {
-						case PROBLEM -> attrs.put(IMarker.SEVERITY, markerConfig.asProblemMarkerConfig().severity.value);
-						case TASK -> attrs.put(IMarker.PRIORITY, markerConfig.asTaskMarkerConfig().priority.value);
+						case PROBLEM:
+							attrs.put(IMarker.SEVERITY, markerConfig.asProblemMarkerConfig().severity.value);
+							break;
+						case TASK:
+							attrs.put(IMarker.PRIORITY, markerConfig.asTaskMarkerConfig().priority.value);
+							break;
 					}
 					attrs.put(IMarker.USER_EDITABLE, Boolean.FALSE);
 					attrs.put(IMarker.SOURCE_ID, "TM4E");

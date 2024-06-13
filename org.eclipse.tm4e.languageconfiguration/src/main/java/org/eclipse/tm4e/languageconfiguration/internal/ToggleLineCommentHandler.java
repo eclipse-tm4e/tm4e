@@ -47,14 +47,12 @@ public class ToggleLineCommentHandler extends AbstractHandler {
 	public static final String ADD_BLOCK_COMMENT_COMMAND_ID = "org.eclipse.tm4e.languageconfiguration.addBlockCommentCommand";
 	public static final String REMOVE_BLOCK_COMMENT_COMMAND_ID = "org.eclipse.tm4e.languageconfiguration.removeBlockCommentCommand";
 
-	@Nullable
-	private static <T> T adapt(@Nullable final Object sourceObject, final Class<T> adapter) {
+	private static <T> @Nullable T adapt(@Nullable final Object sourceObject, final Class<T> adapter) {
 		return Adapters.adapt(sourceObject, adapter);
 	}
 
-	@Nullable
 	@Override
-	public Object execute(@Nullable final ExecutionEvent event) throws ExecutionException {
+	public @Nullable Object execute(@Nullable final ExecutionEvent event) throws ExecutionException {
 		if (event == null) {
 			return null;
 		}
@@ -321,8 +319,7 @@ public class ToggleLineCommentHandler extends AbstractHandler {
 	 *
 	 * @return the comment support from the given list of content types and null otherwise.
 	 */
-	@Nullable
-	private static CommentSupport getCommentSupport(final IContentType[] contentTypes) {
+	private static @Nullable CommentSupport getCommentSupport(final IContentType[] contentTypes) {
 		final var registry = LanguageConfigurationRegistryManager.getInstance();
 		for (final var contentType : contentTypes) {
 			if (!registry.shouldComment(contentType)) {
@@ -467,7 +464,7 @@ public class ToggleLineCommentHandler extends AbstractHandler {
 
 		final Set<ITypedRegion> comments = getBlockCommentParts(document, textSelectionStart,
 				textSelectionEnd - textSelectionStart, open, close);
-		final ITypedRegion[] brokenEnds = findBrokenBlockCommentPart(comments, open, close);
+		final @Nullable ITypedRegion[] brokenEnds = findBrokenBlockCommentPart(comments, open, close);
 
 		int newCommentStart = textSelectionStart;
 		int newCommentEnd = textSelectionEnd;
@@ -494,12 +491,12 @@ public class ToggleLineCommentHandler extends AbstractHandler {
 		return new TextSelection(document, textSelectionStart, textSelectionEnd - textSelectionStart);
 	}
 
-	private static ITypedRegion[] findBrokenBlockCommentPart(final Set<ITypedRegion> blockCommentParts, final String open,
+	private static @Nullable ITypedRegion[] findBrokenBlockCommentPart(final Set<ITypedRegion> blockCommentParts, final String open,
 			final String close) {
-		final ITypedRegion[] brokenBlockComment = { null, null };
-		blockCommentParts.stream().forEach(bc -> {
+		final @Nullable ITypedRegion[] brokenBlockComment = { null, null };
+		blockCommentParts.forEach(bc -> {
 			if (open.equals(bc.getType())) {
-				brokenBlockComment[0] = bc;	// Save as "broken" block comment open part, so the last open part will be the result
+				brokenBlockComment[0] = bc; // Save as "broken" block comment open part, so the last open part will be the result
 			} else if (close.equals(bc.getType())) {
 				if (brokenBlockComment[0] != null) {
 					brokenBlockComment[0] = null; // Clear "broken" block comment open part

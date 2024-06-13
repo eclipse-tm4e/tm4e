@@ -29,7 +29,6 @@ import java.util.Map;
 import javax.xml.XMLConstants;
 import javax.xml.parsers.SAXParserFactory;
 
-import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.eclipse.jdt.annotation.Nullable;
 import org.xml.sax.Attributes;
 import org.xml.sax.InputSource;
@@ -91,12 +90,11 @@ public final class TMParserPList implements TMParser {
 			final StringBuilder text = new StringBuilder();
 
 			@Override
-			public void characters(final char @Nullable [] chars, final int start, final int count) {
+			public void characters(final char[] chars, final int start, final int count) {
 				text.append(chars, start, count);
 			}
 
 			@Override
-			@NonNullByDefault({})
 			public void startElement(final String uri, final String localName, final String qName, final Attributes attributes) {
 				text.setLength(0);
 				switch (localName) {
@@ -121,7 +119,6 @@ public final class TMParserPList implements TMParser {
 			}
 
 			@Override
-			@NonNullByDefault({})
 			public void endElement(final String uri, final String localName, final String qName) {
 				switch (localName) {
 					case PLIST_ARRAY: {

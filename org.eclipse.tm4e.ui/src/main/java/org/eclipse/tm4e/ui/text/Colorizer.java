@@ -113,10 +113,11 @@ class Colorizer {
 					continue;
 				}
 				final int startLineOffset = doc.getLineOffset(lineIndex);
-				for (int i = 0; i < tokens.size(); i++) {
-					final TMToken currentToken = tokens.get(i);
-					final TMToken nextToken = i + 1 < tokens.size()
-							? tokens.get(i + 1)
+				int nextTokenIndex = 0;
+				for (final TMToken currentToken : tokens) {
+					nextTokenIndex++;
+					final @Nullable TMToken nextToken = nextTokenIndex < tokens.size()
+							? tokens.get(nextTokenIndex)
 							: null;
 					int tokenStartIndex = currentToken.startIndex;
 

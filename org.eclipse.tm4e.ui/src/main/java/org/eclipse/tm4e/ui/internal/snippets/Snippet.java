@@ -11,6 +11,8 @@
  */
 package org.eclipse.tm4e.ui.internal.snippets;
 
+import static org.eclipse.tm4e.core.internal.utils.NullSafetyHelper.assertNonNull;
+
 import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.tm4e.registry.TMResource;
 import org.eclipse.tm4e.registry.XMLConstants;
@@ -31,8 +33,8 @@ final class Snippet extends TMResource implements ISnippet {
 
 	Snippet(final IConfigurationElement ce) {
 		super(ce);
-		this.scopeName = ce.getAttribute(XMLConstants.SCOPE_NAME_ATTR);
-		this.name = ce.getAttribute(XMLConstants.NAME_ATTR);
+		this.scopeName = assertNonNull(ce.getAttribute(XMLConstants.SCOPE_NAME_ATTR));
+		this.name = assertNonNull(ce.getAttribute(XMLConstants.NAME_ATTR));
 	}
 
 	@Override

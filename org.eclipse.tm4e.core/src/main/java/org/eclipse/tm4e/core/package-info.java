@@ -1,5 +1,5 @@
 @NonNullByDefault({ ARRAY_CONTENTS, PARAMETER, RETURN_TYPE, FIELD, TYPE_BOUND, TYPE_ARGUMENT })
-package org.eclipse.tm4e.core.theme.css;
+package org.eclipse.tm4e.core;
 
 import static org.eclipse.jdt.annotation.DefaultLocation.*;
 

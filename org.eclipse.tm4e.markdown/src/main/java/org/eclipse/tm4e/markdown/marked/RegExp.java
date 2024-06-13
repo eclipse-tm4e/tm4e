@@ -23,27 +23,24 @@ import org.eclipse.jdt.annotation.Nullable;
 
 public class RegExp {
 
-	@Nullable
-	protected String source;
-
-	@Nullable
-	private Pattern pattern;
+	protected @Nullable String source;
+	private @Nullable Pattern pattern;
 
 	public RegExp(@Nullable final String source) {
 		this.source = source;
 	}
 
-	@Nullable
-	public Matcher exec(final String s) {
+	public @Nullable Matcher exec(final String s) {
+		final var source = this.source;
 		if (source == null) {
 			return null;
 		}
 
+		Pattern pattern = this.pattern;
 		if (pattern == null) {
-			pattern = Pattern.compile(source);
+			pattern = this.pattern = Pattern.compile(source);
 		}
 
-		assert pattern != null;
 		final Matcher matcher = pattern.matcher(s);
 		if (matcher.find()) {
 			return matcher;
@@ -56,11 +53,10 @@ public class RegExp {
 	}
 
 	public RegExp replace(@Nullable final String name, @Nullable String val) {
-		final var source = this.source;
-
 		if (name == null)
 			return new RegExp(source);
 
+		final var source = this.source;
 		if (source != null && val != null) {
 			val = val.replaceAll("(^|[^\\[])\\^", "$1");
 			this.source = source.replaceFirst(name, Matcher.quoteReplacement(val));
@@ -73,11 +69,10 @@ public class RegExp {
 	}
 
 	public RegExp replaceAll(@Nullable final String name, @Nullable String val) {
-		final var source = this.source;
-
 		if (name == null)
 			return new RegExp(source);
 
+		final var source = this.source;
 		if (source != null && val != null) {
 			val = val.replaceAll("(^|[^\\[])\\^", "$1");
 			this.source = source.replaceAll(name, Matcher.quoteReplacement(val));

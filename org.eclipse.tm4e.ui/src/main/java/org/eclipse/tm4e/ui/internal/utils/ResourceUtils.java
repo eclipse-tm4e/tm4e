@@ -18,8 +18,7 @@ import org.eclipse.jface.text.IDocument;
 
 public final class ResourceUtils {
 
-	@Nullable
-	public static IResource findResource(final IDocument doc) {
+	public static @Nullable IResource findResource(final IDocument doc) {
 		// for local unit tests to prevent ExceptionInInitiaizerError
 		if (!Platform.isRunning())
 			return null;

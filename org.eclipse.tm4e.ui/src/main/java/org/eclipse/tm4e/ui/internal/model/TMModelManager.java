@@ -11,8 +11,6 @@
  */
 package org.eclipse.tm4e.ui.internal.model;
 
-import static org.eclipse.tm4e.core.internal.utils.NullSafetyHelper.castNullable;
-
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -39,7 +37,7 @@ public final class TMModelManager implements ITMModelManager {
 
 	@Override
 	public void disconnect(final IDocument document) {
-		final var model = castNullable(models.remove(document));
+		final var model = models.remove(document);
 		if (model != null) {
 			model.dispose();
 		}

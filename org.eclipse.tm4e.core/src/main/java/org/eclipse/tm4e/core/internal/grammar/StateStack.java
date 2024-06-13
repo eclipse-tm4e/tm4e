@@ -23,7 +23,6 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 
-import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.tm4e.core.grammar.IStateStack;
 import org.eclipse.tm4e.core.internal.rule.IRuleRegistry;
@@ -39,7 +38,6 @@ import org.eclipse.tm4e.core.internal.rule.RuleId;
  */
 public final class StateStack implements IStateStack {
 
-	@NonNullByDefault({}) // https://github.com/eclipse-jdt/eclipse.jdt.core/issues/233
 	record Frame(
 			RuleId ruleId,
 			@Nullable Integer enterPos,

@@ -11,7 +11,6 @@
  */
 package org.eclipse.tm4e.ui.internal.model;
 
-import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.jface.text.BadLocationException;
 import org.eclipse.jface.text.DocumentEvent;
 import org.eclipse.jface.text.IDocument;
@@ -35,9 +34,7 @@ public final class TMDocumentModel extends TMModel implements ITMDocumentModel, 
 	}
 
 	@Override
-	public void documentAboutToBeChanged(@Nullable final DocumentEvent event) {
-		if (event == null)
-			return;
+	public void documentAboutToBeChanged(final DocumentEvent event) {
 		try {
 			switch (DocumentHelper.getEventType(event)) {
 				case REMOVE, REPLACE /*= Remove + Insert */:
@@ -52,9 +49,7 @@ public final class TMDocumentModel extends TMModel implements ITMDocumentModel, 
 	}
 
 	@Override
-	public void documentChanged(@Nullable final DocumentEvent event) {
-		if (event == null)
-			return;
+	public void documentChanged(final DocumentEvent event) {
 		try {
 			final int startLineIndex = DocumentHelper.getStartLineIndex(event);
 			switch (DocumentHelper.getEventType(event)) {

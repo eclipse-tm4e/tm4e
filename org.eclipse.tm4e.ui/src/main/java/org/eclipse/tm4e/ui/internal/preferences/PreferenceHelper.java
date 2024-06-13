@@ -11,12 +11,13 @@
  */
 package org.eclipse.tm4e.ui.internal.preferences;
 
+import static org.eclipse.tm4e.core.internal.utils.NullSafetyHelper.*;
+
 import java.io.IOException;
 import java.util.Collection;
 import java.util.Set;
 
 import org.eclipse.core.runtime.preferences.InstanceScope;
-import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.tm4e.ui.TMUIPlugin;
 import org.eclipse.tm4e.ui.internal.utils.MarkerConfig;
@@ -45,7 +46,6 @@ public final class PreferenceHelper {
 			.registerTypeAdapterFactory(new TypeAdapterFactory() {
 				@SuppressWarnings("unchecked")
 				@Override
-				@NonNullByDefault({})
 				public @Nullable <T> TypeAdapter<T> create(final Gson gson, final TypeToken<T> type) {
 					if (!MarkerConfig.class.isAssignableFrom(type.getRawType()))
 						return null;
@@ -55,17 +55,18 @@ public final class PreferenceHelper {
 					final var taskAdapter = gson.getDelegateAdapter(this, TypeToken.get(MarkerConfig.TaskMarkerConfig.class));
 					return (TypeAdapter<T>) new TypeAdapter<MarkerConfig>() {
 						@Override
-						public void write(final JsonWriter out, final MarkerConfig value) throws IOException {
-							if (value.getClass().isAssignableFrom(MarkerConfig.ProblemMarkerConfig.class)) {
+						public void write(final JsonWriter out, final @Nullable MarkerConfig value) throws IOException {
+							final var valueClass = castNonNull(value).getClass();
+							if (valueClass.isAssignableFrom(MarkerConfig.ProblemMarkerConfig.class)) {
 								problemAdapter.write(out, (MarkerConfig.ProblemMarkerConfig) value);
-							} else if (value.getClass().isAssignableFrom(MarkerConfig.TaskMarkerConfig.class)) {
+							} else if (valueClass.isAssignableFrom(MarkerConfig.TaskMarkerConfig.class)) {
 								taskAdapter.write(out, (MarkerConfig.TaskMarkerConfig) value);
 							}
 						}
 
 						@Override
-						public MarkerConfig read(final JsonReader in) throws IOException {
-							final var objectJson = jsonElementAdapter.read(in).getAsJsonObject();
+						public @Nullable MarkerConfig read(final JsonReader in) throws IOException {
+							final var objectJson = assertNonNull(jsonElementAdapter.read(in)).getAsJsonObject();
 							return switch (MarkerConfig.Type.valueOf(objectJson.get("type").getAsString())) {
 								case PROBLEM -> problemAdapter.fromJsonTree(objectJson);
 								case TASK -> taskAdapter.fromJsonTree(objectJson);
@@ -76,7 +77,7 @@ public final class PreferenceHelper {
 			}).create();
 
 	public static IThemeAssociation[] loadThemeAssociations(final String json) {
-		return DEFAULT_GSON.fromJson(json, ThemeAssociation[].class);
+		return assertNonNull(DEFAULT_GSON.fromJson(json, ThemeAssociation[].class));
 	}
 
 	public static String toJsonThemeAssociations(final Collection<IThemeAssociation> themeAssociations) {
@@ -96,8 +97,8 @@ public final class PreferenceHelper {
 	}
 
 	public static Set<MarkerConfig> loadMarkerConfigs(final String json) {
-		return DEFAULT_GSON.fromJson(json, new TypeToken<Set<MarkerConfig>>() {
-		}.getType());
+		return assertNonNull(DEFAULT_GSON.fromJson(json, new TypeToken<Set<MarkerConfig>>() {
+		}.getType()));
 	}
 
 	public static String toJsonMarkerConfigs(final Set<MarkerConfig> markerConfigs) {

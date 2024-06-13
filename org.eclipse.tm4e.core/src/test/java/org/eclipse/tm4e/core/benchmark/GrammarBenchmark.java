@@ -9,13 +9,11 @@
  */
 package org.eclipse.tm4e.core.benchmark;
 
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
-import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 
 import org.eclipse.tm4e.core.grammar.IGrammar;
 import org.eclipse.tm4e.core.grammar.IStateStack;
+import org.eclipse.tm4e.core.internal.utils.ResourceUtils;
 import org.eclipse.tm4e.core.registry.IGrammarSource;
 import org.eclipse.tm4e.core.registry.Registry;
 
@@ -41,8 +39,8 @@ public final class GrammarBenchmark implements Runnable {
 		/*
 		 * load the file to be parsed
 		 */
-		try (var sourceFileIS = GrammarBenchmark.class.getResourceAsStream("GrammarBenchmark.JavaFile.txt")) {
-			sourceCode = new BufferedReader(new InputStreamReader(sourceFileIS, StandardCharsets.UTF_8))
+		try (var sourceFileReader = ResourceUtils.getResourceReader(GrammarBenchmark.class, "GrammarBenchmark.JavaFile.txt")) {
+			sourceCode = sourceFileReader
 					.lines()
 					.toArray(String[]::new);
 		}

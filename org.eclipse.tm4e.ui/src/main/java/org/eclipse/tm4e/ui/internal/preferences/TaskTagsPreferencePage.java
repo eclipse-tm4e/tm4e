@@ -16,7 +16,6 @@ import static org.eclipse.tm4e.core.internal.utils.NullSafetyHelper.*;
 import java.util.Set;
 import java.util.stream.Stream;
 
-import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.dialogs.IMessageProvider;
@@ -101,7 +100,7 @@ public final class TaskTagsPreferencePage extends AbstractPreferencePage {
 		}
 
 		@Override
-		protected Control createDialogArea(final @Nullable Composite parent) {
+		protected Control createDialogArea(final Composite parent) {
 			final var area = (Composite) super.createDialogArea(parent);
 			final var container = new Composite(area, SWT.NONE);
 			container.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
@@ -182,7 +181,7 @@ public final class TaskTagsPreferencePage extends AbstractPreferencePage {
 	}
 
 	@Override
-	protected Control createContents(@NonNullByDefault({}) final Composite parent) {
+	protected Control createContents(final Composite parent) {
 		createMarkerConfigsTable(parent);
 
 		applyDialogFont(parent);

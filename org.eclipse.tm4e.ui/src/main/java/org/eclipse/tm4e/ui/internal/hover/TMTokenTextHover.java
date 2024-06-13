@@ -11,7 +11,6 @@
  *******************************************************************************/
 package org.eclipse.tm4e.ui.internal.hover;
 
-import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.jface.text.AbstractReusableInformationControlCreator;
 import org.eclipse.jface.text.BadLocationException;
@@ -49,15 +48,14 @@ public class TMTokenTextHover implements ITextHover, ITextHoverExtension {
 		// setup a hover control that interprets basic HTML input
 		return new AbstractReusableInformationControlCreator() {
 			@Override
-			protected IInformationControl doCreateInformationControl(final @NonNullByDefault({}) Shell parent) {
+			protected IInformationControl doCreateInformationControl(final Shell parent) {
 				return new DefaultInformationControl(parent, EditorsUI.getTooltipAffordanceString());
 			}
 		};
 	}
 
 	@Override
-	public @Nullable String getHoverInfo(final @NonNullByDefault({}) ITextViewer textViewer,
-			final @NonNullByDefault({}) IRegion hoverRegion) {
+	public @Nullable String getHoverInfo(final ITextViewer textViewer, final IRegion hoverRegion) {
 		if (hoverRegion instanceof final RegionWithTMToken regionWithToken) {
 			final var text = regionWithToken.tokenText.replace(' ', '·').replace('\t', '→');
 			return "<b>" + text + "</b> (" + text.length()
@@ -70,7 +68,7 @@ public class TMTokenTextHover implements ITextHover, ITextHoverExtension {
 	}
 
 	@Override
-	public @Nullable IRegion getHoverRegion(final @NonNullByDefault({}) ITextViewer textViewer, final int offset) {
+	public @Nullable IRegion getHoverRegion(final ITextViewer textViewer, final int offset) {
 		if (!PreferenceHelper.isTMTokenHoverEnabled())
 			return null;
 

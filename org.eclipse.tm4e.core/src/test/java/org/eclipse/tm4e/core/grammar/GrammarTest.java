@@ -14,16 +14,14 @@ package org.eclipse.tm4e.core.grammar;
 import static org.eclipse.tm4e.core.registry.IGrammarSource.*;
 import static org.junit.jupiter.api.Assertions.*;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.nio.charset.StandardCharsets;
 import java.time.Duration;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
 import org.eclipse.tm4e.core.Data;
+import org.eclipse.tm4e.core.internal.utils.ResourceUtils;
 import org.eclipse.tm4e.core.registry.IGrammarSource;
 import org.eclipse.tm4e.core.registry.Registry;
 import org.junit.jupiter.api.Assertions;
@@ -208,13 +206,13 @@ class GrammarTest {
 		final var grammar = new Registry().addGrammar(fromResource(Data.class, "TypeScript.tmLanguage.json"));
 
 		final List<String> expectedTokens;
-		try (var resource = Data.class.getResourceAsStream("raytracer_tokens.txt")) {
-			expectedTokens = new BufferedReader(new InputStreamReader(resource, StandardCharsets.UTF_8)).lines().toList();
+		try (var reader = ResourceUtils.getResourceReader(Data.class, "raytracer_tokens.txt")) {
+			expectedTokens = reader.lines().toList();
 		}
 
 		IStateStack stateStack = null;
 		int tokenIndex = -1;
-		try (var reader = new BufferedReader(new InputStreamReader(Data.class.getResourceAsStream("raytracer.ts")))) {
+		try (var reader = ResourceUtils.getResourceReader(Data.class, "raytracer.ts")) {
 			String line;
 			while ((line = reader.readLine()) != null) {
 				final var lineTokens = grammar.tokenizeLine(line, stateStack, null);
@@ -234,7 +232,7 @@ class GrammarTest {
 	void testTokenizeWithTimeout() throws IOException {
 		final var grammar = new Registry().addGrammar(fromResource(Data.class, "TypeScript.tmLanguage.json"));
 
-		try (var reader = new BufferedReader(new InputStreamReader(Data.class.getResourceAsStream("raytracer.ts")))) {
+		try (var reader = ResourceUtils.getResourceReader(Data.class, "raytracer.ts")) {
 			final String veryLongLine = reader.lines().collect(Collectors.joining());
 			final var result1 = grammar.tokenizeLine(veryLongLine);
 			assertFalse(result1.isStoppedEarly());

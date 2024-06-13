@@ -267,7 +267,7 @@ public final class LanguageConfiguration {
 				.create();
 
 		try {
-			final var langCfg = gsonBuilder.fromJson(jsonString, LanguageConfiguration.class);
+			final var langCfg = assertNonNull(gsonBuilder.fromJson(jsonString, LanguageConfiguration.class));
 			if (castNullable(langCfg.autoClosingPairs) == null) {
 				langCfg.autoClosingPairs = Collections.emptyList();
 			} else {

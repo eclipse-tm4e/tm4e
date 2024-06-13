@@ -44,11 +44,13 @@ abstract class AbstractLanguageConfigurationRegistryManager implements ILanguage
 	@Override
 	public LanguageConfiguration getLanguageConfigurationFor(final IContentType... contentTypes) {
 		for (final IContentType contentType : contentTypes) {
-			if (userDefinitions.containsKey(contentType)) {
-				return userDefinitions.get(contentType).getLanguageConfiguration();
+			final var userDefinition = userDefinitions.get(contentType);
+			if (userDefinition != null) {
+				return userDefinition.getLanguageConfiguration();
 			}
-			if (pluginDefinitions.containsKey(contentType)) {
-				return pluginDefinitions.get(contentType).getLanguageConfiguration();
+			final var pluginDefinition = pluginDefinitions.get(contentType);
+			if (pluginDefinition != null) {
+				return pluginDefinition.getLanguageConfiguration();
 			}
 		}
 		return null;

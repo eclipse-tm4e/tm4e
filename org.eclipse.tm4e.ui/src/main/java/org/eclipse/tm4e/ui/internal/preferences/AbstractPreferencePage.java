@@ -12,7 +12,6 @@
  */
 package org.eclipse.tm4e.ui.internal.preferences;
 
-import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.jface.preference.PreferencePage;
 import org.eclipse.ui.IWorkbench;
@@ -28,7 +27,7 @@ public abstract class AbstractPreferencePage extends PreferencePage implements I
 	}
 
 	@Override
-	public void init(final @NonNullByDefault({}) IWorkbench workbench) {
+	public void init(final IWorkbench workbench) {
 	}
 
 	@Override

@@ -19,6 +19,12 @@ import org.eclipse.jdt.annotation.Nullable;
 
 public final class NullSafetyHelper {
 
+	public static <T> @NonNull T assertNonNull(final @Nullable T value) {
+		if (value == null)
+			throw new IllegalStateException("Null value!");
+		return value;
+	}
+
 	/**
 	 * Casts non-null value marked as {@link Nullable} to {@link NonNull}.
 	 * <p>
@@ -28,27 +34,24 @@ public final class NullSafetyHelper {
 	 *
 	 * @throws AssertionError if JVM assertions are enabled and the given value is null
 	 */
-	@NonNull
-	public static <T> T castNonNull(@Nullable final T value) {
+	public static <T> @NonNull T castNonNull(final @Nullable T value) {
 		assert value != null;
 		return value;
 	}
 
-	@NonNull
 	@SuppressWarnings("null")
-	private static <T> T castNonNullUnsafe(final T value) {
+	private static <T> @NonNull T castNonNullUnsafe(final T value) {
 		return value;
 	}
 
 	/**
 	 * Casts a non-null value as {@link Nullable}.
 	 */
-	@Nullable
-	public static <T> T castNullable(final T value) {
+	public static <T> @Nullable T castNullable(final T value) {
 		return value;
 	}
 
-	public static <T> T defaultIfNull(@Nullable final T object, final T defaultValue) {
+	public static <T> T defaultIfNull(final @Nullable T object, final T defaultValue) {
 		if (object == null) {
 			return defaultValue;
 		}
@@ -65,9 +68,8 @@ public final class NullSafetyHelper {
 	/**
 	 * Allows to initializes a @NonNull field with <code>null</code> that is lazy initialized
 	 */
-	@NonNull
 	@SuppressWarnings("unchecked")
-	public static <T> T lazyNonNull() {
+	public static <T> @NonNull T lazyNonNull() {
 		return (T) castNonNullUnsafe(null);
 	}
 

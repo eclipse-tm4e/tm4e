@@ -40,15 +40,16 @@ public class TMUIPlugin extends AbstractUIPlugin {
 	private static final String TRACE_ID = PLUGIN_ID + "/trace"; //$NON-NLS-1$
 
 	// The shared instance
+	private static volatile @Nullable TMUIPlugin plugin;
+
+	/**
+	 * Returns the shared instance
+	 *
+	 * @return the shared instance
+	 */
 	@Nullable
-	private static volatile TMUIPlugin plugin;
-
-	public static boolean getPreference(final String key, final boolean defaultValue) {
-		return Platform.getPreferencesService().getBoolean(PLUGIN_ID, key, defaultValue, null /* = search in all available scopes */);
-	}
-
-	public static @Nullable String getPreference(final String key, final @Nullable String defaultValue) {
-		return Platform.getPreferencesService().getString(PLUGIN_ID, key, defaultValue, null /* = search in all available scopes */);
+	public static TMUIPlugin getDefault() {
+		return plugin;
 	}
 
 	public static void log(final IStatus status) {
@@ -80,8 +81,30 @@ public class TMUIPlugin extends AbstractUIPlugin {
 		return Boolean.parseBoolean(Platform.getDebugOption(TRACE_ID));
 	}
 
+	public static boolean getPreference(final String key, final boolean defaultValue) {
+		return Platform.getPreferencesService().getBoolean(TMUIPlugin.PLUGIN_ID, key, defaultValue,
+				null /* = search in all available scopes */);
+	}
+
+	public static @Nullable String getPreference(final String key, final @Nullable String defaultValue) {
+		return Platform.getPreferencesService().getString(TMUIPlugin.PLUGIN_ID, key, defaultValue,
+				null /* = search in all available scopes */);
+	}
+
+	public static ITMModelManager getTMModelManager() {
+		return TMModelManager.INSTANCE;
+	}
+
+	public static IThemeManager getThemeManager() {
+		return ThemeManager.getInstance();
+	}
+
+	public static ISnippetManager getSnippetManager() {
+		return SnippetManager.getInstance();
+	}
+
 	@Override
-	public void start(@Nullable final BundleContext context) throws Exception {
+	public void start(final BundleContext context) throws Exception {
 		super.start(context);
 		plugin = this;
 		if (isLogTraceEnabled()) {
@@ -92,12 +115,15 @@ public class TMUIPlugin extends AbstractUIPlugin {
 			tm4eCoreLogger.addHandler(new Handler() {
 				@Override
 				public void publish(@Nullable final LogRecord entry) {
-					if (entry != null) {
-						log(new Status(toSeverity(entry.getLevel()), tm4eCorePluginId,
-								entry.getParameters() == null || entry.getParameters().length == 0
-										? entry.getMessage()
-										: java.text.MessageFormat.format(entry.getMessage(), entry.getParameters())));
-					}
+					if (entry == null)
+						return;
+
+					final var params = entry.getParameters();
+					final var msg = entry.getMessage();
+					log(new Status(toSeverity(entry.getLevel()), tm4eCorePluginId,
+							msg == null || params == null || params.length == 0
+									? msg
+									: java.text.MessageFormat.format(msg, entry.getParameters())));
 				}
 
 				private int toSeverity(final Level level) {
@@ -124,46 +150,9 @@ public class TMUIPlugin extends AbstractUIPlugin {
 	}
 
 	@Override
-	public void stop(@Nullable final BundleContext context) throws Exception {
+	public void stop(final BundleContext context) throws Exception {
 		ColorManager.getInstance().dispose();
 		plugin = null;
 		super.stop(context);
-	}
-
-	/**
-	 * Returns the shared instance
-	 *
-	 * @return the shared instance
-	 */
-	@Nullable
-	public static TMUIPlugin getDefault() {
-		return plugin;
-	}
-
-	/**
-	 * Returns the TextMate model manager.
-	 *
-	 * @return the TextMate model manager.
-	 */
-	public static ITMModelManager getTMModelManager() {
-		return TMModelManager.INSTANCE;
-	}
-
-	/**
-	 * Returns the TextMate themes manager.
-	 *
-	 * @return the TextMate themes manager.
-	 */
-	public static IThemeManager getThemeManager() {
-		return ThemeManager.getInstance();
-	}
-
-	/**
-	 * Returns the Snippet manager.
-	 *
-	 * @return the Snippet manager.
-	 */
-	public static ISnippetManager getSnippetManager() {
-		return SnippetManager.getInstance();
 	}
 }

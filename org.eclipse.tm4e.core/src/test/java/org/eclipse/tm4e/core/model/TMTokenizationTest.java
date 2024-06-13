@@ -9,16 +9,15 @@
  */
 package org.eclipse.tm4e.core.model;
 
-import static org.eclipse.tm4e.core.registry.IGrammarSource.*;
+import static org.eclipse.tm4e.core.registry.IGrammarSource.fromResource;
 import static org.junit.jupiter.api.Assertions.*;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.time.Duration;
 import java.util.stream.Collectors;
 
 import org.eclipse.tm4e.core.Data;
+import org.eclipse.tm4e.core.internal.utils.ResourceUtils;
 import org.eclipse.tm4e.core.registry.Registry;
 import org.junit.jupiter.api.Test;
 
@@ -29,7 +28,7 @@ class TMTokenizationTest {
 		final var grammar = new Registry().addGrammar(fromResource(Data.class, "TypeScript.tmLanguage.json"));
 
 		final var tokenizer = new TMTokenizationSupport(grammar);
-		try (var reader = new BufferedReader(new InputStreamReader(Data.class.getResourceAsStream("raytracer.ts")))) {
+		try (var reader = ResourceUtils.getResourceReader(Data.class, "raytracer.ts")) {
 			final String veryLongLine = reader.lines().collect(Collectors.joining());
 			final var result1 = tokenizer.tokenize(veryLongLine, null);
 			assertFalse(result1.stoppedEarly);

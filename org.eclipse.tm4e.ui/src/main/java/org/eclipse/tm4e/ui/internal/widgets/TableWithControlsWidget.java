@@ -12,7 +12,8 @@
  */
 package org.eclipse.tm4e.ui.internal.widgets;
 
-import org.eclipse.jdt.annotation.NonNullByDefault;
+import static org.eclipse.tm4e.core.internal.utils.NullSafetyHelper.castNonNull;
+
 import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.jface.layout.GridLayoutFactory;
 import org.eclipse.jface.viewers.Viewer;
@@ -57,7 +58,7 @@ public abstract class TableWithControlsWidget<T> extends Composite {
 		buttonsArea.setLayoutData(new GridData(GridData.VERTICAL_ALIGN_BEGINNING | GridData.FILL_VERTICAL));
 		createButtons();
 		if (buttonsArea.getChildren().length == 0) {
-			((GridLayout) parent.getLayout()).horizontalSpacing = 0;
+			(castNonNull((GridLayout) parent.getLayout())).horizontalSpacing = 0;
 		}
 	}
 
@@ -102,9 +103,8 @@ public abstract class TableWithControlsWidget<T> extends Composite {
 
 			table.resetFilters();
 			table.setFilters(new ViewerFilter() {
-				@NonNullByDefault({})
 				@Override
-				public boolean select(final Viewer viewer, final Object parentElement, final Object element) {
+				public boolean select(final Viewer viewer, final @Nullable Object parentElement, final Object element) {
 					for (int i = 0, l = swtTable.getItemCount(); i < l; i++) {
 						if (table.getElementAt(i) == element) {
 							final var row = swtTable.getItem(i);

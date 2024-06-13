@@ -11,6 +11,8 @@
  */
 package org.eclipse.tm4e.ui.internal.themes;
 
+import static org.eclipse.tm4e.core.internal.utils.NullSafetyHelper.*;
+
 import java.util.Arrays;
 
 import org.eclipse.core.runtime.IConfigurationElement;
@@ -123,7 +125,7 @@ public final class ThemeManager extends AbstractThemeManager {
 		// Load Theme definitions from preferences
 		String json = TMUIPlugin.getPreference(PreferenceConstants.THEMES, null);
 		if (json != null) {
-			for (final var jsonElem : new Gson().fromJson(json, JsonObject[].class)) {
+			for (final var jsonElem : castNonNull(new Gson().fromJson(json, JsonObject[].class))) {
 				final String name = jsonElem.get("id").getAsString();
 				super.registerTheme(new Theme(name,
 						jsonElem.get("path").getAsString(),
@@ -146,7 +148,7 @@ public final class ThemeManager extends AbstractThemeManager {
 
 	void save() throws BackingStoreException {
 		// save config to "${workspace_loc}/metadata/.plugins/org.eclipse.core.runtime/.settings/org.eclipse.tm4e.ui.prefs"
-		final var prefs = InstanceScope.INSTANCE.getNode(TMUIPlugin.PLUGIN_ID);
+		final var prefs = castNonNull(InstanceScope.INSTANCE.getNode(TMUIPlugin.PLUGIN_ID));
 
 		// manually registered themes
 		prefs.put(PreferenceConstants.THEMES, Arrays.stream(getThemes()) //

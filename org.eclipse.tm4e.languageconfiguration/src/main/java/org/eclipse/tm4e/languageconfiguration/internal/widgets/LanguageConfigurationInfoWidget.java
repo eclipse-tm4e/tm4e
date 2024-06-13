@@ -14,9 +14,9 @@ package org.eclipse.tm4e.languageconfiguration.internal.widgets;
 import static org.eclipse.tm4e.core.internal.utils.NullSafetyHelper.lazyNonNull;
 import static org.eclipse.tm4e.languageconfiguration.internal.LanguageConfigurationMessages.*;
 
+import java.util.List;
 import java.util.Objects;
 import java.util.function.Consumer;
-import java.util.function.Function;
 
 import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.jface.layout.GridLayoutFactory;
@@ -118,27 +118,26 @@ public class LanguageConfigurationInfoWidget extends Composite {
 		stack.setLayout(stackLayout);
 		stack.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
 
-		final Function<Consumer<Composite>, Composite> createStackLayer = (final Consumer<Composite> layerDecorator) -> {
+		final List<Consumer<Composite>> stackLayerDecorators = List.of(
+				this::createCommentsInfo,
+				this::createBracketsInfo,
+				this::createAutoClosingPairsInfo,
+				this::createAutoCloseBeforeInfo,
+				this::createSurroundingPairsInfo,
+				this::createFoldingInfo,
+				this::createWordPatternInfo,
+				this::createOnEnterRulesInfo,
+				this::createIndentationRulesInfo,
+				this::createColorizedBracketPairsInfo);
+
+		final var stackLayers = stackLayerDecorators.stream().map(layerDecorator -> {
 			final var layer = new Composite(stack, SWT.BORDER);
 			layer.setLayout(GridLayoutFactory.swtDefaults().create());
 			layer.setBackground(getDisplay().getSystemColor(SWT.COLOR_LIST_BACKGROUND));
 			layer.setBackgroundMode(SWT.INHERIT_DEFAULT);
 			layerDecorator.accept(layer);
 			return layer;
-		};
-
-		final var stackLayers = new Composite[] {
-			createStackLayer.apply(this::createCommentsInfo),
-			createStackLayer.apply(this::createBracketsInfo),
-			createStackLayer.apply(this::createAutoClosingPairsInfo),
-			createStackLayer.apply(this::createAutoCloseBeforeInfo),
-			createStackLayer.apply(this::createSurroundingPairsInfo),
-			createStackLayer.apply(this::createFoldingInfo),
-			createStackLayer.apply(this::createWordPatternInfo),
-			createStackLayer.apply(this::createOnEnterRulesInfo),
-			createStackLayer.apply(this::createIndentationRulesInfo),
-			createStackLayer.apply(this::createColorizedBracketPairsInfo),
-		};
+		}).toArray(Composite[]::new);
 
 		tableViewer.addSelectionChangedListener(event -> {
 			final var selection = (StructuredSelection) event.getSelection();

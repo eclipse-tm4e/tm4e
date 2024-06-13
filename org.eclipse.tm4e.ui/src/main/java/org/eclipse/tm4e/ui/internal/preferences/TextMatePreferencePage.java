@@ -14,7 +14,6 @@ package org.eclipse.tm4e.ui.internal.preferences;
 import static org.eclipse.tm4e.core.internal.utils.NullSafetyHelper.lazyNonNull;
 
 import org.eclipse.core.runtime.Platform;
-import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.eclipse.jface.layout.GridLayoutFactory;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
@@ -41,7 +40,7 @@ public final class TextMatePreferencePage extends AbstractPreferencePage {
 	}
 
 	@Override
-	protected Control createContents(final @NonNullByDefault({}) Composite parent) {
+	protected Control createContents(final Composite parent) {
 		final var composite = new Composite(parent, SWT.NONE);
 		composite.setLayout(GridLayoutFactory.fillDefaults().create());
 
@@ -85,7 +84,7 @@ public final class TextMatePreferencePage extends AbstractPreferencePage {
 	}
 
 	@Override
-	public void init(final @NonNullByDefault({}) IWorkbench workbench) {
+	public void init(final IWorkbench workbench) {
 	}
 
 	@Override

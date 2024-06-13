@@ -19,20 +19,16 @@ import org.eclipse.ui.IEditorPart;
 /**
  * An Eclipse property tester to check if a given editor part is linked to the
  * {@link TMPresentationReconciler}.
- *
  */
 public final class TMPropertyTester extends PropertyTester {
 
 	private static final String CAN_SUPPORT_TEXT_MATE = "canSupportTextMate";
 
 	@Override
-	public boolean test(@Nullable final Object receiver, @Nullable final String property,
-			final Object @Nullable [] args, @Nullable final Object expectedValue) {
-		if (CAN_SUPPORT_TEXT_MATE.equals(property)) {
-			if (receiver instanceof final IEditorPart editorPart) {
-				final var reconciler = TMPresentationReconciler.getTMPresentationReconciler(editorPart);
-				return reconciler != null && reconciler.isEnabled();
-			}
+	public boolean test(@Nullable final Object receiver, final String property, final Object[] args, @Nullable final Object expectedValue) {
+		if (CAN_SUPPORT_TEXT_MATE.equals(property) && receiver instanceof final IEditorPart editorPart) {
+			final var reconciler = TMPresentationReconciler.getTMPresentationReconciler(editorPart);
+			return reconciler != null && reconciler.isEnabled();
 		}
 		return false;
 	}

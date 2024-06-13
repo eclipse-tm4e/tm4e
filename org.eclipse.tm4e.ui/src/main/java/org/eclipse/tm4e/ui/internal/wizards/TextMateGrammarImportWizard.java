@@ -13,7 +13,6 @@ package org.eclipse.tm4e.ui.internal.wizards;
 
 import static org.eclipse.tm4e.core.internal.utils.NullSafetyHelper.lazyNonNull;
 
-import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.wizard.Wizard;
 import org.eclipse.tm4e.registry.IGrammarDefinition;
@@ -63,7 +62,7 @@ public final class TextMateGrammarImportWizard extends Wizard implements IImport
 	}
 
 	@Override
-	public void init(@Nullable final IWorkbench workbench, @Nullable final IStructuredSelection selection) {
+	public void init(final IWorkbench workbench, final IStructuredSelection selection) {
 	}
 
 	public IGrammarDefinition getCreatedDefinition() {

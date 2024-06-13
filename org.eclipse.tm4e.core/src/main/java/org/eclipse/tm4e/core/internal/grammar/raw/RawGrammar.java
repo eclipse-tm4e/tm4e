@@ -33,8 +33,7 @@ public final class RawGrammar extends PropertySettable.HashMap<@Nullable Object>
 
 	private static final long serialVersionUID = 1L;
 
-	@Nullable
-	private transient List<String> fileTypes;
+	private transient @Nullable List<String> fileTypes;
 
 	@Override
 	public Collection<String> getFileTypes() {
@@ -58,27 +57,23 @@ public final class RawGrammar extends PropertySettable.HashMap<@Nullable Object>
 	}
 
 	@Override
-	@Nullable
-	public String getFirstLineMatch() {
+	public @Nullable String getFirstLineMatch() {
 		return (String) get(FIRST_LINE_MATCH);
 	}
 
-	@Nullable
 	@Override
 	@SuppressWarnings("unchecked")
-	public Map<String, IRawRule> getInjections() {
+	public @Nullable Map<String, IRawRule> getInjections() {
 		return (Map<String, IRawRule>) get(INJECTIONS);
 	}
 
-	@Nullable
 	@Override
-	public String getInjectionSelector() {
+	public @Nullable String getInjectionSelector() {
 		return (String) get(INJECTION_SELECTOR);
 	}
 
-	@Nullable
 	@Override
-	public String getName() {
+	public @Nullable String getName() {
 		return (String) get(NAME);
 	}
 
@@ -98,7 +93,7 @@ public final class RawGrammar extends PropertySettable.HashMap<@Nullable Object>
 		return repo;
 	}
 
-	private Object getSafe(@Nullable final Object key) {
+	private Object getOrThrow(final Object key) {
 		@SuppressWarnings("unlikely-arg-type")
 		final var obj = get(key);
 		if (obj == null) {
@@ -109,12 +104,11 @@ public final class RawGrammar extends PropertySettable.HashMap<@Nullable Object>
 
 	@Override
 	public String getScopeName() {
-		return (String) getSafe(SCOPE_NAME);
+		return (String) getOrThrow(SCOPE_NAME);
 	}
 
-	@Nullable
 	@Override
-	public Object put(final String key, @Nullable final Object value) {
+	public @Nullable Object put(final String key, @Nullable final Object value) {
 		if (FILE_TYPES.equals(key))
 			fileTypes = null;
 
@@ -123,8 +117,8 @@ public final class RawGrammar extends PropertySettable.HashMap<@Nullable Object>
 
 	@Override
 	@SuppressWarnings("unlikely-arg-type")
-	public void putAll(@Nullable final Map<? extends String, ? extends @Nullable Object> m) {
-		if (m != null && m.containsKey(FILE_TYPES))
+	public void putAll(final Map<? extends String, ? extends @Nullable Object> m) {
+		if (m.containsKey(FILE_TYPES))
 			fileTypes = null;
 		super.putAll(m);
 	}

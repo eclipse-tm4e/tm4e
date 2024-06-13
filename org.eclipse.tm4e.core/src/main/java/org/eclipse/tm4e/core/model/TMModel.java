@@ -15,7 +15,7 @@
 package org.eclipse.tm4e.core.model;
 
 import static java.lang.System.Logger.Level.*;
-import static org.eclipse.tm4e.core.internal.utils.NullSafetyHelper.*;
+import static org.eclipse.tm4e.core.internal.utils.NullSafetyHelper.lazyNonNull;
 
 import java.lang.System.Logger;
 import java.time.Duration;
@@ -161,9 +161,9 @@ public abstract class TMModel implements ITMModel {
 
 						// poll all subsequent edits
 						for (;;) {
-							// wait up to 50ms for the next edit, so that edits made in fast succession (e.g. by a formater) are applied
+							// wait up to 50ms for the next edit, so that edits made in fast succession (e.g. by a formatter) are applied
 							// in one go before the token revalidation loop happens
-							final var edit = castNullable(edits.poll(50, TimeUnit.MILLISECONDS));
+							final var edit = edits.poll(50, TimeUnit.MILLISECONDS);
 							if (edit == null)
 								break;
 							applyEdit(edit);

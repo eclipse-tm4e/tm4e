@@ -26,7 +26,6 @@ import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.content.IContentType;
 import org.eclipse.core.runtime.preferences.IEclipsePreferences.IPreferenceChangeListener;
 import org.eclipse.core.runtime.preferences.IEclipsePreferences.PreferenceChangeEvent;
-import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.jface.text.BadLocationException;
 import org.eclipse.jface.text.IDocument;
@@ -90,12 +89,10 @@ public class TMPresentationReconciler implements IPresentationReconciler {
 	public static @Nullable TMPresentationReconciler getTMPresentationReconciler(final ITextViewer textViewer) {
 		try {
 			final Field presentationReconcilerField = SourceViewer.class.getDeclaredField("fPresentationReconciler");
-			if (presentationReconcilerField != null) {
-				presentationReconcilerField.trySetAccessible();
-				return presentationReconcilerField.get(textViewer) instanceof final TMPresentationReconciler tmPresentationReconciler
-						? tmPresentationReconciler
-						: null;
-			}
+			presentationReconcilerField.trySetAccessible();
+			return presentationReconcilerField.get(textViewer) instanceof final TMPresentationReconciler tmPresentationReconciler
+					? tmPresentationReconciler
+					: null;
 		} catch (SecurityException | NoSuchFieldException ex) {
 			// in case the SourceViewer class no longer has the fPresentationReconciler field or changed access level
 			TMUIPlugin.logError(ex);
@@ -391,7 +388,7 @@ public class TMPresentationReconciler implements IPresentationReconciler {
 	}
 
 	@Override
-	public void install(@NonNullByDefault({}) final ITextViewer viewer) {
+	public void install(final ITextViewer viewer) {
 		this.viewer = viewer;
 		viewer.addTextInputListener(viewerListener);
 
@@ -404,13 +401,14 @@ public class TMPresentationReconciler implements IPresentationReconciler {
 
 	@Override
 	public void uninstall() {
-		final var viewer = castNonNull(this.viewer);
-		viewer.removeTextInputListener(viewerListener);
+		final var viewer = this.viewer;
+		if (viewer != null) {
+			viewer.removeTextInputListener(viewerListener);
 
-		viewerListener.inputDocumentAboutToBeChanged(viewer.getDocument(), null);
-		ThemeManager.removePreferenceChangeListener(themeChangeListener);
-
-		this.viewer = null;
+			viewerListener.inputDocumentAboutToBeChanged(viewer.getDocument(), null);
+			ThemeManager.removePreferenceChangeListener(themeChangeListener);
+			this.viewer = null;
+		}
 	}
 
 	@Override

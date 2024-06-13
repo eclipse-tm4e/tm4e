@@ -12,6 +12,7 @@
 package org.eclipse.tm4e.registry;
 
 import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Platform;
 import org.eclipse.core.runtime.Plugin;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.jdt.annotation.Nullable;
@@ -48,22 +49,32 @@ public class TMEclipseRegistryPlugin extends Plugin {
 		}
 	}
 
-	public static void logError(final Exception ex) {
+	public static void logError(final Throwable ex) {
 		log(new Status(IStatus.ERROR, PLUGIN_ID, ex.getMessage(), ex));
 	}
 
-	public static void logError(final String message, @Nullable final Exception ex) {
+	public static void logError(final String message, @Nullable final Throwable ex) {
 		log(new Status(IStatus.ERROR, PLUGIN_ID, message, ex));
 	}
 
+	public static boolean getPreference(final String key, final boolean defaultValue) {
+		return Platform.getPreferencesService().getBoolean(TMEclipseRegistryPlugin.PLUGIN_ID, key, defaultValue,
+				null /* = search in all available scopes */);
+	}
+
+	public static @Nullable String getPreference(final String key, final @Nullable String defaultValue) {
+		return Platform.getPreferencesService().getString(TMEclipseRegistryPlugin.PLUGIN_ID, key, defaultValue,
+				null /* = search in all available scopes */);
+	}
+
 	@Override
-	public void start(@Nullable final BundleContext bundleContext) throws Exception {
+	public void start(final BundleContext bundleContext) throws Exception {
 		super.start(bundleContext);
 		plugin = this;
 	}
 
 	@Override
-	public void stop(@Nullable final BundleContext bundleContext) throws Exception {
+	public void stop(final BundleContext bundleContext) throws Exception {
 		plugin = null;
 		super.stop(bundleContext);
 	}

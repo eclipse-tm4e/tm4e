@@ -17,6 +17,7 @@
 		<tycho-surefire-plugin.vmargs></tycho-surefire-plugin.vmargs>
 		<jgit.dirtyWorkingTree>error</jgit.dirtyWorkingTree>
 		<tm4e.target-platform>oldest</tm4e.target-platform>
+		<surefire-version>3.3.0</surefire-version>
 	</properties>
 
 	<organization>
@@ -135,7 +136,7 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-surefire-plugin</artifactId>
-				<version>3.3.0</version>
+				<version>${surefire-version}</version>
 				<executions>
 					<execution>
 						<phase>test</phase>
@@ -148,7 +149,7 @@
 					<dependency>
 						<groupId>org.apache.maven.surefire</groupId>
 						<artifactId>surefire-junit-platform</artifactId>
-						<version>3.3.0</version>
+						<version>${surefire-version}</version>
 					</dependency>
 					<dependency>
 						<groupId>org.junit.jupiter</groupId>

@@ -79,6 +79,23 @@
     </scopeNameContentTypeBinding>
   </extension>
 
+  <!-- ======================================== -->
+  <!-- Scope Aliases                            -->
+  <!-- ======================================== -->
+  <extension point="org.eclipse.tm4e.registry.grammars">
+    <grammar scopeName="text.xml.svg" path="syntaxes/xml/xml.tmLanguage.json" />
+    <scopeNameContentTypeBinding scopeName="text.xml.svg" contentTypeId="org.eclipse.tm4e.language_pack.xml" />
+  </extension>
+  <extension point="org.eclipse.tm4e.registry.grammars">
+    <grammar scopeName="source.vbnet" path="syntaxes/vb/vb.tmLanguage.json" />
+    <scopeNameContentTypeBinding scopeName="source.vbnet" contentTypeId="org.eclipse.tm4e.language_pack.vb" />
+  </extension>
+  <extension point="org.eclipse.tm4e.registry.grammars">
+    <grammar scopeName="text.html.php" path="syntaxes/php/php.tmLanguage.json" />
+    <scopeNameContentTypeBinding scopeName="text.html.php" contentTypeId="org.eclipse.tm4e.language_pack.php" />
+  </extension>
+
+
   <!-- START-GENERATED -->
 
   <!-- ======================================== -->

@@ -53,12 +53,12 @@ class VSCodeSingleExtensionSourceHandler extends AbstractSourceHandler<Config.VS
 		assertArgNotEmpty("package.json/contributes/languages", pkgJson.contributes().languages());
 
 		final var pkgJsonLangs = new TreeMap<String /*langId*/, Contributions.Language>();
-		for (final var lang : pkgJson.contributes().languages()) {
+		for (final Contributions.Language lang : pkgJson.contributes().languages()) {
 			pkgJsonLangs.put(lang.id(), lang);
 		}
 		final var pkgJsonLangGrammars = new TreeMap<String /*langId*/, Contributions.Grammar>();
 		final var pkgJsonInlineGrammars = new TreeMap<String /*scopeName*/, Contributions.Grammar>();
-		for (final var grammar : pkgJson.contributes().grammars()) {
+		for (final Contributions.Grammar grammar : pkgJson.contributes().grammars()) {
 			if (grammar.language() != null) {
 				if (pkgJsonLangs.containsKey(grammar.language())) {
 					pkgJsonLangGrammars.put(grammar.language(), grammar);
@@ -75,9 +75,18 @@ class VSCodeSingleExtensionSourceHandler extends AbstractSourceHandler<Config.VS
 			for (final Entry<String, Config.LanguageIgnoreable> langOverrides : source.languages.entrySet()) {
 				final var langId = langOverrides.getKey();
 				if (!pkgJsonLangs.containsKey(langId)) {
-					logInfo("FAILED", true, false);
-					throw new IllegalArgumentException(
-							"No language with id [" + langId + "] found at [package.json/contributes/languages]");
+					final Config.LanguageIgnoreable langOverride = langOverrides.getValue();
+					if (isBlank(langOverride.grammar)) {
+						logInfo("FAILED", true, false);
+						throw new IllegalArgumentException(
+								"No language with id [" + langId + "] found at [package.json/contributes/languages]");
+					}
+					if (isBlank(langOverride.scopeName)) {
+						logInfo("FAILED", true, false);
+						throw new IllegalArgumentException("Language with id [" + langId
+								+ "] found at [package.json/contributes/languages] is missing scopeName");
+					}
+					pkgJsonLangs.put(langId, new Contributions.Language(langId, null, null, null, null, null, langOverride.langcfg));
 				}
 			}
 			logInfo("OK", true, false);

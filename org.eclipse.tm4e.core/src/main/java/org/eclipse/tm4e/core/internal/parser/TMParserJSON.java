@@ -14,9 +14,11 @@ package org.eclipse.tm4e.core.internal.parser;
 
 import static org.eclipse.tm4e.core.internal.utils.NullSafetyHelper.assertNonNull;
 
+import java.io.BufferedReader;
 import java.io.Reader;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import org.eclipse.jdt.annotation.NonNull;
 
@@ -26,13 +28,32 @@ public class TMParserJSON implements TMParser {
 
 	public static final TMParserJSON INSTANCE = new TMParserJSON();
 
+	private static String removeTrailingCommas(final String jsonString) {
+		/* matches:
+		 * --------------
+		 * },
+		 *    }
+		 * --------------
+		 * as well as:
+		 * --------------
+		 * },
+		 *   // foo
+		 *   // bar
+		 *    }
+		 * --------------
+		 */
+		return jsonString.replaceAll("(,)(\\s*\\n(\\s*\\/\\/.*\\n)*\\s*[\\]}])", "$2");
+	}
+
 	private static final Gson LOADER = new Gson();
 
 	protected TMParserJSON() {
 	}
 
 	protected Map<String, Object> loadRaw(final Reader source) {
-		return assertNonNull(LOADER.fromJson(source, Map.class));
+		// GSON does not support trailing commas so we have to manually remove them -> maybe better switch to jackson json parser?
+		final var jsonString = removeTrailingCommas(new BufferedReader(source).lines().collect(Collectors.joining("\n")));
+		return assertNonNull(LOADER.fromJson(jsonString, Map.class));
 	}
 
 	@Override

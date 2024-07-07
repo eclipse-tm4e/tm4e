@@ -54,7 +54,7 @@ import org.eclipse.tm4e.core.internal.utils.StringUtils;
  * TextMate grammar implementation.
  *
  * @see <a href=
- *      "https://github.com/microsoft/vscode-textmate/blob/09effd8b7429b71010e0fa34ea2e16e622692946/src/grammar/grammar.ts#L98">
+ *      "https://github.com/microsoft/vscode-textmate/blob/167bbbd509356cc4617f250c0d754aef670ab14a/src/grammar/grammar.ts#L98">
  *      github.com/microsoft/vscode-textmate/blob/main/src/grammar/grammar.ts</a>
  */
 public final class Grammar implements IGrammar, IRuleFactoryHelper {

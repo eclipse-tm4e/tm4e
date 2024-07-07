@@ -24,7 +24,7 @@ import org.eclipse.tm4e.core.internal.oniguruma.OnigCaptureIndex;
 
 /**
  * @see <a href=
- *      "https://github.com/microsoft/vscode-textmate/blob/09effd8b7429b71010e0fa34ea2e16e622692946/src/utils.ts#L59">
+ *      "https://github.com/microsoft/vscode-textmate/blob/167bbbd509356cc4617f250c0d754aef670ab14a/src/utils.ts#L59">
  *      github.com/microsoft/vscode-textmate/blob/main/src/utils.ts</a>
  */
 public final class RegexSource {
@@ -35,7 +35,7 @@ public final class RegexSource {
 	 * Escapes/prefixes RegEx meta characters with a backslash in the given string.
 	 *
 	 * It is a non-regex based faster alternative to the <a href=
-	 * "https://github.com/microsoft/vscode-textmate/blob/09effd8b7429b71010e0fa34ea2e16e622692946/src/utils.ts#L159">TypeScript
+	 * "https://github.com/microsoft/vscode-textmate/blob/167bbbd509356cc4617f250c0d754aef670ab14a/src/utils.ts#L159">TypeScript
 	 * implementation</a>:
 	 *
 	 * <pre>

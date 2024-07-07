@@ -27,7 +27,7 @@ import org.junit.jupiter.api.TestMethodOrder;
 /**
  * {@link EncodedTokenAttributes} tests same than vscode-textmate.
  *
- * @see <a href="https://github.com/microsoft/vscode-textmate/blob/09effd8b7429b71010e0fa34ea2e16e622692946/src/tests/grammar.test.ts">
+ * @see <a href="https://github.com/microsoft/vscode-textmate/blob/167bbbd509356cc4617f250c0d754aef670ab14a/src/tests/grammar.test.ts">
  *      github.com/Microsoft/vscode-textmate/blob/master/src/tests/grammar.test.ts</a>
  */
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)

@@ -27,7 +27,7 @@ import org.eclipse.jdt.annotation.Nullable;
 
 /**
  * @see <a href=
- *      "https://github.com/microsoft/vscode-textmate/blob/09effd8b7429b71010e0fa34ea2e16e622692946/src/matcher.ts#L14">
+ *      "https://github.com/microsoft/vscode-textmate/blob/167bbbd509356cc4617f250c0d754aef670ab14a/src/matcher.ts#L14">
  *      github.com/microsoft/vscode-textmate/blob/main/src/matcher.ts</a>
  */
 final class MatcherBuilder<T> {
@@ -150,7 +150,7 @@ final class MatcherBuilder<T> {
 
 	/**
 	 * @see <a href=
-	 *      "https://github.com/microsoft/vscode-textmate/blob/09effd8b7429b71010e0fa34ea2e16e622692946/src/matcher.ts#L89">
+	 *      "https://github.com/microsoft/vscode-textmate/blob/167bbbd509356cc4617f250c0d754aef670ab14a/src/matcher.ts#L89">
 	 *      github.com/microsoft/vscode-textmate/blob/main/src/matcher.ts</a>
 	 */
 	private boolean isIdentifier(final String token) {
@@ -178,7 +178,7 @@ final class MatcherBuilder<T> {
 
 	/**
 	 * @see <a href=
-	 *      "https://github.com/microsoft/vscode-textmate/blob/09effd8b7429b71010e0fa34ea2e16e622692946/src/matcher.ts#L93">
+	 *      "https://github.com/microsoft/vscode-textmate/blob/167bbbd509356cc4617f250c0d754aef670ab14a/src/matcher.ts#L93">
 	 *      github.com/microsoft/vscode-textmate/blob/main/src/matcher.ts</a>
 	 */
 	private static final class Tokenizer {

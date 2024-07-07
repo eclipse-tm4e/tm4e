@@ -19,7 +19,7 @@ package org.eclipse.tm4e.core.internal.grammar.tokenattrs;
 
 /**
  * @see <a href=
- *      "https://github.com/microsoft/vscode-textmate/blob/09effd8b7429b71010e0fa34ea2e16e622692946/src/encodedTokenAttributes.ts#L181">
+ *      "https://github.com/microsoft/vscode-textmate/blob/167bbbd509356cc4617f250c0d754aef670ab14a/src/encodedTokenAttributes.ts#L181">
  *      github.com/microsoft/vscode-textmate/blob/main/src/encodedTokenAttributes.ts</a>
  */
 public final class OptionalStandardTokenType {

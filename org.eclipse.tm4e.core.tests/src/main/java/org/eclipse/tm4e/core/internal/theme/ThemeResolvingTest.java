@@ -35,7 +35,7 @@ import com.google.gson.GsonBuilder;
 
 /**
  * @see <a href=
- *      "https://github.com/microsoft/vscode-textmate/blob/09effd8b7429b71010e0fa34ea2e16e622692946/src/tests/themes.test.ts#L323">
+ *      "https://github.com/microsoft/vscode-textmate/blob/167bbbd509356cc4617f250c0d754aef670ab14a/src/tests/themes.test.ts#L323">
  *      github.com/microsoft/vscode-textmate/blob/main/src/tests/themes.test.ts</a>
  */
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)

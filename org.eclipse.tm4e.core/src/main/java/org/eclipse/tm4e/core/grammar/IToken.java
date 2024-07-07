@@ -19,7 +19,7 @@ package org.eclipse.tm4e.core.grammar;
 import java.util.List;
 
 /**
- * @see <a href="https://github.com/microsoft/vscode-textmate/blob/09effd8b7429b71010e0fa34ea2e16e622692946/src/main.ts#L249">
+ * @see <a href="https://github.com/microsoft/vscode-textmate/blob/167bbbd509356cc4617f250c0d754aef670ab14a/src/main.ts#L249">
  *      github.com/microsoft/vscode-textmate/blob/main/src/main.ts</a>
  */
 public interface IToken {

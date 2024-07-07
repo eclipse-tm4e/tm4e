@@ -21,7 +21,7 @@ import org.eclipse.tm4e.core.internal.grammar.raw.RawRepository;
 
 /**
  * @see <a href=
- *      "https://github.com/microsoft/vscode-textmate/blob/09effd8b7429b71010e0fa34ea2e16e622692946/src/grammar/grammarDependencies.ts#L240">
+ *      "https://github.com/microsoft/vscode-textmate/blob/167bbbd509356cc4617f250c0d754aef670ab14a/src/grammar/grammarDependencies.ts#L240">
  *      github.com/microsoft/vscode-textmate/blob/main/src/grammar/grammarDependencies.ts</a>
  */
 public final class IncludeReference {

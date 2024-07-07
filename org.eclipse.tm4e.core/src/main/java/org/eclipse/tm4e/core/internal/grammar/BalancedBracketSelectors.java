@@ -24,7 +24,7 @@ import org.eclipse.tm4e.core.internal.matcher.Matcher;
 
 /**
  * @see <a href=
- *      "https://github.com/microsoft/vscode-textmate/blob/09effd8b7429b71010e0fa34ea2e16e622692946/src/grammar/grammar.ts#L898">
+ *      "https://github.com/microsoft/vscode-textmate/blob/167bbbd509356cc4617f250c0d754aef670ab14a/src/grammar/grammar.ts#L898">
  *      github.com/microsoft/vscode-textmate/blob/main/src/grammar/grammar.ts</a>
  */
 public final class BalancedBracketSelectors {

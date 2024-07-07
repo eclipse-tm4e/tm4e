@@ -20,7 +20,7 @@ import org.eclipse.jdt.annotation.Nullable;
 
 /**
  * @see <a href=
- *      "https://github.com/microsoft/vscode-textmate/blob/09effd8b7429b71010e0fa34ea2e16e622692946/src/rule.ts#L96">
+ *      "https://github.com/microsoft/vscode-textmate/blob/167bbbd509356cc4617f250c0d754aef670ab14a/src/rule.ts#L96">
  *      github.com/microsoft/vscode-textmate/blob/main/src/rule.ts</a>
  */
 public final class CaptureRule extends Rule {

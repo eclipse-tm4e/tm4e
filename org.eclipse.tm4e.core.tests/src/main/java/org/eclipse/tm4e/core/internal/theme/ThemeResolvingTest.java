@@ -20,6 +20,7 @@ import static org.eclipse.tm4e.core.internal.theme.FontStyle.*;
 
 import java.util.List;
 
+import org.eclipse.tm4e.core.internal.grammar.ScopeStack;
 import org.eclipse.tm4e.core.internal.utils.StringUtils;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.MethodOrderer;
@@ -347,6 +348,72 @@ public class ThemeResolvingTest extends AbstractThemeTest {
 
 	@Test
 	@Order(15)
+	@DisplayName("Theme resolving a rule with child combinator")
+	public void testRuleWithChildCombinator() throws Exception {
+		final var theme = createTheme("""
+			{"settings": [
+				{ "settings": { "foreground": "#100000" } },
+				{ "scope": "b a",       "settings": { "foreground": "#200000" } },
+				{ "scope": "b > a",     "settings": { "foreground": "#300000" } },
+				{ "scope": "c > b > a", "settings": { "foreground": "#400000" } },
+				{ "scope": "a",         "settings": { "foreground": "#500000" } },
+			]}""");
+
+		final var colorMap = theme.getColorMap();
+
+		interface Matcher {
+			String match(String... path);
+		}
+
+		final Matcher matcher = (String[] path) -> {
+			final var result = theme.match(ScopeStack.from(path));
+			if (result == null || result.foregroundId == 0)
+				return null;
+			return colorMap.get(result.foregroundId);
+		};
+
+		assertEquals(matcher.match("b", "a"), "#300000", "b a");
+		assertEquals(matcher.match("b", "c", "a"), "#200000", "b c a");
+		assertEquals(matcher.match("c", "b", "a"), "#400000", "c b a");
+		assertEquals(matcher.match("c", "b", "d", "a"), "#200000", "c b d a");
+	}
+
+	@Test
+	@Order(16)
+	@DisplayName("Theme resolving should give deeper scopes higher specificity (#233)")
+	public void testGiveDeeperScopesHigherSpecificity() throws Exception {
+		final var theme = createTheme("""
+			{"settings": [
+				{ "settings": { "foreground": "#100000" } },
+				{ "scope": "y.z a.b", "settings": { "foreground": "#200000" } },
+				{ "scope": "x y a.b", "settings": { "foreground": "#300000" } },
+			]}""");
+
+		final var colorMap = theme.getColorMap();
+
+		interface Matcher {
+			String match(String... path);
+		}
+
+		final Matcher matcher = (String[] path) -> {
+			final var result = theme.match(ScopeStack.from(path));
+			if (result == null || result.foregroundId == 0)
+				return null;
+			return colorMap.get(result.foregroundId);
+		};
+
+		assertEquals(matcher.match("x", "a.b"), null, "x a.b");
+		assertEquals(matcher.match("y", "a.b"), null, "y a.b");
+		assertEquals(matcher.match("y.z", "a"), null, "y.z a");
+		assertEquals(matcher.match("x", "y", "a.b"), "#300000", "x y a.b");
+
+		// Even though the "x y a.b" rule has more scopes in its path, the "y.z a.b" rule has
+		// a deeper match, so it should take precedence.
+		assertEquals(matcher.match("x", "y.z", "a.b"), "#200000", "y.z a.b");
+	}
+
+	@Test
+	@Order(17)
 	@DisplayName("Theme resolving issue #38: ignores rules with invalid colors")
 	public void testIssue_38_ignores_rules_with_invalid_colors() throws Exception {
 		final var actual = parseTheme("""
@@ -404,7 +471,7 @@ public class ThemeResolvingTest extends AbstractThemeTest {
 	}
 
 	@Test
-	@Order(16)
+	@Order(18)
 	@DisplayName("Theme resolving issue #35: Trailing comma in a tmTheme scope selector")
 	public void testIssue_35_Trailing_comma_in_a_tmTheme_scope_selector() throws Exception {
 		final var actual = parseTheme("""

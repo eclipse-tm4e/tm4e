@@ -12,6 +12,7 @@
 package org.eclipse.tm4e.core.internal.theme;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 
@@ -28,7 +29,7 @@ import org.eclipse.jdt.annotation.Nullable;
 public class ThemeTrieElementRule {
 
 	public int scopeDepth;
-	public final @Nullable List<String> parentScopes;
+	public final List<String> parentScopes;
 	public int fontStyle;
 	public int foreground;
 	public int background;
@@ -36,7 +37,7 @@ public class ThemeTrieElementRule {
 	public ThemeTrieElementRule(final int scopeDepth, final @Nullable List<String> parentScopes, final int fontStyle, final int foreground,
 			final int background) {
 		this.scopeDepth = scopeDepth;
-		this.parentScopes = parentScopes;
+		this.parentScopes = parentScopes == null ? Collections.emptyList() : parentScopes;
 		this.fontStyle = fontStyle;
 		this.foreground = foreground;
 		this.background = background;

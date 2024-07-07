@@ -11,7 +11,6 @@
  */
 package org.eclipse.tm4e.core.internal.theme;
 
-import static org.eclipse.tm4e.core.internal.utils.MoreCollections.asArrayList;
 import static org.eclipse.tm4e.core.internal.utils.StringUtils.strArrCmp;
 
 import java.util.ArrayList;
@@ -56,60 +55,81 @@ public final class ThemeTrieElement {
 		this._children = children;
 	}
 
-	private static List<ThemeTrieElementRule> _sortBySpecificity(final List<ThemeTrieElementRule> arr) {
-		if (arr.size() == 1) {
-			return arr;
-		}
-		arr.sort(ThemeTrieElement::_cmpBySpecificity);
-		return arr;
-	}
-
 	private static int _cmpBySpecificity(final ThemeTrieElementRule a, final ThemeTrieElementRule b) {
-		if (a.scopeDepth == b.scopeDepth) {
-			final var aParentScopes = a.parentScopes;
-			final var bParentScopes = b.parentScopes;
-			final int aParentScopesLen = aParentScopes == null ? 0 : aParentScopes.size();
-			final int bParentScopesLen = bParentScopes == null ? 0 : bParentScopes.size();
-			if (aParentScopesLen == bParentScopesLen) {
-				for (int i = 0; i < aParentScopesLen; i++) {
-					@SuppressWarnings("null")
-					final String aScope = aParentScopes.get(i);
-					@SuppressWarnings("null")
-					final String bScope = bParentScopes.get(i);
-					final int aLen = aScope.length();
-					final int bLen = bScope.length();
-					if (aLen != bLen) {
-						return bLen - aLen;
-					}
-				}
-			}
-			return bParentScopesLen - aParentScopesLen;
+		// First, compare the scope depths of both rules. The “scope depth” of a rule is
+		// the number of segments (delimited by dots) in the rule's deepest scope name
+		// (i.e. the final scope name in the scope path delimited by spaces).
+		if (a.scopeDepth != b.scopeDepth) {
+			return b.scopeDepth - a.scopeDepth;
 		}
-		return b.scopeDepth - a.scopeDepth;
+
+		// Traverse the parent scopes depth-first, comparing the specificity of both
+		// rules' parent scopes, which matches the behavior described by ”Ranking Matches”
+		// in TextMate 1.5's manual: https://macromates.com/manual/en/scope_selectors
+		// Start at index 0 for both rules, since the parent scopes were reversed
+		// beforehand (i.e. index 0 is the deepest parent scope).
+		int aParentIndex = 0;
+		int bParentIndex = 0;
+
+		final int aParentScopesSize = a.parentScopes.size();
+		final int bParentScopesSize = b.parentScopes.size();
+
+		while (true) {
+			// Child combinators don't affect specificity.
+			if (aParentScopesSize > aParentIndex && ">".equals(a.parentScopes.get(aParentIndex))) {
+				aParentIndex++;
+			}
+			if (bParentScopesSize > bParentIndex && ">".equals(b.parentScopes.get(bParentIndex))) {
+				bParentIndex++;
+			}
+
+			// This is a scope-by-scope comparison, so we need to stop once a rule runs
+			// out of parent scopes.
+			if (aParentIndex >= aParentScopesSize || bParentIndex >= bParentScopesSize) {
+				break;
+			}
+
+			// When sorting by scope name specificity, it's safe to treat a longer parent
+			// scope as more specific. If both rules' parent scopes match a given scope
+			// path, the longer parent scope will always be more specific.
+			final int parentScopeLengthDiff = b.parentScopes.get(bParentIndex).length() - a.parentScopes.get(aParentIndex).length();
+
+			if (parentScopeLengthDiff != 0) {
+				return parentScopeLengthDiff;
+			}
+
+			aParentIndex++;
+			bParentIndex++;
+		}
+
+		// If a depth-first, scope-by-scope comparison resulted in a tie, the rule with
+		// more parent scopes is considered more specific.
+		return bParentScopesSize - aParentScopesSize;
 	}
 
 	public List<ThemeTrieElementRule> match(final String scope) {
-		if ("".equals(scope)) {
-			return ThemeTrieElement._sortBySpecificity(asArrayList(this._mainRule, this._rulesWithParentScopes));
+		if (!scope.isEmpty()) {
+			final int dotIndex = scope.indexOf('.');
+			String head;
+			String tail;
+			if (dotIndex == -1) {
+				head = scope;
+				tail = "";
+			} else {
+				head = scope.substring(0, dotIndex);
+				tail = scope.substring(dotIndex + 1);
+			}
+
+			final ThemeTrieElement child = this._children.get(head);
+			if (child != null) {
+				return child.match(tail);
+			}
 		}
 
-		final int dotIndex = scope.indexOf('.');
-		final String head;
-		final String tail;
-		if (dotIndex == -1) {
-			head = scope;
-			tail = "";
-		} else {
-			head = scope.substring(0, dotIndex);
-			tail = scope.substring(dotIndex + 1);
-		}
-
-		final ThemeTrieElement child = this._children.get(head);
-		if (child != null) {
-			return child.match(tail);
-		}
-
-		return ThemeTrieElement._sortBySpecificity(asArrayList(this._mainRule, this._rulesWithParentScopes));
+		final var rules = new ArrayList<>(this._rulesWithParentScopes);
+		rules.add(this._mainRule);
+		rules.sort(ThemeTrieElement::_cmpBySpecificity);
+		return rules;
 	}
 
 	public void insert(final int scopeDepth, final String scope, @Nullable final List<String> parentScopes, final int fontStyle,

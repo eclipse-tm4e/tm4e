@@ -98,26 +98,47 @@ public final class Theme {
 				effectiveRule.background);
 	}
 
-	private boolean _scopePathMatchesParentScopes(@Nullable ScopeStack scopePath, @Nullable final List<String> parentScopeNames) {
-		if (parentScopeNames == null) {
+	private boolean _scopePathMatchesParentScopes(@Nullable ScopeStack scopePath, final List<String> parentScopeNames) {
+		if (parentScopeNames.isEmpty()) {
 			return true;
 		}
 
-		var index = 0;
-		var scopePattern = parentScopeNames.get(index);
+		// Starting with the deepest parent scope, look for a match in the scope path.
+		final var parentScopeNamesLen = parentScopeNames.size();
+		for (int index = 0; index < parentScopeNamesLen; index++) {
+			var scopePattern = parentScopeNames.get(index);
+			boolean scopeMustMatch = false;
 
-		while (scopePath != null) {
-			if (_matchesScope(scopePath.scopeName, scopePattern)) {
-				index++;
-				if (index == parentScopeNames.size()) {
-					return true;
+			// Check for a child combinator (a parent-child relationship)
+			if (">".equals(scopePattern)) {
+				if (index == parentScopeNamesLen - 1) {
+					// Invalid use of child combinator
+					return false;
 				}
-				scopePattern = parentScopeNames.get(index);
+				scopePattern = parentScopeNames.get(++index);
+				scopeMustMatch = true;
+			}
+
+			while (scopePath != null) {
+				if (_matchesScope(scopePath.scopeName, scopePattern)) {
+					break;
+				}
+				if (scopeMustMatch) {
+					// If a child combinator was used, the parent scope must match.
+					return false;
+				}
+				scopePath = scopePath.parent;
+			}
+
+			if (scopePath == null) {
+				// No more potential matches
+				return false;
 			}
 			scopePath = scopePath.parent;
 		}
 
-		return false;
+		// All parent scopes were matched.
+		return true;
 	}
 
 	private boolean _matchesScope(final String scopeName, final String scopeNamePattern) {

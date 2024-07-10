@@ -15,7 +15,7 @@
 package org.eclipse.tm4e.core.model;
 
 import static java.lang.System.Logger.Level.*;
-import static org.eclipse.tm4e.core.internal.utils.NullSafetyHelper.lazyNonNull;
+import static org.eclipse.tm4e.core.internal.utils.NullSafetyHelper.lateNonNull;
 
 import java.lang.System.Logger;
 import java.time.Duration;
@@ -99,7 +99,7 @@ public abstract class TMModel implements ITMModel {
 	/** The background thread performing async line tokenizations */
 	private volatile @Nullable TokenizerThread tokenizerThread;
 	private volatile boolean tokenizerThreadHasWork;
-	private TMTokenizationSupport tokenizer = lazyNonNull();
+	private TMTokenizationSupport tokenizer = lateNonNull();
 
 	/** package visibility for tests **/
 	final ArrayList<LineTokens> lines;

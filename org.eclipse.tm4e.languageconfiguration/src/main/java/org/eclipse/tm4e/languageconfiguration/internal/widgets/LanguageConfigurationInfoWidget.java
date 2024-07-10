@@ -11,7 +11,7 @@
  */
 package org.eclipse.tm4e.languageconfiguration.internal.widgets;
 
-import static org.eclipse.tm4e.core.internal.utils.NullSafetyHelper.lazyNonNull;
+import static org.eclipse.tm4e.core.internal.utils.NullSafetyHelper.lateNonNull;
 import static org.eclipse.tm4e.languageconfiguration.internal.LanguageConfigurationMessages.*;
 
 import java.util.List;
@@ -52,32 +52,32 @@ public class LanguageConfigurationInfoWidget extends Composite {
 		LanguageConfigurationInfoWidget_colorizedBracketPairs_title,
 	};
 
-	private Text lineCommentText = lazyNonNull();
-	private Text blockCommentStartText = lazyNonNull();
-	private Text blockCommentEndText = lazyNonNull();
+	private Text lineCommentText = lateNonNull();
+	private Text blockCommentStartText = lateNonNull();
+	private Text blockCommentEndText = lateNonNull();
 
-	private CharacterPairsTableWidget bracketsTable = lazyNonNull();
+	private CharacterPairsTableWidget bracketsTable = lateNonNull();
 
-	private AutoClosingPairConditionalTableWidget autoClosingPairsTable = lazyNonNull();
+	private AutoClosingPairConditionalTableWidget autoClosingPairsTable = lateNonNull();
 
-	private Text autoCloseBeforeText = lazyNonNull();
+	private Text autoCloseBeforeText = lateNonNull();
 
-	private CharacterPairsTableWidget surroundingPairsTable = lazyNonNull();
+	private CharacterPairsTableWidget surroundingPairsTable = lateNonNull();
 
-	private Text foldingOffsideText = lazyNonNull();
-	private Text foldingMarkersStartText = lazyNonNull();
-	private Text foldingMarkersEndText = lazyNonNull();
+	private Text foldingOffsideText = lateNonNull();
+	private Text foldingMarkersStartText = lateNonNull();
+	private Text foldingMarkersEndText = lateNonNull();
 
-	private Text wordPatternText = lazyNonNull();
+	private Text wordPatternText = lateNonNull();
 
-	private OnEnterRuleTableWidget onEnterRuleTable = lazyNonNull();
+	private OnEnterRuleTableWidget onEnterRuleTable = lateNonNull();
 
-	private Text indentationDecreaseIndentPattern = lazyNonNull();
-	private Text indentationIncreaseIndentPattern = lazyNonNull();
-	private Text indentationIndentNextLinePattern = lazyNonNull();
-	private Text indentationUnIndentedLinePattern = lazyNonNull();
+	private Text indentationDecreaseIndentPattern = lateNonNull();
+	private Text indentationIncreaseIndentPattern = lateNonNull();
+	private Text indentationIndentNextLinePattern = lateNonNull();
+	private Text indentationUnIndentedLinePattern = lateNonNull();
 
-	private CharacterPairsTableWidget colorizedBracketPairsTable = lazyNonNull();
+	private CharacterPairsTableWidget colorizedBracketPairsTable = lateNonNull();
 
 	public LanguageConfigurationInfoWidget(final Composite parent, final int style) {
 		super(parent, style);

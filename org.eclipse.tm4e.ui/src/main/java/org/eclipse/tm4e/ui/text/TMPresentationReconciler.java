@@ -226,8 +226,8 @@ public class TMPresentationReconciler implements IPresentationReconciler {
 		}
 
 		@Override
-		public void textChanged(final @Nullable TextEvent event) {
-			if (event == null || !event.getViewerRedrawState())
+		public void textChanged(final TextEvent event) {
+			if (!event.getViewerRedrawState())
 				return;
 
 			final var viewer = TMPresentationReconciler.this.viewer;

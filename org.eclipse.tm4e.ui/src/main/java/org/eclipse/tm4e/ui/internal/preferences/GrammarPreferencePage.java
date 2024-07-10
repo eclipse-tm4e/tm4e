@@ -13,7 +13,7 @@
  *******************************************************************************/
 package org.eclipse.tm4e.ui.internal.preferences;
 
-import static org.eclipse.tm4e.core.internal.utils.NullSafetyHelper.lazyNonNull;
+import static org.eclipse.tm4e.core.internal.utils.NullSafetyHelper.lateNonNull;
 
 import java.util.stream.Collectors;
 
@@ -65,14 +65,14 @@ public final class GrammarPreferencePage extends AbstractPreferencePage {
 	private IThemeManager.EditSession themeManager = ThemeManager.getInstance().newEditSession();
 	private final ISnippetManager snippetManager = TMUIPlugin.getSnippetManager();
 
-	private TableWidget<IGrammarDefinition> grammarsTable = lazyNonNull();
+	private TableWidget<IGrammarDefinition> grammarsTable = lateNonNull();
 
 	// Grammar info tabs
-	private GrammarInfoWidget grammarInfoWidget = lazyNonNull();
-	private TableWithControlsWidget<IContentType> contentTypesWidget = lazyNonNull();
-	private ThemeAssociationsWidget themeAssociationsWidget = lazyNonNull();
+	private GrammarInfoWidget grammarInfoWidget = lateNonNull();
+	private TableWithControlsWidget<IContentType> contentTypesWidget = lateNonNull();
+	private ThemeAssociationsWidget themeAssociationsWidget = lateNonNull();
 
-	private TMViewer grammarPreview = lazyNonNull();
+	private TMViewer grammarPreview = lateNonNull();
 
 	public GrammarPreferencePage() {
 		super(TMUIMessages.GrammarPreferencePage_title, TMUIMessages.GrammarPreferencePage_description);

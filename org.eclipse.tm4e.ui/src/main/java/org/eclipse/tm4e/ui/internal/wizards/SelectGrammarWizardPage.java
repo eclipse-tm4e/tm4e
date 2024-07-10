@@ -65,8 +65,8 @@ final class SelectGrammarWizardPage extends AbstractWizardPage {
 		"*.yaml",
 		"*.yml" };
 
-	private Text grammarFileText = lazyNonNull();
-	private GrammarInfoWidget grammarInfoWidget = lazyNonNull();
+	private Text grammarFileText = lateNonNull();
+	private GrammarInfoWidget grammarInfoWidget = lateNonNull();
 
 	protected SelectGrammarWizardPage() {
 		super(PAGE_NAME);
@@ -160,7 +160,7 @@ final class SelectGrammarWizardPage extends AbstractWizardPage {
 				});
 
 				if (dialog.open() == ElementTreeSelectionDialog.OK && dialog.getFirstResult() instanceof final IFile file) {
-					grammarFileText.setText(assertNonNull(file.getLocation()).toOSString());
+					grammarFileText.setText(castNonNull(file.getLocation()).toOSString());
 				}
 			}
 		});

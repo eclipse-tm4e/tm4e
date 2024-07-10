@@ -19,28 +19,28 @@ import org.eclipse.jdt.annotation.Nullable;
 
 public final class NullSafetyHelper {
 
-	public static <T> @NonNull T assertNonNull(final @Nullable T value) {
-		if (value == null)
-			throw new IllegalStateException("Null value!");
-		return value;
-	}
-
 	/**
-	 * Casts non-null value marked as {@link Nullable} to {@link NonNull}.
+	 * Casts a non-null value marked as {@link Nullable} to {@link NonNull}.
 	 * <p>
 	 * Only use if you are sure the value is non-null but annotation-based null analysis was not able to determine it.
 	 * <p>
 	 * This method is not meant for non-null input validation.
 	 *
-	 * @throws AssertionError if JVM assertions are enabled and the given value is null
+	 * @throws IllegalStateException if the given value is null
 	 */
 	public static <T> @NonNull T castNonNull(final @Nullable T value) {
-		assert value != null;
+		if (value == null)
+			throw new IllegalStateException("Unexpected null value present!");
 		return value;
 	}
 
+	/**
+	 * Casts the elements of given array to {@link NonNull} without any validation.
+	 * <p>
+	 * Only use if you are sure the value is non-null but annotation-based null analysis was not able to determine it.
+	 */
 	@SuppressWarnings("null")
-	private static <T> @NonNull T castNonNullUnsafe(final T value) {
+	public static <T> @NonNull T castNonNullUnsafe(final T value) {
 		return value;
 	}
 
@@ -58,7 +58,7 @@ public final class NullSafetyHelper {
 		return object;
 	}
 
-	public static <T> T defaultIfNull(@Nullable final T object, final Supplier<T> defaultValue) {
+	public static <T> T defaultIfNull(final @Nullable T object, final Supplier<T> defaultValue) {
 		if (object == null) {
 			return defaultValue.get();
 		}
@@ -66,10 +66,11 @@ public final class NullSafetyHelper {
 	}
 
 	/**
-	 * Allows to initializes a @NonNull field with <code>null</code> that is lazy initialized
+	 * Allows to initializes a @NonNull field with <code>null</code> that is
+	 * initialized later.
 	 */
 	@SuppressWarnings("unchecked")
-	public static <T> @NonNull T lazyNonNull() {
+	public static <T> @NonNull T lateNonNull() {
 		return (T) castNonNullUnsafe(null);
 	}
 

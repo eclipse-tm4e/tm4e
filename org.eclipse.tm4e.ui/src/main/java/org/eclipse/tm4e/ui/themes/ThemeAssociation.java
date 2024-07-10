@@ -11,7 +11,7 @@
  */
 package org.eclipse.tm4e.ui.themes;
 
-import static org.eclipse.tm4e.core.internal.utils.NullSafetyHelper.assertNonNull;
+import static org.eclipse.tm4e.core.internal.utils.NullSafetyHelper.castNonNull;
 
 import java.util.Objects;
 
@@ -54,8 +54,8 @@ public final class ThemeAssociation implements IThemeAssociation {
 	}
 
 	public ThemeAssociation(final IConfigurationElement ce) {
-		this(assertNonNull(ce.getAttribute(THEME_ID_ATTR)),
-				assertNonNull(ce.getAttribute(SCOPE_NAME_ATTR)),
+		this(castNonNull(ce.getAttribute(THEME_ID_ATTR)),
+				castNonNull(ce.getAttribute(SCOPE_NAME_ATTR)),
 				"true".equals(ce.getAttribute(WHEN_DARK_ATTR)));
 		this.pluginId = ce.getNamespaceIdentifier();
 	}

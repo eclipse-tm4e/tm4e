@@ -16,7 +16,7 @@ import java.io.IOException;
 import java.io.LineNumberReader;
 import java.io.StringReader;
 
-import org.eclipse.jdt.annotation.NonNullByDefault;
+import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.jface.text.BadLocationException;
 import org.eclipse.jface.text.DefaultLineTracker;
 import org.eclipse.jface.text.IDocument;
@@ -33,7 +33,6 @@ import org.eclipse.jface.text.Region;
  * Partially implemented {@link IDocument}. Especially all methods related to {@link IDocumentListener}, {@link IDocumentPartitioner},
  * {@link Position} are not implemented.
  */
-@NonNullByDefault({})
 public class MockDocument implements IDocument {
 
 	private String contentType;
@@ -164,7 +163,7 @@ public class MockDocument implements IDocument {
 	}
 
 	@Override
-	public String getLineDelimiter(final int lineIndex) throws BadLocationException {
+	public @Nullable String getLineDelimiter(final int lineIndex) throws BadLocationException {
 		final String[] lines = text.split("\n");
 		if (lines.length <= lineIndex)
 			throw new BadLocationException("Line " + lineIndex + " not present.");
@@ -305,7 +304,7 @@ public class MockDocument implements IDocument {
 	}
 
 	@Override
-	public void setDocumentPartitioner(IDocumentPartitioner partitioner) {
+	public void setDocumentPartitioner(@Nullable IDocumentPartitioner partitioner) {
 		throw new UnsupportedOperationException();
 	}
 

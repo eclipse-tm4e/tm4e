@@ -11,7 +11,7 @@
  */
 package org.eclipse.tm4e.ui.themes;
 
-import static org.eclipse.tm4e.core.internal.utils.NullSafetyHelper.assertNonNull;
+import static org.eclipse.tm4e.core.internal.utils.NullSafetyHelper.castNonNull;
 
 import java.io.InputStream;
 
@@ -70,8 +70,8 @@ public class Theme extends TMResource implements ITheme {
 	 */
 	public Theme(final IConfigurationElement ce) {
 		super(ce);
-		id = assertNonNull(ce.getAttribute(XMLConstants.ID_ATTR));
-		name = assertNonNull(ce.getAttribute(XMLConstants.NAME_ATTR));
+		id = castNonNull(ce.getAttribute(XMLConstants.ID_ATTR));
+		name = castNonNull(ce.getAttribute(XMLConstants.NAME_ATTR));
 		dark = Boolean.parseBoolean(ce.getAttribute(DARK_ATTR));
 		isDefault = Boolean.parseBoolean(ce.getAttribute(DEFAULT_ATTR));
 	}

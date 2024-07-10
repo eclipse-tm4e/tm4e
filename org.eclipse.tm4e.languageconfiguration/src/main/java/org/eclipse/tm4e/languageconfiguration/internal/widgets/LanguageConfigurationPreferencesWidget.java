@@ -12,7 +12,7 @@
 package org.eclipse.tm4e.languageconfiguration.internal.widgets;
 
 import static org.eclipse.swt.events.SelectionListener.widgetSelectedAdapter;
-import static org.eclipse.tm4e.core.internal.utils.NullSafetyHelper.lazyNonNull;
+import static org.eclipse.tm4e.core.internal.utils.NullSafetyHelper.lateNonNull;
 import static org.eclipse.tm4e.languageconfiguration.internal.LanguageConfigurationMessages.*;
 
 import org.eclipse.jdt.annotation.NonNullByDefault;
@@ -31,8 +31,8 @@ public final class LanguageConfigurationPreferencesWidget extends LanguageConfig
 	private @NonNullByDefault({}) Button toggleBracketAutoClosingButton;
 	private @NonNullByDefault({}) Button toggleMatchingPairsButton;
 
-	private ILanguageConfigurationDefinition definition = lazyNonNull();
-	private ILanguageConfigurationRegistryManager.EditSession manager = lazyNonNull();
+	private ILanguageConfigurationDefinition definition = lateNonNull();
+	private ILanguageConfigurationRegistryManager.EditSession manager = lateNonNull();
 
 	public LanguageConfigurationPreferencesWidget(final Composite parent, final int style) {
 		super(parent, style);

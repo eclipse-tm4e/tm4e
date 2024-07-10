@@ -11,7 +11,7 @@
  */
 package org.eclipse.tm4e.ui.internal.wizards;
 
-import static org.eclipse.tm4e.core.internal.utils.NullSafetyHelper.lazyNonNull;
+import static org.eclipse.tm4e.core.internal.utils.NullSafetyHelper.lateNonNull;
 
 import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.jface.wizard.Wizard;
@@ -29,7 +29,7 @@ public final class CreateThemeAssociationWizard extends Wizard {
 	private final IThemeManager.EditSession themeManager;
 	private final boolean saveOnFinish;
 
-	private CreateThemeAssociationWizardPage mainPage = lazyNonNull();
+	private CreateThemeAssociationWizardPage mainPage = lateNonNull();
 	private @Nullable IThemeAssociation createdThemeAssociation;
 	private @Nullable IGrammarDefinition initialDefinition;
 	private @Nullable IThemeAssociation initialAssociation;

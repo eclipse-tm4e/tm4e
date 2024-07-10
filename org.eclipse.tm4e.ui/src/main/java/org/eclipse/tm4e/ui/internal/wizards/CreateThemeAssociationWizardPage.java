@@ -43,8 +43,8 @@ final class CreateThemeAssociationWizardPage extends AbstractWizardPage {
 
 	private static final String PAGE_NAME = CreateThemeAssociationWizardPage.class.getName();
 
-	private ComboViewer themeViewer = lazyNonNull();
-	private ComboViewer grammarsCombo = lazyNonNull();
+	private ComboViewer themeViewer = lateNonNull();
+	private ComboViewer grammarsCombo = lateNonNull();
 
 	@Nullable
 	private final IGrammarDefinition initialDefinition;
@@ -52,7 +52,7 @@ final class CreateThemeAssociationWizardPage extends AbstractWizardPage {
 	@Nullable
 	private final IThemeAssociation initialAssociation;
 
-	private Button whenDarkButton = lazyNonNull();
+	private Button whenDarkButton = lateNonNull();
 
 	protected CreateThemeAssociationWizardPage(@Nullable final IGrammarDefinition initialDefinition,
 			@Nullable final IThemeAssociation initialAssociation) {
@@ -130,8 +130,8 @@ final class CreateThemeAssociationWizardPage extends AbstractWizardPage {
 	}
 
 	IThemeAssociation getThemeAssociation() {
-		final String themeId = ((ITheme) assertNonNull(themeViewer.getStructuredSelection().getFirstElement())).getId();
-		final var grammar = (IGrammarDefinition) assertNonNull(grammarsCombo.getStructuredSelection().getFirstElement());
+		final String themeId = ((ITheme) castNonNull(themeViewer.getStructuredSelection().getFirstElement())).getId();
+		final var grammar = (IGrammarDefinition) castNonNull(grammarsCombo.getStructuredSelection().getFirstElement());
 		final String scopeName = grammar.getScope().getName();
 		final boolean whenDark = whenDarkButton.getSelection();
 		return new ThemeAssociation(themeId, scopeName, whenDark);

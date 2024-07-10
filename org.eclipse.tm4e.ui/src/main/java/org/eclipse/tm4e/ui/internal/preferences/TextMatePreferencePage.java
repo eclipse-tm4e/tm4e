@@ -11,7 +11,7 @@
  */
 package org.eclipse.tm4e.ui.internal.preferences;
 
-import static org.eclipse.tm4e.core.internal.utils.NullSafetyHelper.lazyNonNull;
+import static org.eclipse.tm4e.core.internal.utils.NullSafetyHelper.lateNonNull;
 
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.jface.layout.GridLayoutFactory;
@@ -33,7 +33,7 @@ import org.osgi.service.prefs.BackingStoreException;
  */
 public final class TextMatePreferencePage extends AbstractPreferencePage {
 
-	private Button tmTokenHoverCheckbox = lazyNonNull();
+	private Button tmTokenHoverCheckbox = lateNonNull();
 
 	public TextMatePreferencePage() {
 		super(null, null);

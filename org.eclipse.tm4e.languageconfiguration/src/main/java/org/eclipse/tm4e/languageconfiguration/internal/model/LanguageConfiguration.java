@@ -267,7 +267,7 @@ public final class LanguageConfiguration {
 				.create();
 
 		try {
-			final var langCfg = assertNonNull(gsonBuilder.fromJson(jsonString, LanguageConfiguration.class));
+			final var langCfg = castNonNull(gsonBuilder.fromJson(jsonString, LanguageConfiguration.class));
 			if (castNullable(langCfg.autoClosingPairs) == null) {
 				langCfg.autoClosingPairs = Collections.emptyList();
 			} else {
@@ -364,7 +364,7 @@ public final class LanguageConfiguration {
 		return comments;
 	}
 
-	private List<CharacterPair> brackets = lazyNonNull();
+	private List<CharacterPair> brackets = lateNonNull();
 
 	/**
 	 * Returns the language's brackets. This configuration implicitly affects pressing Enter around these brackets.
@@ -395,7 +395,7 @@ public final class LanguageConfiguration {
 		return indentationRules;
 	}
 
-	private List<OnEnterRule> onEnterRules = lazyNonNull();
+	private List<OnEnterRule> onEnterRules = lateNonNull();
 
 	/**
 	 * Returns the language's rules to be evaluated when pressing Enter.
@@ -406,7 +406,7 @@ public final class LanguageConfiguration {
 		return onEnterRules;
 	}
 
-	private List<AutoClosingPairConditional> autoClosingPairs = lazyNonNull();
+	private List<AutoClosingPairConditional> autoClosingPairs = lateNonNull();
 
 	/**
 	 * Returns the language's auto closing pairs. The 'close' character is automatically inserted with the 'open'
@@ -418,7 +418,7 @@ public final class LanguageConfiguration {
 		return autoClosingPairs;
 	}
 
-	private List<AutoClosingPair> surroundingPairs = lazyNonNull();
+	private List<AutoClosingPair> surroundingPairs = lateNonNull();
 
 	/**
 	 * Returns the language's surrounding pairs. When the 'open' character is typed on a selection, the selected string
@@ -430,7 +430,7 @@ public final class LanguageConfiguration {
 		return surroundingPairs;
 	}
 
-	private List<CharacterPair> colorizedBracketPairs = lazyNonNull();
+	private List<CharacterPair> colorizedBracketPairs = lateNonNull();
 
 	/**
 	 * Defines a list of bracket pairs that are colorized depending on their nesting level.

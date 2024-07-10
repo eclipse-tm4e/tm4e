@@ -66,7 +66,7 @@ public final class PreferenceHelper {
 
 						@Override
 						public @Nullable MarkerConfig read(final JsonReader in) throws IOException {
-							final var objectJson = assertNonNull(jsonElementAdapter.read(in)).getAsJsonObject();
+							final var objectJson = castNonNull(jsonElementAdapter.read(in)).getAsJsonObject();
 							return switch (MarkerConfig.Type.valueOf(objectJson.get("type").getAsString())) {
 								case PROBLEM -> problemAdapter.fromJsonTree(objectJson);
 								case TASK -> taskAdapter.fromJsonTree(objectJson);
@@ -77,7 +77,7 @@ public final class PreferenceHelper {
 			}).create();
 
 	public static IThemeAssociation[] loadThemeAssociations(final String json) {
-		return assertNonNull(DEFAULT_GSON.fromJson(json, ThemeAssociation[].class));
+		return castNonNull(DEFAULT_GSON.fromJson(json, ThemeAssociation[].class));
 	}
 
 	public static String toJsonThemeAssociations(final Collection<IThemeAssociation> themeAssociations) {
@@ -97,7 +97,7 @@ public final class PreferenceHelper {
 	}
 
 	public static Set<MarkerConfig> loadMarkerConfigs(final String json) {
-		return assertNonNull(DEFAULT_GSON.fromJson(json, new TypeToken<Set<MarkerConfig>>() {
+		return castNonNull(DEFAULT_GSON.fromJson(json, new TypeToken<Set<MarkerConfig>>() {
 		}.getType()));
 	}
 

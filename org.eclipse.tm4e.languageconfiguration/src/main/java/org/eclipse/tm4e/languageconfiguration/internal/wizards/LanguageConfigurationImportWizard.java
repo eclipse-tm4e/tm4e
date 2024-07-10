@@ -11,7 +11,7 @@
  */
 package org.eclipse.tm4e.languageconfiguration.internal.wizards;
 
-import static org.eclipse.tm4e.core.internal.utils.NullSafetyHelper.lazyNonNull;
+import static org.eclipse.tm4e.core.internal.utils.NullSafetyHelper.lateNonNull;
 
 import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.jface.viewers.IStructuredSelection;
@@ -31,8 +31,8 @@ public final class LanguageConfigurationImportWizard extends Wizard implements I
 	private final ILanguageConfigurationRegistryManager.EditSession manager;
 	private final boolean saveOnFinish;
 
-	private SelectLanguageConfigurationWizardPage mainPage = lazyNonNull();
-	private ILanguageConfigurationDefinition createdDefinition = lazyNonNull();
+	private SelectLanguageConfigurationWizardPage mainPage = lateNonNull();
+	private ILanguageConfigurationDefinition createdDefinition = lateNonNull();
 
 	public LanguageConfigurationImportWizard(final ILanguageConfigurationRegistryManager.EditSession manager, final boolean saveOnFinish) {
 		this.manager = manager;

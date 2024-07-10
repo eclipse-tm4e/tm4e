@@ -11,6 +11,8 @@
  */
 package org.eclipse.tm4e.ui.internal.widgets;
 
+import static org.eclipse.tm4e.core.internal.utils.NullSafetyHelper.castNonNull;
+
 import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.jface.resource.JFaceResources;
 import org.eclipse.jface.text.Document;
@@ -70,6 +72,6 @@ public final class TMViewer extends SourceViewer {
 		if (getDocument() == null) {
 			setDocument(new Document());
 		}
-		getDocument().set(text);
+		castNonNull(getDocument()).set(text);
 	}
 }

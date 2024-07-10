@@ -44,7 +44,7 @@ public class TMTokenTextHover implements ITextHover, ITextHoverExtension {
 	}
 
 	@Override
-	public IInformationControlCreator getHoverControlCreator() {
+	public @Nullable IInformationControlCreator getHoverControlCreator() {
 		// setup a hover control that interprets basic HTML input
 		return new AbstractReusableInformationControlCreator() {
 			@Override

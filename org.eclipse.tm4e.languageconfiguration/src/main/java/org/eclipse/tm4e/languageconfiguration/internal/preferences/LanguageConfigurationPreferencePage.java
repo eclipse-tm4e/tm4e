@@ -13,7 +13,7 @@
  */
 package org.eclipse.tm4e.languageconfiguration.internal.preferences;
 
-import static org.eclipse.tm4e.core.internal.utils.NullSafetyHelper.lazyNonNull;
+import static org.eclipse.tm4e.core.internal.utils.NullSafetyHelper.lateNonNull;
 import static org.eclipse.tm4e.languageconfiguration.internal.LanguageConfigurationMessages.*;
 
 import org.eclipse.jdt.annotation.NonNullByDefault;
@@ -46,7 +46,7 @@ public final class LanguageConfigurationPreferencePage extends AbstractPreferenc
 	static final String PAGE_ID = "org.eclipse.tm4e.languageconfiguration.preferences.LanguageConfigurationPreferencePage"; //$NON-NLS-1$
 
 	private ILanguageConfigurationRegistryManager.EditSession manager = LanguageConfigurationRegistryManager.getInstance().newEditSession();
-	private TableWidget<ILanguageConfigurationDefinition> langCfgsTable = lazyNonNull();
+	private TableWidget<ILanguageConfigurationDefinition> langCfgsTable = lateNonNull();
 
 	public LanguageConfigurationPreferencePage() {
 		super(LanguageConfigurationPreferencePage_title, LanguageConfigurationPreferencePage_description);

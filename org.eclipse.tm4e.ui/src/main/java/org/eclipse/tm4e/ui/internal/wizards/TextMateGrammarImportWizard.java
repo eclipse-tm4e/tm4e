@@ -11,7 +11,7 @@
  */
 package org.eclipse.tm4e.ui.internal.wizards;
 
-import static org.eclipse.tm4e.core.internal.utils.NullSafetyHelper.lazyNonNull;
+import static org.eclipse.tm4e.core.internal.utils.NullSafetyHelper.lateNonNull;
 
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.wizard.Wizard;
@@ -31,8 +31,8 @@ public final class TextMateGrammarImportWizard extends Wizard implements IImport
 	private final IGrammarRegistryManager.EditSession manager;
 	private final boolean saveOnFinish;
 
-	private SelectGrammarWizardPage mainPage = lazyNonNull();
-	private IGrammarDefinition createdDefinition = lazyNonNull();
+	private SelectGrammarWizardPage mainPage = lateNonNull();
+	private IGrammarDefinition createdDefinition = lateNonNull();
 
 	public TextMateGrammarImportWizard(final IGrammarRegistryManager.EditSession manager, final boolean saveOnFinish) {
 		this.manager = manager;

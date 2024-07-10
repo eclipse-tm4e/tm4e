@@ -11,7 +11,7 @@
  */
 package org.eclipse.tm4e.ui.internal.text;
 
-import static org.eclipse.tm4e.core.internal.utils.NullSafetyHelper.lazyNonNull;
+import static org.eclipse.tm4e.core.internal.utils.NullSafetyHelper.lateNonNull;
 
 import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.jface.text.DocumentEvent;
@@ -26,8 +26,8 @@ import org.eclipse.tm4e.ui.text.ITMPresentationReconcilerListener;
 public final class TMPresentationReconcilerTestGenerator
 		implements ITMPresentationReconcilerListener, IDocumentListener, ITextListener {
 
-	private ITextViewer viewer = lazyNonNull();
-	private IDocument document = lazyNonNull();
+	private ITextViewer viewer = lateNonNull();
+	private IDocument document = lateNonNull();
 
 	private final StringBuilder code = new StringBuilder();
 

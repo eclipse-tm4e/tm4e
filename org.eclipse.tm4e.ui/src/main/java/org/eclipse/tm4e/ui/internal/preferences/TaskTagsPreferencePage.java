@@ -58,10 +58,10 @@ public final class TaskTagsPreferencePage extends AbstractPreferencePage {
 		@Nullable
 		MarkerConfig markerConfig;
 
-		Text txtTag = lazyNonNull();
-		Combo cmbType = lazyNonNull();
-		Label lblLevel = lazyNonNull();
-		Combo cmbLevel = lazyNonNull();
+		Text txtTag = lateNonNull();
+		Combo cmbType = lateNonNull();
+		Label lblLevel = lateNonNull();
+		Combo cmbLevel = lateNonNull();
 
 		MarkerConfigEditDialog(final Shell parentShell, final @Nullable MarkerConfig markerConfig) {
 			super(parentShell);
@@ -174,7 +174,7 @@ public final class TaskTagsPreferencePage extends AbstractPreferencePage {
 	}
 
 	private final Set<MarkerConfig> markerConfigs = PreferenceHelper.loadMarkerConfigs();
-	private TableWidget<MarkerConfig> markerConfigsTable = lazyNonNull();
+	private TableWidget<MarkerConfig> markerConfigsTable = lateNonNull();
 
 	public TaskTagsPreferencePage() {
 		super(null, TMUIMessages.TaskTagsPreferencePage_description);

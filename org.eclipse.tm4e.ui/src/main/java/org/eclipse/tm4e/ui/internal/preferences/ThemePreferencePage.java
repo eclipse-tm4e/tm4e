@@ -65,11 +65,11 @@ public final class ThemePreferencePage extends AbstractPreferencePage {
 	private final IGrammarRegistryManager grammarManager = TMEclipseRegistryPlugin.getGrammarRegistryManager();
 	private IThemeManager.EditSession themeManager = ThemeManager.getInstance().newEditSession();
 
-	private TableWidget<ITheme> themesTable = lazyNonNull();
+	private TableWidget<ITheme> themesTable = lateNonNull();
 
 	// Preview content
-	private ComboViewer grammarsCombo = lazyNonNull();
-	private TMViewer themePreview = lazyNonNull();
+	private ComboViewer grammarsCombo = lateNonNull();
+	private TMViewer themePreview = lateNonNull();
 
 	public ThemePreferencePage() {
 		super(TMUIMessages.ThemePreferencePage_title, TMUIMessages.ThemePreferencePage_description);

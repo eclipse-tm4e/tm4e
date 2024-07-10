@@ -63,9 +63,9 @@ final class SelectLanguageConfigurationWizardPage extends WizardPage implements 
 
 	private static final String[] TEXTMATE_EXTENSIONS = { "*language-configuration.json" }; //$NON-NLS-1$
 
-	private Text fileText = lazyNonNull();
-	private Text contentTypeText = lazyNonNull();
-	private LanguageConfigurationInfoWidget infoWidget = lazyNonNull();
+	private Text fileText = lateNonNull();
+	private Text contentTypeText = lateNonNull();
+	private LanguageConfigurationInfoWidget infoWidget = lateNonNull();
 
 	private final ILanguageConfigurationRegistryManager registryManager;
 
@@ -306,7 +306,7 @@ final class SelectLanguageConfigurationWizardPage extends WizardPage implements 
 			path = castNonNull(ResourcesPlugin.getWorkspace().getRoot().getFile(path).getLocation());
 		}
 
-		final var contentType = assertNonNull(ContentTypeHelper.getContentTypeById(contentTypeText.getText()));
+		final var contentType = castNonNull(ContentTypeHelper.getContentTypeById(contentTypeText.getText()));
 		return new LanguageConfigurationDefinition(contentType, path.toString());
 	}
 }

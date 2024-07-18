@@ -401,4 +401,17 @@
 		</pluginRepository>
 	</pluginRepositories>
 
+	<distributionManagement>
+		<repository>
+			<id>repo.eclipse.org</id>
+			<name>TM4E Repository - Releases</name>
+			<url>https://repo.eclipse.org/content/repositories/tm4e-releases/</url>
+		</repository>
+		<snapshotRepository>
+			<id>repo.eclipse.org</id>
+			<name>TM4E Repository - Snapshots</name>
+			<url>https://repo.eclipse.org/content/repositories/tm4e-snapshots/</url>
+		</snapshotRepository>
+	</distributionManagement>
+
 </project>

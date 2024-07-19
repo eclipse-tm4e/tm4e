@@ -11,6 +11,10 @@
 	<artifactId>org.eclipse.tm4e.core.tests</artifactId>
 	<packaging>eclipse-test-plugin</packaging>
 
+	<properties>
+		<maven.deploy.skip>true</maven.deploy.skip>
+	</properties>
+
 	<build>
 		<pluginManagement>
 			<plugins>

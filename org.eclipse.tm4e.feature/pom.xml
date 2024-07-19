@@ -10,4 +10,9 @@
 
 	<artifactId>org.eclipse.tm4e.feature</artifactId>
 	<packaging>eclipse-feature</packaging>
+
+	<properties>
+		<maven.deploy.skip>true</maven.deploy.skip>
+	</properties>
+
 </project>

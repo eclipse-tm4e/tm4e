@@ -11,6 +11,10 @@
 	<artifactId>org.eclipse.tm4e.repository</artifactId>
 	<packaging>eclipse-repository</packaging>
 
+	<properties>
+		<maven.deploy.skip>true</maven.deploy.skip>
+	</properties>
+
 	<profiles>
 		<profile>
 			<id>sign</id>

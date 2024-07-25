@@ -15,7 +15,6 @@ import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Supplier;
 
 import org.eclipse.jdt.annotation.Nullable;
-import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.resource.JFaceResources;
 import org.eclipse.jface.text.ITextSelection;
 import org.eclipse.jface.text.ITextViewer;
@@ -25,7 +24,6 @@ import org.eclipse.swt.SWTException;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.graphics.Color;
-import org.eclipse.swt.graphics.FontMetrics;
 import org.eclipse.swt.graphics.GC;
 import org.eclipse.swt.graphics.RGB;
 import org.eclipse.swt.widgets.Display;
@@ -43,32 +41,25 @@ import org.eclipse.ui.texteditor.ITextEditor;
 public final class UI {
 
 	public static GC createGC() {
-		final var shell = getActiveShell();
-		if (shell == null)
-			throw new IllegalStateException("No active shell found.");
-		return new GC(shell);
+		return new GC(getDisplay());
 	}
 
-	@Nullable
-	public static IWorkbenchPage getActivePage() {
+	public static @Nullable IWorkbenchPage getActivePage() {
 		final var window = getActiveWindow();
 		return window == null ? null : window.getActivePage();
 	}
 
-	@Nullable
-	public static IWorkbenchPart getActivePart() {
+	public static @Nullable IWorkbenchPart getActivePart() {
 		final var page = getActivePage();
 		return page == null ? null : page.getActivePart();
 	}
 
-	@Nullable
-	public static Shell getActiveShell() {
+	public static @Nullable Shell getActiveShell() {
 		final var window = getActiveWindow();
 		return window == null ? null : window.getShell();
 	}
 
-	@Nullable
-	public static ITextEditor getActiveTextEditor() {
+	public static @Nullable ITextEditor getActiveTextEditor() {
 		final var activePage = getActivePage();
 		if (activePage == null) {
 			return null;
@@ -94,8 +85,7 @@ public final class UI {
 		return null;
 	}
 
-	@Nullable
-	public static ITextViewer getActiveTextViewer() {
+	public static @Nullable ITextViewer getActiveTextViewer() {
 		final var editor = getActiveTextEditor();
 		if (editor != null) {
 			return editor.getAdapter(ITextViewer.class);
@@ -103,8 +93,7 @@ public final class UI {
 		return null;
 	}
 
-	@Nullable
-	public static IWorkbenchWindow getActiveWindow() {
+	public static @Nullable IWorkbenchWindow getActiveWindow() {
 		return PlatformUI.getWorkbench().getActiveWorkbenchWindow();
 	}
 
@@ -147,22 +136,6 @@ public final class UI {
 				display.timerExec(delay, later);
 			}
 		};
-	}
-
-	private static @Nullable FontMetrics fontMetrics;
-
-	public static int convertHeightInCharsToPixels(final int chars) {
-		var fontMetrics = UI.fontMetrics;
-		if (fontMetrics == null) {
-			final GC gc = createGC();
-			try {
-				gc.setFont(JFaceResources.getDialogFont());
-				fontMetrics = UI.fontMetrics = gc.getFontMetrics();
-			} finally {
-				gc.dispose();
-			}
-		}
-		return Dialog.convertHeightInCharsToPixels(fontMetrics, chars);
 	}
 
 	public static int getTextWidth(final String string) {
@@ -221,7 +194,7 @@ public final class UI {
 			}
 		});
 
-		final @Nullable RuntimeException ex = exRef.get();
+		final RuntimeException ex = exRef.get();
 		if (ex != null) {
 			throw ex;
 		}

@@ -119,7 +119,7 @@ public final class UI {
 		return true;
 	}
 
-	public static ModifyListener debounceModifyListener(final int delay, final ModifyListener listener) {
+	public static ModifyListener debounce(final int delayMS, final ModifyListener listener) {
 		return new ModifyListener() {
 			private Runnable later = () -> {
 			};
@@ -133,7 +133,7 @@ public final class UI {
 				later = () -> listener.modifyText(e);
 
 				// Schedule a new call to execute after the delay
-				display.timerExec(delay, later);
+				display.timerExec(delayMS, later);
 			}
 		};
 	}

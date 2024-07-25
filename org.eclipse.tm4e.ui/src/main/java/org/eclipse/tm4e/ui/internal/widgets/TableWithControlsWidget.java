@@ -25,6 +25,7 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
+import org.eclipse.tm4e.ui.internal.utils.UI;
 
 /**
  * Widget which display a table on the left and buttons on the right
@@ -84,7 +85,7 @@ public abstract class TableWithControlsWidget<T> extends Composite {
 	private void createFilter(final Composite parent) {
 		final var filterInput = new Text(this, SWT.SEARCH | SWT.ICON_CANCEL | SWT.ICON_SEARCH | SWT.FLAT);
 		filterInput.setMessage(" type filter text");
-		filterInput.addModifyListener(e -> onFilterChanged(filterInput.getText()));
+		filterInput.addModifyListener(UI.debounce(200, e -> onFilterChanged(filterInput.getText())));
 		filterInput.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 
 		@SuppressWarnings("unused")

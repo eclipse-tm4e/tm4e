@@ -39,16 +39,15 @@ import org.junit.jupiter.api.TestMethodOrder;
 @TestMethodOrder(MethodOrderer.MethodName.class)
 class TMParserTest {
 
-	@SuppressWarnings("null")
 	private void validateCaptures(final RawGrammar grammar) {
 		assertNotNull(grammar.getPatterns());
-		assertEquals(1, grammar.getPatterns().size());
-		final var pattern = grammar.getPatterns().iterator().next();
+		assertEquals(1, castNonNull(grammar.getPatterns()).size());
+		final var pattern = castNonNull(grammar.getPatterns()).iterator().next();
 		assertEquals("THE_PATTERN", pattern.getName());
 		assertEquals("BEGIN_PATTERN", pattern.getBegin());
 		assertEquals("END_PATTERN", pattern.getEnd());
-		final var capures = pattern.getCaptures();
-		assertEquals("THE_CAPTURE", capures.getCapture("0").getName());
+		final var capures = castNonNull(pattern.getCaptures());
+		assertEquals("THE_CAPTURE", castNonNull(capures.getCapture("0")).getName());
 	}
 
 	@Test

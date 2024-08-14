@@ -195,7 +195,7 @@
   <!-- ======================================== -->
   <extension point="org.eclipse.core.contenttype.contentTypes">
     <content-type id="org.eclipse.tm4e.language_pack.cpp" name="C++" base-type="org.eclipse.tm4e.language_pack.basetype" priority="low"
-                  file-extensions="c++,cc,cpp,cxx,h,h++,hh,hpp,hxx,ii,inl,ino,ipp,ixx,tpp,txx" file-patterns="*.h.in,*.hpp.in" />
+                  file-extensions="c++,c++m,cc,ccm,cpp,cppm,cxx,cxxm,h,h++,hh,hpp,hxx,ii,inl,ino,ipp,ixx,tpp,txx" file-patterns="*.h.in,*.hpp.in" />
   </extension>
   <extension point="org.eclipse.tm4e.registry.grammars">
     <grammar scopeName="source.cpp" path="syntaxes/cpp/cpp.tmLanguage.json" />

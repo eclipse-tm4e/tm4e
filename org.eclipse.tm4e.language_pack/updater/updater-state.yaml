@@ -4,8 +4,8 @@ extensions:
     github:
       repo: microsoft/vscode
       path: extensions/bat
-      ref: 1.89.1
-      commit: dc96b837cf6bb4af9cd736aa3af08cf8279f7685
+      ref: 1.91.1
+      commit: f1e16e1e6214d7c44d078b1f0607b2388f29d729
     languages:
       bat:
         label: Batch File
@@ -18,8 +18,8 @@ extensions:
     github:
       repo: microsoft/vscode
       path: extensions/clojure
-      ref: 1.89.1
-      commit: dc96b837cf6bb4af9cd736aa3af08cf8279f7685
+      ref: 1.91.1
+      commit: f1e16e1e6214d7c44d078b1f0607b2388f29d729
     languages:
       clojure:
         label: Clojure
@@ -36,8 +36,8 @@ extensions:
     github:
       repo: microsoft/vscode
       path: extensions/coffeescript
-      ref: 1.89.1
-      commit: dc96b837cf6bb4af9cd736aa3af08cf8279f7685
+      ref: 1.91.1
+      commit: f1e16e1e6214d7c44d078b1f0607b2388f29d729
     languages:
       coffeescript:
         label: CoffeeScript
@@ -51,8 +51,8 @@ extensions:
     github:
       repo: microsoft/vscode
       path: extensions/cpp
-      ref: 1.89.1
-      commit: dc96b837cf6bb4af9cd736aa3af08cf8279f7685
+      ref: 1.91.1
+      commit: f1e16e1e6214d7c44d078b1f0607b2388f29d729
     languages:
       c:
         label: C
@@ -67,9 +67,13 @@ extensions:
         upstream-url: https://github.com/jeff-hykin/better-cpp-syntax/commit/f1d127a8af2b184db570345f0bb179503c47fdf6
         file-extensions:
         - .c++
+        - .c++m
         - .cc
+        - .ccm
         - .cpp
+        - .cppm
         - .cxx
+        - .cxxm
         - .h
         - .h++
         - .h.in
@@ -97,8 +101,8 @@ extensions:
     github:
       repo: microsoft/vscode
       path: extensions/csharp
-      ref: 1.89.1
-      commit: dc96b837cf6bb4af9cd736aa3af08cf8279f7685
+      ref: 1.91.1
+      commit: f1e16e1e6214d7c44d078b1f0607b2388f29d729
     languages:
       csharp:
         label: C#
@@ -112,8 +116,8 @@ extensions:
     github:
       repo: microsoft/vscode
       path: extensions/css
-      ref: 1.89.1
-      commit: dc96b837cf6bb4af9cd736aa3af08cf8279f7685
+      ref: 1.91.1
+      commit: f1e16e1e6214d7c44d078b1f0607b2388f29d729
     languages:
       css:
         label: CSS
@@ -125,21 +129,21 @@ extensions:
     github:
       repo: microsoft/vscode
       path: extensions/dart
-      ref: 1.89.1
-      commit: dc96b837cf6bb4af9cd736aa3af08cf8279f7685
+      ref: 1.91.1
+      commit: f1e16e1e6214d7c44d078b1f0607b2388f29d729
     languages:
       dart:
         label: Dart
         scope-name: source.dart
-        upstream-url: https://github.com/dart-lang/dart-syntax-highlight/commit/272e2f89f85073c04b7e15b582257f76d2489970
+        upstream-url: https://github.com/dart-lang/dart-syntax-highlight/commit/bb8f7eebf5a1028e70dbebcf35cfef738dddc7fe
         file-extensions:
         - .dart
   diff:
     github:
       repo: microsoft/vscode
       path: extensions/diff
-      ref: 1.89.1
-      commit: dc96b837cf6bb4af9cd736aa3af08cf8279f7685
+      ref: 1.91.1
+      commit: f1e16e1e6214d7c44d078b1f0607b2388f29d729
     languages:
       diff:
         label: Diff
@@ -153,8 +157,8 @@ extensions:
     github:
       repo: microsoft/vscode
       path: extensions/docker
-      ref: 1.89.1
-      commit: dc96b837cf6bb4af9cd736aa3af08cf8279f7685
+      ref: 1.91.1
+      commit: f1e16e1e6214d7c44d078b1f0607b2388f29d729
     languages:
       dockerfile:
         label: Docker
@@ -173,8 +177,8 @@ extensions:
     github:
       repo: microsoft/vscode
       path: extensions/fsharp
-      ref: 1.89.1
-      commit: dc96b837cf6bb4af9cd736aa3af08cf8279f7685
+      ref: 1.91.1
+      commit: f1e16e1e6214d7c44d078b1f0607b2388f29d729
     languages:
       fsharp:
         label: F#
@@ -189,8 +193,8 @@ extensions:
     github:
       repo: microsoft/vscode
       path: extensions/git-base
-      ref: 1.89.1
-      commit: dc96b837cf6bb4af9cd736aa3af08cf8279f7685
+      ref: 1.91.1
+      commit: f1e16e1e6214d7c44d078b1f0607b2388f29d729
     languages:
       git-commit:
         label: Git Commit Message
@@ -220,21 +224,21 @@ extensions:
     github:
       repo: microsoft/vscode
       path: extensions/go
-      ref: 1.89.1
-      commit: dc96b837cf6bb4af9cd736aa3af08cf8279f7685
+      ref: 1.91.1
+      commit: f1e16e1e6214d7c44d078b1f0607b2388f29d729
     languages:
       go:
         label: Go
         scope-name: source.go
-        upstream-url: https://github.com/worlpaker/go-syntax/commit/6b7e1ad89c031a35a2bf8359538204bcef82f5be
+        upstream-url: https://github.com/worlpaker/go-syntax/commit/092c45ec9a51fe40188408d1371f123eaa4796fa
         file-extensions:
         - .go
   groovy:
     github:
       repo: microsoft/vscode
       path: extensions/groovy
-      ref: 1.89.1
-      commit: dc96b837cf6bb4af9cd736aa3af08cf8279f7685
+      ref: 1.91.1
+      commit: f1e16e1e6214d7c44d078b1f0607b2388f29d729
     languages:
       groovy:
         label: Groovy
@@ -254,8 +258,8 @@ extensions:
     github:
       repo: microsoft/vscode
       path: extensions/handlebars
-      ref: 1.89.1
-      commit: dc96b837cf6bb4af9cd736aa3af08cf8279f7685
+      ref: 1.91.1
+      commit: f1e16e1e6214d7c44d078b1f0607b2388f29d729
     languages:
       handlebars:
         label: Handlebars
@@ -269,8 +273,8 @@ extensions:
     github:
       repo: microsoft/vscode
       path: extensions/hlsl
-      ref: 1.89.1
-      commit: dc96b837cf6bb4af9cd736aa3af08cf8279f7685
+      ref: 1.91.1
+      commit: f1e16e1e6214d7c44d078b1f0607b2388f29d729
     languages:
       hlsl:
         label: HLSL (High-Level Shader Language)
@@ -289,8 +293,8 @@ extensions:
     github:
       repo: microsoft/vscode
       path: extensions/html
-      ref: 1.89.1
-      commit: dc96b837cf6bb4af9cd736aa3af08cf8279f7685
+      ref: 1.91.1
+      commit: f1e16e1e6214d7c44d078b1f0607b2388f29d729
     languages:
       html:
         label: HTML
@@ -316,8 +320,8 @@ extensions:
     github:
       repo: microsoft/vscode
       path: extensions/ini
-      ref: 1.89.1
-      commit: dc96b837cf6bb4af9cd736aa3af08cf8279f7685
+      ref: 1.91.1
+      commit: f1e16e1e6214d7c44d078b1f0607b2388f29d729
     languages:
       ini:
         label: INI Config File
@@ -329,8 +333,8 @@ extensions:
     github:
       repo: microsoft/vscode
       path: extensions/java
-      ref: 1.89.1
-      commit: dc96b837cf6bb4af9cd736aa3af08cf8279f7685
+      ref: 1.91.1
+      commit: f1e16e1e6214d7c44d078b1f0607b2388f29d729
     languages:
       java:
         label: Java
@@ -343,8 +347,8 @@ extensions:
     github:
       repo: microsoft/vscode
       path: extensions/javascript
-      ref: 1.89.1
-      commit: dc96b837cf6bb4af9cd736aa3af08cf8279f7685
+      ref: 1.91.1
+      commit: f1e16e1e6214d7c44d078b1f0607b2388f29d729
     languages:
       javascript:
         label: JavaScript
@@ -370,8 +374,8 @@ extensions:
     github:
       repo: microsoft/vscode
       path: extensions/json
-      ref: 1.89.1
-      commit: dc96b837cf6bb4af9cd736aa3af08cf8279f7685
+      ref: 1.91.1
+      commit: f1e16e1e6214d7c44d078b1f0607b2388f29d729
     languages:
       json:
         label: JSON
@@ -431,21 +435,21 @@ extensions:
     github:
       repo: microsoft/vscode
       path: extensions/julia
-      ref: 1.89.1
-      commit: dc96b837cf6bb4af9cd736aa3af08cf8279f7685
+      ref: 1.91.1
+      commit: f1e16e1e6214d7c44d078b1f0607b2388f29d729
     languages:
       julia:
         label: Julia
         scope-name: source.julia
-        upstream-url: https://github.com/JuliaEditorSupport/atom-language-julia/commit/c56f92f8120ae9046a064de6351b50b3b5c624a1
+        upstream-url: https://github.com/JuliaEditorSupport/atom-language-julia/commit/663bf8d943fd8440f4ae7565f73327dd616bf191
         file-extensions:
         - .jl
   latex:
     github:
       repo: microsoft/vscode
       path: extensions/latex
-      ref: 1.89.1
-      commit: dc96b837cf6bb4af9cd736aa3af08cf8279f7685
+      ref: 1.91.1
+      commit: f1e16e1e6214d7c44d078b1f0607b2388f29d729
     languages:
       bibtex:
         label: BibTeX
@@ -456,11 +460,11 @@ extensions:
       cpp_embedded_latex:
         label: C++ embedded Latex
         scope-name: source.cpp.embedded.latex
-        upstream-url: https://github.com/jlelong/vscode-latex-basics/commit/ff5e3f24ff5f242d62954cf9e124184f27bf24dd
+        upstream-url: https://github.com/jlelong/vscode-latex-basics/commit/f17f354528411340e22402230be1b72e5aa1126a
       latex:
         label: LaTeX
         scope-name: text.tex.latex
-        upstream-url: https://github.com/jlelong/vscode-latex-basics/commit/4f8b49bca02b0bfde6e46252c209396ba6c567f9
+        upstream-url: https://github.com/jlelong/vscode-latex-basics/commit/3d141a124a16558958e95c54267f7ca37986de6f
         file-extensions:
         - .ctx
         - .ltx
@@ -472,7 +476,7 @@ extensions:
       tex:
         label: TeX
         scope-name: text.tex
-        upstream-url: https://github.com/jlelong/vscode-latex-basics/commit/4f8b49bca02b0bfde6e46252c209396ba6c567f9
+        upstream-url: https://github.com/jlelong/vscode-latex-basics/commit/5d7c2a4e451a932b776f6d9342087be6a1e8c0a1
         file-extensions:
         - .bbx
         - .cbx
@@ -482,13 +486,13 @@ extensions:
     github:
       repo: microsoft/vscode
       path: extensions/less
-      ref: 1.89.1
-      commit: dc96b837cf6bb4af9cd736aa3af08cf8279f7685
+      ref: 1.91.1
+      commit: f1e16e1e6214d7c44d078b1f0607b2388f29d729
     languages:
       less:
         label: Less
         scope-name: source.css.less
-        upstream-url: https://github.com/radium-v/Better-Less/commit/05de79f600227201e35f07a49f07acce80e49dbf
+        upstream-url: https://github.com/radium-v/Better-Less/commit/24047277622c245dbe9309f0004d0ccb8f02636f
         file-extensions:
         - .less
   log:
@@ -501,21 +505,21 @@ extensions:
     github:
       repo: microsoft/vscode
       path: extensions/lua
-      ref: 1.89.1
-      commit: dc96b837cf6bb4af9cd736aa3af08cf8279f7685
+      ref: 1.91.1
+      commit: f1e16e1e6214d7c44d078b1f0607b2388f29d729
     languages:
       lua:
         label: Lua
         scope-name: source.lua
-        upstream-url: https://github.com/sumneko/lua.tmbundle/commit/94ce82cc4d45f82641a5252d7a7fd9e28c875adc
+        upstream-url: https://github.com/sumneko/lua.tmbundle/commit/1483add845ebfb3e1e631fe372603e5fed2cdd42
         file-extensions:
         - .lua
   make:
     github:
       repo: microsoft/vscode
       path: extensions/make
-      ref: 1.89.1
-      commit: dc96b837cf6bb4af9cd736aa3af08cf8279f7685
+      ref: 1.91.1
+      commit: f1e16e1e6214d7c44d078b1f0607b2388f29d729
     languages:
       makefile:
         label: Makefile
@@ -533,8 +537,8 @@ extensions:
     github:
       repo: microsoft/vscode
       path: extensions/markdown-basics
-      ref: 1.89.1
-      commit: dc96b837cf6bb4af9cd736aa3af08cf8279f7685
+      ref: 1.91.1
+      commit: f1e16e1e6214d7c44d078b1f0607b2388f29d729
     languages:
       markdown:
         label: Markdown
@@ -554,8 +558,8 @@ extensions:
     github:
       repo: microsoft/vscode
       path: extensions/markdown-math
-      ref: 1.89.1
-      commit: dc96b837cf6bb4af9cd736aa3af08cf8279f7685
+      ref: 1.91.1
+      commit: f1e16e1e6214d7c44d078b1f0607b2388f29d729
     languages:
       markdown-math:
         label: Markdown Math
@@ -567,8 +571,8 @@ extensions:
     github:
       repo: microsoft/vscode
       path: extensions/objective-c
-      ref: 1.89.1
-      commit: dc96b837cf6bb4af9cd736aa3af08cf8279f7685
+      ref: 1.91.1
+      commit: f1e16e1e6214d7c44d078b1f0607b2388f29d729
     languages:
       objective-c:
         label: Objective-C
@@ -586,8 +590,8 @@ extensions:
     github:
       repo: microsoft/vscode
       path: extensions/perl
-      ref: 1.89.1
-      commit: dc96b837cf6bb4af9cd736aa3af08cf8279f7685
+      ref: 1.91.1
+      commit: f1e16e1e6214d7c44d078b1f0607b2388f29d729
     languages:
       perl:
         label: Perl
@@ -617,8 +621,8 @@ extensions:
     github:
       repo: microsoft/vscode
       path: extensions/php
-      ref: 1.89.1
-      commit: dc96b837cf6bb4af9cd736aa3af08cf8279f7685
+      ref: 1.91.1
+      commit: f1e16e1e6214d7c44d078b1f0607b2388f29d729
     languages:
       php:
         label: PHP
@@ -634,8 +638,8 @@ extensions:
     github:
       repo: microsoft/vscode
       path: extensions/powershell
-      ref: 1.89.1
-      commit: dc96b837cf6bb4af9cd736aa3af08cf8279f7685
+      ref: 1.91.1
+      commit: f1e16e1e6214d7c44d078b1f0607b2388f29d729
     languages:
       powershell:
         label: PowerShell
@@ -651,8 +655,8 @@ extensions:
     github:
       repo: microsoft/vscode
       path: extensions/pug
-      ref: 1.89.1
-      commit: dc96b837cf6bb4af9cd736aa3af08cf8279f7685
+      ref: 1.91.1
+      commit: f1e16e1e6214d7c44d078b1f0607b2388f29d729
     languages:
       jade:
         label: Pug
@@ -665,8 +669,8 @@ extensions:
     github:
       repo: microsoft/vscode
       path: extensions/python
-      ref: 1.89.1
-      commit: dc96b837cf6bb4af9cd736aa3af08cf8279f7685
+      ref: 1.91.1
+      commit: f1e16e1e6214d7c44d078b1f0607b2388f29d729
     languages:
       python:
         label: Python
@@ -691,8 +695,8 @@ extensions:
     github:
       repo: microsoft/vscode
       path: extensions/r
-      ref: 1.89.1
-      commit: dc96b837cf6bb4af9cd736aa3af08cf8279f7685
+      ref: 1.91.1
+      commit: f1e16e1e6214d7c44d078b1f0607b2388f29d729
     languages:
       r:
         label: R
@@ -707,13 +711,13 @@ extensions:
     github:
       repo: microsoft/vscode
       path: extensions/razor
-      ref: 1.89.1
-      commit: dc96b837cf6bb4af9cd736aa3af08cf8279f7685
+      ref: 1.91.1
+      commit: f1e16e1e6214d7c44d078b1f0607b2388f29d729
     languages:
       razor:
         label: ASP.NET Razor
         scope-name: text.html.cshtml
-        upstream-url: https://github.com/dotnet/razor/commit/f01e110af179981942987384d2b5d4e489eab014
+        upstream-url: https://github.com/dotnet/razor/commit/39159764277f3c80a786d8872eba7730da3d7ef0
         file-extensions:
         - .cshtml
         - .razor
@@ -721,8 +725,8 @@ extensions:
     github:
       repo: microsoft/vscode
       path: extensions/restructuredtext
-      ref: 1.89.1
-      commit: dc96b837cf6bb4af9cd736aa3af08cf8279f7685
+      ref: 1.91.1
+      commit: f1e16e1e6214d7c44d078b1f0607b2388f29d729
     languages:
       restructuredtext:
         label: reStructuredText
@@ -734,8 +738,8 @@ extensions:
     github:
       repo: microsoft/vscode
       path: extensions/ruby
-      ref: 1.89.1
-      commit: dc96b837cf6bb4af9cd736aa3af08cf8279f7685
+      ref: 1.91.1
+      commit: f1e16e1e6214d7c44d078b1f0607b2388f29d729
     languages:
       ruby:
         label: Ruby
@@ -779,8 +783,8 @@ extensions:
     github:
       repo: microsoft/vscode
       path: extensions/rust
-      ref: 1.89.1
-      commit: dc96b837cf6bb4af9cd736aa3af08cf8279f7685
+      ref: 1.91.1
+      commit: f1e16e1e6214d7c44d078b1f0607b2388f29d729
     languages:
       rust:
         label: Rust
@@ -792,8 +796,8 @@ extensions:
     github:
       repo: microsoft/vscode
       path: extensions/scss
-      ref: 1.89.1
-      commit: dc96b837cf6bb4af9cd736aa3af08cf8279f7685
+      ref: 1.91.1
+      commit: f1e16e1e6214d7c44d078b1f0607b2388f29d729
     languages:
       scss:
         label: SCSS
@@ -807,8 +811,8 @@ extensions:
     github:
       repo: microsoft/vscode
       path: extensions/search-result
-      ref: 1.89.1
-      commit: dc96b837cf6bb4af9cd736aa3af08cf8279f7685
+      ref: 1.91.1
+      commit: f1e16e1e6214d7c44d078b1f0607b2388f29d729
     languages:
       search-result:
         label: VS Code Search Result
@@ -819,8 +823,8 @@ extensions:
     github:
       repo: microsoft/vscode
       path: extensions/shaderlab
-      ref: 1.89.1
-      commit: dc96b837cf6bb4af9cd736aa3af08cf8279f7685
+      ref: 1.91.1
+      commit: f1e16e1e6214d7c44d078b1f0607b2388f29d729
     languages:
       shaderlab:
         label: ShaderLab
@@ -832,13 +836,13 @@ extensions:
     github:
       repo: microsoft/vscode
       path: extensions/shellscript
-      ref: 1.89.1
-      commit: dc96b837cf6bb4af9cd736aa3af08cf8279f7685
+      ref: 1.91.1
+      commit: f1e16e1e6214d7c44d078b1f0607b2388f29d729
     languages:
       shellscript:
         label: Shell Script
         scope-name: source.shell
-        upstream-url: https://github.com/jeff-hykin/better-shell-syntax/commit/21748db7c7fd6ccd660c5bc770212836e58385ae
+        upstream-url: https://github.com/jeff-hykin/better-shell-syntax/commit/6d0bc37a6b8023a5fddf75bd2b4eb1e1f962e4c2
         file-extensions:
         - .Xsession
         - .bash
@@ -885,8 +889,8 @@ extensions:
     github:
       repo: microsoft/vscode
       path: extensions/sql
-      ref: 1.89.1
-      commit: dc96b837cf6bb4af9cd736aa3af08cf8279f7685
+      ref: 1.91.1
+      commit: f1e16e1e6214d7c44d078b1f0607b2388f29d729
     languages:
       sql:
         label: SQL
@@ -899,8 +903,8 @@ extensions:
     github:
       repo: microsoft/vscode
       path: extensions/swift
-      ref: 1.89.1
-      commit: dc96b837cf6bb4af9cd736aa3af08cf8279f7685
+      ref: 1.91.1
+      commit: f1e16e1e6214d7c44d078b1f0607b2388f29d729
     languages:
       swift:
         label: Swift
@@ -912,8 +916,8 @@ extensions:
     github:
       repo: microsoft/vscode
       path: extensions/typescript-basics
-      ref: 1.89.1
-      commit: dc96b837cf6bb4af9cd736aa3af08cf8279f7685
+      ref: 1.91.1
+      commit: f1e16e1e6214d7c44d078b1f0607b2388f29d729
     languages:
       typescript:
         label: TypeScript
@@ -936,8 +940,8 @@ extensions:
     github:
       repo: microsoft/vscode
       path: extensions/vb
-      ref: 1.89.1
-      commit: dc96b837cf6bb4af9cd736aa3af08cf8279f7685
+      ref: 1.91.1
+      commit: f1e16e1e6214d7c44d078b1f0607b2388f29d729
     languages:
       vb:
         label: Visual Basic
@@ -953,8 +957,8 @@ extensions:
     github:
       repo: microsoft/vscode
       path: extensions/xml
-      ref: 1.89.1
-      commit: dc96b837cf6bb4af9cd736aa3af08cf8279f7685
+      ref: 1.91.1
+      commit: f1e16e1e6214d7c44d078b1f0607b2388f29d729
     languages:
       xml:
         label: XML
@@ -1033,8 +1037,8 @@ extensions:
     github:
       repo: microsoft/vscode
       path: extensions/yaml
-      ref: 1.89.1
-      commit: dc96b837cf6bb4af9cd736aa3af08cf8279f7685
+      ref: 1.91.1
+      commit: f1e16e1e6214d7c44d078b1f0607b2388f29d729
     languages:
       yaml:
         label: YAML

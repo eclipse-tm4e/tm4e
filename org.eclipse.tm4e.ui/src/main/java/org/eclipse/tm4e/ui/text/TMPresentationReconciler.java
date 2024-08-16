@@ -304,34 +304,34 @@ public class TMPresentationReconciler implements IPresentationReconciler {
 					? viewerExt5.widgetRange2ModelRange(new Region(event.getOffset(), length))
 					: new Region(event.getOffset() + viewer.getVisibleRegion().getOffset(), length);
 		}
-	}
 
-	/**
-	 * Finds a grammar for the given document.
-	 */
-	private @Nullable IGrammar findGrammar(final IDocument doc) {
-		final IGrammar currentGrammar = isForcedGrammar ? this.grammar : null;
-		if (currentGrammar != null)
-			return currentGrammar;
+		/**
+		 * Finds a grammar for the given document.
+		 */
+		private @Nullable IGrammar findGrammar(final IDocument doc) {
+			final IGrammar currentGrammar = isForcedGrammar ? TMPresentationReconciler.this.grammar : null;
+			if (currentGrammar != null)
+				return currentGrammar;
 
-		final ContentTypeInfo info = ContentTypeHelper.findContentTypes(doc);
-		if (info == null)
-			return null;
+			final ContentTypeInfo info = ContentTypeHelper.findContentTypes(doc);
+			if (info == null)
+				return null;
 
-		final IContentType[] contentTypes = info.getContentTypes();
-		// try to determine the grammar based on the content types
-		IGrammar grammar = TMEclipseRegistryPlugin.getGrammarRegistryManager().getGrammarFor(contentTypes);
-		if (grammar == null) {
-			// try to determine the grammar based on the file type
-			final String fileName = info.getFileName();
-			if (fileName.indexOf('.') > -1) {
-				final String fileExtension = new Path(fileName).getFileExtension();
-				if (fileExtension != null) {
-					grammar = TMEclipseRegistryPlugin.getGrammarRegistryManager().getGrammarForFileExtension(fileExtension);
+			final IContentType[] contentTypes = info.getContentTypes();
+			// try to determine the grammar based on the content types
+			IGrammar grammar = TMEclipseRegistryPlugin.getGrammarRegistryManager().getGrammarFor(contentTypes);
+			if (grammar == null) {
+				// try to determine the grammar based on the file type
+				final String fileName = info.getFileName();
+				if (fileName.indexOf('.') > -1) {
+					final String fileExtension = new Path(fileName).getFileExtension();
+					if (fileExtension != null) {
+						grammar = TMEclipseRegistryPlugin.getGrammarRegistryManager().getGrammarForFileExtension(fileExtension);
+					}
 				}
 			}
+			return grammar;
 		}
-		return grammar;
 	}
 
 	public @Nullable IGrammar getGrammar() {

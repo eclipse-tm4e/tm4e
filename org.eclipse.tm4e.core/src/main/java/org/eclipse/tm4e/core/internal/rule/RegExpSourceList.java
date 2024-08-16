@@ -33,7 +33,7 @@ final class RegExpSourceList {
 	private boolean hasAnchors;
 
 	private @Nullable CompiledRule cached;
-	private @Nullable final CompiledRule[][] anchorCache = new CompiledRule[2][2];
+	private final @Nullable CompiledRule[][] anchorCache = new CompiledRule[2][2];
 
 	private void disposeCache() {
 		cached = null;

@@ -11,7 +11,7 @@
  */
 package org.eclipse.tm4e.core.internal.theme;
 
-import static org.eclipse.tm4e.core.internal.utils.StringUtils.strArrCmp;
+import static org.eclipse.tm4e.core.internal.utils.StringUtils.*;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -150,11 +150,8 @@ public final class ThemeTrieElement {
 			tail = scope.substring(dotIndex + 1);
 		}
 
-		ThemeTrieElement child = this._children.get(head);
-		if (child == null) {
-			child = new ThemeTrieElement(this._mainRule.clone(), ThemeTrieElementRule.cloneArr(this._rulesWithParentScopes));
-			this._children.put(head, child);
-		}
+		final ThemeTrieElement child = this._children.computeIfAbsent(head,
+				key -> new ThemeTrieElement(this._mainRule.clone(), ThemeTrieElementRule.cloneArr(this._rulesWithParentScopes)));
 
 		child.insert(scopeDepth + 1, tail, parentScopes, fontStyle, foreground, background);
 	}

@@ -16,7 +16,7 @@
  */
 package org.eclipse.tm4e.core.model;
 
-import static org.eclipse.tm4e.core.internal.utils.NullSafetyHelper.castNonNull;
+import static org.eclipse.tm4e.core.internal.utils.NullSafetyHelper.*;
 
 import java.time.Duration;
 import java.util.ArrayList;
@@ -198,13 +198,11 @@ public class TMTokenizationSupport implements ITokenizationSupport {
 			tokens = new @NonNull Integer[tmpTokens.length];
 			for (int i = 0; i < tmpTokens.length; i++) {
 				final String token = tmpTokens[i];
-				Integer tokenId = this.tokenToTokenId.get(token);
-				if (tokenId == null) {
-					tokenId = ++this.lastAssignedTokenId;
-					this.tokenToTokenId.put(token, tokenId);
-					this.tokenIdToToken.add(token);
-				}
-				tokens[i] = tokenId;
+				tokens[i] = this.tokenToTokenId.computeIfAbsent(token, _token -> {
+					final var tokenId = ++this.lastAssignedTokenId;
+					this.tokenIdToToken.add(_token);
+					return tokenId;
+				});
 			}
 
 			this.scopeToTokenIds.put(scope, tokens);

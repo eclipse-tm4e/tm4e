@@ -453,14 +453,12 @@ public class ToggleLineCommentHandler extends AbstractHandler {
 		final int selectionStartLine = document.getLineOfOffset(textSelectionStart);
 		final int selectionEndLine = document.getLineOfOffset(textSelectionEnd);
 		final int[] lineRange = { -1, -1 };
-		Set<Integer> lines = computeLines(new TextSelection(textSelectionStart, textSelectionEnd - textSelectionStart),
-				document);
-		lines = lines.stream().filter(l -> l >= selectionStartLine && l <= selectionEndLine && !TextUtils.isBlankLine(document, l))
-				.map(l -> {
+		computeLines(new TextSelection(textSelectionStart, textSelectionEnd - textSelectionStart), document).stream()
+				.filter(l -> l >= selectionStartLine && l <= selectionEndLine && !TextUtils.isBlankLine(document, l))
+				.forEach(l -> {
 					lineRange[0] = lineRange[0] == -1 || lineRange[0] > l ? l : lineRange[0];
 					lineRange[1] = lineRange[1] < l ? l : lineRange[1];
-					return l;
-				}).collect(Collectors.toSet());
+				});
 
 		final Set<ITypedRegion> comments = getBlockCommentParts(document, textSelectionStart,
 				textSelectionEnd - textSelectionStart, open, close);

@@ -48,8 +48,10 @@ public class Lexer {
 	}
 
 	private Tokens lex(String src) {
-		src = src.replaceAll("\r\n|\r", "\n").replaceAll("\t", "    ").replaceAll("\u00a0", " ").replaceAll("\u2424",
-				"\n");
+		src = src.replaceAll("\r\n|\r", "\n") //
+				.replace("\t", "    ") //
+				.replace("\u00a0", " ") //
+				.replace("\u2424", "\n");
 		return this.token(src, true);
 	}
 

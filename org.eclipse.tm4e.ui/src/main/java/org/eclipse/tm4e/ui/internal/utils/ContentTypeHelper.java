@@ -112,7 +112,7 @@ public final class ContentTypeHelper {
 			if (bufferContentType != null) {
 				contentTypes.add(bufferContentType);
 			}
-			if (buffer.isDirty()) {
+			if (buffer.isDirty() && buffer.getDocument() != null) {
 				// Buffer is dirty (content of the filesystem is not synch with
 				// the editor content), use IDocument content.
 				try (var input = new DocumentInputStream(buffer.getDocument())) {

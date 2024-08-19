@@ -1,71 +1,45 @@
 /*******************************************************************************
- * Copyright (c) 2005, 2008 IBM Corporation and others.
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * Copyright (c) 2024 Sebastian Thomschke and others.
+ * This program and the accompanying materials are made
+ * available under the terms of the Eclipse Public License 2.0
+ * which is available at https://www.eclipse.org/legal/epl-2.0/
+ *
+ * SPDX-License-Identifier: EPL-2.0
  *
  * Contributors:
- * IBM Corporation - initial API and implementation
- * QNX Software System
- * Sebastian Thomschke - implement read(byte[], int, int)
+ * Sebastian Thomschke - initial implementation
  *******************************************************************************/
 package org.eclipse.tm4e.ui.internal.utils;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.Objects;
+import java.nio.charset.Charset;
 
-import org.eclipse.jface.text.BadLocationException;
+import org.eclipse.core.filebuffers.FileBuffers;
+import org.eclipse.core.filebuffers.ITextFileBuffer;
+import org.eclipse.core.filebuffers.ITextFileBufferManager;
+import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.jface.text.IDocument;
+import org.eclipse.tm4e.ui.TMUIPlugin;
 
-/**
- * Input stream which reads from a document
- */
-final class DocumentInputStream extends InputStream {
+final class DocumentInputStream extends CharsInputStream {
 
-	private final IDocument doc;
-	private int pos = 0;
-
-	DocumentInputStream(final IDocument document) {
-		doc = document;
+	private static @Nullable Charset getCharset(final IDocument document) {
+		final ITextFileBufferManager bufferManager = FileBuffers.getTextFileBufferManager();
+		if (bufferManager == null)
+			return null;
+		final ITextFileBuffer buffer = bufferManager.getTextFileBuffer(document);
+		if (buffer == null)
+			return null;
+		try {
+			final String charsetName = buffer.getEncoding();
+			if (charsetName != null)
+				return Charset.forName(charsetName);
+		} catch (final Exception ex) {
+			TMUIPlugin.logError(ex);
+		}
+		return null;
 	}
 
-	@Override
-	public int read(final byte[] buff, final int buffOffset, final int len) throws IOException {
-		Objects.checkFromIndexSize(buffOffset, len, buff.length);
-
-		if (len == 0)
-			return 0;
-
-		final var docLen = doc.getLength();
-		if (pos >= docLen)
-			return -1;
-
-		var bytesRead = -1;
-		try {
-			buff[buffOffset] = (byte) doc.getChar(pos++);
-			bytesRead = 1;
-			while (bytesRead < len) {
-				if (pos >= docLen) {
-					break;
-				}
-				buff[buffOffset + bytesRead++] = (byte) doc.getChar(pos++);
-			}
-		} catch (final BadLocationException ex) {
-			// ignore
-		}
-		return bytesRead;
-	}
-
-	@Override
-	public int read() throws IOException {
-		try {
-			if (pos < doc.getLength())
-				return doc.getChar(pos++) & 0xFF;
-		} catch (final BadLocationException ex) {
-			// ignore
-		}
-		return -1;
+	DocumentInputStream(final IDocument doc) {
+		super(doc::getChar, doc::getLength, getCharset(doc));
 	}
 }

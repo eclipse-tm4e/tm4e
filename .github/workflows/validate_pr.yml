@@ -33,6 +33,7 @@ jobs:
             revert
             perf
             style
+            test
           scopes: |
             core
             deps

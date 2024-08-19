@@ -20,7 +20,7 @@ import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.jface.text.IDocument;
 import org.eclipse.tm4e.ui.TMUIPlugin;
 
-final class DocumentInputStream extends CharsInputStream {
+public final class DocumentInputStream extends CharsInputStream {
 
 	private static @Nullable Charset getCharset(final IDocument document) {
 		final ITextFileBufferManager bufferManager = FileBuffers.getTextFileBufferManager();
@@ -39,7 +39,7 @@ final class DocumentInputStream extends CharsInputStream {
 		return null;
 	}
 
-	DocumentInputStream(final IDocument doc) {
+	public DocumentInputStream(final IDocument doc) {
 		super(doc::getChar, doc::getLength, getCharset(doc));
 	}
 }

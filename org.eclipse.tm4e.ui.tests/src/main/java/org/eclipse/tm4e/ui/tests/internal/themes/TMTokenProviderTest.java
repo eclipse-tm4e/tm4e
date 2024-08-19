@@ -9,7 +9,7 @@
  * Contributors:
  * Sebastian Thomschke (Vegard IT) - initial implementation
  *******************************************************************************/
-package org.eclipse.tm4e.ui.internal.themes;
+package org.eclipse.tm4e.ui.tests.internal.themes;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -21,6 +21,7 @@ import org.eclipse.jface.text.TextAttribute;
 import org.eclipse.swt.SWT;
 import org.eclipse.tm4e.core.registry.IThemeSource.ContentType;
 import org.eclipse.tm4e.core.theme.RGB;
+import org.eclipse.tm4e.ui.internal.themes.TMThemeTokenProvider;
 import org.eclipse.tm4e.ui.themes.ColorManager;
 import org.junit.jupiter.api.Test;
 

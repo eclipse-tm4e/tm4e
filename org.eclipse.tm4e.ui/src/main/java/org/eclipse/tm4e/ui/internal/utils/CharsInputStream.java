@@ -26,11 +26,11 @@ import org.eclipse.jdt.annotation.Nullable;
 
 class CharsInputStream extends InputStream {
 	@FunctionalInterface
-	interface CharsSupplier {
+	public interface CharsSupplier {
 		char charAt(int index) throws Exception;
 	}
 
-	enum EncoderState {
+	private enum EncoderState {
 		ENCODING,
 		FLUSHING,
 		DONE
@@ -98,6 +98,10 @@ class CharsInputStream extends InputStream {
 	public int available() {
 		final int remaining = byteBuffer.remaining();
 		return remaining == 0 ? charsLength.getAsInt() - charIndex : remaining;
+	}
+
+	public Charset getCharset() {
+		return encoder.charset();
 	}
 
 	private boolean flushEncoder() throws IOException {

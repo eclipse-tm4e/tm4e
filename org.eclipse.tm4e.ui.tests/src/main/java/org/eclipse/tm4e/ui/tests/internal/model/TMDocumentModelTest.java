@@ -11,7 +11,7 @@
  * - Mickael Istria (Red Hat Inc.)
  * - Sebastian Thomschke (Vegard IT GmbH) - add test cases
  */
-package org.eclipse.tm4e.ui.internal.model;
+package org.eclipse.tm4e.ui.tests.internal.model;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -29,6 +29,7 @@ import org.eclipse.tm4e.core.model.ModelTokensChangedEvent;
 import org.eclipse.tm4e.core.model.Range;
 import org.eclipse.tm4e.core.registry.IGrammarSource;
 import org.eclipse.tm4e.core.registry.Registry;
+import org.eclipse.tm4e.ui.internal.model.TMDocumentModel;
 import org.eclipse.tm4e.ui.tests.support.TestUtils;
 import org.junit.function.ThrowingRunnable;
 import org.junit.jupiter.api.AfterEach;

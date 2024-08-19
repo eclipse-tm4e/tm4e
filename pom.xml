@@ -305,7 +305,7 @@
 						<!-- https://wiki.eclipse.org/Tycho/FAQ#How_to_use_SWTBot_or_some_UI_tool_for_testing.3F -->
 						<useUIHarness>true</useUIHarness>
 						<useUIThread>true</useUIThread>
-						<argLine>-Xms512m -Xmx512m ${tycho-surefire-plugin.vmargs}</argLine>
+						<argLine>-Xms512m -Xmx512m -Dfile.encoding=${project.build.sourceEncoding} ${tycho-surefire-plugin.vmargs}</argLine>
 					</configuration>
 				</plugin>
 				<plugin>

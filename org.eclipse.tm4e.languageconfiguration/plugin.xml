@@ -117,6 +117,11 @@
       <!-- register commands as entries in main window menu -->
       <menuContribution locationURI="menu:org.eclipse.ui.main.menu?after=edit">
          <menu id="org.eclipse.tm4e.source.menu" label="%LanguageConfiguration.menu.source.name" mnemonic="S">
+            <visibleWhen>
+               <with variable="activeEditor">
+                  <instanceof value="org.eclipse.ui.internal.genericeditor.ExtensionBasedTextEditor" />
+               </with>
+            </visibleWhen>
             <command commandId="org.eclipse.tm4e.languageconfiguration.toggleLineCommentCommand" >
                <visibleWhen>
                   <reference definitionId="org.eclipse.tm4e.languageconfiguration.hasLanguageConfiguration"/>

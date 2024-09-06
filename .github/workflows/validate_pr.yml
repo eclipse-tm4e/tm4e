@@ -41,6 +41,6 @@ jobs:
           requireScope: false
 
       - name: "Label PR"
-        uses: srvaroa/labeler@v1.10.1 # https://github.com/srvaroa/labeler
+        uses: srvaroa/labeler@v1.11.0 # https://github.com/srvaroa/labeler
         env:
           GITHUB_TOKEN: "${{ secrets.GITHUB_TOKEN }}"

@@ -165,14 +165,20 @@ public final class ThemePreferencePage extends AbstractPreferencePage {
 				final var themePath = Path.of(res);
 				final var themeFileName = themePath.getFileName().toString();
 				try {
-					final var rawTheme = RawThemeReader.readTheme(IThemeSource.fromFile(themePath));
-					final var rawThemeName = rawTheme.getName();
-					final String name = rawThemeName == null
-							? themeFileName.substring(0, themeFileName.lastIndexOf('.'))
-							: rawThemeName;
-					return new Theme(name, themePath.toAbsolutePath().toString(), name, false);
+					final String themeName;
+					if (themeFileName.endsWith(".css")) {
+						themeName = themeFileName.substring(0, themeFileName.lastIndexOf('.'));
+					} else {
+						final var rawTheme = RawThemeReader.readTheme(IThemeSource.fromFile(themePath));
+						final var rawThemeName = rawTheme.getName();
+						themeName = rawThemeName == null
+								? themeFileName.substring(0, themeFileName.lastIndexOf('.'))
+								: rawThemeName;
+					}
+					return new Theme(themeName, themePath.toAbsolutePath().toString(), themeName, false);
 				} catch (final Exception ex) {
 					MessageDialog.openError(getShell(), "Invalid theme file", "Failed to parse [" + themePath + "]: " + ex);
+					TMUIPlugin.logError(ex);
 					return null;
 				}
 

@@ -46,13 +46,9 @@ public final class OnigRegExp {
 	 */
 	private static final WarnCallback LOGGER_WARN_CALLBACK = message -> LOGGER.log(Level.WARNING, message);
 
-	@Nullable
-	private OnigString lastSearchString;
-
+	private @Nullable OnigString lastSearchString;
 	private int lastSearchPosition = -1;
-
-	@Nullable
-	private OnigResult lastSearchResult;
+	private @Nullable OnigResult lastSearchResult;
 
 	private final String pattern;
 	private final Regex regex;
@@ -70,23 +66,35 @@ public final class OnigRegExp {
 	 * @throws TMException if parsing fails
 	 */
 	public OnigRegExp(final String pattern, final boolean ignoreCase) {
-		this.pattern = rewritePatternIfRequired(pattern);
-		hasGAnchor = this.pattern.contains("\\G");
-		final byte[] patternBytes = this.pattern.getBytes(StandardCharsets.UTF_8);
+		hasGAnchor = pattern.contains("\\G");
+
+		Regex regex;
 		try {
-			int options = Option.CAPTURE_GROUP;
-			if (ignoreCase)
-				options |= Option.IGNORECASE;
-			regex = new Regex(patternBytes, 0, patternBytes.length, options, UTF8Encoding.INSTANCE, Syntax.DEFAULT,
-					LOGGER.isLoggable(Level.WARNING) ? LOGGER_WARN_CALLBACK : WarnCallback.NONE);
+			regex = parsePattern(pattern, ignoreCase);
 		} catch (final SyntaxException ex) {
-			throw new TMException("Parsing regex pattern \"" + this.pattern + "\" failed with " + ex, ex);
+			try {
+				regex = parsePattern(rewritePatternIfRequired(pattern), ignoreCase);
+			} catch (final SyntaxException unused) {
+				throw new TMException("Parsing regex pattern \"" + pattern + "\" failed with " + ex, ex);
+			}
 		}
+
+		this.pattern = pattern;
+		this.regex = regex;
+	}
+
+	private Regex parsePattern(final String pattern, final boolean ignoreCase) throws SyntaxException {
+		int options = Option.CAPTURE_GROUP;
+		if (ignoreCase)
+			options |= Option.IGNORECASE;
+		final byte[] patternBytes = pattern.getBytes(StandardCharsets.UTF_8);
+		return new Regex(patternBytes, 0, patternBytes.length, options, UTF8Encoding.INSTANCE, Syntax.DEFAULT,
+				LOGGER.isLoggable(Level.WARNING) ? LOGGER_WARN_CALLBACK : WarnCallback.NONE);
 	}
 
 	/**
 	 * Rewrites the given pattern to workaround limitations of the joni library which for example does not support
-	 * negative variable-length lookbehinds
+	 * negative variable-length look-behinds
 	 *
 	 * @see <a href="https://github.com/eclipse/tm4e/issues/677">github.com/eclipse/tm4e/issue/677</a>
 	 */
@@ -129,8 +137,7 @@ public final class OnigRegExp {
 		return lastSearchResult;
 	}
 
-	@Nullable
-	private OnigResult search(final byte[] data, final int startPosition, final int end) {
+	private @Nullable OnigResult search(final byte[] data, final int startPosition, final int end) {
 		final Matcher matcher = regex.matcher(data);
 		final int status = matcher.search(startPosition, end, Option.DEFAULT);
 		if (status != Matcher.FAILED) {

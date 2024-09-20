@@ -30,13 +30,15 @@
 .markup.changed { color: rgb(230, 219, 116); }
 .constant.numeric.line-number.find-in-files.match { color: rgb(174, 129, 255, 0.63); }
 .entity.name.filename.find-in-files { color: rgb(230, 219, 116); }
-.markup.quote { color: rgb(249, 38, 114); }
+.markup.quote { font-style: italic; color: rgb(249, 38, 114); }
 .markup.list { color: rgb(230, 219, 116); }
-.markup.bold { color: rgb(102, 217, 239); }
-.markup.italic { color: rgb(102, 217, 239); }
-.markup.inline.raw { color: rgb(253, 151, 31); }
-.markup.heading { color: rgb(166, 226, 46); }
+.markup.bold { font-weight: bold; color: rgb(102, 217, 239); }
+.markup.italic { font-style: italic; color: rgb(102, 217, 239); }
+.markup.raw { font-family: monospace; font-style: normal; color: rgb(253, 151, 31); }
+.markup.inline.raw { font-family: monospace; font-style: normal; color: rgb(253, 151, 31); }
+.markup.heading { font-weight: bold; color: rgb(166, 226, 46); }
 .markup.heading.setext { color: rgb(166, 226, 46); }
+.markup.strikethrough { text-decoration: line-through; }
 
 .editor { background-color: rgb(39, 40, 34); color: rgb(248,248,242); }
 .editor.lineHighlight { background-color: rgb(62, 61, 50); }

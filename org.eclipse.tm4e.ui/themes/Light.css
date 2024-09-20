@@ -93,7 +93,20 @@
 }
 
 .markup.inline.raw {
+	font-family: monospace;
+	font-style: normal;
 	color: rgb(128, 0, 0);
+}
+.markup.raw {
+	font-family: monospace;
+	font-style: normal;
+	color: rgb(128, 0, 0);
+}
+.markup.quote {
+	font-style: italic;
+}
+.markup.strikethrough {
+	text-decoration: line-through;
 }
 
 .meta.selector {

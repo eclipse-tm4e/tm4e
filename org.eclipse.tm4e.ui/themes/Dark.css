@@ -21,7 +21,9 @@
 .markup.changed { color: rgb(86, 156, 214); }
 .markup.punctuation.quote.beginning { color: rgb(96, 139, 78); }
 .markup.punctuation.list.beginning { color: rgb(103, 150, 230); }
-.markup.inline.raw { color: rgb(206, 145, 120); }
+.markup.raw { font-style: normal; color: rgb(206, 145, 120); }
+.markup.inline.raw { font-family: monospace; font-style: normal; color: rgb(206, 145, 120); }
+.markup.quote { font-style: italic; }
 .meta.selector { color: rgb(215, 186, 125); }
 .punctuation.definition.tag { color: rgb(128, 128, 128); }
 .meta.preprocessor { color: rgb(86, 156, 214); }

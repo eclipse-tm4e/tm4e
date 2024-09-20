@@ -34,12 +34,14 @@
 .support.type.exception { color: rgb(203, 75, 22); }
 .support.other.variable {  }
 .invalid {  }
-.markup.quote { color: rgb(133, 153, 0); }
+.markup.quote { font-style: italic; color: rgb(133, 153, 0); }
 .markup.list { color: rgb(181, 137, 0); }
-.markup.bold { color: rgb(211, 54, 130); }
-.markup.italic { color: rgb(211, 54, 130); }
-.markup.inline.raw { color: rgb(42, 161, 152); }
-.markup.heading { color: rgb(38, 139, 210); }
+.markup.bold { font-weight: bold; color: rgb(211, 54, 130); }
+.markup.italic { font-style: italic; color: rgb(211, 54, 130); }
+.markup.strikethrough { text-decoration: line-through; }
+.markup.inline.raw { font-family: monospace; font-style: normal; color: rgb(42, 161, 152); }
+.markup.raw { font-family: monospace; font-style: normal; color: rgb(42, 161, 152); }
+.markup.heading { font-weight: bold; color: rgb(38, 139, 210); }
 .markup.heading.setext { color: rgb(38, 139, 210); }
 
 .editor { background-color: rgb(255, 255, 255); color: rgb(0, 0, 0); }

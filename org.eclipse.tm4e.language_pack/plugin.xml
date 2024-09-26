@@ -920,6 +920,7 @@
   <!-- ======================================== -->
   <extension point="org.eclipse.tm4e.registry.grammars">
     <grammar scopeName="markdown.math.block" path="syntaxes/markdown-math/markdown.math.block.tmLanguage.json" />
+    <grammar scopeName="markdown.math.codeblock" path="syntaxes/markdown-math/markdown.math.codeblock.tmLanguage.json" />
     <grammar scopeName="markdown.math.inline" path="syntaxes/markdown-math/markdown.math.inline.tmLanguage.json" />
   </extension>
 
@@ -1266,7 +1267,7 @@
   <!-- ======================================== -->
   <extension point="org.eclipse.core.contenttype.contentTypes">
     <content-type id="org.eclipse.tm4e.language_pack.shellscript" name="Shell Script" base-type="org.eclipse.tm4e.language_pack.basetype" priority="low"
-                  file-extensions="Xsession,bash,bash_aliases,bash_login,bash_logout,bash_profile,bashrc,csh,cshrc,ebuild,fish,ksh,profile,sh,tcshrc,xprofile,xsession,xsessionrc,yash_profile,yashrc,zlogin,zlogout,zprofile,zsh,zsh-theme,zshenv,zshrc" file-names=".envrc,.hushlogin,APKBUILD,PKGBUILD,bashrc_Apple_Terminal,zlogin,zlogout,zprofile,zshenv,zshrc,zshrc_Apple_Terminal" file-patterns=".env.*" />
+                  file-extensions="Xsession,bash,bash_aliases,bash_login,bash_logout,bash_profile,bashrc,csh,cshrc,ebuild,eclass,fish,ksh,profile,sh,tcshrc,xprofile,xsession,xsessionrc,yash_profile,yashrc,zlogin,zlogout,zprofile,zsh,zsh-theme,zshenv,zshrc" file-names=".envrc,.hushlogin,APKBUILD,PKGBUILD,bashrc_Apple_Terminal,zlogin,zlogout,zprofile,zshenv,zshrc,zshrc_Apple_Terminal" file-patterns=".env.*" />
   </extension>
   <extension point="org.eclipse.tm4e.registry.grammars">
     <grammar scopeName="source.shell" path="syntaxes/shellscript/shellscript.tmLanguage.json" />
@@ -1282,10 +1283,10 @@
   </extension>
 
   <!-- ======================================== -->
-  <!-- sql/sql: SQL -->
+  <!-- sql/sql: MS SQL -->
   <!-- ======================================== -->
   <extension point="org.eclipse.core.contenttype.contentTypes">
-    <content-type id="org.eclipse.tm4e.language_pack.sql" name="SQL" base-type="org.eclipse.tm4e.language_pack.basetype" priority="low"
+    <content-type id="org.eclipse.tm4e.language_pack.sql" name="MS SQL" base-type="org.eclipse.tm4e.language_pack.basetype" priority="low"
                   file-extensions="dsql,sql" />
   </extension>
   <extension point="org.eclipse.tm4e.registry.grammars">
@@ -1298,7 +1299,7 @@
   </extension>
 
   <extension point="org.eclipse.tm4e.ui.snippets">
-    <snippet name="SQL Example" path="syntaxes/sql/sql.example.sql" scopeName="source.sql" />
+    <snippet name="MS SQL Example" path="syntaxes/sql/sql.example.sql" scopeName="source.sql" />
   </extension>
 
   <!-- ======================================== -->

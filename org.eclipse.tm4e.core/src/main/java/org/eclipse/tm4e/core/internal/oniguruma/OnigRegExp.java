@@ -106,10 +106,16 @@ public final class OnigRegExp {
 			return "(?<!\\.)\\s*" + pattern.substring(lookbehind1.length());
 		}
 
-		// e.g. used in markdown.math.inline.tmLanguage.json
+		// e.g. used in markdown.math.block.tmLanguage.json and tex.tmLanguage.json
 		final var lookbehind2 = "(?<=^\\s*)";
 		if (pattern.startsWith(lookbehind2)) {
 			return "(?<=^)\\s*" + pattern.substring(lookbehind2.length());
+		}
+
+		// e.g. used in carbon.tmLanguage.json
+		final var lookbehind3 = "(?<=\\s*\\.)";
+		if (pattern.startsWith(lookbehind3)) {
+			return "\\s*\\." + pattern.substring(lookbehind3.length());
 		}
 		return pattern;
 	}

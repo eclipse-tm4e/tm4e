@@ -64,10 +64,9 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        os: 
-        # https://github.com/actions/runner-images#available-images
+        os:  # https://github.com/actions/runner-images#available-images
         - ubuntu-latest
-        - macos-12 # Intel
+        - macos-13 # Intel
         - macos-14 # ARM
         - windows-latest
         target-platform:

@@ -12,7 +12,7 @@
 package org.eclipse.tm4e.ui.tests.internal.utils;
 
 import static java.nio.charset.StandardCharsets.UTF_8;
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
@@ -28,8 +28,8 @@ import org.eclipse.tm4e.ui.internal.utils.DocumentInputStream;
 import org.eclipse.ui.editors.text.FileDocumentProvider;
 import org.eclipse.ui.part.FileEditorInput;
 import org.eclipse.ui.texteditor.IDocumentProvider;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 class DocumentInputStreamTest {
 
@@ -44,7 +44,7 @@ class DocumentInputStreamTest {
 	private final IDocumentProvider documentProvider = new FileDocumentProvider();
 	private IDocument document;
 
-	@Before
+	@BeforeEach
 	public void setUp() throws CoreException {
 		final IProject p = ResourcesPlugin.getWorkspace().getRoot().getProject(getClass().getName() + System.currentTimeMillis());
 		p.create(null);

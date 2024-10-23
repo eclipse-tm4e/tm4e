@@ -28,8 +28,15 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.condition.DisabledIf;
 
+@DisabledIf("org.eclipse.tm4e.ui.tests.TMPresentationReconcilerTypeScriptTest#isDisabled")
 class TMPresentationReconcilerTypeScriptTest {
+
+	static boolean isDisabled() {
+		// TODO ignore these tests on GitHub Actions Windows runner because they are extremely slow (4-5min) for an unknown reason
+		return TestUtils.isGitHubActions() && System.getProperty("os.name").toLowerCase().contains("windows");
+	}
 
 	private IGrammar grammar;
 	private ITokenProvider theme;
@@ -37,18 +44,15 @@ class TMPresentationReconcilerTypeScriptTest {
 
 	@BeforeEach
 	void setup() throws Exception {
-		// TODO ignore these tests on GitHub Actions Windows runner because they are extremely slow (4-5min) for an unknown reason
-		org.junit.Assume.assumeFalse(TestUtils.isGitHubActions() && System.getProperty("os.name").toLowerCase().contains("windows"));
-
 		TestUtils.assertNoTM4EThreadsRunning();
 
 		grammar = new Registry().addGrammar(IGrammarSource.fromResource(getClass(), "/grammars/TypeScript.tmLanguage.json"));
-		theme =  TMUIPlugin.getThemeManager().getThemeById(ThemeIdConstants.SolarizedLight);
+		theme = TMUIPlugin.getThemeManager().getThemeById(ThemeIdConstants.SolarizedLight);
 	}
 
 	@AfterEach
 	void tearDown() throws InterruptedException {
-		if(editor != null)
+		if (editor != null)
 			editor.dispose();
 
 		TestUtils.assertNoTM4EThreadsRunning();

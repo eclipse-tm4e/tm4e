@@ -31,7 +31,6 @@ import org.eclipse.tm4e.core.registry.IGrammarSource;
 import org.eclipse.tm4e.core.registry.Registry;
 import org.eclipse.tm4e.ui.internal.model.TMDocumentModel;
 import org.eclipse.tm4e.ui.tests.support.TestUtils;
-import org.junit.function.ThrowingRunnable;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
@@ -41,6 +40,10 @@ import org.junit.jupiter.api.TestMethodOrder;
 
 @TestMethodOrder(MethodOrderer.MethodName.class)
 class TMDocumentModelTest {
+
+	 interface ThrowingRunnable {
+		 void run() throws Throwable;
+	}
 
 	private static final String LF = "\n";
 	private static IGrammar grammar;

@@ -16,7 +16,6 @@ Require-Bundle: org.eclipse.core.runtime,
  org.eclipse.ui.workbench,
  org.eclipse.ui.workbench.texteditor,
  org.eclipse.tm4e.languageconfiguration,
- org.eclipse.tm4e.ui,
- org.junit
+ org.eclipse.tm4e.ui
 Bundle-ActivationPolicy: lazy
 Import-Package: org.junit.jupiter.api

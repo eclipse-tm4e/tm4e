@@ -44,10 +44,10 @@ Latest builds, for testing, can be found at https://download.eclipse.org/tm4e/sn
 
 ### 🏗️ Build
 
-Prerequisite: Latest [Apache Maven](https://maven.apache.org/) release or Eclipse [m2e](https://www.eclipse.org/m2e/).
-
-- From the command line: run `mvn clean verify`
-- From within Eclipse : right-click on the tm4e root folder > Run As > Maven build
+- From the command line run:
+  - on Windows `mvnw clean verify`
+  - on Linux `./mvnw clean verify`
+- From within Eclipse with [M2E](https://www.eclipse.org/m2e/) installed: right-click on the tm4e root folder > Run As > Maven build
 
 #### Running the CI job locally:
 

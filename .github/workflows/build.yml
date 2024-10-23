@@ -160,16 +160,10 @@ jobs:
         key: ${{ runner.os }}-${{ runner.arch }}-repo-tycho-${{ hashFiles(format('target-platforms/{0}.target', matrix.target-platform)) }}
 
 
-    - name: "Install: Maven"
-      uses: stCarolas/setup-maven@v5  # https://github.com/stCarolas/setup-maven
-      with:
-        maven-version: 3.9.9
-
-
     - name: "Build with Maven 🔨"
       continue-on-error: ${{ matrix.target-platform == 'unstable' }}
       run: |
-        set -eu
+        set -euo pipefail
 
         MAVEN_OPTS="${MAVEN_OPTS:-}"
         if [[ "${{ runner.os }}" == "Windows" ]]; then
@@ -183,14 +177,14 @@ jobs:
         echo "MAVEN_OPTS: $MAVEN_OPTS"
 
         if [[ ${ACT:-} == "true" ]]; then # when running locally using nektos/act
-           maven_args="-Djgit.dirtyWorkingTree=warning"
+          maven_args="-Djgit.dirtyWorkingTree=warning"
         else
-           maven_args="--no-transfer-progress"
+          maven_args="--no-transfer-progress"
         fi
 
         # prevent "org.eclipse.swt.SWTError: No more handles [gtk_init_check() failed]" on Linux
         ${{ runner.os == 'Linux' && 'xvfb-run --auto-servernum --server-args="-screen 0 1600x900x24" \' || '' }}
-        mvn \
+        ./mvnw \
           --errors \
           --update-snapshots \
           --batch-mode \

@@ -113,7 +113,7 @@ Here are some projects that use tm4e:
 - **License**: TM4E is a community open-source project licensed under the [Eclipse Public License 2.0](LICENSE).
 - **Support**: You can ask (and answer!) questions in the [GitHub discussions](https://github.com/eclipse/tm4e/discussions). Report bugs, and request features using [GitHub issues](https://github.com/eclipse/tm4e/issues).
 - **Source Code**: This `github.com/eclipse/tm4e` repository is the reference repository to contribute to TM4E
-- **Build**: Builds can be performed with a simple `mvn clean verify`
+- **Build**: Builds can be performed with a simple `./mvnw clean verify`
 - **Continuous testing, integration and deployment** is performed by CI jobs at https://ci.eclipse.org/tm4e/ and https://github.com/eclipse/tm4e/actions
 - **Developers mailing-list**: Contributors are also expected to subscribe the [tm4e-dev mailing-list](https://dev.eclipse.org/mailman/listinfo/tm4e-dev).
 - **Becoming a committer**: as usual with Eclipse.org projects, anyone who's made significant contributions and who's upheld quality standards alongside good judgement and open-mindedness.

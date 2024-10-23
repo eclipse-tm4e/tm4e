@@ -88,12 +88,6 @@ jobs:
         key: ${{ runner.os }}-${{ runner.arch }}-repo-tycho-${{ hashFiles('target-platforms/oldest.target') }}
 
 
-    - name: "Install: Maven"
-      uses: stCarolas/setup-maven@v5  # https://github.com/stCarolas/setup-maven
-      with:
-        maven-version: 3.9.9
-
-
     - name: Dash License check  # see https://github.com/eclipse/dash-licenses
       run: |
         set -eu
@@ -119,7 +113,7 @@ jobs:
           dash_iplab_token_arg="-Ddash.iplab.token=$DASH_IPLAB_TOKEN"
         fi
 
-        (set -x; mvn \
+        (set -x; ./mvnw \
           --errors \
           --update-snapshots \
           --batch-mode \

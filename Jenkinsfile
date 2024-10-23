@@ -9,7 +9,6 @@ pipeline {
 	}
 
 	tools {
-		maven 'apache-maven-latest' // https://wiki.eclipse.org/Jenkins#Apache_Maven
 		jdk 'temurin-jdk17-latest'
 	}
 
@@ -33,14 +32,14 @@ pipeline {
 					script {
 						if (env.BRANCH_NAME == 'main') {
 							withCredentials([string(credentialsId: 'gpg-passphrase', variable: 'KEYRING_PASSPHRASE')]) {
-								sh '''mvn clean deploy -B \
+								sh '''./mvnw clean deploy -B \
 									-Dmaven.test.failure.ignore=true \
 									-Dsurefire.rerunFailingTestsCount=3 \
 									-Psign -Dgpg.passphrase="${KEYRING_PASSPHRASE}"
 								'''
 							}
 						} else {
-							sh '''mvn clean verify -B \
+							sh '''./mvnw clean verify -B \
 								-Dmaven.test.failure.ignore=true \
 								-Dsurefire.rerunFailingTestsCount=3
 							'''

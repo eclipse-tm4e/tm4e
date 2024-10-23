@@ -23,14 +23,18 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.SimpleFileVisitor;
 import java.nio.file.attribute.BasicFileAttributes;
+import java.util.Collection;
 import java.util.List;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import org.eclipse.jdt.annotation.NonNullByDefault;
+import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.tm4e.core.Data;
+import org.eclipse.tm4e.core.internal.grammar.raw.IRawRule;
 import org.eclipse.tm4e.core.internal.grammar.raw.RawGrammar;
 import org.eclipse.tm4e.core.internal.grammar.raw.RawGrammarReader;
+import org.eclipse.tm4e.core.internal.oniguruma.OnigRegExp;
 import org.eclipse.tm4e.core.internal.utils.ResourceUtils;
 import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Test;
@@ -197,6 +201,33 @@ class TMParserTest {
 		}
 	}
 
+	private void assertParseablePattern(final @Nullable String pattern) {
+		if (pattern == null)
+			return;
+		try {
+			assertNotNull(new OnigRegExp(pattern));
+		} catch (final RuntimeException ex) {
+			final var msg = ex.getMessage();
+			if (msg != null && msg.contains("invalid backref number/name")) {
+				// ignore
+			} else
+				throw ex;
+		}
+	}
+
+	private void assertParseablePatterns(final @Nullable Collection<IRawRule> patterns) {
+		if (patterns == null || patterns.isEmpty())
+			return;
+
+		for (final var rule : patterns) {
+			assertParseablePattern(rule.getBegin());
+			assertParseablePattern(rule.getEnd());
+			assertParseablePattern(rule.getMatch());
+			assertParseablePattern(rule.getWhile());
+			assertParseablePatterns(rule.getPatterns());
+		}
+	}
+
 	@Test
 	@NonNullByDefault({})
 	void testLanguagePackGrammars() throws IOException {
@@ -210,9 +241,12 @@ class TMParserTest {
 						final var grammar = TMParserJSON.INSTANCE.parse(input, RawGrammarReader.OBJECT_FACTORY);
 						count.incrementAndGet();
 						assertFalse(grammar.getScopeName().isBlank());
-						assertFalse(castNonNull(grammar.getPatterns()).isEmpty());
 						assertNotNull(grammar.getFileTypes());
 						assertNotNull(grammar.getRepository());
+
+						final var patterns = castNonNull(grammar.getPatterns());
+						assertFalse(patterns.isEmpty());
+						assertParseablePatterns(patterns);
 					} catch (final Exception ex) {
 						throw new RuntimeException(ex);
 					}

@@ -1,0 +1,69 @@
+# https://docs.github.com/en/actions/using-workflows/workflow-syntax-for-github-actions
+name: Bump Version
+
+on:
+  workflow_dispatch:
+    # https://github.blog/changelog/2020-07-06-github-actions-manual-triggers-with-workflow_dispatch/
+    inputs:
+      type:
+        description: Type
+        default: micro'
+        required: true
+        type: choice
+        options:
+          - major
+          - minor
+          - micro
+
+
+defaults:
+  run:
+    shell: bash
+
+
+jobs:
+
+  ###########################################################
+  bump-version:
+  ###########################################################
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: "Show: GitHub context"
+      env:
+        GITHUB_CONTEXT: ${{ toJSON(github) }}
+      run: echo $GITHUB_CONTEXT
+
+
+    - name: "Show: environment variables"
+      run: env | sort
+
+
+    - name: Git Checkout
+      uses: actions/checkout@v4  # https://github.com/actions/checkout
+      with:
+        fetch-depth: 0 # required to prevent tycho-p2-extras-plugin:compare-version-with-baseline potentially failing the build
+
+    - name: Bump Version
+      run: python bump-version.py ${{ github.event.inputs.type }}
+
+    - name: Configure Git
+      run: |
+        git config user.name "github-actions[bot]"
+        git config user.email "github-actions[bot]@users.noreply.github.com"
+    
+    - name: Commit changes
+      run: |
+        git add .
+
+        projectVersion=$(python -c "import xml.etree.ElementTree as ET; \
+        print(ET.parse(open('pom.xml')).getroot().find(  \
+        '{http://maven.apache.org/POM/4.0.0}version').text)")
+
+        git commit -m "set tm4e version to $projectVersion"
+
+    - name: Push changes
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      run: |
+        git push origin HEAD:${{ github.ref_name }}

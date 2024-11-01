@@ -4,7 +4,7 @@ Bundle-Name: %pluginName
 Bundle-Vendor: %providerName
 Bundle-Localization: plugin
 Bundle-SymbolicName: org.eclipse.tm4e.ui.tests;singleton:=true
-Bundle-Version: 0.14.0.qualifier
+Bundle-Version: 0.14.1.qualifier
 Require-Bundle: org.eclipse.jface.text,
  org.eclipse.core.filesystem,
  org.eclipse.core.resources,

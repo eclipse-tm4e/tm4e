@@ -27,7 +27,7 @@ final class RawCaptures extends PropertySettable.HashMap<IRawRule> implements IR
 		try {
 			return get(captureId);
 		} catch (final ClassCastException ex) {
-			// log ClassCastException with some context, to better troubleshoot issues like https://github.com/eclipse/tm4e/issues/754
+			// log ClassCastException with some context, to better troubleshoot issues like https://github.com/eclipse-tm4e/tm4e/issues/754
 			LOGGER.log(Level.ERROR, "Unexpected ClassCastException in RawCaptures.getCapture(\"" + captureId + "\")", ex);
 			throw ex;
 		}
@@ -44,7 +44,7 @@ final class RawCaptures extends PropertySettable.HashMap<IRawRule> implements IR
 			try {
 				action.accept(captureId, (IRawRule) rule);
 			} catch (final ClassCastException ex) {
-				// log ClassCastException with some context, to better troubleshoot issues like https://github.com/eclipse/tm4e/issues/754
+				// log ClassCastException with some context, to better troubleshoot issues like https://github.com/eclipse-tm4e/tm4e/issues/754
 				LOGGER.log(Level.ERROR, "Unexpected ClassCastException in RawCaptures.getCapture(\"" + captureId + "\")", ex);
 				throw ex;
 			}

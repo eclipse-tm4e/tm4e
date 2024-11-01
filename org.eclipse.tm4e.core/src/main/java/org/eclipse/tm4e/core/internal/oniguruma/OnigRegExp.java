@@ -96,7 +96,7 @@ public final class OnigRegExp {
 	 * Rewrites the given pattern to workaround limitations of the joni library which for example does not support
 	 * negative variable-length look-behinds
 	 *
-	 * @see <a href="https://github.com/eclipse/tm4e/issues/677">github.com/eclipse/tm4e/issue/677</a>
+	 * @see <a href="https://github.com/eclipse-tm4e/tm4e/issues/677">github.com/eclipse-tm4e/tm4e/issue/677</a>
 	 */
 	private String rewritePatternIfRequired(final String pattern) {
 

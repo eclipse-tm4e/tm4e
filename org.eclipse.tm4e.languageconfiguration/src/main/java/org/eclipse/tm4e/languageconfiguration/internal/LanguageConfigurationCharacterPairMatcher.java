@@ -127,7 +127,7 @@ public class LanguageConfigurationCharacterPairMatcher
 					final var bracketsChars = new char[surroundingBracketsChars.length()];
 					surroundingBracketsChars.getChars(0, surroundingBracketsChars.length(), bracketsChars, 0);
 					// TODO handle surroundingQuotesChars, DefaultCharacterPairMatcher cannot handle pairs correctly when open and close chars
-					//      are identically, see https://github.com/eclipse/tm4e/issues/470
+					//      are identically, see https://github.com/eclipse-tm4e/tm4e/issues/470
 					this.matcher = matcher = new DefaultCharacterPairMatcher(bracketsChars);
 				}
 			}

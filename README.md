@@ -1,8 +1,8 @@
 # Eclipse TM4E - TextMate and language-configuration support for Java and in Eclipse IDE
 
-[![GitHub Actions](https://github.com/eclipse/tm4e/actions/workflows/build.yml/badge.svg)](https://github.com/eclipse/tm4e/actions/workflows/build.yml)
+[![GitHub Actions](https://github.com/eclipse-tm4e/tm4e/actions/workflows/build.yml/badge.svg)](https://github.com/eclipse-tm4e/tm4e/actions/workflows/build.yml)
 [![Jenkins tests](https://img.shields.io/jenkins/tests?jobUrl=https%3A%2F%2Fci.eclipse.org%2Ftm4e%2Fjob%2FTM4E%2Fjob%2Fmain%2F&logo=jenkins&logoColor=white)](https://ci.eclipse.org/tm4e/job/TM4E/)
-[![License](https://img.shields.io/github/license/eclipse/tm4e.svg?color=blue)](LICENSE)
+[![License](https://img.shields.io/github/license/eclipse-tm4e/tm4e.svg?color=blue)](LICENSE)
 
 TM4E brings Java API to tokenize textual documents according to TextMate grammars with an Eclipse IDE client that can do syntax highlighting according to this tokenization; and Eclipse IDE client for VSCode [Language Configuration](https://code.visualstudio.com/api/references/contribution-points#contributes.languages) to support matching bracket, auto close, on enter support.
 
@@ -77,9 +77,9 @@ Then you can reference the dependency in your pom.xml like so:
 <a href="https://mickaelistria.github.io/redirctToEclipseIDECloneCommand/redirect.html"><img src="https://mickaelistria.github.io/redirctToEclipseIDECloneCommand/cloneToEclipseBadge.png" alt="Clone to Eclipse IDE"/></a>
 
 The following class and modules should be used as entry point provides:
- - [org.eclipse.tm4e.core](https://github.com/eclipse/tm4e/tree/main/org.eclipse.tm4e.core) provides the Java TextMate tokenizer. This project is a Java port of [vscode-textmate](https://github.com/Microsoft/vscode-textmate) written in TypeScript. This Java API can be used with any Java UI Toolkit (Swing, Eclipse, etc). See [Core](https://github.com/eclipse/tm4e/wiki/Core) section for more information.
- - [org.eclipse.tm4e.ui](https://github.com/eclipse/tm4e/tree/main/org.eclipse.tm4e.ui) provides the Eclipse **org.eclipse.jface.text.presentation.IPresentationReconciler** [TMPresentationReconciler](https://github.com/eclipse/tm4e/blob/main/org.eclipse.tm4e.ui/src/main/java/org/eclipse/tm4e/ui/text/TMPresentationReconciler.java) which is able to tokenize an editor content by using a given JSON, PList TextMate grammar and do syntax coloration. See [UI](https://github.com/eclipse/tm4e/wiki/UI) section for more information.
- - [org.eclipse.tm4e.languageconfiguration](https://github.com/eclipse/tm4e/tree/main/org.eclipse.tm4e.languageconfiguration) provides the VSCode [Language Configuration](https://code.visualstudio.com/api/references/contribution-points#contributes.languages) to support matching bracket, auto close, on enter support with a simple **language-configuration.json**.
+ - [org.eclipse.tm4e.core](https://github.com/eclipse-tm4e/tm4e/tree/main/org.eclipse.tm4e.core) provides the Java TextMate tokenizer. This project is a Java port of [vscode-textmate](https://github.com/Microsoft/vscode-textmate) written in TypeScript. This Java API can be used with any Java UI Toolkit (Swing, Eclipse, etc). See [Core](https://github.com/eclipse-tm4e/tm4e/wiki/Core) section for more information.
+ - [org.eclipse.tm4e.ui](https://github.com/eclipse-tm4e/tm4e/tree/main/org.eclipse.tm4e.ui) provides the Eclipse **org.eclipse.jface.text.presentation.IPresentationReconciler** [TMPresentationReconciler](https://github.com/eclipse-tm4e/tm4e/blob/main/org.eclipse.tm4e.ui/src/main/java/org/eclipse/tm4e/ui/text/TMPresentationReconciler.java) which is able to tokenize an editor content by using a given JSON, PList TextMate grammar and do syntax coloration. See [UI](https://github.com/eclipse-tm4e/tm4e/wiki/UI) section for more information.
+ - [org.eclipse.tm4e.languageconfiguration](https://github.com/eclipse-tm4e/tm4e/tree/main/org.eclipse.tm4e.languageconfiguration) provides the VSCode [Language Configuration](https://code.visualstudio.com/api/references/contribution-points#contributes.languages) to support matching bracket, auto close, on enter support with a simple **language-configuration.json**.
 
 An example with TypeScript:
 
@@ -111,9 +111,9 @@ Here are some projects that use tm4e:
 ## 👷 Get support and contribute
 
 - **License**: TM4E is a community open-source project licensed under the [Eclipse Public License 2.0](LICENSE).
-- **Support**: You can ask (and answer!) questions in the [GitHub discussions](https://github.com/eclipse/tm4e/discussions). Report bugs, and request features using [GitHub issues](https://github.com/eclipse/tm4e/issues).
-- **Source Code**: This `github.com/eclipse/tm4e` repository is the reference repository to contribute to TM4E
+- **Support**: You can ask (and answer!) questions in the [GitHub discussions](https://github.com/eclipse-tm4e/tm4e/discussions). Report bugs, and request features using [GitHub issues](https://github.com/eclipse-tm4e/tm4e/issues).
+- **Source Code**: This `github.com/eclipse-tm4e/tm4e` repository is the reference repository to contribute to TM4E
 - **Build**: Builds can be performed with a simple `./mvnw clean verify`
-- **Continuous testing, integration and deployment** is performed by CI jobs at https://ci.eclipse.org/tm4e/ and https://github.com/eclipse/tm4e/actions
+- **Continuous testing, integration and deployment** is performed by CI jobs at https://ci.eclipse.org/tm4e/ and https://github.com/eclipse-tm4e/tm4e/actions
 - **Developers mailing-list**: Contributors are also expected to subscribe the [tm4e-dev mailing-list](https://dev.eclipse.org/mailman/listinfo/tm4e-dev).
 - **Becoming a committer**: as usual with Eclipse.org projects, anyone who's made significant contributions and who's upheld quality standards alongside good judgement and open-mindedness.

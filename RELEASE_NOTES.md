@@ -1,23 +1,23 @@
 # Eclipse TM4E: Release notes
 
-> **IMPORTANT:** Releases and changelogs are now tracked via the [GitHub releases](https://github.com/eclipse/tm4e/releases) page. Older changelogs are listed below.
+> **IMPORTANT:** Releases and changelogs are now tracked via the [GitHub releases](https://github.com/eclipse-tm4e/tm4e/releases) page. Older changelogs are listed below.
 
 ## 0.8.0
 
 * 📅 Release Date: June 23th 2023
-* All changes: https://github.com/eclipse/tm4e/compare/0.7.1...0.8.0
+* All changes: https://github.com/eclipse-tm4e/tm4e/compare/0.7.1...0.8.0
 
 
 ## 0.7.1
 
 * 📅 Release Date: May 25th 2023
-* All changes: https://github.com/eclipse/tm4e/compare/0.7.0...0.7.1
+* All changes: https://github.com/eclipse-tm4e/tm4e/compare/0.7.0...0.7.1
 
 
 ## 0.7.0
 
 * 📅 Release Date: May 11th 2023
-* All changes: https://github.com/eclipse/tm4e/compare/0.6.3...0.7.0
+* All changes: https://github.com/eclipse-tm4e/tm4e/compare/0.6.3...0.7.0
 
 ### Fixed
 - On enter rule don't use the proper insert spaces / tab width when those settings are changed
@@ -34,7 +34,7 @@
 ## 0.6.3
 
 * 📅 Release Date: March 16th 2023
-* All changes: https://github.com/eclipse/tm4e/compare/0.6.2...0.6.3
+* All changes: https://github.com/eclipse-tm4e/tm4e/compare/0.6.2...0.6.3
 
 Many bugfixes and dependency updates.
 
@@ -42,14 +42,14 @@ Many bugfixes and dependency updates.
 ## 0.6.2
 
 * 📅 Release Date: November 26th 2022
-* All changes: https://github.com/eclipse/tm4e/compare/0.6.1...0.6.2
+* All changes: https://github.com/eclipse-tm4e/tm4e/compare/0.6.1...0.6.2
 
 Many bugfixes and dependency updates.
 
 ## 0.6.1
 
 * 📅 Release Date: September 14th 2022
-* All changes: https://github.com/eclipse/tm4e/compare/0.6.0...0.6.1
+* All changes: https://github.com/eclipse-tm4e/tm4e/compare/0.6.0...0.6.1
 
 #### Support for onEnterRules
 
@@ -58,7 +58,7 @@ The `onEnterRule` directive of language-configuration files is now honored, so n
 ## 0.6.0
 
 * 📅 Release Date: June 23th 2022
-* All changes: https://github.com/eclipse/tm4e/compare/0.4.5...0.6.0
+* All changes: https://github.com/eclipse-tm4e/tm4e/compare/0.4.5...0.6.0
 
 #### Move to Java 17
 
@@ -82,7 +82,7 @@ Toggling comment, auto-closing pairs... got improved so they now feel more natur
 ## 0.4.5
 
 * 📅 Release Date: May 11th 2022
-* All changes: https://github.com/eclipse/tm4e/compare/0.4.3...0.4.5
+* All changes: https://github.com/eclipse-tm4e/tm4e/compare/0.4.3...0.4.5
 * 0.4.4 release was skipped to align public and internal version numbers
 
 
@@ -93,7 +93,7 @@ Toggling comment, auto-closing pairs... got improved so they now feel more natur
 ## 0.4.3
 
 * 📅 Release Date: 19th November 2021
-* All changes: https://github.com/eclipse/tm4e/compare/0.4.2...0.4.3
+* All changes: https://github.com/eclipse-tm4e/tm4e/compare/0.4.2...0.4.3
 
 #### Support locations outside a local file system
 
@@ -115,14 +115,14 @@ By default, TM4E now decides of the best theme to use according to the backgroun
 ## 0.4.2
 
 * 📅 Release Date (tentative): 6th September 2021
-* All changes: https://github.com/eclipse/tm4e/compare/0.4.1...0.4.2
+* All changes: https://github.com/eclipse-tm4e/tm4e/compare/0.4.1...0.4.2
 
 No new feature, numerous bugfixes and code improvements.
 
 ## 0.4.1
 
 * 📅 Release Date: 27th August 2020
-* All changes: https://github.com/eclipse/tm4e/compare/0.4.0...0.4.1
+* All changes: https://github.com/eclipse-tm4e/tm4e/compare/0.4.0...0.4.1
 
 #### Users can add TextMate theme
 
@@ -131,7 +131,7 @@ It's not possible for users to add extra TextMate theme to use in their IDE via 
 ## 0.4.0
 
 * 📅 Release Date: 21st November 2019
-* All changes: https://github.com/eclipse/tm4e/compare/0.3.4...0.4.0
+* All changes: https://github.com/eclipse-tm4e/tm4e/compare/0.3.4...0.4.0
 
 #### Improve logging mechanism
 

@@ -41,7 +41,7 @@ public final class RawRepository extends PropertySettable.HashMap<IRawRule> impl
 		try {
 			return get(name);
 		} catch (final ClassCastException ex) {
-			// log ClassCastException with some context, to better troubleshoot issues like https://github.com/eclipse/tm4e/issues/754
+			// log ClassCastException with some context, to better troubleshoot issues like https://github.com/eclipse-tm4e/tm4e/issues/754
 			LOGGER.log(Level.ERROR, "Unexpected ClassCastException in RawRepository.getRule(\"" + name + "\")", ex);
 			throw ex;
 		}

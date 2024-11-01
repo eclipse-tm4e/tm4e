@@ -13,7 +13,7 @@
 		<maven.minimum.version>3.9.5</maven.minimum.version>
 		<tycho-version>4.0.9</tycho-version>
 		<sonar.jacoco.reportPath>../target/jacoco.exec</sonar.jacoco.reportPath>
-		<tycho.scmUrl>scm:git:https://github.com/eclipse/tm4e.git</tycho.scmUrl>
+		<tycho.scmUrl>scm:git:https://github.com/eclipse-tm4e/tm4e.git</tycho.scmUrl>
 		<tycho-surefire-plugin.vmargs></tycho-surefire-plugin.vmargs>
 		<jgit.dirtyWorkingTree>error</jgit.dirtyWorkingTree>
 		<tm4e.target-platform>oldest</tm4e.target-platform>
@@ -51,9 +51,9 @@
 	</modules>
 
 	<scm>
-		<url>https://github.com/eclipse/tm4e</url>
-		<connection>scm:git:https://github.com/eclipse/tm4e</connection>
-		<developerConnection>scm:git:https://github.com/eclipse/tm4e</developerConnection>
+		<url>https://github.com/eclipse-tm4e/tm4e</url>
+		<connection>scm:git:https://github.com/eclipse-tm4e/tm4e</connection>
+		<developerConnection>scm:git:https://github.com/eclipse-tm4e/tm4e</developerConnection>
 	</scm>
 
 	<dependencies>

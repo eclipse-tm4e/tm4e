@@ -9,7 +9,7 @@
  *
  * Contributors:
  * - Angelo Zerr <angelo.zerr@gmail.com> - initial API and implementation, see
- * https://github.com/eclipse/tm4e/blob/95c17ade86677f3e2fd32e76222f71adfce18371/org.eclipse.tm4e.core/src/main/java/org/eclipse/tm4e/core/internal/parser/PList.java
+ * https://github.com/eclipse-tm4e/tm4e/blob/95c17ade86677f3e2fd32e76222f71adfce18371/org.eclipse.tm4e.core/src/main/java/org/eclipse/tm4e/core/internal/parser/PList.java
  * - Sebastian Thomschke (Vegard IT) - major rewrite to support more configuration variants
  */
 package org.eclipse.tm4e.core.internal.parser;

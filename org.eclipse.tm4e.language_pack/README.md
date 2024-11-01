@@ -12,7 +12,7 @@ Syntax highlighting and more for about 40 programming languages and file formats
 [TextMate grammars](https://en.wikipedia.org/wiki/TextMate#Language_Grammars) and
 [language configurations](https://code.visualstudio.com/api/language-extensions/language-configuration-guide)
 taken from [Visual Studio Code](https://github.com/microsoft/vscode/tree/main/extensions) and
-provided as a plugin based on [Eclipse tm4e](https://github.com/eclipse/tm4e)
+provided as a plugin based on [Eclipse tm4e](https://github.com/eclipse-tm4e/tm4e)
 for the [Eclipse IDE](https://eclipseide.org).
 
 

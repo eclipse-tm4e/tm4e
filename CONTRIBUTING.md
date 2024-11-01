@@ -2,7 +2,7 @@
 
 Welcome to the Eclipse TM4E contributor land, and thanks in advance for your help in making Eclipse TM4E better and better!
 
-🏠 The official Eclipse TM4E Git repository is https://github.com/eclipse/tm4e.
+🏠 The official Eclipse TM4E Git repository is https://github.com/eclipse-tm4e/tm4e.
 
 
 ## ⚖️ Legal and Eclipse Foundation terms
@@ -98,7 +98,7 @@ Where
 
 ### ➕ Submit changes
 
-TM4E only accepts contributions via GitHub Pull Requests against https://github.com/eclipse/tm4e repository.
+TM4E only accepts contributions via GitHub Pull Requests against https://github.com/eclipse-tm4e/tm4e repository.
 
 Before sending us a pull request, please ensure that:
 

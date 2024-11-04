@@ -10,6 +10,7 @@ on:
     paths-ignore:
     - '**/*.md'
     - '.github/*.yml'
+    - '.github/workflows/codeql.yml'
     - '.github/workflows/licensecheck.yml'
     - '.github/workflows/validate_pr.yml'
     - '**/.project'

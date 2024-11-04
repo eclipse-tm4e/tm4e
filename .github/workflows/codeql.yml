@@ -1,0 +1,95 @@
+# https://docs.github.com/en/actions/using-workflows/workflow-syntax-for-github-actions
+name: CodeQL
+
+on:
+  push:
+    branches: [ "main" ]
+    paths-ignore:
+    - '**/*.md'
+    - '.github/*.yml'
+    - '.github/workflows/build.yml'
+    - '.github/workflows/bump-version.yml'
+    - '.github/workflows/licensecheck.yml'
+    - '.github/workflows/validate_pr.yml'
+    - '**/.project'
+    - '**/.settings/*.prefs'
+    - '.gitignore'
+    - '.actrc'
+    - 'Jenkinsfile'
+  pull_request:
+    branches: [ "main" ]
+    paths-ignore:
+    - '**/*.md'
+    - '.github/*.yml'
+    - '.github/workflows/build.yml'
+    - '.github/workflows/bump-version.yml'
+    - '.github/workflows/licensecheck.yml'
+    - '.github/workflows/validate_pr.yml'
+    - '**/.project'
+    - '**/.settings/*.prefs'
+    - '.gitignore'
+    - '.actrc'
+    - 'Jenkinsfile'
+  workflow_dispatch:
+    # https://github.blog/changelog/2020-07-06-github-actions-manual-triggers-with-workflow_dispatch/
+
+
+jobs:
+
+  ###########################################################
+  analyze:
+  ###########################################################
+
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+        # build-mode: https://github.com/github/codeql-action#build-modes
+        - language: java-kotlin
+          build-mode: none
+        - language: javascript-typescript
+          build-mode: none
+        - language: python
+          build-mode: none
+
+    name: Analyze (${{ matrix.language }})
+    runs-on: ubuntu-latest
+    permissions:
+      # required for all workflows
+      security-events: write
+
+      # required to fetch internal or private CodeQL packs
+      packages: read
+
+      # only required for workflows in private repositories
+      actions: read
+      contents: read
+
+    timeout-minutes: 15
+
+    steps:
+    - name: "Show: GitHub context"
+      env:
+        GITHUB_CONTEXT: ${{ toJSON(github) }}
+      run: echo $GITHUB_CONTEXT
+
+
+    - name: "Show: environment variables"
+      run: env | sort
+
+
+    - name: Git Checkout
+      uses: actions/checkout@v4  # https://github.com/actions/checkout
+
+
+    - name: Initialize CodeQL
+      uses: github/codeql-action/init@v3
+      with:
+        languages: ${{ matrix.language }}
+        build-mode: ${{ matrix.build-mode }}
+
+
+    - name: Perform CodeQL Analysis
+      uses: github/codeql-action/analyze@v3
+      with:
+        category: "/language:${{matrix.language}}"

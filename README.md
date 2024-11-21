@@ -109,7 +109,7 @@ Here are some projects that use tm4e:
 
 ## Documentation
 
-See [https://github.com/eclipse-tm4e/tm4e/blob/main/documentation/README.md](Further documentation) for additional information.
+See [Further documentation](https://github.com/eclipse-tm4e/tm4e/blob/main/documentation/README.md) for additional information.
 
 ## 👷 Get support and contribute
 

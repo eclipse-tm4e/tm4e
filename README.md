@@ -107,6 +107,9 @@ Here are some projects that use tm4e:
     - [typescript.java](https://github.com/angelozerr/typescript.java) - TypeScript IDE for Eclipse with JSDT & tsserver.
     - [Phaser Editor 2D](https://github.com/PhaserEditor2D/PhaserEditor) - an IDE for the creation of HTML5 games.
 
+## Documentation
+
+See [https://github.com/eclipse-tm4e/tm4e/blob/main/documentation/README.md](Further documentation) for additional information.
 
 ## 👷 Get support and contribute
 

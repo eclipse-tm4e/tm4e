@@ -53,10 +53,6 @@ defaults:
     shell: bash
 
 
-env:
-  JAVA_VERSION: 17
-
-
 jobs:
 
   ###########################################################
@@ -131,6 +127,11 @@ jobs:
         #     at org.eclipse.urischeme.internal.registration.RegistrationLinux.getSchemesInformation(RegistrationLinux.java:75)
         #     at org.eclipse.urischeme.AutoRegisterSchemeHandlersJob.run(AutoRegisterSchemeHandlersJob.java:85)
         sudo apt-get install --no-install-recommends -y xdg-utils
+
+
+    - name: "Set Java Version"
+      run: echo "JAVA_VERSION=$([[ '${{ matrix.target-platform }}' == 'oldest' ]] && echo 17 || echo 21)" >> $GITHUB_ENV
+
 
     - name: "Install: JDK ${{ env.JAVA_VERSION }} ☕"
       uses: actions/setup-java@v4  # https://github.com/actions/setup-java

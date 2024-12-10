@@ -117,6 +117,12 @@ public final class OnigRegExp {
 		if (pattern.startsWith(lookbehind3)) {
 			return "\\s*\\." + pattern.substring(lookbehind3.length());
 		}
+
+		// e.g. used in julia.tmLanguage.json
+		final var lookbehind4 = "(?<=\\S\\s+)";
+		if (pattern.startsWith(lookbehind4)) {
+			return "\\S\\s+" + pattern.substring(lookbehind4.length());
+		}
 		return pattern;
 	}
 

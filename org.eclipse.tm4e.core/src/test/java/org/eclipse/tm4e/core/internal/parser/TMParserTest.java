@@ -36,6 +36,8 @@ import org.eclipse.tm4e.core.internal.grammar.raw.RawGrammar;
 import org.eclipse.tm4e.core.internal.grammar.raw.RawGrammarReader;
 import org.eclipse.tm4e.core.internal.oniguruma.OnigRegExp;
 import org.eclipse.tm4e.core.internal.utils.ResourceUtils;
+import org.eclipse.tm4e.core.registry.IGrammarSource;
+import org.eclipse.tm4e.core.registry.Registry;
 import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
@@ -235,18 +237,28 @@ class TMParserTest {
 		Files.walkFileTree(Paths.get("../org.eclipse.tm4e.language_pack"), new SimpleFileVisitor<Path>() {
 			@Override
 			public FileVisitResult visitFile(final Path file, final BasicFileAttributes attrs) throws IOException {
-				if (file.getFileName().toString().endsWith("tmLanguage.json")) {
-					try (var input = Files.newBufferedReader(file)) {
+				final var fileName = file.getFileName().toString().toLowerCase();
+				if (fileName.endsWith("tmlanguage.yaml") || fileName.endsWith("tmlanguage.json") || fileName.endsWith("plist")
+						|| fileName.endsWith("tmlanguage")) {
+					try {
 						System.out.println("Parsing [" + file + "]...");
-						final var grammar = TMParserJSON.INSTANCE.parse(input, RawGrammarReader.OBJECT_FACTORY);
+						final var rawGrammar = RawGrammarReader.readGrammar(IGrammarSource.fromFile(file));
 						count.incrementAndGet();
-						assertFalse(grammar.getScopeName().isBlank());
-						assertNotNull(grammar.getFileTypes());
-						assertNotNull(grammar.getRepository());
+						assertFalse(rawGrammar.getScopeName().isBlank());
+						assertNotNull(rawGrammar.getFileTypes());
+						assertNotNull(rawGrammar.getRepository());
 
-						final var patterns = castNonNull(grammar.getPatterns());
+						final var patterns = castNonNull(rawGrammar.getPatterns());
 						assertFalse(patterns.isEmpty());
 						assertParseablePatterns(patterns);
+
+						final var reg = new Registry();
+						final var grammar = reg.addGrammar(IGrammarSource.fromFile(file));
+						assertEquals(grammar.getName(), rawGrammar.getName());
+						assertEquals(grammar.getScopeName(), rawGrammar.getScopeName());
+						assertEquals(grammar.getFileTypes(), rawGrammar.getFileTypes());
+						grammar.tokenizeLine("");
+
 					} catch (final Exception ex) {
 						throw new RuntimeException(ex);
 					}

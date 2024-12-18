@@ -15,16 +15,21 @@ import static org.eclipse.tm4e.core.registry.IGrammarSource.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.time.Duration;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
+import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 import org.eclipse.tm4e.core.Data;
 import org.eclipse.tm4e.core.internal.utils.ResourceUtils;
 import org.eclipse.tm4e.core.registry.IGrammarSource;
 import org.eclipse.tm4e.core.registry.Registry;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Test;
@@ -72,6 +77,36 @@ class GrammarTest {
 		"Token from 14 to 15 with scopes [source.js, meta.function.js, meta.decl.block.js, meta.brace.curly.js]" };
 
 	@Test
+	void testTokenizeConcurrent() throws Exception {
+		final var registry = new Registry();
+		final var grammar = registry.addGrammar(fromFile(Paths.get("../org.eclipse.tm4e.language_pack/syntaxes/xml/xml.tmLanguage.json")));
+		final String content = Files.readString(Paths.get("../org.eclipse.tm4e.language_pack/syntaxes/xml/xml.example.xml"));
+
+		final int numThreads = 4;
+		final int numIterations = 10;
+
+		final var executor = Executors.newFixedThreadPool(numThreads);
+		final Runnable tokenizationTask = () -> {
+			for (int i = 0; i < numIterations; i++) {
+				final var r = TokenizationUtils.tokenizeText(content, grammar);
+				assertTrue(r.count() > 10);
+			}
+		};
+
+		final List<Future<?>> futures = new ArrayList<>();
+		for (int i = 0; i < numThreads; i++) {
+			futures.add(executor.submit(tokenizationTask));
+		}
+
+		for (final Future<?> future : futures) {
+			future.get();
+		}
+
+		executor.shutdown();
+		executor.awaitTermination(1, TimeUnit.MINUTES);
+	}
+
+	@Test
 	void testTokenizeSingleLineExpression() throws Exception {
 		final var registry = new Registry();
 		final IGrammar grammar = registry.addGrammar(fromResource(Data.class, "JavaScript.tmLanguage"));
@@ -80,7 +115,7 @@ class GrammarTest {
 		for (int i = 0; i < lineTokens.getTokens().length; i++) {
 			final IToken token = lineTokens.getTokens()[i];
 			final String s = "Token from " + token.getStartIndex() + " to " + token.getEndIndex() + " with scopes " + token.getScopes();
-			Assertions.assertEquals(EXPECTED_SINGLE_LINE_TOKENS[i], s);
+			assertEquals(EXPECTED_SINGLE_LINE_TOKENS[i], s);
 		}
 	}
 
@@ -100,7 +135,7 @@ class GrammarTest {
 			for (i = 0; i < lineTokens.getTokens().length; i++) {
 				final IToken token = lineTokens.getTokens()[i];
 				final String s = "Token from " + token.getStartIndex() + " to " + token.getEndIndex() + " with scopes " + token.getScopes();
-				Assertions.assertEquals(EXPECTED_MULTI_LINE_TOKENS[i + j], s);
+				assertEquals(EXPECTED_MULTI_LINE_TOKENS[i + j], s);
 			}
 			j = i;
 		}
@@ -220,7 +255,7 @@ class GrammarTest {
 				for (int i = 0; i < lineTokens.getTokens().length; i++) {
 					tokenIndex++;
 					final var token = lineTokens.getTokens()[i];
-					Assertions.assertEquals(
+					assertEquals(
 							expectedTokens.get(tokenIndex),
 							"Token from " + token.getStartIndex() + " to " + token.getEndIndex() + " with scopes " + token.getScopes());
 				}

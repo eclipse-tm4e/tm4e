@@ -267,7 +267,7 @@ public final class Grammar implements IGrammar, IRuleFactoryHelper {
 	}
 
 	@SuppressWarnings("unchecked")
-	private <T> T _tokenize(
+	private synchronized <T> T _tokenize(
 			String lineText,
 			@Nullable StateStack prevState,
 			final boolean emitBinaryTokens,

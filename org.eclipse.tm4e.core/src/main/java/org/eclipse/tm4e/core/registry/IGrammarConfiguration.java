@@ -29,23 +29,19 @@ import org.eclipse.jdt.annotation.Nullable;
  */
 public interface IGrammarConfiguration {
 
-	@Nullable
-	default Map<String, Integer> getEmbeddedLanguages() {
+	default @Nullable Map<String, Integer> getEmbeddedLanguages() {
 		return null;
 	}
 
-	@Nullable
-	default Map<String, Integer> getTokenTypes() {
+	default @Nullable Map<String, Integer> getTokenTypes() {
 		return null;
 	}
 
-	@Nullable
-	default List<String> getBalancedBracketSelectors() {
+	default @Nullable List<String> getBalancedBracketSelectors() {
 		return null;
 	}
 
-	@Nullable
-	default List<String> getUnbalancedBracketSelectors() {
+	default @Nullable List<String> getUnbalancedBracketSelectors() {
 		return null;
 	}
 }

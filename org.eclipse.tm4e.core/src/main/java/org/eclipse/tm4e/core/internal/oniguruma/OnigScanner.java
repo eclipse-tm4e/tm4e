@@ -32,8 +32,7 @@ public final class OnigScanner {
 		searcher = new OnigSearcher(regexps);
 	}
 
-	@Nullable
-	public OnigScannerMatch findNextMatch(final OnigString source, final int startPosition) {
+	public @Nullable OnigScannerMatch findNextMatch(final OnigString source, final int startPosition) {
 		final OnigResult bestResult = searcher.search(source, startPosition);
 		if (bestResult != null) {
 			return new OnigScannerMatch(bestResult, source);

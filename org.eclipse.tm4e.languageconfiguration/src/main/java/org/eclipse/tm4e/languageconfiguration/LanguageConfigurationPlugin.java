@@ -50,7 +50,7 @@ public final class LanguageConfigurationPlugin extends AbstractUIPlugin {
 		log(new Status(IStatus.ERROR, PLUGIN_ID, null, ex));
 	}
 
-	public static void logError(final String message, @Nullable final Throwable ex) {
+	public static void logError(final String message, final @Nullable Throwable ex) {
 		log(new Status(IStatus.ERROR, PLUGIN_ID, message, ex));
 	}
 

@@ -38,9 +38,8 @@ public class RawRule extends PropertySettable.HashMap<@Nullable Object> implemen
 
 	private static final long serialVersionUID = 1L;
 
-	@Nullable
 	@Override
-	public RuleId getId() {
+	public @Nullable RuleId getId() {
 		return (RuleId) get(ID);
 	}
 
@@ -49,9 +48,8 @@ public class RawRule extends PropertySettable.HashMap<@Nullable Object> implemen
 		super.put(ID, id);
 	}
 
-	@Nullable
 	@Override
-	public String getName() {
+	public @Nullable String getName() {
 		return (String) get(NAME);
 	}
 
@@ -60,21 +58,18 @@ public class RawRule extends PropertySettable.HashMap<@Nullable Object> implemen
 		return this;
 	}
 
-	@Nullable
 	@Override
-	public String getContentName() {
+	public @Nullable String getContentName() {
 		return (String) get(CONTENT_NAME);
 	}
 
-	@Nullable
 	@Override
-	public String getMatch() {
+	public @Nullable String getMatch() {
 		return (String) get(MATCH);
 	}
 
-	@Nullable
 	@Override
-	public IRawCaptures getCaptures() {
+	public @Nullable IRawCaptures getCaptures() {
 		updateCaptures(CAPTURES);
 		return (IRawCaptures) get(CAPTURES);
 	}
@@ -92,60 +87,52 @@ public class RawRule extends PropertySettable.HashMap<@Nullable Object> implemen
 		}
 	}
 
-	@Nullable
 	@Override
-	public String getBegin() {
+	public @Nullable String getBegin() {
 		return (String) get(BEGIN);
 	}
 
-	@Nullable
 	@Override
-	public String getWhile() {
+	public @Nullable String getWhile() {
 		return (String) get(WHILE);
 	}
 
-	@Nullable
 	@Override
-	public String getInclude() {
+	public @Nullable String getInclude() {
 		return (String) get(INCLUDE);
 	}
 
-	public RawRule setInclude(@Nullable final String include) {
+	public RawRule setInclude(final @Nullable String include) {
 		super.put(INCLUDE, include);
 		return this;
 	}
 
-	@Nullable
 	@Override
-	public IRawCaptures getBeginCaptures() {
+	public @Nullable IRawCaptures getBeginCaptures() {
 		updateCaptures(BEGIN_CAPTURES);
 		return (IRawCaptures) get(BEGIN_CAPTURES);
 	}
 
-	@Nullable
 	@Override
-	public String getEnd() {
+	public @Nullable String getEnd() {
 		return (String) get(END);
 	}
 
-	@Nullable
 	@Override
-	public IRawCaptures getEndCaptures() {
+	public @Nullable IRawCaptures getEndCaptures() {
 		updateCaptures(END_CAPTURES);
 		return (IRawCaptures) get(END_CAPTURES);
 	}
 
-	@Nullable
 	@Override
-	public IRawCaptures getWhileCaptures() {
+	public @Nullable IRawCaptures getWhileCaptures() {
 		updateCaptures(WHILE_CAPTURES);
 		return (IRawCaptures) get(WHILE_CAPTURES);
 	}
 
-	@Nullable
 	@Override
 	@SuppressWarnings("unchecked")
-	public Collection<IRawRule> getPatterns() {
+	public @Nullable Collection<IRawRule> getPatterns() {
 		return (Collection<IRawRule>) get(PATTERNS);
 	}
 
@@ -154,9 +141,8 @@ public class RawRule extends PropertySettable.HashMap<@Nullable Object> implemen
 		return this;
 	}
 
-	@Nullable
 	@Override
-	public IRawRepository getRepository() {
+	public @Nullable IRawRepository getRepository() {
 		return (IRawRepository) get(REPOSITORY);
 	}
 

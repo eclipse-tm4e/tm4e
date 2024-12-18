@@ -47,8 +47,7 @@ public class TMUIPlugin extends AbstractUIPlugin {
 	 *
 	 * @return the shared instance
 	 */
-	@Nullable
-	public static TMUIPlugin getDefault() {
+	public static @Nullable TMUIPlugin getDefault() {
 		return plugin;
 	}
 
@@ -114,7 +113,7 @@ public class TMUIPlugin extends AbstractUIPlugin {
 			tm4eCoreLogger.setLevel(Level.FINEST);
 			tm4eCoreLogger.addHandler(new Handler() {
 				@Override
-				public void publish(@Nullable final LogRecord entry) {
+				public void publish(final @Nullable LogRecord entry) {
 					if (entry == null)
 						return;
 

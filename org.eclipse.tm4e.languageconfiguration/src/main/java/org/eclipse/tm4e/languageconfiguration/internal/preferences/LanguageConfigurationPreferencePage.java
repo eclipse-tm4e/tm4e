@@ -101,7 +101,7 @@ public final class LanguageConfigurationPreferencePage extends AbstractPreferenc
 					}
 
 					@Override
-					protected Object[] getElements(@Nullable final Object input) {
+					protected Object[] getElements(final @Nullable Object input) {
 						if (input instanceof final ILanguageConfigurationRegistryManager manager)
 							return manager.getDefinitions();
 						return super.getElements(input);

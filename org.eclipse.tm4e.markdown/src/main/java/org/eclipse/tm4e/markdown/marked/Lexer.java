@@ -27,7 +27,7 @@ public class Lexer {
 	private final Tokens tokens;
 	private final Options options;
 
-	public Lexer(@Nullable final Options options) {
+	public Lexer(final @Nullable Options options) {
 		this.tokens = new Tokens();
 		this.options = options != null ? options : Options.DEFAULTS;
 
@@ -42,7 +42,7 @@ public class Lexer {
 		}
 	}
 
-	public static Tokens lex(final String src, @Nullable final Options options) {
+	public static Tokens lex(final String src, final @Nullable Options options) {
 		final var lexer = new Lexer(options);
 		return lexer.lex(src);
 	}
@@ -59,7 +59,7 @@ public class Lexer {
 		return token(src, top, null);
 	}
 
-	private Tokens token(String src, final boolean top, @Nullable final Object bq) {
+	private Tokens token(String src, final boolean top, final @Nullable Object bq) {
 		src = src.replaceAll("^ +$", "");
 		Matcher cap;
 		while (!StringUtils.isNullOrEmpty(src)) {

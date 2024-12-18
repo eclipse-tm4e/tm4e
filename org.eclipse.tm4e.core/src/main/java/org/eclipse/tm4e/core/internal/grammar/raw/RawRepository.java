@@ -36,8 +36,7 @@ public final class RawRepository extends PropertySettable.HashMap<IRawRule> impl
 	}
 
 	@Override
-	@Nullable
-	public IRawRule getRule(final String name) {
+	public @Nullable IRawRule getRule(final String name) {
 		try {
 			return get(name);
 		} catch (final ClassCastException ex) {

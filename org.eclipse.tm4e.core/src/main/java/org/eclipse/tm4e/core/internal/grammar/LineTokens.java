@@ -105,13 +105,12 @@ final class LineTokens {
 
 	private final List<TokenTypeMatcher> _tokenTypeOverrides;
 
-	@Nullable
-	private final BalancedBracketSelectors balancedBracketSelectors;
+	private final @Nullable BalancedBracketSelectors balancedBracketSelectors;
 
 	LineTokens(final boolean emitBinaryTokens,
 			final String lineText,
 			final List<TokenTypeMatcher> tokenTypeOverrides,
-			@Nullable final BalancedBracketSelectors balancedBracketSelectors) {
+			final @Nullable BalancedBracketSelectors balancedBracketSelectors) {
 
 		this._emitBinaryTokens = emitBinaryTokens;
 		this._tokenTypeOverrides = tokenTypeOverrides;
@@ -130,7 +129,7 @@ final class LineTokens {
 		this.produceFromScopes(stack.contentNameScopesList, endIndex);
 	}
 
-	void produceFromScopes(@Nullable final AttributedScopeStack scopesList, final int endIndex) {
+	void produceFromScopes(final @Nullable AttributedScopeStack scopesList, final int endIndex) {
 		if (this._lastTokenEndIndex >= endIndex) {
 			return;
 		}

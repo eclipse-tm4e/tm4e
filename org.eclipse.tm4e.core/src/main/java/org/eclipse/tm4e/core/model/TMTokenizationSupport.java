@@ -68,15 +68,15 @@ public class TMTokenizationSupport implements ITokenizationSupport {
 	}
 
 	@Override
-	public TokenizationResult tokenize(final String line, @Nullable final IStateStack state) {
+	public TokenizationResult tokenize(final String line, final @Nullable IStateStack state) {
 		return tokenize(line, state, null, null);
 	}
 
 	@Override
 	public TokenizationResult tokenize(final String line,
-			@Nullable final IStateStack state,
-			@Nullable final Integer offsetDeltaOrNull,
-			@Nullable final Duration timeLimit) {
+			final @Nullable IStateStack state,
+			final @Nullable Integer offsetDeltaOrNull,
+			final @Nullable Duration timeLimit) {
 
 		final int offsetDelta = offsetDeltaOrNull == null ? 0 : offsetDeltaOrNull;
 		final var tokenizationResult = _grammar.tokenizeLine(line, state, timeLimit);

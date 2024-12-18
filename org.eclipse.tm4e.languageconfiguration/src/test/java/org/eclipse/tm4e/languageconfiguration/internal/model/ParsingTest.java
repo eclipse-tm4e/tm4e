@@ -28,8 +28,7 @@ import org.junit.jupiter.api.Test;
 
 class ParsingTest {
 
-	@Nullable
-	private LanguageConfiguration loadLanguageConfiguration(final String path) throws IOException {
+	private @Nullable LanguageConfiguration loadLanguageConfiguration(final String path) throws IOException {
 		try (InputStream is = getClass().getResourceAsStream(path)) {
 			assertNotNull(is);
 			return LanguageConfiguration.load(new InputStreamReader(is));

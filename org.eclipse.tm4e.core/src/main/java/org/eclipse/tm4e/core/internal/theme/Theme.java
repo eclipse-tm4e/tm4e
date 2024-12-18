@@ -40,7 +40,7 @@ import org.eclipse.tm4e.core.internal.utils.StringUtils;
  */
 public final class Theme {
 
-	public static Theme createFromRawTheme(@Nullable final IRawTheme source, @Nullable final List<String> colorMap) {
+	public static Theme createFromRawTheme(final @Nullable IRawTheme source, final @Nullable List<String> colorMap) {
 		final var theme = createFromParsedTheme(parseTheme(source), colorMap);
 
 		// custom tm4e code, not from upstream
@@ -51,7 +51,7 @@ public final class Theme {
 		return theme;
 	}
 
-	public static Theme createFromParsedTheme(final List<ParsedThemeRule> source, @Nullable final List<String> colorMap) {
+	public static Theme createFromParsedTheme(final List<ParsedThemeRule> source, final @Nullable List<String> colorMap) {
 		return resolveParsedThemeRules(source, colorMap);
 	}
 
@@ -80,7 +80,7 @@ public final class Theme {
 		return editorColors;
 	}
 
-	public @Nullable StyleAttributes match(@Nullable final ScopeStack scopePath) {
+	public @Nullable StyleAttributes match(final @Nullable ScopeStack scopePath) {
 		if (scopePath == null) {
 			return this._defaults;
 		}
@@ -150,7 +150,7 @@ public final class Theme {
 	/**
 	 * Parse a raw theme into rules.
 	 */
-	public static List<ParsedThemeRule> parseTheme(@Nullable final IRawTheme source) {
+	public static List<ParsedThemeRule> parseTheme(final @Nullable IRawTheme source) {
 		if (source == null)
 			return Collections.emptyList();
 
@@ -252,7 +252,7 @@ public final class Theme {
 	/**
 	 * Resolve rules (i.e. inheritance).
 	 */
-	public static Theme resolveParsedThemeRules(final List<ParsedThemeRule> _parsedThemeRules, @Nullable final List<String> _colorMap) {
+	public static Theme resolveParsedThemeRules(final List<ParsedThemeRule> _parsedThemeRules, final @Nullable List<String> _colorMap) {
 
 		// copy the list since we cannot be sure the given list is mutable
 		final var parsedThemeRules = new ArrayList<>(_parsedThemeRules);
@@ -305,7 +305,7 @@ public final class Theme {
 	}
 
 	@Override
-	public boolean equals(@Nullable final Object obj) {
+	public boolean equals(final @Nullable Object obj) {
 		if (this == obj)
 			return true;
 		if (obj instanceof final Theme other)

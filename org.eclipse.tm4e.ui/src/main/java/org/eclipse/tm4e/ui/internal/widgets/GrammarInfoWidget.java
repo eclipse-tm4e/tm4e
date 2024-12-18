@@ -71,7 +71,7 @@ public final class GrammarInfoWidget extends Composite {
 		fileTypesText.setLayoutData(GridDataFactory.fillDefaults().hint(100, SWT.DEFAULT).create());
 	}
 
-	public void refresh(@Nullable final IGrammar grammar) {
+	public void refresh(final @Nullable IGrammar grammar) {
 		if (grammar == null) {
 			nameText.setText("");
 			scopeNameText.setText("");

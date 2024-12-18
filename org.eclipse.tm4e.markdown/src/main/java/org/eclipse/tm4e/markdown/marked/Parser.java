@@ -24,16 +24,15 @@ public class Parser {
 	private final Options options;
 	private final IRenderer renderer;
 
-	@Nullable
-	private Token token;
+	private @Nullable Token token;
 
-	public Parser(@Nullable final Options options, @Nullable final IRenderer renderer) {
+	public Parser(final @Nullable Options options, final @Nullable IRenderer renderer) {
 		this.options = options != null ? options : Options.DEFAULTS;
 		this.renderer = renderer != null ? renderer : new HTMLRenderer();
 	}
 
-	public static IRenderer parse(final Tokens src, @Nullable final Options options,
-			@Nullable final IRenderer renderer) {
+	public static IRenderer parse(final Tokens src, final @Nullable Options options,
+			final @Nullable IRenderer renderer) {
 		final var parser = new Parser(options, renderer);
 		return parser.parse(src);
 	}

@@ -25,7 +25,7 @@ public final class TMPropertyTester extends PropertyTester {
 	private static final String CAN_SUPPORT_TEXT_MATE = "canSupportTextMate";
 
 	@Override
-	public boolean test(@Nullable final Object receiver, final String property, final Object[] args, @Nullable final Object expectedValue) {
+	public boolean test(final @Nullable Object receiver, final String property, final Object[] args, final @Nullable Object expectedValue) {
 		if (CAN_SUPPORT_TEXT_MATE.equals(property) && receiver instanceof final IEditorPart editorPart) {
 			final var reconciler = TMPresentationReconciler.getTMPresentationReconciler(editorPart);
 			return reconciler != null && reconciler.isEnabled();

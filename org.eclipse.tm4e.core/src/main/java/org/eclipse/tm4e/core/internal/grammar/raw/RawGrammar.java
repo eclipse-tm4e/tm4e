@@ -108,7 +108,7 @@ public final class RawGrammar extends PropertySettable.HashMap<@Nullable Object>
 	}
 
 	@Override
-	public @Nullable Object put(final String key, @Nullable final Object value) {
+	public @Nullable Object put(final String key, final @Nullable Object value) {
 		if (FILE_TYPES.equals(key))
 			fileTypes = null;
 

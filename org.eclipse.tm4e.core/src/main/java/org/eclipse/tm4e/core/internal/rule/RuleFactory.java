@@ -41,8 +41,8 @@ public final class RuleFactory {
 
 	private static final Logger LOGGER = System.getLogger(RuleFactory.class.getName());
 
-	private static CaptureRule createCaptureRule(final IRuleFactoryHelper helper, @Nullable final String name,
-			@Nullable final String contentName, final RuleId retokenizeCapturedWithRuleId) {
+	private static CaptureRule createCaptureRule(final IRuleFactoryHelper helper, final @Nullable String name,
+			final @Nullable String contentName, final RuleId retokenizeCapturedWithRuleId) {
 		return helper.registerRule(id -> new CaptureRule(id, name, contentName, retokenizeCapturedWithRuleId));
 	}
 
@@ -102,7 +102,7 @@ public final class RuleFactory {
 		return castNonNull(desc.getId());
 	}
 
-	private static List<@Nullable CaptureRule> _compileCaptures(@Nullable final IRawCaptures captures, final IRuleFactoryHelper helper,
+	private static List<@Nullable CaptureRule> _compileCaptures(final @Nullable IRawCaptures captures, final IRuleFactoryHelper helper,
 			final IRawRepository repository) {
 		if (captures == null) {
 			return Collections.emptyList();
@@ -142,7 +142,7 @@ public final class RuleFactory {
 		}
 	}
 
-	private static CompilePatternsResult _compilePatterns(@Nullable final Collection<IRawRule> patterns, final IRuleFactoryHelper helper,
+	private static CompilePatternsResult _compilePatterns(final @Nullable Collection<IRawRule> patterns, final IRuleFactoryHelper helper,
 			final IRawRepository repository) {
 		if (patterns == null) {
 			return new CompilePatternsResult(new RuleId[0], false);
@@ -182,8 +182,7 @@ public final class RuleFactory {
 
 						if (externalGrammar != null) {
 							final var externalGrammarRepo = externalGrammar.getRepository();
-							@Nullable
-							final String externalGrammarInclude = reference.kind == IncludeReference.Kind.TopLevelRepositoryReference
+							final @Nullable String externalGrammarInclude = reference.kind == IncludeReference.Kind.TopLevelRepositoryReference
 									? reference.ruleName
 									: null;
 							if (externalGrammarInclude != null) {

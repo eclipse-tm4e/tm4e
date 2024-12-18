@@ -43,7 +43,7 @@ public final class TMScope implements ITMScope {
 		qualifiedName = pluginId == null ? scopeName : scopeName + CONTRIBUTOR_SEPARATOR + pluginId;
 	}
 
-	private TMScope(final String scopeName, @Nullable final String pluginId, final String qualifiedName) {
+	private TMScope(final String scopeName, final @Nullable String pluginId, final String qualifiedName) {
 		this.name = scopeName;
 		this.pluginId = pluginId;
 		this.qualifiedName = qualifiedName;

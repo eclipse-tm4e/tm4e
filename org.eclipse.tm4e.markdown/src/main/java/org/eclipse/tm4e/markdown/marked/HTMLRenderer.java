@@ -33,7 +33,7 @@ public class HTMLRenderer implements IRenderer {
 	}
 
 	@Override
-	public void code(final String code, @Nullable final String lang, final boolean escaped) {
+	public void code(final String code, final @Nullable String lang, final boolean escaped) {
 		if (lang == null) {
 			html.append("<pre><code>");
 			html.append(escaped ? code : htmlEscape(code, true));

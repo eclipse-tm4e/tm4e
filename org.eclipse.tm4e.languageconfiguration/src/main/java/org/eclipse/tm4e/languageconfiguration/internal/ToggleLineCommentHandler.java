@@ -47,12 +47,12 @@ public class ToggleLineCommentHandler extends AbstractHandler {
 	public static final String ADD_BLOCK_COMMENT_COMMAND_ID = "org.eclipse.tm4e.languageconfiguration.addBlockCommentCommand";
 	public static final String REMOVE_BLOCK_COMMENT_COMMAND_ID = "org.eclipse.tm4e.languageconfiguration.removeBlockCommentCommand";
 
-	private static <T> @Nullable T adapt(@Nullable final Object sourceObject, final Class<T> adapter) {
+	private static <T> @Nullable T adapt(final @Nullable Object sourceObject, final Class<T> adapter) {
 		return Adapters.adapt(sourceObject, adapter);
 	}
 
 	@Override
-	public @Nullable Object execute(@Nullable final ExecutionEvent event) throws ExecutionException {
+	public @Nullable Object execute(final @Nullable ExecutionEvent event) throws ExecutionException {
 		if (event == null) {
 			return null;
 		}

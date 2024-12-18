@@ -86,8 +86,7 @@ public final class Registry {
 	 * Load the grammar for `scopeName` and all referenced included grammars asynchronously.
 	 * Please do not use language id 0.
 	 */
-	@Nullable
-	public IGrammar loadGrammarWithEmbeddedLanguages(
+	public @Nullable IGrammar loadGrammarWithEmbeddedLanguages(
 			final String initialScopeName,
 			final int initialLanguage,
 			final Map<String, Integer> embeddedLanguages) {
@@ -104,8 +103,7 @@ public final class Registry {
 	 * Load the grammar for `scopeName` and all referenced included grammars asynchronously.
 	 * Please do not use language id 0.
 	 */
-	@Nullable
-	public IGrammar loadGrammarWithConfiguration(
+	public @Nullable IGrammar loadGrammarWithConfiguration(
 			final String initialScopeName,
 			final int initialLanguage,
 			final IGrammarConfiguration configuration) {
@@ -122,18 +120,16 @@ public final class Registry {
 	/**
 	 * Load the grammar for `scopeName` and all referenced included grammars.
 	 */
-	@Nullable
-	public IGrammar loadGrammar(final String initialScopeName) {
+	public @Nullable IGrammar loadGrammar(final String initialScopeName) {
 		return this._loadGrammar(initialScopeName, 0, null, null, null);
 	}
 
-	@Nullable
-	private IGrammar _loadGrammar(
+	private @Nullable IGrammar _loadGrammar(
 			final String initialScopeName,
 			final int initialLanguage,
-			@Nullable final Map<String, Integer> embeddedLanguages,
-			@Nullable final Map<String, Integer> tokenTypes,
-			@Nullable final BalancedBracketSelectors balancedBracketSelectors) {
+			final @Nullable Map<String, Integer> embeddedLanguages,
+			final @Nullable Map<String, Integer> tokenTypes,
+			final @Nullable BalancedBracketSelectors balancedBracketSelectors) {
 
 		if (!_loadSingleGrammar(initialScopeName))
 			return null;
@@ -189,9 +185,9 @@ public final class Registry {
 
 	public IGrammar addGrammar(
 			final IGrammarSource source,
-			@Nullable final List<String> injections,
-			@Nullable final Integer initialLanguage,
-			@Nullable final Map<String, Integer> embeddedLanguages) throws TMException {
+			final @Nullable List<String> injections,
+			final @Nullable Integer initialLanguage,
+			final @Nullable Map<String, Integer> embeddedLanguages) throws TMException {
 		try {
 			final var rawGrammar = RawGrammarReader.readGrammar(source);
 			this._syncRegistry.addGrammar(rawGrammar,
@@ -208,21 +204,19 @@ public final class Registry {
 	/**
 	 * Lookup a grammar. The grammar must first be registered via `loadGrammar` or `addGrammar`.
 	 */
-	@Nullable
-	public IGrammar grammarForScopeName(final String scopeName) {
+	public @Nullable IGrammar grammarForScopeName(final String scopeName) {
 		return _grammarForScopeName(scopeName, null, null, null, null);
 	}
 
 	/**
 	 * Get the grammar for `scopeName`. The grammar must first be created via `loadGrammar` or `addGrammar`.
 	 */
-	@Nullable
-	private IGrammar _grammarForScopeName(
+	private @Nullable IGrammar _grammarForScopeName(
 			final String scopeName,
-			@Nullable final Integer initialLanguage,
-			@Nullable final Map<String, Integer> embeddedLanguages,
-			@Nullable final Map<String, Integer> tokenTypes,
-			@Nullable final BalancedBracketSelectors balancedBracketSelectors) {
+			final @Nullable Integer initialLanguage,
+			final @Nullable Map<String, Integer> embeddedLanguages,
+			final @Nullable Map<String, Integer> tokenTypes,
+			final @Nullable BalancedBracketSelectors balancedBracketSelectors) {
 		return this._syncRegistry.grammarForScopeName(
 				scopeName,
 				initialLanguage == null ? 0 : initialLanguage,

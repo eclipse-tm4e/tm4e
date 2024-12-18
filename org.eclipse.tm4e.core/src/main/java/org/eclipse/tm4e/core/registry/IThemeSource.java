@@ -46,7 +46,7 @@ public interface IThemeSource {
 		return fromFile(file, null, null);
 	}
 
-	static IThemeSource fromFile(final Path file, @Nullable final ContentType contentType, @Nullable final Charset charset) {
+	static IThemeSource fromFile(final Path file, final @Nullable ContentType contentType, final @Nullable Charset charset) {
 
 		final var filePath = file.toString();
 		final var contentType1 = contentType == null ? guessFileFormat(filePath) : contentType;
@@ -78,8 +78,8 @@ public interface IThemeSource {
 	/**
 	 * @throws IllegalArgumentException if the content type is unsupported or cannot be determined
 	 */
-	static IThemeSource fromResource(final Class<?> clazz, final String resourceName, @Nullable final ContentType contentType,
-			@Nullable final Charset charset) {
+	static IThemeSource fromResource(final Class<?> clazz, final String resourceName, final @Nullable ContentType contentType,
+			final @Nullable Charset charset) {
 
 		final var contentType1 = contentType == null ? guessFileFormat(resourceName) : contentType;
 		return new IThemeSource() {

@@ -53,7 +53,7 @@ public class TMEclipseRegistryPlugin extends Plugin {
 		log(new Status(IStatus.ERROR, PLUGIN_ID, ex.getMessage(), ex));
 	}
 
-	public static void logError(final String message, @Nullable final Throwable ex) {
+	public static void logError(final String message, final @Nullable Throwable ex) {
 		log(new Status(IStatus.ERROR, PLUGIN_ID, message, ex));
 	}
 

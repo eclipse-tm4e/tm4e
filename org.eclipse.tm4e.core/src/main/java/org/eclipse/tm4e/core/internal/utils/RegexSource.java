@@ -64,7 +64,7 @@ public final class RegexSource {
 		return sb.toString();
 	}
 
-	public static boolean hasCaptures(@Nullable final CharSequence regexSource) {
+	public static boolean hasCaptures(final @Nullable CharSequence regexSource) {
 		if (regexSource == null) {
 			return false;
 		}

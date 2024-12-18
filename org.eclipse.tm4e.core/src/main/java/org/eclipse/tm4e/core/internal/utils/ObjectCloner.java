@@ -82,8 +82,7 @@ public final class ObjectCloner {
 		return obj;
 	}
 
-	@Nullable
-	private static <@Nullable T> T deepCloneNullable(final T obj, final Map<Object, @Nullable Object> clones) {
+	private static @Nullable <@Nullable T> T deepCloneNullable(final T obj, final Map<Object, @Nullable Object> clones) {
 		if (obj == null) {
 			return null;
 		}

@@ -61,16 +61,15 @@ public final class CreateThemeAssociationWizard extends Wizard {
 		return true;
 	}
 
-	@Nullable
-	public IThemeAssociation getCreatedThemeAssociation() {
+	public @Nullable IThemeAssociation getCreatedThemeAssociation() {
 		return createdThemeAssociation;
 	}
 
-	public void setInitialDefinition(@Nullable final IGrammarDefinition definition) {
+	public void setInitialDefinition(final @Nullable IGrammarDefinition definition) {
 		this.initialDefinition = definition;
 	}
 
-	public void setInitialAssociation(@Nullable final IThemeAssociation association) {
+	public void setInitialAssociation(final @Nullable IThemeAssociation association) {
 		this.initialAssociation = association;
 	}
 }

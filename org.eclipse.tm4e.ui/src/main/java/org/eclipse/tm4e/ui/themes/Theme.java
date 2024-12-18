@@ -99,45 +99,40 @@ public class Theme extends TMResource implements ITheme {
 				: themeColor;
 	}
 
-	@Nullable
 	@Override
-	public Color getEditorForeground() {
+	public @Nullable Color getEditorForeground() {
 		final ITokenProvider provider = getTokenProvider();
 		return getPriorityColor(
 				provider != null ? provider.getEditorForeground() : null,
 				AbstractTextEditor.PREFERENCE_COLOR_FOREGROUND);
 	}
 
-	@Nullable
 	@Override
-	public Color getEditorBackground() {
+	public @Nullable Color getEditorBackground() {
 		final ITokenProvider provider = getTokenProvider();
 		return getPriorityColor(
 				provider != null ? provider.getEditorBackground() : null,
 				AbstractTextEditor.PREFERENCE_COLOR_BACKGROUND);
 	}
 
-	@Nullable
 	@Override
-	public Color getEditorSelectionForeground() {
+	public @Nullable Color getEditorSelectionForeground() {
 		final ITokenProvider provider = getTokenProvider();
 		return getPriorityColor(
 				provider != null ? provider.getEditorSelectionForeground() : null,
 				AbstractTextEditor.PREFERENCE_COLOR_SELECTION_FOREGROUND);
 	}
 
-	@Nullable
 	@Override
-	public Color getEditorSelectionBackground() {
+	public @Nullable Color getEditorSelectionBackground() {
 		final ITokenProvider provider = getTokenProvider();
 		return getPriorityColor(
 				provider != null ? provider.getEditorSelectionBackground() : null,
 				AbstractTextEditor.PREFERENCE_COLOR_SELECTION_BACKGROUND);
 	}
 
-	@Nullable
 	@Override
-	public Color getEditorCurrentLineHighlight() {
+	public @Nullable Color getEditorCurrentLineHighlight() {
 		final ITokenProvider provider = getTokenProvider();
 		final Color themeColor = provider != null ? provider.getEditorCurrentLineHighlight() : null;
 		final ColorManager manager = ColorManager.getInstance();
@@ -146,8 +141,7 @@ public class Theme extends TMResource implements ITheme {
 				: themeColor;
 	}
 
-	@Nullable
-	private ITokenProvider getTokenProvider() {
+	private @Nullable ITokenProvider getTokenProvider() {
 		if (tokenProvider == null || isModified()) {
 			try (InputStream in = getInputStream()) {
 				final var path = getPath();

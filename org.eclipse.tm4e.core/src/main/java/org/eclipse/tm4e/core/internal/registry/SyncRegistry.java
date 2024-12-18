@@ -58,7 +58,7 @@ public class SyncRegistry implements IGrammarRepository, IThemeProvider {
 	/**
 	 * Add `grammar` to registry and return a list of referenced scope names
 	 */
-	public void addGrammar(final IRawGrammar grammar, @Nullable final Collection<String> injectionScopeNames) {
+	public void addGrammar(final IRawGrammar grammar, final @Nullable Collection<String> injectionScopeNames) {
 		this._rawGrammars.put(grammar.getScopeName(), grammar);
 
 		if (injectionScopeNames != null) {
@@ -82,8 +82,7 @@ public class SyncRegistry implements IGrammarRepository, IThemeProvider {
 	}
 
 	@Override
-	@Nullable
-	public Collection<String> injections(final String targetScope) {
+	public @Nullable Collection<String> injections(final String targetScope) {
 		return this._injectionGrammars.get(targetScope);
 	}
 
@@ -98,22 +97,20 @@ public class SyncRegistry implements IGrammarRepository, IThemeProvider {
 	/**
 	 * Match a scope in the theme.
 	 */
-	@Nullable
 	@Override
-	public StyleAttributes themeMatch(final ScopeStack scopePath) {
+	public @Nullable StyleAttributes themeMatch(final ScopeStack scopePath) {
 		return this._theme.match(scopePath);
 	}
 
 	/**
 	 * Lookup a grammar.
 	 */
-	@Nullable
-	public IGrammar grammarForScopeName(
+	public @Nullable IGrammar grammarForScopeName(
 			final String scopeName,
 			final int initialLanguage,
-			@Nullable final Map<String, Integer> embeddedLanguages,
-			@Nullable final Map<String, Integer> tokenTypes,
-			@Nullable final BalancedBracketSelectors balancedBracketSelectors) {
+			final @Nullable Map<String, Integer> embeddedLanguages,
+			final @Nullable Map<String, Integer> tokenTypes,
+			final @Nullable BalancedBracketSelectors balancedBracketSelectors) {
 
 		return this._grammars.computeIfAbsent(scopeName, scopeName_ -> {
 			final var rawGrammar = lookup(scopeName_);

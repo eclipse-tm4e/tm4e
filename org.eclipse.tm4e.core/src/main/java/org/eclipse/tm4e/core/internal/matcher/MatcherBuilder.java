@@ -38,8 +38,7 @@ final class MatcherBuilder<T> {
 	private final Tokenizer tokenizer;
 	private final NameMatcher<T> matchesName;
 
-	@Nullable
-	private String token;
+	private @Nullable String token;
 
 	MatcherBuilder(final CharSequence selector, final NameMatcher<T> matchesName) {
 		tokenizer = new Tokenizer(selector);
@@ -71,8 +70,7 @@ final class MatcherBuilder<T> {
 		}
 	}
 
-	@Nullable
-	private Matcher<T> parseOperand() {
+	private @Nullable Matcher<T> parseOperand() {
 		if ("-".equals(token)) {
 			token = tokenizer.next();
 			final var expressionToNegate = parseOperand();

@@ -21,7 +21,7 @@ public final class CommentSupport {
 
 	private final @Nullable CommentRule comments;
 
-	public CommentSupport(@Nullable final CommentRule comments) {
+	public CommentSupport(final @Nullable CommentRule comments) {
 		this.comments = comments;
 	}
 

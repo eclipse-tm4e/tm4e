@@ -22,7 +22,7 @@ import org.eclipse.ui.texteditor.ITextEditor;
 public final class HasLanguageConfigurationPropertyTester extends PropertyTester {
 
 	@Override
-	public boolean test(@Nullable final Object receiver, final String property, final Object[] args, @Nullable final Object expectedValue) {
+	public boolean test(final @Nullable Object receiver, final String property, final Object[] args, final @Nullable Object expectedValue) {
 
 		final var editor = Adapters.adapt(receiver, ITextEditor.class);
 		if (editor == null) {

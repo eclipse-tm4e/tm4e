@@ -63,8 +63,7 @@ public final class Grammar implements IGrammar, IRuleFactoryHelper {
 
 	private final String rootScopeName;
 
-	@Nullable
-	private RuleId _rootId;
+	private @Nullable RuleId _rootId;
 	private int _lastRuleId = 0;
 	private final Map<RuleId, @Nullable Rule> _ruleId2desc = new HashMap<>();
 	private final Map<String /*scopeName*/, IRawGrammar> includedGrammars = new HashMap<>();
@@ -72,21 +71,19 @@ public final class Grammar implements IGrammar, IRuleFactoryHelper {
 	private final IRawGrammar _grammar;
 	final IThemeProvider themeProvider;
 
-	@Nullable
-	private List<Injection> _injections;
+	private @Nullable List<Injection> _injections;
 	private final BasicScopeAttributesProvider _basicScopeAttributesProvider;
 	private final List<TokenTypeMatcher> _tokenTypeMatchers = new ArrayList<>();
 
-	@Nullable
-	private final BalancedBracketSelectors balancedBracketSelectors;
+	private final @Nullable BalancedBracketSelectors balancedBracketSelectors;
 
 	public Grammar(
 			final String rootScopeName,
 			final IRawGrammar grammar,
 			final int initialLanguage,
-			@Nullable final Map<String, Integer> embeddedLanguages,
-			@Nullable final Map<String, Integer> tokenTypes,
-			@Nullable final BalancedBracketSelectors balancedBracketSelectors,
+			final @Nullable Map<String, Integer> embeddedLanguages,
+			final @Nullable Map<String, Integer> tokenTypes,
+			final @Nullable BalancedBracketSelectors balancedBracketSelectors,
 			final IGrammarRepository grammarRepository,
 			final IThemeProvider themeProvider) {
 
@@ -220,8 +217,7 @@ public final class Grammar implements IGrammar, IRuleFactoryHelper {
 	}
 
 	@Override
-	@Nullable
-	public IRawGrammar getExternalGrammar(final String scopeName, @Nullable final IRawRepository repository) {
+	public @Nullable IRawGrammar getExternalGrammar(final String scopeName, final @Nullable IRawRepository repository) {
 		if (this.includedGrammars.containsKey(scopeName)) {
 			return this.includedGrammars.get(scopeName);
 		}
@@ -236,7 +232,7 @@ public final class Grammar implements IGrammar, IRuleFactoryHelper {
 		return null;
 	}
 
-	private IRawGrammar initGrammar(IRawGrammar grammar, @Nullable final IRawRule base) {
+	private IRawGrammar initGrammar(IRawGrammar grammar, final @Nullable IRawRule base) {
 		grammar = ObjectCloner.deepClone(grammar);
 
 		final var repo = grammar.getRepository();
@@ -254,8 +250,8 @@ public final class Grammar implements IGrammar, IRuleFactoryHelper {
 
 	@Override
 	public ITokenizeLineResult<IToken[]> tokenizeLine(final String lineText,
-			@Nullable final IStateStack prevState,
-			@Nullable final Duration timeLimit) {
+			final @Nullable IStateStack prevState,
+			final @Nullable Duration timeLimit) {
 		return _tokenize(lineText, (StateStack) prevState, false, timeLimit);
 	}
 
@@ -265,8 +261,8 @@ public final class Grammar implements IGrammar, IRuleFactoryHelper {
 	}
 
 	@Override
-	public ITokenizeLineResult<int[]> tokenizeLine2(final String lineText, @Nullable final IStateStack prevState,
-			@Nullable final Duration timeLimit) {
+	public ITokenizeLineResult<int[]> tokenizeLine2(final String lineText, final @Nullable IStateStack prevState,
+			final @Nullable Duration timeLimit) {
 		return _tokenize(lineText, (StateStack) prevState, true, timeLimit);
 	}
 
@@ -275,7 +271,7 @@ public final class Grammar implements IGrammar, IRuleFactoryHelper {
 			String lineText,
 			@Nullable StateStack prevState,
 			final boolean emitBinaryTokens,
-			@Nullable final Duration timeLimit) {
+			final @Nullable Duration timeLimit) {
 		var rootId = this._rootId;
 		if (rootId == null) {
 			rootId = this._rootId = RuleFactory.getCompiledRuleId(
@@ -358,8 +354,7 @@ public final class Grammar implements IGrammar, IRuleFactoryHelper {
 	}
 
 	@Override
-	@Nullable
-	public String getName() {
+	public @Nullable String getName() {
 		return _grammar.getName();
 	}
 

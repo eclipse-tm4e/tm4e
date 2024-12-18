@@ -81,8 +81,7 @@ public final class StateStack implements IStateStack {
 	/**
 	 * The previous state on the stack (or null for the root state).
 	 */
-	@Nullable
-	private final StateStack parent;
+	private final @Nullable StateStack parent;
 
 	/**
 	 * The state (rule) that this element represents.
@@ -97,31 +96,28 @@ public final class StateStack implements IStateStack {
 	/**
 	 * The "pop" (end) condition for this state in case that it was dynamically generated through captured text.
 	 */
-	@Nullable
-	final String endRule;
+	final @Nullable String endRule;
 
 	/**
 	 * The list of scopes containing the "name" for this state.
 	 */
-	@Nullable
-	final AttributedScopeStack nameScopesList;
+	final @Nullable AttributedScopeStack nameScopesList;
 
 	/**
 	 * The list of scopes containing the "contentName" (besides "name") for this state.
 	 * This list **must** contain as an element `scopeName`.
 	 */
-	@Nullable
-	final AttributedScopeStack contentNameScopesList;
+	final @Nullable AttributedScopeStack contentNameScopesList;
 
 	StateStack(
-			@Nullable final StateStack parent,
+			final @Nullable StateStack parent,
 			final RuleId ruleId,
 			final int enterPos,
 			final int anchorPos,
 			final boolean beginRuleCapturedEOL,
-			@Nullable final String endRule,
-			@Nullable final AttributedScopeStack nameScopesList,
-			@Nullable final AttributedScopeStack contentNameScopesList) {
+			final @Nullable String endRule,
+			final @Nullable AttributedScopeStack nameScopesList,
+			final @Nullable AttributedScopeStack contentNameScopesList) {
 
 		this.parent = parent;
 		this.ruleId = ruleId;
@@ -135,7 +131,7 @@ public final class StateStack implements IStateStack {
 	}
 
 	@Override
-	public boolean equals(@Nullable final Object other) {
+	public boolean equals(final @Nullable Object other) {
 		if (other instanceof final StateStack otherState) {
 			return _equals(this, otherState);
 		}
@@ -224,9 +220,9 @@ public final class StateStack implements IStateStack {
 			final int enterPos,
 			final int anchorPos,
 			final boolean beginRuleCapturedEOL,
-			@Nullable final String endRule,
-			@Nullable final AttributedScopeStack nameScopesList,
-			@Nullable final AttributedScopeStack contentNameScopesList) {
+			final @Nullable String endRule,
+			final @Nullable AttributedScopeStack nameScopesList,
+			final @Nullable AttributedScopeStack contentNameScopesList) {
 		return new StateStack(
 				this,
 				ruleId,
@@ -324,7 +320,7 @@ public final class StateStack implements IStateStack {
 						: Collections.emptyList());
 	}
 
-	public static StateStack pushFrame(@Nullable final StateStack self, final Frame frame) {
+	public static StateStack pushFrame(final @Nullable StateStack self, final Frame frame) {
 		final var namesScopeList = AttributedScopeStack.fromExtension(self == null ? null : self.nameScopesList,
 				frame.nameScopesList);
 		final var enterPos = frame.enterPos;

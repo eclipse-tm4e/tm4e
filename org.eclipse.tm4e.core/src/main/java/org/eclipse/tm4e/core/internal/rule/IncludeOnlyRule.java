@@ -28,10 +28,9 @@ final class IncludeOnlyRule extends Rule {
 	final boolean hasMissingPatterns;
 	final RuleId[] patterns;
 
-	@Nullable
-	private RegExpSourceList cachedCompiledPatterns;
+	private @Nullable RegExpSourceList cachedCompiledPatterns;
 
-	IncludeOnlyRule(final RuleId id, @Nullable final String name, @Nullable final String contentName,
+	IncludeOnlyRule(final RuleId id, final @Nullable String name, final @Nullable String contentName,
 			final CompilePatternsResult patterns) {
 		super(id, name, contentName);
 		this.patterns = patterns.patterns;
@@ -47,12 +46,12 @@ final class IncludeOnlyRule extends Rule {
 	}
 
 	@Override
-	public CompiledRule compile(final IRuleRegistry grammar, @Nullable final String endRegexSource) {
+	public CompiledRule compile(final IRuleRegistry grammar, final @Nullable String endRegexSource) {
 		return getCachedCompiledPatterns(grammar).compile();
 	}
 
 	@Override
-	public CompiledRule compileAG(final IRuleRegistry grammar, @Nullable final String endRegexSource,
+	public CompiledRule compileAG(final IRuleRegistry grammar, final @Nullable String endRegexSource,
 			final boolean allowA, final boolean allowG) {
 		return getCachedCompiledPatterns(grammar).compileAG(allowA, allowG);
 	}

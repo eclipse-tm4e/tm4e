@@ -28,14 +28,9 @@ public final class ThemeAssociation implements IThemeAssociation {
 	private static final String WHEN_DARK_ATTR = "whenDark"; //$NON-NLS-1$
 
 	private final String themeId;
-
-	@Nullable
-	private String scopeName;
-
+	private @Nullable String scopeName;
 	private boolean whenDark;
-
-	@Nullable
-	private String pluginId;
+	private @Nullable String pluginId;
 
 	/**
 	 * Constructor for user preferences (loaded from Json with Gson).
@@ -60,9 +55,8 @@ public final class ThemeAssociation implements IThemeAssociation {
 		this.pluginId = ce.getNamespaceIdentifier();
 	}
 
-	@Nullable
 	@Override
-	public String getPluginId() {
+	public @Nullable String getPluginId() {
 		return pluginId;
 	}
 
@@ -71,9 +65,8 @@ public final class ThemeAssociation implements IThemeAssociation {
 		return themeId;
 	}
 
-	@Nullable
 	@Override
-	public String getScopeName() {
+	public @Nullable String getScopeName() {
 		return scopeName;
 	}
 
@@ -101,5 +94,4 @@ public final class ThemeAssociation implements IThemeAssociation {
 					&& Objects.equals(themeId, other.themeId);
 		return false;
 	}
-
 }

@@ -44,9 +44,8 @@ class GrammarInjectionTest {
 	void angular2TokenizeLine() throws Exception {
 		final var registry = new Registry(new IRegistryOptions() {
 
-			@Nullable
 			@Override
-			public Collection<String> getInjections(@Nullable final String scopeName) {
+			public @Nullable Collection<String> getInjections(final @Nullable String scopeName) {
 				return List.of("template.ng", "styles.ng");
 			}
 

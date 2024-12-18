@@ -75,7 +75,7 @@ public final class ThemeAssociationsWidget extends TableWithControlsWidget<IThem
 			}
 
 			@Override
-			protected Object[] getElements(@Nullable final Object input) {
+			protected Object[] getElements(final @Nullable Object input) {
 				if (input instanceof final IGrammarDefinition grammarDef) {
 					return themeManager
 							.getThemeAssociationsForScope(grammarDef.getScope().getName());

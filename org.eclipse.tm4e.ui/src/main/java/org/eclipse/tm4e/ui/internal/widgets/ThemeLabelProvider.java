@@ -22,24 +22,21 @@ import org.eclipse.tm4e.ui.themes.ITheme;
  */
 public final class ThemeLabelProvider extends LabelProvider implements ITableLabelProvider {
 
-	@Nullable
 	@Override
-	public Image getColumnImage(@Nullable final Object element, final int columnIndex) {
+	public @Nullable Image getColumnImage(final @Nullable Object element, final int columnIndex) {
 		return null;
 	}
 
-	@Nullable
 	@Override
-	public String getText(@Nullable final Object element) {
+	public @Nullable String getText(final @Nullable Object element) {
 		if (element == null)
 			return "";
 		final ITheme theme = (ITheme) element;
 		return theme.getName();
 	}
 
-	@Nullable
 	@Override
-	public String getColumnText(@Nullable final Object element, final int columnIndex) {
+	public @Nullable String getColumnText(final @Nullable Object element, final int columnIndex) {
 		if (element == null)
 			return "";
 		final ITheme theme = (ITheme) element;

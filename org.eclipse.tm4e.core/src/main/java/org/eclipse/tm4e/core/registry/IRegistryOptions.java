@@ -29,23 +29,19 @@ import org.eclipse.tm4e.core.internal.theme.raw.IRawTheme;
  */
 public interface IRegistryOptions {
 
-	@Nullable
-	default IRawTheme getTheme() {
+	default @Nullable IRawTheme getTheme() {
 		return null;
 	}
 
-	@Nullable
-	default List<String> getColorMap() {
+	default @Nullable List<String> getColorMap() {
 		return null;
 	}
 
-	@Nullable
-	default IGrammarSource getGrammarSource(@SuppressWarnings("unused") final String scopeName) {
+	default @Nullable IGrammarSource getGrammarSource(@SuppressWarnings("unused") final String scopeName) {
 		return null;
 	}
 
-	@Nullable
-	default Collection<String> getInjections(@SuppressWarnings("unused") final String scopeName) {
+	default @Nullable Collection<String> getInjections(@SuppressWarnings("unused") final String scopeName) {
 		return null;
 	}
 }

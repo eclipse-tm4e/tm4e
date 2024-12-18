@@ -36,8 +36,7 @@ public final class MoreCollections {
 		return list;
 	}
 
-	@Nullable
-	public static <T> T findFirstMatching(final List<T> list, final Predicate<T> filter) {
+	public static @Nullable <T> T findFirstMatching(final List<T> list, final Predicate<T> filter) {
 		for (final T e : list) {
 			if (filter.test(e))
 				return e;
@@ -48,8 +47,7 @@ public final class MoreCollections {
 	/**
 	 * @return the last element or null if list is empty
 	 */
-	@Nullable
-	public static <T> T findLastElement(final List<T> list) {
+	public static @Nullable <T> T findLastElement(final List<T> list) {
 		if (list.isEmpty())
 			return null;
 		return getLastElement(list);
@@ -76,11 +74,11 @@ public final class MoreCollections {
 		return list.get(list.size() - 1);
 	}
 
-	public static <T> Collection<T> nullToEmpty(@Nullable final Collection<T> coll) {
+	public static <T> Collection<T> nullToEmpty(final @Nullable Collection<T> coll) {
 		return coll == null ? Collections.emptyList() : coll;
 	}
 
-	public static <T> List<T> nullToEmpty(@Nullable final List<T> list) {
+	public static <T> List<T> nullToEmpty(final @Nullable List<T> list) {
 		return list == null ? Collections.emptyList() : list;
 	}
 

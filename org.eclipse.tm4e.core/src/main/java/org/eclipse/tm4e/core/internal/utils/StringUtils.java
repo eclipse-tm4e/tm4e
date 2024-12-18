@@ -38,11 +38,11 @@ public final class StringUtils {
 	private static final Pattern RGB = Pattern.compile("^#[0-9a-f]{3}", Pattern.CASE_INSENSITIVE);
 	private static final Pattern RGBA = Pattern.compile("^#[0-9a-f]{4}", Pattern.CASE_INSENSITIVE);
 
-	public static String nullToEmpty(@Nullable final String txt) {
+	public static String nullToEmpty(final @Nullable String txt) {
 		return txt == null ? "" : txt;
 	}
 
-	public static boolean isNullOrEmpty(@Nullable final String txt) {
+	public static boolean isNullOrEmpty(final @Nullable String txt) {
 		return txt == null || txt.isEmpty();
 	}
 
@@ -156,7 +156,7 @@ public final class StringUtils {
 		return 0;
 	}
 
-	public static int strArrCmp(@Nullable final List<String> a, @Nullable final List<String> b) {
+	public static int strArrCmp(final @Nullable List<String> a, final @Nullable List<String> b) {
 		if (a == null && b == null) {
 			return 0;
 		}
@@ -188,7 +188,7 @@ public final class StringUtils {
 	/**
 	 * @return "{SimpleClassName}{...fields...}"
 	 */
-	public static String toString(@Nullable final Object object, final Consumer<StringBuilder> fieldsBuilder) {
+	public static String toString(final @Nullable Object object, final Consumer<StringBuilder> fieldsBuilder) {
 		if (object == null)
 			return "null";
 		final var sb = new StringBuilder(object.getClass().getSimpleName());

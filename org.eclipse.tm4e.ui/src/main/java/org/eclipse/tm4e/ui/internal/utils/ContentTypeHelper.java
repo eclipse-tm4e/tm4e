@@ -51,8 +51,7 @@ public final class ContentTypeHelper {
 	 *
 	 * @return the content types from the given {@link IDocument} and null otherwise.
 	 */
-	@Nullable
-	public static ContentTypeInfo findContentTypes(final IDocument document) {
+	public static @Nullable ContentTypeInfo findContentTypes(final IDocument document) {
 		// Find content types from FileBuffers
 		final ContentTypeInfo contentTypes = findContentTypesFromFileBuffers(document);
 		if (contentTypes != null) {
@@ -69,8 +68,7 @@ public final class ContentTypeHelper {
 	 *
 	 * @return matching content type or null
 	 */
-	@Nullable
-	public static IContentType getContentTypeById(final String contentTypeId) {
+	public static @Nullable IContentType getContentTypeById(final String contentTypeId) {
 		final IContentTypeManager manager = Platform.getContentTypeManager();
 		return manager.getContentType(contentTypeId);
 	}
@@ -86,8 +84,7 @@ public final class ContentTypeHelper {
 	 * @return the content types from the given {@link IDocument} by using
 	 *         {@link ITextFileBufferManager} and null otherwise.
 	 */
-	@Nullable
-	private static ContentTypeInfo findContentTypesFromFileBuffers(final IDocument document) {
+	private static @Nullable ContentTypeInfo findContentTypesFromFileBuffers(final IDocument document) {
 		final ITextFileBufferManager bufferManager = FileBuffers.getTextFileBufferManager();
 		final ITextFileBuffer buffer = bufferManager.getTextFileBuffer(document);
 		if (buffer != null) {
@@ -103,8 +100,7 @@ public final class ContentTypeHelper {
 	 *
 	 * @return the content types from the given {@link ITextFileBuffer}.
 	 */
-	@Nullable
-	private static ContentTypeInfo getContentTypes(final ITextFileBuffer buffer) {
+	private static @Nullable ContentTypeInfo getContentTypes(final ITextFileBuffer buffer) {
 		try {
 			final String fileName = buffer.getFileStore().getName();
 			final var contentTypes = new LinkedHashSet<IContentType>();
@@ -179,8 +175,7 @@ public final class ContentTypeHelper {
 	 * @return the content types from the given {@link IDocument} by using
 	 *         {@link IEditorInput} and null otherwise.
 	 */
-	@Nullable
-	private static ContentTypeInfo findContentTypesFromEditorInput(final IDocument document) {
+	private static @Nullable ContentTypeInfo findContentTypesFromEditorInput(final IDocument document) {
 		final IEditorInput editorInput = getEditorInput(document);
 		if (editorInput != null) {
 			if (editorInput instanceof final IStorageEditorInput storageInput) {
@@ -209,8 +204,7 @@ public final class ContentTypeHelper {
 	 *
 	 * @return the {@link IEditorInput} from the given document and null otherwise.
 	 */
-	@Nullable
-	private static IEditorInput getEditorInput(final IDocument document) {
+	private static @Nullable IEditorInput getEditorInput(final IDocument document) {
 		try {
 			// This utilities class is very ugly, I have not found a clean mean
 			// to retrieve the IEditorInput linked to a document.

@@ -41,11 +41,10 @@ public final class BeginEndRule extends Rule {
 	final boolean hasMissingPatterns;
 	final RuleId[] patterns;
 
-	@Nullable
-	private RegExpSourceList cachedCompiledPatterns;
+	private @Nullable RegExpSourceList cachedCompiledPatterns;
 
-	BeginEndRule(final RuleId id, @Nullable final String name, @Nullable final String contentName, final String begin,
-			final List<@Nullable CaptureRule> beginCaptures, @Nullable final String end,
+	BeginEndRule(final RuleId id, final @Nullable String name, final @Nullable String contentName, final String begin,
+			final List<@Nullable CaptureRule> beginCaptures, final @Nullable String end,
 			final List<@Nullable CaptureRule> endCaptures, final boolean applyEndPatternLast,
 			final CompilePatternsResult patterns) {
 		super(id, name, contentName);
@@ -77,17 +76,17 @@ public final class BeginEndRule extends Rule {
 	}
 
 	@Override
-	public CompiledRule compile(final IRuleRegistry grammar, @Nullable final String endRegexSource) {
+	public CompiledRule compile(final IRuleRegistry grammar, final @Nullable String endRegexSource) {
 		return getCachedCompiledPatterns(grammar, endRegexSource).compile();
 	}
 
 	@Override
-	public CompiledRule compileAG(final IRuleRegistry grammar, @Nullable final String endRegexSource, final boolean allowA,
+	public CompiledRule compileAG(final IRuleRegistry grammar, final @Nullable String endRegexSource, final boolean allowA,
 			final boolean allowG) {
 		return getCachedCompiledPatterns(grammar, endRegexSource).compileAG(allowA, allowG);
 	}
 
-	private RegExpSourceList getCachedCompiledPatterns(final IRuleRegistry grammar, @Nullable final String endRegexSource) {
+	private RegExpSourceList getCachedCompiledPatterns(final IRuleRegistry grammar, final @Nullable String endRegexSource) {
 		var cachedCompiledPatterns = this.cachedCompiledPatterns;
 		if (cachedCompiledPatterns == null) {
 			cachedCompiledPatterns = new RegExpSourceList();

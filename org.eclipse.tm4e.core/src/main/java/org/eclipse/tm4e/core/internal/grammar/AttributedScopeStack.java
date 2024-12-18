@@ -34,8 +34,7 @@ final class AttributedScopeStack {
 	record Frame(int encodedTokenAttributes, List<String> scopeNames) {
 	}
 
-	@Nullable
-	static AttributedScopeStack fromExtension(final @Nullable AttributedScopeStack namesScopeList,
+	static @Nullable AttributedScopeStack fromExtension(final @Nullable AttributedScopeStack namesScopeList,
 			final List<AttributedScopeStack.Frame> contentNameScopesList) {
 		var current = namesScopeList;
 		@Nullable

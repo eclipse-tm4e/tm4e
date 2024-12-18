@@ -26,7 +26,7 @@ public class RegExp {
 	protected @Nullable String source;
 	private @Nullable Pattern pattern;
 
-	public RegExp(@Nullable final String source) {
+	public RegExp(final @Nullable String source) {
 		this.source = source;
 	}
 
@@ -52,7 +52,7 @@ public class RegExp {
 		return replace(name, val.source);
 	}
 
-	public RegExp replace(@Nullable final String name, @Nullable String val) {
+	public RegExp replace(final @Nullable String name, @Nullable String val) {
 		if (name == null)
 			return new RegExp(source);
 
@@ -68,7 +68,7 @@ public class RegExp {
 		return replaceAll(name, val.source);
 	}
 
-	public RegExp replaceAll(@Nullable final String name, @Nullable String val) {
+	public RegExp replaceAll(final @Nullable String name, @Nullable String val) {
 		if (name == null)
 			return new RegExp(source);
 

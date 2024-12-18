@@ -148,15 +148,15 @@ public final class ScopeDependencyProcessor {
 	}
 
 	private static final class ContextWithRepository extends Context {
-		@Nullable
-		final IRawRepository repository;
 
-		ContextWithRepository(final Context context, @Nullable final IRawRepository repository) {
+		final @Nullable IRawRepository repository;
+
+		ContextWithRepository(final Context context, final @Nullable IRawRepository repository) {
 			super(context.baseGrammar, context.selfGrammar);
 			this.repository = repository;
 		}
 
-		ContextWithRepository(final IRawGrammar baseGrammar, final IRawGrammar selfGrammar, @Nullable final IRawRepository repository) {
+		ContextWithRepository(final IRawGrammar baseGrammar, final IRawGrammar selfGrammar, final @Nullable IRawRepository repository) {
 			super(baseGrammar, selfGrammar);
 			this.repository = repository;
 		}
@@ -227,8 +227,7 @@ public final class ScopeDependencyProcessor {
 					break;
 				case TopLevelReference:
 				case TopLevelRepositoryReference:
-					@Nullable
-					final IRawGrammar selfGrammar = reference.scopeName.equals(context.selfGrammar.getScopeName())
+					final @Nullable IRawGrammar selfGrammar = reference.scopeName.equals(context.selfGrammar.getScopeName())
 							? context.selfGrammar
 							: reference.scopeName.equals(context.baseGrammar.getScopeName())
 									? context.baseGrammar

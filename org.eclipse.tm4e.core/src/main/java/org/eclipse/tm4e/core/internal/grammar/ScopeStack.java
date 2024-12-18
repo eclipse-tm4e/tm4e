@@ -29,8 +29,7 @@ import org.eclipse.jdt.annotation.Nullable;
  */
 public final class ScopeStack {
 
-	@Nullable
-	static ScopeStack push(@Nullable ScopeStack path, final List<String> scopeNames) {
+	static @Nullable ScopeStack push(@Nullable ScopeStack path, final List<String> scopeNames) {
 		for (final var name : scopeNames) {
 			path = new ScopeStack(path, name);
 		}
@@ -41,8 +40,7 @@ public final class ScopeStack {
 		return new ScopeStack(null, first);
 	}
 
-	@Nullable
-	public static ScopeStack from(final String... segments) {
+	public static @Nullable ScopeStack from(final String... segments) {
 		ScopeStack result = null;
 		for (final String segment : segments) {
 			result = new ScopeStack(result, segment);
@@ -50,11 +48,10 @@ public final class ScopeStack {
 		return result;
 	}
 
-	@Nullable
-	public final ScopeStack parent;
+	public final @Nullable ScopeStack parent;
 	public final String scopeName;
 
-	ScopeStack(@Nullable final ScopeStack parent, final String scopeName) {
+	ScopeStack(final @Nullable ScopeStack parent, final String scopeName) {
 		this.parent = parent;
 		this.scopeName = scopeName;
 	}
@@ -92,7 +89,7 @@ public final class ScopeStack {
 		return parent.isExtending(other);
 	}
 
-	List<String> getExtensionIfDefined(@Nullable final ScopeStack base) {
+	List<String> getExtensionIfDefined(final @Nullable ScopeStack base) {
 		final var result = new ArrayList<String>();
 		@Nullable
 		ScopeStack item = this;

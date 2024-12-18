@@ -45,7 +45,7 @@ public final class Range {
 	}
 
 	@Override
-	public boolean equals(@Nullable final Object obj) {
+	public boolean equals(final @Nullable Object obj) {
 		if (this == obj)
 			return true;
 		if (obj instanceof final Range other)

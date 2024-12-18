@@ -305,8 +305,7 @@ final class LineTokenizer {
 		}
 	}
 
-	@Nullable
-	private MatchResult matchRule(final Grammar grammar, final OnigString lineText, final boolean isFirstLine, final int linePos,
+	private @Nullable MatchResult matchRule(final Grammar grammar, final OnigString lineText, final boolean isFirstLine, final int linePos,
 			final StateStack stack, final int anchorPosition) {
 		final var rule = stack.getRule(grammar);
 		final var ruleScanner = rule.compileAG(grammar, stack.endRule, isFirstLine, linePos == anchorPosition);
@@ -319,8 +318,7 @@ final class LineTokenizer {
 		return null;
 	}
 
-	@Nullable
-	private MatchResult matchRuleOrInjections(final Grammar grammar, final OnigString lineText, final boolean isFirstLine,
+	private @Nullable MatchResult matchRuleOrInjections(final Grammar grammar, final OnigString lineText, final boolean isFirstLine,
 			final int linePos, final StateStack stack, final int anchorPosition) {
 		// Look for normal grammar rule
 		final MatchResult matchResult = matchRule(grammar, lineText, isFirstLine, linePos, stack, anchorPosition);
@@ -355,9 +353,8 @@ final class LineTokenizer {
 		return matchResult;
 	}
 
-	@Nullable
-	private MatchInjectionsResult matchInjections(final List<Injection> injections, final Grammar grammar, final OnigString lineText,
-			final boolean isFirstLine, final int linePos, final StateStack stack, final int anchorPosition) {
+	private @Nullable MatchInjectionsResult matchInjections(final List<Injection> injections, final Grammar grammar,
+			final OnigString lineText, final boolean isFirstLine, final int linePos, final StateStack stack, final int anchorPosition) {
 
 		// The lower the better
 		var bestMatchRating = Integer.MAX_VALUE;

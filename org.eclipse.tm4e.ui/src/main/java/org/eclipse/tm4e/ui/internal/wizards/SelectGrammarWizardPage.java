@@ -185,9 +185,8 @@ final class SelectGrammarWizardPage extends AbstractWizardPage {
 		setPageComplete(false);
 	}
 
-	@Nullable
 	@Override
-	protected IStatus validatePage(final Event event) {
+	protected @Nullable IStatus validatePage(final Event event) {
 		grammarInfoWidget.refresh(null);
 		final String path = grammarFileText.getText();
 		if (path.isEmpty()) {

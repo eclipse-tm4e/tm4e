@@ -153,7 +153,7 @@ public final class TMPresentationReconcilerTestGenerator
 	}
 
 	@Override
-	public void onColorized(final TextPresentation presentation, @Nullable final Throwable e) {
+	public void onColorized(final TextPresentation presentation, final @Nullable Throwable e) {
 		// Command command = commands.get(commands.size() - 1);
 		// if (e != null) {
 		// command.error = e;

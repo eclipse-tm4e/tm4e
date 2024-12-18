@@ -32,7 +32,7 @@ public class TMHTMLRenderer extends HTMLRenderer {
 	}
 
 	@Override
-	public void code(final String code, @Nullable final String lang, final boolean escaped) {
+	public void code(final String code, final @Nullable String lang, final boolean escaped) {
 		final IGrammar grammar = lang == null ? getDefaultGrammar() : getGrammar(lang);
 		if (grammar == null) {
 			super.code(code, lang, escaped);
@@ -62,9 +62,8 @@ public class TMHTMLRenderer extends HTMLRenderer {
 		html.append("<br/>");
 	}
 
-	@Nullable
-	private IStateStack tokenizeLine(final String line, final ITokenizationSupport tokenizationSupport,
-			@Nullable final IStateStack startState) {
+	private @Nullable IStateStack tokenizeLine(final String line, final ITokenizationSupport tokenizationSupport,
+			final @Nullable IStateStack startState) {
 		final var tokenized = tokenizationSupport.tokenize(line, startState);
 		final var endState = tokenized.getEndState();
 		final var tokens = tokenized.getTokens();
@@ -103,13 +102,11 @@ public class TMHTMLRenderer extends HTMLRenderer {
 		return endState;
 	}
 
-	@Nullable
-	protected IGrammar getDefaultGrammar() {
+	protected @Nullable IGrammar getDefaultGrammar() {
 		return getGrammar(defaultLang);
 	}
 
-	@Nullable
-	protected IGrammar getGrammar(final String lang) {
+	protected @Nullable IGrammar getGrammar(final String lang) {
 		final IContentType[] contentTypes = Platform.getContentTypeManager().findContentTypesFor("x." + lang);
 		return TMEclipseRegistryPlugin.getGrammarRegistryManager().getGrammarFor(contentTypes);
 	}

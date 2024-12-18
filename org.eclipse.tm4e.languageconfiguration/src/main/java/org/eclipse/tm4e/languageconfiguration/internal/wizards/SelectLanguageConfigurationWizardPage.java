@@ -202,7 +202,7 @@ final class SelectLanguageConfigurationWizardPage extends WizardPage implements 
 
 	private static final class ContentTypesLabelProvider extends LabelProvider {
 		@Override
-		public @Nullable String getText(@Nullable final Object element) {
+		public @Nullable String getText(final @Nullable Object element) {
 			return element == null
 					? ""
 					: ((IContentType) element).getName();
@@ -214,7 +214,7 @@ final class SelectLanguageConfigurationWizardPage extends WizardPage implements 
 		private IContentTypeManager manager = Platform.getContentTypeManager();
 
 		@Override
-		public Object[] getChildren(@Nullable final Object parentElement) {
+		public Object[] getChildren(final @Nullable Object parentElement) {
 			final var elements = new ArrayList<>();
 			final var baseType = (IContentType) parentElement;
 			for (final var contentType : manager.getAllContentTypes()) {
@@ -226,7 +226,7 @@ final class SelectLanguageConfigurationWizardPage extends WizardPage implements 
 		}
 
 		@Override
-		public @Nullable Object getParent(@Nullable final Object element) {
+		public @Nullable Object getParent(final @Nullable Object element) {
 			if (element == null)
 				return null;
 			final IContentType contentType = (IContentType) element;
@@ -234,17 +234,17 @@ final class SelectLanguageConfigurationWizardPage extends WizardPage implements 
 		}
 
 		@Override
-		public boolean hasChildren(@Nullable final Object element) {
+		public boolean hasChildren(final @Nullable Object element) {
 			return getChildren(element).length > 0;
 		}
 
 		@Override
-		public Object[] getElements(@Nullable final Object inputElement) {
+		public Object[] getElements(final @Nullable Object inputElement) {
 			return getChildren(manager.getContentType(IContentTypeManager.CT_TEXT));
 		}
 
 		@Override
-		public void inputChanged(final Viewer viewer, @Nullable final Object oldInput, @Nullable final Object newInput) {
+		public void inputChanged(final Viewer viewer, final @Nullable Object oldInput, final @Nullable Object newInput) {
 			manager = newInput == null ? Platform.getContentTypeManager() : (IContentTypeManager) newInput;
 		}
 	}
@@ -259,8 +259,7 @@ final class SelectLanguageConfigurationWizardPage extends WizardPage implements 
 		return text;
 	}
 
-	@Nullable
-	private IStatus validatePage() {
+	private @Nullable IStatus validatePage() {
 		infoWidget.refresh(null);
 
 		final String path = fileText.getText();

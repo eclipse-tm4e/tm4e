@@ -41,7 +41,7 @@ final class BasicScopeAttributesProvider {
 
 	private final ConcurrentMap<String /*scopeName*/, BasicScopeAttributes> cache = new ConcurrentHashMap<>();
 
-	BasicScopeAttributesProvider(final int initialLanguage, @Nullable final Map<String, Integer> embeddedLanguages) {
+	BasicScopeAttributesProvider(final int initialLanguage, final @Nullable Map<String, Integer> embeddedLanguages) {
 		this._defaultAttributes = new BasicScopeAttributes(initialLanguage, OptionalStandardTokenType.NotSet);
 		this._embeddedLanguagesMatcher = new ScopeMatcher<>(defaultIfNull(embeddedLanguages, Collections.emptyMap()));
 	}
@@ -50,7 +50,7 @@ final class BasicScopeAttributesProvider {
 		return this._defaultAttributes;
 	}
 
-	BasicScopeAttributes getBasicScopeAttributes(@Nullable final String scopeName) {
+	BasicScopeAttributes getBasicScopeAttributes(final @Nullable String scopeName) {
 		if (scopeName == null) {
 			return BasicScopeAttributesProvider._NULL_SCOPE_METADATA;
 		}
@@ -92,8 +92,7 @@ final class BasicScopeAttributesProvider {
 	private static final class ScopeMatcher<TValue> {
 
 		private final Map<String, TValue> values;
-		@Nullable
-		private final Pattern scopesRegExp;
+		private final @Nullable Pattern scopesRegExp;
 
 		ScopeMatcher(final Map<String, TValue> values) {
 			if (values.isEmpty()) {

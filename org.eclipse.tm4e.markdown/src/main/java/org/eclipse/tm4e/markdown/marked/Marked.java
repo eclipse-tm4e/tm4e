@@ -28,11 +28,11 @@ public final class Marked {
 		return parse(src, null, renderer);
 	}
 
-	public static IRenderer parse(final String src, @Nullable final Options opt) {
+	public static IRenderer parse(final String src, final @Nullable Options opt) {
 		return parse(src, opt, null);
 	}
 
-	public static IRenderer parse(final String src, @Nullable final Options opt, @Nullable final IRenderer renderer) {
+	public static IRenderer parse(final String src, final @Nullable Options opt, final @Nullable IRenderer renderer) {
 		return Parser.parse(Lexer.lex(src, opt), opt, renderer);
 	}
 

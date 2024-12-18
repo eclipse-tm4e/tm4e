@@ -40,7 +40,7 @@ public final class ColorMap {
 		this(null);
 	}
 
-	public ColorMap(@Nullable final List<String> _colorMap) {
+	public ColorMap(final @Nullable List<String> _colorMap) {
 		_id2color.add(""); // required since the upstream impl works with 1-based indexes
 		if (_colorMap != null) {
 			this._isFrozen = true;
@@ -77,7 +77,7 @@ public final class ColorMap {
 	}
 
 	@Override
-	public boolean equals(@Nullable final Object obj) {
+	public boolean equals(final @Nullable Object obj) {
 		if (this == obj)
 			return true;
 		if (obj instanceof final ColorMap other)

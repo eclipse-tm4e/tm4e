@@ -25,16 +25,14 @@ public class Tokens extends ArrayList<Token> {
 
 	private static final long serialVersionUID = 1L;
 
-	@Nullable
-	public Object links;
+	public @Nullable Object links;
 
 	public Tokens reverse() {
 		Collections.reverse(this);
 		return this;
 	}
 
-	@Nullable
-	public Token pop() {
+	public @Nullable Token pop() {
 		if (super.isEmpty()) {
 			return null;
 		}

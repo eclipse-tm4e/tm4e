@@ -29,7 +29,7 @@ public class InlineLexer {
 	private final InlineRules rules;
 	private final IRenderer renderer;
 
-	public InlineLexer(@Nullable final Object links, @Nullable final Options options, @Nullable final IRenderer renderer) {
+	public InlineLexer(final @Nullable Object links, final @Nullable Options options, final @Nullable IRenderer renderer) {
 		this.options = options != null ? options : Options.DEFAULTS;
 		// this.links = links;
 		this.renderer = renderer != null ? renderer : new HTMLRenderer();

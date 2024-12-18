@@ -46,16 +46,13 @@ final class CreateThemeAssociationWizardPage extends AbstractWizardPage {
 	private ComboViewer themeViewer = lateNonNull();
 	private ComboViewer grammarsCombo = lateNonNull();
 
-	@Nullable
-	private final IGrammarDefinition initialDefinition;
-
-	@Nullable
-	private final IThemeAssociation initialAssociation;
+	private final @Nullable IGrammarDefinition initialDefinition;
+	private final @Nullable IThemeAssociation initialAssociation;
 
 	private Button whenDarkButton = lateNonNull();
 
-	protected CreateThemeAssociationWizardPage(@Nullable final IGrammarDefinition initialDefinition,
-			@Nullable final IThemeAssociation initialAssociation) {
+	protected CreateThemeAssociationWizardPage(final @Nullable IGrammarDefinition initialDefinition,
+			final @Nullable IThemeAssociation initialAssociation) {
 		super(PAGE_NAME);
 		super.setTitle(TMUIMessages.CreateThemeAssociationWizardPage_title);
 		super.setDescription(TMUIMessages.CreateThemeAssociationWizardPage_description);
@@ -114,9 +111,8 @@ final class CreateThemeAssociationWizardPage extends AbstractWizardPage {
 		setPageComplete(false);
 	}
 
-	@Nullable
 	@Override
-	protected IStatus validatePage(final Event event) {
+	protected @Nullable IStatus validatePage(final Event event) {
 		if (themeViewer.getSelection().isEmpty()) {
 			return new Status(IStatus.ERROR, TMUIPlugin.PLUGIN_ID,
 					TMUIMessages.CreateThemeAssociationWizardPage_theme_error_required);

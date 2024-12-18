@@ -64,8 +64,7 @@ public class CSSParser {
 		parser.parseStyleSheet(source);
 	}
 
-	@Nullable
-	public IStyle getBestStyle(final String... cssClassNames) {
+	public @Nullable IStyle getBestStyle(final String... cssClassNames) {
 		int bestSpecificity = 0;
 		IStyle bestStyle = null;
 		for (final IStyle style : handler.getStyles()) {

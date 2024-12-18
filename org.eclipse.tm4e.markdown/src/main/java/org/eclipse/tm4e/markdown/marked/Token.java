@@ -21,24 +21,20 @@ import org.eclipse.jdt.annotation.Nullable;
 public class Token {
 
 	public final TokenType type;
-
-	@Nullable
-	public final String text;
+	public final @Nullable String text;
 	public final int depth;
-
-	@Nullable
-	public final String lang;
+	public final @Nullable String lang;
 	public final boolean escaped;
 
 	public Token(final TokenType type) {
 		this(type, null);
 	}
 
-	public Token(final TokenType type, @Nullable final String text) {
+	public Token(final TokenType type, final @Nullable String text) {
 		this(type, text, -1);
 	}
 
-	public Token(final TokenType type, @Nullable final String text, final int depth) {
+	public Token(final TokenType type, final @Nullable String text, final int depth) {
 		this(type, text, depth, null, false);
 	}
 
@@ -46,7 +42,7 @@ public class Token {
 		this(type, text, -1, lang, false);
 	}
 
-	private Token(final TokenType type, @Nullable final String text, final int depth, @Nullable final String lang,
+	private Token(final TokenType type, final @Nullable String text, final int depth, final @Nullable String lang,
 			final boolean escaped) {
 		this.type = type;
 		this.text = text;

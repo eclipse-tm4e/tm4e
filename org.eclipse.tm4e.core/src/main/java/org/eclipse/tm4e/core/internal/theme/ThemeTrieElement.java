@@ -132,7 +132,7 @@ public final class ThemeTrieElement {
 		return rules;
 	}
 
-	public void insert(final int scopeDepth, final String scope, @Nullable final List<String> parentScopes, final int fontStyle,
+	public void insert(final int scopeDepth, final String scope, final @Nullable List<String> parentScopes, final int fontStyle,
 			final int foreground, final int background) {
 		if (scope.isEmpty()) {
 			this.doInsertHere(scopeDepth, parentScopes, fontStyle, foreground, background);
@@ -156,7 +156,7 @@ public final class ThemeTrieElement {
 		child.insert(scopeDepth + 1, tail, parentScopes, fontStyle, foreground, background);
 	}
 
-	private void doInsertHere(final int scopeDepth, @Nullable final List<String> parentScopes, int fontStyle, int foreground,
+	private void doInsertHere(final int scopeDepth, final @Nullable List<String> parentScopes, int fontStyle, int foreground,
 			int background) {
 
 		if (parentScopes == null) {
@@ -198,7 +198,7 @@ public final class ThemeTrieElement {
 	}
 
 	@Override
-	public boolean equals(@Nullable final Object obj) {
+	public boolean equals(final @Nullable Object obj) {
 		if (this == obj)
 			return true;
 		if (obj instanceof final ThemeTrieElement other)

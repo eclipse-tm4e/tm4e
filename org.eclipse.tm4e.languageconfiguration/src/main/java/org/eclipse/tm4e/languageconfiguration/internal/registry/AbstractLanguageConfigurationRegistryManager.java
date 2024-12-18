@@ -40,9 +40,8 @@ abstract class AbstractLanguageConfigurationRegistryManager implements ILanguage
 		(definition.getPluginId() == null ? userDefinitions : pluginDefinitions).remove(definition.getContentType());
 	}
 
-	@Nullable
 	@Override
-	public LanguageConfiguration getLanguageConfigurationFor(final IContentType... contentTypes) {
+	public @Nullable LanguageConfiguration getLanguageConfigurationFor(final IContentType... contentTypes) {
 		for (final IContentType contentType : contentTypes) {
 			final var userDefinition = userDefinitions.get(contentType);
 			if (userDefinition != null) {

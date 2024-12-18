@@ -30,15 +30,13 @@ public abstract class Rule {
 
 	final RuleId id;
 
-	@Nullable
-	private final String name;
+	private final @Nullable String name;
 	private final boolean nameIsCapturing;
 
-	@Nullable
-	private final String contentName;
+	private final @Nullable String contentName;
 	private final boolean contentNameIsCapturing;
 
-	Rule(final RuleId id, @Nullable final String name, final @Nullable String contentName) {
+	Rule(final RuleId id, final @Nullable String name, final @Nullable String contentName) {
 		this.id = id;
 		this.name = name;
 		this.nameIsCapturing = RegexSource.hasCaptures(name);
@@ -46,8 +44,7 @@ public abstract class Rule {
 		this.contentNameIsCapturing = RegexSource.hasCaptures(contentName);
 	}
 
-	@Nullable
-	public String getName(@Nullable final CharSequence lineText, final OnigCaptureIndex @Nullable [] captureIndices) {
+	public @Nullable String getName(final @Nullable CharSequence lineText, final OnigCaptureIndex @Nullable [] captureIndices) {
 		final var name = this.name;
 		if (!nameIsCapturing || name == null || lineText == null || captureIndices == null) {
 			return name;
@@ -55,8 +52,7 @@ public abstract class Rule {
 		return RegexSource.replaceCaptures(name, lineText, captureIndices);
 	}
 
-	@Nullable
-	public String getContentName(final CharSequence lineText, final OnigCaptureIndex[] captureIndices) {
+	public @Nullable String getContentName(final CharSequence lineText, final OnigCaptureIndex[] captureIndices) {
 		final var contentName = this.contentName;
 		if (!contentNameIsCapturing || contentName == null) {
 			return contentName;

@@ -47,7 +47,7 @@ public interface NameMatcher<T> {
 			});
 		}
 
-		private boolean scopesAreMatching(@Nullable final String thisScopeName, final String scopeName) {
+		private boolean scopesAreMatching(final @Nullable String thisScopeName, final String scopeName) {
 			if (thisScopeName == null) {
 				return false;
 			}

@@ -263,7 +263,7 @@ final class SelectLanguageConfigurationWizardPage extends WizardPage implements 
 		infoWidget.refresh(null);
 
 		final String path = fileText.getText();
-		if (path.length() == 0) {
+		if (path.isEmpty()) {
 			return new Status(IStatus.ERROR, LanguageConfigurationPlugin.PLUGIN_ID,
 					SelectLanguageConfigurationWizardPage_fileError_noSelection);
 		}

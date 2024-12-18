@@ -43,7 +43,7 @@ class OnigRegExpTest {
 	}
 
 	@Test
-	void testOnigRegExp() throws Exception {
+	void testOnigRegExp() {
 		assertOnigRegExpSearch(
 				"\\G(MAKEFILES|VPATH|SHELL|MAKESHELL|MAKE|MAKELEVEL|MAKEFLAGS|MAKECMDGOALS|CURDIR|SUFFIXES|\\.LIBPATTERNS)(?=\\s*\\))",
 				"ifeq (version,$(firstword $(MAKECMDGOALS))\n",

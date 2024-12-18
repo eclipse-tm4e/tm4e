@@ -36,7 +36,7 @@ class ParsingTest {
 	}
 
 	@Test
-	void testOniguramaFallback() throws Exception {
+	void testOniguramaFallback() {
 		final var languageConfiguration = LanguageConfiguration.load(new StringReader("""
 			{
 			  "onEnterRules": [{
@@ -117,7 +117,7 @@ class ParsingTest {
 	}
 
 	@Test
-	void testParseColorizedBracketsPair() throws Exception {
+	void testParseColorizedBracketsPair() {
 		final var languageConfiguration = LanguageConfiguration.load(new StringReader("""
 			{
 				"colorizedBracketPairs": [
@@ -135,7 +135,7 @@ class ParsingTest {
 	}
 
 	@Test
-	void testIndentationRules() throws Exception {
+	void testIndentationRules() {
 		final var languageConfiguration = LanguageConfiguration.load(new StringReader("""
 			{
 				"indentationRules": {

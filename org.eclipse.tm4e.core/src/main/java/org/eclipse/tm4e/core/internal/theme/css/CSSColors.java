@@ -18,7 +18,7 @@ import java.util.Map;
 import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.tm4e.core.theme.RGB;
 
-public class CSSColors {
+public final class CSSColors {
 	private static final Map<String, RGB> NAMED_COLORS = new HashMap<>();
 	static {
 		NAMED_COLORS.put("aliceblue", new RGB(240, 248, 255));
@@ -175,5 +175,8 @@ public class CSSColors {
 	 */
 	public static @Nullable RGB getByName(final String name) {
 		return NAMED_COLORS.get(name);
+	}
+
+	private CSSColors() {
 	}
 }

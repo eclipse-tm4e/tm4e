@@ -54,8 +54,7 @@ public final class TMScope implements ITMScope {
 		if (this == obj)
 			return true;
 		return obj instanceof TMScope other
-				? qualifiedName.equals(other.qualifiedName)
-				: false;
+				&& qualifiedName.equals(other.qualifiedName);
 	}
 
 	@Override

@@ -57,7 +57,7 @@ class TMParserTest {
 	}
 
 	@Test
-	void testParseCapturesJSON() throws Exception {
+	void testParseCapturesJSON() {
 		// test capture defined as JSON map
 		validateCaptures(TMParserJSON.INSTANCE.parse(new StringReader("""
 			{"patterns": [{
@@ -136,7 +136,7 @@ class TMParserTest {
 	}
 
 	@Test
-	void testParseCapturesYAML() throws Exception {
+	void testParseCapturesYAML() {
 		// test capture defined as YAML map
 		validateCaptures(TMParserYAML.INSTANCE.parse(new StringReader("""
 			---

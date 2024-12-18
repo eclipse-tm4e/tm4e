@@ -14,7 +14,6 @@ package org.eclipse.tm4e.ui.tests;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.FileOutputStream;
-import java.io.IOException;
 
 import org.eclipse.swt.custom.StyledText;
 import org.eclipse.swt.widgets.Control;
@@ -22,7 +21,6 @@ import org.eclipse.tm4e.ui.internal.utils.UI;
 import org.eclipse.tm4e.ui.tests.support.TestUtils;
 import org.eclipse.ui.IEditorDescriptor;
 import org.eclipse.ui.IEditorPart;
-import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.ide.IDE;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -48,7 +46,7 @@ class TMinGenericEditorTest {
 	}
 
 	@Test
-	void testTMHighlightInGenericEditor() throws IOException, PartInitException {
+	void testTMHighlightInGenericEditor() throws Exception {
 		final var f = TestUtils.createTempFile(".ts");
 		try (var fileOutputStream = new FileOutputStream(f)) {
 			fileOutputStream.write("let a = '';\nlet b = 10;\nlet c = true;".getBytes());
@@ -60,7 +58,7 @@ class TMinGenericEditorTest {
 	}
 
 	@Test
-	void testTMHighlightInGenericEditorEdit() throws IOException, PartInitException {
+	void testTMHighlightInGenericEditorEdit() throws Exception {
 		final var f = TestUtils.createTempFile(".ts");
 		try (var fileOutputStream = new FileOutputStream(f)) {
 			fileOutputStream.write("let a = '';".getBytes());

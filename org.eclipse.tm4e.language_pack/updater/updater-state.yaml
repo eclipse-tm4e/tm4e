@@ -4,8 +4,8 @@ extensions:
     github:
       repo: microsoft/vscode
       path: extensions/bat
-      ref: 1.95.1
-      commit: 65edc4939843c90c34d61f4ce11704f09d3e5cb6
+      ref: 1.96.1
+      commit: 42b266171e51a016313f47d0c48aca9295b9cbb2
     languages:
       bat:
         label: Batch File
@@ -18,8 +18,8 @@ extensions:
     github:
       repo: microsoft/vscode
       path: extensions/clojure
-      ref: 1.95.1
-      commit: 65edc4939843c90c34d61f4ce11704f09d3e5cb6
+      ref: 1.96.1
+      commit: 42b266171e51a016313f47d0c48aca9295b9cbb2
     languages:
       clojure:
         label: Clojure
@@ -36,8 +36,8 @@ extensions:
     github:
       repo: microsoft/vscode
       path: extensions/coffeescript
-      ref: 1.95.1
-      commit: 65edc4939843c90c34d61f4ce11704f09d3e5cb6
+      ref: 1.96.1
+      commit: 42b266171e51a016313f47d0c48aca9295b9cbb2
     languages:
       coffeescript:
         label: CoffeeScript
@@ -51,8 +51,8 @@ extensions:
     github:
       repo: microsoft/vscode
       path: extensions/cpp
-      ref: 1.95.1
-      commit: 65edc4939843c90c34d61f4ce11704f09d3e5cb6
+      ref: 1.96.1
+      commit: 42b266171e51a016313f47d0c48aca9295b9cbb2
     languages:
       c:
         label: C
@@ -101,8 +101,8 @@ extensions:
     github:
       repo: microsoft/vscode
       path: extensions/csharp
-      ref: 1.95.1
-      commit: 65edc4939843c90c34d61f4ce11704f09d3e5cb6
+      ref: 1.96.1
+      commit: 42b266171e51a016313f47d0c48aca9295b9cbb2
     languages:
       csharp:
         label: C#
@@ -116,21 +116,21 @@ extensions:
     github:
       repo: microsoft/vscode
       path: extensions/css
-      ref: 1.95.1
-      commit: 65edc4939843c90c34d61f4ce11704f09d3e5cb6
+      ref: 1.96.1
+      commit: 42b266171e51a016313f47d0c48aca9295b9cbb2
     languages:
       css:
         label: CSS
         scope-name: source.css
-        upstream-url: https://github.com/microsoft/vscode-css/commit/c216f777497265700ff336f739328e5197e012cd
+        upstream-url: https://github.com/microsoft/vscode-css/commit/a927fe2f73927bf5c25d0b0c4dd0e63d69fd8887
         file-extensions:
         - .css
   dart:
     github:
       repo: microsoft/vscode
       path: extensions/dart
-      ref: 1.95.1
-      commit: 65edc4939843c90c34d61f4ce11704f09d3e5cb6
+      ref: 1.96.1
+      commit: 42b266171e51a016313f47d0c48aca9295b9cbb2
     languages:
       dart:
         label: Dart
@@ -142,8 +142,8 @@ extensions:
     github:
       repo: microsoft/vscode
       path: extensions/diff
-      ref: 1.95.1
-      commit: 65edc4939843c90c34d61f4ce11704f09d3e5cb6
+      ref: 1.96.1
+      commit: 42b266171e51a016313f47d0c48aca9295b9cbb2
     languages:
       diff:
         label: Diff
@@ -157,8 +157,8 @@ extensions:
     github:
       repo: microsoft/vscode
       path: extensions/docker
-      ref: 1.95.1
-      commit: 65edc4939843c90c34d61f4ce11704f09d3e5cb6
+      ref: 1.96.1
+      commit: 42b266171e51a016313f47d0c48aca9295b9cbb2
     languages:
       dockerfile:
         label: Docker
@@ -177,8 +177,8 @@ extensions:
     github:
       repo: microsoft/vscode
       path: extensions/fsharp
-      ref: 1.95.1
-      commit: 65edc4939843c90c34d61f4ce11704f09d3e5cb6
+      ref: 1.96.1
+      commit: 42b266171e51a016313f47d0c48aca9295b9cbb2
     languages:
       fsharp:
         label: F#
@@ -193,8 +193,8 @@ extensions:
     github:
       repo: microsoft/vscode
       path: extensions/git-base
-      ref: 1.95.1
-      commit: 65edc4939843c90c34d61f4ce11704f09d3e5cb6
+      ref: 1.96.1
+      commit: 42b266171e51a016313f47d0c48aca9295b9cbb2
     languages:
       git-commit:
         label: Git Commit Message
@@ -224,21 +224,21 @@ extensions:
     github:
       repo: microsoft/vscode
       path: extensions/go
-      ref: 1.95.1
-      commit: 65edc4939843c90c34d61f4ce11704f09d3e5cb6
+      ref: 1.96.1
+      commit: 42b266171e51a016313f47d0c48aca9295b9cbb2
     languages:
       go:
         label: Go
         scope-name: source.go
-        upstream-url: https://github.com/worlpaker/go-syntax/commit/ce0d1d19653dc264d8e53f97cb45cc8d1689f221
+        upstream-url: https://github.com/worlpaker/go-syntax/commit/32bbaebcf218fa552e8f0397401e12f6e94fa3c5
         file-extensions:
         - .go
   groovy:
     github:
       repo: microsoft/vscode
       path: extensions/groovy
-      ref: 1.95.1
-      commit: 65edc4939843c90c34d61f4ce11704f09d3e5cb6
+      ref: 1.96.1
+      commit: 42b266171e51a016313f47d0c48aca9295b9cbb2
     languages:
       groovy:
         label: Groovy
@@ -258,8 +258,8 @@ extensions:
     github:
       repo: microsoft/vscode
       path: extensions/handlebars
-      ref: 1.95.1
-      commit: 65edc4939843c90c34d61f4ce11704f09d3e5cb6
+      ref: 1.96.1
+      commit: 42b266171e51a016313f47d0c48aca9295b9cbb2
     languages:
       handlebars:
         label: Handlebars
@@ -273,8 +273,8 @@ extensions:
     github:
       repo: microsoft/vscode
       path: extensions/hlsl
-      ref: 1.95.1
-      commit: 65edc4939843c90c34d61f4ce11704f09d3e5cb6
+      ref: 1.96.1
+      commit: 42b266171e51a016313f47d0c48aca9295b9cbb2
     languages:
       hlsl:
         label: HLSL (High-Level Shader Language)
@@ -293,8 +293,8 @@ extensions:
     github:
       repo: microsoft/vscode
       path: extensions/html
-      ref: 1.95.1
-      commit: 65edc4939843c90c34d61f4ce11704f09d3e5cb6
+      ref: 1.96.1
+      commit: 42b266171e51a016313f47d0c48aca9295b9cbb2
     languages:
       html:
         label: HTML
@@ -320,8 +320,8 @@ extensions:
     github:
       repo: microsoft/vscode
       path: extensions/ini
-      ref: 1.95.1
-      commit: 65edc4939843c90c34d61f4ce11704f09d3e5cb6
+      ref: 1.96.1
+      commit: 42b266171e51a016313f47d0c48aca9295b9cbb2
     languages:
       ini:
         label: INI Config File
@@ -333,8 +333,8 @@ extensions:
     github:
       repo: microsoft/vscode
       path: extensions/java
-      ref: 1.95.1
-      commit: 65edc4939843c90c34d61f4ce11704f09d3e5cb6
+      ref: 1.96.1
+      commit: 42b266171e51a016313f47d0c48aca9295b9cbb2
     languages:
       java:
         label: Java
@@ -347,13 +347,13 @@ extensions:
     github:
       repo: microsoft/vscode
       path: extensions/javascript
-      ref: 1.95.1
-      commit: 65edc4939843c90c34d61f4ce11704f09d3e5cb6
+      ref: 1.96.1
+      commit: 42b266171e51a016313f47d0c48aca9295b9cbb2
     languages:
       javascript:
         label: JavaScript
         scope-name: source.js
-        upstream-url: https://github.com/microsoft/TypeScript-TmLanguage/commit/b80b7509a78e642f789c567e144ed951ab98b4e3
+        upstream-url: https://github.com/microsoft/TypeScript-TmLanguage/commit/48f608692aa6d6ad7bd65b478187906c798234a8
         file-extensions:
         - .cjs
         - .es6
@@ -365,7 +365,7 @@ extensions:
       javascriptreact:
         label: JavaScript JSX
         scope-name: source.js.jsx
-        upstream-url: https://github.com/microsoft/TypeScript-TmLanguage/commit/b80b7509a78e642f789c567e144ed951ab98b4e3
+        upstream-url: https://github.com/microsoft/TypeScript-TmLanguage/commit/48f608692aa6d6ad7bd65b478187906c798234a8
         file-extensions:
         - .jsx
     inline-grammars:
@@ -374,8 +374,8 @@ extensions:
     github:
       repo: microsoft/vscode
       path: extensions/json
-      ref: 1.95.1
-      commit: 65edc4939843c90c34d61f4ce11704f09d3e5cb6
+      ref: 1.96.1
+      commit: 42b266171e51a016313f47d0c48aca9295b9cbb2
     languages:
       json:
         label: JSON
@@ -435,8 +435,8 @@ extensions:
     github:
       repo: microsoft/vscode
       path: extensions/julia
-      ref: 1.95.1
-      commit: 65edc4939843c90c34d61f4ce11704f09d3e5cb6
+      ref: 1.96.1
+      commit: 42b266171e51a016313f47d0c48aca9295b9cbb2
     languages:
       julia:
         label: Julia
@@ -448,8 +448,8 @@ extensions:
     github:
       repo: microsoft/vscode
       path: extensions/latex
-      ref: 1.95.1
-      commit: 65edc4939843c90c34d61f4ce11704f09d3e5cb6
+      ref: 1.96.1
+      commit: 42b266171e51a016313f47d0c48aca9295b9cbb2
     languages:
       bibtex:
         label: BibTeX
@@ -486,8 +486,8 @@ extensions:
     github:
       repo: microsoft/vscode
       path: extensions/less
-      ref: 1.95.1
-      commit: 65edc4939843c90c34d61f4ce11704f09d3e5cb6
+      ref: 1.96.1
+      commit: 42b266171e51a016313f47d0c48aca9295b9cbb2
     languages:
       less:
         label: Less
@@ -505,8 +505,8 @@ extensions:
     github:
       repo: microsoft/vscode
       path: extensions/lua
-      ref: 1.95.1
-      commit: 65edc4939843c90c34d61f4ce11704f09d3e5cb6
+      ref: 1.96.1
+      commit: 42b266171e51a016313f47d0c48aca9295b9cbb2
     languages:
       lua:
         label: Lua
@@ -518,8 +518,8 @@ extensions:
     github:
       repo: microsoft/vscode
       path: extensions/make
-      ref: 1.95.1
-      commit: 65edc4939843c90c34d61f4ce11704f09d3e5cb6
+      ref: 1.96.1
+      commit: 42b266171e51a016313f47d0c48aca9295b9cbb2
     languages:
       makefile:
         label: Makefile
@@ -537,8 +537,8 @@ extensions:
     github:
       repo: microsoft/vscode
       path: extensions/markdown-basics
-      ref: 1.95.1
-      commit: 65edc4939843c90c34d61f4ce11704f09d3e5cb6
+      ref: 1.96.1
+      commit: 42b266171e51a016313f47d0c48aca9295b9cbb2
     languages:
       markdown:
         label: Markdown
@@ -558,8 +558,8 @@ extensions:
     github:
       repo: microsoft/vscode
       path: extensions/markdown-math
-      ref: 1.95.1
-      commit: 65edc4939843c90c34d61f4ce11704f09d3e5cb6
+      ref: 1.96.1
+      commit: 42b266171e51a016313f47d0c48aca9295b9cbb2
     languages:
       markdown-math:
         label: Markdown Math
@@ -572,8 +572,8 @@ extensions:
     github:
       repo: microsoft/vscode
       path: extensions/objective-c
-      ref: 1.95.1
-      commit: 65edc4939843c90c34d61f4ce11704f09d3e5cb6
+      ref: 1.96.1
+      commit: 42b266171e51a016313f47d0c48aca9295b9cbb2
     languages:
       objective-c:
         label: Objective-C
@@ -591,8 +591,8 @@ extensions:
     github:
       repo: microsoft/vscode
       path: extensions/perl
-      ref: 1.95.1
-      commit: 65edc4939843c90c34d61f4ce11704f09d3e5cb6
+      ref: 1.96.1
+      commit: 42b266171e51a016313f47d0c48aca9295b9cbb2
     languages:
       perl:
         label: Perl
@@ -622,8 +622,8 @@ extensions:
     github:
       repo: microsoft/vscode
       path: extensions/php
-      ref: 1.95.1
-      commit: 65edc4939843c90c34d61f4ce11704f09d3e5cb6
+      ref: 1.96.1
+      commit: 42b266171e51a016313f47d0c48aca9295b9cbb2
     languages:
       php:
         label: PHP
@@ -639,8 +639,8 @@ extensions:
     github:
       repo: microsoft/vscode
       path: extensions/powershell
-      ref: 1.95.1
-      commit: 65edc4939843c90c34d61f4ce11704f09d3e5cb6
+      ref: 1.96.1
+      commit: 42b266171e51a016313f47d0c48aca9295b9cbb2
     languages:
       powershell:
         label: PowerShell
@@ -656,8 +656,8 @@ extensions:
     github:
       repo: microsoft/vscode
       path: extensions/pug
-      ref: 1.95.1
-      commit: 65edc4939843c90c34d61f4ce11704f09d3e5cb6
+      ref: 1.96.1
+      commit: 42b266171e51a016313f47d0c48aca9295b9cbb2
     languages:
       jade:
         label: Pug
@@ -670,8 +670,8 @@ extensions:
     github:
       repo: microsoft/vscode
       path: extensions/python
-      ref: 1.95.1
-      commit: 65edc4939843c90c34d61f4ce11704f09d3e5cb6
+      ref: 1.96.1
+      commit: 42b266171e51a016313f47d0c48aca9295b9cbb2
     languages:
       python:
         label: Python
@@ -696,8 +696,8 @@ extensions:
     github:
       repo: microsoft/vscode
       path: extensions/r
-      ref: 1.95.1
-      commit: 65edc4939843c90c34d61f4ce11704f09d3e5cb6
+      ref: 1.96.1
+      commit: 42b266171e51a016313f47d0c48aca9295b9cbb2
     languages:
       r:
         label: R
@@ -712,8 +712,8 @@ extensions:
     github:
       repo: microsoft/vscode
       path: extensions/razor
-      ref: 1.95.1
-      commit: 65edc4939843c90c34d61f4ce11704f09d3e5cb6
+      ref: 1.96.1
+      commit: 42b266171e51a016313f47d0c48aca9295b9cbb2
     languages:
       razor:
         label: ASP.NET Razor
@@ -726,8 +726,8 @@ extensions:
     github:
       repo: microsoft/vscode
       path: extensions/restructuredtext
-      ref: 1.95.1
-      commit: 65edc4939843c90c34d61f4ce11704f09d3e5cb6
+      ref: 1.96.1
+      commit: 42b266171e51a016313f47d0c48aca9295b9cbb2
     languages:
       restructuredtext:
         label: reStructuredText
@@ -739,8 +739,8 @@ extensions:
     github:
       repo: microsoft/vscode
       path: extensions/ruby
-      ref: 1.95.1
-      commit: 65edc4939843c90c34d61f4ce11704f09d3e5cb6
+      ref: 1.96.1
+      commit: 42b266171e51a016313f47d0c48aca9295b9cbb2
     languages:
       ruby:
         label: Ruby
@@ -784,8 +784,8 @@ extensions:
     github:
       repo: microsoft/vscode
       path: extensions/rust
-      ref: 1.95.1
-      commit: 65edc4939843c90c34d61f4ce11704f09d3e5cb6
+      ref: 1.96.1
+      commit: 42b266171e51a016313f47d0c48aca9295b9cbb2
     languages:
       rust:
         label: Rust
@@ -797,8 +797,8 @@ extensions:
     github:
       repo: microsoft/vscode
       path: extensions/scss
-      ref: 1.95.1
-      commit: 65edc4939843c90c34d61f4ce11704f09d3e5cb6
+      ref: 1.96.1
+      commit: 42b266171e51a016313f47d0c48aca9295b9cbb2
     languages:
       scss:
         label: SCSS
@@ -812,8 +812,8 @@ extensions:
     github:
       repo: microsoft/vscode
       path: extensions/search-result
-      ref: 1.95.1
-      commit: 65edc4939843c90c34d61f4ce11704f09d3e5cb6
+      ref: 1.96.1
+      commit: 42b266171e51a016313f47d0c48aca9295b9cbb2
     languages:
       search-result:
         label: VS Code Search Result
@@ -824,8 +824,8 @@ extensions:
     github:
       repo: microsoft/vscode
       path: extensions/shaderlab
-      ref: 1.95.1
-      commit: 65edc4939843c90c34d61f4ce11704f09d3e5cb6
+      ref: 1.96.1
+      commit: 42b266171e51a016313f47d0c48aca9295b9cbb2
     languages:
       shaderlab:
         label: ShaderLab
@@ -837,8 +837,8 @@ extensions:
     github:
       repo: microsoft/vscode
       path: extensions/shellscript
-      ref: 1.95.1
-      commit: 65edc4939843c90c34d61f4ce11704f09d3e5cb6
+      ref: 1.96.1
+      commit: 42b266171e51a016313f47d0c48aca9295b9cbb2
     languages:
       shellscript:
         label: Shell Script
@@ -891,8 +891,8 @@ extensions:
     github:
       repo: microsoft/vscode
       path: extensions/sql
-      ref: 1.95.1
-      commit: 65edc4939843c90c34d61f4ce11704f09d3e5cb6
+      ref: 1.96.1
+      commit: 42b266171e51a016313f47d0c48aca9295b9cbb2
     languages:
       sql:
         label: MS SQL
@@ -905,8 +905,8 @@ extensions:
     github:
       repo: microsoft/vscode
       path: extensions/swift
-      ref: 1.95.1
-      commit: 65edc4939843c90c34d61f4ce11704f09d3e5cb6
+      ref: 1.96.1
+      commit: 42b266171e51a016313f47d0c48aca9295b9cbb2
     languages:
       swift:
         label: Swift
@@ -918,13 +918,13 @@ extensions:
     github:
       repo: microsoft/vscode
       path: extensions/typescript-basics
-      ref: 1.95.1
-      commit: 65edc4939843c90c34d61f4ce11704f09d3e5cb6
+      ref: 1.96.1
+      commit: 42b266171e51a016313f47d0c48aca9295b9cbb2
     languages:
       typescript:
         label: TypeScript
         scope-name: source.ts
-        upstream-url: https://github.com/microsoft/TypeScript-TmLanguage/commit/b80b7509a78e642f789c567e144ed951ab98b4e3
+        upstream-url: https://github.com/microsoft/TypeScript-TmLanguage/commit/48f608692aa6d6ad7bd65b478187906c798234a8
         file-extensions:
         - .cts
         - .mts
@@ -932,7 +932,7 @@ extensions:
       typescriptreact:
         label: TypeScript JSX
         scope-name: source.tsx
-        upstream-url: https://github.com/microsoft/TypeScript-TmLanguage/commit/b80b7509a78e642f789c567e144ed951ab98b4e3
+        upstream-url: https://github.com/microsoft/TypeScript-TmLanguage/commit/48f608692aa6d6ad7bd65b478187906c798234a8
         file-extensions:
         - .tsx
     inline-grammars:
@@ -942,8 +942,8 @@ extensions:
     github:
       repo: microsoft/vscode
       path: extensions/vb
-      ref: 1.95.1
-      commit: 65edc4939843c90c34d61f4ce11704f09d3e5cb6
+      ref: 1.96.1
+      commit: 42b266171e51a016313f47d0c48aca9295b9cbb2
     languages:
       vb:
         label: Visual Basic
@@ -959,8 +959,8 @@ extensions:
     github:
       repo: microsoft/vscode
       path: extensions/xml
-      ref: 1.95.1
-      commit: 65edc4939843c90c34d61f4ce11704f09d3e5cb6
+      ref: 1.96.1
+      commit: 42b266171e51a016313f47d0c48aca9295b9cbb2
     languages:
       xml:
         label: XML
@@ -1039,8 +1039,8 @@ extensions:
     github:
       repo: microsoft/vscode
       path: extensions/yaml
-      ref: 1.95.1
-      commit: 65edc4939843c90c34d61f4ce11704f09d3e5cb6
+      ref: 1.96.1
+      commit: 42b266171e51a016313f47d0c48aca9295b9cbb2
     languages:
       yaml:
         label: YAML
@@ -1050,6 +1050,7 @@ extensions:
         - .cff
         - .eyaml
         - .eyml
+        - .winget
         - .yaml
         - .yaml-tmlanguage
         - .yaml-tmpreferences

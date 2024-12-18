@@ -1443,7 +1443,7 @@
   <!-- ======================================== -->
   <extension point="org.eclipse.core.contenttype.contentTypes">
     <content-type id="org.eclipse.tm4e.language_pack.yaml" name="YAML" base-type="org.eclipse.tm4e.language_pack.basetype" priority="low"
-                  file-extensions="cff,eyaml,eyml,yaml,yaml-tmlanguage,yaml-tmpreferences,yaml-tmtheme,yml" />
+                  file-extensions="cff,eyaml,eyml,winget,yaml,yaml-tmlanguage,yaml-tmpreferences,yaml-tmtheme,yml" />
   </extension>
   <extension point="org.eclipse.tm4e.registry.grammars">
     <grammar scopeName="source.yaml" path="syntaxes/yaml/yaml.tmLanguage.json" />

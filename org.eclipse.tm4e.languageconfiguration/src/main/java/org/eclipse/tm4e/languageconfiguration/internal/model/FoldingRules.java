@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2018 Red Hat Inc. and others.
+ * Copyright (c) 2018, 2025 Red Hat Inc. and others.
  * This program and the accompanying materials are made
  * available under the terms of the Eclipse Public License 2.0
  * which is available at https://www.eclipse.org/legal/epl-2.0/
@@ -63,7 +63,7 @@ public final class FoldingRules {
 	@Override
 	public String toString() {
 		return StringUtils.toString(this, sb -> sb
-				.append("markers=").append(", ")
+				.append("markers=").append(markers).append(", ")
 				.append("offSide=").append(offSide));
 	}
 }

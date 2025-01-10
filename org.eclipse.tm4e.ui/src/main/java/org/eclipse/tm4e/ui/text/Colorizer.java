@@ -166,6 +166,13 @@ class Colorizer {
 			length = Math.min(length, damageRegion.getOffset() + damageRegion.getLength() - lastStart);
 			addStyleRange(presentation, lastStart, length, lastAttribute);
 			viewer.changeTextPresentation(presentation, false);
+		} catch (final IllegalArgumentException | BadLocationException ex) {
+			error = ex;
+			// These exceptions can be thrown if there is a delay running the tokenizer thread
+			// and the tokens become out of sync with the document line data.
+			// As this is an expected state, only log them if tracing is enabled.
+			if (TMUIPlugin.isLogTraceEnabled())
+				TMUIPlugin.logError(ex);
 		} catch (final Exception ex) {
 			error = ex;
 			TMUIPlugin.logError(ex);

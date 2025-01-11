@@ -25,7 +25,7 @@ import java.nio.charset.StandardCharsets;
 import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.tm4e.core.TMException;
 import org.eclipse.tm4e.core.internal.utils.StringUtils;
-import org.jcodings.specific.UTF8Encoding;
+import org.jcodings.specific.NonStrictUTF8Encoding;
 import org.joni.Matcher;
 import org.joni.Option;
 import org.joni.Regex;
@@ -88,7 +88,7 @@ public final class OnigRegExp {
 		if (ignoreCase)
 			options |= Option.IGNORECASE;
 		final byte[] patternBytes = pattern.getBytes(StandardCharsets.UTF_8);
-		return new Regex(patternBytes, 0, patternBytes.length, options, UTF8Encoding.INSTANCE, Syntax.DEFAULT,
+		return new Regex(patternBytes, 0, patternBytes.length, options, NonStrictUTF8Encoding.INSTANCE, Syntax.RUBY,
 				LOGGER.isLoggable(Level.WARNING) ? LOGGER_WARN_CALLBACK : WarnCallback.NONE);
 	}
 

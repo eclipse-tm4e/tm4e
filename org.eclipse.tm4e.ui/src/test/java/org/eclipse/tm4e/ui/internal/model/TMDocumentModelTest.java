@@ -11,9 +11,8 @@
  */
 package org.eclipse.tm4e.ui.internal.model;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.eclipse.tm4e.core.registry.IGrammarSource.fromString;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-
 import org.eclipse.jface.text.Document;
 import org.eclipse.tm4e.core.registry.IGrammarSource.ContentType;
 import org.eclipse.tm4e.core.registry.Registry;
@@ -34,14 +33,14 @@ class TMDocumentModelTest {
 		});
 
 		Thread.sleep(300);
-		assertEquals(1, tmModel.getNumberOfLines());
+		assertThat(tmModel.getNumberOfLines()).isEqualTo(1);
 
 		document.set("a\nb\nc\nd");
 		Thread.sleep(300);
-		assertEquals(4, tmModel.getNumberOfLines());
+		assertThat(tmModel.getNumberOfLines()).isEqualTo(4);
 
 		document.set("a\nb");
 		Thread.sleep(300);
-		assertEquals(2, tmModel.getNumberOfLines());
+		assertThat(tmModel.getNumberOfLines()).isEqualTo(2);
 	}
 }

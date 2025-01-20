@@ -12,7 +12,7 @@
  */
 package org.eclipse.tm4e.core.internal.theme.css;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.assertj.core.api.Assertions.*;
 
 import org.eclipse.tm4e.core.theme.RGB;
 import org.eclipse.tm4e.core.theme.css.CSSParser;
@@ -27,9 +27,9 @@ class CSSParserTest {
 			.storage.invalid { background-color: red; }
 			""");
 
-		assertEquals(null, parser.getBestStyle("undefined"));
-		assertEquals(new RGB(255,128,128), parser.getBestStyle("invalid").getBackgroundColor());
-		assertEquals(new RGB(255,0,0), parser.getBestStyle("storage", "invalid").getBackgroundColor());
-		assertEquals(new RGB(255,0,0), parser.getBestStyle("storage" , "modifier", "invalid", "deprecated").getBackgroundColor());
+		assertThat(parser.getBestStyle("undefined")).isNull();
+		assertThat(parser.getBestStyle("invalid").getBackgroundColor()).isEqualTo(new RGB(255, 128, 128));
+		assertThat(parser.getBestStyle("storage", "invalid").getBackgroundColor()).isEqualTo(new RGB(255, 0, 0));
+		assertThat(parser.getBestStyle("storage", "modifier", "invalid", "deprecated").getBackgroundColor()).isEqualTo(new RGB(255, 0, 0));
 	}
 }

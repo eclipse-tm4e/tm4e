@@ -11,7 +11,7 @@
  */
 package org.eclipse.tm4e.ui.tests;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.assertj.core.api.Assertions.assertThat;
 
 import java.util.List;
 
@@ -63,10 +63,10 @@ class TMPresentationReconcilerTypeScriptTest {
 		editor = new TMEditor(grammar, theme, "let a = '';\nlet b = 10;\nlet c = true;");
 
 		final List<ICommand> commands = editor.execute();
-		assertEquals(1, commands.size());
+		assertThat(commands).hasSize(1);
 
-		final ICommand command = commands.get(0);
-		assertEquals("["
+		final ICommand command0 = commands.get(0);
+		assertThat(command0.getStyleRanges()).isEqualTo("["
 				+ "StyleRange {0, 3, fontStyle=bold, foreground=Color {7, 54, 66, 255}}, "
 				+ "StyleRange {3, 1, fontStyle=normal}, "
 				+ "StyleRange {4, 1, fontStyle=normal, foreground=Color {38, 139, 210, 255}}, "
@@ -91,8 +91,7 @@ class TMPresentationReconcilerTypeScriptTest {
 				+ "StyleRange {31, 1, fontStyle=normal}, "
 				+ "StyleRange {32, 4, fontStyle=normal, foreground=Color {181, 137, 0, 255}}, "
 				+ "StyleRange {36, 1, fontStyle=normal}"
-				+ "]",
-				command.getStyleRanges());
+				+ "]");
 	}
 
 	@Test
@@ -101,11 +100,11 @@ class TMPresentationReconcilerTypeScriptTest {
 		editor.invalidateTextPresentation(0, 3);
 
 		final List<ICommand> commands = editor.execute();
-		assertEquals(2, commands.size());
+		assertThat(commands).hasSize(2);
 
 		// document.set("let a = '';\nlet b = 10;\nlet c = true;");
 		final ICommand command0 = commands.get(0);
-		assertEquals("["
+		assertThat(command0.getStyleRanges()).isEqualTo("["
 				+ "StyleRange {0, 3, fontStyle=bold, foreground=Color {7, 54, 66, 255}}, "
 				+ "StyleRange {3, 1, fontStyle=normal}, "
 				+ "StyleRange {4, 1, fontStyle=normal, foreground=Color {38, 139, 210, 255}}, "
@@ -130,15 +129,13 @@ class TMPresentationReconcilerTypeScriptTest {
 				+ "StyleRange {31, 1, fontStyle=normal}, "
 				+ "StyleRange {32, 4, fontStyle=normal, foreground=Color {181, 137, 0, 255}}, "
 				+ "StyleRange {36, 1, fontStyle=normal}"
-				+ "]",
-				command0.getStyleRanges());
+				+ "]");
 
 		// viewer.invalidateTextPresentation(0, 3);
 		final ICommand command1 = commands.get(1);
-		assertEquals("["
+		assertThat(command1.getStyleRanges()).isEqualTo("["
 				+ "StyleRange {0, 3, fontStyle=bold, foreground=Color {7, 54, 66, 255}}"
-				+ "]",
-				command1.getStyleRanges());
+				+ "]");
 	}
 
 	@Test
@@ -147,11 +144,11 @@ class TMPresentationReconcilerTypeScriptTest {
 		editor.invalidateTextPresentation(0, 2);
 
 		final List<ICommand> commands = editor.execute();
-		assertEquals(2, commands.size());
+		assertThat(commands).hasSize(2);
 
 		// document.set("let a = '';\nlet b = 10;\nlet c = true;");
 		final ICommand command0 = commands.get(0);
-		assertEquals("["
+		assertThat(command0.getStyleRanges()).isEqualTo("["
 				+ "StyleRange {0, 3, fontStyle=bold, foreground=Color {7, 54, 66, 255}}, "
 				+ "StyleRange {3, 1, fontStyle=normal}, "
 				+ "StyleRange {4, 1, fontStyle=normal, foreground=Color {38, 139, 210, 255}}, "
@@ -176,15 +173,13 @@ class TMPresentationReconcilerTypeScriptTest {
 				+ "StyleRange {31, 1, fontStyle=normal}, "
 				+ "StyleRange {32, 4, fontStyle=normal, foreground=Color {181, 137, 0, 255}}, "
 				+ "StyleRange {36, 1, fontStyle=normal}"
-				+ "]",
-				command0.getStyleRanges());
+				+ "]");
 
 		// viewer.invalidateTextPresentation(0, 2);
 		final ICommand command1 = commands.get(1);
-		assertEquals("["
+		assertThat(command1.getStyleRanges()).isEqualTo("["
 				+ "StyleRange {0, 2, fontStyle=bold, foreground=Color {7, 54, 66, 255}}"
-				+ "]",
-				command1.getStyleRanges());
+				+ "]");
 	}
 
 	@Test
@@ -193,11 +188,11 @@ class TMPresentationReconcilerTypeScriptTest {
 		editor.invalidateTextPresentation(1, 2);
 
 		final List<ICommand> commands = editor.execute();
-		assertEquals(2, commands.size());
+		assertThat(commands).hasSize(2);
 
 		// document.set("let a = '';\nlet b = 10;\nlet c = true;");
-		final ICommand Command0 = commands.get(0);
-		assertEquals("["
+		final ICommand command0 = commands.get(0);
+		assertThat(command0.getStyleRanges()).isEqualTo("["
 				+ "StyleRange {0, 3, fontStyle=bold, foreground=Color {7, 54, 66, 255}}, "
 				+ "StyleRange {3, 1, fontStyle=normal}, "
 				+ "StyleRange {4, 1, fontStyle=normal, foreground=Color {38, 139, 210, 255}}, "
@@ -222,15 +217,13 @@ class TMPresentationReconcilerTypeScriptTest {
 				+ "StyleRange {31, 1, fontStyle=normal}, "
 				+ "StyleRange {32, 4, fontStyle=normal, foreground=Color {181, 137, 0, 255}}, "
 				+ "StyleRange {36, 1, fontStyle=normal}"
-				+ "]",
-				Command0.getStyleRanges());
+				+ "]");
 
 		// viewer.invalidateTextPresentation(1, 2);
 		final ICommand command1 = commands.get(1);
-		assertEquals("["
+		assertThat(command1.getStyleRanges()).isEqualTo("["
 				+ "StyleRange {1, 2, fontStyle=bold, foreground=Color {7, 54, 66, 255}}"
-				+ "]",
-				command1.getStyleRanges());
+				+ "]");
 	}
 
 	@Test
@@ -239,11 +232,11 @@ class TMPresentationReconcilerTypeScriptTest {
 		editor.invalidateTextPresentation(1, 1);
 
 		final List<ICommand> commands = editor.execute();
-		assertEquals(2, commands.size());
+		assertThat(commands).hasSize(2);
 
 		// document.set("let a = '';\nlet b = 10;\nlet c = true;");
 		final ICommand command0 = commands.get(0);
-		assertEquals("["
+		assertThat(command0.getStyleRanges()).isEqualTo("["
 				+ "StyleRange {0, 3, fontStyle=bold, foreground=Color {7, 54, 66, 255}}, "
 				+ "StyleRange {3, 1, fontStyle=normal}, "
 				+ "StyleRange {4, 1, fontStyle=normal, foreground=Color {38, 139, 210, 255}}, "
@@ -268,15 +261,13 @@ class TMPresentationReconcilerTypeScriptTest {
 				+ "StyleRange {31, 1, fontStyle=normal}, "
 				+ "StyleRange {32, 4, fontStyle=normal, foreground=Color {181, 137, 0, 255}}, "
 				+ "StyleRange {36, 1, fontStyle=normal}"
-				+ "]",
-				command0.getStyleRanges());
+				+ "]");
 
 		// viewer.invalidateTextPresentation(1, 1);
 		final ICommand command1 = commands.get(1);
-		assertEquals("["
+		assertThat(command1.getStyleRanges()).isEqualTo("["
 				+ "StyleRange {1, 1, fontStyle=bold, foreground=Color {7, 54, 66, 255}}"
-				+ "]",
-				command1.getStyleRanges());
+				+ "]");
 	}
 
 	@Disabled
@@ -286,11 +277,11 @@ class TMPresentationReconcilerTypeScriptTest {
 		editor.invalidateTextPresentation(1, 8);
 
 		final List<ICommand> commands = editor.execute();
-		assertEquals(2, commands.size());
+		assertThat(commands).hasSize(2);
 
 		// document.set("let a = '';\nlet b = 10;\nlet c = true;");
 		final ICommand command0 = commands.get(0);
-		assertEquals("["
+		assertThat(command0.getStyleRanges()).isEqualTo("["
 				+ "StyleRange {0, 3, fontStyle=bold, foreground=Color {7, 54, 66, 255}}, "
 				+ "StyleRange {3, 1, fontStyle=normal}, "
 				+ "StyleRange {4, 1, fontStyle=normal, foreground=Color {38, 139, 210, 255}}, "
@@ -315,15 +306,13 @@ class TMPresentationReconcilerTypeScriptTest {
 				+ "StyleRange {31, 1, fontStyle=normal}, "
 				+ "StyleRange {32, 4, fontStyle=normal, foreground=Color {181, 137, 0, 255}}, "
 				+ "StyleRange {36, 1, fontStyle=normal}"
-				+ "]",
-				command0.getStyleRanges());
+				+ "]");
 
 		//viewer.invalidateTextPresentation(1, 8);
 		final ICommand command1 = commands.get(1);
-		assertEquals("["
+		assertThat(command1.getStyleRanges()).isEqualTo("["
 				+ "StyleRange {1, 2, fontStyle=bold, foreground=Color {7, 54, 66, 255}}"
-				+ "]",
-				command1.getStyleRanges());
+				+ "]");
 	}
 
 	@Test
@@ -332,15 +321,14 @@ class TMPresentationReconcilerTypeScriptTest {
 		editor.invalidateTextPresentation(0, 6);
 
 		final List<ICommand> commands = editor.execute();
-		assertEquals(2, commands.size());
+		assertThat(commands).hasSize(2);
 
 		for (final ICommand command : commands) {
-			assertEquals("["
+			assertThat(command.getStyleRanges()).isEqualTo("["
 					+ "StyleRange {0, 3, fontStyle=normal, foreground=Color {38, 139, 210, 255}}, "
 					+ "StyleRange {3, 2, fontStyle=normal}, "
 					+ "StyleRange {5, 1, fontStyle=normal, foreground=Color {38, 139, 210, 255}}"
-					+ "]",
-					command.getStyleRanges());
+					+ "]");
 		}
 	}
 }

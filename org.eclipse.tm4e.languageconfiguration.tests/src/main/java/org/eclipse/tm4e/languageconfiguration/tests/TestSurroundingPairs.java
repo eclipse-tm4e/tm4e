@@ -12,7 +12,7 @@
  */
 package org.eclipse.tm4e.languageconfiguration.tests;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.assertj.core.api.Assertions.assertThat;
 
 import java.io.ByteArrayInputStream;
 import java.util.stream.Stream;
@@ -61,22 +61,21 @@ public class TestSurroundingPairs {
 
 		text.setText("the mountain is high");
 		text.setSelection(4, 12);
-		assertEquals(12, text.getCaretOffset());
-		assertEquals("mountain", text.getSelectionText());
+		assertThat(text.getCaretOffset()).isEqualTo(12);
+		assertThat(text.getSelectionText()).isEqualTo("mountain");
 		text.insert("(");
-		assertEquals("the (mountain) is high", text.getText());
-		assertEquals("mountain", text.getSelectionText());
-		assertEquals(13, text.getCaretOffset());
+		assertThat(text.getText()).isEqualTo("the (mountain) is high");
+		assertThat(text.getSelectionText()).isEqualTo("mountain");
+		assertThat(text.getCaretOffset()).isEqualTo(13);
 
 		// test with disabled surrounding pairs
 		langDef.setMatchingPairsEnabled(false);
 
 		text.setText("the mountain is high");
 		text.setSelection(4, 12);
-		assertEquals(12, text.getCaretOffset());
-		assertEquals("mountain", text.getSelectionText());
+		assertThat(text.getCaretOffset()).isEqualTo(12);
+		assertThat(text.getSelectionText()).isEqualTo("mountain");
 		text.insert("(");
-		assertEquals("the ( is high", text.getText());
-
+		assertThat(text.getText()).isEqualTo("the ( is high");
 	}
 }

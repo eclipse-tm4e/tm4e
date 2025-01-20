@@ -8,7 +8,7 @@
  */
 package org.eclipse.tm4e.languageconfiguration.tests;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.assertj.core.api.Assertions.assertThat;
 
 import java.io.ByteArrayInputStream;
 
@@ -43,6 +43,6 @@ public class TestOnEnter {
 		final StyledText text = (StyledText) editor.getAdapter(Control.class);
 		text.setSelection(text.getText().length());
 		text.insert("\n");
-		assertEquals("  ///\n  /// ", text.getText());
+		assertThat(text.getText()).isEqualTo("  ///\n  /// ");
 	}
 }

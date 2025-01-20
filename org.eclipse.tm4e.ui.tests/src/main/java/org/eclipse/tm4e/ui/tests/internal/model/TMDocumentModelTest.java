@@ -13,7 +13,7 @@
  */
 package org.eclipse.tm4e.ui.tests.internal.model;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.assertj.core.api.Assertions.assertThat;
 
 import java.nio.file.Path;
 import java.util.ArrayList;
@@ -41,8 +41,8 @@ import org.junit.jupiter.api.TestMethodOrder;
 @TestMethodOrder(MethodOrderer.MethodName.class)
 class TMDocumentModelTest {
 
-	 interface ThrowingRunnable {
-		 void run() throws Throwable;
+	interface ThrowingRunnable {
+		void run() throws Throwable;
 	}
 
 	private static final String LF = "\n";
@@ -61,12 +61,12 @@ class TMDocumentModelTest {
 	private final TMDocumentModel model = new TMDocumentModel(doc);
 
 	private void assertDocHasLines(final Iterable<String> lines) {
-		assertEquals(String.join(LF, lines), doc.get());
-		assertEquals(model.getDocument().getNumberOfLines(), model.getNumberOfLines());
+		assertThat(doc.get()).isEqualTo(String.join(LF, lines));
+		assertThat(model.getNumberOfLines()).isEqualTo(model.getDocument().getNumberOfLines());
 	}
 
 	private void assertRange(final ModelTokensChangedEvent e, final int startLineNumber, final int endLineNumber) {
-		assertEquals(List.of(new Range(startLineNumber, endLineNumber)), e.ranges);
+		assertThat(e.ranges).containsOnly(new Range(startLineNumber, endLineNumber));
 	}
 
 	private ModelTokensChangedEvent awaitModelChangedEvent(final TMDocumentModel model, final List<String> initialLines,
@@ -78,12 +78,12 @@ class TMDocumentModelTest {
 			final ModelTokensChangedEvent.Listener listener = e -> signal.countDown();
 			model.addModelTokensChangedListener(listener);
 			model.getDocument().set(String.join(LF, initialLines));
-			assertTrue(signal.await(2, TimeUnit.SECONDS));
+			assertThat(signal.await(2, TimeUnit.SECONDS)).isTrue();
 			Thread.sleep(TestUtils.isCI() ? 500 : 50);
 			model.removeModelTokensChangedListener(listener);
 		}
 
-		assertEquals(model.getDocument().getNumberOfLines(), model.getNumberOfLines());
+		assertThat(model.getNumberOfLines()).isEqualTo(model.getDocument().getNumberOfLines());
 
 		// test
 		final var event = new AtomicReference<ModelTokensChangedEvent>();
@@ -94,7 +94,7 @@ class TMDocumentModelTest {
 		};
 		model.addModelTokensChangedListener(listener);
 		action.run();
-		assertTrue(signal.await(2, TimeUnit.SECONDS));
+		assertThat(signal.await(2, TimeUnit.SECONDS)).isTrue();
 		model.removeModelTokensChangedListener(listener);
 		return event.get();
 	}

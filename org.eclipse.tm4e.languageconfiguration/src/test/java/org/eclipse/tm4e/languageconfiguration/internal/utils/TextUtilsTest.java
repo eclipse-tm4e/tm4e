@@ -12,8 +12,8 @@
  */
 package org.eclipse.tm4e.languageconfiguration.internal.utils;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.eclipse.tm4e.languageconfiguration.internal.utils.TextUtils.*;
-import static org.junit.jupiter.api.Assertions.*;
 
 import org.eclipse.jface.text.DocumentCommand;
 import org.eclipse.tm4e.languageconfiguration.internal.model.CursorConfiguration;
@@ -27,142 +27,142 @@ class TextUtilsTest {
 
 	@Test
 	void testIsEnter() {
-		assertTrue(isEnter(newDoc(""), new DocumentCommand() {
+		assertThat(isEnter(newDoc(""), new DocumentCommand() {
 			{
 				text = "\n";
 			}
-		}));
-		assertTrue(isEnter(newDoc(""), new DocumentCommand() {
+		})).isTrue();
+		assertThat(isEnter(newDoc(""), new DocumentCommand() {
 			{
 				text = "\r\n";
 			}
-		}));
-		assertFalse(isEnter(newDoc(""), new DocumentCommand() {
+		})).isTrue();
+		assertThat(isEnter(newDoc(""), new DocumentCommand() {
 			{
 				text = "word";
 			}
-		}));
+		})).isFalse();
 	}
 
 	@Test
 	void testGetIndentationFromWhitespace() {
-		assertEquals("\t\t", getIndentationFromWhitespace("\t\t", new CursorConfiguration(false, 0)));
-		assertEquals("\t\t", getIndentationFromWhitespace("\t\t", new CursorConfiguration(true, 2)));
-		assertEquals("\t\t", getIndentationFromWhitespace("\t\t ", new CursorConfiguration(true, 2)));
-		assertEquals("\t\t  ", getIndentationFromWhitespace("\t\t  ", new CursorConfiguration(true, 2)));
-		assertEquals("\t\t  ", getIndentationFromWhitespace("\t\t   ", new CursorConfiguration(true, 2)));
-		assertEquals("", getIndentationFromWhitespace(" \t ", new CursorConfiguration(true, 2)));
+		assertThat(getIndentationFromWhitespace("\t\t", new CursorConfiguration(false, 0))).isEqualTo("\t\t");
+		assertThat(getIndentationFromWhitespace("\t\t", new CursorConfiguration(true, 2))).isEqualTo("\t\t");
+		assertThat(getIndentationFromWhitespace("\t\t ", new CursorConfiguration(true, 2))).isEqualTo("\t\t");
+		assertThat(getIndentationFromWhitespace("\t\t  ", new CursorConfiguration(true, 2))).isEqualTo("\t\t  ");
+		assertThat(getIndentationFromWhitespace("\t\t   ", new CursorConfiguration(true, 2))).isEqualTo("\t\t  ");
+		assertThat(getIndentationFromWhitespace(" \t ", new CursorConfiguration(true, 2))).isEqualTo("");
 	}
 
 	@Test
 	void testGetLeadingWhitespace() throws Exception {
 		final var indent = "\t \t ";
-		assertEquals(indent, getLeadingWhitespace(newDoc(indent + "hello"), 0));
-		assertEquals(indent, getLeadingWhitespace(newDoc("hello\n" + indent + "world"), 1));
-		assertEquals(indent, getIndentationAtPosition(newDoc(indent + "hello"), indent.length() + 2));
+		assertThat(getLeadingWhitespace(newDoc(indent + "hello"), 0)).isEqualTo(indent);
+		assertThat(getLeadingWhitespace(newDoc("hello\n" + indent + "world"), 1)).isEqualTo(indent);
+		assertThat(getIndentationAtPosition(newDoc(indent + "hello"), indent.length() + 2)).isEqualTo(indent);
 	}
 
 	@Test
-	void testIndentationAtPosition() throws Exception {
+	void testIndentationAtPosition() {
 		final var indent = "\t \t ";
-		assertEquals("", getIndentationAtPosition(newDoc(indent + "hello"), 0));
-		assertEquals("\t", getIndentationAtPosition(newDoc(indent + "hello"), 1));
-		assertEquals("\t ", getIndentationAtPosition(newDoc(indent + "hello"), 2));
+		assertThat(getIndentationAtPosition(newDoc(indent + "hello"), 0)).isEqualTo("");
+		assertThat(getIndentationAtPosition(newDoc(indent + "hello"), 1)).isEqualTo("\t");
+		assertThat(getIndentationAtPosition(newDoc(indent + "hello"), 2)).isEqualTo("\t ");
 	}
 
 	@Test
 	void testIsBlankLine() {
-		assertTrue(isBlankLine(newDoc(""), 0));
-		assertTrue(isBlankLine(newDoc(" "), 0));
-		assertTrue(isBlankLine(newDoc(" \t"), 0));
-		assertTrue(isBlankLine(newDoc("\n\n"), 1));
-		assertTrue(isBlankLine(newDoc("\n \n"), 1));
-		assertTrue(isBlankLine(newDoc("\n \t\n"), 1));
+		assertThat(isBlankLine(newDoc(""), 0)).isTrue();
+		assertThat(isBlankLine(newDoc(" "), 0)).isTrue();
+		assertThat(isBlankLine(newDoc(" \t"), 0)).isTrue();
+		assertThat(isBlankLine(newDoc("\n\n"), 1)).isTrue();
+		assertThat(isBlankLine(newDoc("\n \n"), 1)).isTrue();
+		assertThat(isBlankLine(newDoc("\n \t\n"), 1)).isTrue();
 
-		assertFalse(isBlankLine(newDoc("word"), 0));
-		assertFalse(isBlankLine(newDoc("\nword\n"), 1));
+		assertThat(isBlankLine(newDoc("word"), 0)).isFalse();
+		assertThat(isBlankLine(newDoc("\nword\n"), 1)).isFalse();
 	}
 
 	@Test
 	void testIsEmptyLine() {
-		assertTrue(isEmptyLine(newDoc(""), 0));
-		assertFalse(isEmptyLine(newDoc(" "), 0));
-		assertFalse(isEmptyLine(newDoc(" \t"), 0));
-		assertTrue(isEmptyLine(newDoc("\n\n"), 1));
-		assertFalse(isEmptyLine(newDoc("\n \n"), 1));
-		assertFalse(isEmptyLine(newDoc("\n \t\n"), 1));
+		assertThat(isEmptyLine(newDoc(""), 0)).isTrue();
+		assertThat(isEmptyLine(newDoc(" "), 0)).isFalse();
+		assertThat(isEmptyLine(newDoc(" \t"), 0)).isFalse();
+		assertThat(isEmptyLine(newDoc("\n\n"), 1)).isTrue();
+		assertThat(isEmptyLine(newDoc("\n \n"), 1)).isFalse();
+		assertThat(isEmptyLine(newDoc("\n \t\n"), 1)).isFalse();
 
-		assertFalse(isEmptyLine(newDoc("word"), 0));
-		assertFalse(isEmptyLine(newDoc("\nword\n"), 1));
+		assertThat(isEmptyLine(newDoc("word"), 0)).isFalse();
+		assertThat(isEmptyLine(newDoc("\nword\n"), 1)).isFalse();
 	}
 
 	@Test
 	void testReplaceIndent_IndentEmptyLines() {
-		assertEquals("", replaceIndent("\t\t", 2, "", true).toString());
-		assertEquals("foo  ", replaceIndent("foo  ", 2, "", true).toString());
-		assertEquals("foo", replaceIndent(" \t foo", 2, "", true).toString());
-		assertEquals("foo\nbar", replaceIndent(" foo\n bar", 2, "", true).toString());
-		assertEquals("foo\nbar", replaceIndent("  foo\n\tbar", 2, "", true).toString());
-		assertEquals("foo\nbar", replaceIndent(" foo\n\tbar", 2, "", true).toString());
-		assertEquals("foo\n\tbar", replaceIndent("\tfoo\n\t\tbar", 2, "", true).toString());
-		assertEquals("foo\n\tbar", replaceIndent("\tfoo\n  \tbar", 2, "", true).toString());
+		assertThat(replaceIndent("\t\t", 2, "", true)).hasToString("");
+		assertThat(replaceIndent("foo  ", 2, "", true)).hasToString("foo  ");
+		assertThat(replaceIndent(" \t foo", 2, "", true)).hasToString("foo");
+		assertThat(replaceIndent(" foo\n bar", 2, "", true)).hasToString("foo\nbar");
+		assertThat(replaceIndent("  foo\n\tbar", 2, "", true)).hasToString("foo\nbar");
+		assertThat(replaceIndent(" foo\n\tbar", 2, "", true)).hasToString("foo\nbar");
+		assertThat(replaceIndent("\tfoo\n\t\tbar", 2, "", true)).hasToString("foo\n\tbar");
+		assertThat(replaceIndent("\tfoo\n  \tbar", 2, "", true)).hasToString("foo\n\tbar");
 
-		assertEquals("foo\r\nbar", replaceIndent(" foo\r\n bar", 2, "", true).toString());
-		assertEquals("foo\r\nbar", replaceIndent("  foo\r\n\tbar", 2, "", true).toString());
-		assertEquals("foo\r\nbar", replaceIndent(" foo\r\n\tbar", 2, "", true).toString());
-		assertEquals("foo\r\n\tbar", replaceIndent("\tfoo\r\n\t\tbar", 2, "", true).toString());
-		assertEquals("foo\r\n\tbar", replaceIndent("\tfoo\r\n  \tbar", 2, "", true).toString());
+		assertThat(replaceIndent(" foo\r\n bar", 2, "", true)).hasToString("foo\r\nbar");
+		assertThat(replaceIndent("  foo\r\n\tbar", 2, "", true)).hasToString("foo\r\nbar");
+		assertThat(replaceIndent(" foo\r\n\tbar", 2, "", true)).hasToString("foo\r\nbar");
+		assertThat(replaceIndent("\tfoo\r\n\t\tbar", 2, "", true)).hasToString("foo\r\n\tbar");
+		assertThat(replaceIndent("\tfoo\r\n  \tbar", 2, "", true)).hasToString("foo\r\n\tbar");
 
-		assertEquals("..", replaceIndent("\t\t", 2, "..", true).toString());
-		assertEquals("..foo  ", replaceIndent("foo  ", 2, "..", true).toString());
-		assertEquals("..foo", replaceIndent(" \t foo", 2, "..", true).toString());
-		assertEquals("..foo\n..bar", replaceIndent(" foo\n bar", 2, "..", true).toString());
-		assertEquals("..foo\n..bar", replaceIndent("  foo\n\tbar", 2, "..", true).toString());
-		assertEquals("..foo\n..bar", replaceIndent(" foo\n\tbar", 2, "..", true).toString());
-		assertEquals("..foo\n..\tbar", replaceIndent("\tfoo\n\t\tbar", 2, "..", true).toString());
-		assertEquals("..foo\n..\tbar", replaceIndent("\tfoo\n  \tbar", 2, "..", true).toString());
+		assertThat(replaceIndent("\t\t", 2, "..", true)).hasToString("..");
+		assertThat(replaceIndent("foo  ", 2, "..", true)).hasToString("..foo  ");
+		assertThat(replaceIndent(" \t foo", 2, "..", true)).hasToString("..foo");
+		assertThat(replaceIndent(" foo\n bar", 2, "..", true)).hasToString("..foo\n..bar");
+		assertThat(replaceIndent("  foo\n\tbar", 2, "..", true)).hasToString("..foo\n..bar");
+		assertThat(replaceIndent(" foo\n\tbar", 2, "..", true)).hasToString("..foo\n..bar");
+		assertThat(replaceIndent("\tfoo\n\t\tbar", 2, "..", true)).hasToString("..foo\n..\tbar");
+		assertThat(replaceIndent("\tfoo\n  \tbar", 2, "..", true)).hasToString("..foo\n..\tbar");
 
-		assertEquals("..\n", replaceIndent("\n", 2, "..", true).toString());
-		assertEquals("..\n..\n", replaceIndent("\n\n", 2, "..", true).toString());
-		assertEquals("..foo\n..bar\n", replaceIndent("\tfoo\n\tbar\n", 2, "..", true).toString());
+		assertThat(replaceIndent("\n", 2, "..", true)).hasToString("..\n");
+		assertThat(replaceIndent("\n\n", 2, "..", true)).hasToString("..\n..\n");
+		assertThat(replaceIndent("\tfoo\n\tbar\n", 2, "..", true)).hasToString("..foo\n..bar\n");
 
-		assertEquals("..\r\n", replaceIndent("\r\n", 2, "..", true).toString());
-		assertEquals("..\r\n..\r\n", replaceIndent("\r\n\r\n", 2, "..", true).toString());
-		assertEquals("..foo\r\n..bar\r\n", replaceIndent("\tfoo\r\n\tbar\r\n", 2, "..", true).toString());
+		assertThat(replaceIndent("\r\n", 2, "..", true)).hasToString("..\r\n");
+		assertThat(replaceIndent("\r\n\r\n", 2, "..", true)).hasToString("..\r\n..\r\n");
+		assertThat(replaceIndent("\tfoo\r\n\tbar\r\n", 2, "..", true)).hasToString("..foo\r\n..bar\r\n");
 	}
 
 	@Test
 	void testReplaceIndent_DoNotIndentEmptyLines() {
-		assertEquals("", replaceIndent("\t\t", 2, "", false).toString());
-		assertEquals("foo  ", replaceIndent("foo  ", 2, "", false).toString());
-		assertEquals("foo", replaceIndent(" \t foo", 2, "", false).toString());
-		assertEquals("foo\nbar", replaceIndent(" foo\n bar", 2, "", false).toString());
-		assertEquals("foo\nbar", replaceIndent("  foo\n\tbar", 2, "", false).toString());
-		assertEquals("foo\nbar", replaceIndent(" foo\n\tbar", 2, "", false).toString());
-		assertEquals("foo\n\tbar", replaceIndent("\tfoo\n\t\tbar", 2, "", false).toString());
-		assertEquals("foo\n\tbar", replaceIndent("\tfoo\n  \tbar", 2, "", false).toString());
+		assertThat(replaceIndent("\t\t", 2, "", false)).hasToString("");
+		assertThat(replaceIndent("foo  ", 2, "", false)).hasToString("foo  ");
+		assertThat(replaceIndent(" \t foo", 2, "", false)).hasToString("foo");
+		assertThat(replaceIndent(" foo\n bar", 2, "", false)).hasToString("foo\nbar");
+		assertThat(replaceIndent("  foo\n\tbar", 2, "", false)).hasToString("foo\nbar");
+		assertThat(replaceIndent(" foo\n\tbar", 2, "", false)).hasToString("foo\nbar");
+		assertThat(replaceIndent("\tfoo\n\t\tbar", 2, "", false)).hasToString("foo\n\tbar");
+		assertThat(replaceIndent("\tfoo\n  \tbar", 2, "", false)).hasToString("foo\n\tbar");
 
-		assertEquals("foo\r\nbar", replaceIndent(" foo\r\n bar", 2, "", false).toString());
-		assertEquals("foo\r\nbar", replaceIndent("  foo\r\n\tbar", 2, "", false).toString());
-		assertEquals("foo\r\nbar", replaceIndent(" foo\r\n\tbar", 2, "", false).toString());
-		assertEquals("foo\r\n\tbar", replaceIndent("\tfoo\r\n\t\tbar", 2, "", false).toString());
-		assertEquals("foo\r\n\tbar", replaceIndent("\tfoo\r\n  \tbar", 2, "", false).toString());
+		assertThat(replaceIndent(" foo\r\n bar", 2, "", false)).hasToString("foo\r\nbar");
+		assertThat(replaceIndent("  foo\r\n\tbar", 2, "", false)).hasToString("foo\r\nbar");
+		assertThat(replaceIndent(" foo\r\n\tbar", 2, "", false)).hasToString("foo\r\nbar");
+		assertThat(replaceIndent("\tfoo\r\n\t\tbar", 2, "", false)).hasToString("foo\r\n\tbar");
+		assertThat(replaceIndent("\tfoo\r\n  \tbar", 2, "", false)).hasToString("foo\r\n\tbar");
 
-		assertEquals("", replaceIndent("\t\t", 2, "..", false).toString());
-		assertEquals("..foo  ", replaceIndent("foo  ", 2, "..", false).toString());
-		assertEquals("..foo", replaceIndent(" \t foo", 2, "..", false).toString());
-		assertEquals("..foo\n..bar", replaceIndent(" foo\n bar", 2, "..", false).toString());
-		assertEquals("..foo\n..bar", replaceIndent("  foo\n\tbar", 2, "..", false).toString());
-		assertEquals("..foo\n..bar", replaceIndent(" foo\n\tbar", 2, "..", false).toString());
-		assertEquals("..foo\n..\tbar", replaceIndent("\tfoo\n\t\tbar", 2, "..", false).toString());
-		assertEquals("..foo\n..\tbar", replaceIndent("\tfoo\n  \tbar", 2, "..", false).toString());
+		assertThat(replaceIndent("\t\t", 2, "..", false)).hasToString("");
+		assertThat(replaceIndent("foo  ", 2, "..", false)).hasToString("..foo  ");
+		assertThat(replaceIndent(" \t foo", 2, "..", false)).hasToString("..foo");
+		assertThat(replaceIndent(" foo\n bar", 2, "..", false)).hasToString("..foo\n..bar");
+		assertThat(replaceIndent("  foo\n\tbar", 2, "..", false)).hasToString("..foo\n..bar");
+		assertThat(replaceIndent(" foo\n\tbar", 2, "..", false)).hasToString("..foo\n..bar");
+		assertThat(replaceIndent("\tfoo\n\t\tbar", 2, "..", false)).hasToString("..foo\n..\tbar");
+		assertThat(replaceIndent("\tfoo\n  \tbar", 2, "..", false)).hasToString("..foo\n..\tbar");
 
-		assertEquals("\n", replaceIndent("\n", 2, "..", false).toString());
-		assertEquals("\n\n", replaceIndent("\n\n", 2, "..", false).toString());
-		assertEquals("..foo\n..bar\n", replaceIndent("\tfoo\n\tbar\n", 2, "..", false).toString());
+		assertThat(replaceIndent("\n", 2, "..", false)).hasToString("\n");
+		assertThat(replaceIndent("\n\n", 2, "..", false)).hasToString("\n\n");
+		assertThat(replaceIndent("\tfoo\n\tbar\n", 2, "..", false)).hasToString("..foo\n..bar\n");
 
-		assertEquals("\r\n", replaceIndent("\r\n", 2, "..", false).toString());
-		assertEquals("\r\n\r\n", replaceIndent("\r\n\r\n", 2, "..", false).toString());
-		assertEquals("..foo\r\n..bar\r\n", replaceIndent("\tfoo\r\n\tbar\r\n", 2, "..", false).toString());
+		assertThat(replaceIndent("\r\n", 2, "..", false)).hasToString("\r\n");
+		assertThat(replaceIndent("\r\n\r\n", 2, "..", false)).hasToString("\r\n\r\n");
+		assertThat(replaceIndent("\tfoo\r\n\tbar\r\n", 2, "..", false)).hasToString("..foo\r\n..bar\r\n");
 	}
 }

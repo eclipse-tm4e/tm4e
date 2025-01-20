@@ -41,7 +41,7 @@ class ThemeMatchingTest extends AbstractThemeTest {
 			]}""");
 
 		final var actual = theme.match(ScopeStack.from("punctuation.definition.string.begin.html"));
-		assertEquals(theme.getColorMap().get(actual.foregroundId), "#300000");
+		assertThat(theme.getColorMap().get(actual.foregroundId)).isEqualTo("#300000");
 	}
 
 	@Test
@@ -58,7 +58,7 @@ class ThemeMatchingTest extends AbstractThemeTest {
 
 		final var map = theme.getColorMap();
 
-		assertEquals(map.get(theme.match(ScopeStack.from("d", "a.b")).foregroundId), "#400000");
+		assertThat(map.get(theme.match(ScopeStack.from("d", "a.b")).foregroundId)).isEqualTo("#400000");
 	}
 
 	@Test
@@ -80,7 +80,7 @@ class ThemeMatchingTest extends AbstractThemeTest {
 						"entity.name.tag.structure.any.html"));
 
 		final var colorMap = theme.getColorMap();
-		assertEquals(colorMap.get(result.foregroundId), "#300000");
+		assertThat(colorMap.get(result.foregroundId)).isEqualTo("#300000");
 	}
 
 	private Map<String, String> match(final Theme theme, final String... path) {
@@ -118,41 +118,41 @@ class ThemeMatchingTest extends AbstractThemeTest {
 			]}""");
 
 		// simpleMatch1..25
-		assertEquals(match(theme, "source"), map("background", "#100000", "fontStyle", "not set"));
-		assertEquals(match(theme, "source"), map("background", "#100000", "fontStyle", "not set"));
-		assertEquals(match(theme, "source.ts"), map("background", "#100000", "fontStyle", "not set"));
-		assertEquals(match(theme, "source.tss"), map("background", "#100000", "fontStyle", "not set"));
-		assertEquals(match(theme, "something"), map("background", "#100000", "fontStyle", "not set"));
-		assertEquals(match(theme, "something.ts"), map("background", "#100000", "fontStyle", "not set"));
-		assertEquals(match(theme, "something.tss"), map("background", "#100000", "fontStyle", "not set"));
-		assertEquals(match(theme, "baz"), map("background", "#200000", "fontStyle", "not set"));
-		assertEquals(match(theme, "baz.ts"), map("background", "#200000", "fontStyle", "not set"));
-		assertEquals(match(theme, "baz.tss"), map("background", "#200000", "fontStyle", "not set"));
-		assertEquals(match(theme, "constant"), map("foreground", "#300000", "fontStyle", "italic"));
-		assertEquals(match(theme, "constant.string"), map("foreground", "#300000", "fontStyle", "italic"));
-		assertEquals(match(theme, "constant.hex"), map("foreground", "#300000", "fontStyle", "italic"));
-		assertEquals(match(theme, "constant.numeric"), map("foreground", "#400000", "fontStyle", "italic"));
-		assertEquals(match(theme, "constant.numeric.baz"), map("foreground", "#400000", "fontStyle", "italic"));
-		assertEquals(match(theme, "constant.numeric.hex"), map("foreground", "#400000", "fontStyle", "bold"));
-		assertEquals(match(theme, "constant.numeric.hex.baz"), map("foreground", "#400000", "fontStyle", "bold"));
-		assertEquals(match(theme, "constant.numeric.oct"), map("foreground", "#400000", "fontStyle", "italic bold underline"));
-		assertEquals(match(theme, "constant.numeric.oct.baz"), map("foreground", "#400000", "fontStyle", "italic bold underline"));
-		assertEquals(match(theme, "constant.numeric.dec"), map("foreground", "#500000", "fontStyle", "none"));
-		assertEquals(match(theme, "constant.numeric.dec.baz"), map("foreground", "#500000", "fontStyle", "none"));
-		assertEquals(match(theme, "storage.object.bar"), map("foreground", "#600000", "fontStyle", "none"));
-		assertEquals(match(theme, "storage.object.bar.baz"), map("foreground", "#600000", "fontStyle", "none"));
-		assertEquals(match(theme, "storage.object.bart"), map("fontStyle", "not set"));
-		assertEquals(match(theme, "storage.object"), map("fontStyle", "not set"));
-		assertEquals(match(theme, "storage"), map("fontStyle", "not set"));
+		assertThat(match(theme, "source")).isEqualTo(map("background", "#100000", "fontStyle", "not set"));
+		assertThat(match(theme, "source")).isEqualTo(map("background", "#100000", "fontStyle", "not set"));
+		assertThat(match(theme, "source.ts")).isEqualTo(map("background", "#100000", "fontStyle", "not set"));
+		assertThat(match(theme, "source.tss")).isEqualTo(map("background", "#100000", "fontStyle", "not set"));
+		assertThat(match(theme, "something")).isEqualTo(map("background", "#100000", "fontStyle", "not set"));
+		assertThat(match(theme, "something.ts")).isEqualTo(map("background", "#100000", "fontStyle", "not set"));
+		assertThat(match(theme, "something.tss")).isEqualTo(map("background", "#100000", "fontStyle", "not set"));
+		assertThat(match(theme, "baz")).isEqualTo(map("background", "#200000", "fontStyle", "not set"));
+		assertThat(match(theme, "baz.ts")).isEqualTo(map("background", "#200000", "fontStyle", "not set"));
+		assertThat(match(theme, "baz.tss")).isEqualTo(map("background", "#200000", "fontStyle", "not set"));
+		assertThat(match(theme, "constant")).isEqualTo(map("foreground", "#300000", "fontStyle", "italic"));
+		assertThat(match(theme, "constant.string")).isEqualTo(map("foreground", "#300000", "fontStyle", "italic"));
+		assertThat(match(theme, "constant.hex")).isEqualTo(map("foreground", "#300000", "fontStyle", "italic"));
+		assertThat(match(theme, "constant.numeric")).isEqualTo(map("foreground", "#400000", "fontStyle", "italic"));
+		assertThat(match(theme, "constant.numeric.baz")).isEqualTo(map("foreground", "#400000", "fontStyle", "italic"));
+		assertThat(match(theme, "constant.numeric.hex")).isEqualTo(map("foreground", "#400000", "fontStyle", "bold"));
+		assertThat(match(theme, "constant.numeric.hex.baz")).isEqualTo(map("foreground", "#400000", "fontStyle", "bold"));
+		assertThat(match(theme, "constant.numeric.oct")).isEqualTo(map("foreground", "#400000", "fontStyle", "italic bold underline"));
+		assertThat(match(theme, "constant.numeric.oct.baz")).isEqualTo(map("foreground", "#400000", "fontStyle", "italic bold underline"));
+		assertThat(match(theme, "constant.numeric.dec")).isEqualTo(map("foreground", "#500000", "fontStyle", "none"));
+		assertThat(match(theme, "constant.numeric.dec.baz")).isEqualTo(map("foreground", "#500000", "fontStyle", "none"));
+		assertThat(match(theme, "storage.object.bar")).isEqualTo(map("foreground", "#600000", "fontStyle", "none"));
+		assertThat(match(theme, "storage.object.bar.baz")).isEqualTo(map("foreground", "#600000", "fontStyle", "none"));
+		assertThat(match(theme, "storage.object.bart")).isEqualTo(map("fontStyle", "not set"));
+		assertThat(match(theme, "storage.object")).isEqualTo(map("fontStyle", "not set"));
+		assertThat(match(theme, "storage")).isEqualTo(map("fontStyle", "not set"));
 
 		// defaultMatch1..3
-		assertEquals(match(theme, ""), map("fontStyle", "not set"));
-		assertEquals(match(theme, "bazz"), map("fontStyle", "not set"));
-		assertEquals(match(theme, "asdfg"), map("fontStyle", "not set"));
+		assertThat(match(theme, "")).isEqualTo(map("fontStyle", "not set"));
+		assertThat(match(theme, "bazz")).isEqualTo(map("fontStyle", "not set"));
+		assertThat(match(theme, "asdfg")).isEqualTo(map("fontStyle", "not set"));
 
 		// multiMatch1..2
-		assertEquals(match(theme, "bar"), map("background", "#200000", "fontStyle", "not set"));
-		assertEquals(match(theme, "source.css", "selector", "bar"), map("background", "#200000", "fontStyle", "bold"));
+		assertThat(match(theme, "bar")).isEqualTo(map("background", "#200000", "fontStyle", "not set"));
+		assertThat(match(theme, "source.css", "selector", "bar")).isEqualTo(map("background", "#200000", "fontStyle", "bold"));
 	}
 
 	@Test
@@ -191,6 +191,6 @@ class ThemeMatchingTest extends AbstractThemeTest {
 				"meta.structure.dictionary.value.json",
 				"string.quoted.double.json");
 		final var result = theme.match(path);
-		assertEquals(theme.getColorMap().get(result.foregroundId), "#FF410D");
+		assertThat(theme.getColorMap().get(result.foregroundId)).isEqualTo("#FF410D");
 	}
 }

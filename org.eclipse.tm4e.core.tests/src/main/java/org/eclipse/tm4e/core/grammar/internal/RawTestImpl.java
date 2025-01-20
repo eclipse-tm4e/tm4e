@@ -16,7 +16,7 @@
 package org.eclipse.tm4e.core.grammar.internal;
 
 import static java.util.stream.Collectors.*;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.assertj.core.api.Assertions.*;
 
 import java.io.File;
 import java.util.Arrays;
@@ -136,16 +136,15 @@ public class RawTestImpl {
 			final var actualTokensStr = actualTokens.stream().map(Object::toString).collect(joining("\n"));
 			final var expextedTokensStr = expextedTokens.stream().map(Object::toString).collect(joining("\n"));
 
-			assertEquals(expextedTokensStr, actualTokensStr,
-					message + " (collection size problem: actual=" + actualTokens.size() + " expected=" + expextedTokens.size() + ")");
+			assertThat(actualTokensStr).as(message + " (collection size)").isEqualTo(expextedTokensStr);
 		}
 
 		// compare item
 		for (int i = 0; i < expextedTokens.size(); i++) {
 			final var expected = expextedTokens.get(i);
 			final var actual = actualTokens.get(i);
-			assertEquals(expected.getValue(), actual.getValue(), message + " (value of item '" + i + "' problem)");
-			assertEquals(expected.getScopes(), actual.getScopes(), message + " (tokens of item '" + i + "' problem)");
+			assertThat(actual.getValue()).as(message + " (value of item '" + i + "' problem)").isEqualTo(expected.getValue());
+			assertThat(actual.getScopes()).as(message + " (scopes of item '" + i + "' problem)").isEqualTo(expected.getScopes());
 		}
 	}
 

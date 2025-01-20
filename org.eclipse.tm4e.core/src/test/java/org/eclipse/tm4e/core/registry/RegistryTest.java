@@ -12,7 +12,7 @@
  */
 package org.eclipse.tm4e.core.registry;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.assertj.core.api.Assertions.assertThat;
 
 import java.io.IOException;
 import java.nio.file.FileVisitResult;
@@ -43,21 +43,21 @@ class RegistryTest {
 						System.out.println("Parsing [" + file + "]...");
 						final var grammar = reg.addGrammar(IGrammarSource.fromFile(file));
 						count.incrementAndGet();
-						assertFalse(grammar.getScopeName().isBlank());
-						assertNotNull(grammar.getFileTypes());
+						assertThat(grammar.getScopeName()).isNotBlank();
+						assertThat(grammar.getFileTypes()).isNotNull();
 					}
 				}
 				return FileVisitResult.CONTINUE;
 			}
 		});
 		System.out.println("Successfully parsed " + count.intValue() + " grammars.");
-		assertTrue(count.intValue() > 10, "Only " + count.intValue() + " grammars found, expected more than 10!");
+		assertThat(count).as("Number of grammars found.").hasValueGreaterThan(10);
 	}
 
 	@Test
 	void testLoadingUnknownGrammar() {
 		final var reg = new Registry();
-		assertNull(reg.grammarForScopeName("undefined"));
-		assertNull(reg.loadGrammar("undefined"));
+		assertThat(reg.grammarForScopeName("undefined")).isNull();
+		assertThat(reg.loadGrammar("undefined")).isNull();
 	}
 }

@@ -46,7 +46,7 @@ public class ThemeResolvingTest extends AbstractThemeTest {
 	private static final ThemeTrieElement NOTSET_THEME_TRIE_ELEMENT = new ThemeTrieElement(NOTSET_THEME_TRIE_ELEMENT_RULE);
 
 	private static void assertStrArrCmp(final String testCase, final List<String> a, final List<String> b, final int expected) {
-		assertEquals(expected, StringUtils.strArrCmp(a, b), testCase);
+		assertThat(StringUtils.strArrCmp(a, b)).as(testCase).isEqualTo(expected);
 	}
 
 	@Test
@@ -57,7 +57,7 @@ public class ThemeResolvingTest extends AbstractThemeTest {
 		actual.sort(StringUtils::strcmp);
 
 		final var expected = list("", "a", "ab", "bar", "z", "zu");
-		assertArrayEquals(expected.toArray(), actual.toArray());
+		assertThat(actual).isEqualTo(expected);
 	}
 
 	@Test
@@ -96,10 +96,10 @@ public class ThemeResolvingTest extends AbstractThemeTest {
 
 	private static void assertThemeEqual(final Theme actual, final Theme expected) {
 		// if this fails, we get a nice visual representation of the difference:
-		assertEquals(THEME_GSON.toJson(expected), THEME_GSON.toJson(actual));
+		assertThat(THEME_GSON.toJson(actual)).isEqualTo(THEME_GSON.toJson(expected));
 
 		// this ensures hashCode/equals are properly implemented:
-		assertEquals(expected, actual);
+		assertThat(actual).isEqualTo(expected);
 	}
 
 	@Test
@@ -372,10 +372,10 @@ public class ThemeResolvingTest extends AbstractThemeTest {
 			return colorMap.get(result.foregroundId);
 		};
 
-		assertEquals(matcher.match("b", "a"), "#300000", "b a");
-		assertEquals(matcher.match("b", "c", "a"), "#200000", "b c a");
-		assertEquals(matcher.match("c", "b", "a"), "#400000", "c b a");
-		assertEquals(matcher.match("c", "b", "d", "a"), "#200000", "c b d a");
+		assertThat(matcher.match("b", "a")).as("b a").isEqualTo("#300000");
+		assertThat(matcher.match("b", "c", "a")).as("b c a").isEqualTo("#200000");
+		assertThat(matcher.match("c", "b", "a")).as("c b a").isEqualTo("#400000");
+		assertThat(matcher.match("c", "b", "d", "a")).as("c b d a").isEqualTo("#200000");
 	}
 
 	@Test
@@ -402,14 +402,14 @@ public class ThemeResolvingTest extends AbstractThemeTest {
 			return colorMap.get(result.foregroundId);
 		};
 
-		assertEquals(matcher.match("x", "a.b"), null, "x a.b");
-		assertEquals(matcher.match("y", "a.b"), null, "y a.b");
-		assertEquals(matcher.match("y.z", "a"), null, "y.z a");
-		assertEquals(matcher.match("x", "y", "a.b"), "#300000", "x y a.b");
+		assertThat(matcher.match("x", "a.b")).as("x a.b").isNull();
+		assertThat(matcher.match("y", "a.b")).as("y a.b").isNull();
+		assertThat(matcher.match("y.z", "a")).as("y.z a").isNull();
+		assertThat(matcher.match("x", "y", "a.b")).as("x y a.b").isEqualTo("#300000");
 
 		// Even though the "x y a.b" rule has more scopes in its path, the "y.z a.b" rule has
 		// a deeper match, so it should take precedence.
-		assertEquals(matcher.match("x", "y.z", "a.b"), "#200000", "y.z a.b");
+		assertThat(matcher.match("x", "y.z", "a.b")).as("y.z a.b").isEqualTo("#200000");
 	}
 
 	@Test
@@ -467,7 +467,7 @@ public class ThemeResolvingTest extends AbstractThemeTest {
 				new ParsedThemeRule("variable.other", null, 4, None, null, null),
 				new ParsedThemeRule("variable.parameter.function.coffee", null, 5, Italic, "#F9D423", null));
 
-		assertArrayEquals(expected.toArray(), actual.toArray());
+		assertThat(actual).isEqualTo(expected);
 	}
 
 	@Test
@@ -505,6 +505,6 @@ public class ThemeResolvingTest extends AbstractThemeTest {
 				new ParsedThemeRule("meta.at-rule.if.scss", null, 1, NotSet, "#CC7832", null),
 				new ParsedThemeRule("punctuation.definition", list("meta.at-rule.if.scss"), 1, NotSet, "#CC7832", null));
 
-		assertArrayEquals(expected.toArray(), actual.toArray());
+		assertThat(actual).isEqualTo(expected);
 	}
 }

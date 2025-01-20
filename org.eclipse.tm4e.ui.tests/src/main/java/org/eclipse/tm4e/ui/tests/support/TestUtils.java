@@ -13,7 +13,7 @@
  */
 package org.eclipse.tm4e.ui.tests.support;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.assertj.core.api.Assertions.*;
 
 import java.io.File;
 import java.io.IOException;
@@ -39,7 +39,7 @@ public final class TestUtils {
 	public static IEditorDescriptor assertHasGenericEditor() {
 		final var genericEditorDescr = PlatformUI.getWorkbench().getEditorRegistry()
 				.findEditor("org.eclipse.ui.genericeditor.GenericEditor");
-		assertNotNull(genericEditorDescr);
+		assertThat(genericEditorDescr).isNotNull();
 		return genericEditorDescr;
 	}
 
@@ -130,7 +130,7 @@ public final class TestUtils {
 			}
 			throw new AssertionError(errorMessage, ex.get());
 		}
-		assertTrue(isConditionMet, errorMessage);
+		assertThat(isConditionMet).as(errorMessage).isTrue();
 	}
 
 	public static boolean waitForCondition(final int timeout_ms, final Condition condition) {

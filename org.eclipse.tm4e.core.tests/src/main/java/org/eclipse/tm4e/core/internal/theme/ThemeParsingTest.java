@@ -18,6 +18,8 @@ package org.eclipse.tm4e.core.internal.theme;
 
 import static org.eclipse.tm4e.core.internal.theme.FontStyle.*;
 
+import java.util.List;
+
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Order;
@@ -36,7 +38,7 @@ public class ThemeParsingTest extends AbstractThemeTest {
 	@Order(1)
 	@DisplayName("Theme parsing can parse")
 	public void testCanParse() throws Exception {
-		final var actual = parseTheme("""
+		final List<ParsedThemeRule> actual = parseTheme("""
 			{ "settings": [
 			{ "settings": { "foreground": "#F8F8F2", "background": "#272822" } },
 			{ "scope": "source, something", "settings": { "background": "#100000" } },
@@ -51,22 +53,21 @@ public class ThemeParsingTest extends AbstractThemeTest {
 			{ "scope": "foo", "settings": { "fontStyle": "", "foreground": "#CFA" } }
 			]}""");
 
-		final var expected = new ParsedThemeRule[] {
-			new ParsedThemeRule("", null, 0, NotSet, "#F8F8F2", "#272822"),
-			new ParsedThemeRule("source", null, 1, NotSet, null, "#100000"),
-			new ParsedThemeRule("something", null, 1, NotSet, null, "#100000"),
-			new ParsedThemeRule("bar", null, 2, NotSet, null, "#010000"),
-			new ParsedThemeRule("baz", null, 2, NotSet, null, "#010000"),
-			new ParsedThemeRule("bar", list("selector", "source.css"), 3, Bold, null, null),
-			new ParsedThemeRule("constant", null, 4, Italic, "#ff0000", null),
-			new ParsedThemeRule("constant.numeric", null, 5, NotSet, "#00ff00", null),
-			new ParsedThemeRule("constant.numeric.hex", null, 6, Bold, null, null),
-			new ParsedThemeRule("constant.numeric.oct", null, 7, Bold | Italic | Underline, null, null),
-			new ParsedThemeRule("constant.numeric.bin", null, 8, Bold | Strikethrough, null, null),
-			new ParsedThemeRule("constant.numeric.dec", null, 9, None, "#0000ff", null),
-			new ParsedThemeRule("foo", null, 10, None, "#CFA", null),
-		};
+		final var expected = list(
+				new ParsedThemeRule("", null, 0, NotSet, "#F8F8F2", "#272822"),
+				new ParsedThemeRule("source", null, 1, NotSet, null, "#100000"),
+				new ParsedThemeRule("something", null, 1, NotSet, null, "#100000"),
+				new ParsedThemeRule("bar", null, 2, NotSet, null, "#010000"),
+				new ParsedThemeRule("baz", null, 2, NotSet, null, "#010000"),
+				new ParsedThemeRule("bar", list("selector", "source.css"), 3, Bold, null, null),
+				new ParsedThemeRule("constant", null, 4, Italic, "#ff0000", null),
+				new ParsedThemeRule("constant.numeric", null, 5, NotSet, "#00ff00", null),
+				new ParsedThemeRule("constant.numeric.hex", null, 6, Bold, null, null),
+				new ParsedThemeRule("constant.numeric.oct", null, 7, Bold | Italic | Underline, null, null),
+				new ParsedThemeRule("constant.numeric.bin", null, 8, Bold | Strikethrough, null, null),
+				new ParsedThemeRule("constant.numeric.dec", null, 9, None, "#0000ff", null),
+				new ParsedThemeRule("foo", null, 10, None, "#CFA", null));
 
-		assertArrayEquals(expected, actual.toArray());
+		assertThat(actual).isEqualTo(expected);
 	}
 }

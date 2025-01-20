@@ -12,7 +12,7 @@
  *******************************************************************************/
 package org.eclipse.tm4e.ui.internal.preferences;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.assertj.core.api.Assertions.assertThat;
 
 import org.eclipse.tm4e.ui.internal.utils.MarkerConfig;
 import org.junit.jupiter.api.Test;
@@ -23,6 +23,6 @@ class PreferenceHelperTest {
 	void testMarkerConfigsSerialization() {
 		final var defaults = MarkerConfig.getDefaults();
 		final var defaultsAsJson = PreferenceHelper.toJsonMarkerConfigs(defaults);
-		assertEquals(defaults, PreferenceHelper.loadMarkerConfigs(defaultsAsJson));
+		assertThat(PreferenceHelper.loadMarkerConfigs(defaultsAsJson)).isEqualTo(defaults);
 	}
 }

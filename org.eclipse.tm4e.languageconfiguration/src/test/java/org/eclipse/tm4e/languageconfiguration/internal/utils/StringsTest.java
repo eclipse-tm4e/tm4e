@@ -17,8 +17,8 @@
  */
 package org.eclipse.tm4e.languageconfiguration.internal.utils;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.eclipse.tm4e.languageconfiguration.internal.utils.Strings.*;
-import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import org.junit.jupiter.api.Test;
 
@@ -31,26 +31,26 @@ class StringsTest {
 
 	@Test
 	void testLastNonWhitespaceIndex() {
-		assertEquals(2, lastNonWhitespaceIndex("abc  \t \t "));
-		assertEquals(2, lastNonWhitespaceIndex("abc"));
-		assertEquals(2, lastNonWhitespaceIndex("abc\t"));
-		assertEquals(2, lastNonWhitespaceIndex("abc "));
-		assertEquals(2, lastNonWhitespaceIndex("abc  \t \t "));
-		assertEquals(11, lastNonWhitespaceIndex("abc  \t \t abc \t \t "));
-		assertEquals(2, lastNonWhitespaceIndex("abc  \t \t abc \t \t ", 8));
-		assertEquals(-1, lastNonWhitespaceIndex("  \t \t "));
+		assertThat(lastNonWhitespaceIndex("abc  \t \t ")).isEqualTo(2);
+		assertThat(lastNonWhitespaceIndex("abc")).isEqualTo(2);
+		assertThat(lastNonWhitespaceIndex("abc\t")).isEqualTo(2);
+		assertThat(lastNonWhitespaceIndex("abc ")).isEqualTo(2);
+		assertThat(lastNonWhitespaceIndex("abc  \t \t ")).isEqualTo(2);
+		assertThat(lastNonWhitespaceIndex("abc  \t \t abc \t \t ")).isEqualTo(11);
+		assertThat(lastNonWhitespaceIndex("abc  \t \t abc \t \t ", 8)).isEqualTo(2);
+		assertThat(lastNonWhitespaceIndex("  \t \t ")).isEqualTo(-1);
 	}
 
 	@Test
 	void testGetLeadingWhitespace() {
-		assertEquals("  ", getLeadingWhitespace("  foo"));
-		assertEquals("", getLeadingWhitespace("  foo", 2));
-		assertEquals("", getLeadingWhitespace("  foo", 1, 1));
-		assertEquals(" ", getLeadingWhitespace("  foo", 0, 1));
-		assertEquals("  ", getLeadingWhitespace("  "));
-		assertEquals(" ", getLeadingWhitespace("  ", 1));
-		assertEquals(" ", getLeadingWhitespace("  ", 0, 1));
-		assertEquals("\t", getLeadingWhitespace("\t\tfunction foo(){", 0, 1));
-		assertEquals("\t\t", getLeadingWhitespace("\t\tfunction foo(){", 0, 2));
+		assertThat(getLeadingWhitespace("  foo")).isEqualTo("  ");
+		assertThat(getLeadingWhitespace("  foo", 2)).isEqualTo("");
+		assertThat(getLeadingWhitespace("  foo", 1, 1)).isEqualTo("");
+		assertThat(getLeadingWhitespace("  foo", 0, 1)).isEqualTo(" ");
+		assertThat(getLeadingWhitespace("  ")).isEqualTo("  ");
+		assertThat(getLeadingWhitespace("  ", 1)).isEqualTo(" ");
+		assertThat(getLeadingWhitespace("  ", 0, 1)).isEqualTo(" ");
+		assertThat(getLeadingWhitespace("\t\tfunction foo(){", 0, 1)).isEqualTo("\t");
+		assertThat(getLeadingWhitespace("\t\tfunction foo(){", 0, 2)).isEqualTo("\t\t");
 	}
 }

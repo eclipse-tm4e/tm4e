@@ -9,7 +9,8 @@
  **********************************************************************/
 package org.eclipse.tm4e.languageconfiguration.internal.model;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.eclipse.tm4e.core.internal.utils.NullSafetyHelper.castNonNull;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -28,16 +29,20 @@ import org.junit.jupiter.api.Test;
 
 class ParsingTest {
 
-	private @Nullable LanguageConfiguration loadLanguageConfiguration(final String path) throws IOException {
+	private LanguageConfiguration loadLanguageConfigFromClassPath(final String path) throws IOException {
 		try (InputStream is = getClass().getResourceAsStream(path)) {
-			assertNotNull(is);
-			return LanguageConfiguration.load(new InputStreamReader(is));
+			assert is != null;
+			return castNonNull(LanguageConfiguration.load(new InputStreamReader(is)));
 		}
+	}
+
+	private LanguageConfiguration loadLanguageConfigFromString(final String content) {
+		return castNonNull(LanguageConfiguration.load(new StringReader(content)));
 	}
 
 	@Test
 	void testOniguramaFallback() {
-		final var languageConfiguration = LanguageConfiguration.load(new StringReader("""
+		final var languageConfiguration = loadLanguageConfigFromString("""
 			{
 			  "onEnterRules": [{
 			    "beforeText": "^[\\\\s]*///.*$",
@@ -51,48 +56,42 @@ class ParsingTest {
 			      "end": "{%\\\\s*end(block|filter|for|if|macro|raw)\\\\s*%}"
 			    }
 			  }
-			}"""));
-		assertNotNull(languageConfiguration);
+			}""");
+		assertThat(languageConfiguration.getOnEnterRules().get(0).beforeText.getClass().getSimpleName())
+				.endsWith("JavaRegExPattern");
 
-		assertTrue(languageConfiguration.getOnEnterRules().get(0).beforeText.getClass().getSimpleName().endsWith("JavaRegExPattern"));
-
-		final var folding = languageConfiguration.getFolding();
-		assert folding != null;
-		assertTrue(folding.markers.start.getClass().getSimpleName().endsWith("OnigRegExPattern"));
+		final var folding = castNonNull(languageConfiguration.getFolding());
+		assertThat(folding.markers.start.getClass().getSimpleName()).endsWith("OnigRegExPattern");
 	}
 
 	@Test
 	void testCanLoadPhpLanguageConfig() throws Exception {
-		final var languageConfiguration = loadLanguageConfiguration("/php-language-configuration.json");
-		assertNotNull(languageConfiguration);
-		final var comments = languageConfiguration.getComments();
-		assertNotNull(comments);
-		assertNotNull(comments.blockComment);
-		assertEquals("//", comments.lineComment);
-		assertEquals(3, languageConfiguration.getBrackets().size());
-		assertEquals(6, languageConfiguration.getAutoClosingPairs().size());
-		assertEquals(";:.,=}])>` \n\t", languageConfiguration.getAutoCloseBefore());
-		assertNotNull(languageConfiguration.getWordPattern());
-		assertEquals(5, languageConfiguration.getOnEnterRules().size());
-		assertEquals(6, languageConfiguration.getSurroundingPairs().size());
-		assertNotNull(languageConfiguration.getFolding());
+		final var languageConfiguration = loadLanguageConfigFromClassPath("/php-language-configuration.json");
+		final var comments = castNonNull(languageConfiguration.getComments());
+		assertThat(comments.blockComment).isNotNull();
+		assertThat(comments.lineComment).isEqualTo("//");
+		assertThat(languageConfiguration.getBrackets()).hasSize(3);
+		assertThat(languageConfiguration.getAutoClosingPairs()).hasSize(6);
+		assertThat(languageConfiguration.getAutoCloseBefore()).isEqualTo(";:.,=}])>` \n\t");
+		assertThat(languageConfiguration.getWordPattern()).isNotNull();
+		assertThat(languageConfiguration.getOnEnterRules()).hasSize(5);
+		assertThat(languageConfiguration.getSurroundingPairs()).hasSize(6);
+		assertThat(languageConfiguration.getFolding()).isNotNull();
 	}
 
 	@Test
 	void testCanLoadRustLanguageConfig() throws Exception {
-		final var languageConfiguration = loadLanguageConfiguration("/rust-language-configuration.json");
-		assertNotNull(languageConfiguration);
-		final var comments = languageConfiguration.getComments();
-		assertNotNull(comments);
-		assertNotNull(comments.blockComment);
-		assertEquals("//", comments.lineComment);
-		assertEquals(4, languageConfiguration.getBrackets().size());
-		assertEquals(6, languageConfiguration.getAutoClosingPairs().size());
-		assertNull(languageConfiguration.getAutoCloseBefore());
-		assertNull(languageConfiguration.getWordPattern());
-		assertEquals(6, languageConfiguration.getOnEnterRules().size());
-		assertEquals(6, languageConfiguration.getSurroundingPairs().size());
-		assertNull(languageConfiguration.getFolding());
+		final var languageConfiguration = loadLanguageConfigFromClassPath("/rust-language-configuration.json");
+		final var comments = castNonNull(languageConfiguration.getComments());
+		assertThat(comments.blockComment).isNotNull();
+		assertThat(comments.lineComment).isEqualTo("//");
+		assertThat(languageConfiguration.getBrackets()).hasSize(4);
+		assertThat(languageConfiguration.getAutoClosingPairs()).hasSize(6);
+		assertThat(languageConfiguration.getAutoCloseBefore()).isNull();
+		assertThat(languageConfiguration.getWordPattern()).isNull();
+		assertThat(languageConfiguration.getOnEnterRules()).hasSize(6);
+		assertThat(languageConfiguration.getSurroundingPairs()).hasSize(6);
+		assertThat(languageConfiguration.getFolding()).isNull();
 	}
 
 	@Test
@@ -106,19 +105,19 @@ class ParsingTest {
 						System.out.println("Parsing [" + file + "]...");
 						final var languageConfiguration = LanguageConfiguration.load(input);
 						count.incrementAndGet();
-						assertNotNull(languageConfiguration);
+						assertThat(languageConfiguration).isNotNull();
 					}
 				}
 				return FileVisitResult.CONTINUE;
 			}
 		});
 		System.out.println("Successfully parsed " + count.intValue() + " language configurations.");
-		assertTrue(count.intValue() > 10, "Only " + count.intValue() + " language configurations found, expected more than 10!");
+		assertThat(count.intValue()).isGreaterThan(10);
 	}
 
 	@Test
 	void testParseColorizedBracketsPair() {
-		final var languageConfiguration = LanguageConfiguration.load(new StringReader("""
+		final var languageConfiguration = loadLanguageConfigFromString("""
 			{
 				"colorizedBracketPairs": [
 					["(",")"],
@@ -126,28 +125,27 @@ class ParsingTest {
 					["{","}"],
 					["<",">"]
 				],
-			}"""));
-		assertNotNull(languageConfiguration);
+			}""");
 
-		assertEquals(4, languageConfiguration.getColorizedBracketPairs().size());
-		assertEquals("(", languageConfiguration.getColorizedBracketPairs().get(0).open);
-		assertEquals(")", languageConfiguration.getColorizedBracketPairs().get(0).close);
+		assertThat(languageConfiguration.getColorizedBracketPairs()).hasSize(4);
+		assertThat(languageConfiguration.getColorizedBracketPairs().get(0).open).isEqualTo("(");
+		assertThat(languageConfiguration.getColorizedBracketPairs().get(0).close).isEqualTo(")");
 	}
 
 	@Test
 	void testIndentationRules() {
-		final var languageConfiguration = LanguageConfiguration.load(new StringReader("""
+		final var languageConfiguration = loadLanguageConfigFromString("""
 			{
 				"indentationRules": {
 					"increaseIndentPattern": "(^.*\\\\{[^}]*$)",
 					"decreaseIndentPattern": "^\\\\s*\\\\}"
 				},
-			}"""));
-		assertNotNull(languageConfiguration);
+			}""");
 
 		var indentationRules = languageConfiguration.getIndentationRules();
 		assert indentationRules != null;
-		assertEquals("(^.*\\{[^}]*$)", indentationRules.increaseIndentPattern.toString());
-		assertEquals("^\\s*\\}", indentationRules.decreaseIndentPattern.toString());
+
+		assertThat(indentationRules.increaseIndentPattern).hasToString("(^.*\\{[^}]*$)");
+		assertThat(indentationRules.decreaseIndentPattern).hasToString("^\\s*\\}");
 	}
 }

@@ -16,12 +16,11 @@
  */
 package org.eclipse.tm4e.languageconfiguration.internal;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.eclipse.tm4e.core.internal.utils.NullSafetyHelper.castNonNull;
-import static org.junit.jupiter.api.Assertions.*;
 
 import java.io.StringReader;
 
-import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.jface.text.IDocument;
 import org.eclipse.tm4e.languageconfiguration.internal.model.CursorConfiguration;
 import org.eclipse.tm4e.languageconfiguration.internal.model.IndentForEnter;
@@ -79,15 +78,14 @@ class IndentationRulesTest {
 
 	}
 
-	private void assertResult(final @Nullable IndentForEnter result, final String beforeEnter, final String AfterEnter,
-			final String indent) {
-		assertNotNull(result);
-		assertEquals(beforeEnter, result.beforeEnter);
-		assertEquals(AfterEnter, result.afterEnter);
-		assertEquals(indent, indentConv.normalizeIndentation(AfterEnter));
+	private void assertResult(final IndentForEnter result, final String expectedBeforeEnter, final String expectedAfterEnter,
+			final String expectedIndent) {
+		assertThat(result.beforeEnter).isEqualTo(expectedBeforeEnter);
+		assertThat(result.afterEnter).isEqualTo(expectedAfterEnter);
+		assertThat(indentConv.normalizeIndentation(expectedAfterEnter)).isEqualTo(expectedIndent);
 	}
 
-	private @Nullable IndentForEnter getIndentForEnter(final IDocument doc, final int offset) {
-		return IndentForEnterHelper.getIndentForEnter(doc, offset, indentConv, indentRulesSupport);
+	private IndentForEnter getIndentForEnter(final IDocument doc, final int offset) {
+		return castNonNull(IndentForEnterHelper.getIndentForEnter(doc, offset, indentConv, indentRulesSupport));
 	}
 }

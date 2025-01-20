@@ -11,8 +11,6 @@
  */
 package org.eclipse.tm4e.ui.tests;
 
-import static org.junit.jupiter.api.Assertions.assertTrue;
-
 import java.io.FileOutputStream;
 
 import org.eclipse.swt.custom.StyledText;
@@ -54,7 +52,7 @@ class TMinGenericEditorTest {
 		editor = IDE.openEditor(UI.getActivePage(), f.toURI(), genericEditorDescr.getId(), true);
 
 		final var text = (StyledText) editor.getAdapter(Control.class);
-		assertTrue(TestUtils.waitForCondition(3_000, () -> text.getStyleRanges().length > 1));
+		TestUtils.waitForAndAssertCondition(3_000, () -> text.getStyleRanges().length > 1);
 	}
 
 	@Test

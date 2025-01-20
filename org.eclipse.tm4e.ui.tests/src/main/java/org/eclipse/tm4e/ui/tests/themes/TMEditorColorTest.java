@@ -11,7 +11,7 @@
  */
 package org.eclipse.tm4e.ui.tests.themes;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.assertj.core.api.Assertions.assertThat;
 
 import java.io.IOException;
 
@@ -67,16 +67,29 @@ class TMEditorColorTest implements ThemeIdConstants {
 
 		final String themeId = manager.getDefaultTheme().getId();
 		final ITheme theme = manager.getThemeById(themeId);
-		assertEquals(SolarizedLight, themeId, "Default light theme isn't set");
-		assertEquals(theme.getEditorBackground(), styledText.getBackground(), "Background colors isn't equals");
-		assertEquals(theme.getEditorForeground(), styledText.getForeground(), "Foreground colors isn't equals");
-		assertNull(theme.getEditorSelectionBackground(), "System default selection background should be null");
-		assertNull(theme.getEditorSelectionForeground(), "System default selection foreground should be null");
 
-		final Color eclipseLineHighlight = ColorManager.getInstance().getPreferenceEditorColor(EDITOR_CURRENTLINE_HIGHLIGHT);
+		assertThat(themeId).as("Default light theme isn't set").isEqualTo(SolarizedLight);
+		assertThat(styledText.getBackground())
+				.as("Background colors aren't equal")
+				.isEqualTo(theme.getEditorBackground());
+		assertThat(styledText.getForeground())
+				.as("Foreground colors aren't equal")
+				.isEqualTo(theme.getEditorForeground());
+		assertThat(theme.getEditorSelectionBackground())
+				.as("System default selection background should be null")
+				.isNull();
+		assertThat(theme.getEditorSelectionForeground())
+				.as("System default selection foreground should be null")
+				.isNull();
+
+		final Color eclipseLineHighlight = ColorManager.getInstance()
+				.getPreferenceEditorColor(EDITOR_CURRENTLINE_HIGHLIGHT);
 		final Color themeLineHighlight = theme.getEditorCurrentLineHighlight();
-		assertNotNull(themeLineHighlight, "Highlight shouldn't be a null");
-		assertNotEquals(eclipseLineHighlight, themeLineHighlight, "Default Line highlight should be from TM theme");
+
+		assertThat(themeLineHighlight).as("Highlight shouldn't be null").isNotNull();
+		assertThat(themeLineHighlight)
+				.as("Default Line highlight should be from TM theme")
+				.isNotEqualTo(eclipseLineHighlight);
 	}
 
 	@Test
@@ -98,16 +111,28 @@ class TMEditorColorTest implements ThemeIdConstants {
 
 		final String themeId = manager.getDefaultTheme().getId();
 		final ITheme theme = manager.getThemeById(themeId);
-		assertEquals(SolarizedLight, themeId, "Default light theme isn't set");
 
-		assertEquals(styledText.getBackground(), testColor, "Background color should be user defined");
-		assertEquals(theme.getEditorForeground(), styledText.getForeground(), "Foreground colors should be ");
-		assertEquals(theme.getEditorSelectionBackground(), testColor, "Selection background color should be user defined");
-		assertNull(theme.getEditorSelectionForeground(), "Selection foreground should be System default (null)");
+		assertThat(themeId).as("Default light theme isn't set").isEqualTo(SolarizedLight);
 
-		final Color lineHighlight = ColorManager.getInstance().getPreferenceEditorColor(EDITOR_CURRENTLINE_HIGHLIGHT);
-		assertNotNull(lineHighlight, "Highlight shouldn't be a null");
-		assertEquals(lineHighlight, theme.getEditorCurrentLineHighlight(),
-				"Line highlight should be from preferences (because of user defined background)");
+		assertThat(styledText.getBackground())
+				.as("Background color should be user defined")
+				.isEqualTo(testColor);
+		assertThat(styledText.getForeground())
+				.as("Foreground colors should be user defined")
+				.isEqualTo(theme.getEditorForeground());
+		assertThat(theme.getEditorSelectionBackground())
+				.as("Selection background color should be user defined")
+				.isEqualTo(testColor);
+		assertThat(theme.getEditorSelectionForeground())
+				.as("Selection foreground should be system default (null)")
+				.isNull();
+
+		final Color lineHighlight = ColorManager.getInstance()
+				.getPreferenceEditorColor(EDITOR_CURRENTLINE_HIGHLIGHT);
+
+		assertThat(lineHighlight).as("Highlight shouldn't be null").isNotNull();
+		assertThat(lineHighlight)
+				.as("Line highlight should be from preferences (because of user-defined background)")
+				.isEqualTo(theme.getEditorCurrentLineHighlight());
 	}
 }

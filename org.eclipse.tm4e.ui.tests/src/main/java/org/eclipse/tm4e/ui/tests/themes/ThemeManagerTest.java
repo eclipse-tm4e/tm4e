@@ -11,9 +11,7 @@
  */
 package org.eclipse.tm4e.ui.tests.themes;
 
-import static org.junit.jupiter.api.Assertions.*;
-
-import java.util.stream.Stream;
+import static org.assertj.core.api.Assertions.assertThat;
 
 import org.eclipse.tm4e.ui.TMUIPlugin;
 import org.eclipse.tm4e.ui.themes.ITheme;
@@ -31,21 +29,21 @@ class ThemeManagerTest implements ThemeIdConstants {
 	@Test
 	void testDefaultThemeAssociation() {
 		final ITheme theme = manager.getDefaultTheme();
-		assertEquals(SolarizedLight, theme.getId());
+		assertThat(theme.getId()).isEqualTo(SolarizedLight);
 	}
 
 	@Test
 	void testAllThemesAreRegistered() {
 		// All Dark themes
 		final ITheme[] darkThemes = manager.getThemes(true);
-		assertTrue(Stream.of(darkThemes).anyMatch(t -> t.getId().equals(Dark)));
-		assertTrue(Stream.of(darkThemes).anyMatch(t -> t.getId().equals(Monokai)));
+		assertThat(darkThemes).anyMatch(t -> t.getId().equals(Dark));
+		assertThat(darkThemes).anyMatch(t -> t.getId().equals(Monokai));
 
 		// All themes for Other E4 CSS Theme
 		final ITheme[] lightThemes = manager.getThemes(false);
-		assertTrue(Stream.of(lightThemes).anyMatch(t -> t.getId().equals(Light)));
-		assertTrue(Stream.of(lightThemes).anyMatch(t -> t.getId().equals(EclipseLight)));
-		assertTrue(Stream.of(lightThemes).anyMatch(t -> t.getId().equals(SolarizedLight)));
-		assertTrue(Stream.of(lightThemes).anyMatch(t -> t.getId().equals(WtpXmlClassic)));
+		assertThat(lightThemes).anyMatch(t -> t.getId().equals(Light));
+		assertThat(lightThemes).anyMatch(t -> t.getId().equals(EclipseLight));
+		assertThat(lightThemes).anyMatch(t -> t.getId().equals(SolarizedLight));
+		assertThat(lightThemes).anyMatch(t -> t.getId().equals(WtpXmlClassic));
 	}
 }

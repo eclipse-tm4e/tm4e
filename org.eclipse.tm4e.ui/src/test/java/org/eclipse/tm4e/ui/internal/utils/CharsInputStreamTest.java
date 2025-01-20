@@ -12,14 +12,14 @@
 package org.eclipse.tm4e.ui.internal.utils;
 
 import static java.nio.charset.StandardCharsets.UTF_8;
-import static org.junit.Assert.*;
+import static org.assertj.core.api.Assertions.assertThat;
 
 import java.io.IOException;
 import java.util.ArrayList;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
-public class CharsInputStreamTest {
+class CharsInputStreamTest {
 
 	private static final String TEST_ASCII = "Hello, World!";
 
@@ -30,35 +30,35 @@ public class CharsInputStreamTest {
 	private static final int TEST_UNICODE_BYTES_LEN = TEST_UNICODE.getBytes(UTF_8).length;
 
 	@Test
-	public void testAvailable() throws IOException {
+	void testAvailable() throws IOException {
 		try (var is = new CharsInputStream(TEST_ASCII)) {
-			assertEquals(TEST_ASCII.length(), is.available());
+			assertThat(is.available()).isEqualTo(TEST_ASCII.length());
 			final var buffer = new byte[4];
 			is.read(buffer);
-			assertEquals(TEST_ASCII.length() - 4, is.available());
+			assertThat(is.available()).isEqualTo(TEST_ASCII.length() - 4);
 			is.readAllBytes();
-			assertEquals(0, is.available());
+			assertThat(is.available()).isZero();
 		}
 
 		try (var is = new CharsInputStream(TEST_UNICODE)) {
-			assertTrue(is.available() > 0);
+			assertThat(is.available()).isPositive();
 			is.read(new byte[10]);
-			assertTrue(is.available() > 0);
+			assertThat(is.available()).isPositive();
 			is.readAllBytes();
-			assertEquals(0, is.available());
+			assertThat(is.available()).isZero();
 		}
 	}
 
 	@Test
-	public void testEndOfStream() throws IOException {
+	void testEndOfStream() throws IOException {
 		try (var is = new CharsInputStream(TEST_UNICODE)) {
 			is.skip(Long.MAX_VALUE);
-			assertEquals(-1, is.read());
+			assertThat(is.read()).isEqualTo(-1);
 		}
 	}
 
 	@Test
-	public void testReadEachByte() throws IOException {
+	void testReadEachByte() throws IOException {
 		try (var is = new CharsInputStream(TEST_UNICODE)) {
 			final var bytesRead = new ArrayList<Byte>();
 			int b;
@@ -70,57 +70,57 @@ public class CharsInputStreamTest {
 			for (int i = 0; i < bytesRead.size(); i++) {
 				byteArray[i] = bytesRead.get(i);
 			}
-			assertEquals(TEST_UNICODE, new String(byteArray, UTF_8));
+			assertThat(new String(byteArray, UTF_8)).isEqualTo(TEST_UNICODE);
 		}
 	}
 
 	@Test
-	public void testReadIntoByteArray() throws IOException {
+	void testReadIntoByteArray() throws IOException {
 		final var buffer = new byte[1024]; // Buffer to read a portion of the text
 
 		try (var is = new CharsInputStream(TEST_UNICODE)) {
 			final int bytesRead = is.read(buffer, 0, buffer.length);
 
-			assertEquals(TEST_UNICODE_BYTES_LEN, bytesRead);
-			assertEquals(TEST_UNICODE, new String(buffer, 0, bytesRead, UTF_8));
+			assertThat(bytesRead).isEqualTo(TEST_UNICODE_BYTES_LEN);
+			assertThat(new String(buffer, 0, bytesRead, UTF_8)).isEqualTo(TEST_UNICODE);
 		}
 	}
 
 	@Test
-	public void testSkip() throws IOException {
+	void testSkip() throws IOException {
 		try (var is = new CharsInputStream(TEST_UNICODE)) {
 			// skip emoji
 			final long skipped = is.skip(EMOJI_BYTES_LEN);
-			assertEquals(EMOJI_BYTES_LEN, skipped);
+			assertThat(skipped).isEqualTo(EMOJI_BYTES_LEN);
 
 			final var japanese = new byte[TEST_UNICODE_BYTES_LEN];
 			final int bytesRead = is.read(japanese);
 
-			assertEquals(JAPANESE, new String(japanese, 0, bytesRead, UTF_8));
+			assertThat(new String(japanese, 0, bytesRead, UTF_8)).isEqualTo(JAPANESE);
 		}
 	}
 
 	@Test
-	public void testHighSurrogateAtEndOfInput() throws IOException {
+	void testHighSurrogateAtEndOfInput() throws IOException {
 		final char[] invalidSequence = { 'A', '\uD800' }; // valid char followed by an isolated high surrogate
 		try (var is = new CharsInputStream(new String(invalidSequence), UTF_8)) {
 			final byte[] result = is.readAllBytes();
 			final var output = new String(result, UTF_8);
 
 			// the high surrogate at the end should be replaced by the Unicode replacement char
-			assertEquals("A" + CharsInputStream.UNICODE_REPLACEMENT_CHAR, output);
+			assertThat(output).isEqualTo("A" + CharsInputStream.UNICODE_REPLACEMENT_CHAR);
 		}
 	}
 
 	@Test
-	public void testHighSurrogateWithoutLowSurrogate() throws IOException {
+	void testHighSurrogateWithoutLowSurrogate() throws IOException {
 		final char[] invalidSequence = { '\uD800', 'A' }; // \uD800 is a high surrogate, followed by 'A'
 		try (var is = new CharsInputStream(new String(invalidSequence), UTF_8)) {
 			final byte[] result = is.readAllBytes();
 			final var output = new String(result, UTF_8);
 
 			// the invalid surrogate pair should be replaced by the Unicode replacement char
-			assertEquals(CharsInputStream.UNICODE_REPLACEMENT_CHAR + "A", output);
+			assertThat(output).isEqualTo(CharsInputStream.UNICODE_REPLACEMENT_CHAR + "A");
 		}
 	}
 }

@@ -11,7 +11,7 @@
  *******************************************************************************/
 package org.eclipse.tm4e.ui.tests.internal.themes;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.assertj.core.api.Assertions.assertThat;
 
 import java.io.ByteArrayInputStream;
 import java.nio.file.Files;
@@ -35,76 +35,67 @@ class TMTokenProviderTest {
 				.newInputStream(Path.of("../org.eclipse.tm4e.core.tests/src/main/resources/test-cases/themes/QuietLight.tmTheme"))) {
 			final var theme = new TMThemeTokenProvider(ContentType.XML, in);
 
-			assertEquals(colors.getColor(RGB.fromHex("#333333")), theme.getEditorForeground());
-			assertEquals(colors.getColor(RGB.fromHex("#F5F5F5")), theme.getEditorBackground());
-			assertEquals(colors.getColor(RGB.fromHex("#E4F6D4")), theme.getEditorCurrentLineHighlight());
-			assertEquals(null, theme.getEditorSelectionForeground());
-			assertEquals(colors.getColor(RGB.fromHex("#C9D0D9")), theme.getEditorSelectionBackground());
+			assertThat(theme.getEditorForeground()).isEqualTo(colors.getColor(RGB.fromHex("#333333")));
+			assertThat(theme.getEditorBackground()).isEqualTo(colors.getColor(RGB.fromHex("#F5F5F5")));
+			assertThat(theme.getEditorCurrentLineHighlight()).isEqualTo(colors.getColor(RGB.fromHex("#E4F6D4")));
+			assertThat(theme.getEditorSelectionForeground()).isNull();
+			assertThat(theme.getEditorSelectionBackground()).isEqualTo(colors.getColor(RGB.fromHex("#C9D0D9")));
 
-			if (theme.getToken("comment").getData() instanceof TextAttribute attrs) {
-				assertEquals(colors.getColor(RGB.fromHex("#AAAAAA")), attrs.getForeground());
-				assertEquals(SWT.ITALIC, attrs.getStyle() | SWT.ITALIC);
-			} else {
-				fail();
-			}
+			var token = theme.getToken("comment").getData();
+			assertThat(token).isInstanceOf(TextAttribute.class);
+			var attrs = (TextAttribute) token;
+			assertThat(attrs.getForeground()).isEqualTo(colors.getColor(RGB.fromHex("#AAAAAA")));
+			assertThat(attrs.getStyle() | SWT.ITALIC).isEqualTo(SWT.ITALIC);
 
-			if (theme.getToken("punctuation.definition.comment").getData() instanceof TextAttribute attrs) {
-				assertEquals(colors.getColor(RGB.fromHex("#AAAAAA")), attrs.getForeground());
-				assertEquals(SWT.ITALIC, attrs.getStyle() | SWT.ITALIC);
-			} else {
-				fail();
-			}
+			token = theme.getToken("punctuation.definition.comment").getData();
+			assertThat(token).isInstanceOf(TextAttribute.class);
+			attrs = (TextAttribute) token;
+			assertThat(attrs.getForeground()).isEqualTo(colors.getColor(RGB.fromHex("#AAAAAA")));
+			assertThat(attrs.getStyle() | SWT.ITALIC).isEqualTo(SWT.ITALIC);
 
-			if (theme.getToken("keyword").getData() instanceof TextAttribute attrs) {
-				assertEquals(colors.getColor(RGB.fromHex("#4B83CD")), attrs.getForeground());
-			} else {
-				fail();
-			}
+			token = theme.getToken("keyword").getData();
+			assertThat(token).isInstanceOf(TextAttribute.class);
+			attrs = (TextAttribute) token;
+			assertThat(attrs.getForeground()).isEqualTo(colors.getColor(RGB.fromHex("#4B83CD")));
 
-			if (theme.getToken("keyword.operator").getData() instanceof TextAttribute attrs) {
-				assertEquals(colors.getColor(RGB.fromHex("#777777")), attrs.getForeground());
-			} else {
-				fail();
-			}
+			token = theme.getToken("keyword.operator").getData();
+			assertThat(token).isInstanceOf(TextAttribute.class);
+			attrs = (TextAttribute) token;
+			assertThat(attrs.getForeground()).isEqualTo(colors.getColor(RGB.fromHex("#777777")));
 		}
 	}
 
 	@Test
 	void testTMJsonTheme() throws Exception {
-		try (var in = Files
-				.newInputStream(Path.of("../org.eclipse.tm4e.core.tests/src/main/resources/test-cases/themes/dark_vs.json"))) {
+		try (var in = Files.newInputStream(Path.of("../org.eclipse.tm4e.core.tests/src/main/resources/test-cases/themes/dark_vs.json"))) {
 			final var theme = new TMThemeTokenProvider(ContentType.JSON, in);
 
-			assertEquals(colors.getColor(RGB.fromHex("#D4D4D4")), theme.getEditorForeground());
-			assertEquals(colors.getColor(RGB.fromHex("#1E1E1E")), theme.getEditorBackground());
-			assertEquals(null, theme.getEditorCurrentLineHighlight());
-			assertEquals(null, theme.getEditorSelectionForeground());
-			assertEquals(null, theme.getEditorSelectionBackground());
+			assertThat(theme.getEditorForeground()).isEqualTo(colors.getColor(RGB.fromHex("#D4D4D4")));
+			assertThat(theme.getEditorBackground()).isEqualTo(colors.getColor(RGB.fromHex("#1E1E1E")));
+			assertThat(theme.getEditorCurrentLineHighlight()).isNull();
+			assertThat(theme.getEditorSelectionForeground()).isNull();
+			assertThat(theme.getEditorSelectionBackground()).isNull();
 
-			if (theme.getToken("comment").getData() instanceof TextAttribute attrs) {
-				assertEquals(colors.getColor(RGB.fromHex("#608B4E")), attrs.getForeground());
-				assertEquals(SWT.ITALIC, attrs.getStyle() | SWT.ITALIC);
-			} else {
-				fail();
-			}
+			var token = theme.getToken("comment").getData();
+			assertThat(token).isInstanceOf(TextAttribute.class);
+			var attrs = (TextAttribute) token;
+			assertThat(attrs.getForeground()).isEqualTo(colors.getColor(RGB.fromHex("#608B4E")));
+			assertThat(attrs.getStyle() | SWT.ITALIC).isEqualTo(SWT.ITALIC);
 
-			if (theme.getToken("keyword").getData() instanceof TextAttribute attrs) {
-				assertEquals(colors.getColor(RGB.fromHex("#569CD6")), attrs.getForeground());
-			} else {
-				fail();
-			}
+			token = theme.getToken("keyword").getData();
+			assertThat(token).isInstanceOf(TextAttribute.class);
+			attrs = (TextAttribute) token;
+			assertThat(attrs.getForeground()).isEqualTo(colors.getColor(RGB.fromHex("#569CD6")));
 
-			if (theme.getToken("keyword.operator").getData() instanceof TextAttribute attrs) {
-				assertEquals(colors.getColor(RGB.fromHex("#D4D4D4")), attrs.getForeground());
-			} else {
-				fail();
-			}
+			token = theme.getToken("keyword.operator").getData();
+			assertThat(token).isInstanceOf(TextAttribute.class);
+			attrs = (TextAttribute) token;
+			assertThat(attrs.getForeground()).isEqualTo(colors.getColor(RGB.fromHex("#D4D4D4")));
 
-			if (theme.getToken("keyword.operator.expression").getData() instanceof TextAttribute attrs) {
-				assertEquals(colors.getColor(RGB.fromHex("#569CD6")), attrs.getForeground());
-			} else {
-				fail();
-			}
+			token = theme.getToken("keyword.operator.expression").getData();
+			assertThat(token).isInstanceOf(TextAttribute.class);
+			attrs = (TextAttribute) token;
+			assertThat(attrs.getForeground()).isEqualTo(colors.getColor(RGB.fromHex("#569CD6")));
 		}
 	}
 
@@ -137,35 +128,33 @@ class TMTokenProviderTest {
 			    }
 			  ],
 			  "colors": {
-				"editor.foreground": "#FFFFFF",
-				"editor.background": "#000000",
-				"editor.selectionForeground": "#EEEEEE",
-				"editor.selectionBackground": "#333333",
-				"editor.lineHighlightBackground": "#999999"
+			    "editor.foreground": "#FFFFFF",
+			    "editor.background": "#000000",
+			    "editor.selectionForeground": "#EEEEEE",
+			    "editor.selectionBackground": "#333333",
+			    "editor.lineHighlightBackground": "#999999"
 			  },
 			  "semanticHighlighting": true
 			}
 			""".getBytes())) {
 			final var theme = new TMThemeTokenProvider(ContentType.JSON, in);
 
-			assertEquals(colors.getColor(RGB.fromHex("#FFFFFF")), theme.getEditorForeground());
-			assertEquals(colors.getColor(RGB.fromHex("#000000")), theme.getEditorBackground());
-			assertEquals(colors.getColor(RGB.fromHex("#999999")), theme.getEditorCurrentLineHighlight());
-			assertEquals(colors.getColor(RGB.fromHex("#EEEEEE")), theme.getEditorSelectionForeground());
+			assertThat(theme.getEditorForeground()).isEqualTo(colors.getColor(RGB.fromHex("#FFFFFF")));
+			assertThat(theme.getEditorBackground()).isEqualTo(colors.getColor(RGB.fromHex("#000000")));
+			assertThat(theme.getEditorCurrentLineHighlight()).isEqualTo(colors.getColor(RGB.fromHex("#999999")));
+			assertThat(theme.getEditorSelectionForeground()).isEqualTo(colors.getColor(RGB.fromHex("#EEEEEE")));
+			assertThat(theme.getEditorSelectionBackground()).isEqualTo(colors.getColor(RGB.fromHex("#333333")));
 
-			assertEquals(colors.getColor(RGB.fromHex("#333333")), theme.getEditorSelectionBackground());
-			if (theme.getToken("comment").getData() instanceof TextAttribute attrs) {
-				assertEquals(colors.getColor(RGB.fromHex("#FF0000")), attrs.getForeground());
-				assertEquals(SWT.ITALIC, attrs.getStyle() | SWT.ITALIC);
-			} else {
-				fail();
-			}
+			var token = theme.getToken("comment").getData();
+			assertThat(token).isInstanceOf(TextAttribute.class);
+			var attrs = (TextAttribute) token;
+			assertThat(attrs.getForeground()).isEqualTo(colors.getColor(RGB.fromHex("#FF0000")));
+			assertThat(attrs.getStyle()).isEqualTo(SWT.ITALIC);
 
-			if (theme.getToken("keyword").getData() instanceof TextAttribute attrs) {
-				assertEquals(colors.getColor(RGB.fromHex("#00FF00")), attrs.getForeground());
-			} else {
-				fail();
-			}
+			token = theme.getToken("keyword").getData();
+			assertThat(token).isInstanceOf(TextAttribute.class);
+			attrs = (TextAttribute) token;
+			assertThat(attrs.getForeground()).isEqualTo(colors.getColor(RGB.fromHex("#00FF00")));
 		}
 	}
 }

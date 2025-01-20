@@ -18,7 +18,7 @@
  */
 package org.eclipse.tm4e.languageconfiguration.internal.supports;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.assertj.core.api.Assertions.assertThat;
 
 import java.util.List;
 
@@ -86,10 +86,10 @@ class OnEnterSupportTest {
 			void testIndentAction(final String beforeText, final String afterText, final IndentAction expected) {
 				final EnterAction actual = onEnter("", beforeText, afterText);
 				if (expected == IndentAction.None) {
-					assertNull(actual);
+					assertThat(actual).isNull();
 				} else {
-					assertNotNull(actual);
-					assertEquals(expected, actual.indentAction);
+					assert actual != null;
+					assertThat(actual.indentAction).isEqualTo(expected);
 				}
 			}
 		}
@@ -129,20 +129,22 @@ class OnEnterSupportTest {
 				testIndentAction(previousLineText, beforeText, afterText, expectedIndentAction, expectedAppendText, 0);
 			}
 
+			@SuppressWarnings("null")
 			void testIndentAction(final String previousLineText, final String beforeText, final String afterText,
 					final @Nullable IndentAction expectedIndentAction, final @Nullable String expectedAppendText,
 					final int removeText) {
 				final EnterAction actual = onEnter(previousLineText, beforeText, afterText);
 				if (expectedIndentAction == null) {
-					assertNull(actual, "isNull:" + beforeText);
+					assertThat(actual).as("isNull:" + beforeText).isNull();
 				} else {
-					assertNotNull(actual, "isNotNull:" + beforeText);
-					assertEquals(expectedIndentAction, actual.indentAction, "indentAction:" + beforeText);
+					assertThat(actual).as("isNotNull:" + beforeText).isNotNull();
+					assert actual != null;
+					assertThat(actual.indentAction).as("indentAction:" + beforeText).isEqualTo(expectedIndentAction);
 					if (expectedAppendText != null) {
-						assertEquals(expectedAppendText, actual.appendText, "appendText:" + beforeText);
+						assertThat(actual.appendText).as("appendText:" + beforeText).isEqualTo(expectedAppendText);
 					}
 					if (removeText != 0) {
-						assertEquals(removeText, actual.removeText, "removeText:" + beforeText);
+						assertThat(actual.removeText).as("removeText:" + beforeText).isEqualTo(removeText);
 					}
 				}
 			}
@@ -230,10 +232,10 @@ class OnEnterSupportTest {
 			void testIndentAction(final String beforeText, final String afterText, final @Nullable IndentAction expected) {
 				final EnterAction actual = onEnter("", beforeText, afterText);
 				if (expected == IndentAction.None) {
-					assertNull(actual);
+					assertThat(actual).isNull();
 				} else {
-					assertNotNull(actual);
-					assertEquals(expected, actual.indentAction);
+					assert actual != null;
+					assertThat(actual.indentAction).isEqualTo(expected);
 				}
 			}
 		}

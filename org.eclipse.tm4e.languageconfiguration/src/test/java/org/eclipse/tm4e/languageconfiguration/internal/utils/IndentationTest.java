@@ -17,7 +17,7 @@
  */
 package org.eclipse.tm4e.languageconfiguration.internal.utils;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.assertj.core.api.Assertions.assertThat;
 
 import org.eclipse.tm4e.languageconfiguration.internal.model.CursorConfiguration;
 import org.junit.jupiter.api.Test;
@@ -33,45 +33,45 @@ class IndentationTest {
 	void testNormalizeIndentation1() {
 		var cursorCfg = new CursorConfiguration(false, 4);
 
-		assertEquals("\t", cursorCfg.normalizeIndentation("\t"));
-		assertEquals("\t", cursorCfg.normalizeIndentation("    "));
-		assertEquals("   ", cursorCfg.normalizeIndentation("   "));
-		assertEquals("  ", cursorCfg.normalizeIndentation("  "));
-		assertEquals(" ", cursorCfg.normalizeIndentation(" "));
-		assertEquals("", cursorCfg.normalizeIndentation(""));
-		assertEquals("\t\t", cursorCfg.normalizeIndentation(" \t    "));
-		assertEquals("\t   ", cursorCfg.normalizeIndentation(" \t   "));
-		assertEquals("\t  ", cursorCfg.normalizeIndentation(" \t  "));
-		assertEquals("\t ", cursorCfg.normalizeIndentation(" \t "));
-		assertEquals("\t", cursorCfg.normalizeIndentation(" \t"));
+		assertThat(cursorCfg.normalizeIndentation("\t")).isEqualTo("\t");
+		assertThat(cursorCfg.normalizeIndentation("    ")).isEqualTo("\t");
+		assertThat(cursorCfg.normalizeIndentation("   ")).isEqualTo("   ");
+		assertThat(cursorCfg.normalizeIndentation("  ")).isEqualTo("  ");
+		assertThat(cursorCfg.normalizeIndentation(" ")).isEqualTo(" ");
+		assertThat(cursorCfg.normalizeIndentation("")).isEqualTo("");
+		assertThat(cursorCfg.normalizeIndentation(" \t    ")).isEqualTo("\t\t");
+		assertThat(cursorCfg.normalizeIndentation(" \t   ")).isEqualTo("\t   ");
+		assertThat(cursorCfg.normalizeIndentation(" \t  ")).isEqualTo("\t  ");
+		assertThat(cursorCfg.normalizeIndentation(" \t ")).isEqualTo("\t ");
+		assertThat(cursorCfg.normalizeIndentation(" \t")).isEqualTo("\t");
 
-		assertEquals("\ta", cursorCfg.normalizeIndentation("\ta"));
-		assertEquals("\ta", cursorCfg.normalizeIndentation("    a"));
-		assertEquals("   a", cursorCfg.normalizeIndentation("   a"));
-		assertEquals("  a", cursorCfg.normalizeIndentation("  a"));
-		assertEquals(" a", cursorCfg.normalizeIndentation(" a"));
-		assertEquals("a", cursorCfg.normalizeIndentation("a"));
-		assertEquals("\t\ta", cursorCfg.normalizeIndentation(" \t    a"));
-		assertEquals("\t   a", cursorCfg.normalizeIndentation(" \t   a"));
-		assertEquals("\t  a", cursorCfg.normalizeIndentation(" \t  a"));
-		assertEquals("\t a", cursorCfg.normalizeIndentation(" \t a"));
-		assertEquals("\ta", cursorCfg.normalizeIndentation(" \ta"));
+		assertThat(cursorCfg.normalizeIndentation("\ta")).isEqualTo("\ta");
+		assertThat(cursorCfg.normalizeIndentation("    a")).isEqualTo("\ta");
+		assertThat(cursorCfg.normalizeIndentation("   a")).isEqualTo("   a");
+		assertThat(cursorCfg.normalizeIndentation("  a")).isEqualTo("  a");
+		assertThat(cursorCfg.normalizeIndentation(" a")).isEqualTo(" a");
+		assertThat(cursorCfg.normalizeIndentation("a")).isEqualTo("a");
+		assertThat(cursorCfg.normalizeIndentation(" \t    a")).isEqualTo("\t\ta");
+		assertThat(cursorCfg.normalizeIndentation(" \t   a")).isEqualTo("\t   a");
+		assertThat(cursorCfg.normalizeIndentation(" \t  a")).isEqualTo("\t  a");
+		assertThat(cursorCfg.normalizeIndentation(" \t a")).isEqualTo("\t a");
+		assertThat(cursorCfg.normalizeIndentation(" \ta")).isEqualTo("\ta");
 	}
 
 	@Test
 	void testNormalizeIndentation2() {
 		var cursorCfg = new CursorConfiguration(true, 4);
 
-		assertEquals("    a", cursorCfg.normalizeIndentation("\ta"));
-		assertEquals("    a", cursorCfg.normalizeIndentation("    a"));
-		assertEquals("   a", cursorCfg.normalizeIndentation("   a"));
-		assertEquals("  a", cursorCfg.normalizeIndentation("  a"));
-		assertEquals(" a", cursorCfg.normalizeIndentation(" a"));
-		assertEquals("a", cursorCfg.normalizeIndentation("a"));
-		assertEquals("        a", cursorCfg.normalizeIndentation(" \t    a"));
-		assertEquals("       a", cursorCfg.normalizeIndentation(" \t   a"));
-		assertEquals("      a", cursorCfg.normalizeIndentation(" \t  a"));
-		assertEquals("     a", cursorCfg.normalizeIndentation(" \t a"));
-		assertEquals("    a", cursorCfg.normalizeIndentation(" \ta"));
+		assertThat(cursorCfg.normalizeIndentation("\ta")).isEqualTo("    a");
+		assertThat(cursorCfg.normalizeIndentation("    a")).isEqualTo("    a");
+		assertThat(cursorCfg.normalizeIndentation("   a")).isEqualTo("   a");
+		assertThat(cursorCfg.normalizeIndentation("  a")).isEqualTo("  a");
+		assertThat(cursorCfg.normalizeIndentation(" a")).isEqualTo(" a");
+		assertThat(cursorCfg.normalizeIndentation("a")).isEqualTo("a");
+		assertThat(cursorCfg.normalizeIndentation(" \t    a")).isEqualTo("        a");
+		assertThat(cursorCfg.normalizeIndentation(" \t   a")).isEqualTo("       a");
+		assertThat(cursorCfg.normalizeIndentation(" \t  a")).isEqualTo("      a");
+		assertThat(cursorCfg.normalizeIndentation(" \t a")).isEqualTo("     a");
+		assertThat(cursorCfg.normalizeIndentation(" \ta")).isEqualTo("    a");
 	}
 }

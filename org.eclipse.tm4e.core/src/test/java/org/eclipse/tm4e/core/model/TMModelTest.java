@@ -9,8 +9,8 @@
  */
 package org.eclipse.tm4e.core.model;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.eclipse.tm4e.core.registry.IGrammarSource.fromResource;
-import static org.junit.jupiter.api.Assertions.*;
 
 import org.eclipse.tm4e.core.Data;
 import org.eclipse.tm4e.core.internal.grammar.StateStack;
@@ -31,7 +31,7 @@ class TMModelTest {
 				const sum = addNumbers(10, 15);             // 4
 				console.log('Sum is: ' + sum);              // 5
 			""".split("\\r?\\n");
-		assertEquals(5, textLines.length);
+		assertThat(textLines.length).isEqualTo(5);
 
 		final var tmModel = new TMModel(textLines.length) {
 			@Override
@@ -43,7 +43,7 @@ class TMModelTest {
 		try {
 			tmModel.setGrammar(grammar);
 
-			assertEquals(BackgroundTokenizationState.COMPLETED, tmModel.getBackgroundTokenizationState());
+			assertThat(tmModel.getBackgroundTokenizationState()).isEqualTo(BackgroundTokenizationState.COMPLETED);
 
 			// adding a listener will spawn the TokenizerThread
 			tmModel.addModelTokensChangedListener(event -> {
@@ -64,13 +64,13 @@ class TMModelTest {
 				Thread.yield();
 			}
 
-			assertEquals(BackgroundTokenizationState.COMPLETED, tmModel.getBackgroundTokenizationState());
+			assertThat(tmModel.getBackgroundTokenizationState()).isEqualTo(BackgroundTokenizationState.COMPLETED);
 
 			for (int i = 1; i < textLines.length; i++) {
-				assertNotEquals(StateStack.NULL, tmModel.lines.get(i).startState, "Line " + i + " is expected to be up-to-date");
+				assertThat(tmModel.lines.get(i).startState).as("Line " + i + " is expected to be up-to-date").isNotEqualTo(StateStack.NULL);
 			}
 			for (int i = 0; i < textLines.length; i++) {
-				assertNotNull(tmModel.lines.get(i).tokens, "Line " + i + " is expected to be up-to-date");
+				assertThat(tmModel.lines.get(i).tokens).as("Line " + i + " is expected to be up-to-date").isNotNull();
 			}
 		} finally {
 			tmModel.dispose();

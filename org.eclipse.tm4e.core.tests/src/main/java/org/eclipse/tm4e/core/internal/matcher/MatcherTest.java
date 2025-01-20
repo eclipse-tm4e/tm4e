@@ -11,7 +11,7 @@
  */
 package org.eclipse.tm4e.core.internal.matcher;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.assertj.core.api.Assertions.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -41,8 +41,7 @@ public class MatcherTest {
 		@Override
 		public void execute() {
 			final var matcher = Matcher.createMatchers(expression);
-			final boolean result = matcher.stream().anyMatch(m -> m.matcher.matches(input));
-			assertEquals(result, this.result);
+			assertThat(matcher.stream().anyMatch(m -> m.matcher.matches(input))).isEqualTo(this.result);
 		}
 	}
 

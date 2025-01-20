@@ -9,8 +9,8 @@
  */
 package org.eclipse.tm4e.core.model;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.eclipse.tm4e.core.registry.IGrammarSource.fromResource;
-import static org.junit.jupiter.api.Assertions.*;
 
 import java.io.IOException;
 import java.time.Duration;
@@ -31,12 +31,12 @@ class TMTokenizationTest {
 		try (var reader = ResourceUtils.getResourceReader(Data.class, "raytracer.ts")) {
 			final String veryLongLine = reader.lines().collect(Collectors.joining());
 			final var result1 = tokenizer.tokenize(veryLongLine, null);
-			assertFalse(result1.stoppedEarly);
+			assertThat(result1.stoppedEarly).isFalse();
 
 			final var result2 = tokenizer.tokenize(veryLongLine, null, null, Duration.ofMillis(10));
-			assertTrue(result2.stoppedEarly);
+			assertThat(result2.stoppedEarly).isTrue();
 
-			assertNotEquals(result1.tokens.size(), result2.tokens.size());
+			assertThat(result1.tokens.size()).isNotEqualTo(result2.tokens.size());
 		}
 	}
 }

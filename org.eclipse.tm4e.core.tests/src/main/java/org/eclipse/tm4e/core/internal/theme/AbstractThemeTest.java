@@ -17,9 +17,8 @@ import java.util.Map;
 
 import org.eclipse.tm4e.core.internal.theme.raw.RawThemeReader;
 import org.eclipse.tm4e.core.registry.IThemeSource;
-import org.junit.jupiter.api.Assertions;
 
-public abstract class AbstractThemeTest extends Assertions {
+public abstract class AbstractThemeTest extends org.assertj.core.api.Assertions {
 
 	protected static final int _NOT_SET = 0;
 

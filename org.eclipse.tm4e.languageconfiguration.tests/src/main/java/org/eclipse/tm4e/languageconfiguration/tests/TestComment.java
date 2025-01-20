@@ -8,7 +8,7 @@
  */
 package org.eclipse.tm4e.languageconfiguration.tests;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.assertj.core.api.Assertions.assertThat;
 
 import java.io.ByteArrayInputStream;
 
@@ -50,14 +50,14 @@ public class TestComment {
 		String text = doc.get();
 		editor.getSelectionProvider().setSelection(new TextSelection(0, text.length()));
 		service.executeCommand(ToggleLineCommentHandler.TOGGLE_LINE_COMMENT_COMMAND_ID, null);
-		assertEquals("/*a*/\n\n/*b*/\n\n/*c*/", doc.get());
+		assertThat(doc.get()).isEqualTo("/*a*/\n\n/*b*/\n\n/*c*/");
 		checktTextSelection(editor.getSelectionProvider().getSelection(), 2, 15);
 
 		// Repeatedly executed toggle comment command should remove the comments inserted previously
 		text = doc.get();
 		editor.getSelectionProvider().setSelection(new TextSelection(0, text.length()));
 		service.executeCommand(ToggleLineCommentHandler.TOGGLE_LINE_COMMENT_COMMAND_ID, null);
-		assertEquals("a\n\nb\n\nc", doc.get());
+		assertThat(doc.get()).isEqualTo("a\n\nb\n\nc");
 		checktTextSelection(editor.getSelectionProvider().getSelection(), 0, 7);
 	}
 
@@ -77,19 +77,19 @@ public class TestComment {
 		service.executeCommand(ToggleLineCommentHandler.TOGGLE_LINE_COMMENT_COMMAND_ID, null);
 
 		text = doc.get();
-		assertEquals(" a ", text);
+		assertThat(text).isEqualTo(" a ");
 		final ISelection selection = editor.getSelectionProvider().getSelection();
-		assertNotNull(selection);
-		assertInstanceOf(ITextSelection.class, selection);
+		assertThat(selection).isNotNull();
+		assertThat(selection).isInstanceOf(ITextSelection.class);
 		final var textSelection = (ITextSelection) selection;
-		assertEquals(0, textSelection.getOffset());
-		assertEquals(3, textSelection.getLength());
+		assertThat(textSelection.getOffset()).isEqualTo(0);
+		assertThat(textSelection.getLength()).isEqualTo(3);
 		checktTextSelection(editor.getSelectionProvider().getSelection(), 0, 3);
 
 		// Repeatedly executed toggle comment command should remove the comments inserted previously
 		editor.getSelectionProvider().setSelection(new TextSelection(0, text.length()));
 		service.executeCommand(ToggleLineCommentHandler.TOGGLE_LINE_COMMENT_COMMAND_ID, null);
-		assertEquals("/* a */", doc.get());
+		assertThat(doc.get()).isEqualTo("/* a */");
 		checktTextSelection(editor.getSelectionProvider().getSelection(), 2, 3);
 	}
 
@@ -109,13 +109,13 @@ public class TestComment {
 		final var service = PlatformUI.getWorkbench().getService(IHandlerService.class);
 		editor.getSelectionProvider().setSelection(new TextSelection(0, 0)); // No matter the selection length
 		service.executeCommand(ToggleLineCommentHandler.TOGGLE_LINE_COMMENT_COMMAND_ID, null);
-		assertEquals("/*a*/\r\n\r\nb\r\n\r\nc", doc.get());
+		assertThat(doc.get()).isEqualTo("/*a*/\r\n\r\nb\r\n\r\nc");
 		checktTextSelection(editor.getSelectionProvider().getSelection(), 2, 0);
 
 		// Repeatedly executed toggle comment command should remove the comments inserted previously
 		editor.getSelectionProvider().setSelection(new TextSelection(0, 0)); // No matter the selection length
 		service.executeCommand(ToggleLineCommentHandler.TOGGLE_LINE_COMMENT_COMMAND_ID, null);
-		assertEquals("a\r\n\r\nb\r\n\r\nc", doc.get());
+		assertThat(doc.get()).isEqualTo("a\r\n\r\nb\r\n\r\nc");
 		checktTextSelection(editor.getSelectionProvider().getSelection(), 0, 0);
 	}
 
@@ -139,11 +139,11 @@ public class TestComment {
 		editor.getSelectionProvider().setSelection(new TextSelection(indexOfA, lengthToC));
 		service.executeCommand(ToggleLineCommentHandler.TOGGLE_LINE_COMMENT_COMMAND_ID, null);
 		String commented = padding + "//a\n//b\n//c\n" + padding;
-		assertEquals(commented, doc.get());
+		assertThat(doc.get()).isEqualTo(commented);
 
 		// Repeatedly executed toggle comment command should remove the comments inserted previously
 		service.executeCommand(ToggleLineCommentHandler.TOGGLE_LINE_COMMENT_COMMAND_ID, null);
-		assertEquals(input, doc.get());
+		assertThat(doc.get()).isEqualTo(input);
 		checktTextSelection(editor.getSelectionProvider().getSelection(), indexOfA, lengthToC);
 	}
 
@@ -161,14 +161,14 @@ public class TestComment {
 		String text = doc.get();
 		editor.getSelectionProvider().setSelection(new TextSelection(0, text.length()));
 		service.executeCommand(ToggleLineCommentHandler.ADD_BLOCK_COMMENT_COMMAND_ID, null);
-		assertEquals("//a\n//\n//b\n//\n//c", doc.get());
+		assertThat(doc.get()).isEqualTo("//a\n//\n//b\n//\n//c");
 		checktTextSelection(editor.getSelectionProvider().getSelection(), 2, 15);
 
 		// Repeatedly executed toggle comment command should remove the comments inserted previously
 		text = doc.get();
 		editor.getSelectionProvider().setSelection(new TextSelection(0, text.length()));
 		service.executeCommand(ToggleLineCommentHandler.REMOVE_BLOCK_COMMENT_COMMAND_ID, null);
-		assertEquals("a\n\nb\n\nc", doc.get());
+		assertThat(doc.get()).isEqualTo("a\n\nb\n\nc");
 		checktTextSelection(editor.getSelectionProvider().getSelection(), 0, 7);
 	}
 
@@ -186,7 +186,7 @@ public class TestComment {
 		final var service = PlatformUI.getWorkbench().getService(IHandlerService.class);
 		editor.getSelectionProvider().setSelection(new TextSelection(0, text.length()));
 		service.executeCommand(ToggleLineCommentHandler.REMOVE_BLOCK_COMMENT_COMMAND_ID, null);
-		assertEquals(" a ", doc.get());
+		assertThat(doc.get()).isEqualTo(" a ");
 		checktTextSelection(editor.getSelectionProvider().getSelection(), 0, 0);
 	}
 
@@ -204,7 +204,7 @@ public class TestComment {
 		final var service = PlatformUI.getWorkbench().getService(IHandlerService.class);
 		editor.getSelectionProvider().setSelection(new TextSelection(0, text.length()));
 		service.executeCommand(ToggleLineCommentHandler.REMOVE_BLOCK_COMMENT_COMMAND_ID, null);
-		assertEquals(" a  b  c ", doc.get());
+		assertThat(doc.get()).isEqualTo(" a  b  c ");
 		checktTextSelection(editor.getSelectionProvider().getSelection(), 0, 0);
 	}
 
@@ -222,7 +222,7 @@ public class TestComment {
 		final var service = PlatformUI.getWorkbench().getService(IHandlerService.class);
 		editor.getSelectionProvider().setSelection(new TextSelection(1, text.length() - 2));
 		service.executeCommand(ToggleLineCommentHandler.REMOVE_BLOCK_COMMENT_COMMAND_ID, null);
-		assertEquals(" a ", doc.get());
+		assertThat(doc.get()).isEqualTo(" a ");
 		checktTextSelection(editor.getSelectionProvider().getSelection(), 0, 0);
 	}
 
@@ -240,7 +240,7 @@ public class TestComment {
 		final var service = PlatformUI.getWorkbench().getService(IHandlerService.class);
 		editor.getSelectionProvider().setSelection(new TextSelection(5, 7)); // [*/ b /*]
 		service.executeCommand(ToggleLineCommentHandler.REMOVE_BLOCK_COMMENT_COMMAND_ID, null);
-		assertEquals(" a  b  c ", doc.get());
+		assertThat(doc.get()).isEqualTo(" a  b  c ");
 		checktTextSelection(editor.getSelectionProvider().getSelection(), 3, 0);
 	}
 
@@ -258,7 +258,7 @@ public class TestComment {
 		final var service = PlatformUI.getWorkbench().getService(IHandlerService.class);
 		editor.getSelectionProvider().setSelection(new TextSelection(6, 5)); // [/ b /]
 		service.executeCommand(ToggleLineCommentHandler.REMOVE_BLOCK_COMMENT_COMMAND_ID, null);
-		assertEquals(" a  b  c ", doc.get());
+		assertThat(doc.get()).isEqualTo(" a  b  c ");
 		checktTextSelection(editor.getSelectionProvider().getSelection(), 3, 0);
 	}
 
@@ -276,7 +276,7 @@ public class TestComment {
 		final var service = PlatformUI.getWorkbench().getService(IHandlerService.class);
 		editor.getSelectionProvider().setSelection(new TextSelection(2, 1)); // [b]
 		service.executeCommand(ToggleLineCommentHandler.ADD_BLOCK_COMMENT_COMMAND_ID, null);
-		assertEquals("a /*b*/ c", doc.get());
+		assertThat(doc.get()).isEqualTo("a /*b*/ c");
 		checktTextSelection(editor.getSelectionProvider().getSelection(), 4, 0);
 	}
 
@@ -296,15 +296,15 @@ public class TestComment {
 		service.executeCommand(ToggleLineCommentHandler.ADD_BLOCK_COMMENT_COMMAND_ID, null);
 
 		// No comment is to be added because the selection is already inside a block comment
-		assertEquals(text, doc.get());
+		assertThat(doc.get()).isEqualTo(text);
 		checktTextSelection(editor.getSelectionProvider().getSelection(), 4, 1);
 	}
 
 	private void checktTextSelection(final ISelection selection, final int expectedOffset, final int expectedLength) {
-		assertNotNull(selection);
-		assertInstanceOf(ITextSelection.class, selection);
+		assertThat(selection).isNotNull();
+		assertThat(selection).isInstanceOf(ITextSelection.class);
 		final var textSelection = (ITextSelection) selection;
-		assertEquals(expectedOffset, textSelection.getOffset());
-		assertEquals(expectedLength, textSelection.getLength());
+		assertThat(textSelection.getOffset()).isEqualTo(expectedOffset);
+		assertThat(textSelection.getLength()).isEqualTo(expectedLength);
 	}
 }

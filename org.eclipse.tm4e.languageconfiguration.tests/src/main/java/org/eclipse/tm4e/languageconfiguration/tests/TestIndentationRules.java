@@ -12,7 +12,7 @@
  */
 package org.eclipse.tm4e.languageconfiguration.tests;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.assertj.core.api.Assertions.assertThat;
 
 import java.io.ByteArrayInputStream;
 
@@ -50,13 +50,13 @@ public class TestIndentationRules {
 		text.setText("");
 		text.setSelection(0);
 		text.insert("   function bar() {\n   }");
-		assertEquals("function bar() {\n}", text.getText());
+		assertThat(text.getText()).isEqualTo("function bar() {\n}");
 
 		// insert an unindented code snippet into the body of a class and expect it to be indented
 		text.setText("public class Foo {\n\n}");
 		text.setSelection(19);
 		text.insert("function bar() {\n}");
-		assertEquals("public class Foo {\n\tfunction bar() {\n\t}\n}", text.getText());
+		assertThat(text.getText()).isEqualTo("public class Foo {\n\tfunction bar() {\n\t}\n}");
 
 		// insert single line text and ensure the text is only indented in blank lines
 		text.setText("public class Foo {\n\n}");
@@ -64,7 +64,7 @@ public class TestIndentationRules {
 		text.insert("bar");
 		text.setSelection(16);
 		text.insert("bar");
-		assertEquals("public class Foobar {\n\tbar\n}", text.getText());
+		assertThat(text.getText()).isEqualTo("public class Foobar {\n\tbar\n}");
 	}
 
 	@Test
@@ -81,6 +81,6 @@ public class TestIndentationRules {
 		text.setText("public class Foo {\n\n}");
 		text.setSelection(18);
 		text.insert("\n");
-		assertEquals("public class Foo {\n\t\n\n}", text.getText());
+		assertThat(text.getText()).isEqualTo("public class Foo {\n\t\n\n}");
 	}
 }

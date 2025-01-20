@@ -11,11 +11,12 @@
  */
 package org.eclipse.tm4e.ui.tests;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.core.runtime.content.IContentType;
 import org.eclipse.tm4e.core.grammar.IGrammar;
 import org.eclipse.tm4e.registry.TMEclipseRegistryPlugin;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 class RegistryTest {
@@ -24,13 +25,13 @@ class RegistryTest {
 	void testGrammarRegistered() {
 		final IContentType contentType = Platform.getContentTypeManager().getContentType("org.eclipse.tm4e.ui.tests.testContentType");
 		final IGrammar grammar = TMEclipseRegistryPlugin.getGrammarRegistryManager().getGrammarFor(contentType);
-		Assertions.assertNotNull(grammar);
+		assertThat(grammar).isNotNull();
 	}
 
 	@Test
 	void testThemeAppliesToSubtypes() {
 		final IContentType contentType = Platform.getContentTypeManager().getContentType("org.eclipse.tm4e.ui.tests.testContentType.child");
 		final IGrammar grammar = TMEclipseRegistryPlugin.getGrammarRegistryManager().getGrammarFor(contentType);
-		Assertions.assertNotNull(grammar);
+		assertThat(grammar).isNotNull();
 	}
 }

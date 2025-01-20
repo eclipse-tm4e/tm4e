@@ -11,7 +11,7 @@
  */
 package org.eclipse.tm4e.languageconfiguration.tests;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.assertj.core.api.Assertions.assertThat;
 
 import java.io.ByteArrayInputStream;
 
@@ -45,42 +45,50 @@ public class TestAutoClosing {
 		file.create(new ByteArrayInputStream(new byte[0]), true, null);
 		final ITextEditor editor = (ITextEditor) IDE.openEditor(UI.getActivePage(), file);
 		final StyledText text = (StyledText) editor.getAdapter(Control.class);
+
 		// insert closing
 		text.setText("");
 		text.replaceTextRange(0, 0, "(");
-		assertEquals("()", text.getText());
-		assertEquals(1, text.getCaretOffset());
+		assertThat(text.getText()).isEqualTo("()");
+		assertThat(text.getCaretOffset()).isEqualTo(1);
+
 		// nested insert closing
 		text.setText("foo(String::from)");
 		text.replaceTextRange(16, 0, "(");
-		assertEquals("foo(String::from())", text.getText());
-		assertEquals(17, text.getCaretOffset());
+		assertThat(text.getText()).isEqualTo("foo(String::from())");
+		assertThat(text.getCaretOffset()).isEqualTo(17);
+
 		// ignore already opened
 		text.setText("()");
 		text.replaceTextRange(0, 0, "(");
-		assertEquals("()", text.getText());
-		assertEquals(1, text.getCaretOffset());
+		assertThat(text.getText()).isEqualTo("()");
+		assertThat(text.getCaretOffset()).isEqualTo(1);
+
 		// ignore already closed
 		text.setText("()");
 		text.replaceTextRange(1, 0, ")");
-		assertEquals("()", text.getText());
-		assertEquals(2, text.getCaretOffset());
-		//
+		assertThat(text.getText()).isEqualTo("()");
+		assertThat(text.getCaretOffset()).isEqualTo(2);
+
+		// extra closing
 		text.setText("()");
 		text.replaceTextRange(2, 0, ")");
-		assertEquals("())", text.getText());
-		//
+		assertThat(text.getText()).isEqualTo("())");
+
+		// double quotes
 		text.setText("");
 		text.replaceTextRange(0, 0, "\"");
-		assertEquals("\"\"", text.getText());
-		assertEquals(1, text.getCaretOffset());
+		assertThat(text.getText()).isEqualTo("\"\"");
+		assertThat(text.getCaretOffset()).isEqualTo(1);
+
 		// continued
 		text.replaceTextRange(1, 0, "\"");
-		assertEquals("\"\"", text.getText());
-		assertEquals(2, text.getCaretOffset());
+		assertThat(text.getText()).isEqualTo("\"\"");
+		assertThat(text.getCaretOffset()).isEqualTo(2);
+
 		// continued
 		text.replaceTextRange(2, 0, "\"");
-		assertEquals("\"\"\"\"", text.getText());
-		assertEquals(3, text.getCaretOffset());
+		assertThat(text.getText()).isEqualTo("\"\"\"\"");
+		assertThat(text.getCaretOffset()).isEqualTo(3);
 	}
 }

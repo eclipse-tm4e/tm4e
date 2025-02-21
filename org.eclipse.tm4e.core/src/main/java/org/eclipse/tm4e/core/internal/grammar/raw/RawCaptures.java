@@ -42,6 +42,9 @@ final class RawCaptures extends PropertySettable.HashMap<IRawRule> implements IR
 	public void forEachCapture(final BiConsumer<String, IRawRule> action) {
 		forEach((final String captureId, final Object rule) -> {
 			try {
+				// to handle e.g. https://github.com/microsoft/vscode/blob/f4edc9af6c1d8e3018ca13a4e0d7de350f8f1368/extensions/yaml/syntaxes/yaml-1.1.tmLanguage.json#L139-L159
+				if ("comment".equals(captureId) && rule instanceof String)
+					return;
 				action.accept(captureId, (IRawRule) rule);
 			} catch (final ClassCastException ex) {
 				// log ClassCastException with some context, to better troubleshoot issues like https://github.com/eclipse-tm4e/tm4e/issues/754

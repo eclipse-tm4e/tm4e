@@ -94,7 +94,7 @@ sources:
     github:
       repo: microsoft/vscode
       path: extensions
-      ref: "1.96.1" # https://gitlab.eclipse.org/eclipsefdn/emo-team/iplab/-/issues/17960
+      ref: "1.97.2" # https://gitlab.eclipse.org/eclipsefdn/emo-team/iplab/-/issues/19521
     license-download: false
     include-all-by-default: true
     extensions:
@@ -161,6 +161,7 @@ sources:
             label: VS Code Search Result
 
       yaml:
+        ignored: newer versions use a lot of variable-length lookbehinds not supported by Joni
         languages:
           dockercompose:
             label: Docker Compose

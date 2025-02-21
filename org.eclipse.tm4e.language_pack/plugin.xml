@@ -652,7 +652,7 @@
   <!-- ======================================== -->
   <extension point="org.eclipse.core.contenttype.contentTypes">
     <content-type id="org.eclipse.tm4e.language_pack.jsonc" name="JSON with Comments" base-type="org.eclipse.tm4e.language_pack.basetype" priority="low"
-                  file-extensions="babelrc,eslintrc,hintrc,jsfmtrc,jshintrc,jsonc,swcrc" file-names=".babelrc.json,.ember-cli,babel.config.json,typedoc.json" file-patterns="*.eslintrc.json" />
+                  file-extensions="babelrc,eslintrc,hintrc,jsfmtrc,jshintrc,jsonc,swcrc" file-names=".babelrc.json,.ember-cli,babel.config.json,bun.lock,typedoc.json" file-patterns="*.eslintrc.json" />
   </extension>
   <extension point="org.eclipse.tm4e.registry.grammars">
     <grammar scopeName="source.json.comments" path="syntaxes/json/jsonc.tmLanguage.json" />
@@ -672,7 +672,7 @@
   <!-- ======================================== -->
   <extension point="org.eclipse.core.contenttype.contentTypes">
     <content-type id="org.eclipse.tm4e.language_pack.jsonl" name="JSON Lines" base-type="org.eclipse.tm4e.language_pack.basetype" priority="low"
-                  file-extensions="jsonl" />
+                  file-extensions="jsonl,ndjson" />
   </extension>
   <extension point="org.eclipse.tm4e.registry.grammars">
     <grammar scopeName="source.json.lines" path="syntaxes/json/jsonl.tmLanguage.json" />

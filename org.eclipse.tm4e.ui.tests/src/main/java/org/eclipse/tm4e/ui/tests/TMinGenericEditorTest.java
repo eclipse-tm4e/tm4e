@@ -19,6 +19,7 @@ import org.eclipse.tm4e.ui.internal.utils.UI;
 import org.eclipse.tm4e.ui.tests.support.TestUtils;
 import org.eclipse.ui.IEditorDescriptor;
 import org.eclipse.ui.IEditorPart;
+import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.ide.IDE;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -28,6 +29,7 @@ class TMinGenericEditorTest {
 
 	private IEditorDescriptor genericEditorDescr;
 	private IEditorPart editor;
+	private IEditorPart clonedEditor;
 
 	@BeforeEach
 	public void setup() throws Exception {
@@ -39,6 +41,9 @@ class TMinGenericEditorTest {
 	public void tearDown() throws Exception {
 		TestUtils.closeEditor(editor);
 		editor = null;
+
+		TestUtils.closeEditor(clonedEditor);
+		clonedEditor = null;
 
 		TestUtils.assertNoTM4EThreadsRunning();
 	}
@@ -70,6 +75,19 @@ class TMinGenericEditorTest {
 		text.setText("let a = '';\nlet b = 10;\nlet c = true;");
 		TestUtils.waitForAndAssertCondition("More styles should have been added", 3_000,
 				() -> text.getStyleRanges().length > initialNumberOfRanges + 3);
+	}
+
+	@Test
+	void testTMHighlightInClonedGenericEditor() throws Exception {
+		final var f = TestUtils.createTempFile(".ts");
+		try (var fileOutputStream = new FileOutputStream(f)) {
+			fileOutputStream.write("let a = '';".getBytes());
+		}
+		editor = IDE.openEditor(UI.getActivePage(), f.toURI(), genericEditorDescr.getId(), true);
+		clonedEditor = UI.getActivePage().openEditor(editor.getEditorInput(), genericEditorDescr.getId(), true, IWorkbenchPage.MATCH_NONE);
+
+		final var text = (StyledText) clonedEditor.getAdapter(Control.class);
+		TestUtils.waitForAndAssertCondition(3_000, () -> text.getStyleRanges().length > 1);
 	}
 
 	@Test

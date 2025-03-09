@@ -217,7 +217,7 @@ public class TMPresentationReconciler implements IPresentationReconciler {
 						viewer.getTextWidget().getBackground().getRGB());
 			}
 
-			TMPresentationReconciler.this.colorizer = new Colorizer(viewer, theme, listeners);
+			final var colorizer = TMPresentationReconciler.this.colorizer = new Colorizer(viewer, theme, listeners);
 			final var isModelReused = TMModelManager.INSTANCE.isConnected(newDoc);
 
 			// connect a TextMate model to the new document
@@ -227,7 +227,7 @@ public class TMPresentationReconciler implements IPresentationReconciler {
 
 			// For new models the colorizer will be invoked after tokenization. For reused
 			// models (e.g. when splitting an editor) this must be done explicitly.
-			if (colorizer != null && isModelReused) {
+			if (isModelReused) {
 				try {
 					colorizer.colorize(new Region(0, newDoc.getLength()), docModel);
 				} catch (final BadLocationException ex) {

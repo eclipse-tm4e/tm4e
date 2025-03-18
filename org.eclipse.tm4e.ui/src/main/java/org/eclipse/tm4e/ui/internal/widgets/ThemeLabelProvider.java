@@ -28,22 +28,18 @@ public final class ThemeLabelProvider extends LabelProvider implements ITableLab
 	}
 
 	@Override
-	public @Nullable String getText(final @Nullable Object element) {
-		if (element == null)
-			return "";
-		final ITheme theme = (ITheme) element;
-		return theme.getName();
+	public @Nullable String getText(final Object element) {
+		return ((ITheme) element).getName();
 	}
 
 	@Override
 	public @Nullable String getColumnText(final @Nullable Object element, final int columnIndex) {
 		if (element == null)
 			return "";
-		final ITheme theme = (ITheme) element;
 		return switch (columnIndex) {
-			case 0 -> theme.getName();
-			case 1 -> theme.getPath();
-			case 2 -> theme.getPluginId();
+			case 0 -> ((ITheme) element).getName();
+			case 1 -> ((ITheme) element).getPath();
+			case 2 -> ((ITheme) element).getPluginId();
 			default -> ""; //$NON-NLS-1$
 		};
 	}

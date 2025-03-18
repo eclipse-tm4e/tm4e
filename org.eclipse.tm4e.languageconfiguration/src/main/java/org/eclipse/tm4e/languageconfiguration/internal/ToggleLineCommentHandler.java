@@ -52,10 +52,7 @@ public class ToggleLineCommentHandler extends AbstractHandler {
 	}
 
 	@Override
-	public @Nullable Object execute(final @Nullable ExecutionEvent event) throws ExecutionException {
-		if (event == null) {
-			return null;
-		}
+	public @Nullable Object execute(final ExecutionEvent event) throws ExecutionException {
 		final var part = HandlerUtil.getActiveEditor(event);
 		final var editor = adapt(part, ITextEditor.class);
 		if (editor == null) {

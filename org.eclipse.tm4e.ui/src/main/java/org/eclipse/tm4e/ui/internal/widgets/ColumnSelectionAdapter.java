@@ -11,7 +11,6 @@
  */
 package org.eclipse.tm4e.ui.internal.widgets;
 
-import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
@@ -20,7 +19,6 @@ import org.eclipse.swt.widgets.TableColumn;
 
 /**
  * Sort the selected column and refresh the viewer.
- *
  */
 public final class ColumnSelectionAdapter extends SelectionAdapter {
 
@@ -36,8 +34,8 @@ public final class ColumnSelectionAdapter extends SelectionAdapter {
 	}
 
 	@Override
-	public void widgetSelected(final @Nullable SelectionEvent e) {
-		if (e != null && e.getSource() instanceof final TableColumn tableColumn) {
+	public void widgetSelected(final SelectionEvent e) {
+		if (e.getSource() instanceof final TableColumn tableColumn) {
 			int columnIndex = -1;
 			final TableColumn[] columns = tableViewer.getTable().getColumns();
 			for (int i = 0; i < columns.length; i++) {

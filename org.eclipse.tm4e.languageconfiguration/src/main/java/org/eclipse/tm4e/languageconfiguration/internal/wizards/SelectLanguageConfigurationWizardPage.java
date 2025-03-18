@@ -202,10 +202,8 @@ final class SelectLanguageConfigurationWizardPage extends WizardPage implements 
 
 	private static final class ContentTypesLabelProvider extends LabelProvider {
 		@Override
-		public @Nullable String getText(final @Nullable Object element) {
-			return element == null
-					? ""
-					: ((IContentType) element).getName();
+		public @Nullable String getText(final Object element) {
+			return ((IContentType) element).getName();
 		}
 	}
 
@@ -214,7 +212,7 @@ final class SelectLanguageConfigurationWizardPage extends WizardPage implements 
 		private IContentTypeManager manager = Platform.getContentTypeManager();
 
 		@Override
-		public Object[] getChildren(final @Nullable Object parentElement) {
+		public Object[] getChildren(final Object parentElement) {
 			final var elements = new ArrayList<>();
 			final var baseType = (IContentType) parentElement;
 			for (final var contentType : manager.getAllContentTypes()) {
@@ -226,21 +224,20 @@ final class SelectLanguageConfigurationWizardPage extends WizardPage implements 
 		}
 
 		@Override
-		public @Nullable Object getParent(final @Nullable Object element) {
-			if (element == null)
-				return null;
+		public @Nullable Object getParent(final Object element) {
 			final IContentType contentType = (IContentType) element;
 			return contentType.getBaseType();
 		}
 
 		@Override
-		public boolean hasChildren(final @Nullable Object element) {
+		public boolean hasChildren(final Object element) {
 			return getChildren(element).length > 0;
 		}
 
 		@Override
 		public Object[] getElements(final @Nullable Object inputElement) {
-			return getChildren(manager.getContentType(IContentTypeManager.CT_TEXT));
+			final var ctype = manager.getContentType(IContentTypeManager.CT_TEXT);
+			return ctype == null ? new Object[0] : getChildren(ctype);
 		}
 
 		@Override

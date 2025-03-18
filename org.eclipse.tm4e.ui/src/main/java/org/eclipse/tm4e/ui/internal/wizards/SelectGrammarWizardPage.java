@@ -97,7 +97,7 @@ final class SelectGrammarWizardPage extends AbstractWizardPage {
 		browseFileSystemButton.setText(TMUIMessages.Button_browse_FileSystem);
 		browseFileSystemButton.addSelectionListener(new SelectionAdapter() {
 			@Override
-			public void widgetSelected(final @Nullable SelectionEvent e) {
+			public void widgetSelected(final SelectionEvent e) {
 				final var dialog = new FileDialog(parent.getShell());
 				dialog.setFilterExtensions(new String[] { Stream.of(TEXTMATE_GRAMMAR_FILE_FILTERS).collect(Collectors.joining(";")) });
 				dialog.setFilterPath(grammarFileText.getText());
@@ -112,7 +112,7 @@ final class SelectGrammarWizardPage extends AbstractWizardPage {
 		browseWorkspaceButton.setText(TMUIMessages.Button_browse_Workspace);
 		browseWorkspaceButton.addSelectionListener(new SelectionAdapter() {
 			@Override
-			public void widgetSelected(final @Nullable SelectionEvent e) {
+			public void widgetSelected(final SelectionEvent e) {
 				final var dialog = new ElementTreeSelectionDialog(parent.getShell(), new WorkbenchLabelProvider(),
 						new WorkbenchContentProvider());
 				dialog.setTitle("TextMate grammar selection");

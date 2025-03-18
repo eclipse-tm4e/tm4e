@@ -28,7 +28,7 @@ public final class GrammarDefinitionLabelProvider extends LabelProvider implemen
 	}
 
 	@Override
-	public @Nullable String getText(final @Nullable Object element) {
+	public @Nullable String getText(final Object element) {
 		return getColumnText(element, 0);
 	}
 

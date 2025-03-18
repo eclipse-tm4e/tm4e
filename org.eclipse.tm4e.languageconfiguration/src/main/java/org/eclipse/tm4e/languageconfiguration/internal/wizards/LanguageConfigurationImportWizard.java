@@ -13,7 +13,6 @@ package org.eclipse.tm4e.languageconfiguration.internal.wizards;
 
 import static org.eclipse.tm4e.core.internal.utils.NullSafetyHelper.lateNonNull;
 
-import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.wizard.Wizard;
 import org.eclipse.tm4e.languageconfiguration.LanguageConfigurationPlugin;
@@ -62,7 +61,7 @@ public final class LanguageConfigurationImportWizard extends Wizard implements I
 	}
 
 	@Override
-	public void init(final @Nullable IWorkbench workbench, final @Nullable IStructuredSelection selection) {
+	public void init(final IWorkbench workbench, final IStructuredSelection selection) {
 	}
 
 	public ILanguageConfigurationDefinition getCreatedDefinition() {

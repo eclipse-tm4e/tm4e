@@ -141,7 +141,7 @@ public final class TaskTagsPreferencePage extends AbstractPreferencePage {
 			label.setText(TMUIMessages.TaskTagsPreferencePage_column_type);
 			cmbType = new Combo(parent, SWT.READ_ONLY);
 			cmbType.setItems(Stream.of(MarkerConfig.Type.values()).map(Enum::name).toArray(String[]::new));
-			cmbType.addListener(SWT.Modify, (final @Nullable Event e) -> {
+			cmbType.addListener(SWT.Modify, (final Event e) -> {
 				if (!cmbType.getText().isBlank())
 					switch (MarkerConfig.Type.valueOf(cmbType.getText())) {
 						case PROBLEM:

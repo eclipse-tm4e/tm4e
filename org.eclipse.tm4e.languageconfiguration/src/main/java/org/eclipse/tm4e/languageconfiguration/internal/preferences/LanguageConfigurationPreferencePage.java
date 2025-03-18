@@ -16,7 +16,6 @@ package org.eclipse.tm4e.languageconfiguration.internal.preferences;
 import static org.eclipse.tm4e.core.internal.utils.NullSafetyHelper.lateNonNull;
 import static org.eclipse.tm4e.languageconfiguration.internal.LanguageConfigurationMessages.*;
 
-import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.layout.GridDataFactory;
@@ -53,7 +52,7 @@ public final class LanguageConfigurationPreferencePage extends AbstractPreferenc
 	}
 
 	@Override
-	protected Control createContents(final @NonNullByDefault({}) Composite parent) {
+	protected Control createContents(final Composite parent) {
 		final var control = new Composite(parent, SWT.NONE);
 		control.setLayout(GridLayoutFactory.fillDefaults().create());
 

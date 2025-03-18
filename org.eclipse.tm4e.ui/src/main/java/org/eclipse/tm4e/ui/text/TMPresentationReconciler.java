@@ -120,10 +120,7 @@ public class TMPresentationReconciler implements IPresentationReconciler {
 	/**
 	 * Listener to recolorize editors when E4 Theme from "General > Appearance" preferences changed or TextMate theme changed.
 	 */
-	private final IPreferenceChangeListener themeChangeListener = (final @Nullable PreferenceChangeEvent event) -> {
-		if (event == null)
-			return;
-
+	private final IPreferenceChangeListener themeChangeListener = (final PreferenceChangeEvent event) -> {
 		switch (event.getKey()) {
 			case PreferenceUtils.E4_THEME_ID, //
 					PreferenceConstants.THEME_ASSOCIATIONS, //

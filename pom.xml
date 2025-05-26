@@ -11,7 +11,7 @@
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<maven.minimum.version>3.9.5</maven.minimum.version>
-		<tycho-version>4.0.12</tycho-version>
+		<tycho-version>4.0.13</tycho-version>
 		<sonar.jacoco.reportPath>../target/jacoco.exec</sonar.jacoco.reportPath>
 		<tycho.scmUrl>scm:git:https://github.com/eclipse-tm4e/tm4e.git</tycho.scmUrl>
 		<tycho-surefire-plugin.vmargs></tycho-surefire-plugin.vmargs>

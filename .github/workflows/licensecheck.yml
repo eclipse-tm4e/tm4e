@@ -1,4 +1,4 @@
-# https://docs.github.com/en/actions/using-workflows/workflow-syntax-for-github-actions
+# https://docs.github.com/en/actions/writing-workflows/workflow-syntax-for-github-actions
 name: License check
 
 on:
@@ -9,7 +9,7 @@ on:
     - '**'
   pull_request:
   workflow_dispatch:
-    # https://github.blog/changelog/2020-07-06-github-actions-manual-triggers-with-workflow_dispatch/
+    # https://docs.github.com/en/actions/writing-workflows/choosing-when-your-workflow-runs/events-that-trigger-workflows#workflow_dispatch
     inputs:
       dash-iplab-token:
         description: "Gitlab Personal Access Token (https://gitlab.eclipse.org/-/user_settings/personal_access_tokens) with 'api'' scope for Automatic IP Team Review Requests via org.eclipse.dash:license-tool-plugin, see https://github.com/eclipse/dash-licenses#automatic-ip-team-review-requests"

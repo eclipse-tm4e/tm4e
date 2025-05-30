@@ -11,11 +11,12 @@
  */
 package org.eclipse.tm4e.ui.internal.utils;
 
+import static org.eclipse.core.runtime.Platform.getContentTypeManager;
+
 import java.io.BufferedInputStream;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
-import java.util.Arrays;
 import java.util.LinkedHashSet;
 import java.util.List;
 
@@ -30,9 +31,7 @@ import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.ListenerList;
-import org.eclipse.core.runtime.Platform;
 import org.eclipse.core.runtime.content.IContentType;
-import org.eclipse.core.runtime.content.IContentTypeManager;
 import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.jface.text.IDocument;
 import org.eclipse.tm4e.ui.TMUIPlugin;
@@ -69,8 +68,7 @@ public final class ContentTypeHelper {
 	 * @return matching content type or null
 	 */
 	public static @Nullable IContentType getContentTypeById(final String contentTypeId) {
-		final IContentTypeManager manager = Platform.getContentTypeManager();
-		return manager.getContentType(contentTypeId);
+		return getContentTypeManager().getContentType(contentTypeId);
 	}
 
 	// ------------------------- Find content types from FileBuffers
@@ -94,38 +92,34 @@ public final class ContentTypeHelper {
 	}
 
 	/**
-	 * Returns the content types from the given {@link ITextFileBuffer}.
+	 * Determines the content types associated with the given {@link ITextFileBuffer}.
 	 *
-	 * @param buffer
-	 *
-	 * @return the content types from the given {@link ITextFileBuffer}.
+	 * @return a {@link ContentTypeInfo} object containing the file name and associated content types,
+	 *         or {@code null} if content types could not be determined
 	 */
 	private static @Nullable ContentTypeInfo getContentTypes(final ITextFileBuffer buffer) {
 		try {
 			final String fileName = buffer.getFileStore().getName();
 			final var contentTypes = new LinkedHashSet<IContentType>();
+			if (buffer.isDirty() && buffer.getDocument() != null) {
+				// Buffer is dirty, i.e. content of the filesystem is not in sync with the editor content -> use IDocument content
+				try (var contents = new DocumentInputStream(buffer.getDocument())) {
+					contentTypes.addAll(List.of(getContentTypeManager().findContentTypesFor(contents, fileName)));
+				}
+			} else {
+				// Buffer is synchronized with filesystem content
+				try (InputStream contents = getContents(buffer)) {
+					contentTypes.addAll(List.of(getContentTypeManager().findContentTypesFor(contents, fileName)));
+				}
+			}
+
+			// Append the buffer's content type last to preserve the priority order of content types resolved by getContentTypeManager,
+			// since buffer.getContentType() may return a more generic, less specific type.
 			final IContentType bufferContentType = buffer.getContentType();
 			if (bufferContentType != null) {
 				contentTypes.add(bufferContentType);
 			}
-			if (buffer.isDirty() && buffer.getDocument() != null) {
-				// Buffer is dirty (content of the filesystem is not synch with
-				// the editor content), use IDocument content.
-				try (var input = new DocumentInputStream(buffer.getDocument())) {
-					final IContentType[] contentTypesForInput = Platform.getContentTypeManager()
-							.findContentTypesFor(input, fileName);
-					if (contentTypesForInput != null) {
-						contentTypes.addAll(Arrays.asList(contentTypesForInput));
-						return new ContentTypeInfo(fileName, contentTypes.toArray(IContentType[]::new));
-					}
-				}
-			}
-
-			// Buffer is synchronized with filesystem content
-			try (InputStream contents = getContents(buffer)) {
-				contentTypes.addAll(List.of(Platform.getContentTypeManager().findContentTypesFor(contents, fileName)));
-				return new ContentTypeInfo(fileName, contentTypes.toArray(IContentType[]::new));
-			}
+			return new ContentTypeInfo(fileName, contentTypes.toArray(IContentType[]::new));
 		} catch (final Exception ex) {
 			TMUIPlugin.logTrace(ex);
 		}
@@ -183,7 +177,7 @@ public final class ContentTypeHelper {
 					final IStorage storage = storageInput.getStorage();
 					final String fileName = storage.getName();
 					try (InputStream input = storage.getContents()) {
-						final var contentTypes = Platform.getContentTypeManager().findContentTypesFor(input, fileName);
+						final var contentTypes = getContentTypeManager().findContentTypesFor(input, fileName);
 						return contentTypes == null ? null : new ContentTypeInfo(fileName, contentTypes);
 					}
 				} catch (final Exception ex) {

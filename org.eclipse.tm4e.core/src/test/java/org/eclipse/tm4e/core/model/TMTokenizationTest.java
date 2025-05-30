@@ -33,7 +33,7 @@ class TMTokenizationTest {
 			final var result1 = tokenizer.tokenize(veryLongLine, null);
 			assertThat(result1.stoppedEarly).isFalse();
 
-			final var result2 = tokenizer.tokenize(veryLongLine, null, null, Duration.ofMillis(10));
+			final var result2 = tokenizer.tokenize(veryLongLine, null, 0, Duration.ofMillis(10));
 			assertThat(result2.stoppedEarly).isTrue();
 
 			assertThat(result1.tokens.size()).isNotEqualTo(result2.tokens.size());

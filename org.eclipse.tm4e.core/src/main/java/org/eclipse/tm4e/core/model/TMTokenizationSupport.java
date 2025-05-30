@@ -16,7 +16,7 @@
  */
 package org.eclipse.tm4e.core.model;
 
-import static org.eclipse.tm4e.core.internal.utils.NullSafetyHelper.*;
+import static org.eclipse.tm4e.core.internal.utils.NullSafetyHelper.castNonNull;
 
 import java.time.Duration;
 import java.util.ArrayList;
@@ -69,16 +69,15 @@ public class TMTokenizationSupport implements ITokenizationSupport {
 
 	@Override
 	public TokenizationResult tokenize(final String line, final @Nullable IStateStack state) {
-		return tokenize(line, state, null, null);
+		return tokenize(line, state, 0, null);
 	}
 
 	@Override
 	public TokenizationResult tokenize(final String line,
 			final @Nullable IStateStack state,
-			final @Nullable Integer offsetDeltaOrNull,
+			final int offsetDelta,
 			final @Nullable Duration timeLimit) {
 
-		final int offsetDelta = offsetDeltaOrNull == null ? 0 : offsetDeltaOrNull;
 		final var tokenizationResult = _grammar.tokenizeLine(line, state, timeLimit);
 		final var tokens = tokenizationResult.getTokens();
 

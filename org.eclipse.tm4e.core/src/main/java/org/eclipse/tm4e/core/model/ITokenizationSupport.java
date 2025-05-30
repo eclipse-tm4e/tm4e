@@ -35,5 +35,5 @@ public interface ITokenizationSupport {
 	 * @param offsetDelta adds offsetDelta to each of the returned indices
 	 * @param timeLimit duration after which tokenization is stopped
 	 */
-	TokenizationResult tokenize(String line, @Nullable IStateStack state, @Nullable Integer offsetDelta, @Nullable Duration timeLimit);
+	TokenizationResult tokenize(String line, @Nullable IStateStack state, int offsetDelta, @Nullable Duration timeLimit);
 }

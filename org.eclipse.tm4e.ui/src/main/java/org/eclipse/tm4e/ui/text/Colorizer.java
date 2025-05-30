@@ -76,7 +76,9 @@ class Colorizer {
 					final var region = new Region(doc.getLineOffset(range.fromLineNumber - 1), length);
 					colorize(region, docModel);
 				} catch (final BadLocationException ex) {
-					TMUIPlugin.logError(ex);
+					// This is an expected state, only log when tracing is enabled.
+					if (TMUIPlugin.isLogTraceEnabled())
+						TMUIPlugin.logError(ex);
 				}
 			}
 		}

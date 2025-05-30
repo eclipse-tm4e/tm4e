@@ -95,6 +95,7 @@ final class LineTokenizer {
 	private final LineTokens lineTokens;
 	private int anchorPosition = -1;
 	private boolean stop;
+	private final int lineLength;
 
 	private LineTokenizer(final Grammar grammar, final OnigString lineText, final boolean isFirstLine, final int linePos,
 			final StateStack stack, final LineTokens lineTokens) {
@@ -104,6 +105,7 @@ final class LineTokenizer {
 		this.linePos = linePos;
 		this.stack = stack;
 		this.lineTokens = lineTokens;
+		this.lineLength = lineText.content.length();
 	}
 
 	private TokenizeStringResult scan(final boolean checkWhileConditions, final long timeLimit) {
@@ -139,7 +141,7 @@ final class LineTokenizer {
 		if (r == null) {
 			LOGGER.log(TRACE, " no more matches.");
 			// No match
-			lineTokens.produce(stack, lineText.content.length());
+			lineTokens.produce(stack, lineLength);
 			stop = true;
 			return;
 		}
@@ -175,7 +177,7 @@ final class LineTokenizer {
 				// intent was to continue in this state
 				stack = popped;
 
-				lineTokens.produce(stack, lineText.content.length());
+				lineTokens.produce(stack, lineLength);
 				stop = true;
 				return;
 			}
@@ -193,7 +195,7 @@ final class LineTokenizer {
 					matchedRuleId,
 					linePos,
 					anchorPosition,
-					captureIndices[0].end == lineText.content.length(),
+					captureIndices[0].end == lineLength,
 					null,
 					nameScopesList,
 					nameScopesList);
@@ -229,7 +231,7 @@ final class LineTokenizer {
 					// Grammar pushed the same rule without advancing
 					LOGGER.log(INFO, "[2] - Grammar is in an endless loop - Grammar pushed the same rule without advancing");
 					stack = castNonNull(stack.pop());
-					lineTokens.produce(stack, lineText.content.length());
+					lineTokens.produce(stack, lineLength);
 					stop = true;
 					return;
 				}
@@ -263,7 +265,7 @@ final class LineTokenizer {
 					// Grammar pushed the same rule without advancing
 					LOGGER.log(INFO, "[3] - Grammar is in an endless loop - Grammar pushed the same rule without advancing");
 					stack = castNonNull(stack.pop());
-					lineTokens.produce(stack, lineText.content.length());
+					lineTokens.produce(stack, lineLength);
 					stop = true;
 					return;
 				}
@@ -291,7 +293,7 @@ final class LineTokenizer {
 					// Grammar is not advancing, nor is it pushing/popping
 					LOGGER.log(INFO, "[4] - Grammar is in an endless loop - Grammar is not advancing, nor is it pushing/popping");
 					stack = stack.safePop();
-					lineTokens.produce(stack, lineText.content.length());
+					lineTokens.produce(stack, lineLength);
 					stop = true;
 					return;
 				}

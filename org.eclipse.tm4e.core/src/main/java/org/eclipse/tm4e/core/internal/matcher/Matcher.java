@@ -19,6 +19,8 @@ package org.eclipse.tm4e.core.internal.matcher;
 import java.util.List;
 
 /**
+ *
+ * @see <a href="https://macromates.com/textmate/manual/references#scope-selector">TextMate Scope Selector syntax</a>
  * @see <a href=
  *      "https://github.com/microsoft/vscode-textmate/blob/167bbbd509356cc4617f250c0d754aef670ab14a/src/matcher.ts#L10">
  *      github.com/microsoft/vscode-textmate/blob/main/src/matcher.ts</a>

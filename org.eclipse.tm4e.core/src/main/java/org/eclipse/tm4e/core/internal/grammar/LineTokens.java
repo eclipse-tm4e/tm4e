@@ -159,8 +159,8 @@ final class LineTokens {
 								0);
 					}
 				}
-				if (balancedBracketSelectors != null) {
-					containsBalancedBrackets = balancedBracketSelectors.match(scopes);
+				if (this.balancedBracketSelectors != null) {
+					containsBalancedBrackets = this.balancedBracketSelectors.match(scopes);
 				}
 			}
 

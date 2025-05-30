@@ -33,7 +33,7 @@ public interface IGrammarConfiguration {
 		return null;
 	}
 
-	default @Nullable Map<String, Integer> getTokenTypes() {
+	default @Nullable /*SequencedMap*/ Map<String, Integer> getTokenTypes() {
 		return null;
 	}
 

@@ -179,6 +179,7 @@ public class TMTokenizationSupport implements ITokenizationSupport {
 
 	/**
 	 * https://github.com/microsoft/vscode/blob/70d250824ef66ef09f04c4084b804d5f353fb704/src/vs/editor/node/textMate/TMSyntax.ts#L129
+	 * Removed in upstream by https://github.com/microsoft/vscode/commit/467f42da9125b42081e50cb9e63c46ebbaa7d558
 	 */
 	private static final class DecodeMap {
 

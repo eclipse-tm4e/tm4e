@@ -267,7 +267,7 @@ public final class Grammar implements IGrammar, IRuleFactoryHelper {
 	}
 
 	@SuppressWarnings("unchecked")
-	private synchronized <T> T _tokenize(
+	private synchronized <T> TokenizeLineResult<T> _tokenize(
 			String lineText,
 			@Nullable StateStack prevState,
 			final boolean emitBinaryTokens,
@@ -329,7 +329,7 @@ public final class Grammar implements IGrammar, IRuleFactoryHelper {
 			lineText += '\n';
 		}
 		final var onigLineText = OnigString.of(lineText);
-		final int lineLength = lineText.length();
+		final int lineLength = onigLineText.content.length();
 		final var lineTokens = new LineTokens(
 				emitBinaryTokens,
 				lineText,
@@ -345,7 +345,7 @@ public final class Grammar implements IGrammar, IRuleFactoryHelper {
 				true,
 				timeLimit == null ? Duration.ZERO : timeLimit);
 
-		return (T) new TokenizeLineResult<>(
+		return (TokenizeLineResult<T>) new TokenizeLineResult<>(
 				emitBinaryTokens
 						? lineTokens.getBinaryResult(r.stack, lineLength)
 						: lineTokens.getResult(r.stack, lineLength),

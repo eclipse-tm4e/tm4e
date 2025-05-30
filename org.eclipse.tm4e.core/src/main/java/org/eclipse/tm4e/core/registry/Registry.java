@@ -43,7 +43,6 @@ import org.eclipse.tm4e.core.internal.utils.ScopeNames;
  * @see <a href=
  *      "https://github.com/microsoft/vscode-textmate/blob/167bbbd509356cc4617f250c0d754aef670ab14a/src/main.ts#L54">
  *      github.com/microsoft/vscode-textmate/blob/main/src/main.ts</a>
- *
  */
 public final class Registry {
 

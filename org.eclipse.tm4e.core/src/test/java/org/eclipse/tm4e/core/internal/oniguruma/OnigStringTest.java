@@ -1,6 +1,18 @@
+/**
+ * Copyright (c) 2017 Fabio Zadrozny.
+ * This program and the accompanying materials are made
+ * available under the terms of the Eclipse Public License 2.0
+ * which is available at https://www.eclipse.org/legal/epl-2.0/
+ *
+ * SPDX-License-Identifier: EPL-2.0
+ *
+ * Contributors:
+ * Fabio Zadrozny - initial API and implementation
+ * Sebastian Thomschke - refactoring and extended test cases
+ */
 package org.eclipse.tm4e.core.internal.oniguruma;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.assertj.core.api.Assertions.*;
 
 import org.junit.jupiter.api.Test;
 
@@ -8,35 +20,42 @@ class OnigStringTest {
 
 	private OnigString verifyBasics(final String string, final Class<? extends OnigString> expectedType) {
 		final OnigString onigString = OnigString.of(string);
-		assertInstanceOf(expectedType, onigString);
-		assertEquals(string, onigString.content);
-		assertTrue(onigString.toString().contains(string));
+		assertThat(onigString).isInstanceOf(expectedType);
+		assertThat(onigString.content).isEqualTo(string);
+		assertThat(onigString.toString()).contains(string);
 
-		assertEquals(onigString.bytesCount, onigString.bytesUTF8.length);
+		assertThat(onigString.bytesCount).isEqualTo(onigString.bytesUTF8.length);
 
 		/*
 		 * getByteIndexOfChar tests
 		 */
-		assertThrows(ArrayIndexOutOfBoundsException.class, () -> onigString.getByteIndexOfChar(-1));
-		assertEquals(0, onigString.getByteIndexOfChar(0));
-		if (!string.isEmpty())
-			onigString.getByteIndexOfChar(string.length() - 1); // does not throws exception, because in range
-		onigString.getByteIndexOfChar(string.length()); // does not throws exception, because of internal workaround
-		assertThrows(ArrayIndexOutOfBoundsException.class, () -> onigString.getByteIndexOfChar(string.length() + 1));
+		assertThatThrownBy(() -> onigString.getByteIndexOfChar(-1))
+				.isInstanceOf(ArrayIndexOutOfBoundsException.class);
+		assertThat(onigString.getByteIndexOfChar(0)).isZero();
+		if (!string.isEmpty()) {
+			onigString.getByteIndexOfChar(string.length() - 1); // does not throw exception, because in range
+		}
+		onigString.getByteIndexOfChar(string.length()); // does not throw exception, because of internal workaround
+		assertThatThrownBy(() -> onigString.getByteIndexOfChar(string.length() + 1))
+				.isInstanceOf(ArrayIndexOutOfBoundsException.class);
 
 		/*
 		 * getCharIndexOfByte tests
 		 */
-		assertThrows(ArrayIndexOutOfBoundsException.class, () -> onigString.getCharIndexOfByte(-1));
-		assertEquals(0, onigString.getCharIndexOfByte(0));
+		assertThatThrownBy(() -> onigString.getCharIndexOfByte(-1))
+				.isInstanceOf(ArrayIndexOutOfBoundsException.class);
+		assertThat(onigString.getCharIndexOfByte(0)).isZero();
 		if (!string.isEmpty()) {
-			// does not throws exception, because in range
-			assertEquals(string.length() - 1, onigString.getCharIndexOfByte(onigString.bytesCount - 1));
+			// does not throw exception, because in range
+			assertThat(onigString.getCharIndexOfByte(onigString.bytesCount - 1))
+					.isEqualTo(string.length() - 1);
 		}
-		// does not throws exception, because of internal workaround
-		assertEquals(string.length(), onigString.getCharIndexOfByte(onigString.bytesCount));
+		// does not throw exception, because of internal workaround
+		assertThat(onigString.getCharIndexOfByte(onigString.bytesCount))
+				.isEqualTo(string.length());
 
-		assertThrows(ArrayIndexOutOfBoundsException.class, () -> onigString.getCharIndexOfByte(onigString.bytesCount + 1));
+		assertThatThrownBy(() -> onigString.getCharIndexOfByte(onigString.bytesCount + 1))
+				.isInstanceOf(ArrayIndexOutOfBoundsException.class);
 
 		return onigString;
 	}
@@ -46,7 +65,7 @@ class OnigStringTest {
 		final var string = "";
 		final OnigString onigString = verifyBasics(string, OnigString.SingleByteString.class);
 
-		assertEquals(0, onigString.bytesCount);
+		assertThat(onigString.bytesCount).isZero();
 	}
 
 	@Test
@@ -54,23 +73,25 @@ class OnigStringTest {
 		final var string = "ab";
 		final OnigString onigString = verifyBasics(string, OnigString.SingleByteString.class);
 
-		assertEquals(2, onigString.bytesCount);
+		assertThat(onigString.bytesCount).isEqualTo(2);
 
 		/*
 		 * getByteIndexOfChar tests
 		 */
-		assertEquals(0, onigString.getByteIndexOfChar(0));
-		assertEquals(1, onigString.getByteIndexOfChar(1));
-		assertEquals(2, onigString.getByteIndexOfChar(2)); // does not throw exception, because of internal workaround
-		assertThrows(ArrayIndexOutOfBoundsException.class, () -> onigString.getByteIndexOfChar(3));
+		assertThat(onigString.getByteIndexOfChar(0)).isZero();
+		assertThat(onigString.getByteIndexOfChar(1)).isEqualTo(1);
+		assertThat(onigString.getByteIndexOfChar(2)).isEqualTo(2); // does not throw exception, because of internal workaround
+		assertThatThrownBy(() -> onigString.getByteIndexOfChar(3))
+				.isInstanceOf(ArrayIndexOutOfBoundsException.class);
 
 		/*
 		 * getCharIndexOfByte tests
 		 */
-		assertEquals(0, onigString.getCharIndexOfByte(0)); // a
-		assertEquals(1, onigString.getCharIndexOfByte(1)); // b
-		assertEquals(2, onigString.getCharIndexOfByte(2)); // does not throw exception, because of internal workaround
-		assertThrows(ArrayIndexOutOfBoundsException.class, () -> onigString.getCharIndexOfByte(3));
+		assertThat(onigString.getCharIndexOfByte(0)).isZero(); // a
+		assertThat(onigString.getCharIndexOfByte(1)).isEqualTo(1); // b
+		assertThat(onigString.getCharIndexOfByte(2)).isEqualTo(2); // does not throw exception, because of internal workaround
+		assertThatThrownBy(() -> onigString.getCharIndexOfByte(3))
+				.isInstanceOf(ArrayIndexOutOfBoundsException.class);
 	}
 
 	@Test
@@ -78,25 +99,26 @@ class OnigStringTest {
 		final var string = "áé";
 		final OnigString onigString = verifyBasics(string, OnigString.MultiByteString.class);
 
-		assertEquals(4, onigString.bytesCount);
+		assertThat(onigString.bytesCount).isEqualTo(4);
 
 		/*
 		 * getByteIndexOfChar tests
 		 */
-		assertEquals(0, onigString.getByteIndexOfChar(0)); // á
-		assertEquals(2, onigString.getByteIndexOfChar(1)); // é
-		assertEquals(4, onigString.getByteIndexOfChar(2)); // does not throw exception, because of internal workaround
-		assertThrows(ArrayIndexOutOfBoundsException.class, () -> onigString.getByteIndexOfChar(3));
+		assertThat(onigString.getByteIndexOfChar(0)).isZero(); // á
+		assertThat(onigString.getByteIndexOfChar(1)).isEqualTo(2); // é
+		assertThat(onigString.getByteIndexOfChar(2)).isEqualTo(4); // does not throw exception, because of internal workaround
+		assertThatThrownBy(() -> onigString.getByteIndexOfChar(3))
+				.isInstanceOf(ArrayIndexOutOfBoundsException.class);
 
 		/*
 		 * getCharIndexOfByte tests
 		 */
-		assertEquals(0, onigString.getCharIndexOfByte(1)); // á
-		assertEquals(1, onigString.getCharIndexOfByte(2)); // é
-		assertEquals(1, onigString.getCharIndexOfByte(3)); // é
-		assertEquals(2, onigString.getCharIndexOfByte(4)); // does not throw exception, because of internal workaround
-		assertThrows(ArrayIndexOutOfBoundsException.class, () -> onigString.getCharIndexOfByte(5));
-
+		assertThat(onigString.getCharIndexOfByte(1)).isZero(); // á
+		assertThat(onigString.getCharIndexOfByte(2)).isEqualTo(1); // é
+		assertThat(onigString.getCharIndexOfByte(3)).isEqualTo(1); // é
+		assertThat(onigString.getCharIndexOfByte(4)).isEqualTo(2); // does not throw exception, because of internal workaround
+		assertThatThrownBy(() -> onigString.getCharIndexOfByte(5))
+				.isInstanceOf(ArrayIndexOutOfBoundsException.class);
 	}
 
 	@Test
@@ -104,44 +126,46 @@ class OnigStringTest {
 		final var string = "myáçóúôõab";
 		final OnigString onigString = verifyBasics(string, OnigString.MultiByteString.class);
 
-		assertEquals(16, onigString.bytesCount);
+		assertThat(onigString.bytesCount).isEqualTo(16);
 
 		/*
 		 * getByteIndexOfChar tests
 		 */
-		assertEquals(0, onigString.getByteIndexOfChar(0)); // m
-		assertEquals(1, onigString.getByteIndexOfChar(1)); // y
-		assertEquals(2, onigString.getByteIndexOfChar(2)); // á
-		assertEquals(4, onigString.getByteIndexOfChar(3)); // ç
-		assertEquals(6, onigString.getByteIndexOfChar(4)); // ó
-		assertEquals(8, onigString.getByteIndexOfChar(5)); // ú
-		assertEquals(10, onigString.getByteIndexOfChar(6)); // ô
-		assertEquals(12, onigString.getByteIndexOfChar(7)); // õ
-		assertEquals(14, onigString.getByteIndexOfChar(8)); // a
-		assertEquals(15, onigString.getByteIndexOfChar(9)); // b
-		assertEquals(16, onigString.getByteIndexOfChar(10)); // does not throw exception, because of internal workaround
-		assertThrows(ArrayIndexOutOfBoundsException.class, () -> onigString.getByteIndexOfChar(string.length() + 1));
+		assertThat(onigString.getByteIndexOfChar(0)).isZero(); // m
+		assertThat(onigString.getByteIndexOfChar(1)).isEqualTo(1); // y
+		assertThat(onigString.getByteIndexOfChar(2)).isEqualTo(2); // á
+		assertThat(onigString.getByteIndexOfChar(3)).isEqualTo(4); // ç
+		assertThat(onigString.getByteIndexOfChar(4)).isEqualTo(6); // ó
+		assertThat(onigString.getByteIndexOfChar(5)).isEqualTo(8); // ú
+		assertThat(onigString.getByteIndexOfChar(6)).isEqualTo(10); // ô
+		assertThat(onigString.getByteIndexOfChar(7)).isEqualTo(12); // õ
+		assertThat(onigString.getByteIndexOfChar(8)).isEqualTo(14); // a
+		assertThat(onigString.getByteIndexOfChar(9)).isEqualTo(15); // b
+		assertThat(onigString.getByteIndexOfChar(10)).isEqualTo(16); // does not throw exception, because of internal workaround
+		assertThatThrownBy(() -> onigString.getByteIndexOfChar(string.length() + 1))
+				.isInstanceOf(ArrayIndexOutOfBoundsException.class);
 
 		/*
 		 * getCharIndexOfByte tests
 		 */
-		assertEquals(0, onigString.getCharIndexOfByte(0)); // m
-		assertEquals(1, onigString.getCharIndexOfByte(1)); // y
-		assertEquals(2, onigString.getCharIndexOfByte(2)); // á
-		assertEquals(2, onigString.getCharIndexOfByte(3)); // á
-		assertEquals(3, onigString.getCharIndexOfByte(4)); // ç
-		assertEquals(3, onigString.getCharIndexOfByte(5)); // ç
-		assertEquals(4, onigString.getCharIndexOfByte(6)); // ó
-		assertEquals(4, onigString.getCharIndexOfByte(7)); // ó
-		assertEquals(5, onigString.getCharIndexOfByte(8)); // ú
-		assertEquals(5, onigString.getCharIndexOfByte(9)); // ú
-		assertEquals(6, onigString.getCharIndexOfByte(10)); // ô
-		assertEquals(6, onigString.getCharIndexOfByte(11)); // ô
-		assertEquals(7, onigString.getCharIndexOfByte(12)); // õ
-		assertEquals(7, onigString.getCharIndexOfByte(13)); // õ
-		assertEquals(8, onigString.getCharIndexOfByte(14)); // a
-		assertEquals(9, onigString.getCharIndexOfByte(15)); // b
-		assertEquals(10, onigString.getCharIndexOfByte(16)); // does not throw exception, because of internal workaround
-		assertThrows(ArrayIndexOutOfBoundsException.class, () -> onigString.getCharIndexOfByte(17));
+		assertThat(onigString.getCharIndexOfByte(0)).isZero(); // m
+		assertThat(onigString.getCharIndexOfByte(1)).isEqualTo(1); // y
+		assertThat(onigString.getCharIndexOfByte(2)).isEqualTo(2); // á
+		assertThat(onigString.getCharIndexOfByte(3)).isEqualTo(2); // á
+		assertThat(onigString.getCharIndexOfByte(4)).isEqualTo(3); // ç
+		assertThat(onigString.getCharIndexOfByte(5)).isEqualTo(3); // ç
+		assertThat(onigString.getCharIndexOfByte(6)).isEqualTo(4); // ó
+		assertThat(onigString.getCharIndexOfByte(7)).isEqualTo(4); // ó
+		assertThat(onigString.getCharIndexOfByte(8)).isEqualTo(5); // ú
+		assertThat(onigString.getCharIndexOfByte(9)).isEqualTo(5); // ú
+		assertThat(onigString.getCharIndexOfByte(10)).isEqualTo(6); // ô
+		assertThat(onigString.getCharIndexOfByte(11)).isEqualTo(6); // ô
+		assertThat(onigString.getCharIndexOfByte(12)).isEqualTo(7); // õ
+		assertThat(onigString.getCharIndexOfByte(13)).isEqualTo(7); // õ
+		assertThat(onigString.getCharIndexOfByte(14)).isEqualTo(8); // a
+		assertThat(onigString.getCharIndexOfByte(15)).isEqualTo(9); // b
+		assertThat(onigString.getCharIndexOfByte(16)).isEqualTo(10); // does not throw exception, because of internal workaround
+		assertThatThrownBy(() -> onigString.getCharIndexOfByte(17))
+				.isInstanceOf(ArrayIndexOutOfBoundsException.class);
 	}
 }

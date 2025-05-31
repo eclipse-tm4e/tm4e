@@ -9,29 +9,39 @@
  */
 package org.eclipse.tm4e.core.internal.oniguruma;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.assertj.core.api.Assertions.assertThat;
 
 import org.eclipse.jdt.annotation.Nullable;
 import org.junit.jupiter.api.Test;
 
 class OnigRegExpTest {
 
+	@SuppressWarnings("null")
 	private void assertOnigRegExpSearch(final String input, final @Nullable OnigResult result, final int startPosition,
 			final boolean shouldMatch, final String... expectedGroups) {
 		if (shouldMatch) {
-			assertNotNull(result, "Expected a match in input: \"" + input + "\" starting at position " + startPosition);
-			assertEquals(expectedGroups.length, result.count(),
-					"Expected " + expectedGroups.length + " groups, but found " + result.count() + " in input: \"" + input + "\"");
+			assertThat(result)
+					.withFailMessage("Expected a match in input: \"%s\" starting at position %d", input, startPosition)
+					.isNotNull();
+			assert result != null; // only to help Eclipse compiler
+			assertThat(result.count())
+					.withFailMessage("Expected %d groups, but found %d in input: \"%s\"", expectedGroups.length, result.count(), input)
+					.isEqualTo(expectedGroups.length);
+
 			for (int i = 0; i < expectedGroups.length; i++) {
 				final String expectedGroup = expectedGroups[i];
 				final int start = result.locationAt(i);
 				final int end = start + result.lengthAt(i);
 				final String actualGroup = input.substring(start, end);
-				assertEquals(expectedGroup, actualGroup, "Expected group " + i + " to be \"" + expectedGroup + "\" but found \""
-						+ actualGroup + "\" in input: \"" + input + "\"");
+				assertThat(actualGroup)
+						.withFailMessage("Expected group %d to be \"%s\" but found \"%s\" in input: \"%s\"", i, expectedGroup, actualGroup,
+								input)
+						.isEqualTo(expectedGroup);
 			}
 		} else {
-			assertNull(result, "Did not expect a match in input: \"" + input + "\" starting at position " + startPosition);
+			assertThat(result)
+					.withFailMessage("Did not expect a match in input: \"%s\" starting at position %d", input, startPosition)
+					.isNull();
 		}
 	}
 
@@ -65,7 +75,9 @@ class OnigRegExpTest {
 		final var onigLine = OnigString.of(line);
 
 		var result = regexp.search(onigLine, 10);
-		assertNull(result);
+		assertThat(result)
+				.withFailMessage("Did not expect a match in input: \"%s\" starting at position %d", line, 10)
+				.isNull();
 
 		result = regexp.search(onigLine, 28);
 		assertOnigRegExpSearch(line, result, 28, true, "MAKECMDGOALS", "MAKECMDGOALS");

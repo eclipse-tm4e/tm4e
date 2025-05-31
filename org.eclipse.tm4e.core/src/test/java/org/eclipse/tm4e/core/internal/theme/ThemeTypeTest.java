@@ -12,8 +12,8 @@
  */
 package org.eclipse.tm4e.core.internal.theme;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.eclipse.tm4e.core.internal.utils.NullSafetyHelper.castNonNull;
-import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.nio.file.Path;
 
@@ -27,38 +27,37 @@ class ThemeTypeTest {
 
 	@Test
 	void testTMPlistTheme() throws Exception {
-
 		final var rawTheme = RawThemeReader.readTheme(
 				IThemeSource.fromFile(Path.of("../org.eclipse.tm4e.core.tests/src/main/resources/test-cases/themes/QuietLight.tmTheme")));
 
-		assertEquals("Quiet Light", rawTheme.getName());
+		assertThat(rawTheme.getName()).isEqualTo("Quiet Light");
 		final var theme = Theme.createFromRawTheme(rawTheme, null);
 		final var colors = theme.getColorMap();
 
 		final var editorColors = rawTheme.getEditorColors();
-		assertEquals("#F5F5F5", editorColors.get("background"));
-		assertEquals("#000000", editorColors.get("caret"));
-		assertEquals("#333333", editorColors.get("foreground"));
-		assertEquals("#AAAAAA", editorColors.get("invisibles"));
-		assertEquals("#E4F6D4", editorColors.get("lineHighlight"));
-		assertEquals("#C9D0D9", editorColors.get("selection"));
+		assertThat(editorColors.get("background")).isEqualTo("#F5F5F5");
+		assertThat(editorColors.get("caret")).isEqualTo("#000000");
+		assertThat(editorColors.get("foreground")).isEqualTo("#333333");
+		assertThat(editorColors.get("invisibles")).isEqualTo("#AAAAAA");
+		assertThat(editorColors.get("lineHighlight")).isEqualTo("#E4F6D4");
+		assertThat(editorColors.get("selection")).isEqualTo("#C9D0D9");
 
 		var attrs = castNonNull(theme.match(ScopeStack.from()));
-		assertEquals("#333333", colors.get(attrs.foregroundId));
-		assertEquals("#F5F5F5", colors.get(attrs.backgroundId));
+		assertThat(colors.get(attrs.foregroundId)).isEqualTo("#333333");
+		assertThat(colors.get(attrs.backgroundId)).isEqualTo("#F5F5F5");
 
 		attrs = castNonNull(theme.match(ScopeStack.from("comment")));
-		assertEquals("#AAAAAA", colors.get(attrs.foregroundId));
-		assertEquals(FontStyle.Italic, attrs.fontStyle & FontStyle.Italic);
+		assertThat(colors.get(attrs.foregroundId)).isEqualTo("#AAAAAA");
+		assertThat(attrs.fontStyle & FontStyle.Italic).isEqualTo(FontStyle.Italic);
 
 		attrs = castNonNull(theme.match(ScopeStack.from("punctuation.definition.comment")));
-		assertEquals("#AAAAAA", colors.get(attrs.foregroundId));
-		assertEquals(FontStyle.Italic, attrs.fontStyle & FontStyle.Italic);
+		assertThat(colors.get(attrs.foregroundId)).isEqualTo("#AAAAAA");
+		assertThat(attrs.fontStyle & FontStyle.Italic).isEqualTo(FontStyle.Italic);
 
 		attrs = castNonNull(theme.match(ScopeStack.from("keyword")));
-		assertEquals("#4B83CD", colors.get(attrs.foregroundId));
+		assertThat(colors.get(attrs.foregroundId)).isEqualTo("#4B83CD");
 		attrs = castNonNull(theme.match(ScopeStack.from("keyword.operator")));
-		assertEquals("#777777", colors.get(attrs.foregroundId));
+		assertThat(colors.get(attrs.foregroundId)).isEqualTo("#777777");
 	}
 
 	@Test
@@ -66,28 +65,28 @@ class ThemeTypeTest {
 		final var rawTheme = RawThemeReader.readTheme(
 				IThemeSource.fromFile(Path.of("../org.eclipse.tm4e.core.tests/src/main/resources/test-cases/themes/dark_vs.json")));
 
-		assertEquals("Dark Visual Studio", rawTheme.getName());
+		assertThat(rawTheme.getName()).isEqualTo("Dark Visual Studio");
 		final var theme = Theme.createFromRawTheme(rawTheme, null);
 		final var colors = theme.getColorMap();
 
 		final var editorColors = rawTheme.getEditorColors();
-		assertEquals("#D4D4D4", editorColors.get("foreground"));
-		assertEquals("#1E1E1E", editorColors.get("background"));
+		assertThat(editorColors.get("foreground")).isEqualTo("#D4D4D4");
+		assertThat(editorColors.get("background")).isEqualTo("#1E1E1E");
 
 		var attrs = castNonNull(theme.match(ScopeStack.from()));
-		assertEquals("#D4D4D4", colors.get(attrs.foregroundId));
-		assertEquals("#1E1E1E", colors.get(attrs.backgroundId));
+		assertThat(colors.get(attrs.foregroundId)).isEqualTo("#D4D4D4");
+		assertThat(colors.get(attrs.backgroundId)).isEqualTo("#1E1E1E");
 
 		attrs = castNonNull(theme.match(ScopeStack.from("comment")));
-		assertEquals("#608B4E", colors.get(attrs.foregroundId));
-		assertEquals(FontStyle.Italic, attrs.fontStyle & FontStyle.Italic);
+		assertThat(colors.get(attrs.foregroundId)).isEqualTo("#608B4E");
+		assertThat(attrs.fontStyle & FontStyle.Italic).isEqualTo(FontStyle.Italic);
 
 		attrs = castNonNull(theme.match(ScopeStack.from("keyword")));
-		assertEquals("#569CD6", colors.get(attrs.foregroundId));
+		assertThat(colors.get(attrs.foregroundId)).isEqualTo("#569CD6");
 		attrs = castNonNull(theme.match(ScopeStack.from("keyword.operator")));
-		assertEquals("#D4D4D4", colors.get(attrs.foregroundId));
+		assertThat(colors.get(attrs.foregroundId)).isEqualTo("#D4D4D4");
 		attrs = castNonNull(theme.match(ScopeStack.from("keyword.operator.expression")));
-		assertEquals("#569CD6", colors.get(attrs.foregroundId));
+		assertThat(colors.get(attrs.foregroundId)).isEqualTo("#569CD6");
 	}
 
 	@Test
@@ -120,33 +119,33 @@ class ThemeTypeTest {
 					    }
 					  ],
 					  "colors": {
-						"editor.foreground": "#FFFFFF",
-						"editor.background": "#000000",
-						"editor.selectionForeground": "#EEEEEE",
-						"editor.selectionBackground": "#333333",
-						"editor.lineHighlightBackground": "#999999"
+					    "editor.foreground": "#FFFFFF",
+					    "editor.background": "#000000",
+					    "editor.selectionForeground": "#EEEEEE",
+					    "editor.selectionBackground": "#333333",
+					    "editor.lineHighlightBackground": "#999999"
 					  },
 					  "semanticHighlighting": true
 					}
 					"""));
 
-		assertEquals("My theme", rawTheme.getName());
+		assertThat(rawTheme.getName()).isEqualTo("My theme");
 		final var theme = Theme.createFromRawTheme(rawTheme, null);
 		final var colors = theme.getColorMap();
 
 		final var editorColors = rawTheme.getEditorColors();
-		assertEquals("#FFFFFF", editorColors.get("editor.foreground"));
-		assertEquals("#000000", editorColors.get("editor.background"));
+		assertThat(editorColors.get("editor.foreground")).isEqualTo("#FFFFFF");
+		assertThat(editorColors.get("editor.background")).isEqualTo("#000000");
 
 		var attrs = castNonNull(theme.match(ScopeStack.from()));
-		assertEquals("#ABCDEF", colors.get(attrs.foregroundId));
-		assertEquals("#012345", colors.get(attrs.backgroundId));
+		assertThat(colors.get(attrs.foregroundId)).isEqualTo("#ABCDEF");
+		assertThat(colors.get(attrs.backgroundId)).isEqualTo("#012345");
 
 		attrs = castNonNull(theme.match(ScopeStack.from("comment")));
-		assertEquals("#FF0000", colors.get(attrs.foregroundId));
-		assertEquals(FontStyle.Italic, attrs.fontStyle & FontStyle.Italic);
+		assertThat(colors.get(attrs.foregroundId)).isEqualTo("#FF0000");
+		assertThat(attrs.fontStyle & FontStyle.Italic).isEqualTo(FontStyle.Italic);
 
 		attrs = castNonNull(theme.match(ScopeStack.from("keyword.something")));
-		assertEquals("#00FF00", colors.get(attrs.foregroundId));
+		assertThat(colors.get(attrs.foregroundId)).isEqualTo("#00FF00");
 	}
 }

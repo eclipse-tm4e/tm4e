@@ -9,7 +9,7 @@
  */
 package org.eclipse.tm4e.core.internal.utils;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.assertj.core.api.Assertions.assertThat;
 
 import org.eclipse.tm4e.core.internal.grammar.raw.RawRepository;
 import org.eclipse.tm4e.core.internal.grammar.raw.RawRule;
@@ -30,34 +30,35 @@ class ObjectClonerTest {
 		repo.put("rule2_2", rule2);
 
 		final var repoClone = ObjectCloner.deepClone(repo);
-		assertNotNull(repoClone);
-		assertNotSame(repo, repoClone);
-		assertEquals(repo, repoClone);
+		assertThat(repoClone).isNotNull();
+		assertThat(repoClone).isNotSameAs(repo);
+		assertThat(repoClone).isEqualTo(repo);
 
-		assertNotNull(repo.getRule("rule1"));
-		assertNotNull(repo.getRule("rule1_1"));
-		assertNotNull(repo.getRule("rule2"));
-		assertNotNull(repo.getRule("rule2_2"));
+		assertThat(repo.getRule("rule1")).isNotNull();
+		assertThat(repo.getRule("rule1_1")).isNotNull();
+		assertThat(repo.getRule("rule2")).isNotNull();
+		assertThat(repo.getRule("rule2_2")).isNotNull();
 
-		assertNotSame(rule1, repoClone.getRule("rule1"));
-		assertNotSame(rule1, repoClone.getRule("rule1_1"));
-		assertNotSame(rule2, repoClone.getRule("rule2"));
-		assertNotSame(rule2, repoClone.getRule("rule2_2"));
+		assertThat(repoClone.getRule("rule1")).isNotSameAs(rule1);
+		assertThat(repoClone.getRule("rule1_1")).isNotSameAs(rule1);
+		assertThat(repoClone.getRule("rule2")).isNotSameAs(rule2);
+		assertThat(repoClone.getRule("rule2_2")).isNotSameAs(rule2);
 
-		assertEquals(rule1, repoClone.getRule("rule1"));
-		assertEquals(rule1, repoClone.getRule("rule1_1"));
-		assertEquals(rule2, repoClone.getRule("rule2"));
-		assertEquals(rule2, repoClone.getRule("rule2_2"));
+		assertThat(repoClone.getRule("rule1")).isEqualTo(rule1);
+		assertThat(repoClone.getRule("rule1_1")).isEqualTo(rule1);
+		assertThat(repoClone.getRule("rule2")).isEqualTo(rule2);
+		assertThat(repoClone.getRule("rule2_2")).isEqualTo(rule2);
 
-		assertSame(repoClone.getRule("rule1"), repoClone.getRule("rule1_1"));
-		assertSame(repoClone.getRule("rule2"), repoClone.getRule("rule2_2"));
+		assertThat(repoClone.getRule("rule1")).isSameAs(repoClone.getRule("rule1_1"));
+		assertThat(repoClone.getRule("rule2")).isSameAs(repoClone.getRule("rule2_2"));
 	}
 
 	@Test
 	void testDeepCloneEmptyArray() {
 		final var arr = new RawRule[0];
 		final var clone = ObjectCloner.deepClone(arr);
-		assertArrayEquals(arr, clone);
+		assertThat(clone).isNotSameAs(arr);
+		assertThat(clone).isEqualTo(arr);
 	}
 
 	@Test
@@ -68,20 +69,21 @@ class ObjectClonerTest {
 		rule2.setName("Rule2");
 		final var arr = new RawRule[] { rule1, rule1, rule2, rule2 };
 		final var arrClone = ObjectCloner.deepClone(arr);
-		assertNotSame(arr, arrClone);
-		assertArrayEquals(arr, arrClone);
 
-		assertNotSame(rule1, arrClone[0]);
-		assertNotSame(rule1, arrClone[1]);
-		assertNotSame(rule2, arrClone[2]);
-		assertNotSame(rule2, arrClone[3]);
+		assertThat(arrClone).isNotSameAs(arr);
+		assertThat(arrClone).isEqualTo(arr);
 
-		assertEquals(rule1, arrClone[0]);
-		assertEquals(rule1, arrClone[1]);
-		assertEquals(rule2, arrClone[2]);
-		assertEquals(rule2, arrClone[3]);
+		assertThat(arrClone[0]).isNotSameAs(rule1);
+		assertThat(arrClone[1]).isNotSameAs(rule1);
+		assertThat(arrClone[2]).isNotSameAs(rule2);
+		assertThat(arrClone[3]).isNotSameAs(rule2);
 
-		assertSame(arrClone[0], arrClone[1]);
-		assertSame(arrClone[2], arrClone[3]);
+		assertThat(arrClone[0]).isEqualTo(rule1);
+		assertThat(arrClone[1]).isEqualTo(rule1);
+		assertThat(arrClone[2]).isEqualTo(rule2);
+		assertThat(arrClone[3]).isEqualTo(rule2);
+
+		assertThat(arrClone[0]).isSameAs(arrClone[1]);
+		assertThat(arrClone[2]).isSameAs(arrClone[3]);
 	}
 }

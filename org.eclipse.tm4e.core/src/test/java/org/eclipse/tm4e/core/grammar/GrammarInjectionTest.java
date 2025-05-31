@@ -11,6 +11,8 @@
  */
 package org.eclipse.tm4e.core.grammar;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 import java.util.Collection;
 import java.util.List;
 
@@ -19,7 +21,6 @@ import org.eclipse.tm4e.core.Data;
 import org.eclipse.tm4e.core.registry.IGrammarSource;
 import org.eclipse.tm4e.core.registry.IRegistryOptions;
 import org.eclipse.tm4e.core.registry.Registry;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 /**
@@ -67,7 +68,7 @@ class GrammarInjectionTest {
 			final IToken token = lineTokens.getTokens()[i];
 			final var s = "Token from " + token.getStartIndex() + " to " + token.getEndIndex() + " with scopes " + token.getScopes();
 			System.err.println(s);
-			Assertions.assertEquals(EXPECTED_TOKENS[i], s);
+			assertThat(s).isEqualTo(EXPECTED_TOKENS[i]);
 		}
 	}
 }

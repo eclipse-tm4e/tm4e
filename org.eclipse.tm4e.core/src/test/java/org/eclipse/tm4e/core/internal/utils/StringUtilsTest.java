@@ -12,9 +12,7 @@
  */
 package org.eclipse.tm4e.core.internal.utils;
 
-import static org.junit.jupiter.api.Assertions.*;
-
-import java.util.List;
+import static org.assertj.core.api.Assertions.assertThat;
 
 import org.junit.jupiter.api.Test;
 
@@ -22,33 +20,45 @@ class StringUtilsTest {
 
 	@Test
 	void testSplitToArray() {
-		assertArrayEquals(new String[] { "" }, StringUtils.splitToArray("", '.'));
-		assertArrayEquals(new String[] { "abc" }, StringUtils.splitToArray("abc", '.'));
-		assertArrayEquals(new String[] { "abc", "" }, StringUtils.splitToArray("abc.", '.'));
-		assertArrayEquals(new String[] { "", "abc", "" }, StringUtils.splitToArray(".abc.", '.'));
-		assertArrayEquals(new String[] { "", "" }, StringUtils.splitToArray(".", '.'));
-		assertArrayEquals(new String[] { "", "", "", "" }, StringUtils.splitToArray("...", '.'));
-		assertArrayEquals(new String[] { "1", "2", "3", "4", "5", "6", "7", "8" },
-				StringUtils.splitToArray("1.2.3.4.5.6.7.8", '.'));
+		assertThat(StringUtils.splitToArray("", '.'))
+				.containsExactly("");
+		assertThat(StringUtils.splitToArray("abc", '.'))
+				.containsExactly("abc");
+		assertThat(StringUtils.splitToArray("abc.", '.'))
+				.containsExactly("abc", "");
+		assertThat(StringUtils.splitToArray(".abc.", '.'))
+				.containsExactly("", "abc", "");
+		assertThat(StringUtils.splitToArray(".", '.'))
+				.containsExactly("", "");
+		assertThat(StringUtils.splitToArray("...", '.'))
+				.containsExactly("", "", "", "");
+		assertThat(StringUtils.splitToArray("1.2.3.4.5.6.7.8", '.'))
+				.containsExactly("1", "2", "3", "4", "5", "6", "7", "8");
 
 		// test internal array resize
-		assertArrayEquals(new String[] { "1", "2", "3", "4", "5", "6", "7", "8", "9" },
-				StringUtils.splitToArray("1.2.3.4.5.6.7.8.9", '.'));
+		assertThat(StringUtils.splitToArray("1.2.3.4.5.6.7.8.9", '.'))
+				.containsExactly("1", "2", "3", "4", "5", "6", "7", "8", "9");
 	}
 
 	@Test
 	void testSplitToList() {
-		assertEquals(List.of(""), StringUtils.splitToList("", '.'));
-		assertEquals(List.of("abc"), StringUtils.splitToList("abc", '.'));
-		assertEquals(List.of("abc", ""), StringUtils.splitToList("abc.", '.'));
-		assertEquals(List.of("", "abc", ""), StringUtils.splitToList(".abc.", '.'));
-		assertEquals(List.of("", ""), StringUtils.splitToList(".", '.'));
-		assertEquals(List.of("", "", "", ""), StringUtils.splitToList("...", '.'));
-		assertEquals(List.of("1", "2", "3", "4", "5", "6", "7", "8"),
-				StringUtils.splitToList("1.2.3.4.5.6.7.8", '.'));
+		assertThat(StringUtils.splitToList("", '.'))
+				.containsExactly("");
+		assertThat(StringUtils.splitToList("abc", '.'))
+				.containsExactly("abc");
+		assertThat(StringUtils.splitToList("abc.", '.'))
+				.containsExactly("abc", "");
+		assertThat(StringUtils.splitToList(".abc.", '.'))
+				.containsExactly("", "abc", "");
+		assertThat(StringUtils.splitToList(".", '.'))
+				.containsExactly("", "");
+		assertThat(StringUtils.splitToList("...", '.'))
+				.containsExactly("", "", "", "");
+		assertThat(StringUtils.splitToList("1.2.3.4.5.6.7.8", '.'))
+				.containsExactly("1", "2", "3", "4", "5", "6", "7", "8");
 
-		// test internal array resize
-		assertEquals(List.of("1", "2", "3", "4", "5", "6", "7", "8", "9"),
-				StringUtils.splitToList("1.2.3.4.5.6.7.8.9", '.'));
+		// test internal list growth
+		assertThat(StringUtils.splitToList("1.2.3.4.5.6.7.8.9", '.'))
+				.containsExactly("1", "2", "3", "4", "5", "6", "7", "8", "9");
 	}
 }

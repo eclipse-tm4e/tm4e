@@ -11,8 +11,8 @@
  */
 package org.eclipse.tm4e.core.grammar;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.eclipse.tm4e.core.registry.IGrammarSource.*;
-import static org.junit.jupiter.api.Assertions.*;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -89,7 +89,7 @@ class GrammarTest {
 		final Runnable tokenizationTask = () -> {
 			for (int i = 0; i < numIterations; i++) {
 				final var r = TokenizationUtils.tokenizeText(content, grammar);
-				assertTrue(r.count() > 10);
+				assertThat(r.count()).isGreaterThan(10);
 			}
 		};
 
@@ -111,11 +111,11 @@ class GrammarTest {
 		final var registry = new Registry();
 		final IGrammar grammar = registry.addGrammar(fromResource(Data.class, "JavaScript.tmLanguage"));
 		final var lineTokens = grammar.tokenizeLine("function add(a,b) { return a+b; }");
-		assertFalse(lineTokens.isStoppedEarly());
+		assertThat(lineTokens.isStoppedEarly()).isFalse();
 		for (int i = 0; i < lineTokens.getTokens().length; i++) {
 			final IToken token = lineTokens.getTokens()[i];
 			final String s = "Token from " + token.getStartIndex() + " to " + token.getEndIndex() + " with scopes " + token.getScopes();
-			assertEquals(EXPECTED_SINGLE_LINE_TOKENS[i], s);
+			assertThat(s).isEqualTo(EXPECTED_SINGLE_LINE_TOKENS[i]);
 		}
 	}
 
@@ -130,12 +130,12 @@ class GrammarTest {
 		final String[] lines = { "function add(a,b)", "{ return a+b; }" };
 		for (final String line : lines) {
 			final var lineTokens = grammar.tokenizeLine(line, ruleStack, null);
-			assertFalse(lineTokens.isStoppedEarly());
+			assertThat(lineTokens.isStoppedEarly()).isFalse();
 			ruleStack = lineTokens.getRuleStack();
 			for (i = 0; i < lineTokens.getTokens().length; i++) {
 				final IToken token = lineTokens.getTokens()[i];
 				final String s = "Token from " + token.getStartIndex() + " to " + token.getEndIndex() + " with scopes " + token.getScopes();
-				assertEquals(EXPECTED_MULTI_LINE_TOKENS[i + j], s);
+				assertThat(s).isEqualTo(EXPECTED_MULTI_LINE_TOKENS[i + j]);
 			}
 			j = i;
 		}
@@ -147,14 +147,15 @@ class GrammarTest {
 		final IGrammar grammar = registry.addGrammar(fromResource(Data.class, "JavaScript.tmLanguage"));
 		final String lineText = "";
 		final var lineTokens = grammar.tokenizeLine(lineText);
-		assertFalse(lineTokens.isStoppedEarly());
+		assertThat(lineTokens.isStoppedEarly()).isFalse();
 
 		final var endIndexOffset = 1; // IToken's end-indexes are exclusive
 
-		final var tokens = lineTokens.getTokens();
-		assertEquals(1, tokens.length);
-		assertEquals(0, tokens[0].getStartIndex());
-		assertEquals(0 + endIndexOffset, tokens[0].getEndIndex());
+		assertThat(lineTokens.getTokens())
+				.hasOnlyOneElementSatisfying(token -> {
+					assertThat(token.getStartIndex()).isZero();
+					assertThat(token.getEndIndex()).isEqualTo(endIndexOffset);
+				});
 	}
 
 	@Test
@@ -163,14 +164,15 @@ class GrammarTest {
 		final IGrammar grammar = registry.addGrammar(fromResource(Data.class, "JavaScript.tmLanguage"));
 		final String lineText = "true";
 		final var lineTokens = grammar.tokenizeLine(lineText);
-		assertFalse(lineTokens.isStoppedEarly());
+		assertThat(lineTokens.isStoppedEarly()).isFalse();
 
 		final var endIndexOffset = 1; // IToken's end-indexes are exclusive
 
-		final var tokens = lineTokens.getTokens();
-		assertEquals(1, tokens.length);
-		assertEquals(0, tokens[0].getStartIndex());
-		assertEquals(3 + endIndexOffset, tokens[0].getEndIndex());
+		assertThat(lineTokens.getTokens())
+				.hasOnlyOneElementSatisfying(token -> {
+					assertThat(token.getStartIndex()).isZero();
+					assertThat(token.getEndIndex()).isEqualTo(3 + endIndexOffset);
+				});
 	}
 
 	@Test
@@ -179,15 +181,17 @@ class GrammarTest {
 		final IGrammar grammar = registry.addGrammar(fromResource(Data.class, "JavaScript.tmLanguage"));
 		final String lineText = "true\n";
 		final var lineTokens = grammar.tokenizeLine(lineText);
-		assertFalse(lineTokens.isStoppedEarly());
+		assertThat(lineTokens.isStoppedEarly()).isFalse();
 
 		final var endIndexOffset = 1; // IToken's end-indexes are exclusive
 
 		System.out.println(Arrays.toString(lineTokens.getTokens()));
-		final var tokens = lineTokens.getTokens();
-		assertEquals(1, tokens.length); // TODO why is only 1 token returned? The token for \n is missing
-		assertEquals(0, tokens[0].getStartIndex());
-		assertEquals(3 + endIndexOffset, tokens[0].getEndIndex());
+
+		assertThat(lineTokens.getTokens())
+				.hasOnlyOneElementSatisfying(token -> { // TODO why is only 1 token returned? The token for \n is missing
+					assertThat(token.getStartIndex()).isZero();
+					assertThat(token.getEndIndex()).isEqualTo(3 + endIndexOffset);
+				});
 	}
 
 	@Test
@@ -196,13 +200,15 @@ class GrammarTest {
 		final IGrammar grammar = registry.addGrammar(fromResource(Data.class, "JavaScript.tmLanguage"));
 		final String lineText = "@"; // Uncaught SyntaxError: illegal character U+0040
 		final var lineTokens = grammar.tokenizeLine(lineText);
-		assertFalse(lineTokens.isStoppedEarly());
+		assertThat(lineTokens.isStoppedEarly()).isFalse();
+
 		final var endIndexOffset = 1; // IToken's end-indexes are exclusive
 
-		final var tokens = lineTokens.getTokens();
-		assertEquals(1, tokens.length);
-		assertEquals(0, tokens[0].getStartIndex());
-		assertEquals(0 + endIndexOffset + 1, tokens[0].getEndIndex()); // TODO why does end-index have extra +1 offset?
+		assertThat(lineTokens.getTokens())
+				.hasOnlyOneElementSatisfying(token -> {
+					assertThat(token.getStartIndex()).isZero();
+					assertThat(token.getEndIndex()).isEqualTo(0 + endIndexOffset + 1); // TODO why does end-index have extra +1 offset?
+				});
 	}
 
 	@Test
@@ -212,16 +218,21 @@ class GrammarTest {
 
 		final String lineText = "{}";
 		final var lineTokens = grammar.tokenizeLine(lineText);
-		assertFalse(lineTokens.isStoppedEarly());
+		assertThat(lineTokens.isStoppedEarly()).isFalse();
 
 		final var endIndexOffset = 1; // IToken's end-indexes are exclusive
 
-		final var tokens = lineTokens.getTokens();
-		assertEquals(2, tokens.length);
-		assertEquals(0, tokens[0].getStartIndex());
-		assertEquals(0 + endIndexOffset, tokens[0].getEndIndex());
-		assertEquals(1, tokens[1].getStartIndex());
-		assertEquals(1 + endIndexOffset, tokens[1].getEndIndex());
+		assertThat(lineTokens.getTokens())
+				.hasSize(2)
+				.satisfiesExactly(
+						first -> {
+							assertThat(first.getStartIndex()).isZero();
+							assertThat(first.getEndIndex()).isEqualTo(endIndexOffset);
+						},
+						second -> {
+							assertThat(second.getStartIndex()).isEqualTo(1);
+							assertThat(second.getEndIndex()).isEqualTo(1 + endIndexOffset);
+						});
 	}
 
 	@Test
@@ -230,10 +241,9 @@ class GrammarTest {
 		final var grammar = registry.addGrammar(fromResource(Data.class, "yaml.tmLanguage.json"));
 		final var lines = ">\n should.be.string.unquoted.block.yaml\n should.also.be.string.unquoted.block.yaml";
 		final var result = TokenizationUtils.tokenizeText(lines, grammar).iterator();
-		assertTrue(Arrays.stream(result.next().getTokens()).anyMatch(t -> t.getScopes().contains(
-				"keyword.control.flow.block-scalar.folded.yaml")));
-		assertTrue(Arrays.stream(result.next().getTokens()).anyMatch(t -> t.getScopes().contains("string.unquoted.block.yaml")));
-		assertTrue(Arrays.stream(result.next().getTokens()).anyMatch(t -> t.getScopes().contains("string.unquoted.block.yaml")));
+		assertThat(result.next().getTokens()).anyMatch(t -> t.getScopes().contains("keyword.control.flow.block-scalar.folded.yaml"));
+		assertThat(result.next().getTokens()).anyMatch(t -> t.getScopes().contains("string.unquoted.block.yaml"));
+		assertThat(result.next().getTokens()).anyMatch(t -> t.getScopes().contains("string.unquoted.block.yaml"));
 	}
 
 	@Test
@@ -255,9 +265,8 @@ class GrammarTest {
 				for (int i = 0; i < lineTokens.getTokens().length; i++) {
 					tokenIndex++;
 					final var token = lineTokens.getTokens()[i];
-					assertEquals(
-							expectedTokens.get(tokenIndex),
-							"Token from " + token.getStartIndex() + " to " + token.getEndIndex() + " with scopes " + token.getScopes());
+					assertThat("Token from " + token.getStartIndex() + " to " + token.getEndIndex() + " with scopes "
+							+ token.getScopes()).isEqualTo(expectedTokens.get(tokenIndex));
 				}
 			}
 		}
@@ -270,14 +279,16 @@ class GrammarTest {
 		try (var reader = ResourceUtils.getResourceReader(Data.class, "raytracer.ts")) {
 			final String veryLongLine = reader.lines().collect(Collectors.joining());
 			final var result1 = grammar.tokenizeLine(veryLongLine);
-			assertFalse(result1.isStoppedEarly());
+			assertThat(result1.isStoppedEarly()).isFalse();
+
 			final var lastToken1 = result1.getTokens()[result1.getTokens().length - 1];
 
 			final var result2 = grammar.tokenizeLine(veryLongLine, null, Duration.ofMillis(10));
-			assertTrue(result2.isStoppedEarly());
-			assertNotEquals(result1.getTokens().length, result2.getTokens().length);
+			assertThat(result2.isStoppedEarly()).isTrue();
+			assertThat(result2.getTokens()).hasSizeLessThan(result1.getTokens().length);
+			assertThat(result1.getTokens()).contains(result2.getTokens());
 			final var lastToken2 = result2.getTokens()[result2.getTokens().length - 1];
-			assertTrue(lastToken2.getEndIndex() < lastToken1.getEndIndex());
+			assertThat(lastToken2.getEndIndex()).isLessThan(lastToken1.getEndIndex());
 		}
 	}
 
@@ -320,8 +331,14 @@ class GrammarTest {
 			}
 			"""));
 
-		final var result = grammar.tokenizeLine("bar1");
-		assertFalse(result.isStoppedEarly());
-		assertEquals("[{startIndex: 0, endIndex: 4, scopes: [source.test, outer]}]", Arrays.toString(result.getTokens()));
+		final var lineTokens = grammar.tokenizeLine("bar1");
+		assertThat(lineTokens.isStoppedEarly()).isFalse();
+
+		assertThat(lineTokens.getTokens())
+				.hasOnlyOneElementSatisfying(token -> {
+					assertThat(token.getStartIndex()).isZero();
+					assertThat(token.getEndIndex()).isEqualTo(4);
+					assertThat(token.getScopes()).containsExactly("source.test", "outer");
+				});
 	}
 }

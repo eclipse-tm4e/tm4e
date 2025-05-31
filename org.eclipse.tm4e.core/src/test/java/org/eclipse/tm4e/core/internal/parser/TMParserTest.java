@@ -12,8 +12,8 @@
  */
 package org.eclipse.tm4e.core.internal.parser;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.eclipse.tm4e.core.internal.utils.NullSafetyHelper.castNonNull;
-import static org.junit.jupiter.api.Assertions.*;
 
 import java.io.IOException;
 import java.io.StringReader;
@@ -46,14 +46,16 @@ import org.junit.jupiter.api.TestMethodOrder;
 class TMParserTest {
 
 	private void validateCaptures(final RawGrammar grammar) {
-		assertNotNull(grammar.getPatterns());
-		assertEquals(1, castNonNull(grammar.getPatterns()).size());
+		assertThat(grammar.getPatterns()).isNotNull();
+		assertThat(castNonNull(grammar.getPatterns()).size()).isEqualTo(1);
+
 		final var pattern = castNonNull(grammar.getPatterns()).iterator().next();
-		assertEquals("THE_PATTERN", pattern.getName());
-		assertEquals("BEGIN_PATTERN", pattern.getBegin());
-		assertEquals("END_PATTERN", pattern.getEnd());
-		final var capures = castNonNull(pattern.getCaptures());
-		assertEquals("THE_CAPTURE", castNonNull(capures.getCapture("0")).getName());
+		assertThat(pattern.getName()).isEqualTo("THE_PATTERN");
+		assertThat(pattern.getBegin()).isEqualTo("BEGIN_PATTERN");
+		assertThat(pattern.getEnd()).isEqualTo("END_PATTERN");
+
+		final var captures = castNonNull(pattern.getCaptures());
+		assertThat(castNonNull(captures.getCapture("0")).getName()).isEqualTo("THE_CAPTURE");
 	}
 
 	@Test
@@ -165,14 +167,14 @@ class TMParserTest {
 	void testParseJSON() throws Exception {
 		try (var reader = ResourceUtils.getResourceReader(Data.class, "csharp.json")) {
 			final var grammar = TMParserJSON.INSTANCE.parse(reader, RawGrammarReader.OBJECT_FACTORY);
-			assertNotNull(grammar.getRepository());
-			assertFalse(grammar.getFileTypes().isEmpty());
-			assertEquals(List.of("cs"), grammar.getFileTypes());
-			assertEquals("C#", grammar.getName());
-			assertEquals("source.cs", grammar.getScopeName());
-			assertEquals(List.of("cs"), grammar.getFileTypes());
-			assertEquals(Set.of("fileTypes", "foldingStartMarker", "foldingStopMarker", "name", "patterns", "repository", "scopeName"),
-					grammar.keySet());
+			assertThat(grammar.getRepository()).isNotNull();
+			assertThat(grammar.getFileTypes()).isNotEmpty();
+			assertThat(grammar.getFileTypes()).containsExactly("cs");
+			assertThat(grammar.getName()).isEqualTo("C#");
+			assertThat(grammar.getScopeName()).isEqualTo("source.cs");
+			assertThat(grammar.keySet())
+					.isEqualTo(
+							Set.of("fileTypes", "foldingStartMarker", "foldingStopMarker", "name", "patterns", "repository", "scopeName"));
 		}
 	}
 
@@ -180,13 +182,14 @@ class TMParserTest {
 	void testParsePlist() throws Exception {
 		try (var reader = ResourceUtils.getResourceReader(Data.class, "JavaScript.tmLanguage")) {
 			final var grammar = TMParserPList.INSTANCE.parse(reader, RawGrammarReader.OBJECT_FACTORY);
-			assertNotNull(grammar);
-			assertNotNull(grammar.getRepository());
-			assertFalse(grammar.getFileTypes().isEmpty());
-			assertEquals(List.of("js", "jsx"), grammar.getFileTypes());
-			assertEquals("JavaScript (with React support)", grammar.getName());
-			assertEquals("source.js", grammar.getScopeName());
-			assertEquals(Set.of("fileTypes", "name", "patterns", "repository", "scopeName", "uuid"), grammar.keySet());
+			assertThat(grammar).isNotNull();
+			assertThat(grammar.getRepository()).isNotNull();
+			assertThat(grammar.getFileTypes()).isNotEmpty();
+			assertThat(grammar.getFileTypes()).containsExactly("js", "jsx");
+			assertThat(grammar.getName()).isEqualTo("JavaScript (with React support)");
+			assertThat(grammar.getScopeName()).isEqualTo("source.js");
+			assertThat(grammar.keySet())
+					.isEqualTo(Set.of("fileTypes", "name", "patterns", "repository", "scopeName", "uuid"));
 		}
 	}
 
@@ -194,12 +197,13 @@ class TMParserTest {
 	void testParseYAML() throws Exception {
 		try (var reader = ResourceUtils.getResourceReader(Data.class, "JavaScript.tmLanguage.yaml")) {
 			final var grammar = TMParserYAML.INSTANCE.parse(reader, RawGrammarReader.OBJECT_FACTORY);
-			assertNotNull(grammar.getRepository());
-			assertFalse(grammar.getFileTypes().isEmpty());
-			assertEquals(List.of("js", "jsx"), grammar.getFileTypes());
-			assertEquals("JavaScript (with React support)", grammar.getName());
-			assertEquals("source.js", grammar.getScopeName());
-			assertEquals(Set.of("fileTypes", "name", "patterns", "repository", "scopeName", "uuid"), grammar.keySet());
+			assertThat(grammar.getRepository()).isNotNull();
+			assertThat(grammar.getFileTypes()).isNotEmpty();
+			assertThat(grammar.getFileTypes()).containsExactly("js", "jsx");
+			assertThat(grammar.getName()).isEqualTo("JavaScript (with React support)");
+			assertThat(grammar.getScopeName()).isEqualTo("source.js");
+			assertThat(grammar.keySet())
+					.isEqualTo(Set.of("fileTypes", "name", "patterns", "repository", "scopeName", "uuid"));
 		}
 	}
 
@@ -207,7 +211,7 @@ class TMParserTest {
 		if (pattern == null)
 			return;
 		try {
-			assertNotNull(new OnigRegExp(pattern));
+			assertThat(new OnigRegExp(pattern)).isNotNull();
 		} catch (final RuntimeException ex) {
 			final var msg = ex.getMessage();
 			if (msg != null && msg.contains("invalid backref number/name")) {
@@ -231,34 +235,35 @@ class TMParserTest {
 	}
 
 	@Test
-	@NonNullByDefault({})
+	@SuppressWarnings("null")
 	void testLanguagePackGrammars() throws IOException {
 		final var count = new AtomicInteger();
 		Files.walkFileTree(Paths.get("../org.eclipse.tm4e.language_pack"), new SimpleFileVisitor<Path>() {
 			@Override
 			public FileVisitResult visitFile(final Path file, final BasicFileAttributes attrs) throws IOException {
 				final var fileName = file.getFileName().toString().toLowerCase();
-				if (fileName.endsWith("tmlanguage.yaml") || fileName.endsWith("tmlanguage.json") || fileName.endsWith("plist")
+				if (fileName.endsWith("tmlanguage.yaml")
+						|| fileName.endsWith("tmlanguage.json")
+						|| fileName.endsWith("plist")
 						|| fileName.endsWith("tmlanguage")) {
+					System.out.println("Parsing [" + file + "]...");
 					try {
-						System.out.println("Parsing [" + file + "]...");
 						final var rawGrammar = RawGrammarReader.readGrammar(IGrammarSource.fromFile(file));
 						count.incrementAndGet();
-						assertFalse(rawGrammar.getScopeName().isBlank());
-						assertNotNull(rawGrammar.getFileTypes());
-						assertNotNull(rawGrammar.getRepository());
+						assertThat(rawGrammar.getScopeName()).isNotBlank();
+						assertThat(rawGrammar.getFileTypes()).isNotNull();
+						assertThat(rawGrammar.getRepository()).isNotNull();
 
 						final var patterns = castNonNull(rawGrammar.getPatterns());
-						assertFalse(patterns.isEmpty());
+						assertThat(patterns).isNotEmpty();
 						assertParseablePatterns(patterns);
 
 						final var reg = new Registry();
 						final var grammar = reg.addGrammar(IGrammarSource.fromFile(file));
-						assertEquals(grammar.getName(), rawGrammar.getName());
-						assertEquals(grammar.getScopeName(), rawGrammar.getScopeName());
-						assertEquals(grammar.getFileTypes(), rawGrammar.getFileTypes());
+						assertThat(grammar.getName()).isEqualTo(rawGrammar.getName());
+						assertThat(grammar.getScopeName()).isEqualTo(rawGrammar.getScopeName());
+						assertThat(grammar.getFileTypes()).isEqualTo(rawGrammar.getFileTypes());
 						grammar.tokenizeLine("");
-
 					} catch (final Exception ex) {
 						throw new RuntimeException(ex);
 					}
@@ -267,6 +272,8 @@ class TMParserTest {
 			}
 		});
 		System.out.println("Successfully parsed " + count.intValue() + " grammars.");
-		assertTrue(count.intValue() > 10, "Only " + count.intValue() + " grammars found, expected more than 10!");
+		assertThat(count.intValue())
+				.withFailMessage("Only %d grammars found, expected more than 10!", count.intValue())
+				.isGreaterThan(10);
 	}
 }

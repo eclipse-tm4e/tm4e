@@ -15,7 +15,6 @@ package org.eclipse.tm4e.core.internal.grammar;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.eclipse.tm4e.core.internal.utils.NullSafetyHelper.castNonNull;
-import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -61,15 +60,12 @@ class TokenizeLineTest {
 		final var lineTokens = grammar.tokenizeLine(lineText);
 		for (int i = 0; i < lineTokens.getTokens().length; i++) {
 			final var token = lineTokens.getTokens()[i];
-
-			assertTrue(token.getStartIndex() >= 0 //
-					&& token.getStartIndex() <= lineText.length() //
-					&& token.getEndIndex() >= 0 //
-					&& token.getEndIndex() <= lineText.length() //
-			);
-
-			final var s = "Token from " + token.getStartIndex() + " to " + token.getEndIndex() + " with scopes " + token.getScopes();
-			assertEquals(expected[i], s);
+			assertThat(token.getStartIndex()).isGreaterThanOrEqualTo(0);
+			assertThat(token.getStartIndex()).isLessThanOrEqualTo(lineText.length());
+			assertThat(token.getEndIndex()).isGreaterThanOrEqualTo(0);
+			assertThat(token.getEndIndex()).isLessThanOrEqualTo(lineText.length());
+			assertThat("Token from " + token.getStartIndex() + " to " + token.getEndIndex() + " with scopes " + token.getScopes())
+					.isEqualTo(expected[i]);
 		}
 	}
 
@@ -94,15 +90,14 @@ class TokenizeLineTest {
 			}
 		});
 
-		final var grammar = registry.loadGrammarWithConfiguration(jsScope, castNonNull(languageMap.get(jsScope)),
+		final var grammar = castNonNull(registry.loadGrammarWithConfiguration(jsScope, castNonNull(languageMap.get(jsScope)),
 				new IGrammarConfiguration() {
 
 					@Override
 					public @Nullable Map<String, Integer> getTokenTypes() {
 						return tokenMap;
 					}
-				});
-		assertNotNull(grammar);
+				}));
 
 		final var lineText = "console.log('hi'); /*comment*/}";
 		final var lineTokens2 = grammar.tokenizeLine2(lineText);
@@ -113,7 +108,7 @@ class TokenizeLineTest {
 			final int meta = encodedTokens[i + 1];
 
 			final int languageId = EncodedTokenAttributes.getLanguageId(meta);
-			assertEquals(languageMap.get(jsScope), languageId);
+			assertThat(languageId).isEqualTo(languageMap.get(jsScope));
 
 			final int start = encodedTokens[i];
 			final int end = i + 2 < encodedTokens.length ? encodedTokens[i + 2] : lineText.length();
@@ -161,14 +156,12 @@ class TokenizeLineTest {
 		for (int i = 0; i < lineTokens.getTokens().length; i++) {
 			final var token = lineTokens.getTokens()[i];
 
-			assertTrue(token.getStartIndex() >= 0 //
-					&& token.getStartIndex() <= lineText.length() //
-					&& token.getEndIndex() >= 0 //
-					&& token.getEndIndex() <= lineText.length() //
-			);
-
-			final var s = "Token from " + token.getStartIndex() + " to " + token.getEndIndex() + " with scopes " + token.getScopes();
-			assertEquals(expected[i], s);
+			assertThat(token.getStartIndex()).isGreaterThanOrEqualTo(0);
+			assertThat(token.getStartIndex()).isLessThanOrEqualTo(lineText.length());
+			assertThat(token.getEndIndex()).isGreaterThanOrEqualTo(0);
+			assertThat(token.getEndIndex()).isLessThanOrEqualTo(lineText.length());
+			assertThat("Token from " + token.getStartIndex() + " to " + token.getEndIndex() + " with scopes " + token.getScopes())
+					.isEqualTo(expected[i]);
 		}
 	}
 }

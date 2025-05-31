@@ -15,9 +15,9 @@
  */
 package org.eclipse.tm4e.core.internal.grammar.tokenattrs;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.eclipse.tm4e.core.internal.theme.FontStyle.*;
 
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Order;
@@ -33,8 +33,9 @@ import org.junit.jupiter.api.TestMethodOrder;
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 class EncodedTokenAttributesTest {
 
-	private static void assertEquals(final int metadata, final int languageId, final int /*StandardTokenType*/ tokenType,
-			final boolean containsBalancedBrackets, final int /*FontStyle*/ fontStyle, final int foreground, final int background) {
+	@SuppressWarnings("null")
+   private static void assertEquals(final int metadata, final int languageId, final int /*StandardTokenType*/ tokenType,
+         final boolean containsBalancedBrackets, final int /*FontStyle*/ fontStyle, final int foreground, final int background) {
 		final var actual = "{\n"
 				+ "languageId: " + EncodedTokenAttributes.getLanguageId(metadata) + ",\n"
 				+ "tokenType: " + EncodedTokenAttributes.getTokenType(metadata) + ",\n"
@@ -53,7 +54,9 @@ class EncodedTokenAttributesTest {
 				+ "background: " + background + ",\n"
 				+ "}";
 
-		Assertions.assertEquals(expected, actual, "equals for " + EncodedTokenAttributes.toBinaryStr(metadata));
+		assertThat(actual)
+				.as("equals for " + EncodedTokenAttributes.toBinaryStr(metadata))
+				.isEqualTo(expected);
 	}
 
 	@Test

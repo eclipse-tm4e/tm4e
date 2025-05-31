@@ -11,33 +11,31 @@
  */
 package org.eclipse.tm4e.core.internal.oniguruma;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.assertj.core.api.Assertions.assertThat;
 
 import java.util.Arrays;
 
 import org.junit.jupiter.api.Test;
 
 class OnigScannerTest {
-
 	@Test
 	void testOnigScanner() {
 		var scanner = new OnigScanner(Arrays.asList("c", "a(b)?"));
 		OnigScannerMatch result = scanner.findNextMatch(OnigString.of("abc"), 0);
-		assertNotNull(result);
-		assertEquals(1, result.index);
-		assertArrayEquals(new OnigCaptureIndex[] {
-			new OnigCaptureIndex(0, 2),
-			new OnigCaptureIndex(1, 2) },
-				result.getCaptureIndices());
+		assert result != null;
+		assertThat(result.index).isEqualTo(1);
+		assertThat(result.getCaptureIndices())
+				.containsExactly(
+						new OnigCaptureIndex(0, 2),
+						new OnigCaptureIndex(1, 2));
 
 		scanner = new OnigScanner(Arrays.asList("a([b-d])c"));
 		result = scanner.findNextMatch(OnigString.of("!abcdef"), 0);
-		assertNotNull(result);
-		assertEquals(0, result.index);
-		assertArrayEquals(new OnigCaptureIndex[] {
-			new OnigCaptureIndex(1, 4),
-			new OnigCaptureIndex(2, 3) },
-				result.getCaptureIndices());
-
+		assert result != null;
+		assertThat(result.index).isEqualTo(0);
+		assertThat(result.getCaptureIndices())
+				.containsExactly(
+						new OnigCaptureIndex(1, 4),
+						new OnigCaptureIndex(2, 3));
 	}
 }

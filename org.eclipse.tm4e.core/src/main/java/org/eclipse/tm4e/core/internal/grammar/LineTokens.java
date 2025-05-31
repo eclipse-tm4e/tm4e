@@ -56,6 +56,28 @@ final class LineTokens {
 		}
 
 		@Override
+		public boolean equals(@Nullable final Object obj) {
+			if (this == obj)
+				return true;
+			if (obj instanceof final Token other) {
+				return startIndex == other.startIndex //
+						&& endIndex == other.endIndex //
+						&& scopes.equals(other.scopes);
+			}
+			return false;
+		}
+
+		@Override
+		public int hashCode() {
+			final int prime = 31;
+			int result = 1;
+			result = prime * result + endIndex;
+			result = prime * result + scopes.hashCode();
+			result = prime * result + startIndex;
+			return result;
+		}
+
+		@Override
 		public void setStartIndex(final int startIndex) {
 			this.startIndex = startIndex;
 		}

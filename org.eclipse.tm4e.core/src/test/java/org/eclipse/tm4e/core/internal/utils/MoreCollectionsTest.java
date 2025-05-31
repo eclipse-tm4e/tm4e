@@ -9,7 +9,7 @@
  */
 package org.eclipse.tm4e.core.internal.utils;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.assertj.core.api.Assertions.*;
 
 import java.util.Collections;
 import java.util.List;
@@ -20,38 +20,29 @@ class MoreCollectionsTest {
 
 	@Test
 	void testGetElementAt() {
-		assertEquals(1, MoreCollections.getElementAt(List.of(1, 2, 3), 0));
-		assertEquals(3, MoreCollections.getElementAt(List.of(1, 2, 3), -1));
-		assertEquals(2, MoreCollections.getElementAt(List.of(1, 2, 3), -2));
-		assertEquals(1, MoreCollections.getElementAt(List.of(1, 2, 3), -3));
-		try {
-			MoreCollections.getElementAt(List.of(1, 2, 3), -4);
-			fail("Expected ArrayIndexOutOfBoundsException");
-		} catch (final ArrayIndexOutOfBoundsException ex) {
-			//expected
-		}
-		try {
-			MoreCollections.getElementAt(List.of(1, 2, 3), 4);
-			fail("Expected ArrayIndexOutOfBoundsException");
-		} catch (final ArrayIndexOutOfBoundsException ex) {
-			//expected
-		}
+		assertThat(MoreCollections.getElementAt(List.of(1, 2, 3), 0)).isEqualTo(1);
+		assertThat(MoreCollections.getElementAt(List.of(1, 2, 3), -1)).isEqualTo(3);
+		assertThat(MoreCollections.getElementAt(List.of(1, 2, 3), -2)).isEqualTo(2);
+		assertThat(MoreCollections.getElementAt(List.of(1, 2, 3), -3)).isEqualTo(1);
+
+		assertThatThrownBy(() -> MoreCollections.getElementAt(List.of(1, 2, 3), -4))
+				.isInstanceOf(ArrayIndexOutOfBoundsException.class);
+		assertThatThrownBy(() -> MoreCollections.getElementAt(List.of(1, 2, 3), 4))
+				.isInstanceOf(ArrayIndexOutOfBoundsException.class);
 	}
 
 	@Test
 	void testGetLastElement() {
-		assertEquals(3, MoreCollections.getLastElement(List.of(1, 2, 3)));
-		try {
-			MoreCollections.getLastElement(Collections.emptyList());
-			fail("Expected IndexOutOfBoundsException");
-		} catch (final IndexOutOfBoundsException ex) {
-			//expected
-		}
+		assertThat(MoreCollections.getLastElement(List.of(1, 2, 3))).isEqualTo(3);
+
+		assertThatThrownBy(() -> MoreCollections.getLastElement(Collections.emptyList()))
+				.isInstanceOf(IndexOutOfBoundsException.class);
 	}
 
 	@Test
 	void testFindLastElement() {
-		assertEquals(3, MoreCollections.findLastElement(List.of(1, 2, 3)));
-		assertEquals((Object) null, MoreCollections.findLastElement(Collections.emptyList()));
+		assertThat(MoreCollections.findLastElement(List.of(1, 2, 3))).isEqualTo(3);
+		final Object lastElement = MoreCollections.findLastElement(Collections.emptyList());
+		assertThat(lastElement).isNull();
 	}
 }

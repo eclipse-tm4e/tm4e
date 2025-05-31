@@ -12,15 +12,14 @@
  */
 package org.eclipse.tm4e.core.internal.theme.raw;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.eclipse.tm4e.core.internal.utils.NullSafetyHelper.castNonNull;
-import static org.junit.jupiter.api.Assertions.*;
 
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.concurrent.atomic.AtomicInteger;
 
-import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.eclipse.tm4e.core.internal.theme.Theme;
 import org.eclipse.tm4e.core.registry.IThemeSource;
 import org.junit.jupiter.api.Test;
@@ -28,7 +27,7 @@ import org.junit.jupiter.api.Test;
 class RawThemeReaderTest {
 
 	@Test
-	@NonNullByDefault({})
+	@SuppressWarnings("null")
 	void testLoadingThemes() throws IOException {
 		final var count = new AtomicInteger();
 		try (final var files = Files.list(Paths.get("../org.eclipse.tm4e.core.tests/src/main/resources/test-cases/themes"))) {
@@ -40,14 +39,15 @@ class RawThemeReaderTest {
 					try {
 						final IRawTheme rawTheme = RawThemeReader.readTheme(IThemeSource.fromFile(file));
 						count.incrementAndGet();
-						assertFalse(castNonNull(rawTheme.getName()).isEmpty());
-						assertFalse(castNonNull(rawTheme.getSettings()).isEmpty());
+						assertThat(castNonNull(rawTheme.getName())).isNotEmpty();
+						assertThat(castNonNull(rawTheme.getSettings())).isNotEmpty();
+
 						for (final var setting : castNonNull(rawTheme.getSettings())) {
-							assertNotNull(setting.getSetting());
+							assertThat(setting.getSetting()).isNotNull();
 						}
 						final var theme = Theme.createFromRawTheme(rawTheme, null);
-						assertFalse(theme.getColorMap().isEmpty());
-						assertNotNull(theme.getDefaults());
+						assertThat(theme.getColorMap()).isNotEmpty();
+						assertThat(theme.getDefaults()).isNotNull();
 					} catch (final Exception ex) {
 						throw new RuntimeException(ex);
 					}
@@ -55,6 +55,8 @@ class RawThemeReaderTest {
 			});
 		}
 		System.out.println("Successfully parsed " + count.intValue() + " themes.");
-		assertTrue(count.intValue() > 10, "Only " + count.intValue() + " themes found, expected more than 10!");
+		assertThat(count.intValue())
+				.withFailMessage("Only %d themes found, expected more than 10!", count.intValue())
+				.isGreaterThan(10);
 	}
 }

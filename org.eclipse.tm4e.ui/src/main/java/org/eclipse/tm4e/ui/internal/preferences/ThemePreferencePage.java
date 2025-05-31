@@ -41,6 +41,7 @@ import org.eclipse.tm4e.registry.IGrammarRegistryManager;
 import org.eclipse.tm4e.registry.TMEclipseRegistryPlugin;
 import org.eclipse.tm4e.ui.TMUIPlugin;
 import org.eclipse.tm4e.ui.internal.TMUIMessages;
+import org.eclipse.tm4e.ui.internal.themes.Theme;
 import org.eclipse.tm4e.ui.internal.themes.ThemeManager;
 import org.eclipse.tm4e.ui.internal.widgets.GrammarDefinitionLabelProvider;
 import org.eclipse.tm4e.ui.internal.widgets.TMViewer;
@@ -50,7 +51,6 @@ import org.eclipse.tm4e.ui.internal.widgets.VerticalSplitPane;
 import org.eclipse.tm4e.ui.snippets.ISnippet;
 import org.eclipse.tm4e.ui.themes.ITheme;
 import org.eclipse.tm4e.ui.themes.IThemeManager;
-import org.eclipse.tm4e.ui.themes.Theme;
 import org.osgi.service.prefs.BackingStoreException;
 
 /**

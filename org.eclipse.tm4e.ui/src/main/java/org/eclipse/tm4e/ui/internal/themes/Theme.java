@@ -9,7 +9,7 @@
  * Contributors:
  * Angelo Zerr <angelo.zerr@gmail.com> - initial API and implementation
  */
-package org.eclipse.tm4e.ui.themes;
+package org.eclipse.tm4e.ui.internal.themes;
 
 import static org.eclipse.tm4e.core.internal.utils.NullSafetyHelper.castNonNull;
 
@@ -25,8 +25,10 @@ import org.eclipse.tm4e.core.registry.IThemeSource.ContentType;
 import org.eclipse.tm4e.registry.TMResource;
 import org.eclipse.tm4e.registry.XMLConstants;
 import org.eclipse.tm4e.ui.TMUIPlugin;
-import org.eclipse.tm4e.ui.internal.themes.TMThemeTokenProvider;
 import org.eclipse.tm4e.ui.internal.utils.UI;
+import org.eclipse.tm4e.ui.themes.ColorManager;
+import org.eclipse.tm4e.ui.themes.ITheme;
+import org.eclipse.tm4e.ui.themes.ITokenProvider;
 import org.eclipse.tm4e.ui.themes.css.CSSTokenProvider;
 import org.eclipse.ui.texteditor.AbstractDecoratedTextEditorPreferenceConstants;
 import org.eclipse.ui.texteditor.AbstractTextEditor;

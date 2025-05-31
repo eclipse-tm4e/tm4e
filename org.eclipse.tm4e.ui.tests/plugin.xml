@@ -36,12 +36,12 @@
       </presentationReconciler>
    </extension>
    <extension
-         point="org.eclipse.tm4e.ui.snippets">
-      <snippet
-            name="org.eclipse.tm4e.ui.tests.snippet1"
-            path="grammars/snippet.ts"
+         point="org.eclipse.tm4e.ui.samples">
+      <sample
+            name="org.eclipse.tm4e.ui.tests.sample1"
+            path="grammars/sample.ts"
             scopeName="source.ts">
-      </snippet>
+      </sample>
    </extension>
 
 </plugin>

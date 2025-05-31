@@ -45,8 +45,7 @@ import org.eclipse.tm4e.ui.internal.widgets.TableWithControlsWidget;
 import org.eclipse.tm4e.ui.internal.widgets.ThemeAssociationsWidget;
 import org.eclipse.tm4e.ui.internal.widgets.VerticalSplitPane;
 import org.eclipse.tm4e.ui.internal.wizards.TextMateGrammarImportWizard;
-import org.eclipse.tm4e.ui.snippets.ISnippet;
-import org.eclipse.tm4e.ui.snippets.ISnippetManager;
+import org.eclipse.tm4e.ui.samples.ISample;
 import org.eclipse.tm4e.ui.themes.ITheme;
 import org.eclipse.tm4e.ui.themes.IThemeAssociation;
 import org.eclipse.tm4e.ui.themes.IThemeManager;
@@ -63,7 +62,6 @@ public final class GrammarPreferencePage extends AbstractPreferencePage {
 	// Managers
 	private IGrammarRegistryManager.EditSession grammarManager = TMEclipseRegistryPlugin.getGrammarRegistryManager().newEditSession();
 	private IThemeManager.EditSession themeManager = ThemeManager.getInstance().newEditSession();
-	private final ISnippetManager snippetManager = TMUIPlugin.getSnippetManager();
 
 	private TableWidget<IGrammarDefinition> grammarsTable = lateNonNull();
 
@@ -364,13 +362,12 @@ public final class GrammarPreferencePage extends AbstractPreferencePage {
 			setPreviewTheme(selectedAssociation.getThemeId());
 		}
 		grammarPreview.setGrammar(grammar);
-		// Snippet
-		final ISnippet[] snippets = snippetManager.getSnippets(definition.getScope().getName());
-		if (snippets.length == 0) {
+		final ISample[] samples = TMUIPlugin.getSampleManager().getSamples(definition.getScope().getName());
+		if (samples.length == 0) {
 			grammarPreview.setText("");
 		} else {
-			// TODO: manage list of snippet for the given scope.
-			grammarPreview.setText(snippets[0].getContent());
+			// TODO: manage list of sample for the given scope.
+			grammarPreview.setText(samples[0].getContent());
 		}
 	}
 

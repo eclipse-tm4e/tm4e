@@ -457,8 +457,8 @@ public class Updater {
 				if (exampleFile.isPresent()) {
 					pluginLines.append(render("""
 						\n
-						<extension point="org.eclipse.tm4e.ui.snippets">
-						  <snippet name="{label} Example" path="syntaxes/{ext_id}/{example_filename}" scopeName="{scope_name}" />
+						<extension point="org.eclipse.tm4e.ui.samples">
+						  <sample name="{label} Example" path="syntaxes/{ext_id}/{example_filename}" scopeName="{scope_name}" />
 						</extension>""", templateVars));
 				}
 			}

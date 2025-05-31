@@ -3,27 +3,22 @@
 <schema targetNamespace="org.eclipse.tm4e.ui" xmlns="http://www.w3.org/2001/XMLSchema">
 <annotation>
       <appinfo>
-         <meta.schema plugin="org.eclipse.tm4e.ui" id="snippets" name="Snippets code (DEPRECATED)"/>
+         <meta.schema plugin="org.eclipse.tm4e.ui" id="samples" name="Sample code"/>
       </appinfo>
       <documentation>
-         **DEPRECATED (since 0.15.0)**  
-This extension point was used to register &quot;snippet&quot; code for grammar preview, but the terminology conflicted with TextMate&apos;s built-in &quot;snippets&quot;.  
-Please switch to `org.eclipse.tm4e.ui.samples` (samples.exsd).
-
-Extension point to register snippet code for a TextMate grammar to preview the snippet code in the preferences.
-
+         Extension point to register sample code for a TextMate grammar to preview the sample code in the preferences.
       </documentation>
    </annotation>
 
    <element name="extension">
       <annotation>
          <appinfo>
-            <meta.element deprecated="true" />
+            <meta.element />
          </appinfo>
       </annotation>
       <complexType>
          <sequence minOccurs="1" maxOccurs="unbounded">
-            <element ref="snippet" minOccurs="0" maxOccurs="unbounded"/>
+            <element ref="sample" minOccurs="0" maxOccurs="unbounded"/>
          </sequence>
          <attribute name="point" type="string" use="required">
             <annotation>
@@ -49,7 +44,7 @@ Extension point to register snippet code for a TextMate grammar to preview the s
       </complexType>
    </element>
 
-   <element name="snippet">
+   <element name="sample">
       <annotation>
          <documentation>
             This extension point allows developers to register sample code for a TextMate grammar.
@@ -59,14 +54,14 @@ Extension point to register snippet code for a TextMate grammar to preview the s
          <attribute name="name" type="string" use="required">
             <annotation>
                <documentation>
-                  The snippet code name.
+                  The sample code name.
                </documentation>
             </annotation>
          </attribute>
          <attribute name="scopeName" type="string" use="required">
             <annotation>
                <documentation>
-                  Snippet code for the given grammar identified with &lt;code&gt;scopeName&lt;/code&gt;
+                  Sample code for the given grammar identified with &lt;code&gt;scopeName&lt;/code&gt;
                </documentation>
                <appinfo>
                   <meta.attribute kind="identifier" basedOn="org.eclipse.tm4e.registry.grammars/grammar/@scopeName"/>
@@ -76,7 +71,7 @@ Extension point to register snippet code for a TextMate grammar to preview the s
          <attribute name="path" type="string" use="required">
             <annotation>
                <documentation>
-                  The file path of the snippet code.
+                  The file path of the sample code.
                </documentation>
                <appinfo>
                   <meta.attribute kind="resource"/>
@@ -91,7 +86,7 @@ Extension point to register snippet code for a TextMate grammar to preview the s
          <meta.section type="since"/>
       </appinfo>
       <documentation>
-         0.1.0
+         0.14.0
       </documentation>
    </annotation>
 

@@ -9,20 +9,19 @@
  * Contributors:
  * Angelo Zerr <angelo.zerr@gmail.com> - initial API and implementation
  */
-package org.eclipse.tm4e.ui.snippets;
+package org.eclipse.tm4e.ui.samples;
 
 /**
- * Snippet manager API.
- *
+ * Sample manager API.
  */
-public interface ISnippetManager {
+public interface ISampleManager {
 
 	/**
-	 * Returns list of snippet for a given scope name and empty otherwise.
+	 * Returns list of sample for a given scope name and empty otherwise.
 	 *
 	 * @param scopeName
 	 *
-	 * @return list of snippet for a given scope name and empty otherwise.
+	 * @return list of sample for a given scope name and empty otherwise.
 	 */
-	ISnippet[] getSnippets(String scopeName);
+	ISample[] getSamples(String scopeName);
 }

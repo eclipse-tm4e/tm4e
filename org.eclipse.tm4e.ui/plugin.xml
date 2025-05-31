@@ -18,6 +18,10 @@
                     name="%Themes.extension.name"
                     schema="schema/themes.exsd" />
 
+   <extension-point id="samples"
+                    name="%Samples.extension.name"
+                    schema="schema/samples.exsd" />
+
    <extension-point id="snippets"
                     name="%Snippets.extension.name"
                     schema="schema/snippets.exsd" />

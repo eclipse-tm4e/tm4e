@@ -21,10 +21,10 @@ import org.eclipse.core.runtime.Platform;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.tm4e.ui.internal.model.TMModelManager;
-import org.eclipse.tm4e.ui.internal.snippets.SnippetManager;
+import org.eclipse.tm4e.ui.internal.samples.SampleManager;
 import org.eclipse.tm4e.ui.internal.themes.ThemeManager;
 import org.eclipse.tm4e.ui.model.ITMModelManager;
-import org.eclipse.tm4e.ui.snippets.ISnippetManager;
+import org.eclipse.tm4e.ui.samples.ISampleManager;
 import org.eclipse.tm4e.ui.themes.ColorManager;
 import org.eclipse.tm4e.ui.themes.IThemeManager;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
@@ -98,8 +98,8 @@ public class TMUIPlugin extends AbstractUIPlugin {
 		return ThemeManager.getInstance();
 	}
 
-	public static ISnippetManager getSnippetManager() {
-		return SnippetManager.getInstance();
+	public static ISampleManager getSampleManager() {
+		return SampleManager.getInstance();
 	}
 
 	@Override

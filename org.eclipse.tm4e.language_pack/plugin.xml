@@ -118,8 +118,8 @@
     <icon contentType="org.eclipse.tm4e.language_pack.bat" icon="syntaxes/bat/bat.icon.png"/>
   </extension>
 
-  <extension point="org.eclipse.tm4e.ui.snippets">
-    <snippet name="Batch File Example" path="syntaxes/bat/bat.example.bat" scopeName="source.batchfile" />
+  <extension point="org.eclipse.tm4e.ui.samples">
+    <sample name="Batch File Example" path="syntaxes/bat/bat.example.bat" scopeName="source.batchfile" />
   </extension>
 
   <!-- ======================================== -->
@@ -142,8 +142,8 @@
     <icon contentType="org.eclipse.tm4e.language_pack.clojure" icon="syntaxes/clojure/clojure.icon.png"/>
   </extension>
 
-  <extension point="org.eclipse.tm4e.ui.snippets">
-    <snippet name="Clojure Example" path="syntaxes/clojure/clojure.example.clj" scopeName="source.clojure" />
+  <extension point="org.eclipse.tm4e.ui.samples">
+    <sample name="Clojure Example" path="syntaxes/clojure/clojure.example.clj" scopeName="source.clojure" />
   </extension>
 
   <!-- ======================================== -->
@@ -166,8 +166,8 @@
     <icon contentType="org.eclipse.tm4e.language_pack.coffeescript" icon="syntaxes/coffeescript/coffeescript.icon.png"/>
   </extension>
 
-  <extension point="org.eclipse.tm4e.ui.snippets">
-    <snippet name="CoffeeScript Example" path="syntaxes/coffeescript/coffeescript.example.coffee" scopeName="source.coffee" />
+  <extension point="org.eclipse.tm4e.ui.samples">
+    <sample name="CoffeeScript Example" path="syntaxes/coffeescript/coffeescript.example.coffee" scopeName="source.coffee" />
   </extension>
 
   <!-- ======================================== -->
@@ -186,8 +186,8 @@
     <languageConfiguration contentTypeId="org.eclipse.tm4e.language_pack.c" path="syntaxes/cpp/c.language-configuration.json" />
   </extension>
 
-  <extension point="org.eclipse.tm4e.ui.snippets">
-    <snippet name="C Example" path="syntaxes/cpp/c.example.c" scopeName="source.c" />
+  <extension point="org.eclipse.tm4e.ui.samples">
+    <sample name="C Example" path="syntaxes/cpp/c.example.c" scopeName="source.c" />
   </extension>
 
   <!-- ======================================== -->
@@ -206,8 +206,8 @@
     <languageConfiguration contentTypeId="org.eclipse.tm4e.language_pack.cpp" path="syntaxes/cpp/cpp.language-configuration.json" />
   </extension>
 
-  <extension point="org.eclipse.tm4e.ui.snippets">
-    <snippet name="C++ Example" path="syntaxes/cpp/cpp.example.cpp" scopeName="source.cpp" />
+  <extension point="org.eclipse.tm4e.ui.samples">
+    <sample name="C++ Example" path="syntaxes/cpp/cpp.example.cpp" scopeName="source.cpp" />
   </extension>
 
   <!-- ======================================== -->
@@ -226,8 +226,8 @@
     <languageConfiguration contentTypeId="org.eclipse.tm4e.language_pack.cuda-cpp" path="syntaxes/cpp/cuda-cpp.language-configuration.json" />
   </extension>
 
-  <extension point="org.eclipse.tm4e.ui.snippets">
-    <snippet name="CUDA C++ Example" path="syntaxes/cpp/cuda-cpp.example.cu" scopeName="source.cuda-cpp" />
+  <extension point="org.eclipse.tm4e.ui.samples">
+    <sample name="CUDA C++ Example" path="syntaxes/cpp/cuda-cpp.example.cu" scopeName="source.cuda-cpp" />
   </extension>
 
   <!-- ======================================== -->
@@ -253,8 +253,8 @@
     <languageConfiguration contentTypeId="org.eclipse.tm4e.language_pack.csharp" path="syntaxes/csharp/csharp.language-configuration.json" />
   </extension>
 
-  <extension point="org.eclipse.tm4e.ui.snippets">
-    <snippet name="C# Example" path="syntaxes/csharp/csharp.example.cs" scopeName="source.cs" />
+  <extension point="org.eclipse.tm4e.ui.samples">
+    <sample name="C# Example" path="syntaxes/csharp/csharp.example.cs" scopeName="source.cs" />
   </extension>
 
   <!-- ======================================== -->
@@ -273,8 +273,8 @@
     <languageConfiguration contentTypeId="org.eclipse.tm4e.language_pack.css" path="syntaxes/css/css.language-configuration.json" />
   </extension>
 
-  <extension point="org.eclipse.tm4e.ui.snippets">
-    <snippet name="CSS Example" path="syntaxes/css/css.example.css" scopeName="source.css" />
+  <extension point="org.eclipse.tm4e.ui.samples">
+    <sample name="CSS Example" path="syntaxes/css/css.example.css" scopeName="source.css" />
   </extension>
 
   <!-- ======================================== -->
@@ -293,8 +293,8 @@
     <languageConfiguration contentTypeId="org.eclipse.tm4e.language_pack.dart" path="syntaxes/dart/dart.language-configuration.json" />
   </extension>
 
-  <extension point="org.eclipse.tm4e.ui.snippets">
-    <snippet name="Dart Example" path="syntaxes/dart/dart.example.dart" scopeName="source.dart" />
+  <extension point="org.eclipse.tm4e.ui.samples">
+    <sample name="Dart Example" path="syntaxes/dart/dart.example.dart" scopeName="source.dart" />
   </extension>
 
   <!-- ======================================== -->
@@ -313,8 +313,8 @@
     <languageConfiguration contentTypeId="org.eclipse.tm4e.language_pack.diff" path="syntaxes/diff/diff.language-configuration.json" />
   </extension>
 
-  <extension point="org.eclipse.tm4e.ui.snippets">
-    <snippet name="Diff Example" path="syntaxes/diff/diff.example.diff" scopeName="source.diff" />
+  <extension point="org.eclipse.tm4e.ui.samples">
+    <sample name="Diff Example" path="syntaxes/diff/diff.example.diff" scopeName="source.diff" />
   </extension>
 
   <!-- ======================================== -->
@@ -333,8 +333,8 @@
     <languageConfiguration contentTypeId="org.eclipse.tm4e.language_pack.dockerfile" path="syntaxes/docker/dockerfile.language-configuration.json" />
   </extension>
 
-  <extension point="org.eclipse.tm4e.ui.snippets">
-    <snippet name="Docker Example" path="syntaxes/docker/dockerfile.example.dockerfile" scopeName="source.dockerfile" />
+  <extension point="org.eclipse.tm4e.ui.samples">
+    <sample name="Docker Example" path="syntaxes/docker/dockerfile.example.dockerfile" scopeName="source.dockerfile" />
   </extension>
 
   <!-- ======================================== -->
@@ -353,8 +353,8 @@
     <languageConfiguration contentTypeId="org.eclipse.tm4e.language_pack.fsharp" path="syntaxes/fsharp/fsharp.language-configuration.json" />
   </extension>
 
-  <extension point="org.eclipse.tm4e.ui.snippets">
-    <snippet name="F# Example" path="syntaxes/fsharp/fsharp.example.fs" scopeName="source.fsharp" />
+  <extension point="org.eclipse.tm4e.ui.samples">
+    <sample name="F# Example" path="syntaxes/fsharp/fsharp.example.fs" scopeName="source.fsharp" />
   </extension>
 
   <!-- ======================================== -->
@@ -377,8 +377,8 @@
     <icon contentType="org.eclipse.tm4e.language_pack.git-commit" icon="syntaxes/git-base/icon.png"/>
   </extension>
 
-  <extension point="org.eclipse.tm4e.ui.snippets">
-    <snippet name="Git Commit Message Example" path="syntaxes/git-base/git-commit.example.txt" scopeName="text.git-commit" />
+  <extension point="org.eclipse.tm4e.ui.samples">
+    <sample name="Git Commit Message Example" path="syntaxes/git-base/git-commit.example.txt" scopeName="text.git-commit" />
   </extension>
 
   <!-- ======================================== -->
@@ -401,8 +401,8 @@
     <icon contentType="org.eclipse.tm4e.language_pack.git-rebase" icon="syntaxes/git-base/icon.png"/>
   </extension>
 
-  <extension point="org.eclipse.tm4e.ui.snippets">
-    <snippet name="Git Rebase Message Example" path="syntaxes/git-base/git-rebase.example.git-rebase-todo" scopeName="text.git-rebase" />
+  <extension point="org.eclipse.tm4e.ui.samples">
+    <sample name="Git Rebase Message Example" path="syntaxes/git-base/git-rebase.example.git-rebase-todo" scopeName="text.git-rebase" />
   </extension>
 
   <!-- ======================================== -->
@@ -425,8 +425,8 @@
     <icon contentType="org.eclipse.tm4e.language_pack.ignore" icon="syntaxes/git-base/icon.png"/>
   </extension>
 
-  <extension point="org.eclipse.tm4e.ui.snippets">
-    <snippet name="Git Ignore Example" path="syntaxes/git-base/ignore.example.gitignore" scopeName="source.ignore" />
+  <extension point="org.eclipse.tm4e.ui.samples">
+    <sample name="Git Ignore Example" path="syntaxes/git-base/ignore.example.gitignore" scopeName="source.ignore" />
   </extension>
 
   <!-- ======================================== -->
@@ -445,8 +445,8 @@
     <languageConfiguration contentTypeId="org.eclipse.tm4e.language_pack.go" path="syntaxes/go/go.language-configuration.json" />
   </extension>
 
-  <extension point="org.eclipse.tm4e.ui.snippets">
-    <snippet name="Go Example" path="syntaxes/go/go.example.go" scopeName="source.go" />
+  <extension point="org.eclipse.tm4e.ui.samples">
+    <sample name="Go Example" path="syntaxes/go/go.example.go" scopeName="source.go" />
   </extension>
 
   <!-- ======================================== -->
@@ -465,8 +465,8 @@
     <languageConfiguration contentTypeId="org.eclipse.tm4e.language_pack.groovy" path="syntaxes/groovy/groovy.language-configuration.json" />
   </extension>
 
-  <extension point="org.eclipse.tm4e.ui.snippets">
-    <snippet name="Groovy Example" path="syntaxes/groovy/groovy.example.groovy" scopeName="source.groovy" />
+  <extension point="org.eclipse.tm4e.ui.samples">
+    <sample name="Groovy Example" path="syntaxes/groovy/groovy.example.groovy" scopeName="source.groovy" />
   </extension>
 
   <!-- ======================================== -->
@@ -485,8 +485,8 @@
     <languageConfiguration contentTypeId="org.eclipse.tm4e.language_pack.handlebars" path="syntaxes/handlebars/handlebars.language-configuration.json" />
   </extension>
 
-  <extension point="org.eclipse.tm4e.ui.snippets">
-    <snippet name="Handlebars Example" path="syntaxes/handlebars/handlebars.example.hbs" scopeName="text.html.handlebars" />
+  <extension point="org.eclipse.tm4e.ui.samples">
+    <sample name="Handlebars Example" path="syntaxes/handlebars/handlebars.example.hbs" scopeName="text.html.handlebars" />
   </extension>
 
   <!-- ======================================== -->
@@ -505,8 +505,8 @@
     <languageConfiguration contentTypeId="org.eclipse.tm4e.language_pack.hlsl" path="syntaxes/hlsl/hlsl.language-configuration.json" />
   </extension>
 
-  <extension point="org.eclipse.tm4e.ui.snippets">
-    <snippet name="HLSL (High-Level Shader Language) Example" path="syntaxes/hlsl/hlsl.example.hlsl" scopeName="source.hlsl" />
+  <extension point="org.eclipse.tm4e.ui.samples">
+    <sample name="HLSL (High-Level Shader Language) Example" path="syntaxes/hlsl/hlsl.example.hlsl" scopeName="source.hlsl" />
   </extension>
 
   <!-- ======================================== -->
@@ -525,8 +525,8 @@
     <languageConfiguration contentTypeId="org.eclipse.tm4e.language_pack.html" path="syntaxes/html/html.language-configuration.json" />
   </extension>
 
-  <extension point="org.eclipse.tm4e.ui.snippets">
-    <snippet name="HTML Example" path="syntaxes/html/html.example.html" scopeName="text.html.derivative" />
+  <extension point="org.eclipse.tm4e.ui.samples">
+    <sample name="HTML Example" path="syntaxes/html/html.example.html" scopeName="text.html.derivative" />
   </extension>
 
   <!-- ======================================== -->
@@ -552,8 +552,8 @@
     <languageConfiguration contentTypeId="org.eclipse.tm4e.language_pack.ini" path="syntaxes/ini/ini.language-configuration.json" />
   </extension>
 
-  <extension point="org.eclipse.tm4e.ui.snippets">
-    <snippet name="INI Config File Example" path="syntaxes/ini/ini.example.ini" scopeName="source.ini" />
+  <extension point="org.eclipse.tm4e.ui.samples">
+    <sample name="INI Config File Example" path="syntaxes/ini/ini.example.ini" scopeName="source.ini" />
   </extension>
 
   <!-- ======================================== -->
@@ -576,8 +576,8 @@
     <icon contentType="org.eclipse.tm4e.language_pack.java" icon="syntaxes/java/java.icon.png"/>
   </extension>
 
-  <extension point="org.eclipse.tm4e.ui.snippets">
-    <snippet name="Java Example" path="syntaxes/java/java.example.java" scopeName="source.java" />
+  <extension point="org.eclipse.tm4e.ui.samples">
+    <sample name="Java Example" path="syntaxes/java/java.example.java" scopeName="source.java" />
   </extension>
 
   <!-- ======================================== -->
@@ -596,8 +596,8 @@
     <languageConfiguration contentTypeId="org.eclipse.tm4e.language_pack.javascript" path="syntaxes/javascript/javascript.language-configuration.json" />
   </extension>
 
-  <extension point="org.eclipse.tm4e.ui.snippets">
-    <snippet name="JavaScript Example" path="syntaxes/javascript/javascript.example.js" scopeName="source.js" />
+  <extension point="org.eclipse.tm4e.ui.samples">
+    <sample name="JavaScript Example" path="syntaxes/javascript/javascript.example.js" scopeName="source.js" />
   </extension>
 
   <!-- ======================================== -->
@@ -616,8 +616,8 @@
     <languageConfiguration contentTypeId="org.eclipse.tm4e.language_pack.javascriptreact" path="syntaxes/javascript/javascriptreact.language-configuration.json" />
   </extension>
 
-  <extension point="org.eclipse.tm4e.ui.snippets">
-    <snippet name="JavaScript JSX Example" path="syntaxes/javascript/javascriptreact.example.jsx" scopeName="source.js.jsx" />
+  <extension point="org.eclipse.tm4e.ui.samples">
+    <sample name="JavaScript JSX Example" path="syntaxes/javascript/javascriptreact.example.jsx" scopeName="source.js.jsx" />
   </extension>
 
   <!-- ======================================== -->
@@ -643,8 +643,8 @@
     <languageConfiguration contentTypeId="org.eclipse.tm4e.language_pack.json" path="syntaxes/json/json.language-configuration.json" />
   </extension>
 
-  <extension point="org.eclipse.tm4e.ui.snippets">
-    <snippet name="JSON Example" path="syntaxes/json/json.example.json" scopeName="source.json" />
+  <extension point="org.eclipse.tm4e.ui.samples">
+    <sample name="JSON Example" path="syntaxes/json/json.example.json" scopeName="source.json" />
   </extension>
 
   <!-- ======================================== -->
@@ -663,8 +663,8 @@
     <languageConfiguration contentTypeId="org.eclipse.tm4e.language_pack.jsonc" path="syntaxes/json/jsonc.language-configuration.json" />
   </extension>
 
-  <extension point="org.eclipse.tm4e.ui.snippets">
-    <snippet name="JSON with Comments Example" path="syntaxes/json/jsonc.example.jsonc" scopeName="source.json.comments" />
+  <extension point="org.eclipse.tm4e.ui.samples">
+    <sample name="JSON with Comments Example" path="syntaxes/json/jsonc.example.jsonc" scopeName="source.json.comments" />
   </extension>
 
   <!-- ======================================== -->
@@ -683,24 +683,24 @@
     <languageConfiguration contentTypeId="org.eclipse.tm4e.language_pack.jsonl" path="syntaxes/json/jsonl.language-configuration.json" />
   </extension>
 
-  <extension point="org.eclipse.tm4e.ui.snippets">
-    <snippet name="JSON Lines Example" path="syntaxes/json/jsonl.example.jsonl" scopeName="source.json.lines" />
+  <extension point="org.eclipse.tm4e.ui.samples">
+    <sample name="JSON Lines Example" path="syntaxes/json/jsonl.example.jsonl" scopeName="source.json.lines" />
   </extension>
 
   <!-- ======================================== -->
   <!-- json/snippets: Code Snippets -->
   <!-- ======================================== -->
   <extension point="org.eclipse.core.contenttype.contentTypes">
-    <content-type id="org.eclipse.tm4e.language_pack.snippets" name="Code Snippets" base-type="org.eclipse.tm4e.language_pack.basetype" priority="low"
+    <content-type id="org.eclipse.tm4e.language_pack.samples" name="Code Snippets" base-type="org.eclipse.tm4e.language_pack.basetype" priority="low"
                   file-extensions="code-snippets" file-patterns="**/User/profiles/*/snippets/*.json,**/User/snippets/*.json" />
   </extension>
   <extension point="org.eclipse.tm4e.registry.grammars">
-    <grammar scopeName="source.json.comments.snippets" path="syntaxes/json/snippets.tmLanguage.json" />
-    <scopeNameContentTypeBinding scopeName="source.json.comments.snippets" contentTypeId="org.eclipse.tm4e.language_pack.snippets" />
+    <grammar scopeName="source.json.comments.samples" path="syntaxes/json/snippets.tmLanguage.json" />
+    <scopeNameContentTypeBinding scopeName="source.json.comments.samples" contentTypeId="org.eclipse.tm4e.language_pack.samples" />
   </extension>
 
   <extension point="org.eclipse.tm4e.languageconfiguration.languageConfigurations">
-    <languageConfiguration contentTypeId="org.eclipse.tm4e.language_pack.snippets" path="syntaxes/json/snippets.language-configuration.json" />
+    <languageConfiguration contentTypeId="org.eclipse.tm4e.language_pack.samples" path="syntaxes/json/snippets.language-configuration.json" />
   </extension>
 
   <!-- ======================================== -->
@@ -719,8 +719,8 @@
     <languageConfiguration contentTypeId="org.eclipse.tm4e.language_pack.julia" path="syntaxes/julia/julia.language-configuration.json" />
   </extension>
 
-  <extension point="org.eclipse.tm4e.ui.snippets">
-    <snippet name="Julia Example" path="syntaxes/julia/julia.example.julia" scopeName="source.julia" />
+  <extension point="org.eclipse.tm4e.ui.samples">
+    <sample name="Julia Example" path="syntaxes/julia/julia.example.julia" scopeName="source.julia" />
   </extension>
 
   <!-- ======================================== -->
@@ -735,8 +735,8 @@
     <scopeNameContentTypeBinding scopeName="text.bibtex" contentTypeId="org.eclipse.tm4e.language_pack.bibtex" />
   </extension>
 
-  <extension point="org.eclipse.tm4e.ui.snippets">
-    <snippet name="BibTeX Example" path="syntaxes/latex/bibtex.example.bib" scopeName="text.bibtex" />
+  <extension point="org.eclipse.tm4e.ui.samples">
+    <sample name="BibTeX Example" path="syntaxes/latex/bibtex.example.bib" scopeName="text.bibtex" />
   </extension>
 
   <!-- ======================================== -->
@@ -771,8 +771,8 @@
     <languageConfiguration contentTypeId="org.eclipse.tm4e.language_pack.latex" path="syntaxes/latex/latex.language-configuration.json" />
   </extension>
 
-  <extension point="org.eclipse.tm4e.ui.snippets">
-    <snippet name="LaTeX Example" path="syntaxes/latex/latex.example.ltx" scopeName="text.tex.latex" />
+  <extension point="org.eclipse.tm4e.ui.samples">
+    <sample name="LaTeX Example" path="syntaxes/latex/latex.example.ltx" scopeName="text.tex.latex" />
   </extension>
 
   <!-- ======================================== -->
@@ -807,8 +807,8 @@
     <languageConfiguration contentTypeId="org.eclipse.tm4e.language_pack.tex" path="syntaxes/latex/tex.language-configuration.json" />
   </extension>
 
-  <extension point="org.eclipse.tm4e.ui.snippets">
-    <snippet name="TeX Example" path="syntaxes/latex/tex.example.tex" scopeName="text.tex" />
+  <extension point="org.eclipse.tm4e.ui.samples">
+    <sample name="TeX Example" path="syntaxes/latex/tex.example.tex" scopeName="text.tex" />
   </extension>
 
   <!-- ======================================== -->
@@ -827,8 +827,8 @@
     <languageConfiguration contentTypeId="org.eclipse.tm4e.language_pack.less" path="syntaxes/less/less.language-configuration.json" />
   </extension>
 
-  <extension point="org.eclipse.tm4e.ui.snippets">
-    <snippet name="Less Example" path="syntaxes/less/less.example.less" scopeName="source.css.less" />
+  <extension point="org.eclipse.tm4e.ui.samples">
+    <sample name="Less Example" path="syntaxes/less/less.example.less" scopeName="source.css.less" />
   </extension>
 
   <!-- ======================================== -->
@@ -847,8 +847,8 @@
     <languageConfiguration contentTypeId="org.eclipse.tm4e.language_pack.lua" path="syntaxes/lua/lua.language-configuration.json" />
   </extension>
 
-  <extension point="org.eclipse.tm4e.ui.snippets">
-    <snippet name="Lua Example" path="syntaxes/lua/lua.example.lua" scopeName="source.lua" />
+  <extension point="org.eclipse.tm4e.ui.samples">
+    <sample name="Lua Example" path="syntaxes/lua/lua.example.lua" scopeName="source.lua" />
   </extension>
 
   <!-- ======================================== -->
@@ -867,8 +867,8 @@
     <languageConfiguration contentTypeId="org.eclipse.tm4e.language_pack.makefile" path="syntaxes/make/makefile.language-configuration.json" />
   </extension>
 
-  <extension point="org.eclipse.tm4e.ui.snippets">
-    <snippet name="Makefile Example" path="syntaxes/make/makefile.example.makefile" scopeName="source.makefile" />
+  <extension point="org.eclipse.tm4e.ui.samples">
+    <sample name="Makefile Example" path="syntaxes/make/makefile.example.makefile" scopeName="source.makefile" />
   </extension>
 
   <!-- ======================================== -->
@@ -891,8 +891,8 @@
     <icon contentType="org.eclipse.tm4e.language_pack.markdown" icon="syntaxes/markdown/icon.png"/>
   </extension>
 
-  <extension point="org.eclipse.tm4e.ui.snippets">
-    <snippet name="Markdown Example" path="syntaxes/markdown/markdown.example.md" scopeName="text.html.markdown" />
+  <extension point="org.eclipse.tm4e.ui.samples">
+    <sample name="Markdown Example" path="syntaxes/markdown/markdown.example.md" scopeName="text.html.markdown" />
   </extension>
 
   <!-- ======================================== -->
@@ -911,8 +911,8 @@
     <icon contentType="org.eclipse.tm4e.language_pack.markdown-math" icon="syntaxes/markdown-math/icon.png"/>
   </extension>
 
-  <extension point="org.eclipse.tm4e.ui.snippets">
-    <snippet name="Markdown Math Example" path="syntaxes/markdown-math/markdown-math.example.md" scopeName="text.html.markdown.math" />
+  <extension point="org.eclipse.tm4e.ui.samples">
+    <sample name="Markdown Math Example" path="syntaxes/markdown-math/markdown-math.example.md" scopeName="text.html.markdown.math" />
   </extension>
 
   <!-- ======================================== -->
@@ -940,8 +940,8 @@
     <languageConfiguration contentTypeId="org.eclipse.tm4e.language_pack.objective-c" path="syntaxes/objective-c/objective-c.language-configuration.json" />
   </extension>
 
-  <extension point="org.eclipse.tm4e.ui.snippets">
-    <snippet name="Objective-C Example" path="syntaxes/objective-c/objective-c.example.m" scopeName="source.objc" />
+  <extension point="org.eclipse.tm4e.ui.samples">
+    <sample name="Objective-C Example" path="syntaxes/objective-c/objective-c.example.m" scopeName="source.objc" />
   </extension>
 
   <!-- ======================================== -->
@@ -960,8 +960,8 @@
     <languageConfiguration contentTypeId="org.eclipse.tm4e.language_pack.objective-cpp" path="syntaxes/objective-c/objective-cpp.language-configuration.json" />
   </extension>
 
-  <extension point="org.eclipse.tm4e.ui.snippets">
-    <snippet name="Objective-C++ Example" path="syntaxes/objective-c/objective-cpp.example.mm" scopeName="source.objcpp" />
+  <extension point="org.eclipse.tm4e.ui.samples">
+    <sample name="Objective-C++ Example" path="syntaxes/objective-c/objective-cpp.example.mm" scopeName="source.objcpp" />
   </extension>
 
   <!-- ======================================== -->
@@ -980,8 +980,8 @@
     <languageConfiguration contentTypeId="org.eclipse.tm4e.language_pack.perl" path="syntaxes/perl/perl.language-configuration.json" />
   </extension>
 
-  <extension point="org.eclipse.tm4e.ui.snippets">
-    <snippet name="Perl Example" path="syntaxes/perl/perl.example.pl" scopeName="source.perl" />
+  <extension point="org.eclipse.tm4e.ui.samples">
+    <sample name="Perl Example" path="syntaxes/perl/perl.example.pl" scopeName="source.perl" />
   </extension>
 
   <!-- ======================================== -->
@@ -1000,8 +1000,8 @@
     <languageConfiguration contentTypeId="org.eclipse.tm4e.language_pack.raku" path="syntaxes/perl/raku.language-configuration.json" />
   </extension>
 
-  <extension point="org.eclipse.tm4e.ui.snippets">
-    <snippet name="Raku (Perl 6) Example" path="syntaxes/perl/raku.example.pl6" scopeName="source.perl.6" />
+  <extension point="org.eclipse.tm4e.ui.samples">
+    <sample name="Raku (Perl 6) Example" path="syntaxes/perl/raku.example.pl6" scopeName="source.perl.6" />
   </extension>
 
   <!-- ======================================== -->
@@ -1020,8 +1020,8 @@
     <languageConfiguration contentTypeId="org.eclipse.tm4e.language_pack.php" path="syntaxes/php/php.language-configuration.json" />
   </extension>
 
-  <extension point="org.eclipse.tm4e.ui.snippets">
-    <snippet name="PHP Example" path="syntaxes/php/php.example.php" scopeName="source.php" />
+  <extension point="org.eclipse.tm4e.ui.samples">
+    <sample name="PHP Example" path="syntaxes/php/php.example.php" scopeName="source.php" />
   </extension>
 
   <!-- ======================================== -->
@@ -1040,8 +1040,8 @@
     <languageConfiguration contentTypeId="org.eclipse.tm4e.language_pack.powershell" path="syntaxes/powershell/powershell.language-configuration.json" />
   </extension>
 
-  <extension point="org.eclipse.tm4e.ui.snippets">
-    <snippet name="PowerShell Example" path="syntaxes/powershell/powershell.example.ps1" scopeName="source.powershell" />
+  <extension point="org.eclipse.tm4e.ui.samples">
+    <sample name="PowerShell Example" path="syntaxes/powershell/powershell.example.ps1" scopeName="source.powershell" />
   </extension>
 
   <!-- ======================================== -->
@@ -1060,8 +1060,8 @@
     <languageConfiguration contentTypeId="org.eclipse.tm4e.language_pack.jade" path="syntaxes/pug/jade.language-configuration.json" />
   </extension>
 
-  <extension point="org.eclipse.tm4e.ui.snippets">
-    <snippet name="Pug Example" path="syntaxes/pug/jade.example.pug" scopeName="text.pug" />
+  <extension point="org.eclipse.tm4e.ui.samples">
+    <sample name="Pug Example" path="syntaxes/pug/jade.example.pug" scopeName="text.pug" />
   </extension>
 
   <!-- ======================================== -->
@@ -1080,8 +1080,8 @@
     <languageConfiguration contentTypeId="org.eclipse.tm4e.language_pack.python" path="syntaxes/python/python.language-configuration.json" />
   </extension>
 
-  <extension point="org.eclipse.tm4e.ui.snippets">
-    <snippet name="Python Example" path="syntaxes/python/python.example.py" scopeName="source.python" />
+  <extension point="org.eclipse.tm4e.ui.samples">
+    <sample name="Python Example" path="syntaxes/python/python.example.py" scopeName="source.python" />
   </extension>
 
   <!-- ======================================== -->
@@ -1107,8 +1107,8 @@
     <languageConfiguration contentTypeId="org.eclipse.tm4e.language_pack.r" path="syntaxes/r/r.language-configuration.json" />
   </extension>
 
-  <extension point="org.eclipse.tm4e.ui.snippets">
-    <snippet name="R Example" path="syntaxes/r/r.example.r" scopeName="source.r" />
+  <extension point="org.eclipse.tm4e.ui.samples">
+    <sample name="R Example" path="syntaxes/r/r.example.r" scopeName="source.r" />
   </extension>
 
   <!-- ======================================== -->
@@ -1127,8 +1127,8 @@
     <languageConfiguration contentTypeId="org.eclipse.tm4e.language_pack.razor" path="syntaxes/razor/razor.language-configuration.json" />
   </extension>
 
-  <extension point="org.eclipse.tm4e.ui.snippets">
-    <snippet name="ASP.NET Razor Example" path="syntaxes/razor/razor.example.razor" scopeName="text.html.cshtml" />
+  <extension point="org.eclipse.tm4e.ui.samples">
+    <sample name="ASP.NET Razor Example" path="syntaxes/razor/razor.example.razor" scopeName="text.html.cshtml" />
   </extension>
 
   <!-- ======================================== -->
@@ -1147,8 +1147,8 @@
     <languageConfiguration contentTypeId="org.eclipse.tm4e.language_pack.restructuredtext" path="syntaxes/restructuredtext/restructuredtext.language-configuration.json" />
   </extension>
 
-  <extension point="org.eclipse.tm4e.ui.snippets">
-    <snippet name="reStructuredText Example" path="syntaxes/restructuredtext/restructuredtext.example.rst" scopeName="source.rst" />
+  <extension point="org.eclipse.tm4e.ui.samples">
+    <sample name="reStructuredText Example" path="syntaxes/restructuredtext/restructuredtext.example.rst" scopeName="source.rst" />
   </extension>
 
   <!-- ======================================== -->
@@ -1167,8 +1167,8 @@
     <languageConfiguration contentTypeId="org.eclipse.tm4e.language_pack.ruby" path="syntaxes/ruby/ruby.language-configuration.json" />
   </extension>
 
-  <extension point="org.eclipse.tm4e.ui.snippets">
-    <snippet name="Ruby Example" path="syntaxes/ruby/ruby.example.rb" scopeName="source.ruby" />
+  <extension point="org.eclipse.tm4e.ui.samples">
+    <sample name="Ruby Example" path="syntaxes/ruby/ruby.example.rb" scopeName="source.ruby" />
   </extension>
 
   <!-- ======================================== -->
@@ -1191,8 +1191,8 @@
     <icon contentType="org.eclipse.tm4e.language_pack.rust" icon="syntaxes/rust/rust.icon.png"/>
   </extension>
 
-  <extension point="org.eclipse.tm4e.ui.snippets">
-    <snippet name="Rust Example" path="syntaxes/rust/rust.example.rs" scopeName="source.rust" />
+  <extension point="org.eclipse.tm4e.ui.samples">
+    <sample name="Rust Example" path="syntaxes/rust/rust.example.rs" scopeName="source.rust" />
   </extension>
 
   <!-- ======================================== -->
@@ -1211,8 +1211,8 @@
     <languageConfiguration contentTypeId="org.eclipse.tm4e.language_pack.scss" path="syntaxes/scss/scss.language-configuration.json" />
   </extension>
 
-  <extension point="org.eclipse.tm4e.ui.snippets">
-    <snippet name="SCSS Example" path="syntaxes/scss/scss.example.scss" scopeName="source.css.scss" />
+  <extension point="org.eclipse.tm4e.ui.samples">
+    <sample name="SCSS Example" path="syntaxes/scss/scss.example.scss" scopeName="source.css.scss" />
   </extension>
 
   <!-- ======================================== -->
@@ -1238,8 +1238,8 @@
     <icon contentType="org.eclipse.tm4e.language_pack.search-result" icon="syntaxes/search-result/icon.png"/>
   </extension>
 
-  <extension point="org.eclipse.tm4e.ui.snippets">
-    <snippet name="VS Code Search Result Example" path="syntaxes/search-result/search-result.example.code-search" scopeName="text.searchResult" />
+  <extension point="org.eclipse.tm4e.ui.samples">
+    <sample name="VS Code Search Result Example" path="syntaxes/search-result/search-result.example.code-search" scopeName="text.searchResult" />
   </extension>
 
   <!-- ======================================== -->
@@ -1258,8 +1258,8 @@
     <languageConfiguration contentTypeId="org.eclipse.tm4e.language_pack.shaderlab" path="syntaxes/shaderlab/shaderlab.language-configuration.json" />
   </extension>
 
-  <extension point="org.eclipse.tm4e.ui.snippets">
-    <snippet name="ShaderLab Example" path="syntaxes/shaderlab/shaderlab.example.shader" scopeName="source.shaderlab" />
+  <extension point="org.eclipse.tm4e.ui.samples">
+    <sample name="ShaderLab Example" path="syntaxes/shaderlab/shaderlab.example.shader" scopeName="source.shaderlab" />
   </extension>
 
   <!-- ======================================== -->
@@ -1278,8 +1278,8 @@
     <languageConfiguration contentTypeId="org.eclipse.tm4e.language_pack.shellscript" path="syntaxes/shellscript/shellscript.language-configuration.json" />
   </extension>
 
-  <extension point="org.eclipse.tm4e.ui.snippets">
-    <snippet name="Shell Script Example" path="syntaxes/shellscript/shellscript.example.sh" scopeName="source.shell" />
+  <extension point="org.eclipse.tm4e.ui.samples">
+    <sample name="Shell Script Example" path="syntaxes/shellscript/shellscript.example.sh" scopeName="source.shell" />
   </extension>
 
   <!-- ======================================== -->
@@ -1298,8 +1298,8 @@
     <languageConfiguration contentTypeId="org.eclipse.tm4e.language_pack.sql" path="syntaxes/sql/sql.language-configuration.json" />
   </extension>
 
-  <extension point="org.eclipse.tm4e.ui.snippets">
-    <snippet name="MS SQL Example" path="syntaxes/sql/sql.example.sql" scopeName="source.sql" />
+  <extension point="org.eclipse.tm4e.ui.samples">
+    <sample name="MS SQL Example" path="syntaxes/sql/sql.example.sql" scopeName="source.sql" />
   </extension>
 
   <!-- ======================================== -->
@@ -1318,8 +1318,8 @@
     <languageConfiguration contentTypeId="org.eclipse.tm4e.language_pack.swift" path="syntaxes/swift/swift.language-configuration.json" />
   </extension>
 
-  <extension point="org.eclipse.tm4e.ui.snippets">
-    <snippet name="Swift Example" path="syntaxes/swift/swift.example.swift" scopeName="source.swift" />
+  <extension point="org.eclipse.tm4e.ui.samples">
+    <sample name="Swift Example" path="syntaxes/swift/swift.example.swift" scopeName="source.swift" />
   </extension>
 
   <!-- ======================================== -->
@@ -1338,8 +1338,8 @@
     <languageConfiguration contentTypeId="org.eclipse.tm4e.language_pack.typescript" path="syntaxes/typescript/typescript.language-configuration.json" />
   </extension>
 
-  <extension point="org.eclipse.tm4e.ui.snippets">
-    <snippet name="TypeScript Example" path="syntaxes/typescript/typescript.example.ts" scopeName="source.ts" />
+  <extension point="org.eclipse.tm4e.ui.samples">
+    <sample name="TypeScript Example" path="syntaxes/typescript/typescript.example.ts" scopeName="source.ts" />
   </extension>
 
   <!-- ======================================== -->
@@ -1358,8 +1358,8 @@
     <languageConfiguration contentTypeId="org.eclipse.tm4e.language_pack.typescriptreact" path="syntaxes/typescript/typescriptreact.language-configuration.json" />
   </extension>
 
-  <extension point="org.eclipse.tm4e.ui.snippets">
-    <snippet name="TypeScript JSX Example" path="syntaxes/typescript/typescriptreact.example.tsx" scopeName="source.tsx" />
+  <extension point="org.eclipse.tm4e.ui.samples">
+    <sample name="TypeScript JSX Example" path="syntaxes/typescript/typescriptreact.example.tsx" scopeName="source.tsx" />
   </extension>
 
   <!-- ======================================== -->
@@ -1386,8 +1386,8 @@
     <languageConfiguration contentTypeId="org.eclipse.tm4e.language_pack.vb" path="syntaxes/vb/vb.language-configuration.json" />
   </extension>
 
-  <extension point="org.eclipse.tm4e.ui.snippets">
-    <snippet name="Visual Basic Example" path="syntaxes/vb/vb.example.vb" scopeName="source.asp.vb.net" />
+  <extension point="org.eclipse.tm4e.ui.samples">
+    <sample name="Visual Basic Example" path="syntaxes/vb/vb.example.vb" scopeName="source.asp.vb.net" />
   </extension>
 
   <!-- ======================================== -->
@@ -1410,8 +1410,8 @@
     <icon contentType="org.eclipse.tm4e.language_pack.xml" icon="syntaxes/xml/icon.png"/>
   </extension>
 
-  <extension point="org.eclipse.tm4e.ui.snippets">
-    <snippet name="XML Example" path="syntaxes/xml/xml.example.xml" scopeName="text.xml" />
+  <extension point="org.eclipse.tm4e.ui.samples">
+    <sample name="XML Example" path="syntaxes/xml/xml.example.xml" scopeName="text.xml" />
   </extension>
 
   <!-- ======================================== -->
@@ -1434,8 +1434,8 @@
     <icon contentType="org.eclipse.tm4e.language_pack.xsl" icon="syntaxes/xml/icon.png"/>
   </extension>
 
-  <extension point="org.eclipse.tm4e.ui.snippets">
-    <snippet name="XSL Example" path="syntaxes/xml/xsl.example.xsl" scopeName="text.xml.xsl" />
+  <extension point="org.eclipse.tm4e.ui.samples">
+    <sample name="XSL Example" path="syntaxes/xml/xsl.example.xsl" scopeName="text.xml.xsl" />
   </extension>
 
   <!-- ======================================== -->
@@ -1454,8 +1454,8 @@
     <languageConfiguration contentTypeId="org.eclipse.tm4e.language_pack.yaml" path="syntaxes/yaml/yaml.language-configuration.json" />
   </extension>
 
-  <extension point="org.eclipse.tm4e.ui.snippets">
-    <snippet name="YAML Example" path="syntaxes/yaml/yaml.example.yaml" scopeName="source.yaml" />
+  <extension point="org.eclipse.tm4e.ui.samples">
+    <sample name="YAML Example" path="syntaxes/yaml/yaml.example.yaml" scopeName="source.yaml" />
   </extension>
 
   <!-- END-GENERATED -->

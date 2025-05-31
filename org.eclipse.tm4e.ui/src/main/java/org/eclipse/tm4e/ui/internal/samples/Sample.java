@@ -9,16 +9,16 @@
  * Contributors:
  * Angelo Zerr <angelo.zerr@gmail.com> - initial API and implementation
  */
-package org.eclipse.tm4e.ui.internal.snippets;
+package org.eclipse.tm4e.ui.internal.samples;
 
 import static org.eclipse.tm4e.core.internal.utils.NullSafetyHelper.castNonNull;
 
 import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.tm4e.registry.TMResource;
 import org.eclipse.tm4e.registry.XMLConstants;
-import org.eclipse.tm4e.ui.snippets.ISnippet;
+import org.eclipse.tm4e.ui.samples.ISample;
 
-final class Snippet extends TMResource implements ISnippet {
+final class Sample extends TMResource implements ISample {
 
 	private final String scopeName;
 	private final String name;
@@ -26,12 +26,12 @@ final class Snippet extends TMResource implements ISnippet {
 	/**
 	 * Constructor for user preferences (loaded from Json with Gson).
 	 */
-	Snippet() {
+	Sample() {
 		scopeName = "<set-by-gson>";
 		name = "<set-by-gson>";
 	}
 
-	Snippet(final IConfigurationElement ce) {
+	Sample(final IConfigurationElement ce) {
 		super(ce);
 		this.scopeName = castNonNull(ce.getAttribute(XMLConstants.SCOPE_NAME_ATTR));
 		this.name = castNonNull(ce.getAttribute(XMLConstants.NAME_ATTR));

@@ -9,35 +9,33 @@
  * Contributors:
  * Angelo Zerr <angelo.zerr@gmail.com> - initial API and implementation
  */
-package org.eclipse.tm4e.ui.snippets;
+package org.eclipse.tm4e.ui.samples;
 
 import org.eclipse.tm4e.registry.ITMResource;
 
 /**
- *
- * Snippet API.
- *
+ * Sample API.
  */
-public interface ISnippet extends ITMResource {
+public interface ISample extends ITMResource {
 
 	/**
-	 * Returns the name of the snippet.
+	 * Returns the name of the sample.
 	 *
-	 * @return the name of the snippet.
+	 * @return the name of the sample.
 	 */
 	String getName();
 
 	/**
-	 * Returns the scope name of the snippet.
+	 * Returns the scope name of the sample.
 	 *
-	 * @return the scope name of the snippet.
+	 * @return the scope name of the sample.
 	 */
 	String getScopeName();
 
 	/**
-	 * Returns the content of the snippet.
+	 * Returns the content of the sample.
 	 *
-	 * @return the content of the snippet.
+	 * @return the content of the sample.
 	 */
 	String getContent();
 }

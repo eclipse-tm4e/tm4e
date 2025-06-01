@@ -39,18 +39,9 @@ import org.eclipse.tm4e.registry.ITMScope;
 
 abstract class AbstractGrammarRegistryManager implements IGrammarRegistryManager {
 
-	static final class ContentTypeToScopeBinding {
-		final IContentType contentType;
-		final TMScope scope;
-
-		ContentTypeToScopeBinding(final String pluginId, final IContentType contentType, final String scopeName) {
-			this.contentType = contentType;
-			this.scope = new TMScope(scopeName, pluginId);
-		}
-
-		@Override
-		public String toString() {
-			return "ContentTypeToScopeBinding [contentType=" + contentType + ", scope=" + scope + "]";
+	private static record ContentTypeToScopeBinding(IContentType contentType, TMScope scope) {
+		ContentTypeToScopeBinding(String pluginId, IContentType contentType, String scopeName) {
+			this(contentType, new TMScope(scopeName, pluginId));
 		}
 	}
 
@@ -59,7 +50,7 @@ abstract class AbstractGrammarRegistryManager implements IGrammarRegistryManager
 		final Map<String /*scopeName*/, List<IGrammarDefinition>> byUnqualifiedScopeName = new HashMap<>();
 
 		void add(final IGrammarDefinition definition) {
-			final var scope = definition.getScope();
+         final ITMScope scope = definition.getScope();
 
 			if (scope.isQualified())
 				byQualifiedScopeName.put(scope.getQualifiedName(), definition);
@@ -270,7 +261,7 @@ abstract class AbstractGrammarRegistryManager implements IGrammarRegistryManager
 	/**
 	 * Register the given <code>scopeName</code> to inject to the given scope name <code>injectTo</code>.
 	 */
-	void registerInjection(final String scopeName, final String injectTo) {
+	protected void registerInjection(final String scopeName, final String injectTo) {
 		// -> used by GrammarRegistryManager.loadGrammarsFromExtensionPoints()
 		Collection<String> injectionsOfScope = getInjections(injectTo);
 		if (injectionsOfScope == null) {
@@ -288,12 +279,12 @@ abstract class AbstractGrammarRegistryManager implements IGrammarRegistryManager
 				.map(binding -> binding.contentType).toList();
 	}
 
-	void registerContentTypeToScopeBinding(final String pluginId, final IContentType contentType, final String scopeName) {
+	protected void registerContentTypeToScopeBinding(final String pluginId, final IContentType contentType, final String scopeName) {
 		// -> used by GrammarRegistryManager.loadGrammarsFromExtensionPoints()
 		contentTypeToScopeBindings.put(contentType, new ContentTypeToScopeBinding(pluginId, contentType, scopeName));
 	}
 
-	void registerGrammarDefinition(final IGrammarDefinition definition) {
+	protected void registerGrammarDefinition(final IGrammarDefinition definition) {
 		// -> used by GrammarRegistryManager.loadGrammarsFromExtensionPoints()
 		// -> used by TextMateGrammarImportWizard.performFinish()
 		if (definition.getPluginId() == null) {
@@ -303,7 +294,7 @@ abstract class AbstractGrammarRegistryManager implements IGrammarRegistryManager
 		}
 	}
 
-	void unregisterGrammarDefinition(final IGrammarDefinition definition) {
+	protected void unregisterGrammarDefinition(final IGrammarDefinition definition) {
 		// -> used by GrammarPreferencePage.grammarRemoveButton
 		if (definition.getPluginId() == null) {
 			userDefinitions.remove(definition);

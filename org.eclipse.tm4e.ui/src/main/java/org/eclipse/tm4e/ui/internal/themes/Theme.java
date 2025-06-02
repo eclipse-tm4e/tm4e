@@ -14,6 +14,7 @@ package org.eclipse.tm4e.ui.internal.themes;
 import static org.eclipse.tm4e.core.internal.utils.NullSafetyHelper.castNonNull;
 
 import java.io.InputStream;
+import java.util.concurrent.TimeUnit;
 
 import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.jdt.annotation.Nullable;
@@ -37,6 +38,9 @@ import org.eclipse.ui.texteditor.AbstractTextEditor;
  * {@link ITheme} implementation.
  */
 public class Theme extends TMResource implements ITheme {
+
+	/** Interval for re-checking theme changes, in nanoseconds (5 seconds). */
+	private static final long RECHECK_INTERVAL_NANOS = TimeUnit.SECONDS.toNanos(5);
 
 	private static final String DARK_ATTR = "dark";
 	private static final String DEFAULT_ATTR = "default";
@@ -168,9 +172,9 @@ public class Theme extends TMResource implements ITheme {
 	private long lastModifiedRecheck = -1;
 
 	private boolean isModified() {
-		final long now = System.currentTimeMillis();
+		final long now = System.nanoTime();
 		if (now > lastModifiedRecheck) {
-			lastModifiedRecheck = now + 5_000;
+			lastModifiedRecheck = now + RECHECK_INTERVAL_NANOS;
 			final long oldModified = lastModified;
 			lastModified = getLastModified();
 			return lastModified != oldModified;

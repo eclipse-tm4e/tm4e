@@ -87,6 +87,11 @@ public final class LanguageConfigurationMessages extends NLS {
 	public static String SelectLanguageConfigurationWizardPage_workspace_description;
 	public static String SelectLanguageConfigurationWizardPage_workspace_title;
 
+	public static String ToggleLineCommentHandler_ReadOnlyEditor_title;
+	public static String ToggleLineCommentHandler_ReadOnlyEditor_inputReadonly;
+	public static String ToggleLineCommentHandler_ReadOnlyEditor_fileReadonly;
+	public static String ToggleLineCommentHandler_ReadOnlyEditor_makingWritableFailed;
+
 	static {
 		NLS.initializeMessages(BUNDLE_NAME, LanguageConfigurationMessages.class);
 	}

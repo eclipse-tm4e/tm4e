@@ -13,10 +13,19 @@ import static org.assertj.core.api.Assertions.assertThat;
 import java.io.ByteArrayInputStream;
 
 import org.eclipse.core.resources.IProject;
+import org.eclipse.core.resources.ResourceAttributes;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.jface.text.ITextSelection;
 import org.eclipse.jface.text.TextSelection;
 import org.eclipse.jface.viewers.ISelection;
+import org.eclipse.swt.SWT;
+import org.eclipse.swt.widgets.Button;
+import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Control;
+import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.Event;
+import org.eclipse.swt.widgets.Shell;
+import org.eclipse.tm4e.languageconfiguration.internal.LanguageConfigurationMessages;
 import org.eclipse.tm4e.languageconfiguration.internal.ToggleLineCommentHandler;
 import org.eclipse.tm4e.ui.internal.utils.UI;
 import org.eclipse.ui.PlatformUI;
@@ -145,6 +154,71 @@ public class TestComment {
 		service.executeCommand(ToggleLineCommentHandler.TOGGLE_LINE_COMMENT_COMMAND_ID, null);
 		assertThat(doc.get()).isEqualTo(input);
 		checktTextSelection(editor.getSelectionProvider().getSelection(), indexOfA, lengthToC);
+	}
+
+	@Test
+	public void testToggleLineCommentOnReadOnlyFileAndMakeWritable() throws Exception {
+		final var now = System.currentTimeMillis();
+		final var proj = ResourcesPlugin.getWorkspace().getRoot().getProject(getClass().getName() + now);
+		proj.create(null);
+		proj.open(null);
+		final var file = proj.getFile("readonlytest.lc-test");
+		String content = "line1\nline2\n";
+		file.create(new ByteArrayInputStream(content.getBytes()), true, null);
+
+		// Make the file read-only on disk
+		ResourceAttributes attrs = file.getResourceAttributes();
+		attrs.setReadOnly(true);
+		file.setResourceAttributes(attrs);
+
+		// Verify that the file is read-only
+		assertThat(file.getResourceAttributes().isReadOnly()).isTrue();
+
+		// Open the editor on the read-only file
+		final var editor = (ITextEditor) IDE.openEditor(UI.getActivePage(), file, "org.eclipse.ui.genericeditor.GenericEditor");
+		final var doc = editor.getDocumentProvider().getDocument(editor.getEditorInput());
+		final var service = PlatformUI.getWorkbench().getService(IHandlerService.class);
+
+		// Before executing the toggle command, schedule an asyncExec to click "Yes" on the MessageDialog
+		Display.getDefault().asyncExec(new Runnable() {
+			Button findYesButton(final Composite parent) {
+				for (final Control child : parent.getChildren()) {
+					if (child instanceof final Button button
+							&& button.getText().toLowerCase().contains("yes"))
+						return button;
+					if (child instanceof final Composite composite) {
+						final Button result = findYesButton(composite);
+						if (result != null)
+							return result;
+					}
+				}
+				return null;
+			}
+
+			@Override
+			public void run() {
+				for (final Shell shell : Display.getDefault().getShells()) {
+					if (LanguageConfigurationMessages.ToggleLineCommentHandler_ReadOnlyEditor_title.equals(shell.getText())) {
+						Button yesButton = findYesButton(shell);
+						if (yesButton != null) {
+							yesButton.notifyListeners(SWT.Selection, new Event());
+						}
+						break;
+					}
+				}
+			}
+		});
+
+		// Attempt to toggle-line-comment; this will open the dialog and then click "Yes"
+		String text = doc.get();
+		editor.getSelectionProvider().setSelection(new TextSelection(0, text.length()));
+		service.executeCommand(ToggleLineCommentHandler.TOGGLE_LINE_COMMENT_COMMAND_ID, null);
+
+		// After dialog, the file should have been made writable by the handler internally
+		assertThat(file.getResourceAttributes().isReadOnly()).isFalse();
+
+		// Now that the file is writable, comments should be applied
+		assertThat(doc.get()).isEqualTo("//line1\n//line2\n");
 	}
 
 	@Test

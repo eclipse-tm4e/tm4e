@@ -11,6 +11,8 @@
  */
 package org.eclipse.tm4e.languageconfiguration.internal;
 
+import static org.eclipse.tm4e.languageconfiguration.internal.LanguageConfigurationMessages.*;
+
 import java.util.HashSet;
 import java.util.Set;
 import java.util.TreeSet;
@@ -20,9 +22,15 @@ import org.eclipse.core.commands.AbstractHandler;
 import org.eclipse.core.commands.Command;
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
+import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.ResourceAttributes;
 import org.eclipse.core.runtime.Adapters;
+import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.content.IContentType;
 import org.eclipse.jdt.annotation.Nullable;
+import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.text.BadLocationException;
 import org.eclipse.jface.text.IDocument;
 import org.eclipse.jface.text.IMultiTextSelection;
@@ -33,13 +41,17 @@ import org.eclipse.jface.text.ITypedRegion;
 import org.eclipse.jface.text.Region;
 import org.eclipse.jface.text.TextSelection;
 import org.eclipse.jface.text.TypedRegion;
+import org.eclipse.osgi.util.NLS;
 import org.eclipse.tm4e.languageconfiguration.internal.registry.LanguageConfigurationRegistryManager;
 import org.eclipse.tm4e.languageconfiguration.internal.supports.CommentSupport;
 import org.eclipse.tm4e.languageconfiguration.internal.utils.TextUtils;
 import org.eclipse.tm4e.ui.internal.utils.ContentTypeHelper;
 import org.eclipse.tm4e.ui.internal.utils.ContentTypeInfo;
+import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.handlers.HandlerUtil;
+import org.eclipse.ui.part.FileEditorInput;
 import org.eclipse.ui.texteditor.ITextEditor;
+import org.eclipse.ui.texteditor.ITextEditorExtension;
 
 public class ToggleLineCommentHandler extends AbstractHandler {
 
@@ -51,6 +63,19 @@ public class ToggleLineCommentHandler extends AbstractHandler {
 		return Adapters.adapt(sourceObject, adapter);
 	}
 
+	private IStatus setWritable(final IFile file) {
+		ResourceAttributes attrs = file.getResourceAttributes();
+		if (attrs != null) {
+			try {
+				attrs.setReadOnly(false);
+				file.setResourceAttributes(attrs);
+			} catch (CoreException e) {
+				return e.getStatus();
+			}
+		}
+		return Status.OK_STATUS;
+	}
+
 	@Override
 	public @Nullable Object execute(final ExecutionEvent event) throws ExecutionException {
 		final var part = HandlerUtil.getActiveEditor(event);
@@ -58,6 +83,37 @@ public class ToggleLineCommentHandler extends AbstractHandler {
 		if (editor == null) {
 			return null;
 		}
+
+		final var editorExt = adapt(editor, ITextEditorExtension.class);
+		if (editorExt != null && editorExt.isEditorInputReadOnly()) {
+			final IEditorInput input = editor.getEditorInput();
+			IFile file = null;
+			if (input instanceof FileEditorInput fileInput) {
+				file = fileInput.getFile();
+			}
+
+			if (file == null) {
+				MessageDialog.openInformation(HandlerUtil.getActiveShell(event),
+						ToggleLineCommentHandler_ReadOnlyEditor_title,
+						NLS.bind(ToggleLineCommentHandler_ReadOnlyEditor_inputReadonly, input.getToolTipText()));
+				return null;
+			}
+
+			if (!MessageDialog.openQuestion(HandlerUtil.getActiveShell(event),
+					ToggleLineCommentHandler_ReadOnlyEditor_title,
+					NLS.bind(ToggleLineCommentHandler_ReadOnlyEditor_fileReadonly, file.getLocation().toFile())))
+				return null; // abort on user request
+
+			final IStatus status = setWritable(file);
+			if (!status.isOK()) {
+				MessageDialog.openError(HandlerUtil.getActiveShell(event),
+						ToggleLineCommentHandler_ReadOnlyEditor_title,
+						NLS.bind(ToggleLineCommentHandler_ReadOnlyEditor_makingWritableFailed, file.getLocation().toFile(),
+								status.getMessage()));
+				return null;
+			}
+		}
+
 		final var selection = editor.getSelectionProvider().getSelection();
 		if (selection instanceof ITextSelection textSelection) {
 			final var input = editor.getEditorInput();

@@ -13,11 +13,10 @@
  */
 package org.eclipse.tm4e.registry.internal;
 
-import static org.eclipse.tm4e.core.internal.utils.NullSafetyHelper.defaultIfNull;
-
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.Reader;
+import java.net.URI;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -131,13 +130,18 @@ abstract class AbstractGrammarRegistryManager implements IGrammarRegistryManager
 				final var definition_ = definition;
 				return new IGrammarSource() {
 					@Override
-					public String getFilePath() {
-						return defaultIfNull(definition_.getPath(), "unknown");
+					public URI getURI() {
+						return definition_.getURI();
 					}
 
 					@Override
 					public Reader getReader() throws IOException {
 						return new InputStreamReader(definition_.getInputStream());
+					}
+
+					@Override
+					public long getLastModified() {
+						return definition_.getLastModified();
 					}
 				};
 			}

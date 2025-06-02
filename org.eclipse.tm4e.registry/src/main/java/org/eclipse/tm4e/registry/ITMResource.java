@@ -13,6 +13,7 @@ package org.eclipse.tm4e.registry;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.URI;
 
 /**
  * TextMate resource definition API.
@@ -27,12 +28,14 @@ public interface ITMResource extends ITMDefinition {
 	 */
 	String getPath();
 
+	URI getURI();
+
 	/**
 	 * Returns the stream of the TextMate resource.
 	 *
 	 * @return the stream of the TextMate resource.
-	 * 
-	 * @throws IOException
 	 */
 	InputStream getInputStream() throws IOException;
+
+	long getLastModified();
 }

@@ -59,7 +59,6 @@ public final class Registry {
 
 	public Registry(final IRegistryOptions options) {
 		this._options = options;
-
 		this._syncRegistry = new SyncRegistry(Theme.createFromRawTheme(options.getTheme(), options.getColorMap()));
 	}
 
@@ -70,7 +69,7 @@ public final class Registry {
 		try {
 			this._syncRegistry.setTheme(Theme.createFromRawTheme(RawThemeReader.readTheme(source), _options.getColorMap()));
 		} catch (final Exception ex) {
-			throw new TMException("Loading theme from '" + source.getFilePath() + "' failed: " + ex.getMessage(), ex);
+			throw new TMException("Loading theme from '" + source.getURI() + "' failed: " + ex.getMessage(), ex);
 		}
 	}
 
@@ -173,7 +172,7 @@ public final class Registry {
 			this._syncRegistry.addGrammar(grammar, this._options.getInjections(scopeName));
 		} catch (final Exception ex) {
 			throw new TMException("Loading grammar for scope [" + scopeName + "] from [" +
-					grammarSource.getFilePath() + "] failed: " + ex.getMessage(), ex);
+					grammarSource.getURI() + "] failed: " + ex.getMessage(), ex);
 		}
 		return true;
 	}
@@ -194,9 +193,8 @@ public final class Registry {
 							? this._options.getInjections(rawGrammar.getScopeName())
 							: injections);
 			return castNonNull(this._grammarForScopeName(rawGrammar.getScopeName(), initialLanguage, embeddedLanguages, null, null));
-
 		} catch (final Exception ex) {
-			throw new TMException("Loading grammar from [" + source.getFilePath() + "] failed: " + ex.getMessage(), ex);
+			throw new TMException("Loading grammar from [" + source.getURI() + "] failed: " + ex.getMessage(), ex);
 		}
 	}
 

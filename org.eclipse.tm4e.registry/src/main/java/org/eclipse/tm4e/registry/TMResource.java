@@ -16,6 +16,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.URI;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 
@@ -60,6 +61,13 @@ public abstract class TMResource implements ITMResource {
 	}
 
 	@Override
+	public URI getURI() {
+		return pluginId == null //
+				? new File(path).toURI()
+				: URI.create(PLATFORM_PLUGIN + pluginId + '/' + path);
+	}
+
+	@Override
 	public @Nullable String getPluginId() {
 		return pluginId;
 	}
@@ -72,13 +80,14 @@ public abstract class TMResource implements ITMResource {
 				: new URL(PLATFORM_PLUGIN + pluginId + '/' + path).openStream());
 	}
 
-	protected long getLastModified() {
+	@Override
+	public long getLastModified() {
 		try {
-			return new File(pluginId == null
+			return new File(pluginId == null //
 					? path
 					: FileLocator.resolve(new URL(PLATFORM_PLUGIN + pluginId + '/' + path)).getFile() //
 			).lastModified();
-		} catch (final Exception ex) {
+		} catch (final IOException ex) {
 			return 0;
 		}
 	}

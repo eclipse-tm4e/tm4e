@@ -12,6 +12,8 @@ package org.eclipse.tm4e.core.registry;
 import java.io.IOException;
 import java.io.Reader;
 import java.io.StringReader;
+import java.net.URI;
+import java.net.URLEncoder;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
@@ -47,9 +49,8 @@ public interface IGrammarSource {
 	}
 
 	static IGrammarSource fromFile(final Path file, final @Nullable ContentType contentType, final @Nullable Charset charset) {
-
-		final var filePath = file.toString();
-		final var contentType1 = contentType == null ? guessFileFormat(filePath) : contentType;
+		final var uri = file.toUri();
+		final var contentType1 = contentType == null ? guessFileFormat(file.toString()) : contentType;
 		return new IGrammarSource() {
 			@Override
 			public Reader getReader() throws IOException {
@@ -57,13 +58,18 @@ public interface IGrammarSource {
 			}
 
 			@Override
-			public String getFilePath() {
-				return filePath;
+			public URI getURI() {
+				return uri;
 			}
 
 			@Override
 			public ContentType getContentType() {
 				return contentType1;
+			}
+
+			@Override
+			public long getLastModified() {
+				return file.toFile().lastModified();
 			}
 		};
 	}
@@ -80,28 +86,46 @@ public interface IGrammarSource {
 	 */
 	static IGrammarSource fromResource(final Class<?> clazz, final String resourceName, final @Nullable ContentType contentType,
 			final @Nullable Charset charset) {
-
+		final var uri = ResourceUtils.getResourceURI(clazz, resourceName);
 		final var contentType1 = contentType == null ? guessFileFormat(resourceName) : contentType;
 		return new IGrammarSource() {
 			@Override
-			public Reader getReader() {
+			public Reader getReader() throws IOException {
 				return ResourceUtils.getResourceReader(clazz, resourceName, charset);
 			}
 
 			@Override
-			public String getFilePath() {
-				return resourceName;
+			public URI getURI() {
+				return uri;
 			}
 
 			@Override
 			public ContentType getContentType() {
 				return contentType1;
 			}
+
+			@Override
+			public long getLastModified() {
+				try {
+					return ResourceUtils.getResourceLastModified(clazz, resourceName);
+				} catch (final IOException ex) {
+					return 0;
+				}
+			}
 		};
 	}
 
 	static IGrammarSource fromString(final ContentType contentType, final String content) {
-
+		final var uri = URI.create("data:" //
+				+ switch (contentType) {
+					case JSON -> "application/json";
+					case YAML -> "application/x-yaml";
+					case XML -> "application/xml";
+					default -> "text/plain";
+				} //
+				+ ";charset=UTF-8," //
+				+ URLEncoder.encode(content, StandardCharsets.UTF_8));
+		final long modified = System.currentTimeMillis();
 		return new IGrammarSource() {
 			@Override
 			public Reader getReader() {
@@ -109,22 +133,32 @@ public interface IGrammarSource {
 			}
 
 			@Override
-			public String getFilePath() {
-				return "string." + contentType.name().toLowerCase();
+			public URI getURI() {
+				return uri;
 			}
 
 			@Override
 			public ContentType getContentType() {
 				return contentType;
 			}
+
+			@Override
+			public long getLastModified() {
+				return modified;
+			}
 		};
 	}
 
 	default ContentType getContentType() {
-		return guessFileFormat(getFilePath());
+		return guessFileFormat(getURI().getPath());
 	}
 
-	String getFilePath();
+	URI getURI();
 
 	Reader getReader() throws IOException;
+
+	/**
+	 * @return 0 if resource does not exist or modification date is not available
+	 */
+	long getLastModified();
 }

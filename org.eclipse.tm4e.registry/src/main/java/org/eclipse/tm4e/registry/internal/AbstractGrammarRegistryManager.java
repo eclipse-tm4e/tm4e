@@ -31,7 +31,6 @@ import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.tm4e.core.grammar.IGrammar;
 import org.eclipse.tm4e.core.registry.IGrammarSource;
 import org.eclipse.tm4e.core.registry.IRegistryOptions;
-import org.eclipse.tm4e.core.registry.Registry;
 import org.eclipse.tm4e.registry.IGrammarDefinition;
 import org.eclipse.tm4e.registry.IGrammarRegistryManager;
 import org.eclipse.tm4e.registry.ITMScope;
@@ -106,10 +105,10 @@ abstract class AbstractGrammarRegistryManager implements IGrammarRegistryManager
 	protected final Map<IContentType, ContentTypeToScopeBinding> contentTypeToScopeBindings = new HashMap<>();
 	protected final Map<String /*scopeName*/, Collection<String>> injections = new HashMap<>();
 
-	private final Registry registry;
+	private final ReloadingRegistry registry;
 
 	protected AbstractGrammarRegistryManager() {
-		registry = new Registry(new IRegistryOptions() {
+		registry = new ReloadingRegistry(new IRegistryOptions() {
 			@Override
 			public @Nullable Collection<String> getInjections(final String scopeName) {
 				return AbstractGrammarRegistryManager.this.getInjections(scopeName);
@@ -149,7 +148,7 @@ abstract class AbstractGrammarRegistryManager implements IGrammarRegistryManager
 	}
 
 	AbstractGrammarRegistryManager(final IRegistryOptions options) {
-		registry = new Registry(options);
+		registry = new ReloadingRegistry(options);
 	}
 
 	@Override

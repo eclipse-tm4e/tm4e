@@ -60,6 +60,11 @@ public class SyncRegistry implements IGrammarRepository, IThemeProvider {
 	 */
 	public void addGrammar(final IRawGrammar grammar, final @Nullable Collection<String> injectionScopeNames) {
 		this._rawGrammars.put(grammar.getScopeName(), grammar);
+		
+		// custom tm4e code, not from upstream:
+      // If an IRawGrammar is re-registered under the same scope name,
+		// clear any cached Grammar so it will be rebuilt with the new definition
+		this._grammars.remove(grammar.getScopeName());
 
 		if (injectionScopeNames != null) {
 			this._injectionGrammars.put(grammar.getScopeName(), injectionScopeNames);

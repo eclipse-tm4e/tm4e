@@ -44,7 +44,7 @@ import org.eclipse.tm4e.core.internal.utils.ScopeNames;
  *      "https://github.com/microsoft/vscode-textmate/blob/167bbbd509356cc4617f250c0d754aef670ab14a/src/main.ts#L54">
  *      github.com/microsoft/vscode-textmate/blob/main/src/main.ts</a>
  */
-public final class Registry {
+public class Registry {
 
 	private static final Logger LOGGER = System.getLogger(Registry.class.getName());
 
@@ -146,17 +146,12 @@ public final class Registry {
 				balancedBracketSelectors);
 	}
 
-	private boolean _loadSingleGrammar(final String scopeName) {
+	protected boolean _loadSingleGrammar(final String scopeName) {
 		return this._ensureGrammarCache.computeIfAbsent(scopeName, this::_doLoadSingleGrammar);
 	}
 
-	private boolean _doLoadSingleGrammar(final String scopeName) {
-		var grammarSource = this._options.getGrammarSource(scopeName);
-		if (grammarSource == null) {
-			final var scopeNameWithoutContributor = ScopeNames.withoutContributor(scopeName);
-			if (!scopeNameWithoutContributor.equals(scopeName))
-				grammarSource = this._options.getGrammarSource(scopeNameWithoutContributor);
-		}
+	protected boolean _doLoadSingleGrammar(final String scopeName) {
+		final var grammarSource = _grammarSourceForScopeName(scopeName);
 		if (grammarSource == null) {
 			LOGGER.log(WARNING, "No grammar source for scope [{0}]", scopeName);
 			return false;
@@ -220,5 +215,18 @@ public final class Registry {
 				embeddedLanguages,
 				tokenTypes,
 				balancedBracketSelectors);
+	}
+
+	/**
+	 * custom tm4e code, not from upstream
+	 */
+	protected @Nullable IGrammarSource _grammarSourceForScopeName(final String scopeName) {
+		var grammarSource = this._options.getGrammarSource(scopeName);
+		if (grammarSource == null) {
+			final var scopeNameWithoutContributor = ScopeNames.withoutContributor(scopeName);
+			if (!scopeNameWithoutContributor.equals(scopeName))
+				grammarSource = this._options.getGrammarSource(scopeNameWithoutContributor);
+		}
+		return grammarSource;
 	}
 }

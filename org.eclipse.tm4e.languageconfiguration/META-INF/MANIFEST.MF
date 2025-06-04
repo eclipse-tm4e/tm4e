@@ -24,6 +24,7 @@ Require-Bundle: org.eclipse.core.expressions,
 Bundle-Activator: org.eclipse.tm4e.languageconfiguration.LanguageConfigurationPlugin
 Export-Package: org.eclipse.tm4e.languageconfiguration,
  org.eclipse.tm4e.languageconfiguration.internal;x-friends:="org.eclipse.tm4e.languageconfiguration.tests",
+ org.eclipse.tm4e.languageconfiguration.internal.folding;x-friends:="org.eclipse.tm4e.languageconfiguration.tests",
  org.eclipse.tm4e.languageconfiguration.internal.registry;x-friends:="org.eclipse.tm4e.languageconfiguration.tests"
 Bundle-ActivationPolicy: lazy
 Automatic-Module-Name: org.eclipse.tm4e.languageconfiguration

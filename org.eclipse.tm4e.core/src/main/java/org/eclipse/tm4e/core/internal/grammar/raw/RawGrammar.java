@@ -62,6 +62,16 @@ public final class RawGrammar extends PropertySettable.HashMap<@Nullable Object>
 	}
 
 	@Override
+	public @Nullable String getFoldingStartMarker() {
+		return (String) get("foldingStartMarker");
+	}
+
+	@Override
+	public @Nullable String getFoldingEndMarker() {
+		return (String) get("foldingEndMarker");
+	}
+
+	@Override
 	@SuppressWarnings("unchecked")
 	public @Nullable Map<String, IRawRule> getInjections() {
 		return (Map<String, IRawRule>) get(INJECTIONS);

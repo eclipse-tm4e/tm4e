@@ -16,6 +16,32 @@
 
    <extension-point id="languageConfigurations" name="%LanguageConfigurations.extension.name" schema="schema/languageConfigurations.exsd" />
 
+   <extension point="org.eclipse.ui.genericeditor.foldingReconcilers">
+      <foldingReconcilingStrategy
+            class="org.eclipse.tm4e.languageconfiguration.internal.folding.CompositeFoldingStrategy"
+            contentType="org.eclipse.core.runtime.text">
+         <enabledWhen>
+           <and>
+              <!-- language-configuration.json is present -->
+              <reference definitionId="org.eclipse.tm4e.languageconfiguration.editorHasFoldingRules" />
+
+              <!-- AND ( ( LSP4E bundle NOT active )  OR  ( bundle active but NO LS here ) ) -->
+              <or>
+                 <!-- LSP4E bundle not resolved/started -->
+                 <not>
+                    <test property="org.eclipse.tm4e.languageconfiguration.isBundleActive" args="org.eclipse.lsp4e"/>
+                 </not>
+
+                 <!-- LSP4E present, but this editor/viewer has no LS -->
+                 <not>
+                    <reference definitionId="org.eclipse.lsp4e.editorHasLanguageServer"/>
+                 </not>
+              </or>
+           </and>
+         </enabledWhen>
+      </foldingReconcilingStrategy>
+   </extension>
+
    <!-- Preference Pages -->
    <extension point="org.eclipse.ui.preferencePages">
       <page name="%LanguageConfigurationPage.name"
@@ -168,20 +194,53 @@
 
    <!-- https://wiki.eclipse.org/Platform_Expression_Framework -->
    <extension point="org.eclipse.core.expressions.propertyTesters">
+      <!-- provide a testable property 'org.eclipse.tm4e.languageconfiguration.isBundleActive' -->
+      <propertyTester
+            class="org.eclipse.tm4e.languageconfiguration.internal.expressions.IsBundleActivePropertyTester"
+            id="org.eclipse.tm4e.languageconfiguration.expressions.IsBundleActiveTester"
+            namespace="org.eclipse.tm4e.languageconfiguration"
+            properties="isBundleActive"
+            type="java.lang.Object"/>
+      <!-- provide a testable property 'org.eclipse.tm4e.languageconfiguration.hasFoldingRules' -->
+      <propertyTester
+            class="org.eclipse.tm4e.languageconfiguration.internal.expressions.HasFoldingRulesPropertyTester"
+            id="org.eclipse.tm4e.languageconfiguration.expressions.HasFoldingRulesTester"
+            namespace="org.eclipse.tm4e.languageconfiguration"
+            properties="hasFoldingRules"
+            type="java.lang.Object" />
       <!-- provide a testable property 'org.eclipse.tm4e.languageconfiguration.hasLanguageConfiguration' -->
       <propertyTester
-            class="org.eclipse.tm4e.languageconfiguration.internal.HasLanguageConfigurationPropertyTester"
-            id="org.eclipse.tm4e.languageconfiguration.hasLanguageConfigurationPropertyTester"
+            class="org.eclipse.tm4e.languageconfiguration.internal.expressions.HasLanguageConfigurationPropertyTester"
+            id="org.eclipse.tm4e.languageconfiguration.expressions.HasLanguageConfigurationPropertyTester"
             namespace="org.eclipse.tm4e.languageconfiguration"
             properties="hasLanguageConfiguration"
             type="java.lang.Object" />
    </extension>
    <extension point="org.eclipse.core.expressions.definitions">
-      <!-- provide a expression based on the testable property 'org.eclipse.tm4e.languageconfiguration.hasLanguageConfiguration' -->
       <definition id="org.eclipse.tm4e.languageconfiguration.hasLanguageConfiguration">
          <with variable="activeEditor">
             <test property="org.eclipse.tm4e.languageconfiguration.hasLanguageConfiguration" forcePluginActivation="true" />
          </with>
+      </definition>
+      <definition id="org.eclipse.tm4e.languageconfiguration.editorHasFoldingRules">
+         <or>
+            <with variable="editorInput">
+               <test property="org.eclipse.tm4e.languageconfiguration.hasFoldingRules" forcePluginActivation="true" />
+            </with>
+            <with variable="viewer">
+               <test property="org.eclipse.tm4e.languageconfiguration.hasFoldingRules" forcePluginActivation="true" />
+            </with>
+         </or>
+      </definition>
+      <definition id="org.eclipse.tm4e.languageconfiguration.editorHasLanguageServer">
+         <or>
+            <with variable="editorInput">
+               <test property="org.eclipse.tm4e.languageconfiguration.editorHasLanguageServer" forcePluginActivation="true" />
+            </with>
+            <with variable="viewer">
+               <test property="org.eclipse.tm4e.languageconfiguration.editorHasLanguageServer" forcePluginActivation="true" />
+            </with>
+         </or>
       </definition>
    </extension>
 </plugin>

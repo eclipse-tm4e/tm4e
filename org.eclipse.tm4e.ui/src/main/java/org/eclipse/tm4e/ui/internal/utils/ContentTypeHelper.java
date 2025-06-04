@@ -44,6 +44,13 @@ import org.eclipse.ui.IStorageEditorInput;
 public final class ContentTypeHelper {
 
 	/**
+	 * Returns all content types that are associated to the given file name
+	 */
+	public static IContentType[] findContentTypesByFileName(final String fileName) {
+		return getContentTypeManager().findContentTypesFor(fileName);
+	}
+
+	/**
 	 * Find the content types from the given {@link IDocument} and null otherwise.
 	 *
 	 * @param document

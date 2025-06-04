@@ -25,6 +25,12 @@
        ["'", "'"],
        ["\"", "\""]
    ],
+   "folding": {
+     "markers": {
+       "start": "^\\s*#region",
+       "end": "^\\s*#endregion"
+     }
+   },
    "indentationRules": {
       "increaseIndentPattern": "({(?!.*}).*|\\(|\\[|((else(\\s)?)?if|else|for(each)?|while|switch|case).*:)\\s*((/[/*].*|)?$|\\?>)",
       "decreaseIndentPattern": "^(.*\\*\\/)?\\s*((\\})|(\\)+[;,])|(\\]\\)*[;,])|\\b(else:)|\\b((end(if|for(each)?|while|switch));))"

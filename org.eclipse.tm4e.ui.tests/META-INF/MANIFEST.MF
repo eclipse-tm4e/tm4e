@@ -23,4 +23,5 @@ Bundle-ActivationPolicy: lazy
 Import-Package: org.junit.jupiter.api,
  org.junit.jupiter.api.condition,
  org.opentest4j
+Export-Package: org.eclipse.tm4e.ui.tests.support
 Automatic-Module-Name: org.eclipse.tm4e.ui.tests

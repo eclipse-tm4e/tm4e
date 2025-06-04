@@ -53,4 +53,10 @@ public interface IRawGrammar {
 
 	IRawRule toRawRule();
 
+	@Nullable
+	String getFoldingStartMarker(); // custom tm4e code - not in upstream
+
+	@Nullable
+	String getFoldingEndMarker(); // custom tm4e code - not in upstream
+
 }

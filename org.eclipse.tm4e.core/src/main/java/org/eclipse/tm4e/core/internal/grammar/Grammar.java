@@ -369,6 +369,16 @@ public final class Grammar implements IGrammar, IRuleFactoryHelper {
 	}
 
 	@Override
+	public @Nullable String getFoldingStartMarker() {
+		return _grammar.getFoldingStartMarker();
+	}
+
+	@Override
+	public @Nullable String getFoldingEndMarker() {
+		return _grammar.getFoldingEndMarker();
+	}
+
+	@Override
 	public String toString() {
 		return StringUtils.toString(this, sb -> sb
 				.append("name=").append(getName()).append(", ")

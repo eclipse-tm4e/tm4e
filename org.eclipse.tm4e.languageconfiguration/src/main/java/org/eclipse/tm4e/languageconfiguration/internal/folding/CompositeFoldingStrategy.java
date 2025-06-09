@@ -57,7 +57,7 @@ public final class CompositeFoldingStrategy
 	}
 
 	@Override
-	public void reconcile(final DirtyRegion dirtyRegion, final IRegion subRegion) {
+	public void reconcile(final DirtyRegion dirtyRegion, final @Nullable IRegion subRegion) {
 		for (final AbstractFoldingStrategy delegate : DELEGATES) {
 			delegate.reconcile(dirtyRegion, subRegion);
 		}

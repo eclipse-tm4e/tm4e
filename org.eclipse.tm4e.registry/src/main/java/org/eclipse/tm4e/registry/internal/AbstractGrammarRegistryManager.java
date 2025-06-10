@@ -38,7 +38,7 @@ import org.eclipse.tm4e.registry.ITMScope;
 abstract class AbstractGrammarRegistryManager implements IGrammarRegistryManager {
 
 	private static record ContentTypeToScopeBinding(IContentType contentType, TMScope scope) {
-		ContentTypeToScopeBinding(String pluginId, IContentType contentType, String scopeName) {
+		ContentTypeToScopeBinding(final String pluginId, final IContentType contentType, final String scopeName) {
 			this(contentType, new TMScope(scopeName, pluginId));
 		}
 	}
@@ -48,10 +48,11 @@ abstract class AbstractGrammarRegistryManager implements IGrammarRegistryManager
 		final Map<String /*scopeName*/, List<IGrammarDefinition>> byUnqualifiedScopeName = new HashMap<>();
 
 		void add(final IGrammarDefinition definition) {
-         final ITMScope scope = definition.getScope();
+			final ITMScope scope = definition.getScope();
 
-			if (scope.isQualified())
+			if (scope.isQualified()) {
 				byQualifiedScopeName.put(scope.getQualifiedName(), definition);
+			}
 
 			byUnqualifiedScopeName
 					.computeIfAbsent(scope.getName(), unused -> new ArrayList<>())
@@ -78,8 +79,9 @@ abstract class AbstractGrammarRegistryManager implements IGrammarRegistryManager
 		void remove(final IGrammarDefinition definition) {
 			final ITMScope scope = definition.getScope();
 
-			if (scope.isQualified())
+			if (scope.isQualified()) {
 				byQualifiedScopeName.remove(scope.getQualifiedName());
+			}
 
 			final List<IGrammarDefinition> definitionsOfScope = byUnqualifiedScopeName.get(scope.getName());
 			if (definitionsOfScope != null) {
@@ -95,7 +97,7 @@ abstract class AbstractGrammarRegistryManager implements IGrammarRegistryManager
 		}
 	}
 
-	static String getQualifiedScopeName(String scopeName, String pluginId) {
+	static String getQualifiedScopeName(final String scopeName, final String pluginId) {
 		return scopeName + '@' + pluginId;
 	}
 
@@ -164,15 +166,13 @@ abstract class AbstractGrammarRegistryManager implements IGrammarRegistryManager
 
 				// look for a grammar provided by the same plugin as the content-type
 				IGrammar grammar = getGrammarForScope(binding.scope.getQualifiedName());
-				if (grammar != null) {
+				if (grammar != null)
 					return grammar;
-				}
 
 				// look for a grammar provided by any plugin
 				grammar = getGrammarForScope(binding.scope.getName());
-				if (grammar != null) {
+				if (grammar != null)
 					return grammar;
-				}
 			}
 		}
 		return null;
@@ -190,10 +190,7 @@ abstract class AbstractGrammarRegistryManager implements IGrammarRegistryManager
 	 */
 	private @Nullable IGrammar getGrammarForScope(final String scopeName) {
 		final IGrammar grammar = registry.grammarForScopeName(scopeName);
-		if (grammar != null) {
-			return grammar;
-		}
-		return registry.loadGrammar(scopeName);
+		return grammar == null ? registry.loadGrammar(scopeName) : grammar;
 	}
 
 	@Override

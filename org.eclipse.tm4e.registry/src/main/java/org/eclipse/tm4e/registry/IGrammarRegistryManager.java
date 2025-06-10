@@ -63,7 +63,7 @@ public interface IGrammarRegistryManager {
 	/**
 	 * @return the list of registered TextMate grammar definitions.
 	 */
-	IGrammarDefinition [] getDefinitions();
+	IGrammarDefinition[] getDefinitions();
 
 	/**
 	 * @param contentTypes the content types to lookup for grammar association.

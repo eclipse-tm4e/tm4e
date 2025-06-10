@@ -55,12 +55,12 @@ class WorkingCopyGrammarRegistryManager extends AbstractGrammarRegistryManager i
 	}
 
 	@Override
-	public @Nullable Collection<IContentType> getContentTypesForScope(ITMScope scope) {
+	public @Nullable Collection<IContentType> getContentTypesForScope(final ITMScope scope) {
 		return manager.getContentTypesForScope(scope);
 	}
 
 	@Override
-	public @Nullable Collection<String> getInjections(String scopeName) {
+	public @Nullable Collection<String> getInjections(final String scopeName) {
 		return manager.getInjections(scopeName);
 	}
 

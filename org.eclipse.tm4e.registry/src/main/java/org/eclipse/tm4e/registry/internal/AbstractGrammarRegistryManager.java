@@ -156,7 +156,8 @@ abstract class AbstractGrammarRegistryManager implements IGrammarRegistryManager
 	@Override
 	public @Nullable IGrammar getGrammarFor(final IContentType... contentTypes) {
 		// -> used by TMPresentationReconciler
-		for (@Nullable IContentType contentType : contentTypes) {
+		for (@Nullable
+		IContentType contentType : contentTypes) {
 			while (contentType != null) {
 				final ContentTypeToScopeBinding binding = contentTypeToScopeBindings.get(contentType);
 				if (binding == null) {
@@ -249,13 +250,15 @@ abstract class AbstractGrammarRegistryManager implements IGrammarRegistryManager
 				.toArray(IGrammarDefinition[]::new);
 	}
 
-	/**
-	 * @param scopeName an unqualified (sources.batchfile) or qualified (sources.batchfile@plugin) scope name
-	 */
 	@Override
 	public @Nullable Collection<String> getInjections(final String scopeName) {
 		// -> indirectly used by org.eclipse.tm4e.core.registry.Registry._doLoadSingleGrammar(String)
-		return injections.get(TMScope.parse(scopeName).getName());
+		return getInjections(TMScope.parse(scopeName));
+	}
+
+	@Override
+	public @Nullable Collection<String> getInjections(final ITMScope scope) {
+		return injections.get(scope.getName());
 	}
 
 	/**

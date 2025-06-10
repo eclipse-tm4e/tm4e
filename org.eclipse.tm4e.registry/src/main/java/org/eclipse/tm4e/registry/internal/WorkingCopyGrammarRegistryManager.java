@@ -65,6 +65,11 @@ class WorkingCopyGrammarRegistryManager extends AbstractGrammarRegistryManager i
 	}
 
 	@Override
+	public @Nullable Collection<String> getInjections(final ITMScope scope) {
+		return manager.getInjections(scope);
+	}
+
+	@Override
 	public void registerGrammarDefinition(final IGrammarDefinition definition) {
 		super.registerGrammarDefinition(definition);
 		removed.remove(definition);

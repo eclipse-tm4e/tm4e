@@ -98,8 +98,16 @@ public interface IGrammarRegistryManager {
 	Collection<IContentType> getContentTypesForScope(ITMScope scope);
 
 	/**
+	 * @param scopeName an unqualified (sources.batchfile) or qualified (sources.batchfile@plugin) scope name
+	 *
 	 * @return list of scope names to inject for the given <code>scopeName</code> and null otherwise.
 	 */
 	@Nullable
 	Collection<String> getInjections(String scopeName);
+
+	/**
+	 * @return list of scope names to inject for the given scope name and null otherwise.
+	 */
+	@Nullable
+	Collection<String> getInjections(ITMScope scope);
 }

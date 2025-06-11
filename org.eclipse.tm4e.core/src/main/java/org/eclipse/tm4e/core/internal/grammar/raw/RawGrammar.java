@@ -17,6 +17,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.tm4e.core.internal.parser.PropertySettable;
@@ -79,6 +80,15 @@ public final class RawGrammar extends PropertySettable.HashMap<@Nullable Object>
 
 	@Override
 	public @Nullable String getInjectionSelector() {
+		final var value = get(INJECTION_SELECTOR);
+
+		if (value instanceof final Collection<?> coll)
+			// Some grammars incorrectly provide a list of selectors,
+			// so we join them into a single 'or' condition string
+			return coll.stream()
+					.map(Object::toString)
+					.collect(Collectors.joining(" | "));
+
 		return (String) get(INJECTION_SELECTOR);
 	}
 
@@ -106,9 +116,8 @@ public final class RawGrammar extends PropertySettable.HashMap<@Nullable Object>
 	private Object getOrThrow(final Object key) {
 		@SuppressWarnings("unlikely-arg-type")
 		final var obj = get(key);
-		if (obj == null) {
+		if (obj == null)
 			throw new NoSuchElementException("Key '" + key + "' does not exit for grammar '" + getName() + '"');
-		}
 		return obj;
 	}
 
@@ -119,8 +128,9 @@ public final class RawGrammar extends PropertySettable.HashMap<@Nullable Object>
 
 	@Override
 	public @Nullable Object put(final String key, final @Nullable Object value) {
-		if (FILE_TYPES.equals(key))
+		if (FILE_TYPES.equals(key)) {
 			fileTypes = null;
+		}
 
 		return super.put(key, value);
 	}
@@ -128,8 +138,9 @@ public final class RawGrammar extends PropertySettable.HashMap<@Nullable Object>
 	@Override
 	@SuppressWarnings("unlikely-arg-type")
 	public void putAll(final Map<? extends String, ? extends @Nullable Object> m) {
-		if (m.containsKey(FILE_TYPES))
+		if (m.containsKey(FILE_TYPES)) {
 			fileTypes = null;
+		}
 		super.putAll(m);
 	}
 

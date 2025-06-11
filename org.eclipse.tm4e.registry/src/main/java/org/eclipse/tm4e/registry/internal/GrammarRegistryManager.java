@@ -61,9 +61,9 @@ public final class GrammarRegistryManager extends AbstractGrammarRegistryManager
 					registerGrammarDefinition(new GrammarDefinition(ce));
 					break;
 				case XMLConstants.INJECTION_ELT: {
-					final String scopeName = ce.getAttribute(XMLConstants.SCOPE_NAME_ATTR);
+					final var scope = new TMScope(ce.getAttribute(XMLConstants.SCOPE_NAME_ATTR), ce.getNamespaceIdentifier());
 					final String injectTo = ce.getAttribute(XMLConstants.INJECT_TO_ATTR);
-					registerInjection(scopeName, injectTo);
+					registerInjection(scope, injectTo);
 					break;
 				}
 				case XMLConstants.SCOPE_NAME_CONTENT_TYPE_BINDING_ELT: {

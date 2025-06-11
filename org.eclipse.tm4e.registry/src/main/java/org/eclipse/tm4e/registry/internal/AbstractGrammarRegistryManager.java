@@ -264,14 +264,14 @@ abstract class AbstractGrammarRegistryManager implements IGrammarRegistryManager
 	/**
 	 * Register the given <code>scopeName</code> to inject to the given scope name <code>injectTo</code>.
 	 */
-	protected void registerInjection(final String scopeName, final String injectTo) {
+	void registerInjection(final TMScope scopeName, final String injectTo) {
 		// -> used by GrammarRegistryManager.loadGrammarsFromExtensionPoints()
 		Collection<String> injectionsOfScope = getInjections(injectTo);
 		if (injectionsOfScope == null) {
 			injectionsOfScope = new ArrayList<>();
 			injections.put(injectTo, injectionsOfScope);
 		}
-		injectionsOfScope.add(scopeName);
+		injectionsOfScope.add(scopeName.toString());
 	}
 
 	@Override

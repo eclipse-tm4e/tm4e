@@ -37,36 +37,47 @@ Latest builds, for testing, can be found at https://download.eclipse.org/tm4e/sn
 
 ### ⌨️ Setting up the Development Environment manually
 
-- Download and install the **Eclipse IDE for Eclipse Committers** from https://www.eclipse.org/downloads/packages/ or another
-  Eclipse installation with the [Plug-in Development Environment (PDE)](https://www.eclipse.org/pde/) installed.
-- Clone this repository <a href="https://mickaelistria.github.io/redirctToEclipseIDECloneCommand/redirect.html"><img src="https://mickaelistria.github.io/redirctToEclipseIDECloneCommand/cloneToEclipseBadge.png" alt="Clone to Eclipse IDE"/></a>.
-- _File > Open Projects from Filesystem..._ , select the path to the TM4E Git repository and the relevant child projects you want to import
+1. Download and install the **Eclipse IDE for Eclipse Committers** from https://www.eclipse.org/downloads/packages/ or another
+   Eclipse installation with the [Plug-in Development Environment (PDE)](https://www.eclipse.org/pde/) installed.
+1. Clone this repository <a href="https://mickaelistria.github.io/redirctToEclipseIDECloneCommand/redirect.html"><img src="https://mickaelistria.github.io/redirctToEclipseIDECloneCommand/cloneToEclipseBadge.png" alt="Clone to Eclipse IDE"/></a>.
+1. _File > Import > Existing Maven Project_, select the path to the TM4E Git repository and import projects and all modules
+   ![](documentation/import_project.png)
+1. To solve the compiler errors, open the [target-platforms/oldest.target](target-platforms/oldest.target) file in Eclipse, wait until all dependencies are resolved, and click on _**Set as Active Target Platform**_
+   ![](documentation/configure_target_platform.png)
 
-### 🏗️ Build
+### 🏗️ Build & Test
 
-- From the command line run:
-  - on Windows `mvnw clean verify`
-  - on Linux `./mvnw clean verify`
-- From within Eclipse with [M2E](https://www.eclipse.org/m2e/) installed: right-click on the tm4e root folder > Run As > Maven build
+1. **On command line**
 
-#### Running the CI job locally:
+   On Windows execute `mvnw clean verify`\
+   On Linux execute `./mvnw clean verify`
 
-TM4E's [GitHub Actions wokflow](.github/workflows/build.yml) is compatible with [nektos/act](https://github.com/nektos/act) a
-command-line tool that allows you to run GitHub Actions workflows locally.
+2. **Within Eclipse**
 
-1. Install Docker
-1. Install [nektos/act](https://github.com/nektos/act)
-1. From the command line navigate into the tm4e project root
-1. Run the command `act`
-1. On subsequent re-runs you can use `act -r` to reuse previous container which avoids re-installation system packages and
-   reduces build times.
+   - To run full Maven builds: Having [M2E](https://www.eclipse.org/m2e/) installed, right-click on the tm4e root folder > _Run As > Maven build_
 
-In case of build failures the docker container will still be running and you can SSH into it for analysis
-using `docker exec -u root -it <CONTAINER_ID> /bin/bash`, e.g.:
-```bash
-container_id=$(docker container ps --filter status=running --filter name=act-Build-build --format {{.ID}})
-docker exec -u root -it $container_id /bin/bash
-```
+   - To run the non-UI tests of any imported module, right-click on the respective project and select > _RunAs > JUnit Test_
+
+   - To run the UI tests, right-click on the `org.eclipse.tm4e.ui.tests` project and select > _RunAs > JUnit Plug-in Test_
+
+3. **Running the CI job locally:**
+
+    TM4E's [GitHub Actions wokflow](.github/workflows/build.yml) is compatible with [nektos/act](https://github.com/nektos/act) a
+    command-line tool that allows you to run GitHub Actions workflows locally.
+
+    1. Install Docker
+    1. Install [nektos/act](https://github.com/nektos/act)
+    1. From the command line navigate into the tm4e project root
+    1. Run the command `act`
+    1. On subsequent re-runs you can use `act -r` to reuse previous container which avoids re-installation system packages and
+       reduces build times.
+
+    In case of build failures the docker container will still be running and you can SSH into it for analysis
+    using `docker exec -u root -it <CONTAINER_ID> /bin/bash`, e.g.:
+    ```bash
+    container_id=$(docker container ps --filter status=running --filter name=act-Build-build --format {{.ID}})
+    docker exec -u root -it $container_id /bin/bash
+    ```
 
 ### ⬆️ Version bump
 

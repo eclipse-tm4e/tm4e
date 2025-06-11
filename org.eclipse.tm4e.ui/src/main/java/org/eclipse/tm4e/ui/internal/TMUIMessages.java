@@ -75,6 +75,7 @@ public final class TMUIMessages extends NLS {
 
 	// Widgets
 	public static String ContentTypesBindingWidget_description;
+	public static String GrammarInjectionsWidget_description;
 	public static String ThemeAssociationsWidget_description;
 	public static String ThemeAssociationsWidget_remove_dialog_title;
 	public static String ThemeAssociationsWidget_remove_dialog_message;

@@ -15,6 +15,7 @@ package org.eclipse.tm4e.ui.internal.preferences;
 
 import static org.eclipse.tm4e.core.internal.utils.NullSafetyHelper.lateNonNull;
 
+import java.util.List;
 import java.util.stream.Collectors;
 
 import org.eclipse.core.runtime.content.IContentType;
@@ -34,6 +35,7 @@ import org.eclipse.swt.widgets.TabItem;
 import org.eclipse.tm4e.core.grammar.IGrammar;
 import org.eclipse.tm4e.registry.IGrammarDefinition;
 import org.eclipse.tm4e.registry.IGrammarRegistryManager;
+import org.eclipse.tm4e.registry.ITMScope;
 import org.eclipse.tm4e.registry.TMEclipseRegistryPlugin;
 import org.eclipse.tm4e.ui.TMUIPlugin;
 import org.eclipse.tm4e.ui.internal.TMUIMessages;
@@ -69,6 +71,7 @@ public final class GrammarPreferencePage extends AbstractPreferencePage {
 	private GrammarInfoWidget grammarInfoWidget = lateNonNull();
 	private TableWithControlsWidget<IContentType> contentTypesWidget = lateNonNull();
 	private ThemeAssociationsWidget themeAssociationsWidget = lateNonNull();
+	private TableWithControlsWidget<ITMScope> injectionsWidget = lateNonNull();
 
 	private TMViewer grammarPreview = lateNonNull();
 
@@ -194,8 +197,8 @@ public final class GrammarPreferencePage extends AbstractPreferencePage {
 
 		createGeneralTab(folder);
 		createContentTypeTab(folder);
-		createThemeTab(folder);
 		createInjectionTab(folder);
+		createThemeTab(folder);
 	}
 
 	/**
@@ -250,7 +253,47 @@ public final class GrammarPreferencePage extends AbstractPreferencePage {
 				};
 			}
 		};
-		contentTypesWidget.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		contentTypesWidget.setLayoutData(new GridData(GridData.FILL_BOTH));
+
+		tab.setControl(parent);
+	}
+
+	/**
+	 * Create "Injection" tab
+	 */
+	private void createInjectionTab(final TabFolder folder) {
+		final var tab = new TabItem(folder, SWT.NONE);
+		tab.setText(TMUIMessages.GrammarPreferencePage_tab_injection_text);
+
+		final var parent = new Composite(folder, SWT.NONE);
+		parent.setLayout(new GridLayout());
+		parent.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+
+		injectionsWidget = new TableWithControlsWidget<>(parent, TMUIMessages.GrammarInjectionsWidget_description, false) {
+
+			@Override
+			protected TableWidget<ITMScope> createTable(final Composite parent) {
+				return new TableWidget<>(parent, false) {
+					{
+						getTable().setHeaderVisible(false);
+					}
+
+					@Override
+					protected void createColumns() {
+						createColumn("", 100, 0);
+					}
+
+					@Override
+					protected @Nullable String getColumnText(final ITMScope injection, final int columnIndex) {
+						return switch (columnIndex) {
+							case 0 -> injection.getQualifiedName();
+							default -> null;
+						};
+					}
+				};
+			}
+		};
+		injectionsWidget.setLayoutData(new GridData(GridData.FILL_BOTH));
 
 		tab.setControl(parent);
 	}
@@ -286,26 +329,11 @@ public final class GrammarPreferencePage extends AbstractPreferencePage {
 		}
 	}
 
-	/**
-	 * Create "Injection" tab
-	 */
-	private void createInjectionTab(final TabFolder folder) {
-		final var tab = new TabItem(folder, SWT.NONE);
-		tab.setText(TMUIMessages.GrammarPreferencePage_tab_injection_text);
-
-		final var parent = new Composite(folder, SWT.NONE);
-		parent.setLayout(new GridLayout());
-		parent.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-
-		// TODO: manage UI injection
-
-		tab.setControl(parent);
-	}
-
 	private void selectGrammar(final IGrammarDefinition definition) {
 		fillGeneralTab(definition);
 		fillContentTypeTab(definition);
 		fillThemeTab(definition);
+		fillInjectionsTab(definition);
 		preview(definition, themeAssociationsWidget.getTable().getFirstSelectedElement());
 	}
 
@@ -317,6 +345,15 @@ public final class GrammarPreferencePage extends AbstractPreferencePage {
 	private void fillContentTypeTab(final IGrammarDefinition definition) {
 		// Load the content type binding for the given grammar
 		contentTypesWidget.getTable().setInput(grammarManager.getContentTypesForScope(definition.getScope()));
+	}
+
+	private void fillInjectionsTab(final IGrammarDefinition definition) {
+		final var contributedInjections = grammarManager.getInjections(definition.getScope());
+		if (contributedInjections != null) {
+			injectionsWidget.getTable().setInput(contributedInjections.stream().map(ITMScope::parse).toArray());
+		} else {
+		   injectionsWidget.getTable().setInput(List.of());
+		}
 	}
 
 	private void fillThemeTab(final IGrammarDefinition definition) {

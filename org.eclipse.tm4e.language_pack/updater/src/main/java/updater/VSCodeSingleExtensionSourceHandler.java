@@ -29,9 +29,11 @@ import javax.imageio.ImageIO;
 
 import updater.Updater.Config;
 import updater.Updater.State.ExtensionState;
+import updater.Updater.State.InlineGrammarState;
 import updater.Updater.State.LanguageState;
 import updater.Updater.VsCodeExtensionPackageJson;
 import updater.Updater.VsCodeExtensionPackageJson.Contributions;
+import updater.utils.Strings;
 
 /**
  * @author Sebastian Thomschke
@@ -140,7 +142,8 @@ class VSCodeSingleExtensionSourceHandler extends AbstractSourceHandler<Config.VS
 				continue;
 			}
 
-			final var ctx = new DownloadContext(langId, langOverrides.update, targetSyntaxDir);
+			final var landIdSanitized = Strings.sanitizeFilename(langId);
+			final var ctx = new DownloadContext(landIdSanitized, langOverrides.update, targetSyntaxDir);
 			final var grammarFile = downloadTextMateGrammarFile(ctx, grammarPath);
 
 			final var langcfgPath = !isBlank(langOverrides.langcfg) //
@@ -151,13 +154,14 @@ class VSCodeSingleExtensionSourceHandler extends AbstractSourceHandler<Config.VS
 			downloadExampleFile(ctx, langOverrides.example);
 
 			if (langCfg.icon() != null && !isBlank(langCfg.icon().light())) {
-				final var targetIcon = ctx.targetDir().resolve(langId + ".png");
+				final var targetIcon = ctx.targetDir().resolve(landIdSanitized + ".png");
 				if (ctx.updateExistingFiles() || !Files.exists(targetIcon)) {
 					logInfo("Copying image [" + langCfg.icon().light() + "] -> [" + targetIcon.getFileName() + "]...", false);
 					try {
 						final var sourceIcon = ImageIO.read(sourceExtensionDir.resolve(langCfg.icon().light()).toFile());
 						ImageIO.write(resizeImage(sourceIcon, 16, 16), "png", targetIcon.toFile());
-						ImageIO.write(resizeImage(sourceIcon, 32, 32), "png", ctx.targetDir().resolve(langId + "@2x.png").toFile());
+						ImageIO.write(resizeImage(sourceIcon, 32, 32), "png",
+								ctx.targetDir().resolve(landIdSanitized + "@2x.png").toFile());
 						logInfo(" OK", true, false);
 					} catch (final Exception ex) {
 						logInfo(" ERROR [" + ex.getMessage().replace("\n", " | ") + "]", true, false);
@@ -172,6 +176,9 @@ class VSCodeSingleExtensionSourceHandler extends AbstractSourceHandler<Config.VS
 			langState.scopeName = !isBlank(langOverrides.scopeName) //
 					? langOverrides.scopeName //
 					: grammarCfg == null ? null : grammarCfg.scopeName();
+			langState.injectTo = !isEmpty(langOverrides.injectTo) //
+					? new TreeSet<>(langOverrides.injectTo) //
+					: grammarCfg == null || grammarCfg.injectTo() == null ? null : new TreeSet<>(grammarCfg.injectTo());
 			langState.fileExtensions = !isEmpty(langOverrides.fileExtensions) //
 					? new TreeSet<>(langOverrides.fileExtensions) //
 					: langCfg.fileExtensions() == null ? null : new TreeSet<>(langCfg.fileExtensions());
@@ -196,9 +203,12 @@ class VSCodeSingleExtensionSourceHandler extends AbstractSourceHandler<Config.VS
 			}
 			final var grammarCfg = inlineGrammar.getValue();
 			final var grammarPath = isBlank(grammarOverrides.grammar) ? grammarCfg.path() : grammarOverrides.grammar;
-			final var ctx = new DownloadContext(scopeName, grammarOverrides.update, targetSyntaxDir);
+			final var ctx = new DownloadContext(Strings.sanitizeFilename(scopeName), grammarOverrides.update, targetSyntaxDir);
 			downloadTextMateGrammarFile(ctx, grammarPath);
-			state.inlineGrammarScopeNames.add(scopeName);
+			final var inlineGrammarSate = new InlineGrammarState();
+			inlineGrammarSate.scopeName = scopeName;
+			inlineGrammarSate.injectTo = grammarCfg.injectTo() == null ? null : new TreeSet<>(grammarCfg.injectTo());
+			state.inlineGrammars.add(inlineGrammarSate);
 		}
 	}
 

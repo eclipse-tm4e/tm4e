@@ -1,3 +1,4 @@
+content-base-type: org.eclipse.tm4e.language_pack.basetype
 content-type-prefix: org.eclipse.tm4e.language_pack
 content-type-priority: low # low|normal|high
 
@@ -28,6 +29,8 @@ sources:
   #         file-extensions: []              # optional
   #         file-names:      []              # optional
   #         file-patterns:   []              # optional
+  #         content-base-type: <name> # optional
+  #         content-describer: <ITextContentDescriber class name> # optional
   #     inline-grammars: # optional
   #       <scope-name>:
   #         grammar: <filepath_in_repo>      # REQUIRED
@@ -40,6 +43,7 @@ sources:
   #       repo: <repo-name>             # REQUIRED
   #       path: <folderpath_in_repo>    # optional
   #       ref:  <branch_name>|<tag>     # optional
+  #     build: []                       # optional. a list of commands to be executed in the checked out directory
   #     license-download: <true|false>  # optional. defaults to true
   #     languages:  # optional
   #       <language-id>:       # existing id as defined in package.json to override values
@@ -53,6 +57,8 @@ sources:
   #         file-extensions: []              # optional
   #         file-names:      []              # optional
   #         file-patterns:   []              # optional
+  #         content-base-type: <name> # optional
+  #         content-describer: <ITextContentDescriber class name> # optional
   #     inline-grammars: # optional
   #       <scope-name>:   # existing scope-name as defined in package.json to override values
   #         ignored: <reason>                # optional. if set, this language is ignored
@@ -83,6 +89,8 @@ sources:
   #             file-extensions: []              # optional
   #             file-names:      []              # optional
   #             file-patterns:   []              # optional
+  #             content-base-type: <name> # optional
+  #             content-describer: <ITextContentDescriber class name> # optional
   #         inline-grammars: # optional
   #           <scope-name>:   # existing scope-name as defined in package.json to override values
   #             ignored: <reason>                # optional. if set, this language is ignored

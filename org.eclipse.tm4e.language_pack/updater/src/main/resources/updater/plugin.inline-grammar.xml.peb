@@ -1,0 +1,12 @@
+
+<!-- ======================================== -->
+<!-- {{ ext_id }}: Inline Grammars -->
+<!-- ======================================== -->
+<extension point="org.eclipse.tm4e.registry.grammars">
+{% for g in inlineGrammars %}
+  <grammar scopeName="{{ g.scope_name }}" path="syntaxes/{{ ext_id }}/{{ g.grammar_filename }}" />
+{% if g.inject_to is not empty %}{% for i in g.inject_to %}
+  <injection scopeName="{{ g.scope_name }}" injectTo="{{ i }}" />
+{% endfor %}{% endif %}
+{% endfor %}
+</extension>

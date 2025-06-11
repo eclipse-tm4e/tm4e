@@ -14,6 +14,8 @@ package updater.utils;
 import org.yaml.snakeyaml.DumperOptions;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.core.JsonFactory;
+import com.fasterxml.jackson.core.StreamReadFeature;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
@@ -26,7 +28,9 @@ import com.fasterxml.jackson.dataformat.yaml.YAMLGenerator;
  */
 public abstract class ObjectMappers {
 
-	public static final ObjectMapper JSON = new ObjectMapper() //
+	public static final ObjectMapper JSON = new ObjectMapper( //
+			JsonFactory.builder().enable(StreamReadFeature.INCLUDE_SOURCE_IN_LOCATION).build() //
+	) //
 			.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 
 	public static final ObjectMapper YAML;
@@ -36,6 +40,8 @@ public abstract class ObjectMappers {
 					{
 						// :-( https://github.com/FasterXML/jackson-dataformats-text/issues/4
 						setDefaultFlowStyle(DumperOptions.FlowStyle.AUTO);
+
+						setLineBreak(DumperOptions.LineBreak.getPlatformLineBreak());
 					}
 				}) //
 				.enable(YAMLGenerator.Feature.MINIMIZE_QUOTES) //

@@ -96,7 +96,7 @@ extensions:
         - .cu
         - .cuh
     inline-grammars:
-    - source.c.platform
+    - scope-name: source.c.platform
   csharp:
     github:
       repo: microsoft/vscode
@@ -315,7 +315,7 @@ extensions:
         - .xht
         - .xhtml
     inline-grammars:
-    - text.html.basic
+    - scope-name: text.html.basic
   ini:
     github:
       repo: microsoft/vscode
@@ -369,7 +369,7 @@ extensions:
         file-extensions:
         - .jsx
     inline-grammars:
-    - source.js.regexp
+    - scope-name: source.js.regexp
   json:
     github:
       repo: microsoft/vscode
@@ -567,9 +567,15 @@ extensions:
         label: Markdown Math
         scope-name: text.html.markdown.math
     inline-grammars:
-    - markdown.math.block
-    - markdown.math.codeblock
-    - markdown.math.inline
+    - scope-name: markdown.math.block
+      inject-to:
+      - text.html.markdown
+    - scope-name: markdown.math.codeblock
+      inject-to:
+      - text.html.markdown
+    - scope-name: markdown.math.inline
+      inject-to:
+      - text.html.markdown
   objective-c:
     github:
       repo: microsoft/vscode
@@ -693,7 +699,7 @@ extensions:
         - SConscript
         - SConstruct
     inline-grammars:
-    - source.regexp.python
+    - scope-name: source.regexp.python
   r:
     github:
       repo: microsoft/vscode
@@ -809,7 +815,7 @@ extensions:
         file-extensions:
         - .scss
     inline-grammars:
-    - source.sassdoc
+    - scope-name: source.sassdoc
   search-result:
     github:
       repo: microsoft/vscode
@@ -938,8 +944,14 @@ extensions:
         file-extensions:
         - .tsx
     inline-grammars:
-    - documentation.injection.js.jsx
-    - documentation.injection.ts
+    - scope-name: documentation.injection.js.jsx
+      inject-to:
+      - source.js
+      - source.js.jsx
+    - scope-name: documentation.injection.ts
+      inject-to:
+      - source.ts
+      - source.tsx
   vb:
     github:
       repo: microsoft/vscode

@@ -691,16 +691,16 @@
   <!-- json/snippets: Code Snippets -->
   <!-- ======================================== -->
   <extension point="org.eclipse.core.contenttype.contentTypes">
-    <content-type id="org.eclipse.tm4e.language_pack.samples" name="Code Snippets" base-type="org.eclipse.tm4e.language_pack.basetype" priority="low"
+    <content-type id="org.eclipse.tm4e.language_pack.snippets" name="Code Snippets" base-type="org.eclipse.tm4e.language_pack.basetype" priority="low"
                   file-extensions="code-snippets" file-patterns="**/User/profiles/*/snippets/*.json,**/User/snippets/*.json" />
   </extension>
   <extension point="org.eclipse.tm4e.registry.grammars">
-    <grammar scopeName="source.json.comments.samples" path="syntaxes/json/snippets.tmLanguage.json" />
-    <scopeNameContentTypeBinding scopeName="source.json.comments.samples" contentTypeId="org.eclipse.tm4e.language_pack.samples" />
+    <grammar scopeName="source.json.comments.snippets" path="syntaxes/json/snippets.tmLanguage.json" />
+    <scopeNameContentTypeBinding scopeName="source.json.comments.snippets" contentTypeId="org.eclipse.tm4e.language_pack.snippets" />
   </extension>
 
   <extension point="org.eclipse.tm4e.languageconfiguration.languageConfigurations">
-    <languageConfiguration contentTypeId="org.eclipse.tm4e.language_pack.samples" path="syntaxes/json/snippets.language-configuration.json" />
+    <languageConfiguration contentTypeId="org.eclipse.tm4e.language_pack.snippets" path="syntaxes/json/snippets.language-configuration.json" />
   </extension>
 
   <!-- ======================================== -->
@@ -920,8 +920,11 @@
   <!-- ======================================== -->
   <extension point="org.eclipse.tm4e.registry.grammars">
     <grammar scopeName="markdown.math.block" path="syntaxes/markdown-math/markdown.math.block.tmLanguage.json" />
+    <injection scopeName="markdown.math.block" injectTo="text.html.markdown" />
     <grammar scopeName="markdown.math.codeblock" path="syntaxes/markdown-math/markdown.math.codeblock.tmLanguage.json" />
+    <injection scopeName="markdown.math.codeblock" injectTo="text.html.markdown" />
     <grammar scopeName="markdown.math.inline" path="syntaxes/markdown-math/markdown.math.inline.tmLanguage.json" />
+    <injection scopeName="markdown.math.inline" injectTo="text.html.markdown" />
   </extension>
 
   <!-- ======================================== -->
@@ -1367,7 +1370,11 @@
   <!-- ======================================== -->
   <extension point="org.eclipse.tm4e.registry.grammars">
     <grammar scopeName="documentation.injection.js.jsx" path="syntaxes/typescript/documentation.injection.js.jsx.tmLanguage.json" />
+    <injection scopeName="documentation.injection.js.jsx" injectTo="source.js" />
+    <injection scopeName="documentation.injection.js.jsx" injectTo="source.js.jsx" />
     <grammar scopeName="documentation.injection.ts" path="syntaxes/typescript/documentation.injection.ts.tmLanguage.json" />
+    <injection scopeName="documentation.injection.ts" injectTo="source.ts" />
+    <injection scopeName="documentation.injection.ts" injectTo="source.tsx" />
   </extension>
 
   <!-- ======================================== -->

@@ -1,0 +1,5 @@
+<tr>
+  <td>{{ label }}{% if icon_filename %} <img src="syntaxes/{{ ext_id }}/{{ icon_filename }}" width=16/>{% endif %}</td>
+  <td>{{ file_associations | raw }}</td>
+  <td><a href="https://github.com/{{ repo_name }}/tree/{{ commit }}/{{ repo_path }}">{{ repo_ref }}@{{ repo_name }}</a>{{ upstream_url | raw }}</td>
+</tr>

@@ -22,7 +22,9 @@ import java.util.TreeSet;
 import updater.Updater.Config;
 import updater.Updater.Config.InlineGrammar;
 import updater.Updater.State.ExtensionState;
+import updater.Updater.State.InlineGrammarState;
 import updater.Updater.State.LanguageState;
+import updater.utils.Strings;
 
 /**
  * @author Sebastian Thomschke
@@ -55,7 +57,7 @@ class CustomSourceHandler extends AbstractSourceHandler<Config.CustomSource> {
 			assertArgNotEmpty("sources/" + sourceId + "/languages/" + langId + "/scope-name", langCfg.scopeName);
 			assertArgNotEmpty("sources/" + sourceId + "/languages/" + langId + "/grammar", langCfg.grammar);
 
-			final var ctx = new DownloadContext(langId, langCfg.update, targetSyntaxDir);
+			final var ctx = new DownloadContext(Strings.sanitizeFilename(langId), langCfg.update, targetSyntaxDir);
 			final var grammarFile = downloadTextMateGrammarFile(ctx, langCfg.grammar);
 			downloadLangConfigurationJSONFile(ctx, langCfg.langcfg);
 			downloadExampleFile(ctx, langCfg.example);
@@ -63,6 +65,7 @@ class CustomSourceHandler extends AbstractSourceHandler<Config.CustomSource> {
 			final var langState = new LanguageState();
 			langState.label = langCfg.label;
 			langState.scopeName = langCfg.scopeName;
+			langState.injectTo = langCfg.injectTo == null ? null : new TreeSet<>(langCfg.injectTo);
 			langState.fileExtensions = langCfg.fileExtensions == null ? null : new TreeSet<>(langCfg.fileExtensions);
 			langState.fileNames = langCfg.fileNames == null ? null : new TreeSet<>(langCfg.fileNames);
 			langState.filePatterns = langCfg.filePatterns == null ? null : new TreeSet<>(langCfg.filePatterns);
@@ -74,9 +77,12 @@ class CustomSourceHandler extends AbstractSourceHandler<Config.CustomSource> {
 			final var scopeName = inlineGrammar.getKey();
 			final var grammarCfg = inlineGrammar.getValue();
 			assertArgNotEmpty("sources/" + sourceId + "/inline-grammars/" + scopeName + "/grammar", grammarCfg.grammar);
-			final var ctx = new DownloadContext(scopeName, grammarCfg.update, targetSyntaxDir);
+			final var ctx = new DownloadContext(Strings.sanitizeFilename(scopeName), grammarCfg.update, targetSyntaxDir);
 			downloadTextMateGrammarFile(ctx, grammarCfg.grammar);
-			state.inlineGrammarScopeNames.add(scopeName);
+			final var inlineGrammarSate = new InlineGrammarState();
+			inlineGrammarSate.scopeName = scopeName;
+			inlineGrammarSate.injectTo = grammarCfg.injectTo == null ? null : new TreeSet<>(grammarCfg.injectTo);
+			state.inlineGrammars.add(inlineGrammarSate);
 		}
 	}
 }

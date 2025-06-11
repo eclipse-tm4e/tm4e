@@ -1,0 +1,46 @@
+
+<!-- ======================================== -->
+<!-- {{ ext_id }}/{{ lang_id }}: {{ label }} -->
+<!-- ======================================== -->
+<extension point="org.eclipse.core.contenttype.contentTypes">
+{% if file_associations is empty and content_type_describer is empty %}
+  <content-type id="{{ content_type_id }}" name="{{ label }}" base-type="{{ content_base_type }}" priority="{{ content_type_priority }}" />
+{% elseif content_type_describer is empty %}
+  <content-type id="{{ content_type_id }}" name="{{ label }}" base-type="{{ content_base_type }}" priority="{{ content_type_priority }}"
+                {{ file_associations | raw }} />
+{% elseif file_associations is empty %}
+  <content-type id="{{ content_type_id }}" name="{{ label }}" base-type="{{ content_base_type }}" priority="{{ content_type_priority }}">
+    <describer class="{{ content_type_describer }}" />
+  </content-type>
+{% else %}
+  <content-type id="{{ content_type_id }}" name="{{ label }}" base-type="{{ content_base_type }}" priority="{{ content_type_priority }}"
+                {{ file_associations | raw }}>
+    <describer class="{{ content_type_describer }}" />
+  </content-type>
+{% endif %}
+</extension>
+<extension point="org.eclipse.tm4e.registry.grammars">
+  <grammar scopeName="{{ scope_name }}" path="syntaxes/{{ ext_id }}/{{ grammar_filename }}" />
+  <scopeNameContentTypeBinding scopeName="{{ scope_name }}" contentTypeId="{{ content_type_id }}" />
+{% if inject_to is not empty %}{% for i in inject_to %}
+  <injection scopeName="{{ scope_name }}" injectTo="{{ i }}" />
+{% endfor %}{% endif %}
+</extension>
+{% if language_configuration_filename %}
+
+<extension point="org.eclipse.tm4e.languageconfiguration.languageConfigurations">
+  <languageConfiguration contentTypeId="{{ content_type_id }}" path="syntaxes/{{ ext_id }}/{{ language_configuration_filename }}" />
+</extension>
+{% endif %}
+{% if icon_filename %}
+
+<extension point="org.eclipse.ui.genericeditor.icons">
+  <icon contentType="{{ content_type_id }}" icon="syntaxes/{{ ext_id }}/{{ icon_filename }}"/>
+</extension>
+{% endif %}
+{% if example_filename %}
+
+<extension point="org.eclipse.tm4e.ui.samples">
+  <sample name="{{ label }} Example" path="syntaxes/{{ ext_id }}/{{ example_filename }}" scopeName="{{ scope_name }}" />
+</extension>
+{% endif %}

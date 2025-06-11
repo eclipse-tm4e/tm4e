@@ -80,6 +80,13 @@ public abstract class Sys {
 		logInfo("OK -> " + Files.size(targetFile) + " bytes", true, false);
 	}
 
+	public static List<String> execSilent(final Path workDir, final String cmdWithArgs) {
+		final var args = Strings.splitLikeShell(cmdWithArgs);
+		if (args.size() == 1)
+			return execSilent(workDir, args.get(0), new String[0]);
+		return execSilent(workDir, args.get(0), args.subList(1, args.size()).toArray(String[]::new));
+	}
+
 	/**
 	 * @return null if execution failed, otherwise the command's stdout
 	 */
@@ -111,6 +118,15 @@ public abstract class Sys {
 		} catch (final Exception ex) {
 			return null;
 		}
+	}
+
+	public static void execVerbose(final Path workDir, final String cmdWithArgs) throws IOException, InterruptedException {
+		final var args = Strings.splitLikeShell(cmdWithArgs);
+		if (args.size() == 1) {
+			execVerbose(workDir, args.get(0), new String[0]);
+			return;
+		}
+		execVerbose(workDir, args.get(0), args.subList(1, args.size()).toArray(String[]::new));
 	}
 
 	public static void execVerbose(final Path workDir, final String cmd, final String... args) throws IOException, InterruptedException {
@@ -149,7 +165,7 @@ public abstract class Sys {
 	}
 
 	public static Optional<Path> findFirstFile(final Path path, final Predicate<String> nameFilter) throws IOException {
-		try (Stream<Path> files = Files.walk(path)) {
+		try (Stream<Path> files = Files.list(path)) {
 			return files //
 					.filter(Files::isRegularFile) //
 					.filter(file -> nameFilter.test(file.getFileName().toString())).findFirst();

@@ -59,7 +59,7 @@ jobs:
 
 
     - name: "Install: JDK ${{ env.JAVA_VERSION }} ☕"
-      uses: actions/setup-java@v4  # https://github.com/actions/setup-java
+      uses: actions/setup-java@v5  # https://github.com/actions/setup-java
       with:
         distribution: temurin
         java-version: ${{ env.JAVA_VERSION }}

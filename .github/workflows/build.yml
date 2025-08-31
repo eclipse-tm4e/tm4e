@@ -129,15 +129,18 @@ jobs:
         sudo apt-get install --no-install-recommends -y xdg-utils
 
 
-    - name: "Set Java Version"
-      run: echo "JAVA_VERSION=$([[ '${{ matrix.target-platform }}' == 'oldest' ]] && echo 17 || echo 21)" >> $GITHUB_ENV
-
-
-    - name: "Install: JDK ${{ env.JAVA_VERSION }} ☕"
+    - name: "Install: JDK 17 for Compilation ☕"
       uses: actions/setup-java@v5  # https://github.com/actions/setup-java
       with:
         distribution: temurin
-        java-version: ${{ env.JAVA_VERSION }}
+        java-version: 17
+
+
+    - name: "Install: JDK 21 for Maven/Tycho ☕"
+      uses: actions/setup-java@v5  # https://github.com/actions/setup-java
+      with:
+        distribution: temurin
+        java-version: 21
 
 
     - name: "Cache: Local Maven Repository"

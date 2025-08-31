@@ -9,7 +9,7 @@ pipeline {
 	}
 
 	tools {
-		jdk 'temurin-jdk17-latest'
+		jdk 'temurin-jdk21-latest'
 	}
 
 	stages {
@@ -26,6 +26,33 @@ pipeline {
 			}
 		}
 
+		stage('Setup Maven Toolchains') {
+			steps {
+				script { try {
+					def jdk17 = tool name: 'temurin-jdk17-latest', type: 'jdk'
+
+					// Generate toolchains.xml for Maven Toolchains plugin
+					writeFile file: "/tmp/toolchains.xml", text: """
+<toolchains>
+	<toolchain>
+		<type>jdk</type>
+		<provides>
+			<version>17</version>
+			<vendor>temurin</vendor>
+		</provides>
+		<configuration>
+			<jdkHome>${jdk17}</jdkHome>
+		</configuration>
+	</toolchain>
+</toolchains>
+""".trim()
+				} catch (e) {
+					echo "Failed to setup toolchains: ${e}"
+					error("Toolchain setup failed.")
+				} }
+			}
+		}
+
 		stage('Build') {
 			steps {
 				wrap([$class: 'Xvnc', useXauthority: true]) {
@@ -33,6 +60,7 @@ pipeline {
 						if (env.BRANCH_NAME == 'main') {
 							withCredentials([string(credentialsId: 'gpg-passphrase', variable: 'KEYRING_PASSPHRASE')]) {
 								sh '''./mvnw clean deploy -B \
+									-t /tmp/toolchains.xml \
 									-Dmaven.test.failure.ignore=true \
 									-Dsurefire.rerunFailingTestsCount=3 \
 									-Psign -Dgpg.passphrase="${KEYRING_PASSPHRASE}"
@@ -40,6 +68,7 @@ pipeline {
 							}
 						} else {
 							sh '''./mvnw clean verify -B \
+								-t /tmp/toolchains.xml \
 								-Dmaven.test.failure.ignore=true \
 								-Dsurefire.rerunFailingTestsCount=3
 							'''

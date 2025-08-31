@@ -352,7 +352,7 @@ public final class GrammarPreferencePage extends AbstractPreferencePage {
 		if (contributedInjections != null) {
 			injectionsWidget.getTable().setInput(contributedInjections.stream().map(ITMScope::parse).toArray());
 		} else {
-		   injectionsWidget.getTable().setInput(List.of());
+			injectionsWidget.getTable().setInput(List.of());
 		}
 	}
 
@@ -412,7 +412,7 @@ public final class GrammarPreferencePage extends AbstractPreferencePage {
 	protected void performDefaults() {
 		grammarManager = TMEclipseRegistryPlugin.getGrammarRegistryManager().newEditSession();
 		themeManager = ThemeManager.getInstance().newEditSession();
-		grammarsTable.setInput(themeManager);
+		grammarsTable.setInput(grammarManager);
 	}
 
 	@Override

@@ -17,6 +17,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.Reader;
 import java.net.URI;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -137,7 +138,7 @@ abstract class AbstractGrammarRegistryManager implements IGrammarRegistryManager
 
 					@Override
 					public Reader getReader() throws IOException {
-						return new InputStreamReader(definition_.getInputStream());
+						return new InputStreamReader(definition_.getInputStream(), StandardCharsets.UTF_8);
 					}
 
 					@Override
@@ -161,6 +162,7 @@ abstract class AbstractGrammarRegistryManager implements IGrammarRegistryManager
 			while (contentType != null) {
 				final ContentTypeToScopeBinding binding = contentTypeToScopeBindings.get(contentType);
 				if (binding == null) {
+					// check parent content type
 					contentType = contentType.getBaseType();
 					continue;
 				}
@@ -174,6 +176,9 @@ abstract class AbstractGrammarRegistryManager implements IGrammarRegistryManager
 				grammar = getGrammarForScope(binding.scope.getName());
 				if (grammar != null)
 					return grammar;
+
+				// check parent content type
+				contentType = contentType.getBaseType();
 			}
 		}
 		return null;

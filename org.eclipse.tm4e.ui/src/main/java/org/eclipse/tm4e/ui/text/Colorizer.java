@@ -77,8 +77,9 @@ class Colorizer {
 					colorize(region, docModel);
 				} catch (final BadLocationException ex) {
 					// This is an expected state, only log when tracing is enabled.
-					if (TMUIPlugin.isLogTraceEnabled())
+					if (TMUIPlugin.isLogTraceEnabled()) {
 						TMUIPlugin.logError(ex);
+					}
 				}
 			}
 		}
@@ -92,9 +93,10 @@ class Colorizer {
 		final int toLineIndex = doc.getLineOfOffset(damageRegion.getOffset() + damageRegion.getLength());
 
 		// Refresh the UI Presentation
-		if (TMUIPlugin.isLogTraceEnabled())
+		if (TMUIPlugin.isLogTraceEnabled()) {
 			TMUIPlugin.logTrace("Colorize lines from " + (fromLineIndex + 1) + " to " + (toLineIndex + 1));
-		final var presentation = new TextPresentation(damageRegion, 1000);
+		}
+		final var presentation = new TextPresentation(damageRegion, 1_000);
 		Exception error = null;
 
 		final var theme = this.theme;
@@ -110,11 +112,13 @@ class Colorizer {
 			for (int lineIndex = fromLineIndex; lineIndex <= toLineIndex; lineIndex++) {
 				tokens = tmModel.getLineTokens(lineIndex);
 				if (tokens == null) {
-					if (TMUIPlugin.isLogTraceEnabled())
+					if (TMUIPlugin.isLogTraceEnabled()) {
 						TMUIPlugin.logTrace("TextMate tokens not yet available for line " + lineIndex);
+					}
 					continue;
 				}
 				final int startLineOffset = doc.getLineOffset(lineIndex);
+				final int lineLength = doc.getLineLength(lineIndex);
 				int nextTokenIndex = 0;
 				for (final TMToken currentToken : tokens) {
 					nextTokenIndex++;
@@ -134,7 +138,7 @@ class Colorizer {
 							tokenStartIndex = damageRegion.getOffset() - startLineOffset;
 							final IToken token = theme == null ? ITokenProvider.DEFAULT_TOKEN : theme.getToken(currentToken.type);
 							lastAttribute = getTokenTextAttribute(token);
-							length += getTokenLength(tokenStartIndex, nextToken, lineIndex, doc);
+							length += getTokenLength(tokenStartIndex, nextToken, lineLength);
 							firstToken = false;
 							// ignore it
 							continue;
@@ -150,7 +154,7 @@ class Colorizer {
 					final IToken token = theme == null ? ITokenProvider.DEFAULT_TOKEN : theme.getToken(currentToken.type);
 					final TextAttribute attribute = getTokenTextAttribute(token);
 					if (lastAttribute.equals(attribute)) {
-						length += getTokenLength(tokenStartIndex, nextToken, lineIndex, doc);
+						length += getTokenLength(tokenStartIndex, nextToken, lineLength);
 						firstToken = false;
 					} else {
 						if (!firstToken) {
@@ -160,7 +164,7 @@ class Colorizer {
 						lastToken = token;
 						lastAttribute = attribute;
 						lastStart = tokenStartIndex + startLineOffset;
-						length = getTokenLength(tokenStartIndex, nextToken, lineIndex, doc);
+						length = getTokenLength(tokenStartIndex, nextToken, lineLength);
 					}
 				}
 			}
@@ -173,8 +177,9 @@ class Colorizer {
 			// These exceptions can be thrown if there is a delay running the tokenizer thread
 			// and the tokens become out of sync with the document line data.
 			// As this is an expected state, only log them if tracing is enabled.
-			if (TMUIPlugin.isLogTraceEnabled())
+			if (TMUIPlugin.isLogTraceEnabled()) {
 				TMUIPlugin.logError(ex);
+			}
 		} catch (final Exception ex) {
 			error = ex;
 			TMUIPlugin.logError(ex);
@@ -210,8 +215,8 @@ class Colorizer {
 	 * Initialize foreground, background color, current line highlight from the current theme.
 	 */
 	private void applyThemeToViewer() {
-		this.isViewerStyleColorsInitialized = false;
-		this.isViewerHighlightColorInitialized = false;
+		isViewerStyleColorsInitialized = false;
+		isViewerHighlightColorInitialized = false;
 		applyThemeToViewerIfNeeded();
 	}
 
@@ -219,7 +224,7 @@ class Colorizer {
 	 * Initialize foreground, background color, current line highlight from the current theme if needed.
 	 */
 	private void applyThemeToViewerIfNeeded() {
-		if (!isViewerStyleColorsInitialized && this.theme instanceof final ITheme theTheme) {
+		if (!isViewerStyleColorsInitialized && theme instanceof final ITheme theTheme) {
 			final StyledText styledText = viewer.getTextWidget();
 			theTheme.initializeViewerColors(styledText);
 			isViewerStyleColorsInitialized = true;
@@ -269,10 +274,9 @@ class Colorizer {
 		return token.startIndex + startLineOffset < damage.getOffset();
 	}
 
-	private int getTokenLength(final int tokenStartIndex, final @Nullable TMToken nextToken, final int line, final IDocument doc)
-			throws BadLocationException {
+	private int getTokenLength(final int tokenStartIndex, final @Nullable TMToken nextToken, final int lineLength) {
 		return nextToken == null
-				? doc.getLineLength(line) - tokenStartIndex
+				? lineLength - tokenStartIndex
 				: nextToken.startIndex - tokenStartIndex;
 	}
 

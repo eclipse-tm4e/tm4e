@@ -44,6 +44,7 @@ import org.eclipse.jface.text.presentation.IPresentationRepairer;
 import org.eclipse.jface.text.rules.IToken;
 import org.eclipse.jface.text.source.SourceViewer;
 import org.eclipse.swt.custom.StyleRange;
+import org.eclipse.swt.custom.StyledText;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.tm4e.core.TMException;
 import org.eclipse.tm4e.core.grammar.IGrammar;
@@ -110,7 +111,7 @@ public class TMPresentationReconciler implements IPresentationReconciler {
 		final var colorizer = TMPresentationReconciler.this.colorizer;
 		if (colorizer != null) {
 			final Control control = colorizer.getTextViewer().getTextWidget();
-			if (control != null) {
+			if (control != null && !control.isDisposed()) {
 				control.getDisplay().asyncExec(() -> colorizer.colorize(event));
 			}
 		}
@@ -159,6 +160,8 @@ public class TMPresentationReconciler implements IPresentationReconciler {
 	}
 
 	private final class TextViewerListener implements ITextInputListener, ITextListener {
+		private static final Region EMPTY_REGION = new Region(0, 0);
+
 		@Override
 		public void inputDocumentAboutToBeChanged(final @Nullable IDocument oldDoc, final @Nullable IDocument newDoc) {
 			if (oldDoc == null)
@@ -248,12 +251,15 @@ public class TMPresentationReconciler implements IPresentationReconciler {
 				if (diff == 0 || event.getOffset() <= 0)
 					return;
 
-				final StyleRange range = viewer.getTextWidget().getStyleRangeAtOffset(event.getOffset() - 1);
+				final StyledText widget = viewer.getTextWidget();
+				if (widget.isDisposed())
+					return;
+				final StyleRange range = widget.getStyleRangeAtOffset(event.getOffset() - 1);
 				if (range == null)
 					return;
 
 				range.length = Math.max(0, range.length + diff);
-				viewer.getTextWidget().setStyleRange(range);
+				widget.setStyleRange(range);
 				return;
 			}
 
@@ -263,6 +269,9 @@ public class TMPresentationReconciler implements IPresentationReconciler {
 				return;
 
 			final IRegion region = computeRegionToRedraw(event, doc);
+			if (region.getLength() == 0)
+				return;
+
 			final var colorizer = TMPresentationReconciler.this.colorizer;
 			if (colorizer != null) {
 				// case where there is grammar & theme -> update text presentation with the grammar tokens
@@ -292,11 +301,17 @@ public class TMPresentationReconciler implements IPresentationReconciler {
 		}
 
 		IRegion computeRegionToRedraw(final TextEvent event, final IDocument doc) {
-			final IRegion region = event.getOffset() == 0 && event.getLength() == 0 && event.getText() == null
-					? new Region(0, doc.getLength()) // redraw state change, damage the whole document
-					: getRegionOfTextEvent(event);
+			// Fast path: check for redraw state change first
+			if (event.getOffset() == 0 && event.getLength() == 0 && event.getText() == null) {
+				// redraw state change, damage the whole document
+				final int docLength = doc.getLength();
+				return docLength > 0 ? new Region(0, docLength) : EMPTY_REGION;
+			}
+
+			// Normal text event processing
+			final IRegion region = getRegionOfTextEvent(event);
 			return region == null || region.getLength() == 0
-					? new Region(0, 0)
+					? EMPTY_REGION
 					: region;
 		}
 
@@ -354,8 +369,9 @@ public class TMPresentationReconciler implements IPresentationReconciler {
 		if (Objects.equals(newGrammar, this.grammar))
 			return;
 
-		if (newGrammar == null)
+		if (newGrammar == null) {
 			colorizer = null;
+		}
 
 		this.grammar = newGrammar;
 

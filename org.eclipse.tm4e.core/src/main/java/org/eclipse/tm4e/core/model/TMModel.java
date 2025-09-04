@@ -279,8 +279,10 @@ public abstract class TMModel implements ITMModel {
 					if (DEBUG_LOGGING) {
 						logDebug("(%d) >> changedRanges: %s", startLineNumber, changedRanges);
 					}
-					listeners.dispatchEvent(changedRanges, TMModel.this);
-					changedRanges = new ArrayList<>();
+					if (!changedRanges.isEmpty()) {
+						listeners.dispatchEvent(changedRanges, TMModel.this);
+						changedRanges = new ArrayList<>();
+					}
 					prevRange = null;
 					startNanoTime = System.nanoTime();
 				}

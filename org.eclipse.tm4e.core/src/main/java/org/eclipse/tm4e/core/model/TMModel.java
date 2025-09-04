@@ -164,8 +164,9 @@ public abstract class TMModel implements ITMModel {
 							// wait up to 50ms for the next edit, so that edits made in fast succession (e.g. by a formatter) are applied
 							// in one go before the token revalidation loop happens
 							final var edit = edits.poll(50, TimeUnit.MILLISECONDS);
-							if (edit == null)
+							if (edit == null) {
 								break;
+							}
 							applyEdit(edit);
 						}
 					}
@@ -195,8 +196,9 @@ public abstract class TMModel implements ITMModel {
 		private void revalidateTokens() {
 			final int startLineIndex = firstLineToRevalidate;
 			final int startLineNumber = startLineIndex + 1;
-			if (DEBUG_LOGGING)
+			if (DEBUG_LOGGING) {
 				logDebug("(%d)", startLineNumber);
+			}
 
 			long startTime = System.currentTimeMillis();
 			var changedRanges = new ArrayList<Range>();
@@ -209,13 +211,8 @@ public abstract class TMModel implements ITMModel {
 			// iterate over all lines from startLineIndex to end of file to check if (re)tokenization is required
 			for (currLineIndex = startLineIndex; currLineIndex < linesCount; currLineIndex++) {
 
-				// check if TokenizerThread is still running
-				if (isInterrupted()) {
-					break;
-				}
-
-				// check if new edits are queued -> if so, abort current tokenization loop
-				if (!edits.isEmpty()) {
+				// check if TokenizerThread is still running and no new edits are queued
+				if (isInterrupted() || !edits.isEmpty()) {
 					break;
 				}
 
@@ -231,19 +228,22 @@ public abstract class TMModel implements ITMModel {
 				if (prevLineTokens != null) {
 					if (currLineTokens.tokens != null && currLineTokens.startState.equals(prevLineTokens.endState)) {
 						// has matching start and has tokens ==> is up to date
-						if (DEBUG_LOGGING)
+						if (DEBUG_LOGGING) {
 							logDebug("(%d) >> DONE - tokens of line %d are up-to-date", startLineNumber, currLineNumber);
+						}
 						firstLineToRevalidate = currLineIndex + 1;
 						prevLineTokens = currLineTokens;
 						continue;
 					}
-					if (prevLineTokens.endState != null)
+					if (prevLineTokens.endState != null) {
 						currLineTokens.startState = prevLineTokens.endState;
+					}
 				}
 
 				// (re)tokenize the line
-				if (DEBUG_LOGGING)
+				if (DEBUG_LOGGING) {
 					logDebug("(%d) >> tokenizing line %d...", startLineNumber, currLineNumber);
+				}
 				TokenizationResult r;
 				try {
 					final String lineText = getLineText(currLineIndex);
@@ -276,8 +276,9 @@ public abstract class TMModel implements ITMModel {
 
 				// if MAX_TIME_PER_MULTI_LINE_VALIDATIONS reached, notify listeners about line changes
 				if (System.currentTimeMillis() - startTime >= MAX_TIME_PER_MULTI_LINE_VALIDATIONS) {
-					if (DEBUG_LOGGING)
+					if (DEBUG_LOGGING) {
 						logDebug("(%d) >> changedRanges: %s", startLineNumber, changedRanges);
+					}
 					listeners.dispatchEvent(changedRanges, TMModel.this);
 					changedRanges = new ArrayList<>();
 					prevRange = null;
@@ -286,20 +287,23 @@ public abstract class TMModel implements ITMModel {
 			}
 
 			// notify listeners about remaining line changes
-			if (DEBUG_LOGGING)
+			if (DEBUG_LOGGING) {
 				logDebug("(%d) >> changedRanges: %s", startLineNumber, changedRanges);
+			}
 			listeners.dispatchEvent(changedRanges, TMModel.this);
 
 			setAllTokensAreValid();
 		}
 
 		private void applyEdit(final Edit edit) {
-			if (DEBUG_LOGGING)
+			if (DEBUG_LOGGING) {
 				logDebug("(%s)", edit);
+			}
 
 			final var lineIndex = edit.lineIndex;
-			if (isAllTokensAreValid() || lineIndex < firstLineToRevalidate)
+			if (isAllTokensAreValid() || lineIndex < firstLineToRevalidate) {
 				firstLineToRevalidate = lineIndex;
+			}
 
 			// check if single line update
 			if (edit.replacedCount == 1 && edit.replacementCount == 1) {
@@ -397,8 +401,9 @@ public abstract class TMModel implements ITMModel {
 		if (replacedLinesCount == 0 && replacementLinesCount == 0)
 			return;
 
-		if (DEBUG_LOGGING)
+		if (DEBUG_LOGGING) {
 			logDebug("(%d, -%d, +%d)", lineIndex + 1, replacedLinesCount, replacementLinesCount);
+		}
 
 		edits.add(new Edit(lineIndex, replacedLinesCount, replacementLinesCount));
 	}
@@ -430,9 +435,9 @@ public abstract class TMModel implements ITMModel {
 
 	private synchronized void startTokenizerThread() {
 		if (grammar != null && listeners.isNotEmpty()) {
-			var thread = this.tokenizerThread;
+			var thread = tokenizerThread;
 			if (thread == null || !thread.isAlive() || thread.isInterrupted()) {
-				thread = this.tokenizerThread = new TokenizerThread();
+				thread = tokenizerThread = new TokenizerThread();
 				thread.start();
 			}
 		}
@@ -440,12 +445,12 @@ public abstract class TMModel implements ITMModel {
 
 	/** Interrupt the thread if running. */
 	private synchronized void stopTokenizerThread() {
-		final var thread = this.tokenizerThread;
+		final var thread = tokenizerThread;
 		if (thread == null)
 			return;
 
 		thread.interrupt();
-		this.tokenizerThread = null;
+		tokenizerThread = null;
 	}
 
 	@Override

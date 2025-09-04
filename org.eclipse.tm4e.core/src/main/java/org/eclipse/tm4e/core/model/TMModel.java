@@ -139,7 +139,7 @@ public abstract class TMModel implements ITMModel {
 		private static final Duration MAX_TIME_PER_LINE_TOKENIZATION = Duration.ofSeconds(1);
 
 		/** max time in milliseconds for multi-line validations before a consolidated {@link ModelTokensChangedEvent} is emitted */
-		private static final int MAX_TIME_PER_MULTI_LINE_VALIDATIONS = 200;
+		private static final int MAX_TIME_PER_MULTI_LINE_VALIDATIONS = Duration.ofMillis(200).getNano();
 
 		/** Creates a new background thread. The thread runs with minimal priority. */
 		TokenizerThread() {
@@ -200,7 +200,7 @@ public abstract class TMModel implements ITMModel {
 				logDebug("(%d)", startLineNumber);
 			}
 
-			long startTime = System.currentTimeMillis();
+			long startNanoTime = System.nanoTime();
 			var changedRanges = new ArrayList<Range>();
 			Range prevRange = null;
 			var prevLineTokens = getLineTokensOrNull(startLineIndex - 1);
@@ -275,14 +275,14 @@ public abstract class TMModel implements ITMModel {
 				}
 
 				// if MAX_TIME_PER_MULTI_LINE_VALIDATIONS reached, notify listeners about line changes
-				if (System.currentTimeMillis() - startTime >= MAX_TIME_PER_MULTI_LINE_VALIDATIONS) {
+				if (System.nanoTime() - startNanoTime >= MAX_TIME_PER_MULTI_LINE_VALIDATIONS) {
 					if (DEBUG_LOGGING) {
 						logDebug("(%d) >> changedRanges: %s", startLineNumber, changedRanges);
 					}
 					listeners.dispatchEvent(changedRanges, TMModel.this);
 					changedRanges = new ArrayList<>();
 					prevRange = null;
-					startTime = System.currentTimeMillis();
+					startNanoTime = System.nanoTime();
 				}
 			}
 

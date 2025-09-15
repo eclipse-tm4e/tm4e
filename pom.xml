@@ -18,7 +18,7 @@
 		<tycho-surefire-plugin.vmargs></tycho-surefire-plugin.vmargs>
 		<jgit.dirtyWorkingTree>error</jgit.dirtyWorkingTree>
 		<tm4e.target-platform>oldest</tm4e.target-platform>
-		<surefire-version>3.5.3</surefire-version>
+		<surefire-version>3.5.4</surefire-version>
 	</properties>
 
 	<organization>

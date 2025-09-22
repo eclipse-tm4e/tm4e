@@ -102,7 +102,7 @@ sources:
     github:
       repo: microsoft/vscode
       path: extensions
-      ref: "1.98.2" # https://gitlab.eclipse.org/eclipsefdn/emo-team/iplab/-/issues/20242
+      ref: "1.104.0" # https://gitlab.eclipse.org/eclipsefdn/emo-team/iplab/-/issues/23356
     license-download: false
     include-all-by-default: true
     extensions:
@@ -158,6 +158,9 @@ sources:
             scope-name: source.php
             grammar: syntaxes/php.tmLanguage.json
 
+      prompt:
+        ignored: unused - vscode specific
+
       razor:
         languages:
           razor:
@@ -169,7 +172,7 @@ sources:
             label: VS Code Search Result
 
       yaml:
-        ignored: newer versions use a lot of variable-length lookbehinds not supported by Joni
+        ignored: updates ignored since newer versions use a lot of variable-length lookbehinds not supported by Joni
         languages:
           dockercompose:
             label: Docker Compose

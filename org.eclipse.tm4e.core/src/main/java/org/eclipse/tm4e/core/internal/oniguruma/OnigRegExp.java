@@ -93,37 +93,147 @@ public final class OnigRegExp {
 	}
 
 	/**
-	 * Rewrites the given pattern to workaround limitations of the joni library which for example does not support
-	 * negative variable-length look-behinds
+	 * Rewrites the given pattern to work around limitations of the Joni library, which does not support variable-length lookbehinds.
 	 *
-	 * @see <a href="https://github.com/eclipse-tm4e/tm4e/issues/677">github.com/eclipse-tm4e/tm4e/issue/677</a>
+	 * Strategy:
+	 * <ul>
+	 * <li>Fixed-length lookbehind (positive or negative) is supported by Joni → leave unchanged.</li>
+	 * <li>Variable-length POSITIVE lookbehind at the pattern start → rewritten by <em>consuming</em> the context:<br/>
+	 * <code>(?&lt;=X)Y</code> ⇒ <code>(?:X)Y</code><br/>
+	 * Trade-off: the overall match (<code>group(0)</code>) shifts left and now includes X, but capture groups remain intact.</li>
+	 * <li>Variable-length NEGATIVE lookbehind → no safe generic rewrite (changing it would alter semantics).
+	 * These are left unchanged, except for a handful of known safe special cases handled explicitly.</li>
+	 * </ul>
+	 *
+	 * @see <a href="https://github.com/eclipse-tm4e/tm4e/issues/677">github.com/eclipse-tm4e/tm4e/issues/677</a>
 	 */
 	private String rewritePatternIfRequired(final String pattern) {
+		if (pattern.isEmpty())
+			return pattern;
 
-		// e.g. used in csharp.tmLanguage.json
-		final var lookbehind1 = "(?<!\\.\\s*)";
-		if (pattern.startsWith(lookbehind1)) {
-			return "(?<!\\.)\\s*" + pattern.substring(lookbehind1.length());
+		// --- Positive lookbehinds --------------------------------------------------
+		// Joni supports fixed-length positive lookbehind, but not variable-length.
+		// If the pattern starts with (?<=...), inspect its body:
+		//  - Fixed-length → keep as-is.
+		//  - Variable-length → rewrite by consuming the context: (?<=X)Y  ==>  (?:X)Y
+		//    (group numbering is preserved; only group(0) widens to include X).
+		if (pattern.startsWith("(?<=")) {
+			final int close = findBalancedGroupEnd(pattern, 0); // index of ')' closing (?<=...)
+			if (close > 0) {
+				final String body = pattern.substring("(?<=".length(), close);
+
+				if (isFixedLength(body))
+					return pattern; // supported as-is
+
+				// Variable-length positive lookbehind: consume the prefix so the pattern runs on Joni.
+				return "(?:" + body + ")" + pattern.substring(close + 1);
+			}
+			// Unbalanced (?<=... → leave unchanged
 		}
 
-		// e.g. used in markdown.math.block.tmLanguage.json and tex.tmLanguage.json
-		final var lookbehind2 = "(?<=^\\s*)";
-		if (pattern.startsWith(lookbehind2)) {
-			return "(?<=^)\\s*" + pattern.substring(lookbehind2.length());
-		}
+		// --- Negative lookbehinds --------------------------------------------------
+		// We intentionally DO NOT apply a generic rewrite for variable-length NEGATIVE lookbehind:
+		//   - Fixed-length negative LB is Joni-compatible → leave unchanged.
+		//   - Variable-length negative LB has no semantics-preserving generic rewrite.
+		// If you encounter real-world cases, add targeted rewrites below.
 
-		// e.g. used in carbon.tmLanguage.json
-		final var lookbehind3 = "(?<=\\s*\\.)";
-		if (pattern.startsWith(lookbehind3)) {
-			return "\\s*\\." + pattern.substring(lookbehind3.length());
-		}
+		// Used in csharp.tmLanguage.json: (?<!\.\s*) ==> (?<!\.)\s*
+		// Rationale: move the variable portion (\s*) out of the lookbehind while keeping intent.
+		final var negLB = "(?<!\\.\\s*)";
+		if (pattern.startsWith(negLB))
+			return "(?<!\\.)\\s*" + pattern.substring(negLB.length());
 
-		// e.g. used in julia.tmLanguage.json
-		final var lookbehind4 = "(?<=\\S\\s+)";
-		if (pattern.startsWith(lookbehind4)) {
-			return "\\S\\s+" + pattern.substring(lookbehind4.length());
-		}
 		return pattern;
+	}
+
+	/**
+	 * Returns the index of the ')' that closes the group whose '(' is at 'start'.
+	 * Assumes 'start' points at '(' of a construct like (?<=...) or (?<!...).
+	 * Returns -1 if unbalanced.
+	 */
+	private int findBalancedGroupEnd(final String str, final int start) {
+		int depth = 0;
+		boolean escaped = false;
+		for (int idx = start; idx < str.length(); idx++) {
+			final char c = str.charAt(idx);
+			if (escaped) {
+				escaped = false;
+				continue;
+			}
+			if (c == '\\') {
+				escaped = true;
+				continue;
+			}
+			if (c == '(') {
+				depth++;
+			} else if (c == ')') {
+				depth--;
+				if (depth == 0)
+					return idx;
+			}
+		}
+		return -1;
+	}
+
+	/**
+	 * Fixed-length detector for a lookbehind body.
+	 * Returns false if it contains obvious variable-length features:
+	 * - unescaped *, +, ?, or alternation '|'
+	 * - {m,} (open upper bound) or {m,n} with m != n
+	 * If unsure, returns false.
+	 */
+	private boolean isFixedLength(final String body) {
+		boolean escaped = false;
+		for (int idx = 0; idx < body.length(); idx++) {
+			final char ch = body.charAt(idx);
+			if (escaped) {
+				escaped = false;
+				continue;
+			}
+			if (ch == '\\') {
+				escaped = true;
+				continue;
+			}
+			if (ch == '*' || ch == '+' || ch == '?' || ch == '|')
+				return false;
+			if (ch == '{') {
+				int j = idx + 1;
+				while (j < body.length() && Character.isDigit(body.charAt(j))) {
+					j++;
+				}
+				if (j == idx + 1)
+					return false; // not {m
+				int m;
+				try {
+					m = Integer.parseInt(body.substring(idx + 1, j));
+				} catch (final NumberFormatException e) {
+					return false;
+				}
+				int n = m;
+				if (j < body.length() && body.charAt(j) == ',') {
+					j++;
+					int k = j;
+					while (k < body.length() && Character.isDigit(body.charAt(k))) {
+						k++;
+					}
+					if (k == j)
+						return false; // {m,}
+					try {
+						n = Integer.parseInt(body.substring(j, k));
+					} catch (final NumberFormatException e) {
+						return false;
+					}
+					if (m != n)
+						return false; // {m,n} with m != n
+					j = k;
+				}
+				final int close = body.indexOf('}', j);
+				if (close < 0)
+					return false; // malformed
+				idx = close;
+			}
+		}
+		return true;
 	}
 
 	/**

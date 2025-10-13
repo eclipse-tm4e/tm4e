@@ -195,9 +195,8 @@ final class SelectLanguageConfigurationWizardPage extends WizardPage implements 
 		data.horizontalSpan = 2;
 		contentTypesViewer.getControl().setLayoutData(data);
 
-		contentTypesViewer.addSelectionChangedListener(event -> {
-			contentTypeText.setText(event.getStructuredSelection().getFirstElement() instanceof IContentType ct ? ct.toString() : "");
-		});
+		contentTypesViewer.addSelectionChangedListener(event -> contentTypeText
+				.setText(event.getStructuredSelection().getFirstElement() instanceof final IContentType ct ? ct.toString() : ""));
 	}
 
 	private static final class ContentTypesLabelProvider extends LabelProvider {
@@ -260,39 +259,34 @@ final class SelectLanguageConfigurationWizardPage extends WizardPage implements 
 		infoWidget.refresh(null);
 
 		final String path = fileText.getText();
-		if (path.isEmpty()) {
+		if (path.isEmpty())
 			return new Status(IStatus.ERROR, LanguageConfigurationPlugin.PLUGIN_ID,
 					SelectLanguageConfigurationWizardPage_fileError_noSelection);
-		}
 		IPath p = new Path(path);
 		if (!p.isAbsolute()) {
 			p = castNonNull(ResourcesPlugin.getWorkspace().getRoot().getFile(p).getLocation());
 		}
 		try (var file = new FileReader(p.toFile())) {
 			final var configuration = LanguageConfiguration.load(file);
-			if (configuration == null) {
+			if (configuration == null)
 				return new Status(IStatus.ERROR, LanguageConfigurationPlugin.PLUGIN_ID,
 						SelectLanguageConfigurationWizardPage_fileError_invalid);
-			}
 			infoWidget.refresh(configuration);
 		} catch (final Exception e) {
 			return new Status(IStatus.ERROR, LanguageConfigurationPlugin.PLUGIN_ID,
 					SelectLanguageConfigurationWizardPage_fileError_error + e.getLocalizedMessage());
 		}
 
-		if (contentTypeText.getText().isEmpty()) {
+		if (contentTypeText.getText().isEmpty())
 			return new Status(IStatus.ERROR, LanguageConfigurationPlugin.PLUGIN_ID,
 					SelectLanguageConfigurationWizardPage_contentTypeError_noSelection);
-		}
 		final var contentType = ContentTypeHelper.getContentTypeById(contentTypeText.getText());
-		if (contentType == null) {
+		if (contentType == null)
 			return new Status(IStatus.ERROR, LanguageConfigurationPlugin.PLUGIN_ID,
 					SelectLanguageConfigurationWizardPage_contentTypeError_invalid);
-		}
-		if (registryManager.getLanguageConfigurationFor(contentType) != null) {
+		if (registryManager.getLanguageConfigurationFor(contentType) != null)
 			return new Status(IStatus.WARNING, LanguageConfigurationPlugin.PLUGIN_ID,
 					SelectLanguageConfigurationWizardPage_contentTypeWarning_duplicate);
-		}
 		return null;
 	}
 

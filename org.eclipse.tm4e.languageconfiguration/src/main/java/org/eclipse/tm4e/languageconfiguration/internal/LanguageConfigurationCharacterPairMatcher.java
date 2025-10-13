@@ -31,7 +31,7 @@ import org.eclipse.tm4e.ui.internal.utils.ContentTypeInfo;
 public class LanguageConfigurationCharacterPairMatcher
 		implements ICharacterPairMatcher, ICharacterPairMatcherExtension {
 
-	private static DefaultCharacterPairMatcher NOOP_MATCHER = new DefaultCharacterPairMatcher(new char[0]);
+	private static final DefaultCharacterPairMatcher NOOP_MATCHER = new DefaultCharacterPairMatcher(new char[0]);
 
 	private @Nullable DefaultCharacterPairMatcher matcher;
 	private @Nullable IDocument document;

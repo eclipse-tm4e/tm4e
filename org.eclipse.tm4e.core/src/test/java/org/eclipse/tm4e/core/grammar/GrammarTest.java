@@ -85,25 +85,25 @@ class GrammarTest {
 		final int numThreads = 4;
 		final int numIterations = 10;
 
-		final var executor = Executors.newFixedThreadPool(numThreads);
-		final Runnable tokenizationTask = () -> {
-			for (int i = 0; i < numIterations; i++) {
-				final var r = TokenizationUtils.tokenizeText(content, grammar);
-				assertThat(r.count()).isGreaterThan(10);
+		try (final var executor = Executors.newFixedThreadPool(numThreads)) {
+			final Runnable tokenizationTask = () -> {
+				for (int i = 0; i < numIterations; i++) {
+					final var r = TokenizationUtils.tokenizeText(content, grammar);
+					assertThat(r.count()).isGreaterThan(10);
+				}
+			};
+
+			final List<Future<?>> futures = new ArrayList<>();
+			for (int i = 0; i < numThreads; i++) {
+				futures.add(executor.submit(tokenizationTask));
 			}
-		};
 
-		final List<Future<?>> futures = new ArrayList<>();
-		for (int i = 0; i < numThreads; i++) {
-			futures.add(executor.submit(tokenizationTask));
+			for (final Future<?> future : futures) {
+				future.get();
+			}
+			executor.shutdown();
+			executor.awaitTermination(1, TimeUnit.MINUTES);
 		}
-
-		for (final Future<?> future : futures) {
-			future.get();
-		}
-
-		executor.shutdown();
-		executor.awaitTermination(1, TimeUnit.MINUTES);
 	}
 
 	@Test

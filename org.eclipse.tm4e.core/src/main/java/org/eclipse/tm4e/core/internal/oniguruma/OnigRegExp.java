@@ -85,8 +85,9 @@ public final class OnigRegExp {
 
 	private Regex parsePattern(final String pattern, final boolean ignoreCase) throws SyntaxException {
 		int options = Option.CAPTURE_GROUP;
-		if (ignoreCase)
+		if (ignoreCase) {
 			options |= Option.IGNORECASE;
+		}
 		final byte[] patternBytes = pattern.getBytes(StandardCharsets.UTF_8);
 		return new Regex(patternBytes, 0, patternBytes.length, options, NonStrictUTF8Encoding.INSTANCE, Syntax.RUBY,
 				LOGGER.isLoggable(Level.WARNING) ? LOGGER_WARN_CALLBACK : WarnCallback.NONE);
@@ -209,7 +210,6 @@ public final class OnigRegExp {
 				} catch (final NumberFormatException e) {
 					return false;
 				}
-				int n = m;
 				if (j < body.length() && body.charAt(j) == ',') {
 					j++;
 					int k = j;
@@ -219,12 +219,12 @@ public final class OnigRegExp {
 					if (k == j)
 						return false; // {m,}
 					try {
-						n = Integer.parseInt(body.substring(j, k));
+						final int n = Integer.parseInt(body.substring(j, k));
+						if (m != n)
+							return false; // {m,n} with m != n
 					} catch (final NumberFormatException e) {
 						return false;
 					}
-					if (m != n)
-						return false; // {m,n} with m != n
 					j = k;
 				}
 				final int close = body.indexOf('}', j);
@@ -240,18 +240,16 @@ public final class OnigRegExp {
 	 * @return null if not found
 	 */
 	public @Nullable OnigResult search(final OnigString str, final int startPosition) {
-		if (hasGAnchor) {
+		if (hasGAnchor)
 			// Should not use caching, because the regular expression
 			// targets the current search position (\G)
 			return search(str.bytesUTF8, startPosition, str.bytesCount);
-		}
 
-		final var lastSearchResult0 = this.lastSearchResult;
+		final var lastSearchResult0 = lastSearchResult;
 		if (lastSearchString == str
 				&& lastSearchPosition <= startPosition
-				&& (lastSearchResult0 == null || lastSearchResult0.locationAt(0) >= startPosition)) {
+				&& (lastSearchResult0 == null || lastSearchResult0.locationAt(0) >= startPosition))
 			return lastSearchResult0;
-		}
 
 		lastSearchString = str;
 		lastSearchPosition = startPosition;

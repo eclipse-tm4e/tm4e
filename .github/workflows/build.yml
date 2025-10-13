@@ -65,7 +65,7 @@ jobs:
         os:  # https://github.com/actions/runner-images#available-images
         - ubuntu-latest
         - macos-13 # Intel
-        - macos-14 # ARM
+        - macos-latest # ARM
         - windows-latest
         target-platform:
         - oldest

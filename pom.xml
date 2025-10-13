@@ -201,13 +201,6 @@
 				<version>${tycho-version}</version>
 				<executions>
 					<execution>
-						<id>feature-source</id>
-						<phase>package</phase>
-						<goals>
-							<goal>feature-source</goal>
-						</goals>
-					</execution>
-					<execution>
 						<id>plugin-source</id>
 						<goals>
 							<goal>plugin-source</goal>

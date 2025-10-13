@@ -3,17 +3,11 @@
    <feature id="org.eclipse.tm4e.feature">
       <category name="TextMate"/>
    </feature>
-   <feature id="org.eclipse.tm4e.feature.source">
-      <category name="Sources"/>
-   </feature>
    <feature id="org.eclipse.tm4e.language_pack.feature">
       <category name="TextMate"/>
    </feature>
    <bundle id="org.eclipse.tm4e.samples" version="0.0.0">
       <category name="Samples"/>
-   </bundle>
-   <bundle id="org.eclipse.tm4e.samples.source" version="0.0.0">
-      <category name="Sources"/>
    </bundle>
    <bundle id="com.google.gson" version="0.0.0">
       <category name="Dependencies"/>
@@ -38,6 +32,5 @@
    </bundle>
    <category-def name="TextMate" label="TextMate"/>
    <category-def name="Samples" label="Samples"/>
-   <category-def name="Sources" label="Sources"/>
    <category-def name="Dependencies" label="Dependencies"/>
 </site>

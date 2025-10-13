@@ -15,6 +15,21 @@
 		<maven.deploy.skip>true</maven.deploy.skip>
 	</properties>
 
+	<build>
+		<plugins>
+			<plugin>
+				<!-- https://tycho.eclipseprojects.io/doc/main/tycho-p2-repository-plugin/plugin-info.html -->
+				<groupId>org.eclipse.tycho</groupId>
+				<artifactId>tycho-p2-repository-plugin</artifactId>
+				<version>${tycho-version}</version>
+				<configuration>
+					<!-- see https://github.com/eclipse-tycho/tycho/discussions/5265#discussioncomment-14262476 -->
+					<includeAllSources>true</includeAllSources>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
+
 	<profiles>
 		<profile>
 			<id>sign</id>

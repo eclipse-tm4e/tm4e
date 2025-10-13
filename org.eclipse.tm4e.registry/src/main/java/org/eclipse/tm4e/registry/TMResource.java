@@ -17,7 +17,6 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URI;
-import java.net.URL;
 import java.nio.charset.StandardCharsets;
 
 import org.eclipse.core.runtime.FileLocator;
@@ -43,7 +42,7 @@ public abstract class TMResource implements ITMResource {
 
 	protected TMResource(final IConfigurationElement ce) {
 		this(ce.getAttribute(XMLConstants.PATH_ATTR));
-		this.pluginId = ce.getNamespaceIdentifier();
+		pluginId = ce.getNamespaceIdentifier();
 	}
 
 	protected TMResource(final String path) {
@@ -77,7 +76,7 @@ public abstract class TMResource implements ITMResource {
 	public InputStream getInputStream() throws IOException {
 		return new BufferedInputStream(pluginId == null
 				? new FileInputStream(new File(path))
-				: new URL(PLATFORM_PLUGIN + pluginId + '/' + path).openStream());
+				: URI.create(PLATFORM_PLUGIN + pluginId + '/' + path).toURL().openStream());
 	}
 
 	@Override
@@ -85,7 +84,7 @@ public abstract class TMResource implements ITMResource {
 		try {
 			return new File(pluginId == null //
 					? path
-					: FileLocator.resolve(new URL(PLATFORM_PLUGIN + pluginId + '/' + path)).getFile() //
+					: FileLocator.resolve(URI.create(PLATFORM_PLUGIN + pluginId + '/' + path).toURL()).getFile() //
 			).lastModified();
 		} catch (final IOException ex) {
 			return 0;

@@ -129,18 +129,18 @@ jobs:
         sudo apt-get install --no-install-recommends -y xdg-utils
 
 
-    - name: "Install: JDK 17 for Compilation ☕"
-      uses: actions/setup-java@v5  # https://github.com/actions/setup-java
-      with:
-        distribution: temurin
-        java-version: 17
-
-
-    - name: "Install: JDK 21 for Maven/Tycho ☕"
+    - name: "Install: JDK 21 for Compilation ☕"
       uses: actions/setup-java@v5  # https://github.com/actions/setup-java
       with:
         distribution: temurin
         java-version: 21
+
+
+    - name: "Install: JDK 25 for Maven/Tycho ☕"
+      uses: actions/setup-java@v5  # https://github.com/actions/setup-java
+      with:
+        distribution: temurin
+        java-version: 25
 
 
     - name: "Cache: Local Maven Repository"

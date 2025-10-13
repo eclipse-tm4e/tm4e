@@ -29,7 +29,7 @@ pipeline {
 		stage('Setup Maven Toolchains') {
 			steps {
 				script { try {
-					def jdk17 = tool name: 'temurin-jdk17-latest', type: 'jdk'
+					def jdk21 = tool name: 'temurin-jdk21-latest', type: 'jdk'
 
 					// Generate toolchains.xml for Maven Toolchains plugin
 					writeFile file: "/tmp/toolchains.xml", text: """
@@ -37,11 +37,11 @@ pipeline {
 	<toolchain>
 		<type>jdk</type>
 		<provides>
-			<version>17</version>
+			<version>21</version>
 			<vendor>temurin</vendor>
 		</provides>
 		<configuration>
-			<jdkHome>${jdk17}</jdkHome>
+			<jdkHome>${jdk21}</jdkHome>
 		</configuration>
 	</toolchain>
 </toolchains>

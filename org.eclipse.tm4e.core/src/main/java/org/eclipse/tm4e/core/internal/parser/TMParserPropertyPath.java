@@ -62,10 +62,6 @@ final class TMParserPropertyPath extends ArrayList<Object> implements TMParser.P
 		return get(size() - 1);
 	}
 
-	Object removeLast() {
-		return remove(size() - 1);
-	}
-
 	@Override
 	public String toString() {
 		return "/" + stream()

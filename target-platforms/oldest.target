@@ -8,7 +8,7 @@
       <unit id="org.eclipse.license.feature.group" version="2.0.2.v20181016-2210"/>
     </location>
 
-    <!-- 4.29 = Eclipse 2023-09 -->
+    <!-- 4.32 = Eclipse 2024-06 -->
     <location includeAllPlatforms="false" includeConfigurePhase="true" includeMode="planner" includeSource="true" type="InstallableUnit">
       <repository location="https://download.eclipse.org/eclipse/updates/4.29"/>
       <unit id="org.eclipse.platform.feature.group" version="0.0.0"/>
@@ -37,5 +37,5 @@
     </location>
   </locations>
 
-  <targetJRE path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-17"/>
+  <targetJRE path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-21"/>
 </target>

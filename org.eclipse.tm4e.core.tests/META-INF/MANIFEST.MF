@@ -4,7 +4,7 @@ Bundle-Name: %pluginName
 Bundle-Vendor: %providerName
 Bundle-Localization: plugin
 Bundle-SymbolicName: org.eclipse.tm4e.core.tests;singleton:=true
-Bundle-Version: 0.15.2.qualifier
+Bundle-Version: 0.16.0.qualifier
 Require-Bundle: org.apache.batik.css,
  org.apache.batik.util,
  com.google.gson,
@@ -15,6 +15,6 @@ Import-Package: org.junit.jupiter.api,
  org.junit.jupiter.api.function,
  org.w3c.css.sac,
  org.w3c.css.sac.helpers
-Bundle-RequiredExecutionEnvironment: JavaSE-17
+Bundle-RequiredExecutionEnvironment: JavaSE-21
 Bundle-ActivationPolicy: lazy
 Automatic-Module-Name: org.eclipse.tm4e.core.tests

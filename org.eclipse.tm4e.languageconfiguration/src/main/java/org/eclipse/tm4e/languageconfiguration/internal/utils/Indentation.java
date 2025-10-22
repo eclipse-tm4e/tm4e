@@ -36,7 +36,7 @@ public final class Indentation {
 
 		final var result = new StringBuilder();
 		if (!insertSpaces) {
-			final long tabsCnt = spacesCnt / indentSize;
+			final int tabsCnt = spacesCnt / indentSize;
 			spacesCnt = spacesCnt % indentSize;
 			for (int i = 0; i < tabsCnt; i++) {
 				result.append('\t');

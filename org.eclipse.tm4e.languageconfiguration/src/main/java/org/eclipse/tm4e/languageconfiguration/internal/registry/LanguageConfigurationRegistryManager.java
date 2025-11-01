@@ -134,8 +134,7 @@ public final class LanguageConfigurationRegistryManager extends AbstractLanguage
 	}
 
 	public boolean shouldComment(final IContentType contentType) {
-		final var definition = getDefinition(contentType);
-		return definition != null && definition.isOnEnterEnabled();
+		return getDefinition(contentType) != null;
 	}
 
 	public List<AutoClosingPairConditional> getEnabledAutoClosingPairs(final IContentType contentType) {

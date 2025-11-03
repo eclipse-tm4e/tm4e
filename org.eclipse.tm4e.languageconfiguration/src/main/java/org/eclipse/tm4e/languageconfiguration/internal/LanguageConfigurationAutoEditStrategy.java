@@ -142,6 +142,16 @@ public class LanguageConfigurationAutoEditStrategy implements IAutoEditStrategy 
 					final var isTargetLineBlank = TextUtils.isBlankLine(doc, lineIndex);
 
 					if (isPastedTextMultiLine || isTargetLineBlank) {
+
+						// Do not auto-reindent single-line whitespace-only inserts (e.g., Tab as spaces on a blank line)
+						// See: https://github.com/eclipse-tm4e/tm4e/issues/949
+						final boolean isWhitespaceOnlySingleLineInsert = !isPastedTextMultiLine
+								&& command.text.chars().allMatch(Character::isWhitespace);
+						if (isWhitespaceOnlySingleLineInsert) {
+							// Keep user-inserted spaces as-is; skip indentation adjustment
+							continue;
+						}
+
 						final var newIndent = registry.getGoodIndentForLine(doc, lineIndex, contentType, IIndentConverter.of(cursorCfg));
 						if (newIndent != null) {
 							final var lineStartOffset = doc.getLineOffset(lineIndex);

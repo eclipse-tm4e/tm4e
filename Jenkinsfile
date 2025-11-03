@@ -1,11 +1,16 @@
 pipeline {
+	agent {
+		label 'centos-latest'
+	}
+
+	triggers {
+		githubPush()
+	}
+
 	options {
 		timeout(time: 20, unit: 'MINUTES')
 		buildDiscarder(logRotator(numToKeepStr: '10'))
-	}
-
-	agent {
-		label 'centos-latest'
+		disableConcurrentBuilds(abortPrevious: false)
 	}
 
 	tools {
@@ -79,7 +84,7 @@ pipeline {
 			post {
 				always {
 					archiveArtifacts artifacts: 'org.eclipse.tm4e.repository/target/repository/**/*,org.eclipse.tm4e.repository/target/*.zip,*/target/work/data/.metadata/.log'
-					junit '*/target/surefire-reports/TEST-*.xml'
+					junit '**/target/surefire-reports/TEST-*.xml'
 				}
 			}
 		}

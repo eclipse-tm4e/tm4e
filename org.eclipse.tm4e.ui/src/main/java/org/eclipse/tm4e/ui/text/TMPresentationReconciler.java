@@ -1,6 +1,6 @@
 /**
  * Copyright (c) 2015-2017 Angelo ZERR.
- * Copyright (c) 2021-2023 Vegard IT GmbH and others.
+ * Copyright (c) 2021-2025 Vegard IT GmbH and others.
  * This program and the accompanying materials are made
  * available under the terms of the Eclipse Public License 2.0
  * which is available at https://www.eclipse.org/legal/epl-2.0/
@@ -22,8 +22,6 @@ import java.util.Objects;
 import java.util.Set;
 import java.util.concurrent.CopyOnWriteArraySet;
 
-import org.eclipse.core.runtime.Path;
-import org.eclipse.core.runtime.content.IContentType;
 import org.eclipse.core.runtime.preferences.IEclipsePreferences.IPreferenceChangeListener;
 import org.eclipse.core.runtime.preferences.IEclipsePreferences.PreferenceChangeEvent;
 import org.eclipse.jdt.annotation.Nullable;
@@ -50,14 +48,12 @@ import org.eclipse.tm4e.core.TMException;
 import org.eclipse.tm4e.core.grammar.IGrammar;
 import org.eclipse.tm4e.core.model.ModelTokensChangedEvent;
 import org.eclipse.tm4e.core.model.TMToken;
-import org.eclipse.tm4e.registry.TMEclipseRegistryPlugin;
 import org.eclipse.tm4e.ui.TMUIPlugin;
 import org.eclipse.tm4e.ui.internal.model.TMModelManager;
 import org.eclipse.tm4e.ui.internal.preferences.PreferenceConstants;
 import org.eclipse.tm4e.ui.internal.text.TMPresentationReconcilerTestGenerator;
 import org.eclipse.tm4e.ui.internal.themes.ThemeManager;
-import org.eclipse.tm4e.ui.internal.utils.ContentTypeHelper;
-import org.eclipse.tm4e.ui.internal.utils.ContentTypeInfo;
+import org.eclipse.tm4e.ui.internal.utils.GrammarUtils;
 import org.eclipse.tm4e.ui.internal.utils.MarkerUtils;
 import org.eclipse.tm4e.ui.internal.utils.PreferenceUtils;
 import org.eclipse.tm4e.ui.model.ITMDocumentModel;
@@ -169,7 +165,7 @@ public class TMPresentationReconciler implements IPresentationReconciler {
 
 			final var viewer = TMPresentationReconciler.this.viewer;
 			if (viewer != null) {
-				viewer.removeTextListener(TMPresentationReconciler.this.viewerListener);
+				viewer.removeTextListener(viewerListener);
 			}
 			TMModelManager.INSTANCE.disconnect(oldDoc);
 			listeners.forEach(ITMPresentationReconcilerListener::onUninstalled);
@@ -186,24 +182,24 @@ public class TMPresentationReconciler implements IPresentationReconciler {
 
 			listeners.forEach(l -> l.onInstalled(viewer, newDoc));
 
-			viewer.addTextListener(TMPresentationReconciler.this.viewerListener);
+			viewer.addTextListener(viewerListener);
 
 			// update the grammar
 			IGrammar newDocGrammar;
 			if (isForcedGrammar) {
-				newDocGrammar = TMPresentationReconciler.this.grammar;
+				newDocGrammar = grammar;
 			} else {
 				newDocGrammar = findGrammar(newDoc);
 				if (newDocGrammar == null) {
-					newDocGrammar = TMPresentationReconciler.this.grammar;
+					newDocGrammar = grammar;
 				} else {
-					TMPresentationReconciler.this.grammar = newDocGrammar;
+					grammar = newDocGrammar;
 				}
 			}
 
 			if (newDocGrammar == null) {
-				TMPresentationReconciler.this.colorizer = null;
-				TMPresentationReconciler.this.grammar = null;
+				colorizer = null;
+				grammar = null;
 				if (PreferenceUtils.isDebugThrowError())
 					throw new TMException("Cannot find TextMate grammar for the given document!");
 				return;
@@ -332,28 +328,11 @@ public class TMPresentationReconciler implements IPresentationReconciler {
 		 * Finds a grammar for the given document.
 		 */
 		private @Nullable IGrammar findGrammar(final IDocument doc) {
-			final IGrammar currentGrammar = isForcedGrammar ? TMPresentationReconciler.this.grammar : null;
+			final IGrammar currentGrammar = isForcedGrammar ? grammar : null;
 			if (currentGrammar != null)
 				return currentGrammar;
 
-			final ContentTypeInfo info = ContentTypeHelper.findContentTypes(doc);
-			if (info == null)
-				return null;
-
-			final IContentType[] contentTypes = info.getContentTypes();
-			// try to determine the grammar based on the content types
-			IGrammar grammar = TMEclipseRegistryPlugin.getGrammarRegistryManager().getGrammarFor(contentTypes);
-			if (grammar == null) {
-				// try to determine the grammar based on the file type
-				final String fileName = info.getFileName();
-				if (fileName.indexOf('.') > -1) {
-					final String fileExtension = new Path(fileName).getFileExtension();
-					if (fileExtension != null) {
-						grammar = TMEclipseRegistryPlugin.getGrammarRegistryManager().getGrammarForFileExtension(fileExtension);
-					}
-				}
-			}
-			return grammar;
+			return GrammarUtils.findGrammar(doc);
 		}
 	}
 
@@ -362,18 +341,18 @@ public class TMPresentationReconciler implements IPresentationReconciler {
 	}
 
 	public void setGrammar(final @Nullable IGrammar newGrammar) {
-		if (newGrammar == null && this.grammar == null)
+		if (newGrammar == null && grammar == null)
 			return;
 
 		isForcedGrammar = newGrammar != null;
-		if (Objects.equals(newGrammar, this.grammar))
+		if (Objects.equals(newGrammar, grammar))
 			return;
 
 		if (newGrammar == null) {
 			colorizer = null;
 		}
 
-		this.grammar = newGrammar;
+		grammar = newGrammar;
 
 		final IDocument doc = getViewerDocument();
 		if (doc == null)
@@ -389,8 +368,8 @@ public class TMPresentationReconciler implements IPresentationReconciler {
 	}
 
 	public void setTheme(final ITokenProvider newTheme) {
-		if (!Objects.equals(this.theme, newTheme)) {
-			this.theme = newTheme;
+		if (!Objects.equals(theme, newTheme)) {
+			theme = newTheme;
 
 			final var viewer = this.viewer;
 			if (grammar == null || viewer == null)

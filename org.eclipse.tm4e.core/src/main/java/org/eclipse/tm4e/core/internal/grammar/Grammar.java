@@ -318,7 +318,8 @@ public final class Grammar implements IGrammar, IRuleFactoryHelper {
 					false,
 					null,
 					scopeList,
-					scopeList);
+					scopeList,
+					null);
 		} else {
 			isFirstLine = false;
 			prevState.reset();

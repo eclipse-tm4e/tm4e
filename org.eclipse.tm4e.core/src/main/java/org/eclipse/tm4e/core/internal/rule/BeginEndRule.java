@@ -46,8 +46,8 @@ public final class BeginEndRule extends Rule {
 	BeginEndRule(final RuleId id, final @Nullable String name, final @Nullable String contentName, final String begin,
 			final List<@Nullable CaptureRule> beginCaptures, final @Nullable String end,
 			final List<@Nullable CaptureRule> endCaptures, final boolean applyEndPatternLast,
-			final CompilePatternsResult patterns) {
-		super(id, name, contentName);
+			final CompilePatternsResult patterns, final @Nullable String grammarScope) {
+		super(id, name, contentName, grammarScope);
 		this.begin = new RegExpSource(begin, this.id);
 		this.beginCaptures = beginCaptures;
 		this.end = new RegExpSource(defaultIfNull(end, "\uFFFF"), RuleId.END_RULE);

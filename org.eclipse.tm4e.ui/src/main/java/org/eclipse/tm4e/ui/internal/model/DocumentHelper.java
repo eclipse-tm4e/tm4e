@@ -24,16 +24,15 @@ import org.eclipse.tm4e.core.internal.utils.StringUtils;
  */
 public final class DocumentHelper {
 
-	enum DocumentEventType {
+	public enum DocumentEventType {
 		INSERT,
 		REPLACE,
 		REMOVE
 	}
 
-	static DocumentEventType getEventType(final DocumentEvent event) {
-		if (StringUtils.isNullOrEmpty(event.getText())) {
+	public static DocumentEventType getEventType(final DocumentEvent event) {
+		if (StringUtils.isNullOrEmpty(event.getText()))
 			return DocumentEventType.REMOVE;
-		}
 		return event.getLength() == 0
 				? DocumentEventType.INSERT
 				: DocumentEventType.REPLACE;
@@ -50,13 +49,12 @@ public final class DocumentHelper {
 		return event.getDocument().getLineOfOffset(event.getOffset());
 	}
 
-	static int getEndLineIndexOfAddedText(final DocumentEvent event) throws BadLocationException {
+	public static int getEndLineIndexOfAddedText(final DocumentEvent event) throws BadLocationException {
 		final var doc = event.getDocument();
 		final var offsetAfterAddedText = event.getOffset() + event.getText().length();
 		final var isAppendToDocumentEnd = offsetAfterAddedText == doc.getLength();
-		if (isAppendToDocumentEnd) {
+		if (isAppendToDocumentEnd)
 			return doc.getNumberOfLines() - 1;
-		}
 		return doc.getLineOfOffset(offsetAfterAddedText);
 	}
 

@@ -37,17 +37,24 @@ import org.eclipse.tm4e.core.internal.theme.FontStyle;
  *      "https://github.com/microsoft/vscode-textmate/blob/167bbbd509356cc4617f250c0d754aef670ab14a/src/grammar/grammar.ts#L945">
  *      github.com/microsoft/vscode-textmate/blob/main/src/grammar/grammar.ts</a>
  */
-final class LineTokens {
+public final class LineTokens {
 
-	private static final class Token implements IToken {
-		private int startIndex;
-		private final int endIndex;
-		private final List<String> scopes;
+	public static final class Token implements IToken {
+		public int startIndex;
+		public final int endIndex;
+		public final List<String> scopes;
 
-		Token(final int startIndex, final int endIndex, final List<String> scopes) {
+		/**
+		 * Optional grammar root scope for this token (e.g., "source.js" or "text.html.basic").
+		 * Implementations may return null when not available.
+		 */
+		public final @Nullable String grammarScope; // custom tm4e code - not from upstream (for TMPartitioner)
+
+		Token(final int startIndex, final int endIndex, final List<String> scopes, final @Nullable String grammarScope) {
 			this.startIndex = startIndex;
 			this.endIndex = endIndex;
 			this.scopes = scopes;
+			this.grammarScope = grammarScope;
 		}
 
 		@Override
@@ -104,7 +111,7 @@ final class LineTokens {
 
 	private static final Logger LOGGER = System.getLogger(LineTokens.class.getName());
 
-	private static final Deque<IToken> EMPTY_DEQUE = new ArrayDeque<>(0);
+	private static final Deque<Token> EMPTY_DEQUE = new ArrayDeque<>(0);
 
 	private final boolean _emitBinaryTokens;
 
@@ -116,7 +123,7 @@ final class LineTokens {
 	/**
 	 * used only if `emitBinaryTokens` is false.
 	 */
-	private final Deque<IToken> _tokens;
+	private final Deque<Token> _tokens;
 
 	/**
 	 * used only if `emitBinaryTokens` is true.
@@ -124,6 +131,7 @@ final class LineTokens {
 	private final List<Integer> _binaryTokens;
 
 	private int _lastTokenEndIndex = 0;
+	private @Nullable String _currentGrammarScope; // custom tm4e code - not from upstream (for TMPartitioner)
 
 	private final List<TokenTypeMatcher> _tokenTypeOverrides;
 
@@ -148,6 +156,7 @@ final class LineTokens {
 	}
 
 	void produce(final StateStack stack, final int endIndex) {
+		this._currentGrammarScope = stack.grammarScope;
 		this.produceFromScopes(stack.contentNameScopesList, endIndex);
 	}
 
@@ -233,13 +242,13 @@ final class LineTokens {
 			}
 		}
 
-		this._tokens.add(new Token(_lastTokenEndIndex, endIndex, scopes));
+		this._tokens.add(new Token(_lastTokenEndIndex, endIndex, scopes, _currentGrammarScope));
 
 		this._lastTokenEndIndex = endIndex;
 	}
 
 	IToken[] getResult(final StateStack stack, final int lineLength) {
-		if (!this._tokens.isEmpty() && this._tokens.getLast().getStartIndex() == lineLength - 1) {
+		if (!this._tokens.isEmpty() && this._tokens.getLast().startIndex == lineLength - 1) {
 			// pop produced token for newline
 			this._tokens.removeLast();
 		}
@@ -247,10 +256,10 @@ final class LineTokens {
 		if (this._tokens.isEmpty()) {
 			this._lastTokenEndIndex = -1;
 			this.produce(stack, lineLength);
-			this._tokens.getLast().setStartIndex(0);
+			this._tokens.getLast().startIndex = 0;
 		}
 
-		return this._tokens.toArray(IToken[]::new);
+		return this._tokens.toArray(Token[]::new);
 	}
 
 	int[] getBinaryResult(final StateStack stack, final int lineLength) {

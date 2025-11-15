@@ -1,6 +1,6 @@
 /**
  * Copyright (c) 2015-2017 Angelo ZERR.
- * Copyright (c) 2023 Vegard IT GmbH and others.
+ * Copyright (c) 2023-2025 Vegard IT GmbH and others.
  * This program and the accompanying materials are made
  * available under the terms of the Eclipse Public License 2.0
  * which is available at https://www.eclipse.org/legal/epl-2.0/
@@ -17,10 +17,16 @@ import static org.assertj.core.api.Assertions.*;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Collectors;
 
+import org.eclipse.jface.text.IDocument;
 import org.eclipse.swt.widgets.Display;
+import org.eclipse.tm4e.core.model.ITMModel.BackgroundTokenizationState;
+import org.eclipse.tm4e.core.model.ModelTokensChangedEvent;
+import org.eclipse.tm4e.ui.internal.model.TMModelManager;
 import org.eclipse.tm4e.ui.internal.utils.UI;
 import org.eclipse.ui.IEditorDescriptor;
 import org.eclipse.ui.IEditorPart;
@@ -34,6 +40,11 @@ public final class TestUtils {
 	@FunctionalInterface
 	public interface Condition {
 		boolean isMet() throws Exception;
+	}
+
+	@FunctionalInterface
+	public interface ThrowingRunnable {
+		void run() throws Exception;
 	}
 
 	public static IEditorDescriptor assertHasGenericEditor() {
@@ -92,20 +103,20 @@ public final class TestUtils {
 		return "true".equals(System.getenv("GITHUB_ACTIONS"));
 	}
 
-	public static void waitForAndAssertCondition(int timeout_ms, Condition condition) {
+	public static void waitForAndAssertCondition(final int timeout_ms, final Condition condition) {
 		waitForAndAssertCondition("Condition not met within expected time.", timeout_ms, condition);
 	}
 
-	public static void waitForAndAssertCondition(int timeout_ms, Display display, Condition condition) {
+	public static void waitForAndAssertCondition(final int timeout_ms, final Display display, final Condition condition) {
 		waitForAndAssertCondition("Condition not met within expected time.", timeout_ms, display, condition);
 	}
 
-	public static void waitForAndAssertCondition(String errorMessage, int timeout_ms, Condition condition) {
+	public static void waitForAndAssertCondition(final String errorMessage, final int timeout_ms, final Condition condition) {
 		waitForAndAssertCondition(errorMessage, timeout_ms, UI.getDisplay(), condition);
 	}
 
-	public static void waitForAndAssertCondition(String errorMessage, int timeout_ms, Display display,
-			Condition condition) {
+	public static void waitForAndAssertCondition(final String errorMessage, final int timeout_ms, final Display display,
+			final Condition condition) {
 		final var ex = new AtomicReference<Throwable>();
 		final var isConditionMet = new DisplayHelper() {
 			@Override
@@ -122,15 +133,71 @@ public final class TestUtils {
 		}.waitForCondition(display, timeout_ms, 50);
 		if (ex.get() != null) {
 			// if the condition was not met because of an exception throw it
-			if (ex.get() instanceof AssertionError ae) {
+			if (ex.get() instanceof final AssertionError ae)
 				throw ae;
-			}
-			if (ex.get() instanceof RuntimeException re) {
+			if (ex.get() instanceof final RuntimeException re)
 				throw re;
-			}
 			throw new AssertionError(errorMessage, ex.get());
 		}
 		assertThat(isConditionMet).as(errorMessage).isTrue();
+	}
+
+	/**
+	 * Wait until the TM model is ready for assertions, i.e. tokenization has completed at least once.
+	 * This avoids relying solely on background state which may appear COMPLETED from a previous cycle.
+	 */
+	public static void waitForModelReady(final IDocument doc, final int timeout_ms) {
+		final var model = TMModelManager.INSTANCE.getConnectedModel(doc);
+		assertThat(model).as("TM model should be connected").isNotNull();
+
+		// Fast path: if completed and first line has tokens, consider ready
+		if (model.getBackgroundTokenizationState() == BackgroundTokenizationState.COMPLETED
+				&& model.getLineTokens(0) != null) {
+			return;
+		}
+
+		final var latch = new CountDownLatch(1);
+		final ModelTokensChangedEvent.Listener listener = e -> latch.countDown();
+		model.addModelTokensChangedListener(listener);
+		try {
+			try {
+				latch.await(Math.max(50, timeout_ms / 10), TimeUnit.MILLISECONDS);
+			} catch (final InterruptedException ie) {
+				Thread.currentThread().interrupt();
+			}
+
+			waitForAndAssertCondition(timeout_ms,
+					() -> model.getBackgroundTokenizationState() == BackgroundTokenizationState.COMPLETED
+							&& model.getLineTokens(0) != null);
+		} finally {
+			model.removeModelTokensChangedListener(listener);
+		}
+	}
+
+	/**
+	 * Installs a tokens-changed listener BEFORE applying the provided change and then waits for the model
+	 * to go idle (COMPLETED). This avoids missing very fast events right after the change.
+	 */
+	public static void waitForIdleAfterChange(final IDocument doc, final int timeout_ms, final ThrowingRunnable change) throws Exception {
+		final var model = TMModelManager.INSTANCE.getConnectedModel(doc);
+		assertThat(model).as("TM model should be connected").isNotNull();
+
+		waitForAndAssertCondition(5_000, () -> model.getBackgroundTokenizationState() == BackgroundTokenizationState.COMPLETED);
+
+		final var latch = new CountDownLatch(1);
+		final ModelTokensChangedEvent.Listener listener = e -> latch.countDown();
+		model.addModelTokensChangedListener(listener);
+		try {
+			change.run();
+			try {
+				latch.await(Math.max(50, timeout_ms / 10), TimeUnit.MILLISECONDS);
+			} catch (final InterruptedException ie) {
+				Thread.currentThread().interrupt();
+			}
+			waitForAndAssertCondition(timeout_ms, () -> model.getBackgroundTokenizationState() == BackgroundTokenizationState.COMPLETED);
+		} finally {
+			model.removeModelTokensChangedListener(listener);
+		}
 	}
 
 	public static boolean waitForCondition(final int timeout_ms, final Condition condition) {

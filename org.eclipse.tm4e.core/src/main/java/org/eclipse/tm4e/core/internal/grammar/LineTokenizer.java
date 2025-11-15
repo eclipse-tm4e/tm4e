@@ -190,7 +190,15 @@ final class LineTokenizer {
 			final StateStack beforePush = stack;
 			// push it on the stack rule
 			final var scopeName = rule.getName(lineText.content, captureIndices);
-			final var nameScopesList = castNonNull(stack.contentNameScopesList).pushAttributed(scopeName, grammar);
+
+			// custom tm4e code - not from upstream (for TMPartitioner)
+			// make sure origin grammar scope is present when external
+			AttributedScopeStack baseNames = castNonNull(stack.contentNameScopesList);
+			final var nameScopesList = baseNames.pushAttributed(scopeName, grammar);
+			final String frameGrammarScope = (rule.grammarScope != null && !rule.grammarScope.equals(grammar.getScopeName()))
+					? rule.grammarScope
+					: stack.grammarScope;
+
 			stack = stack.push(
 					matchedRuleId,
 					linePos,
@@ -198,7 +206,8 @@ final class LineTokenizer {
 					captureIndices[0].end == lineLength,
 					null,
 					nameScopesList,
-					nameScopesList);
+					nameScopesList,
+					frameGrammarScope);
 
 			if (rule instanceof final BeginEndRule pushedRule) {
 				/*if(LOGGER.isLoggable(DEBUG)) {
@@ -218,7 +227,19 @@ final class LineTokenizer {
 
 				final var contentName = pushedRule.getContentName(lineText.content, captureIndices);
 				final var contentNameScopesList = nameScopesList.pushAttributed(contentName, grammar);
-				stack = stack.withContentNameScopesList(contentNameScopesList);
+
+				// custom tm4e code - not from upstream (for TMPartitioner)
+				// If contentName indicates an embedded root (e.g., source.* or text.*) distinct from the grammar base,
+				// propagate that as the effective grammar scope for this frame so that non-retokenized tokens (e.g., whitespace)
+				// still carry the embedded grammar.
+				String derivedGrammarScope = stack.grammarScope;
+				if (contentName != null) {
+					final String candidate = pickRootScopeFromContentName(contentName);
+					if (candidate != null && !candidate.equals(grammar.getScopeName())) {
+						derivedGrammarScope = candidate;
+					}
+				}
+				stack = stack.withContentNameScopesListAndGrammarScope(contentNameScopesList, derivedGrammarScope);
 
 				if (pushedRule.endHasBackReferences) {
 					stack = stack.withEndRule(
@@ -305,6 +326,31 @@ final class LineTokenizer {
 			linePos = captureIndices[0].end;
 			isFirstLine = false;
 		}
+	}
+
+	/**
+	 * Extract a root scope candidate from a contentName string, which may contain multiple scopes separated by spaces.
+	 * Returns the first token that starts with "source." or "text.", or null if none found.
+	 */
+	private @Nullable String pickRootScopeFromContentName(final String contentName) {
+		// custom tm4e code - not from upstream (for TMPartitioner)
+		final int len = contentName.length();
+		int i = 0;
+		while (i < len) {
+			while (i < len && contentName.charAt(i) == ' ')
+				i++;
+			int j = i;
+			while (j < len && contentName.charAt(j) != ' ')
+				j++;
+			if (j > i) {
+				final String part = contentName.substring(i, j);
+				if (part.startsWith("source.") || part.startsWith("text.")) {
+					return part;
+				}
+			}
+			i = j + 1;
+		}
+		return null;
 	}
 
 	private @Nullable MatchResult matchRule(final Grammar grammar, final OnigString lineText, final boolean isFirstLine, final int linePos,
@@ -460,13 +506,22 @@ final class LineTokenizer {
 			if (retokenizeCapturedWithRuleId.notEquals(RuleId.NO_RULE)) {
 				// the capture requires additional matching
 				final var scopeName = captureRule.getName(lineTextContent, captureIndices);
-				final var nameScopesList = castNonNull(stack.contentNameScopesList).pushAttributed(scopeName, grammar);
+
+				// custom tm4e code - not from upstream (for TMPartitioner)
+				AttributedScopeStack baseNames = castNonNull(stack.contentNameScopesList);
+				final var retokenizeRule = grammar.getRule(retokenizeCapturedWithRuleId);
+				final var grammarScope = retokenizeRule.grammarScope;
+				final var nameScopesList = baseNames.pushAttributed(scopeName, grammar);
+				final String frameGrammarScope = (grammarScope != null && !grammarScope.equals(grammar.getScopeName()))
+						? grammarScope
+						: stack.grammarScope;
+
 				final var contentName = captureRule.getContentName(lineTextContent, captureIndices);
 				final var contentNameScopesList = nameScopesList.pushAttributed(contentName, grammar);
 
 				// the capture requires additional matching
 				final var stackClone = stack.push(retokenizeCapturedWithRuleId, captureIndex.start, -1, false, null, nameScopesList,
-						contentNameScopesList);
+						contentNameScopesList, frameGrammarScope);
 				final var onigSubStr = OnigString.of(lineTextContent.substring(0, captureIndex.end));
 				tokenizeString(grammar, onigSubStr, isFirstLine && captureIndex.start == 0, captureIndex.start, stackClone, lineTokens,
 						false, Duration.ZERO /* no time limit */);

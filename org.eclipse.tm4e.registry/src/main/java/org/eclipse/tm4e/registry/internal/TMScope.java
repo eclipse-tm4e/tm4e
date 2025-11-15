@@ -13,6 +13,7 @@
 package org.eclipse.tm4e.registry.internal;
 
 import static org.eclipse.tm4e.core.internal.utils.ScopeNames.CONTRIBUTOR_SEPARATOR;
+
 import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.tm4e.registry.ITMScope;
 
@@ -20,13 +21,24 @@ public final class TMScope implements ITMScope {
 
 	/**
 	 * @param scopeName fully qualified ("source.batchfile@com.example.myplugin") or unqualified scopeName ("source.batchfile")
+	 *
+	 * @return unqualified scopeName ("source.batchfile")
+	 */
+	public static String toUnqualified(final String scopeName) {
+		final int separatorAt = scopeName.indexOf(CONTRIBUTOR_SEPARATOR);
+		if (separatorAt == -1)
+			return scopeName;
+		return scopeName.substring(0, separatorAt);
+	}
+
+	/**
+	 * @param scopeName fully qualified ("source.batchfile@com.example.myplugin") or unqualified scopeName ("source.batchfile")
 	 */
 	public static TMScope parse(final String scopeName) {
 		final int separatorAt = scopeName.indexOf(CONTRIBUTOR_SEPARATOR);
-		if (separatorAt == -1) {
-			return new TMScope(scopeName, null, scopeName);
-		}
-		return new TMScope(scopeName.substring(0, separatorAt), scopeName.substring(separatorAt + 1), scopeName);
+		return separatorAt == -1
+				? new TMScope(scopeName, null, scopeName)
+				: new TMScope(scopeName.substring(0, separatorAt), scopeName.substring(separatorAt + 1), scopeName);
 	}
 
 	private final @Nullable String pluginId; // e.g. "com.example.myplugin"
@@ -37,14 +49,14 @@ public final class TMScope implements ITMScope {
 	 * @param scopeName the scope name, e.g. "source.batchfile"
 	 * @param pluginId id of the grammar contributing pluginId, e.g. "com.example.myplugin"
 	 */
-	public TMScope(String scopeName, @Nullable String pluginId) {
-		this.name = scopeName;
+	public TMScope(final String scopeName, @Nullable final String pluginId) {
+		name = scopeName;
 		this.pluginId = pluginId;
 		qualifiedName = pluginId == null ? scopeName : scopeName + CONTRIBUTOR_SEPARATOR + pluginId;
 	}
 
 	private TMScope(final String scopeName, final @Nullable String pluginId, final String qualifiedName) {
-		this.name = scopeName;
+		name = scopeName;
 		this.pluginId = pluginId;
 		this.qualifiedName = qualifiedName;
 	}
@@ -53,7 +65,7 @@ public final class TMScope implements ITMScope {
 	public boolean equals(final @Nullable Object obj) {
 		if (this == obj)
 			return true;
-		return obj instanceof TMScope other
+		return obj instanceof final TMScope other
 				&& qualifiedName.equals(other.qualifiedName);
 	}
 

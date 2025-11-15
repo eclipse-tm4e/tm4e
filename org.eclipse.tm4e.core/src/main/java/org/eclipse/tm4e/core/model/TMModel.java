@@ -256,7 +256,7 @@ public abstract class TMModel implements ITMModel {
 				// check if complete line was tokenized
 				if (r.stoppedEarly) {
 					// treat the rest of the line as one default token
-					r.tokens.add(new TMToken(r.actualStopOffset, "", Collections.emptyList()));
+					r.tokens.add(new TMToken(r.actualStopOffset, "", Collections.emptyList(), null));
 					// Use the line's starting state as end state in case of incomplete tokenization
 					r.endState = currLineTokens.startState;
 				}

@@ -31,8 +31,8 @@ final class IncludeOnlyRule extends Rule {
 	private @Nullable RegExpSourceList cachedCompiledPatterns;
 
 	IncludeOnlyRule(final RuleId id, final @Nullable String name, final @Nullable String contentName,
-			final CompilePatternsResult patterns) {
-		super(id, name, contentName);
+			final CompilePatternsResult patterns, final @Nullable String grammarScope) {
+		super(id, name, contentName, grammarScope);
 		this.patterns = patterns.patterns;
 		this.hasMissingPatterns = patterns.hasMissingPatterns;
 	}

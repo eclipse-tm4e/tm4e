@@ -32,10 +32,14 @@ public final class TMToken {
 	// public readonly language: string
 	public final List<String> scopes;
 
-	public TMToken(final int startIndex, final String type, final List<String> scopes) {
+	/** Effective grammar root scope for this token (e.g., "source.js"). May be null. */
+	public final @Nullable String grammarScope; // custom tm4e code - not from upstream (for TMPartitioner)
+
+	public TMToken(final int startIndex, final String type, final List<String> scopes, final @Nullable String grammarScope) {
 		this.startIndex = startIndex;
 		this.type = type;
 		this.scopes = scopes;
+		this.grammarScope = grammarScope; // custom tm4e code - not from upstream (for TMPartitioner)
 	}
 
 	@Override

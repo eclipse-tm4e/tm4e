@@ -30,18 +30,22 @@ public abstract class Rule {
 
 	final RuleId id;
 
+	/** The root scopeName of the grammar that defined this rule (e.g., "text.xml"), or null for local rules. */
+	public final @Nullable String grammarScope; // custom tm4e code - not from upstream (for TMPartitioner)
+
 	private final @Nullable String name;
 	private final boolean nameIsCapturing;
 
 	private final @Nullable String contentName;
 	private final boolean contentNameIsCapturing;
 
-	Rule(final RuleId id, final @Nullable String name, final @Nullable String contentName) {
+	Rule(final RuleId id, final @Nullable String name, final @Nullable String contentName, final @Nullable String grammarScope) {
 		this.id = id;
 		this.name = name;
 		this.nameIsCapturing = RegexSource.hasCaptures(name);
 		this.contentName = contentName;
 		this.contentNameIsCapturing = RegexSource.hasCaptures(contentName);
+		this.grammarScope = grammarScope; // custom tm4e code - not from upstream (for TMPartitioner)
 	}
 
 	public @Nullable String getName(final @Nullable CharSequence lineText, final OnigCaptureIndex @Nullable [] captureIndices) {

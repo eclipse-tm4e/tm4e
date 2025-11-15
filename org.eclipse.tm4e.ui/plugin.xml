@@ -127,6 +127,13 @@
              contentType="org.eclipse.core.runtime.text" />
    </extension>
 
+   <!-- Auto-install TM4E partitioner (secondary partitioning) for text documents when a grammar exists -->
+   <extension point="org.eclipse.core.filebuffers.documentSetup">
+      <participant
+            class="org.eclipse.tm4e.ui.internal.text.TMPartitioningDocumentSetupParticipant"
+            contentTypeId="org.eclipse.core.runtime.text" />
+   </extension>
+
    <extension id="textmarker" point="org.eclipse.core.resources.markers">
       <super type="org.eclipse.core.resources.textmarker"/>
    </extension>

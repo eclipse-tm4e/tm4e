@@ -28,8 +28,8 @@ public final class CaptureRule extends Rule {
 	public final RuleId retokenizeCapturedWithRuleId;
 
 	CaptureRule(final RuleId id, final @Nullable String name, final @Nullable String contentName,
-			final RuleId retokenizeCapturedWithRuleId) {
-		super(id, name, contentName);
+			final RuleId retokenizeCapturedWithRuleId, final @Nullable String grammarScope) {
+		super(id, name, contentName, grammarScope);
 		this.retokenizeCapturedWithRuleId = retokenizeCapturedWithRuleId;
 	}
 

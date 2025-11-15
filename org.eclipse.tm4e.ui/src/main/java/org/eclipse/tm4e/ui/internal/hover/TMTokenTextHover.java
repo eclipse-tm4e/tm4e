@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2024 Vegard IT GmbH and others.
+ * Copyright (c) 2024-2025 Vegard IT GmbH and others.
  * This program and the accompanying materials are made
  * available under the terms of the Eclipse Public License 2.0
  * which is available at https://www.eclipse.org/legal/epl-2.0/
@@ -10,6 +10,8 @@
  * Sebastian Thomschke (Vegard IT) - initial implementation
  *******************************************************************************/
 package org.eclipse.tm4e.ui.internal.hover;
+
+import java.util.Objects;
 
 import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.jface.text.AbstractReusableInformationControlCreator;
@@ -28,6 +30,8 @@ import org.eclipse.tm4e.core.model.TMToken;
 import org.eclipse.tm4e.ui.internal.model.TMDocumentModel;
 import org.eclipse.tm4e.ui.internal.model.TMModelManager;
 import org.eclipse.tm4e.ui.internal.preferences.PreferenceHelper;
+import org.eclipse.tm4e.ui.text.ITMPartitionRegion;
+import org.eclipse.tm4e.ui.text.TMPartitions;
 import org.eclipse.ui.editors.text.EditorsUI;
 
 public class TMTokenTextHover implements ITextHover, ITextHoverExtension {
@@ -35,11 +39,41 @@ public class TMTokenTextHover implements ITextHover, ITextHoverExtension {
 	private static final class RegionWithTMToken extends Region {
 		final TMToken token;
 		final String tokenText;
+		final @Nullable ITMPartitionRegion tmPartition;
 
-		RegionWithTMToken(final int offset, final int length, final String tokenText, final TMToken token) {
+		RegionWithTMToken(
+				final int offset,
+				final int length,
+				final String tokenText,
+				final TMToken token,
+				final @Nullable ITMPartitionRegion tmPartitionRegion) {
 			super(offset, length);
 			this.tokenText = tokenText;
 			this.token = token;
+			tmPartition = tmPartitionRegion;
+		}
+
+		@Override
+		public int hashCode() {
+			final int prime = 31;
+			int result = super.hashCode();
+			result = prime * result + Objects.hash(tmPartition, token, tokenText, getOffset(), getLength());
+			return result;
+		}
+
+		@Override
+		public boolean equals(final @Nullable Object obj) {
+			if (this == obj)
+				return true;
+			if (obj == null || !super.equals(obj))
+				return false;
+			if (obj instanceof final RegionWithTMToken other)
+				return Objects.equals(tmPartition, other.tmPartition) //
+						&& Objects.equals(token, other.token)
+						&& Objects.equals(tokenText, other.tokenText)
+						&& Objects.equals(getOffset(), other.getOffset()) //
+						&& Objects.equals(getLength(), other.getLength());
+			return false;
 		}
 	}
 
@@ -58,11 +92,25 @@ public class TMTokenTextHover implements ITextHover, ITextHoverExtension {
 	public @Nullable String getHoverInfo(final ITextViewer textViewer, final IRegion hoverRegion) {
 		if (hoverRegion instanceof final RegionWithTMToken regionWithToken) {
 			final var text = regionWithToken.tokenText.replace(' ', '·').replace('\t', '→');
-			return "<b>" + text + "</b> (" + text.length()
-					+ " chars)<br>"
+
+			// Partition details captured at region creation time
+			String partitionInfo = "";
+			final var reg = regionWithToken.tmPartition;
+			if (reg != null) {
+				partitionInfo = "<br>"
+						+ "<b>JFace Text Partition:</b>"
+						+ "<li><b>Offset:</b>" + reg.getOffset()
+						+ "<li><b>Length:</b>" + reg.getLength()
+						+ "<li><b>Type:</b> " + reg.getType()
+						+ "<li><b>Grammar Scope:</b> " + reg.getGrammarScope();
+			}
+
+			return "<b>" + text + "</b> (" + text.length() + " chars)<br>"
 					+ "<br>"
 					+ "<b>Token Type:</b> " + regionWithToken.token.type + "<br>"
-					+ "<b>TextMate Scopes:</b> <li>" + String.join("<li>", regionWithToken.token.scopes);
+					+ "<b>Origin Grammar Scope:</b> " + regionWithToken.token.grammarScope + "<br>"
+					+ "<b>TextMate Scopes:</b> <li>" + String.join("<li>", regionWithToken.token.scopes) + "<br>"
+					+ partitionInfo;
 		}
 		return null;
 	}
@@ -106,7 +154,8 @@ public class TMTokenTextHover implements ITextHover, ITextHoverExtension {
 			final int regionLength = nextToken == null
 					? doc.getLineLength(lineIndex) - hoveredToken.startIndex
 					: nextToken.startIndex - hoveredToken.startIndex;
-			return new RegionWithTMToken(regionOffset, regionLength, doc.get(regionOffset, regionLength), hoveredToken);
+			return new RegionWithTMToken(regionOffset, regionLength, doc.get(regionOffset, regionLength), hoveredToken,
+					TMPartitions.getPartition(doc, offset));
 		} catch (final BadLocationException e) {
 			return null;
 		}

@@ -57,6 +57,7 @@ public final class StateStack implements IStateStack {
 			false,
 			null,
 			null,
+			null,
 			null);
 
 	/**
@@ -109,6 +110,13 @@ public final class StateStack implements IStateStack {
 	 */
 	final @Nullable AttributedScopeStack contentNameScopesList;
 
+	/**
+	 * Grammar root scope to associate with tokens while this state is active.
+	 * Typically the origin scope of the rule that introduced this state when it differs from
+	 * the base grammar scope. Null means "use default heuristics".
+	 */
+	final @Nullable String grammarScope; // custom tm4e code - not from upstream (for TMPartitioner)
+
 	StateStack(
 			final @Nullable StateStack parent,
 			final RuleId ruleId,
@@ -117,7 +125,8 @@ public final class StateStack implements IStateStack {
 			final boolean beginRuleCapturedEOL,
 			final @Nullable String endRule,
 			final @Nullable AttributedScopeStack nameScopesList,
-			final @Nullable AttributedScopeStack contentNameScopesList) {
+			final @Nullable AttributedScopeStack contentNameScopesList,
+			final @Nullable String grammarScope) {
 
 		this.parent = parent;
 		this.ruleId = ruleId;
@@ -128,6 +137,7 @@ public final class StateStack implements IStateStack {
 		this.endRule = endRule;
 		this.nameScopesList = nameScopesList;
 		this.contentNameScopesList = contentNameScopesList;
+		this.grammarScope = grammarScope; // custom tm4e code - not from upstream
 	}
 
 	@Override
@@ -231,7 +241,32 @@ public final class StateStack implements IStateStack {
 				beginRuleCapturedEOL,
 				endRule,
 				nameScopesList,
-				contentNameScopesList);
+				contentNameScopesList,
+				this.grammarScope);
+	}
+
+	/**
+	 * Push variant allowing to override the effective grammar scope for the new frame.
+	 */
+	StateStack push( // custom tm4e code - not from upstream (for TMPartitioner)
+			final RuleId ruleId,
+			final int enterPos,
+			final int anchorPos,
+			final boolean beginRuleCapturedEOL,
+			final @Nullable String endRule,
+			final @Nullable AttributedScopeStack nameScopesList,
+			final @Nullable AttributedScopeStack contentNameScopesList,
+			final @Nullable String originScope) {
+		return new StateStack(
+				this,
+				ruleId,
+				enterPos,
+				anchorPos,
+				beginRuleCapturedEOL,
+				endRule,
+				nameScopesList,
+				contentNameScopesList,
+				originScope);
 	}
 
 	int getEnterPos() {
@@ -273,6 +308,26 @@ public final class StateStack implements IStateStack {
 				contentNameScopesList);
 	}
 
+	StateStack withContentNameScopesListAndGrammarScope(
+			final @Nullable AttributedScopeStack contentNameScopesList,
+			final @Nullable String grammarScope) {
+		// custom tm4e code - not from upstream (for TMPartitioner)
+		if (Objects.equals(this.contentNameScopesList, contentNameScopesList)
+				&& Objects.equals(this.grammarScope, grammarScope)) {
+			return this;
+		}
+		return new StateStack(
+				this.parent,
+				this.ruleId,
+				this._enterPos,
+				this._anchorPos,
+				this.beginRuleCapturedEOL,
+				this.endRule,
+				this.nameScopesList,
+				contentNameScopesList,
+				grammarScope);
+	}
+
 	StateStack withEndRule(final String endRule) {
 		if (this.endRule != null && this.endRule.equals(endRule)) {
 			return this;
@@ -285,7 +340,8 @@ public final class StateStack implements IStateStack {
 				this.beginRuleCapturedEOL,
 				endRule,
 				this.nameScopesList,
-				this.contentNameScopesList);
+				this.contentNameScopesList,
+				this.grammarScope);
 	}
 
 	/**
@@ -333,6 +389,7 @@ public final class StateStack implements IStateStack {
 				frame.beginRuleCapturedEOL,
 				frame.endRule,
 				namesScopeList,
-				AttributedScopeStack.fromExtension(namesScopeList, frame.contentNameScopesList));
+				AttributedScopeStack.fromExtension(namesScopeList, frame.contentNameScopesList),
+				null);
 	}
 }

@@ -44,8 +44,8 @@ public final class BeginWhileRule extends Rule {
 	BeginWhileRule(final RuleId id, final @Nullable String name, final @Nullable String contentName,
 			final String begin, final List<@Nullable CaptureRule> beginCaptures,
 			final String _while, final List<@Nullable CaptureRule> whileCaptures,
-			final CompilePatternsResult patterns) {
-		super(/* $location, */id, name, contentName);
+			final CompilePatternsResult patterns, final @Nullable String grammarScope) {
+		super(/* $location, */id, name, contentName, grammarScope);
 		this.begin = new RegExpSource(begin, this.id);
 		this.beginCaptures = beginCaptures;
 		this.whileCaptures = whileCaptures;

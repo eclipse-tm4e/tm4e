@@ -32,8 +32,9 @@ public final class MatchRule extends Rule {
 
 	private @Nullable RegExpSourceList cachedCompiledPatterns;
 
-	MatchRule(final RuleId id, final @Nullable String name, final String match, final List<@Nullable CaptureRule> captures) {
-		super(id, name, null);
+	MatchRule(final RuleId id, final @Nullable String name, final String match, final List<@Nullable CaptureRule> captures,
+			final @Nullable String grammarScope) {
+		super(id, name, null, grammarScope);
 		this.match = new RegExpSource(match, this.id);
 		this.captures = captures;
 	}

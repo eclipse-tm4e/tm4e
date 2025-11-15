@@ -42,12 +42,13 @@ public final class RuleFactory {
 	private static final Logger LOGGER = System.getLogger(RuleFactory.class.getName());
 
 	private static CaptureRule createCaptureRule(final IRuleFactoryHelper helper, final @Nullable String name,
-			final @Nullable String contentName, final RuleId retokenizeCapturedWithRuleId) {
-		return helper.registerRule(id -> new CaptureRule(id, name, contentName, retokenizeCapturedWithRuleId));
+			final @Nullable String contentName, final RuleId retokenizeCapturedWithRuleId, final @Nullable String grammarScope) {
+		return helper.registerRule(id -> new CaptureRule(id, name, contentName, retokenizeCapturedWithRuleId, grammarScope));
 	}
 
 	public static RuleId getCompiledRuleId(final IRawRule desc, final IRuleFactoryHelper helper, final IRawRepository repository) {
 		if (desc.getId() == null) {
+			final String grammarScope = repository.getSelf().getName(); // custom tm4e code - not from upstream (for TMPartitioner)
 			helper.registerRule(ruleId -> {
 				desc.setId(ruleId);
 
@@ -57,7 +58,7 @@ public final class RuleFactory {
 							ruleId,
 							desc.getName(),
 							ruleMatch,
-							_compileCaptures(desc.getCaptures(), helper, repository));
+							_compileCaptures(desc.getCaptures(), helper, repository, grammarScope), grammarScope);
 				}
 
 				final var begin = desc.getBegin();
@@ -73,7 +74,7 @@ public final class RuleFactory {
 							ruleId,
 							desc.getName(),
 							desc.getContentName(),
-							_compilePatterns(patterns, helper, repository1));
+							_compilePatterns(patterns, helper, repository1), grammarScope);
 				}
 
 				final String ruleWhile = desc.getWhile();
@@ -83,27 +84,29 @@ public final class RuleFactory {
 							desc.getName(),
 							desc.getContentName(),
 							begin, _compileCaptures(defaultIfNull(desc.getBeginCaptures(), desc.getCaptures()), helper,
-									repository),
+									repository, grammarScope),
 							ruleWhile, _compileCaptures(defaultIfNull(desc.getWhileCaptures(), desc.getCaptures()), helper,
-									repository),
-							_compilePatterns(desc.getPatterns(), helper, repository));
+									repository, grammarScope),
+							_compilePatterns(desc.getPatterns(), helper, repository), grammarScope);
 				}
 
 				return new BeginEndRule(
 						ruleId,
 						desc.getName(),
 						desc.getContentName(),
-						begin, _compileCaptures(defaultIfNull(desc.getBeginCaptures(), desc.getCaptures()), helper, repository),
-						desc.getEnd(), _compileCaptures(defaultIfNull(desc.getEndCaptures(), desc.getCaptures()), helper, repository),
+						begin,
+						_compileCaptures(defaultIfNull(desc.getBeginCaptures(), desc.getCaptures()), helper, repository, grammarScope),
+						desc.getEnd(),
+						_compileCaptures(defaultIfNull(desc.getEndCaptures(), desc.getCaptures()), helper, repository, grammarScope),
 						desc.isApplyEndPatternLast(),
-						_compilePatterns(desc.getPatterns(), helper, repository));
+						_compilePatterns(desc.getPatterns(), helper, repository), grammarScope);
 			});
 		}
 		return castNonNull(desc.getId());
 	}
 
 	private static List<@Nullable CaptureRule> _compileCaptures(final @Nullable IRawCaptures captures, final IRuleFactoryHelper helper,
-			final IRawRepository repository) {
+			final IRawRepository repository, final @Nullable String grammarScope) {
 		if (captures == null) {
 			return Collections.emptyList();
 		}
@@ -129,7 +132,8 @@ public final class RuleFactory {
 			final RuleId retokenizeCapturedWithRuleId = rule.getPatterns() == null
 					? RuleId.NO_RULE
 					: getCompiledRuleId(rule, helper, repository);
-			r.set(numericCaptureId, createCaptureRule(helper, rule.getName(), rule.getContentName(), retokenizeCapturedWithRuleId));
+			r.set(numericCaptureId,
+					createCaptureRule(helper, rule.getName(), rule.getContentName(), retokenizeCapturedWithRuleId, grammarScope));
 		});
 		return r;
 	}

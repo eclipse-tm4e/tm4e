@@ -30,7 +30,7 @@ import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.tm4e.core.grammar.IGrammar;
 import org.eclipse.tm4e.core.grammar.IStateStack;
-import org.eclipse.tm4e.core.grammar.IToken;
+import org.eclipse.tm4e.core.internal.grammar.LineTokens.Token;
 import org.eclipse.tm4e.core.internal.grammar.StateStack;
 import org.eclipse.tm4e.core.internal.utils.MoreCollections;
 import org.eclipse.tm4e.core.internal.utils.StringUtils;
@@ -79,17 +79,30 @@ public class TMTokenizationSupport implements ITokenizationSupport {
 			final @Nullable Duration timeLimit) {
 
 		final var tokenizationResult = _grammar.tokenizeLine(line, state, timeLimit);
-		final var tokens = tokenizationResult.getTokens();
+		final var tokens = (Token[]) tokenizationResult.getTokens();
 
 		// Create the result early and fill in the tokens later
 		final var tmTokens = new ArrayList<TMToken>(tokens.length < 10 ? tokens.length : 10);
 		String lastTokenType = null;
-		for (final IToken token : tokens) {
-			final String tokenType = decodeTextMateTokenCached.apply(decodeMap, token.getScopes());
+		for (final Token token : tokens) {
+			final String tokenType = decodeTextMateTokenCached.apply(decodeMap, token.scopes);
 
 			// do not push a new token if the type is exactly the same (also helps with ligatures)
 			if (!tokenType.equals(lastTokenType)) {
-				tmTokens.add(new TMToken(token.getStartIndex() + offsetDelta, tokenType, token.getScopes()));
+
+				// custom tm4e code - not from upstream (for TMPartitioner)
+				// Why we look up a preferred root from scopes:
+				// The frame-level hint (token.getGrammarScope()) can lag behind in embedded regions
+				// when outer rules produce tokens (e.g., whitespace, punctuation). The scopes list
+				// always reflects the innermost effective root (last source.* or text.*). Use that
+				// when it differs from the base grammar; otherwise keep the hint for stability.
+				final String baseScope = _grammar.getScopeName();
+				final String preferredFromScopes = choosePreferredScope(token.scopes, baseScope);
+				final String tokenGrammarScope = token.grammarScope == null
+						|| (preferredFromScopes != null && !preferredFromScopes.equals(baseScope))
+								? preferredFromScopes
+								: token.grammarScope;
+				tmTokens.add(new TMToken(token.startIndex + offsetDelta, tokenType, token.scopes, tokenGrammarScope));
 				lastTokenType = tokenType;
 			}
 		}
@@ -102,10 +115,36 @@ public class TMTokenizationSupport implements ITokenizationSupport {
 				// TODO Math.min() is a temporary workaround because currently in some cases lastToken.getEndIndex()
 				// incorrectly returns larger values than line.length() for some reasons.
 				// See for example GrammarTest#testTokenize1IllegalToken()
-				offsetDelta + Math.min(line.length(), lastToken.getEndIndex()),
+				offsetDelta + Math.min(line.length(), lastToken.endIndex),
 
 				tokenizationResult.getRuleStack(),
 				tokenizationResult.isStoppedEarly());
+	}
+
+	private static @Nullable String choosePreferredScope(final List<String> scopes, final @Nullable String baseScope) {
+		// custom tm4e code - not from upstream (for TMPartitioner)
+		String lastSource = null;
+		String lastText = null;
+		for (final String scope : scopes) {
+			if (scope.endsWith("-ignored-vscode") || "source.unknown".equals(scope) || "text.unknown".equals(scope)) {
+				continue;
+			}
+			if (scope.startsWith("source.")) {
+				lastSource = scope;
+			} else if (scope.startsWith("text.")) {
+				lastText = scope;
+			}
+		}
+
+		if (lastSource != null && !lastSource.equals(baseScope))
+			return lastSource;
+		if (lastText != null && !lastText.equals(baseScope))
+			return lastText;
+		if (lastSource != null)
+			return lastSource;
+		if (lastText != null)
+			return lastText;
+		return baseScope;
 	}
 
 	private final BiFunction<DecodeMap, List<String>, String> decodeTextMateTokenCached = new BiFunction<>() {

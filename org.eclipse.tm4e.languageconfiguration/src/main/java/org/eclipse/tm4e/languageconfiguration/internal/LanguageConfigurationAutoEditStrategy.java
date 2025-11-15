@@ -8,6 +8,7 @@
  *
  * Contributors:
  * Angelo Zerr <angelo.zerr@gmail.com> - initial API and implementation
+ * Sebastian Thomschke (Vegard IT GmbH) - resolve auto-edit content types from TM partitions
  */
 package org.eclipse.tm4e.languageconfiguration.internal;
 
@@ -35,6 +36,7 @@ import org.eclipse.tm4e.languageconfiguration.internal.utils.TextUtils;
 import org.eclipse.tm4e.ui.internal.model.TMModelManager;
 import org.eclipse.tm4e.ui.internal.utils.ContentTypeHelper;
 import org.eclipse.tm4e.ui.internal.utils.UI;
+import org.eclipse.tm4e.ui.text.TMPartitions;
 
 /**
  * {@link IAutoEditStrategy} which uses VSCode language-configuration.json.
@@ -65,10 +67,17 @@ public class LanguageConfigurationAutoEditStrategy implements IAutoEditStrategy 
 		if (contentTypes.length == 0 || command.getCommandCount() > 1)
 			return;
 
+		// Determine effective content types based on TM4E partition at the edit location
+		IContentType[] effectiveContentTypes = contentTypes;
+		final var tmPartitionContentTypes = TMPartitions.getContentTypesForOffset(doc, command.offset);
+		if (tmPartitionContentTypes.length > 0) {
+			effectiveContentTypes = tmPartitionContentTypes;
+		}
+
 		if (isEnter(doc, command)) {
 			// enter-key pressed
 			final var cursorCfg = TextEditorPrefs.getCursorConfiguration(UI.getActiveTextEditor());
-			onEnter(cursorCfg, doc, contentTypes, command);
+			onEnter(cursorCfg, doc, effectiveContentTypes, command);
 			return;
 		}
 
@@ -78,7 +87,7 @@ public class LanguageConfigurationAutoEditStrategy implements IAutoEditStrategy 
 			// auto surround pair
 			final var textSelection = UI.getActiveTextSelection();
 			if (textSelection != null && textSelection.getLength() > 0) {
-				for (final IContentType contentType : contentTypes) {
+				for (final IContentType contentType : effectiveContentTypes) {
 					if (!registry.shouldSurroundingPairs(contentType))
 						continue;
 
@@ -104,7 +113,7 @@ public class LanguageConfigurationAutoEditStrategy implements IAutoEditStrategy 
 			}
 
 			// auto close pair
-			for (final IContentType contentType : contentTypes) {
+			for (final IContentType contentType : effectiveContentTypes) {
 				final var autoClosingPair = registry.getAutoClosingPair(doc.get(), command.offset, command.text, contentType);
 				if (autoClosingPair == null) {
 					continue;

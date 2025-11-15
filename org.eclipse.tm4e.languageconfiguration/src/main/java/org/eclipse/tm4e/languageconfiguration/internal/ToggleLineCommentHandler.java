@@ -8,6 +8,7 @@
  *
  * Contributors:
  * Lucas Bullen (Red Hat Inc.) - initial API and implementation
+ * Sebastian Thomschke - make comment toggling partition-aware for embedded grammars
  */
 package org.eclipse.tm4e.languageconfiguration.internal;
 
@@ -47,6 +48,7 @@ import org.eclipse.tm4e.languageconfiguration.internal.supports.CommentSupport;
 import org.eclipse.tm4e.languageconfiguration.internal.utils.TextUtils;
 import org.eclipse.tm4e.ui.internal.utils.ContentTypeHelper;
 import org.eclipse.tm4e.ui.internal.utils.ContentTypeInfo;
+import org.eclipse.tm4e.ui.text.TMPartitions;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.handlers.HandlerUtil;
 import org.eclipse.ui.part.FileEditorInput;
@@ -64,12 +66,12 @@ public class ToggleLineCommentHandler extends AbstractHandler {
 	}
 
 	private IStatus setWritable(final IFile file) {
-		ResourceAttributes attrs = file.getResourceAttributes();
+		final ResourceAttributes attrs = file.getResourceAttributes();
 		if (attrs != null) {
 			try {
 				attrs.setReadOnly(false);
 				file.setResourceAttributes(attrs);
-			} catch (CoreException e) {
+			} catch (final CoreException e) {
 				return e.getStatus();
 			}
 		}
@@ -80,15 +82,14 @@ public class ToggleLineCommentHandler extends AbstractHandler {
 	public @Nullable Object execute(final ExecutionEvent event) throws ExecutionException {
 		final var part = HandlerUtil.getActiveEditor(event);
 		final var editor = adapt(part, ITextEditor.class);
-		if (editor == null) {
+		if (editor == null)
 			return null;
-		}
 
 		final var editorExt = adapt(editor, ITextEditorExtension.class);
 		if (editorExt != null && editorExt.isEditorInputReadOnly()) {
 			final IEditorInput input = editor.getEditorInput();
 			IFile file = null;
-			if (input instanceof FileEditorInput fileInput) {
+			if (input instanceof final FileEditorInput fileInput) {
 				file = fileInput.getFile();
 			}
 
@@ -118,29 +119,26 @@ public class ToggleLineCommentHandler extends AbstractHandler {
 		if (selection instanceof ITextSelection textSelection) {
 			final var input = editor.getEditorInput();
 			final var docProvider = editor.getDocumentProvider();
-			if (docProvider == null || input == null) {
+			if (docProvider == null || input == null)
 				return null;
-			}
 
 			final var document = docProvider.getDocument(input);
-			if (document == null) {
+			if (document == null)
 				return null;
-			}
 
 			final ContentTypeInfo info = ContentTypeHelper.findContentTypes(document);
 			if (info == null)
 				return null;
 
 			final var contentTypes = info.getContentTypes();
-			final var command = event.getCommand();
 			final var commentSupport = getCommentSupport(contentTypes);
-			if (commentSupport == null) {
+			if (commentSupport == null)
 				return null;
-			}
+
 			// Check if comment support is valid according the command to do.
-			if (!isValid(commentSupport, command)) {
+			final var command = event.getCommand();
+			if (!isValid(commentSupport, command))
 				return null;
-			}
 
 			final var target = adapt(editor, IRewriteTarget.class);
 			if (target != null) {
@@ -149,12 +147,19 @@ public class ToggleLineCommentHandler extends AbstractHandler {
 			try {
 				switch (command.getId()) {
 					case TOGGLE_LINE_COMMENT_COMMAND_ID: {
+						// Always try partition-aware toggling first so that embedded partitions with
+						// their own line comment tokens can be handled even when the host content type
+						// lacks a line comment definition.
+						if (toggleLineCommentPartitionAware(document, textSelection, editor)) {
+							break;
+						}
 						final var lineComment = commentSupport.getLineComment();
 						if (lineComment != null && !lineComment.isEmpty()) {
 							updateLineComment(document, textSelection, lineComment, editor);
 						} else {
-							final var blockComment = commentSupport.getBlockComment();
-							if (blockComment != null && !blockComment.open.isEmpty() && !blockComment.close.isEmpty()) {
+							final BlockCommentTokens blockComment = resolveBlockCommentTokens(document, textSelection,
+									commentSupport);
+							if (blockComment != null) {
 								final ITextSelection expandedSelection = expandTextSelectionToFullyIncludeCommentParts(document,
 										textSelection, blockComment.open, blockComment.close);
 								int shiftOffset = expandedSelection.getOffset() - textSelection.getOffset();
@@ -256,8 +261,9 @@ public class ToggleLineCommentHandler extends AbstractHandler {
 					}
 
 					case ADD_BLOCK_COMMENT_COMMAND_ID: {
-						final var blockComment = commentSupport.getBlockComment();
-						if (blockComment != null && !blockComment.open.isEmpty() && !blockComment.close.isEmpty()) {
+						final BlockCommentTokens blockComment = resolveBlockCommentTokens(document, textSelection,
+								commentSupport);
+						if (blockComment != null) {
 							if (!isInsideBlockComment(document, textSelection, blockComment.open, blockComment.close)) {
 								textSelection = removeBlockComments(document, textSelection, blockComment.open,
 										blockComment.close);
@@ -276,8 +282,9 @@ public class ToggleLineCommentHandler extends AbstractHandler {
 					}
 
 					case REMOVE_BLOCK_COMMENT_COMMAND_ID: {
-						final var blockComment = commentSupport.getBlockComment();
-						if (blockComment != null && !blockComment.open.isEmpty() && !blockComment.close.isEmpty()) {
+						final BlockCommentTokens blockComment = resolveBlockCommentTokens(document, textSelection,
+								commentSupport);
+						if (blockComment != null) {
 							textSelection = removeBlockComments(document, textSelection, blockComment.open,
 									blockComment.close);
 							editor.selectAndReveal(textSelection.getOffset(), 0);
@@ -302,6 +309,170 @@ public class ToggleLineCommentHandler extends AbstractHandler {
 		return null;
 	}
 
+	private static final class BlockCommentTokens {
+		final String open;
+		final String close;
+
+		BlockCommentTokens(final String open, final String close) {
+			this.open = open;
+			this.close = close;
+		}
+	}
+
+	/**
+	 * Partition-aware toggle for line comments. Returns true if handled; false to fall back to default.
+	 */
+	private static boolean toggleLineCommentPartitionAware(final IDocument document, final ITextSelection selection,
+			final ITextEditor editor)
+			throws BadLocationException {
+		if (!TMPartitions.hasPartitioning(document))
+			return false;
+
+		// Determine per-line comment token for each selected line
+		final Set<Integer> lines = computeLines(selection, document);
+		if (lines.isEmpty())
+			return false;
+
+		// Build contiguous blocks of lines sharing the same comment token
+		int minLine = Integer.MAX_VALUE, maxLine = Integer.MIN_VALUE;
+		for (final int l : lines) {
+			minLine = Math.min(minLine, l);
+			maxLine = Math.max(maxLine, l);
+		}
+
+		int curr = minLine;
+		boolean handledAny = false;
+		while (curr <= maxLine) {
+			// Skip non-selected lines or blank lines
+			if (!lines.contains(curr) || org.eclipse.tm4e.languageconfiguration.internal.utils.TextUtils.isBlankLine(document, curr)) {
+				curr++;
+				continue;
+			}
+			final int lineStart = document.getLineOffset(curr);
+			final String token = getLineCommentTokenAtOffset(document, lineStart);
+			if (token == null || token.isEmpty())
+				// no mapping -> bail out to default behavior
+				return false;
+			final int blockStartLine = curr;
+			int blockEndLine = curr;
+			// Extend while contiguous lines share the same token
+			for (int l = curr + 1; l <= maxLine; l++) {
+				if (!lines.contains(l) || org.eclipse.tm4e.languageconfiguration.internal.utils.TextUtils.isBlankLine(document, l)) {
+					break;
+				}
+				final int off = document.getLineOffset(l);
+				final String t2 = getLineCommentTokenAtOffset(document, off);
+				if (!token.equals(t2)) {
+					break;
+				}
+				blockEndLine = l;
+				curr = l; // advance outer loop as well
+			}
+
+			final int blockOffset = document.getLineOffset(blockStartLine);
+			final int blockEndOffset = document.getLineOffset(blockEndLine) + document.getLineLength(blockEndLine);
+			final ITextSelection blockSel = new TextSelection(document, blockOffset, blockEndOffset - blockOffset);
+			updateLineComment(document, blockSel, token, editor);
+			handledAny = true;
+			curr++;
+		}
+		return handledAny;
+	}
+
+	private static @Nullable BlockCommentTokens resolveBlockCommentTokens(final IDocument document,
+			final ITextSelection selection, final CommentSupport commentSupport) throws BadLocationException {
+		final var partitionTokens = getBlockCommentTokensFromPartition(document, selection);
+		if (partitionTokens != null) {
+			return partitionTokens;
+		}
+		final var fallback = commentSupport.getBlockComment();
+		if (fallback != null && !fallback.open.isEmpty() && !fallback.close.isEmpty()) {
+			return new BlockCommentTokens(fallback.open, fallback.close);
+		}
+		return null;
+	}
+
+	private static @Nullable BlockCommentTokens getBlockCommentTokensFromPartition(final IDocument document,
+			final ITextSelection selection) throws BadLocationException {
+		if (!TMPartitions.hasPartitioning(document) || document.getLength() == 0) {
+			return null;
+		}
+		int offset = clampOffset(document, selection.getOffset());
+		if (selection.getLength() > 0) {
+			for (int line = selection.getStartLine(); line <= selection.getEndLine(); line++) {
+				if (line < 0)
+					continue;
+				if (TextUtils.isBlankLine(document, line))
+					continue;
+				offset = document.getLineOffset(line);
+				break;
+			}
+		}
+		BlockCommentTokens tokens = getBlockCommentTokenAtOffset(document, offset);
+		if (tokens != null)
+			return tokens;
+		if (selection.getLength() > 0) {
+			final int endOffset = clampOffset(document, selection.getOffset() + selection.getLength() - 1);
+			if (endOffset != offset) {
+				tokens = getBlockCommentTokenAtOffset(document, endOffset);
+			}
+		}
+		return tokens;
+	}
+
+	private static @Nullable BlockCommentTokens getBlockCommentTokenAtOffset(final IDocument doc, final int requestedOffset) {
+		if (!TMPartitions.hasPartitioning(doc))
+			return null;
+		final int offset = clampOffset(doc, requestedOffset);
+		final var cts = TMPartitions.getContentTypesForOffset(doc, offset);
+		if (cts.length == 0)
+			return null;
+		final var registry = LanguageConfigurationRegistryManager.getInstance();
+		for (final IContentType ct : cts) {
+			if (!registry.shouldComment(ct)) {
+				continue;
+			}
+			final var commentSupport = registry.getCommentSupport(ct);
+			if (commentSupport != null) {
+				final var blockComment = commentSupport.getBlockComment();
+				if (blockComment != null && !blockComment.open.isEmpty() && !blockComment.close.isEmpty()) {
+					return new BlockCommentTokens(blockComment.open, blockComment.close);
+				}
+			}
+		}
+		return null;
+	}
+
+	private static @Nullable String getLineCommentTokenAtOffset(final IDocument doc, final int offset) {
+		final var cts = TMPartitions.getContentTypesForOffset(doc, offset);
+		if (cts.length == 0)
+			return null;
+		final var registry = LanguageConfigurationRegistryManager.getInstance();
+		for (final IContentType ct : cts) {
+			if (!registry.shouldComment(ct)) {
+				continue;
+			}
+			final var commentSupport = registry.getCommentSupport(ct);
+			if (commentSupport != null) {
+				final var lineComment = commentSupport.getLineComment();
+				if (lineComment != null && !lineComment.isEmpty())
+					return lineComment;
+			}
+		}
+		return null;
+	}
+
+	private static int clampOffset(final IDocument document, final int offset) {
+		final int length = document.getLength();
+		if (length <= 0)
+			return 0;
+		if (offset <= 0)
+			return 0;
+		if (offset >= length)
+			return length - 1;
+		return offset;
+	}
+
 	private static boolean isBeforeSelection(final IRegion region, final int selectionStart) {
 		final int regionStart = region.getOffset();
 		final int regionEnd = regionStart + region.getLength();
@@ -316,12 +487,10 @@ public class ToggleLineCommentHandler extends AbstractHandler {
 				continue;
 			}
 			final String text = document.get(i, part.length());
-			if (part.indexOf(text.charAt(0)) == -1) {
+			if (part.indexOf(text.charAt(0)) == -1)
 				return null;
-			}
-			if (text.indexOf(part) == 0) {
+			if (text.indexOf(part) == 0)
 				return new TypedRegion(i, part.length(), part);
-			}
 		}
 		return null;
 	}
@@ -358,9 +527,8 @@ public class ToggleLineCommentHandler extends AbstractHandler {
 		final var lineComment = commentSupport.getLineComment();
 		final var blockComment = commentSupport.getBlockComment();
 		if ((lineComment == null || lineComment.isEmpty())
-				&& (blockComment == null || blockComment.open.isEmpty() || blockComment.close.isEmpty())) {
+				&& (blockComment == null || blockComment.open.isEmpty() || blockComment.close.isEmpty()))
 			return false;
-		}
 		// A command should to be either Toggle Line comment or Add/Remove Block comment
 		return TOGGLE_LINE_COMMENT_COMMAND_ID.equals(command.getId())
 				|| ADD_BLOCK_COMMENT_COMMAND_ID.equals(command.getId())
@@ -379,9 +547,8 @@ public class ToggleLineCommentHandler extends AbstractHandler {
 				continue;
 			}
 			final var commentSupport = registry.getCommentSupport(contentType);
-			if (commentSupport != null) {
+			if (commentSupport != null)
 				return commentSupport;
-			}
 		}
 		return null;
 	}
@@ -400,9 +567,8 @@ public class ToggleLineCommentHandler extends AbstractHandler {
 		int lineNumber = selection.getStartLine();
 		while (lineNumber <= selection.getEndLine()) {
 			final var lineRegion = document.getLineInformation(lineNumber);
-			if (!document.get(lineRegion.getOffset(), lineRegion.getLength()).trim().startsWith(comment)) {
+			if (!document.get(lineRegion.getOffset(), lineRegion.getLength()).trim().startsWith(comment))
 				return false;
-			}
 			lineNumber++;
 		}
 		return true;
@@ -460,9 +626,8 @@ public class ToggleLineCommentHandler extends AbstractHandler {
 		final ITextSelection expandedSelection = expandTextSelectionToFullyIncludeCommentParts(document, textSelection, open,
 				close);
 		final String text = document.get(textSelection.getOffset(), textSelection.getLength());
-		if (text.startsWith(open)) {
+		if (text.startsWith(open))
 			return true;
-		}
 		return findNotClosedOpen(document, expandedSelection, open, close) != null;
 	}
 
@@ -475,9 +640,8 @@ public class ToggleLineCommentHandler extends AbstractHandler {
 		// Find the nearest open and or close block comment part
 		if (!backOrderedBeforeSelectioonComments.isEmpty()) {
 			final ITypedRegion comment = backOrderedBeforeSelectioonComments.first();
-			if (open.equals(comment.getType())) {
+			if (open.equals(comment.getType()))
 				return comment;
-			}
 		}
 		return null;
 	}
@@ -490,9 +654,8 @@ public class ToggleLineCommentHandler extends AbstractHandler {
 
 		// Find the nearest close block comment part
 		for (final ITypedRegion comment : afterSelectioonComments) {
-			if (close.equals(comment.getType())) {
+			if (close.equals(comment.getType()))
 				return comment;
-			}
 		}
 		return null;
 	}

@@ -10,6 +10,7 @@ on:  # https://docs.github.com/en/actions/reference/workflows-and-actions/events
     paths-ignore:
     - '**/*.md'
     - '.github/*.yml'
+    - '.github/workflows/bump-version.yml'
     - '.github/workflows/codeql.yml'
     - '.github/workflows/licensecheck.yml'
     - '.github/workflows/validate_pr.yml'
@@ -23,6 +24,7 @@ on:  # https://docs.github.com/en/actions/reference/workflows-and-actions/events
     - '**/*.md'
     - '.github/*.yml'
     - '.github/workflows/bump-version.yml'
+    - '.github/workflows/codeql.yml'
     - '.github/workflows/licensecheck.yml'
     - '.github/workflows/validate_pr.yml'
     - '**/.project'

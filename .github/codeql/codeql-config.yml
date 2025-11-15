@@ -1,0 +1,15 @@
+# https://docs.github.com/en/code-security/code-scanning/creating-an-advanced-setup-for-code-scanning/customizing-your-advanced-setup-for-code-scanning#using-a-custom-configuration-file
+name: "CodeQL config"
+queries:
+- uses: security-and-quality
+- uses: ./.github/codeql/queries/java  # load our custom CodeQL rules
+
+query-filters:
+- exclude:
+    # Exclude the built-in shadowing rule.
+    # We intentionally use final locals that copy instance fields
+    # (e.g. `final var name = this.name`) to support Eclipse null analysis
+    # without introducing noisy renaming. This pattern is deliberate and safe,
+    # so the built-in rule is disabled in favor of our custom rule
+    # (local-shadows-instance-field.ql).
+    id: java/local-shadows-field

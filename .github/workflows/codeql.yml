@@ -2,15 +2,13 @@
 name: CodeQL
 
 on:  # https://docs.github.com/en/actions/reference/workflows-and-actions/events-that-trigger-workflows
+  schedule:
+    # https://docs.github.com/en/actions/reference/workflows-and-actions/events-that-trigger-workflows#schedule
+    - cron: "30 18 * * 1"  # Mondays 18:30 UTC
   push:
     branches: [ "main" ]
     paths-ignore:
     - '**/*.md'
-    - '.github/*.yml'
-    - '.github/workflows/build.yml'
-    - '.github/workflows/bump-version.yml'
-    - '.github/workflows/licensecheck.yml'
-    - '.github/workflows/validate_pr.yml'
     - '**/.project'
     - '**/.settings/*.prefs'
     - '.gitignore'
@@ -20,11 +18,6 @@ on:  # https://docs.github.com/en/actions/reference/workflows-and-actions/events
     branches: [ "main" ]
     paths-ignore:
     - '**/*.md'
-    - '.github/*.yml'
-    - '.github/workflows/build.yml'
-    - '.github/workflows/bump-version.yml'
-    - '.github/workflows/licensecheck.yml'
-    - '.github/workflows/validate_pr.yml'
     - '**/.project'
     - '**/.settings/*.prefs'
     - '.gitignore'
@@ -34,20 +27,35 @@ on:  # https://docs.github.com/en/actions/reference/workflows-and-actions/events
     # https://docs.github.com/en/actions/reference/workflows-and-actions/events-that-trigger-workflows#workflow_dispatch
 
 
+defaults:
+  run:
+    shell: bash
+
+
+env:
+  JAVA_VERSION: 21
+
+
 jobs:
 
   ###########################################################
   analyze:
   ###########################################################
 
+    concurrency:
+      group: codeql-${{ github.workflow }}-${{ github.ref }}-${{ matrix.language }}
+      cancel-in-progress: true
+
     strategy:
       fail-fast: false
       matrix:
         include:
         # build-mode: https://github.com/github/codeql-action#build-modes
-        - language: java-kotlin
+        - language: actions
           build-mode: none
-        - language: javascript-typescript
+        - language: java
+          build-mode: manual
+        - language: javascript
           build-mode: none
         - language: python
           build-mode: none
@@ -82,13 +90,45 @@ jobs:
       uses: actions/checkout@v5  # https://github.com/actions/checkout
 
 
-    # CodeQL executes https://github.com/ferstl/depgraph-maven-plugin
+    - name: "Install: JDK 21 for Compilation ☕"
+      uses: actions/setup-java@v5  # https://github.com/actions/setup-java
+      if: matrix.language == 'java'
+      with:
+        distribution: temurin
+        java-version: 21
+
+
     - name: "Install: JDK 25 for Maven/Tycho ☕"
       uses: actions/setup-java@v5  # https://github.com/actions/setup-java
-      if: ${{ matrix.language }} == 'java'
+      if: matrix.language == 'java'
       with:
         distribution: temurin
         java-version: 25
+
+
+    - name: "Cache: Local Maven Repository"
+      uses: actions/cache/restore@v4
+      if: matrix.language == 'java'
+      with:
+        # Excluded sub directory not working https://github.com/actions/toolkit/issues/713
+        path: |
+          ~/.m2/repository/*
+          !~/.m2/repository/.cache/tycho
+          !~/.m2/repository/.meta/p2-artifacts.properties
+          !~/.m2/repository/p2
+          !~/.m2/repository/*SNAPSHOT*
+        key: ${{ runner.os }}-${{ runner.arch }}-repo-mvn-${{ hashFiles('**/pom.xml') }}
+
+
+    - name: "Cache: Local Tycho Repository"
+      uses: actions/cache/restore@v4
+      if: matrix.language == 'java'
+      with:
+        path: |
+          ~/.m2/repository/.cache/tycho
+          ~/.m2/repository/.meta/p2-artifacts.properties
+          ~/.m2/repository/p2
+        key: ${{ runner.os }}-${{ runner.arch }}-repo-tycho-${{ hashFiles('target-platforms/target-platform-latest/target-platform-latest.target') }}
 
 
     # https://docs.github.com/en/code-security/code-scanning
@@ -99,7 +139,29 @@ jobs:
         # https://github.com/github/codeql-action#build-modes
         build-mode: ${{ matrix.build-mode }}
         # https://docs.github.com/en/code-security/code-scanning/creating-an-advanced-setup-for-code-scanning/customizing-your-advanced-setup-for-code-scanning#using-queries-in-ql-packs
-        queries: +security-and-quality
+        config-file: ./.github/codeql/codeql-config.yml
+
+
+    - name: "Build with Maven 🔨"
+      if: matrix.language == 'java'
+      run: |
+        set -euo pipefail
+
+        MAVEN_OPTS="${MAVEN_OPTS:-}"
+        MAVEN_OPTS+=" -Djava.security.egd=file:/dev/./urandom" # https://stackoverflow.com/questions/58991966/what-java-security-egd-option-is-for/59097932#59097932
+        MAVEN_OPTS+=" -Dorg.slf4j.simpleLogger.showDateTime=true -Dorg.slf4j.simpleLogger.dateTimeFormat=HH:mm:ss,SSS" # https://stackoverflow.com/questions/5120470/how-to-time-the-different-stages-of-maven-execution/49494561#49494561
+        MAVEN_OPTS+=" -Xmx1024m -Djava.awt.headless=true -Djava.net.preferIPv4Stack=true -Dhttps.protocols=TLSv1.3,TLSv1.2"
+        export MAVEN_OPTS
+        echo "MAVEN_OPTS: $MAVEN_OPTS"
+ 
+        ./mvnw \
+          --errors \
+          --no-transfer-progress \
+          --batch-mode \
+          --show-version \
+          -Declipse.p2.mirrors=false \
+          -Dmaven.test.skip=true \
+          clean verify
 
 
     - name: Perform CodeQL Analysis

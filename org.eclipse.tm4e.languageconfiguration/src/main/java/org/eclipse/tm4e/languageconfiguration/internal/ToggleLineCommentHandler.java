@@ -64,12 +64,12 @@ public class ToggleLineCommentHandler extends AbstractHandler {
 	}
 
 	private IStatus setWritable(final IFile file) {
-		ResourceAttributes attrs = file.getResourceAttributes();
+		final ResourceAttributes attrs = file.getResourceAttributes();
 		if (attrs != null) {
 			try {
 				attrs.setReadOnly(false);
 				file.setResourceAttributes(attrs);
-			} catch (CoreException e) {
+			} catch (final CoreException e) {
 				return e.getStatus();
 			}
 		}
@@ -80,15 +80,14 @@ public class ToggleLineCommentHandler extends AbstractHandler {
 	public @Nullable Object execute(final ExecutionEvent event) throws ExecutionException {
 		final var part = HandlerUtil.getActiveEditor(event);
 		final var editor = adapt(part, ITextEditor.class);
-		if (editor == null) {
+		if (editor == null)
 			return null;
-		}
 
 		final var editorExt = adapt(editor, ITextEditorExtension.class);
 		if (editorExt != null && editorExt.isEditorInputReadOnly()) {
 			final IEditorInput input = editor.getEditorInput();
 			IFile file = null;
-			if (input instanceof FileEditorInput fileInput) {
+			if (input instanceof final FileEditorInput fileInput) {
 				file = fileInput.getFile();
 			}
 
@@ -118,29 +117,26 @@ public class ToggleLineCommentHandler extends AbstractHandler {
 		if (selection instanceof ITextSelection textSelection) {
 			final var input = editor.getEditorInput();
 			final var docProvider = editor.getDocumentProvider();
-			if (docProvider == null || input == null) {
+			if (docProvider == null || input == null)
 				return null;
-			}
 
 			final var document = docProvider.getDocument(input);
-			if (document == null) {
+			if (document == null)
 				return null;
-			}
 
 			final ContentTypeInfo info = ContentTypeHelper.findContentTypes(document);
 			if (info == null)
 				return null;
 
 			final var contentTypes = info.getContentTypes();
-			final var command = event.getCommand();
 			final var commentSupport = getCommentSupport(contentTypes);
-			if (commentSupport == null) {
+			if (commentSupport == null)
 				return null;
-			}
+
 			// Check if comment support is valid according the command to do.
-			if (!isValid(commentSupport, command)) {
+			final var command = event.getCommand();
+			if (!isValid(commentSupport, command))
 				return null;
-			}
 
 			final var target = adapt(editor, IRewriteTarget.class);
 			if (target != null) {
@@ -316,12 +312,10 @@ public class ToggleLineCommentHandler extends AbstractHandler {
 				continue;
 			}
 			final String text = document.get(i, part.length());
-			if (part.indexOf(text.charAt(0)) == -1) {
+			if (part.indexOf(text.charAt(0)) == -1)
 				return null;
-			}
-			if (text.indexOf(part) == 0) {
+			if (text.indexOf(part) == 0)
 				return new TypedRegion(i, part.length(), part);
-			}
 		}
 		return null;
 	}
@@ -358,9 +352,8 @@ public class ToggleLineCommentHandler extends AbstractHandler {
 		final var lineComment = commentSupport.getLineComment();
 		final var blockComment = commentSupport.getBlockComment();
 		if ((lineComment == null || lineComment.isEmpty())
-				&& (blockComment == null || blockComment.open.isEmpty() || blockComment.close.isEmpty())) {
+				&& (blockComment == null || blockComment.open.isEmpty() || blockComment.close.isEmpty()))
 			return false;
-		}
 		// A command should to be either Toggle Line comment or Add/Remove Block comment
 		return TOGGLE_LINE_COMMENT_COMMAND_ID.equals(command.getId())
 				|| ADD_BLOCK_COMMENT_COMMAND_ID.equals(command.getId())
@@ -379,9 +372,8 @@ public class ToggleLineCommentHandler extends AbstractHandler {
 				continue;
 			}
 			final var commentSupport = registry.getCommentSupport(contentType);
-			if (commentSupport != null) {
+			if (commentSupport != null)
 				return commentSupport;
-			}
 		}
 		return null;
 	}
@@ -400,9 +392,8 @@ public class ToggleLineCommentHandler extends AbstractHandler {
 		int lineNumber = selection.getStartLine();
 		while (lineNumber <= selection.getEndLine()) {
 			final var lineRegion = document.getLineInformation(lineNumber);
-			if (!document.get(lineRegion.getOffset(), lineRegion.getLength()).trim().startsWith(comment)) {
+			if (!document.get(lineRegion.getOffset(), lineRegion.getLength()).trim().startsWith(comment))
 				return false;
-			}
 			lineNumber++;
 		}
 		return true;
@@ -460,9 +451,8 @@ public class ToggleLineCommentHandler extends AbstractHandler {
 		final ITextSelection expandedSelection = expandTextSelectionToFullyIncludeCommentParts(document, textSelection, open,
 				close);
 		final String text = document.get(textSelection.getOffset(), textSelection.getLength());
-		if (text.startsWith(open)) {
+		if (text.startsWith(open))
 			return true;
-		}
 		return findNotClosedOpen(document, expandedSelection, open, close) != null;
 	}
 
@@ -475,9 +465,8 @@ public class ToggleLineCommentHandler extends AbstractHandler {
 		// Find the nearest open and or close block comment part
 		if (!backOrderedBeforeSelectioonComments.isEmpty()) {
 			final ITypedRegion comment = backOrderedBeforeSelectioonComments.first();
-			if (open.equals(comment.getType())) {
+			if (open.equals(comment.getType()))
 				return comment;
-			}
 		}
 		return null;
 	}
@@ -490,9 +479,8 @@ public class ToggleLineCommentHandler extends AbstractHandler {
 
 		// Find the nearest close block comment part
 		for (final ITypedRegion comment : afterSelectioonComments) {
-			if (close.equals(comment.getType())) {
+			if (close.equals(comment.getType()))
 				return comment;
-			}
 		}
 		return null;
 	}

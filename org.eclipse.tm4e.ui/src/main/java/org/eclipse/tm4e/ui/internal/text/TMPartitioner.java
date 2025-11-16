@@ -832,44 +832,62 @@ public final class TMPartitioner implements ITMPartitioner {
 				for (final TMToken t : tokens) {
 					final String prefNorm = t.grammarScope == null ? null : normalizeVariantScope(t.grammarScope);
 					if (prefNorm != null && !Objects.equals(normalizeBaseScope(prefNorm), baseRootNN)) {
-						if (firstEmbeddedStart < 0)
+						if (firstEmbeddedStart < 0) {
 							firstEmbeddedStart = t.startIndex;
+						}
 						lastEmbeddedStart = t.startIndex;
 					}
 				}
-
-				for (final TMToken tok : tokens) {
-					final String prefNorm = tok.grammarScope == null ? null : normalizeVariantScope(tok.grammarScope);
-					final boolean isBase = prefNorm == null || Objects.equals(normalizeBaseScope(prefNorm), baseRootNN);
-					final String root = isBase ? basePartitionType : scopeToPartitionType(prefNorm != null ? prefNorm : baseRootNN);
-
-					if (currentType == null) {
-						currentType = root;
-						final boolean isEmbedded = !isBase;
-						final int firstTokenStart = lineOffset + tok.startIndex;
-						currentStart = Math.max(currentStart, isEmbedded ? lineOffset : firstTokenStart);
-						currentGrammarScopeStr = isBase ? baseRootNN : prefNorm;
-						continue;
-					}
-
-					if (!currentType.equals(root)) {
-						// While inside an embedded run, ignore base tokens that appear
-						// either at the start of the line (indentation) when another embedded token exists later,
-						// or anywhere before the last embedded token on this line (transient gaps between embedded tokens).
-						if (!currentType.equals(basePartitionType) && basePartitionType.equals(root)) {
-							final boolean baseAtLineStartWithEmbedLater = tok.startIndex == 0 && firstEmbeddedStart > 0;
-							final boolean baseBeforeLastEmbedded = lastEmbeddedStart > 0 && tok.startIndex <= lastEmbeddedStart;
-							if (baseAtLineStartWithEmbedLater || baseBeforeLastEmbedded) {
-								// keep currentType and currentStart as-is
-								continue;
-							}
+				final boolean lineHasEmbedded = firstEmbeddedStart >= 0;
+				boolean skipWhitespaceBaseLineInEmbeddedRun = false;
+				if (!lineHasEmbedded && currentType != null && !currentType.equals(basePartitionType)) {
+					// Line has only base tokens but we are currently inside an embedded run.
+					// If the text covered by this line within [startOffset,endOffset) is whitespace-only,
+					// treat it as part of the embedded partition instead of starting a base segment.
+					final int spanStart = Math.max(lineOffset, startOffset);
+					final int spanEnd = Math.min(lineEnd, endOffset);
+					if (spanEnd > spanStart) {
+						final String slice = doc.get(spanStart, spanEnd - spanStart);
+						if (slice.isBlank()) {
+							skipWhitespaceBaseLineInEmbeddedRun = true;
 						}
-						// Token type changed: finalize previous segment and start a new one
-						final int segEnd = lineOffset + tok.startIndex;
-						addSeg(newSegs, currentStart, segEnd, currentType, currentGrammarScopeStr, baseScope);
-						currentType = root;
-						currentStart = segEnd;
-						currentGrammarScopeStr = isBase ? baseRootNN : prefNorm;
+					}
+				}
+
+				if (!skipWhitespaceBaseLineInEmbeddedRun) {
+					for (final TMToken tok : tokens) {
+						final String prefNorm = tok.grammarScope == null ? null : normalizeVariantScope(tok.grammarScope);
+						final boolean isBase = prefNorm == null || Objects.equals(normalizeBaseScope(prefNorm), baseRootNN);
+						final String root = isBase ? basePartitionType : scopeToPartitionType(prefNorm != null ? prefNorm : baseRootNN);
+
+						if (currentType == null) {
+							currentType = root;
+							final boolean isEmbedded = !isBase;
+							final int firstTokenStart = lineOffset + tok.startIndex;
+							currentStart = Math.max(currentStart, isEmbedded ? lineOffset : firstTokenStart);
+							currentGrammarScopeStr = isBase ? baseRootNN : prefNorm;
+							continue;
+						}
+
+						if (!currentType.equals(root)) {
+							// While inside an embedded run, ignore base tokens that appear
+							// either at the start of the line (indentation) when another embedded token exists later,
+							// or anywhere before the last embedded token on this line (transient gaps between embedded tokens).
+							if (!currentType.equals(basePartitionType) && basePartitionType.equals(root)) {
+								final boolean baseAtLineStartWithEmbedLater = tok.startIndex == 0 && firstEmbeddedStart > 0;
+								final boolean baseBeforeLastEmbedded = lastEmbeddedStart > 0 && tok.startIndex <= lastEmbeddedStart;
+								if (baseAtLineStartWithEmbedLater || baseBeforeLastEmbedded) {
+									// keep currentType and currentStart as-is
+									continue;
+								}
+							}
+							// Token type changed: finalize previous segment and start a new one
+							final int segEnd = lineOffset + tok.startIndex;
+							addSeg(newSegs, currentStart, segEnd, currentType, currentGrammarScopeStr, baseScope);
+							currentType = root;
+							currentStart = segEnd;
+							currentGrammarScopeStr = isBase ? baseRootNN : prefNorm;
+						}
 					}
 				}
 			}

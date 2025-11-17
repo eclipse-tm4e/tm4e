@@ -281,8 +281,9 @@ public final class TMPartitioner implements ITMPartitioner {
 
 			// Walk only entries that can overlap [start, end)
 			for (final var e : partitions.subMap(start, true, Math.max(start, end - 1), true).entrySet()) {
-				if (cursor >= end)
+				if (cursor >= end) {
 					break;
+				}
 				final int rStart = e.getKey();
 				final TMPartitionRegion r = e.getValue();
 				final int rEnd = rStart + r.getLength();
@@ -305,6 +306,62 @@ public final class TMPartitioner implements ITMPartitioner {
 			// fill trailing base gap
 			if (cursor < end) {
 				list.add(new TMPartitionRegion(cursor, end - cursor, basePartitionType, grammar));
+			}
+
+			/*
+			 * Post-process for read consistency:
+			 * ---------------------------------
+			 * At this point {@code partitions} already reflects the latest incremental recompute ranges. In most cases recomputeRange()
+			 * has already absorbed whitespace-only base lines that occur inside an embedded run (via skipWhitespaceBaseLineInEmbeddedRun).
+			 * However, when the TM model reports ranges that do not fully cover the surrounding embedded region (for example a range that
+			 * starts exactly on the blank line), {@code currentType} may be base when that line is visited and a tiny base partition can
+			 * slip through.
+			 *
+			 * To make callers of computePartitioning() robust against such timing and range-boundary effects, we perform a cheap, local
+			 * clean-up here: whenever we see a whitespace-only base segment that is sandwiched between two segments of the same non-base
+			 * type, we merge all three into a single embedded region. This is exactly the shape produced by fenced code blocks in Markdown
+			 * where a blank line separates two embedded lines (e.g. JS, XML, ...).
+			 *
+			 * This logic intentionally does NOT merge arbitrary base content: it only triggers when:
+			 * - the middle segment is base AND consists solely of whitespace, and
+			 * - the left and right neighbours both have the same non-base partition type.
+			 * Regular HTML between CSS/JS blocks and base text outside embedded regions therefore remain untouched.
+			 */
+			final int listSize = list.size();
+			if (listSize > 2) {
+				final var adjusted = new ArrayList<TMPartitionRegion>(listSize);
+				int i = 0;
+				while (i < listSize) {
+					if (i > 0 && i < listSize - 1) {
+						final TMPartitionRegion prev = list.get(i - 1);
+						final TMPartitionRegion cur = list.get(i);
+						final TMPartitionRegion next = list.get(i + 1);
+						if (basePartitionType.equals(cur.getType())
+								&& prev.getType().equals(next.getType())
+								&& !prev.getType().equals(basePartitionType)) {
+							try {
+								final String slice = doc.get(cur.getOffset(), cur.getLength());
+								if (slice.isBlank()) {
+									// merge prev + cur + next into a single embedded region
+									if (!adjusted.isEmpty()) {
+										adjusted.remove(adjusted.size() - 1);
+									}
+									final int newOffset = prev.getOffset();
+									final int newLen = next.getOffset() + next.getLength() - newOffset;
+									adjusted.add(new TMPartitionRegion(newOffset, newLen, prev.getType(), prev.getGrammarScope()));
+									i += 2; // skip cur and next
+									continue;
+								}
+							} catch (final BadLocationException ex) {
+								// If we cannot read the slice, fall through and keep the original regions.
+							}
+						}
+					}
+					adjusted.add(list.get(i));
+					i++;
+				}
+				list.clear();
+				list.addAll(adjusted);
 			}
 
 			if (list.isEmpty())
@@ -782,11 +839,21 @@ public final class TMPartitioner implements ITMPartitioner {
 	 * Rebuild partitions for the text range [startOffset, endOffset) (end not included).
 	 * <p>
 	 * Strategy and invariants:
-	 * <li>Iterate the model line by line and normalize each token's grammar scope at most once per token.
-	 * <li>Prefer embedded scopes (e.g., {@code source.*}) over base scopes (e.g., {@code text.*}).
+	 * <ul>
+	 * <li>Iterate the model line by line and normalize each token's grammar scope at most once per token.</li>
+	 * <li>Prefer embedded scopes (e.g., {@code source.*}) over base scopes (e.g., {@code text.*}).</li>
 	 * <li>Precompute whether a line contains any embedded token to avoid nested lookahead scans in the hot path
-	 * (indentation case: base token at column 0 followed by embedded content later on the same line).
-	 * <li>Build a minimal list of contiguous segments, then coalesce and integrate into the tree under a write lock.
+	 * (indentation case: base token at column 0 followed by embedded content later on the same line).</li>
+	 * <li>Within a single recompute pass, treat whitespace-only lines that occur inside an embedded run
+	 * as part of that run (see {@code skipWhitespaceBaseLineInEmbeddedRun}). This avoids creating tiny base
+	 * partitions for blank lines in embedded blocks when the changed range covers all relevant lines.</li>
+	 * <li>Build a minimal list of contiguous segments, then coalesce and integrate into the tree under a write lock.</li>
+	 * </ul>
+	 * <b>Important:</b> {@link #recomputeRange(int, int)} operates only on the line-span provided by the caller. When the TM
+	 * model reports multiple changed ranges, or when a recompute range starts on a blank line inside an already
+	 * embedded region, {@code currentType} may not yet reflect the surrounding embedded type and a whitespace-only
+	 * base line can still become a separate base partition. Such residual "stray" base segments are cleaned up at
+	 * read time by {@link #computePartitioning(int, int)}, which performs a second, local post-processing pass.
 	 */
 	private void recomputeRange(final int startOffset, final int endOffset) throws BadLocationException {
 		final var model = tmModel;
@@ -832,44 +899,62 @@ public final class TMPartitioner implements ITMPartitioner {
 				for (final TMToken t : tokens) {
 					final String prefNorm = t.grammarScope == null ? null : normalizeVariantScope(t.grammarScope);
 					if (prefNorm != null && !Objects.equals(normalizeBaseScope(prefNorm), baseRootNN)) {
-						if (firstEmbeddedStart < 0)
+						if (firstEmbeddedStart < 0) {
 							firstEmbeddedStart = t.startIndex;
+						}
 						lastEmbeddedStart = t.startIndex;
 					}
 				}
-
-				for (final TMToken tok : tokens) {
-					final String prefNorm = tok.grammarScope == null ? null : normalizeVariantScope(tok.grammarScope);
-					final boolean isBase = prefNorm == null || Objects.equals(normalizeBaseScope(prefNorm), baseRootNN);
-					final String root = isBase ? basePartitionType : scopeToPartitionType(prefNorm != null ? prefNorm : baseRootNN);
-
-					if (currentType == null) {
-						currentType = root;
-						final boolean isEmbedded = !isBase;
-						final int firstTokenStart = lineOffset + tok.startIndex;
-						currentStart = Math.max(currentStart, isEmbedded ? lineOffset : firstTokenStart);
-						currentGrammarScopeStr = isBase ? baseRootNN : prefNorm;
-						continue;
-					}
-
-					if (!currentType.equals(root)) {
-						// While inside an embedded run, ignore base tokens that appear
-						// either at the start of the line (indentation) when another embedded token exists later,
-						// or anywhere before the last embedded token on this line (transient gaps between embedded tokens).
-						if (!currentType.equals(basePartitionType) && basePartitionType.equals(root)) {
-							final boolean baseAtLineStartWithEmbedLater = tok.startIndex == 0 && firstEmbeddedStart > 0;
-							final boolean baseBeforeLastEmbedded = lastEmbeddedStart > 0 && tok.startIndex <= lastEmbeddedStart;
-							if (baseAtLineStartWithEmbedLater || baseBeforeLastEmbedded) {
-								// keep currentType and currentStart as-is
-								continue;
-							}
+				final boolean lineHasEmbedded = firstEmbeddedStart >= 0;
+				boolean skipWhitespaceBaseLineInEmbeddedRun = false;
+				if (!lineHasEmbedded && currentType != null && !currentType.equals(basePartitionType)) {
+					// Line has only base tokens but we are currently inside an embedded run.
+					// If the text covered by this line within [startOffset,endOffset) is whitespace-only,
+					// treat it as part of the embedded partition instead of starting a base segment.
+					final int spanStart = Math.max(lineOffset, startOffset);
+					final int spanEnd = Math.min(lineEnd, endOffset);
+					if (spanEnd > spanStart) {
+						final String slice = doc.get(spanStart, spanEnd - spanStart);
+						if (slice.isBlank()) {
+							skipWhitespaceBaseLineInEmbeddedRun = true;
 						}
-						// Token type changed: finalize previous segment and start a new one
-						final int segEnd = lineOffset + tok.startIndex;
-						addSeg(newSegs, currentStart, segEnd, currentType, currentGrammarScopeStr, baseScope);
-						currentType = root;
-						currentStart = segEnd;
-						currentGrammarScopeStr = isBase ? baseRootNN : prefNorm;
+					}
+				}
+
+				if (!skipWhitespaceBaseLineInEmbeddedRun) {
+					for (final TMToken tok : tokens) {
+						final String prefNorm = tok.grammarScope == null ? null : normalizeVariantScope(tok.grammarScope);
+						final boolean isBase = prefNorm == null || Objects.equals(normalizeBaseScope(prefNorm), baseRootNN);
+						final String root = isBase ? basePartitionType : scopeToPartitionType(prefNorm != null ? prefNorm : baseRootNN);
+
+						if (currentType == null) {
+							currentType = root;
+							final boolean isEmbedded = !isBase;
+							final int firstTokenStart = lineOffset + tok.startIndex;
+							currentStart = Math.max(currentStart, isEmbedded ? lineOffset : firstTokenStart);
+							currentGrammarScopeStr = isBase ? baseRootNN : prefNorm;
+							continue;
+						}
+
+						if (!currentType.equals(root)) {
+							// While inside an embedded run, ignore base tokens that appear
+							// either at the start of the line (indentation) when another embedded token exists later,
+							// or anywhere before the last embedded token on this line (transient gaps between embedded tokens).
+							if (!currentType.equals(basePartitionType) && basePartitionType.equals(root)) {
+								final boolean baseAtLineStartWithEmbedLater = tok.startIndex == 0 && firstEmbeddedStart > 0;
+								final boolean baseBeforeLastEmbedded = lastEmbeddedStart > 0 && tok.startIndex <= lastEmbeddedStart;
+								if (baseAtLineStartWithEmbedLater || baseBeforeLastEmbedded) {
+									// keep currentType and currentStart as-is
+									continue;
+								}
+							}
+							// Token type changed: finalize previous segment and start a new one
+							final int segEnd = lineOffset + tok.startIndex;
+							addSeg(newSegs, currentStart, segEnd, currentType, currentGrammarScopeStr, baseScope);
+							currentType = root;
+							currentStart = segEnd;
+							currentGrammarScopeStr = isBase ? baseRootNN : prefNorm;
+						}
 					}
 				}
 			}

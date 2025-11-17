@@ -11,7 +11,7 @@
  *******************************************************************************/
 package org.eclipse.tm4e.ui.tests.internal.text;
 
-import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.*;
 
 import java.nio.file.Paths;
 
@@ -317,6 +317,7 @@ class TMPartitionerTest {
 
 			```javascript
 			function foo() { return 1; }
+
 			// comment
 			```
 			""");
@@ -510,6 +511,8 @@ class TMPartitionerTest {
 			<body>
 			<script>
 			function x() { return 1; }
+
+			function y() { return 2; }
 			</script>
 			</body>
 			</html>

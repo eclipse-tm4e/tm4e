@@ -338,6 +338,22 @@
   </extension>
 
   <!-- ======================================== -->
+  <!-- dotenv/dotenv: Dotenv -->
+  <!-- ======================================== -->
+  <extension point="org.eclipse.core.contenttype.contentTypes">
+    <content-type id="org.eclipse.tm4e.language_pack.dotenv" name="Dotenv" base-type="org.eclipse.tm4e.language_pack.basetype" priority="low"
+                  file-extensions="env" file-names=".env,.flaskenv,user-dirs.dirs" file-patterns=".env.*" />
+  </extension>
+  <extension point="org.eclipse.tm4e.registry.grammars">
+    <grammar scopeName="source.dotenv" path="syntaxes/dotenv/dotenv.tmLanguage.json" />
+    <scopeNameContentTypeBinding scopeName="source.dotenv" contentTypeId="org.eclipse.tm4e.language_pack.dotenv" />
+  </extension>
+
+  <extension point="org.eclipse.tm4e.languageconfiguration.languageConfigurations">
+    <languageConfiguration contentTypeId="org.eclipse.tm4e.language_pack.dotenv" path="syntaxes/dotenv/dotenv.language-configuration.json" />
+  </extension>
+
+  <!-- ======================================== -->
   <!-- fsharp/fsharp: F# -->
   <!-- ======================================== -->
   <extension point="org.eclipse.core.contenttype.contentTypes">
@@ -1270,7 +1286,7 @@
   <!-- ======================================== -->
   <extension point="org.eclipse.core.contenttype.contentTypes">
     <content-type id="org.eclipse.tm4e.language_pack.shellscript" name="Shell Script" base-type="org.eclipse.tm4e.language_pack.basetype" priority="low"
-                  file-extensions="Xsession,bash,bash_aliases,bash_login,bash_logout,bash_profile,bashrc,csh,cshrc,ebuild,eclass,fish,ksh,profile,sh,tcshrc,xprofile,xsession,xsessionrc,yash_profile,yashrc,zlogin,zlogout,zprofile,zsh,zsh-theme,zshenv,zshrc" file-names=".envrc,.hushlogin,APKBUILD,PKGBUILD,bashrc_Apple_Terminal,zlogin,zlogout,zprofile,zshenv,zshrc,zshrc_Apple_Terminal" file-patterns=".env.*" />
+                  file-extensions="Xsession,bash,bash_aliases,bash_login,bash_logout,bash_profile,bashrc,csh,cshrc,ebuild,eclass,fish,ksh,profile,sh,tcshrc,xprofile,xsession,xsessionrc,yash_profile,yashrc,zlogin,zlogout,zprofile,zsh,zsh-theme,zshenv,zshrc" file-names=".envrc,.hushlogin,APKBUILD,PKGBUILD,bashrc_Apple_Terminal,zlogin,zlogout,zprofile,zshenv,zshrc,zshrc_Apple_Terminal" />
   </extension>
   <extension point="org.eclipse.tm4e.registry.grammars">
     <grammar scopeName="source.shell" path="syntaxes/shellscript/shellscript.tmLanguage.json" />

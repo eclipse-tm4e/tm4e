@@ -16,6 +16,7 @@ Require-Bundle: org.eclipse.core.runtime,
  org.eclipse.ui.workbench,
  org.eclipse.ui.workbench.texteditor,
  org.eclipse.tm4e.languageconfiguration,
+ org.eclipse.tm4e.language_pack,
  org.eclipse.tm4e.ui,
  org.eclipse.tm4e.ui.tests,
  assertj-core

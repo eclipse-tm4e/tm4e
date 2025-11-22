@@ -150,16 +150,12 @@ jobs:
         MAVEN_OPTS="${MAVEN_OPTS:-}"
         MAVEN_OPTS+=" -Djava.security.egd=file:/dev/./urandom" # https://stackoverflow.com/questions/58991966/what-java-security-egd-option-is-for/59097932#59097932
         MAVEN_OPTS+=" -Dorg.slf4j.simpleLogger.showDateTime=true -Dorg.slf4j.simpleLogger.dateTimeFormat=HH:mm:ss,SSS" # https://stackoverflow.com/questions/5120470/how-to-time-the-different-stages-of-maven-execution/49494561#49494561
-        MAVEN_OPTS+=" -Xmx1024m -Djava.awt.headless=true -Djava.net.preferIPv4Stack=true -Dhttps.protocols=TLSv1.3,TLSv1.2"
         export MAVEN_OPTS
         echo "MAVEN_OPTS: $MAVEN_OPTS"
  
         ./mvnw \
-          --errors \
           --no-transfer-progress \
           --batch-mode \
-          --show-version \
-          -Declipse.p2.mirrors=false \
           -Dmaven.test.skip=true \
           clean verify
 

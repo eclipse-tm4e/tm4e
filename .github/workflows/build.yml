@@ -197,7 +197,6 @@ jobs:
           MAVEN_OPTS+=" -Djava.security.egd=file:/dev/./urandom" # https://stackoverflow.com/questions/58991966/what-java-security-egd-option-is-for/59097932#59097932
         fi
         MAVEN_OPTS+=" -Dorg.slf4j.simpleLogger.showDateTime=true -Dorg.slf4j.simpleLogger.dateTimeFormat=HH:mm:ss,SSS" # https://stackoverflow.com/questions/5120470/how-to-time-the-different-stages-of-maven-execution/49494561#49494561
-        MAVEN_OPTS+=" -Xmx1024m -Djava.awt.headless=true -Djava.net.preferIPv4Stack=true -Dhttps.protocols=TLSv1.3,TLSv1.2"
         export MAVEN_OPTS
         echo "MAVEN_OPTS: $MAVEN_OPTS"
 
@@ -210,12 +209,8 @@ jobs:
         # prevent "org.eclipse.swt.SWTError: No more handles [gtk_init_check() failed]" on Linux
         ${{ runner.os == 'Linux' && 'xvfb-run --auto-servernum --server-args="-screen 0 1600x900x24" \' || '' }}
         ./mvnw \
-          --errors \
           --update-snapshots \
           --batch-mode \
-          --show-version \
-          -Declipse.p2.mirrors=false \
-          -Dsurefire.rerunFailingTestsCount=3 \
           -Dtm4e.target-platform=${{ matrix.target-platform }} \
           $maven_args \
           ${{ github.event.inputs.additional_maven_args }} \

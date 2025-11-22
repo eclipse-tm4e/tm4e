@@ -90,16 +90,10 @@ pipeline {
 						// https://stackoverflow.com/questions/5120470/how-to-time-the-different-stages-of-maven-execution/49494561#49494561
 						maven_opts += ' -Dorg.slf4j.simpleLogger.showDateTime=true -Dorg.slf4j.simpleLogger.dateTimeFormat=HH:mm:ss,SSS'
 
-						maven_opts += ' -Xmx1024m -Djava.awt.headless=true -Djava.net.preferIPv4Stack=true -Dhttps.protocols=TLSv1.3,TLSv1.2'
-
 						def maven_args = [
 							'--no-transfer-progress',
-							'--errors',
 							'--update-snapshots',
 							'--batch-mode',
-							'--show-version',
-							'-Declipse.p2.mirrors=false',
-							'-Dsurefire.rerunFailingTestsCount=3',
 							'-t /tmp/toolchains.xml'
 						].join(' ')
 

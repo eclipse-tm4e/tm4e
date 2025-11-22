@@ -64,15 +64,28 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        os:  # https://github.com/actions/runner-images#available-images
+        os:
+        # https://github.com/actions/runner-images#available-images
         - ubuntu-latest
         - macos-15-intel  # Intel
         - macos-latest  # ARM
         - windows-latest
+        # https://github.com/actions/partner-runner-images
+        - ubuntu-24.04-arm
+        - windows-11-arm
         target-platform:
         - oldest
         - latest
-        - staging
+        include:
+        - os: ubuntu-latest
+          target-platform: staging
+        exclude:
+        - os: windows-11-arm
+          # "target-platform: oldest" fails on Windows 11 ARM with:
+          # An unexpected error occurred while launching the test runtime (process returned error code 13 
+          # (HRESULT Code 0xD, check for example https://www.hresult.info/ for further details)).
+          target-platform: oldest
+
 
     runs-on: ${{ matrix.os }}
     timeout-minutes: 15
@@ -141,6 +154,7 @@ jobs:
 
     - name: "Install: JDK 25 for Maven/Tycho ☕"
       uses: actions/setup-java@v5  # https://github.com/actions/setup-java
+      if: matrix.os != 'windows-11-arm'  # TODO not yet available
       with:
         distribution: temurin
         java-version: 25
@@ -148,6 +162,7 @@ jobs:
 
     - name: "Cache: Local Maven Repository"
       uses: actions/cache@v4
+      if: runner.os != 'macOS'  # FIXME workaround for https://github.com/actions/runner/issues/449#issuecomment-3566876749
       with:
         # Excluded sub directory not working https://github.com/actions/toolkit/issues/713
         path: |
@@ -161,6 +176,7 @@ jobs:
 
     - name: "Cache: Local Tycho Repository"
       uses: actions/cache@v4
+      if: runner.os != 'macOS'  # FIXME workaround for https://github.com/actions/runner/issues/449#issuecomment-3566876749
       with:
         path: |
           ~/.m2/repository/.cache/tycho

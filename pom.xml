@@ -328,6 +328,7 @@
 						<useUIHarness>true</useUIHarness>
 						<useUIThread>true</useUIThread>
 						<argLine>-Xms512m -Xmx512m -Dfile.encoding=${project.build.sourceEncoding} ${tycho-surefire-plugin.vmargs}</argLine>
+						<providerHint>junit5</providerHint>
 					</configuration>
 				</plugin>
 				<plugin>

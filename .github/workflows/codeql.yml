@@ -9,6 +9,7 @@ on:  # https://docs.github.com/en/actions/reference/workflows-and-actions/events
     branches: [ "main" ]
     paths-ignore:
     - '**/*.md'
+    - '**/*.png'
     - '**/.project'
     - '**/.settings/*.prefs'
     - '.gitignore'
@@ -18,6 +19,7 @@ on:  # https://docs.github.com/en/actions/reference/workflows-and-actions/events
     branches: [ "main" ]
     paths-ignore:
     - '**/*.md'
+    - '**/*.png'
     - '**/.project'
     - '**/.settings/*.prefs'
     - '.gitignore'

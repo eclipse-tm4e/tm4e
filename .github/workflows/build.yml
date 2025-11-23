@@ -9,6 +9,7 @@ on:  # https://docs.github.com/en/actions/reference/workflows-and-actions/events
     - '**'
     paths-ignore:
     - '**/*.md'
+    - '**/*.png'
     - '.github/*.yml'
     - '.github/workflows/bump-version.yml'
     - '.github/workflows/codeql.yml'
@@ -22,6 +23,7 @@ on:  # https://docs.github.com/en/actions/reference/workflows-and-actions/events
   pull_request:
     paths-ignore:
     - '**/*.md'
+    - '**/*.png'
     - '.github/*.yml'
     - '.github/workflows/bump-version.yml'
     - '.github/workflows/codeql.yml'

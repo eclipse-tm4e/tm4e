@@ -1,0 +1,4 @@
+_LOCAL
+org.eclipse.tm4e.language_pack/syntaxes/
+**/target/
+org.eclipse.tm4e.core.tests/src/main/resources/test-cases/

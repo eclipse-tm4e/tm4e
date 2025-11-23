@@ -117,10 +117,10 @@ If you are using an Eclipse IDE or other tool that ships TM4E-powered editors, y
 
 TM4E is split into three main bundles plus an optional language pack feature:
 
- - [org.eclipse.tm4e.core](https://github.com/eclipse-tm4e/tm4e/tree/main/org.eclipse.tm4e.core) - Java TextMate engine (a port of [vscode-textmate](https://github.com/Microsoft/vscode-textmate)), UI-agnostic and usable with any Java UI toolkit.
- - [org.eclipse.tm4e.ui](https://github.com/eclipse-tm4e/tm4e/tree/main/org.eclipse.tm4e.ui) - Eclipse integration layer providing [`TMPresentationReconciler`](org.eclipse.tm4e.ui/src/main/java/org/eclipse/tm4e/ui/text/TMPresentationReconciler.java), TextMate-based partitioning, theming, preference pages, hovers, and diagnostics.
- - [org.eclipse.tm4e.languageconfiguration](https://github.com/eclipse-tm4e/tm4e/tree/main/org.eclipse.tm4e.languageconfiguration) - VS Code-style `language-configuration.json` support for bracket handling, auto-close, on-enter behavior, and comment toggling.
- - [org.eclipse.tm4e.language_pack](https://github.com/eclipse-tm4e/tm4e/tree/main/org.eclipse.tm4e.language_pack) - Optional language pack feature that bundles TextMate grammars and language configurations so many common languages work out of the box in the Eclipse IDE.
+- [org.eclipse.tm4e.core](https://github.com/eclipse-tm4e/tm4e/tree/main/org.eclipse.tm4e.core) - Java TextMate engine (a port of [vscode-textmate](https://github.com/Microsoft/vscode-textmate)), UI-agnostic and usable with any Java UI toolkit.
+- [org.eclipse.tm4e.ui](https://github.com/eclipse-tm4e/tm4e/tree/main/org.eclipse.tm4e.ui) - Eclipse integration layer providing [`TMPresentationReconciler`](org.eclipse.tm4e.ui/src/main/java/org/eclipse/tm4e/ui/text/TMPresentationReconciler.java), TextMate-based partitioning, theming, preference pages, hovers, and diagnostics.
+- [org.eclipse.tm4e.languageconfiguration](https://github.com/eclipse-tm4e/tm4e/tree/main/org.eclipse.tm4e.languageconfiguration) - VS Code-style `language-configuration.json` support for bracket handling, auto-close, on-enter behavior, and comment toggling.
+- [org.eclipse.tm4e.language_pack](https://github.com/eclipse-tm4e/tm4e/tree/main/org.eclipse.tm4e.language_pack) - Optional language pack feature that bundles TextMate grammars and language configurations so many common languages work out of the box in the Eclipse IDE.
 
 
 ## 🔌 Integrating TM4E

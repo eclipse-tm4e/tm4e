@@ -21,7 +21,7 @@ for the [Eclipse IDE](https://eclipseide.org).
 <!-- START-GENERATED -->
 
 | Language/Format | File Associations | Source
-|:--------------- |:----------------- |:------ |
+|:--------------- |:----------------- |:------
 | ASP.NET Razor | file-extensions="cshtml, razor" | [1.106.0@microsoft/vscode](https://github.com/microsoft/vscode/tree/ac4cbdf48759c7d8c3eb91ffe6bb04316e263c57/extensions/razor) [[upstream]](https://github.com/dotnet/razor/commit/9b1e979b6c3fe7cfbe30f595b9b0994d20bd482c)
 | Batch File <img src="plugin/syntaxes/bat/bat.icon.png" width=16/> | file-extensions="bat, cmd" | [1.106.0@microsoft/vscode](https://github.com/microsoft/vscode/tree/ac4cbdf48759c7d8c3eb91ffe6bb04316e263c57/extensions/bat) [[upstream]](https://github.com/mmims/language-batchfile/commit/6154ae25a24e01ac9329e7bcf958e093cd8733a9)
 | BibTeX | file-extensions="bib" | [1.106.0@microsoft/vscode](https://github.com/microsoft/vscode/tree/ac4cbdf48759c7d8c3eb91ffe6bb04316e263c57/extensions/latex) [[upstream]](https://github.com/jlelong/vscode-latex-basics/commit/0fcf9283828cab2aa611072f54feb1e7d501c2b4)

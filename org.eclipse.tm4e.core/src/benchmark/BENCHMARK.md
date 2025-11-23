@@ -67,6 +67,7 @@ The results of the three benchmark rounds show that it was possible to parse the
 One time parsing of the source file took 104.04 to 106.30 ms and allocated 17.73MB of temporary objects on the JVM heap.
 
 ### How to run the benchmark
+
 To run the benchmark execute the `run-grammar-benchmark.sh` or `run-grammar-benchmark.cmd` from a command line window.
 
 You can also run the [GrammarBenchmark](../test/java/org/eclipse/tm4e/core/benchmark/GrammarBenchmark.java) from within Eclipse via

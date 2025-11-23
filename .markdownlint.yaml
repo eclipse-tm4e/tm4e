@@ -1,0 +1,11 @@
+# https://github.com/DavidAnson/markdownlint#optionsconfig
+MD004: false  # ul-style
+MD012: false  # no-multiple-blanks
+MD013: false  # line-length
+MD031: false  # blanks-around-fences
+MD032: false  # blanks-around-lists
+MD033: false  # no-inline-html
+MD034: false  # no-bare-urls
+MD045: false  # no-alt-text
+MD049: false  # emphasis-style
+MD060: false  # table-column-style

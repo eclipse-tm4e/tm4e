@@ -24,7 +24,7 @@ import org.eclipse.jdt.annotation.Nullable;
 /**
  * TextMate grammar API.
  *
- * @see <a href="https://github.com/microsoft/vscode-textmate/blob/167bbbd509356cc4617f250c0d754aef670ab14a/src/main.ts#L200">
+ * @see <a href="https://github.com/microsoft/vscode-textmate/blob/76ab07aecfbd7e959ee4b55de3976f7a3ee95f38/src/main.ts#L200">
  *      github.com/microsoft/vscode-textmate/blob/main/src/main.ts</a>
  */
 public interface IGrammar {

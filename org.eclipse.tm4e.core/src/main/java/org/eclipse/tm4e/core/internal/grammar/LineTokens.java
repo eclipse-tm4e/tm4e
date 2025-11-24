@@ -31,10 +31,11 @@ import org.eclipse.tm4e.core.grammar.IToken;
 import org.eclipse.tm4e.core.internal.grammar.tokenattrs.EncodedTokenAttributes;
 import org.eclipse.tm4e.core.internal.grammar.tokenattrs.OptionalStandardTokenType;
 import org.eclipse.tm4e.core.internal.theme.FontStyle;
+import org.eclipse.tm4e.core.internal.utils.StringUtils;
 
 /**
  * @see <a href=
- *      "https://github.com/microsoft/vscode-textmate/blob/167bbbd509356cc4617f250c0d754aef670ab14a/src/grammar/grammar.ts#L945">
+ *      "https://github.com/microsoft/vscode-textmate/blob/76ab07aecfbd7e959ee4b55de3976f7a3ee95f38/src/grammar/grammar.ts#L945">
  *      github.com/microsoft/vscode-textmate/blob/main/src/grammar/grammar.ts</a>
  */
 public final class LineTokens {
@@ -134,6 +135,7 @@ public final class LineTokens {
 	private @Nullable String _currentGrammarScope; // custom tm4e code - not from upstream (for TMPartitioner)
 
 	private final List<TokenTypeMatcher> _tokenTypeOverrides;
+	private final boolean _mergeConsecutiveTokensWithEqualMetadata;
 
 	private final @Nullable BalancedBracketSelectors balancedBracketSelectors;
 
@@ -145,6 +147,8 @@ public final class LineTokens {
 		this._emitBinaryTokens = emitBinaryTokens;
 		this._tokenTypeOverrides = tokenTypeOverrides;
 		this._lineText = LOGGER.isLoggable(TRACE) ? lineText : ""; // store line only if it's logged
+		// Don't merge tokens if the line contains RTL characters
+		this._mergeConsecutiveTokensWithEqualMetadata = this._emitBinaryTokens && !StringUtils.containsRTL(lineText);
 		if (this._emitBinaryTokens) {
 			this._tokens = EMPTY_DEQUE;
 			this._binaryTokens = new ArrayList<>();
@@ -206,7 +210,8 @@ public final class LineTokens {
 						0);
 			}
 
-			if (!this._binaryTokens.isEmpty() && getLastElement(this._binaryTokens) == metadata) {
+			if (this._mergeConsecutiveTokensWithEqualMetadata && !this._binaryTokens.isEmpty()
+					&& getLastElement(this._binaryTokens) == metadata) {
 				// no need to push a token with the same metadata
 				this._lastTokenEndIndex = endIndex;
 				return;

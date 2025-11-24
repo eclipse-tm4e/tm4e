@@ -30,7 +30,7 @@ import org.eclipse.tm4e.core.registry.IRegistryOptions;
 import org.eclipse.tm4e.core.registry.Registry;
 
 /**
- * @see <a href="https://github.com/microsoft/vscode-textmate/blob/167bbbd509356cc4617f250c0d754aef670ab14a/src/tests/tokenization.test.ts">
+ * @see <a href="https://github.com/microsoft/vscode-textmate/blob/76ab07aecfbd7e959ee4b55de3976f7a3ee95f38/src/tests/tokenization.test.ts">
  *      github.com/microsoft/vscode-textmate/blob/main/src/tests/tokenization.test.ts</a>
  */
 public class RawTestImpl {

@@ -24,7 +24,7 @@ import org.eclipse.tm4e.core.internal.theme.raw.IRawTheme;
 
 /**
  * @see <a href=
- *      "https://github.com/microsoft/vscode-textmate/blob/167bbbd509356cc4617f250c0d754aef670ab14a/src/main.ts#L22">
+ *      "https://github.com/microsoft/vscode-textmate/blob/76ab07aecfbd7e959ee4b55de3976f7a3ee95f38/src/main.ts#L22">
  *      github.com/microsoft/vscode-textmate/blob/main/src/main.ts</a>
  */
 public interface IRegistryOptions {

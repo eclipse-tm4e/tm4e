@@ -21,7 +21,7 @@ import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.tm4e.core.TMException;
 
 /**
- * Based on <a href="https://github.com/microsoft/vscode-textmate/blob/167bbbd509356cc4617f250c0d754aef670ab14a/src/theme.ts#L385">
+ * Based on <a href="https://github.com/microsoft/vscode-textmate/blob/76ab07aecfbd7e959ee4b55de3976f7a3ee95f38/src/theme.ts#L385">
  * github.com/microsoft/vscode-textmate/blob/main/src/theme.ts#ColorMap</a>.
  * <p>
  * See also <a href=

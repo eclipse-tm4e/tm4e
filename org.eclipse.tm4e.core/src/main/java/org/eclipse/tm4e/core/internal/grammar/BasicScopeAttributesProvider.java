@@ -31,7 +31,7 @@ import org.eclipse.tm4e.core.internal.utils.RegexSource;
 
 /**
  * @see <a href=
- *      "https://github.com/microsoft/vscode-textmate/blob/167bbbd509356cc4617f250c0d754aef670ab14a/src/grammar/basicScopesAttributeProvider.ts#L18">
+ *      "https://github.com/microsoft/vscode-textmate/blob/76ab07aecfbd7e959ee4b55de3976f7a3ee95f38/src/grammar/basicScopesAttributeProvider.ts#L18">
  *      github.com/microsoft/vscode-textmate/blob/main/src/basicScopesAttributeProvider.ts</a>
  */
 final class BasicScopeAttributesProvider {

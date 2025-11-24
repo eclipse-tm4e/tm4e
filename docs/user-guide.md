@@ -21,7 +21,6 @@ You usually do not need to install it explicitly, but you can install it from th
 To check whether TM4E is present, open `Window > Preferences` and look for the `TextMate` pages (such as `TextMate`, `TextMate > Grammar`, `TextMate > Themes`, and `TextMate > Language Configuration`).
 If these pages exist, TM4E is installed and contributing to the IDE.
 
-![Grammar Preferences](img/grammar_preferences.png)
 
 ### Stable and snapshot builds
 
@@ -64,12 +63,16 @@ For advanced users, some editors expose a TextMate token hover that shows the to
 - This is mainly a diagnostics tool for plugin and grammar developers.
 - It can also help you confirm why a particular region is colored or behaves in a certain way.
 
-For details on how to use the token hover and other diagnostics when developing plugins, see the TM4E Plugin Developer Guide.
+![TextMate Token Hover Preference](img/tm_token_hover_preference.png)
+
+![TextMate Token Hover](img/tm_token_hover.png)
+
+For details on how to use the token hover and other diagnostics when developing plugins, see the [TM4E Plugin Developer Guide](plugin-developer-guide.md).
 
 
 ## Language Pack and Additional Grammars
 
-The **TM4E Language Pack** feature bundles a set of TextMate grammars and language configurations so that many common languages work out of the box once TM4E is installed.
+The [TM4E Language Pack](https://github.com/eclipse-tm4e/tm4e/blob/main/org.eclipse.tm4e.language_pack/README.md) feature bundles 50+ TextMate grammars and language configurations so that many common languages work out of the box once TM4E is installed.
 Individual Eclipse tools may also ship their own grammars that plug into TM4E.
 
 If you need additional grammars beyond what TM4E and its language pack provide, you can install third-party plugins that contribute more grammars or themes.
@@ -81,17 +84,25 @@ After installing such a plugin you manage the new grammars and themes through th
 
 Most user-facing configuration lives under the `TextMate` section in the Eclipse preferences (`Window > Preferences`).
 
-- The main `TextMate` page provides an overview and general switches.
-- `TextMate > Grammar` lets you manage available grammars and their associations to Eclipse content types (the way Eclipse classifies file types).
-  Here you can enable or disable grammars and control which grammar applies to a file type.
-- `TextMate > Themes` lets you choose between built-in Light and Dark themes and any additional themes contributed by installed plugins.
-  You can also switch themes from the editor's context menu under `TextMate`.
-- `TextMate > Language Configuration` lets you control language-configuration based features and attach additional configuration files:
-  - You can enable or disable auto closing brackets, matching bracket highlighting, and on-enter actions individually.
-  - You can associate extra `language-configuration.json` files from the workspace or file system with specific content types.
-- `TextMate > Task Tags` lets you define tags in comments (such as `TODO` or `FIXME`) that should be treated as tasks or problems, and configure how they are marked in the workspace.
+1. The main `TextMate` page provides an overview and general switches.
+1. `TextMate > Grammar` lets you manage available grammars and their associations to Eclipse content types (the way Eclipse classifies file types).
+   Here you can enable or disable grammars and control which grammar applies to a file type.\
+   ![Grammar Preferences](img/grammar_preferences.png)
 
-TM4E consumes VS Code-style [language-configuration.json](https://code.visualstudio.com/api/language-extensions/language-configuration-guide) files.
+1. `TextMate > Language Configuration` lets you control language-configuration based features and attach additional configuration files:
+   - You can enable or disable auto closing brackets, matching bracket highlighting, and on-enter actions individually.
+   - You can associate extra `language-configuration.json` files from the workspace or file system with specific content types.
+
+   TM4E consumes VS Code-style [language-configuration.json](https://code.visualstudio.com/api/language-extensions/language-configuration-guide) files.
+
+   ![Language Configuration Preferences](img/langcfg_preferences.png)
+
+1. `TextMate > Task Tags` lets you define tags in comments (such as `TODO` or `FIXME`) that should be treated as tasks or problems, and configure how they are marked in the workspace.\
+   ![Task Tags Preferences](img/task_tags_preferences.png)
+
+1. `TextMate > Themes` lets you choose between built-in Light and Dark themes and any additional themes contributed by installed plugins.
+   You can also switch themes from the editor's context menu under `TextMate`.\
+   ![Themes Preferences](img/themes_preferences.png)
 
 
 ## Using Custom Grammars, Language Configurations, and Themes

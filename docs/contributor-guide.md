@@ -17,6 +17,7 @@ It explains how the repository is structured, how the core engine and registry b
 1. [TM Partitioner (Secondary Partitioning)](#tm-partitioner-secondary-partitioning)
 1. [Handling Conflicting Grammar Registrations](#handling-conflicting-grammar-registrations)
 1. [Diagnostics and Troubleshooting for Contributors](#diagnostics-and-troubleshooting-for-contributors)
+1. [Tracking Upstream vscode-textmate Changes](#tracking-upstream-vscode-textmate-changes)
 1. [Extension and API Evolution Guidelines](#extension-and-api-evolution-guidelines)
 1. [Release Process (Overview)](#release-process-overview)
 1. [Eclipse Plug-in Development Resources](#eclipse-plug-in-development-resources)
@@ -333,6 +334,26 @@ If you *expect* a given content type to exist, double-check that:
 
 - The plug-in defining it is present in the installation.
 - Its `org.eclipse.core.contenttype.contentTypes` extension uses the same ID as the TM4E binding.
+
+
+## Tracking Upstream vscode-textmate Changes
+
+The TM4E core engine in `org.eclipse.tm4e.core` is a Java port of [microsoft/vscode-textmate](https://github.com/microsoft/vscode-textmate). To keep behavior aligned with upstream, changes from the TypeScript implementation are periodically translated to Java and applied to TM4E.
+
+When rebasing TM4E on a newer vscode-textmate commit:
+- Use the upstream repository as the authoritative reference for behavior and semantics.
+  All fixes and new features in the tokenizer should be understood in terms of the original TypeScript implementation first.
+- Translate upstream changes into the corresponding Java code in `org.eclipse.tm4e.core`, preserving structure and intent where practical so that future diffs remain readable.
+- Update the file header comments in the ported classes to point back to the exact vscode-textmate commit (or file + commit link) they are based on.
+  This makes it easier to:
+  - see which upstream version a given part of the port corresponds to, and
+  - rebase or re-compare files against upstream in the future without guessing.
+
+When making larger changes to the port, keep the following in mind:
+- Avoid introducing TM4E-specific behavior differences unless there is a strong Java- or Eclipse-specific reason.
+  If behavior must diverge, document it clearly in comments (for example with inline markers such as `// custom tm4e code - not from upstream`) and, if applicable, in the release notes.
+- Prefer small, incremental ports of upstream changes over large, monolithic rebases.
+  This keeps review and debugging manageable and preserves a clear history of how and why behavior changed over time.
 
 
 ## Extension and API Evolution Guidelines

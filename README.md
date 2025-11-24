@@ -4,14 +4,31 @@
 [![Jenkins tests](https://img.shields.io/jenkins/tests?jobUrl=https%3A%2F%2Fci.eclipse.org%2Ftm4e%2Fjob%2FTM4E%2Fjob%2Fmain%2F&logo=jenkins&logoColor=white)](https://ci.eclipse.org/tm4e/job/TM4E/)
 [![License](https://img.shields.io/github/license/eclipse-tm4e/tm4e.svg?color=blue)](LICENSE)
 
-TM4E provides a Java implementation of the [TextMate grammar](https://en.wikipedia.org/wiki/TextMate#Language_grammars) engine, based on the [microsoft/vscode-textmate](https://github.com/microsoft/vscode-textmate) project, that can be embedded in any Java application,
-along with Eclipse IDE integration for syntax highlighting and VS Code-style [Language Configuration](https://code.visualstudio.com/api/references/contribution-points#contributes.languages) (brackets, auto-closing, on-enter behavior, and more).
+
+## Table of contents
+
+- [About TM4E](#about-tm4e)
+- [Key Features](#key-features)
+- [Installation](#-installation)
+- [Getting started as an end user](#-getting-started-as-an-end-user)
+- [Who is using TM4E?](#-who-is-using-tm4e)
+- [Architecture and modules](#-architecture-and-modules)
+- [Integrating TM4E](#-integrating-tm4e)
+- [Contributing](#-contributing)
+- [License](#-license)
+
+
+## About TM4E
+
+TM4E provides a Java implementation of the [TextMate grammar](https://en.wikipedia.org/wiki/TextMate#Language_grammars) engine, based on the [microsoft/vscode-textmate](https://github.com/microsoft/vscode-textmate) project.
+It can be embedded in any Java application, along with Eclipse IDE integration for syntax highlighting and VS Code-style [Language Configuration](https://code.visualstudio.com/api/references/contribution-points#contributes.languages) (brackets, auto-closing, on-enter behavior, and more).
+
+**Example**: TypeScript editor using TM4E-based highlighting (from [Eclipse Wild Web Developer](https://github.com/eclipse/wildwebdeveloper))
+
+![TypeScript Editor Screenshot](docs/img/typescript_editor.png)
 
 TM4E is an [official Eclipse.org project](https://projects.eclipse.org/projects/technology.tm4e), and follows the usual Eclipse.org processes and IP requirements.
 
-**Example**: TypeScript editor using TM4E-based highlighting (from [Eclipse Wild Web Developer](https://github.com/eclipse/wildwebdeveloper)):
-
-![TypeScript Editor Screenshot](docs/img/typescript_editor.png)
 
 ## Key features
 
@@ -20,7 +37,8 @@ TM4E is an [official Eclipse.org project](https://projects.eclipse.org/projects/
 - Themable colorization through TextMate themes, with built-in Light/Dark themes and additional themes contributed by plugins.
 - A TM4E secondary partitioner that understands embedded languages and exposes normalized grammar scopes that other tooling can consume.
 
-## 📦 Installation
+
+## 📥 Installation
 
 ### 1) In Eclipse IDE or RCP applications
 
@@ -41,7 +59,6 @@ TM4E version |Min. Eclipse version | Min. Java version
 [0.6.3](https://download.eclipse.org/tm4e/releases/0.6.3/)+   | [2022-12](https://projects.eclipse.org/releases/2022-12) ([4.26](https://projects.eclipse.org/projects/eclipse/releases/4.26.0)) | 17
 [0.6.2](https://download.eclipse.org/tm4e/releases/0.6.2/)+   | [2022-09](https://projects.eclipse.org/releases/2022-09) ([4.25](https://projects.eclipse.org/projects/eclipse/releases/4.25.0)) | 17
 [0.6.0](https://download.eclipse.org/tm4e/releases/0.6.0/)+   | [2022-03](https://projects.eclipse.org/releases/2022-03) ([4.23](https://projects.eclipse.org/projects/eclipse/releases/4.23.0)) | 17
-
 
 ### 2) As a Java API with Maven
 
@@ -82,7 +99,16 @@ Then reference the dependency in your pom.xml as follows:
 ```
 
 
-## 👥 Who is using TM4E?
+## 🚀 Getting started as an end user
+
+If you are using an Eclipse IDE or other tool that ships TM4E-powered editors, you usually do not install TM4E directly.
+
+- For day-to-day usage, configuration, and troubleshooting of TM4E-powered editors, see the [User Guide](docs/user-guide.md).
+- For usage questions and general help, use [GitHub discussions](https://github.com/eclipse-tm4e/tm4e/discussions).
+- To report problems with TM4E-powered editors, file issues in [GitHub issues](https://github.com/eclipse-tm4e/tm4e/issues) and include details about your IDE, TM4E version, and steps to reproduce.
+
+
+## 🙋 Who is using TM4E?
 
 Here are some projects that use TM4E:
 
@@ -104,15 +130,6 @@ Here are some projects that use TM4E:
   - [Phaser Editor 2D](https://github.com/PhaserEditor2D/PhaserEditor) - an IDE for the creation of HTML5 games.
 
 
-## 📚 End users
-
-If you are using an Eclipse IDE or other tool that ships TM4E-powered editors, you usually do not install TM4E directly.
-
-- For day-to-day usage, configuration, and troubleshooting of TM4E-powered editors, see the [User Guide](docs/user-guide.md).
-- For usage questions and general help, use [GitHub discussions](https://github.com/eclipse-tm4e/tm4e/discussions).
-- To report problems with TM4E-powered editors, file issues in [GitHub issues](https://github.com/eclipse-tm4e/tm4e/issues) and include details about your IDE, TM4E version, and steps to reproduce.
-
-
 ## 🧩 Architecture and modules
 
 TM4E is split into three main bundles plus an optional language pack feature:
@@ -120,19 +137,19 @@ TM4E is split into three main bundles plus an optional language pack feature:
 - [org.eclipse.tm4e.core](https://github.com/eclipse-tm4e/tm4e/tree/main/org.eclipse.tm4e.core) - Java TextMate engine (a port of [vscode-textmate](https://github.com/Microsoft/vscode-textmate)), UI-agnostic and usable with any Java UI toolkit.
 - [org.eclipse.tm4e.ui](https://github.com/eclipse-tm4e/tm4e/tree/main/org.eclipse.tm4e.ui) - Eclipse integration layer providing [`TMPresentationReconciler`](org.eclipse.tm4e.ui/src/main/java/org/eclipse/tm4e/ui/text/TMPresentationReconciler.java), TextMate-based partitioning, theming, preference pages, hovers, and diagnostics.
 - [org.eclipse.tm4e.languageconfiguration](https://github.com/eclipse-tm4e/tm4e/tree/main/org.eclipse.tm4e.languageconfiguration) - VS Code-style `language-configuration.json` support for bracket handling, auto-close, on-enter behavior, and comment toggling.
-- [org.eclipse.tm4e.language_pack](https://github.com/eclipse-tm4e/tm4e/tree/main/org.eclipse.tm4e.language_pack) - Optional language pack feature that bundles TextMate grammars and language configurations so many common languages work out of the box in the Eclipse IDE.
+- [org.eclipse.tm4e.language_pack](https://github.com/eclipse-tm4e/tm4e/tree/main/org.eclipse.tm4e.language_pack) - Optional language pack feature that bundles 50+ TextMate grammars and language configurations so many common languages work out of the box in the Eclipse IDE.
 
 
 ## 🔌 Integrating TM4E
 
 If you are an Eclipse plug-in developer or Java tool author and want to consume TM4E:
 
-- Start with the [Plugin Developer Guide](docs/plugin-developer-guide.md) for how to depend on TM4E, register grammars and language configurations, and wire TM4E into editors.
+- Start with the [Plugin Developer Guide](docs/plugin-developer-guide.md) for how to depend on TM4E, contribute grammars, themes, and language configurations, and wire TM4E into editors.
 - For integration questions, best practices, and design discussions, use [GitHub discussions](https://github.com/eclipse-tm4e/tm4e/discussions).
 - To report bugs or request new APIs or integration features, file issues in [GitHub issues](https://github.com/eclipse-tm4e/tm4e/issues).
 
 
-## 🛠 Contributing
+## 🤝 Contributing
 
 If you want to work on TM4E itself:
 

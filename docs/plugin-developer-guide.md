@@ -3,16 +3,17 @@
 This guide is for Eclipse plugin developers who want to add TextMate-based syntax highlighting and language configuration features to their editors.
 It explains the main TM4E concepts, how to contribute grammars and themes, how to connect editors to TM4E, and how to use the TM partitioner and language configuration support.
 
+
 ## Table of contents
 
 1. [Core Concepts](#core-concepts)
 1. [Contributing Grammars](#contributing-grammars)
    1. [External Grammar Injection](#external-grammar-injection)
+1. [Contributing Language Configurations](#contributing-language-configurations)
+1. [Contributing Themes](#contributing-themes)
 1. [Wiring Editors to TM4E](#wiring-editors-to-tm4e)
    1. [Using `TextEditor`](#using-texteditor)
    1. [Using the Generic Editor](#using-the-generic-editor)
-1. [Themes for Plugin Authors](#themes-for-plugin-authors)
-1. [Using Language Configuration](#using-language-configuration)
 1. [Using the TM Partitioner from Code](#using-the-tm-partitioner-from-code)
 1. [Diagnostics: Token and Scope Hover](#diagnostics-token-and-scope-hover)
 1. [Samples and Tools](#samples-and-tools)
@@ -29,6 +30,7 @@ Language configuration JSON files add structural editor behavior on top of token
 
 Finally, a TM-specific document partitioner runs as a secondary partitioner.
 It exposes the normalized language scope for each region of a document, so that features like content assist or hovers can react to the active embedded language.
+
 
 ## Contributing Grammars
 
@@ -74,6 +76,83 @@ The injected scopes can then be associated with their own grammars and themes, r
 The screenshots below show the effect before and after enabling these injections:
 
 ![Angular editor before injection](img/angular_editor_without_injection.png) ![Angular editor after injection](img/angular_editor_with_injection.png)
+
+
+## Contributing Language Configurations
+
+Language configuration describes editor behavior beyond pure tokenization. TM4E consumes VS Code style `language-configuration.json` files and exposes them through the `org.eclipse.tm4e.languageconfiguration` bundle.
+
+### 1) Contributing a language-configuration file
+
+As a plug-in author you normally contribute a JSON configuration file with the `org.eclipse.tm4e.languageconfiguration.languageConfigurations` extension point:
+
+```xml
+<extension point="org.eclipse.tm4e.languageconfiguration.languageConfigurations">
+  <languageConfiguration
+      contentTypeId="org.eclipse.corrosion.rust"
+      path="language-configurations/language-configuration.json"/>
+</extension>
+```
+
+The `contentTypeId` in the example refers to the Rust editor from the Corrosion project. Replace it with the content type for your own language so that TM4E can apply the configuration to the correct files. The `path` is resolved relative to your plug-in and the JSON file must be listed in `build.properties`.
+
+The configuration file can contain sections such as `comments`, `brackets`, `autoClosingPairs`, `surroundingPairs`, `folding`, `wordPattern`, and `onEnterRules`. When both the configuration and the current implementation support a feature, TM4E enables:
+
+- auto closing and surrounding pairs
+- matching bracket highlighting
+- on-enter indentation and comment continuation
+- toggle line/block comments
+- folding
+
+### 2) JSON format and compatibility with VS Code
+
+TM4E reads `language-configuration.json` files in the same way as VS Code, with the following points to keep in mind:
+
+- `onEnterRules` are declared in the JSON file.
+- Regular expressions are provided as JSON strings, so backslashes must be escaped just as in VS Code.
+- Indent actions are expressed as string values (for example `"Indent"`, `"Outdent"`, `"IndentOutdent"`, or `"none"`), which TM4E maps internally to the corresponding indentation behavior.
+
+The recommended way to define language configuration is always via JSON `language-configuration.json` files, either contributed through the `languageConfigurations` extension point or added by users in the preferences. Directly implementing TM4E's internal language-configuration interfaces in Java is not required for typical plug-ins and is not considered a stable API surface.
+
+### 3) How TM4E uses language configuration at runtime
+
+Users can attach additional configuration files or disable specific features through the `TextMate > Language Configuration` preference page; this guide focuses on the plug-in-side extension mechanism.
+
+For editors based on the Generic Editor, TM4E contributes:
+
+- auto edit strategies that drive on-enter indentation and auto closing/surrounding pairs based on the configuration
+- character pair matchers that implement matching bracket highlighting
+- folding reconcilers that use language configuration for region folding
+
+Custom `TextEditor`-based editors can reuse the same TM4E strategies and matchers by installing them in their own `SourceViewerConfiguration` if they want consistent behavior.
+
+TM4E also defines commands for toggling line comments and adding or removing block comments that respect the active language configuration. These commands are bound to standard text editor key bindings where applicable and can be invoked from the IDE's key bindings and command framework.
+
+
+## Contributing Themes
+
+TM4E ships with built-in Light and Dark themes that are linked to the Eclipse appearance themes, but plugins can contribute additional CSS-based themes through the `org.eclipse.tm4e.ui.themes` extension point.
+
+```xml
+<extension point="org.eclipse.tm4e.ui.themes">
+  <theme
+      id="com.example.MyTheme"
+      name="MyTheme"
+      path="themes/MyTheme.css"/>
+</extension>
+```
+
+Themes can be flagged as more suitable for light or dark appearances and can be associated with specific grammar scopes so that, for example, a dedicated theme applies whenever a particular language is active.
+You declare one or more `<theme>` elements and then add `themeAssociation` elements that link themes to one or more scopes and optional dark/light variants.
+The exact attributes and options are described in the `themes` extension point schema.
+
+At runtime you can also force a specific theme for an editor by calling `setThemeId` on the presentation reconciler:
+
+```java
+var r = new org.eclipse.tm4e.ui.text.TMPresentationReconciler();
+r.setThemeId(org.eclipse.tm4e.ui.themes.ThemeIdConstants.Monokai);
+```
+
 
 ## Wiring Editors to TM4E
 
@@ -157,79 +236,6 @@ For a new language with its own file extension, a minimal `plugin.xml` wiring th
 
 The grammar file `syntaxes/MyLang.tmLanguage.json` must be packaged in your plug-in and listed in `build.properties`. With this setup, opening a `.mylang` file in the Generic Editor will cause TM4E to resolve the `com.example.mylang` content type, load the `source.mylang` grammar, and drive TextMate-based highlighting for that editor.
 
-## Themes for Plugin Authors
-
-TM4E ships with built-in Light and Dark themes that are linked to the Eclipse appearance themes, but plugins can contribute additional CSS-based themes through the `org.eclipse.tm4e.ui.themes` extension point.
-
-```xml
-<extension point="org.eclipse.tm4e.ui.themes">
-  <theme
-      id="com.example.MyTheme"
-      name="MyTheme"
-      path="themes/MyTheme.css"/>
-</extension>
-```
-
-Themes can be flagged as more suitable for light or dark appearances and can be associated with specific grammar scopes so that, for example, a dedicated theme applies whenever a particular language is active.
-You declare one or more `<theme>` elements and then add `themeAssociation` elements that link themes to one or more scopes and optional dark/light variants.
-The exact attributes and options are described in the `themes` extension point schema.
-
-At runtime you can also force a specific theme for an editor by calling `setThemeId` on the presentation reconciler:
-
-```java
-var r = new org.eclipse.tm4e.ui.text.TMPresentationReconciler();
-r.setThemeId(org.eclipse.tm4e.ui.themes.ThemeIdConstants.Monokai);
-```
-
-## Using Language Configuration
-
-Language configuration describes editor behavior beyond pure tokenization. TM4E consumes VS Code style `language-configuration.json` files and exposes them through the `org.eclipse.tm4e.languageconfiguration` bundle.
-
-### 1) Contributing a language-configuration file
-
-As a plug-in author you normally contribute a JSON configuration file with the `org.eclipse.tm4e.languageconfiguration.languageConfigurations` extension point:
-
-```xml
-<extension point="org.eclipse.tm4e.languageconfiguration.languageConfigurations">
-  <languageConfiguration
-      contentTypeId="org.eclipse.corrosion.rust"
-      path="language-configurations/language-configuration.json"/>
-</extension>
-```
-
-The `contentTypeId` in the example refers to the Rust editor from the Corrosion project. Replace it with the content type for your own language so that TM4E can apply the configuration to the correct files. The `path` is resolved relative to your plug-in and the JSON file must be listed in `build.properties`.
-
-The configuration file can contain sections such as `comments`, `brackets`, `autoClosingPairs`, `surroundingPairs`, `folding`, `wordPattern`, and `onEnterRules`. When both the configuration and the current implementation support a feature, TM4E enables:
-
-- auto closing and surrounding pairs
-- matching bracket highlighting
-- on-enter indentation and comment continuation
-- toggle line/block comments
-- folding
-
-### 2) JSON format and compatibility with VS Code
-
-TM4E reads `language-configuration.json` files in the same way as VS Code, with the following points to keep in mind:
-
-- `onEnterRules` are declared in the JSON file.
-- Regular expressions are provided as JSON strings, so backslashes must be escaped just as in VS Code.
-- Indent actions are expressed as string values (for example `"Indent"`, `"Outdent"`, `"IndentOutdent"`, or `"none"`), which TM4E maps internally to the corresponding indentation behavior.
-
-The recommended way to define language configuration is always via JSON `language-configuration.json` files, either contributed through the `languageConfigurations` extension point or added by users in the preferences. Directly implementing TM4E's internal language-configuration interfaces in Java is not required for typical plug-ins and is not considered a stable API surface.
-
-### 3) How TM4E uses language configuration at runtime
-
-Users can attach additional configuration files or disable specific features through the `TextMate > Language Configuration` preference page; this guide focuses on the plug-in-side extension mechanism.
-
-For editors based on the Generic Editor, TM4E contributes:
-
-- auto edit strategies that drive on-enter indentation and auto closing/surrounding pairs based on the configuration
-- character pair matchers that implement matching bracket highlighting
-- folding reconcilers that use language configuration for region folding
-
-Custom `TextEditor`-based editors can reuse the same TM4E strategies and matchers by installing them in their own `SourceViewerConfiguration` if they want consistent behavior.
-
-TM4E also defines commands for toggling line comments and adding or removing block comments that respect the active language configuration. These commands are bound to standard text editor key bindings where applicable and can be invoked from the IDE's key bindings and command framework.
 
 ## Using the TM Partitioner from Code
 
@@ -277,6 +283,7 @@ If your feature uses `IContentType` rather than scopes, `TMPartitions.getContent
 Convenience methods such as `TMPartitions.hasPartitioning(doc)` and `TMPartitions.getPartition(doc, offset)` help detect whether TM4E is active and retrieve the current region.
 Generic Editor extension points still refer to the editor's primary partitioning via their `partitionType` attribute; you always query TM4E's secondary partitioner from code instead of configuring it directly in the extension XML.
 
+
 ## Diagnostics: Token and Scope Hover
 
 When debugging grammars, themes, or partitioning, it is often helpful to see exactly which TextMate token and scopes TM4E has computed at a given location in the editor.
@@ -289,9 +296,14 @@ When the hover is enabled, hovering over a token shows:
 - The full list of TextMate scopes applied to the token.
 - The JFace text partition information at the caret (offset, length, type) and the TM4E grammar scope for that region.
 
+![TextMate Token Hover](img/tm_token_hover.png)
+
 You can enable or disable this hover on the main `TextMate` preference page (`Window > Preferences > TextMate`) by toggling the "Show TextMate token info hover" checkbox.
 This preference applies to editors that use the Generic Editor framework and have TM4E enabled.
 The hover is primarily intended for plugin and grammar authors as a troubleshooting tool rather than as an end-user feature.
+
+![TextMate Token Hover Preference](img/tm_token_hover_preference.png)
+
 
 ## Samples and Tools
 
@@ -303,6 +315,7 @@ These pages let you inspect and configure grammars, themes, task tags, and langu
 
 For interactive grammar development there is also a separate [Previewer](https://marketplace.eclipse.org/content/previewer) plugin that provides a view showing live syntax highlighting for the grammar file you are editing.
 Combined with TM4E this allows you to iterate quickly on grammars and themes while validating the scopes that the tokenizer produces.
+
 
 ## Further Reading
 

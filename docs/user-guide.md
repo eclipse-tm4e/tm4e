@@ -2,6 +2,7 @@
 
 This guide is for Eclipse users who work with editors powered by TM4E. It explains what TM4E does in the UI, how to install and configure it, and how to troubleshoot common problems.
 
+
 ## Table of contents
 
 1. [Getting TM4E in Eclipse](#getting-tm4e-in-eclipse)

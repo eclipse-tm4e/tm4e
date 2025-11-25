@@ -142,9 +142,9 @@ TM4E is split into three main bundles plus an optional language pack feature:
 
 ## 🔌 Integrating TM4E
 
-If you are an Eclipse plug-in developer or Java tool author and want to consume TM4E:
+If you are an Eclipse plug-in developer or Java tool author and want to integrate TM4E in your own tools:
 
-- Start with the [Plugin Developer Guide](docs/plugin-developer-guide.md) for how to depend on TM4E, contribute grammars, themes, and language configurations, and wire TM4E into editors.
+- Start with the [Adopter Guide](docs/adopter-guide.md) for how to depend on TM4E, contribute grammars, themes, and language configurations, and wire TM4E into editors.
 - For integration questions, best practices, and design discussions, use [GitHub discussions](https://github.com/eclipse-tm4e/tm4e/discussions).
 - To report bugs or request new APIs or integration features, file issues in [GitHub issues](https://github.com/eclipse-tm4e/tm4e/issues).
 

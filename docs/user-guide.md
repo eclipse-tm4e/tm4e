@@ -68,7 +68,7 @@ For advanced users, some editors expose a TextMate token hover that shows the to
 
 ![TextMate Token Hover](img/tm_token_hover.png)
 
-For details on how to use the token hover and other diagnostics when developing plugins, see the [TM4E Plugin Developer Guide](plugin-developer-guide.md).
+For details on how to use the token hover and other diagnostics when developing plugins, see the [TM4E Adopter Guide](adopter-guide.md).
 
 
 ## Language Pack and Additional Grammars
@@ -87,7 +87,8 @@ Most user-facing configuration lives under the `TextMate` section in the Eclipse
 
 1. The main `TextMate` page provides an overview and general switches.
 1. `TextMate > Grammar` lets you manage available grammars and their associations to Eclipse content types (the way Eclipse classifies file types).
-   Here you can enable or disable grammars and control which grammar applies to a file type.\
+   Here you can enable or disable grammars and control which grammar applies to a file type.
+   For each selected grammar you can also inspect details, adjust the content types it applies to, configure grammar injections, and manage per-grammar theme associations using the built-in preview.\
    ![Grammar Preferences](img/grammar_preferences.png)
 
 1. `TextMate > Language Configuration` lets you control language-configuration based features and attach additional configuration files:
@@ -101,7 +102,7 @@ Most user-facing configuration lives under the `TextMate` section in the Eclipse
 1. `TextMate > Task Tags` lets you define tags in comments (such as `TODO` or `FIXME`) that should be treated as tasks or problems, and configure how they are marked in the workspace.\
    ![Task Tags Preferences](img/task_tags_preferences.png)
 
-1. `TextMate > Themes` lets you choose between built-in Light and Dark themes and any additional themes contributed by installed plugins.
+1. `TextMate > Themes` lets you choose between built-in Light and Dark themes and any additional themes contributed by installed plugins, as well as import extra theme files and set the default theme for light and dark modes.
    You can also switch themes from the editor's context menu under `TextMate`.\
    ![Themes Preferences](img/themes_preferences.png)
 
@@ -118,6 +119,7 @@ This is useful if a plugin does not already provide a configuration file for tha
 
 Themes are contributed by plugins and selected on the `TextMate > Themes` page.
 Built-in themes cover common Light and Dark appearances, while plugin-provided themes can add alternative color schemes.
+You can also use the `New...` button on that page to import additional TextMate theme files from disk and mark one as the default for Light or Dark mode.
 If you are interested in authoring themes or grammars yourself, see the Plugin Developer Guide for extension point and authoring details.
 
 
@@ -136,12 +138,12 @@ If you are interested in authoring themes or grammars yourself, see the Plugin D
   If the Generic Editor shows TM4E-based highlighting while a custom editor does not, the custom editor may not be wired to TM4E or may rely solely on its own partitioning or language server integration.
 
 - **Collecting diagnostics for bug reports**:
-  When you need to provide more technical information, enable extra tracing by adding `org.eclipse.tm4e.ui/trace=true` to a debug options file (usually named `debug.options`) and starting Eclipse with `-debug /path/to/debug.options`.
-  To capture text events and generate a Java test skeleton, add `org.eclipse.tm4e.ui/debug/log/GenerateTest=true` to the same file and close an editor that uses TM4E; the test skeleton is written to the error output stream.
+  To capture text events and generate a Java test skeleton, add `org.eclipse.tm4e.ui/debug/log/GenerateTest=true` to a debug options file (usually named `debug.options`) and start Eclipse with `-debug /path/to/debug.options`; the test skeleton is written to the error output stream when you close an editor that uses TM4E.
+  If you need TM4E to fail fast when no grammar is found for a document (for example when isolating a bug), you can additionally set `org.eclipse.tm4e.ui/debug/log/ThrowError=true`, which causes an exception to be thrown instead of silently disabling TM4E for that document.
 
 
 ## Further Reading
 
 For additional background on what TM4E provides in Eclipse and how it fits into the IDE, see the Eclipse newsletter article "TM4E" (June 2018): https://www.eclipse.org/community/eclipse_newsletter/2018/june/tm4e.php
 
-If you plan to implement your own TM4E-based editor or customize integration at the plugin level, switch to the [TM4E Plugin Developer Guide](plugin-developer-guide.md), which is targeted specifically at plugin authors.
+If you plan to implement your own TM4E-based editor or customize integration at the plugin level, switch to the [TM4E Adopter Guide](adopter-guide.md), which is targeted specifically at plugin adopters and plug-in authors.

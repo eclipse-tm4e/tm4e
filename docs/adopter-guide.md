@@ -1,6 +1,8 @@
-# TM4E Plugin Developer Guide
+# TM4E Adopter Guide
 
-This guide is for Eclipse plugin developers who want to add TextMate-based syntax highlighting and language configuration features to their editors.
+This guide is for Eclipse plug-in and RCP application developers who want to integrate TM4E into Eclipse editors, and
+Java developers who want to use the TM4E core TextMate engine in their own applications outside Eclipse.
+
 It explains the main TM4E concepts, how to contribute grammars and themes, how to connect editors to TM4E, and how to use the TM partitioner and language configuration support.
 
 
@@ -15,6 +17,7 @@ It explains the main TM4E concepts, how to contribute grammars and themes, how t
    1. [Using `TextEditor`](#using-texteditor)
    1. [Using the Generic Editor](#using-the-generic-editor)
 1. [Using the TM Partitioner from Code](#using-the-tm-partitioner-from-code)
+1. [Handling Conflicting Grammar Registrations](#handling-conflicting-grammar-registrations)
 1. [Diagnostics: Token and Scope Hover](#diagnostics-token-and-scope-hover)
 1. [Samples and Tools](#samples-and-tools)
 1. [Further Reading](#further-reading)
@@ -282,6 +285,45 @@ if (doc instanceof IDocumentExtension3 ext3) {
 If your feature uses `IContentType` rather than scopes, `TMPartitions.getContentTypesForOffset(doc, offset)` translates the TM partition at a given offset into one or more content types.
 Convenience methods such as `TMPartitions.hasPartitioning(doc)` and `TMPartitions.getPartition(doc, offset)` help detect whether TM4E is active and retrieve the current region.
 Generic Editor extension points still refer to the editor's primary partitioning via their `partitionType` attribute; you always query TM4E's secondary partitioner from code instead of configuring it directly in the extension XML.
+
+
+## Handling Conflicting Grammar Registrations
+
+In real Eclipse installations it is common for several plug-ins (including the TM4E language pack) to register grammars for the same TextMate scope, or to provide overlapping grammars for a given file type.
+TM4E's registry is designed to handle this without forcing every plug-in to invent unique scope names.
+
+At a high level:
+
+- Grammars are always selected based on *content types* and their normal Eclipse priorities, not just on the bare scope name.
+- Internally, TM4E qualifies scopes with the contributing plug-in ID to disambiguate registrations, but external code and grammar authors can continue to use the shared, unqualified scope name.
+
+### 1) Which grammar wins for a file
+
+When an editor is opened, `TMPresentationReconciler` asks the registry for a grammar using the document's content types:
+
+- The content types are computed using the usual Eclipse mechanisms (file extension, content-type base types, and priority).
+- `GrammarRegistryManager` looks for a grammar that is explicitly bound to the highest priority content type via `scopeNameContentTypeBinding`.
+- If multiple plug-ins register a grammar for the same TextMate scope (for example `source.batchfile`), each plug-in typically also defines its own content type and binds that content type to the shared scope.
+
+From a plug-in author's perspective:
+
+- The content type that "wins" according to Eclipse content-type priority rules controls which plug-in's grammar is used for a given document.
+- If you want your grammar to take precedence for a specific file extension, define your own content type for that extension and bind it to your grammar scope via `scopeNameContentTypeBinding`.
+
+### 2) Referencing shared scopes from other grammars
+
+Grammars often embed other languages via shared scopes, for example an HTML grammar embedding JavaScript using `source.js`.
+When multiple plug-ins provide a grammar for the same embedded scope:
+
+- You can continue to reference the shared, unqualified scope (such as `source.js` or `text.html`) in your grammar.
+- TM4E resolves that shared scope to an internal, plug-in-specific variant based on the active registry state and the same content-type bindings described above.
+
+This means:
+
+- You do not need to create plug-in-specific scope names just to avoid collisions.
+- Embedded language references in your grammars remain stable even when users install additional plug-ins or language packs that also contribute grammars for those scopes.
+
+For a deeper, implementation-level description of how the registry qualifies scopes and resolves grammars (including a concrete `source.batchfile` example), see the *Handling Conflicting Grammar Registrations* section in the contributor guide (`docs/contributor-guide.md`).
 
 
 ## Diagnostics: Token and Scope Hover

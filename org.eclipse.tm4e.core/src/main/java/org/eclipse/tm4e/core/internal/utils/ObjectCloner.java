@@ -79,7 +79,7 @@ public final class ObjectCloner {
 
 		final var shallowClone = shallowClone(obj, () -> obj);
 		clones.put(obj, shallowClone);
-		return obj;
+		return shallowClone;
 	}
 
 	private static @Nullable <@Nullable T> T deepCloneNullable(final T obj, final Map<Object, @Nullable Object> clones) {

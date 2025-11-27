@@ -79,7 +79,7 @@ abstract class AbstractSourceHandler<T extends Source> {
 			if (isURL(langCfgPathOrURL)) {
 				final var targetFile = ctx.targetDir.resolve(ctx.targetNamePrefix + ".language-configuration.json");
 				if (ctx.updateExistingFiles || !Files.exists(targetFile)) {
-				   downloadFile(URI.create(langCfgPathOrURL).toURL(), targetFile);
+					downloadFile(URI.create(langCfgPathOrURL).toURL(), targetFile);
 				}
 			} else {
 				final var targetFile = ctx.targetDir.resolve(ctx.targetNamePrefix + ".language-configuration.json");

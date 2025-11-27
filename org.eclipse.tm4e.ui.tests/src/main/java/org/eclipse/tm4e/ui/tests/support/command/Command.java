@@ -26,7 +26,6 @@ public abstract class Command implements ICommand {
 		return name;
 	}
 
-
 	public void setStyleRanges(final String styleRanges) {
 		this.styleRanges = styleRanges;
 	}

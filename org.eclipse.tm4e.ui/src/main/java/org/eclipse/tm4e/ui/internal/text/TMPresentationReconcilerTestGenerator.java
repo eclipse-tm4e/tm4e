@@ -32,12 +32,12 @@ public final class TMPresentationReconcilerTestGenerator
 	private final StringBuilder code = new StringBuilder();
 
 	/*private List<Command> commands = new ArrayList<>();
-
+	
 	private static final class Command {
 		final String command;
 		StyleRange[] ranges;
 		Throwable error;
-
+	
 		Command(String command) {
 			this.command = command;
 		}

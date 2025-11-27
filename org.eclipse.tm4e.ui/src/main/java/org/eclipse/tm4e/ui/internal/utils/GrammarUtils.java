@@ -45,7 +45,7 @@ public final class GrammarUtils {
 		}
 		return grammar;
 	}
-	
+
 	private GrammarUtils() {
 	}
 }

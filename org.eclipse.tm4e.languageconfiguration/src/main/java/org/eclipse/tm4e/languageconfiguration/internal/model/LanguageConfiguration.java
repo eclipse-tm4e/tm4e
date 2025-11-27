@@ -22,8 +22,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
-import org.eclipse.jdt.annotation.NonNull;
-import org.eclipse.jdt.annotation.NonNullByDefault;
+import org.eclipse.jdt.annotation.NotOwning;
 import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.tm4e.languageconfiguration.LanguageConfigurationPlugin;
 import org.eclipse.tm4e.languageconfiguration.internal.model.EnterAction.IndentAction;
@@ -68,9 +67,9 @@ public final class LanguageConfiguration {
 	 * @return an instance of {@link LanguageConfiguration} loaded from the VSCode language-configuration.json file
 	 *         reader.
 	 */
-	@NonNullByDefault({})
-	public static @Nullable LanguageConfiguration load(final @NonNull Reader reader) {
+	public static @Nullable LanguageConfiguration load(final @NotOwning Reader reader) {
 		// GSON does not support trailing commas so we have to manually remove them -> maybe better switch to jackson json parser?
+		@SuppressWarnings("resource")
 		final var jsonString = removeTrailingCommas(new BufferedReader(reader).lines().collect(Collectors.joining("\n")));
 		final var gsonBuilder = new GsonBuilder()
 				.registerTypeAdapter(String.class, (JsonDeserializer<String>) (json, typeOfT, context) -> {

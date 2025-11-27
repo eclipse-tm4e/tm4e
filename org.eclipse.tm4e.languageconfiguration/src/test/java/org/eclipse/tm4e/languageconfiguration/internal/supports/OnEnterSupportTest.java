@@ -18,7 +18,7 @@
  */
 package org.eclipse.tm4e.languageconfiguration.internal.supports;
 
-import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.*;
 
 import java.util.List;
 
@@ -129,7 +129,6 @@ class OnEnterSupportTest {
 				testIndentAction(previousLineText, beforeText, afterText, expectedIndentAction, expectedAppendText, 0);
 			}
 
-			@SuppressWarnings("null")
 			void testIndentAction(final String previousLineText, final String beforeText, final String afterText,
 					final @Nullable IndentAction expectedIndentAction, final @Nullable String expectedAppendText,
 					final int removeText) {

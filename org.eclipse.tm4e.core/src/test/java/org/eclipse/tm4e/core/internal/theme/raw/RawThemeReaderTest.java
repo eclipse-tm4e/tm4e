@@ -27,7 +27,6 @@ import org.junit.jupiter.api.Test;
 class RawThemeReaderTest {
 
 	@Test
-	@SuppressWarnings("null")
 	void testLoadingThemes() throws IOException {
 		final var count = new AtomicInteger();
 		try (final var files = Files.list(Paths.get("../org.eclipse.tm4e.core.tests/src/main/resources/test-cases/themes"))) {

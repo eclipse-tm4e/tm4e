@@ -33,9 +33,8 @@ import org.junit.jupiter.api.TestMethodOrder;
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 class EncodedTokenAttributesTest {
 
-	@SuppressWarnings("null")
-   private static void assertEquals(final int metadata, final int languageId, final int /*StandardTokenType*/ tokenType,
-         final boolean containsBalancedBrackets, final int /*FontStyle*/ fontStyle, final int foreground, final int background) {
+	private static void assertEquals(final int metadata, final int languageId, final int /*StandardTokenType*/ tokenType,
+			final boolean containsBalancedBrackets, final int /*FontStyle*/ fontStyle, final int foreground, final int background) {
 		final var actual = "{\n"
 				+ "languageId: " + EncodedTokenAttributes.getLanguageId(metadata) + ",\n"
 				+ "tokenType: " + EncodedTokenAttributes.getTokenType(metadata) + ",\n"

@@ -21,6 +21,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 import org.eclipse.jdt.annotation.NonNull;
+import org.eclipse.jdt.annotation.NotOwning;
 
 import com.google.gson.Gson;
 
@@ -50,14 +51,15 @@ public class TMParserJSON implements TMParser {
 	protected TMParserJSON() {
 	}
 
-	protected Map<String, Object> loadRaw(final Reader source) {
+	protected Map<String, Object> loadRaw(final @NotOwning Reader source) {
 		// GSON does not support trailing commas so we have to manually remove them -> maybe better switch to jackson json parser?
+		@SuppressWarnings("resource")
 		final var jsonString = removeTrailingCommas(new BufferedReader(source).lines().collect(Collectors.joining("\n")));
 		return castNonNull(LOADER.fromJson(jsonString, Map.class));
 	}
 
 	@Override
-	public final <T extends PropertySettable<?>> T parse(final Reader source, final ObjectFactory<T> factory) {
+	public final <T extends PropertySettable<?>> T parse(final @NotOwning Reader source, final ObjectFactory<T> factory) {
 		final Map<String, Object> rawRoot = loadRaw(source);
 		return transform(rawRoot, factory);
 	}

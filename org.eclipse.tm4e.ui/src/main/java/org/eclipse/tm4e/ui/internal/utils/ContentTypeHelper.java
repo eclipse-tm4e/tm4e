@@ -33,6 +33,7 @@ import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.ListenerList;
 import org.eclipse.core.runtime.content.IContentType;
 import org.eclipse.jdt.annotation.Nullable;
+import org.eclipse.jdt.annotation.Owning;
 import org.eclipse.jface.text.IDocument;
 import org.eclipse.tm4e.ui.TMUIPlugin;
 import org.eclipse.ui.IEditorInput;
@@ -142,7 +143,7 @@ public final class ContentTypeHelper {
 	 *
 	 * @throws CoreException
 	 */
-	private static InputStream getContents(final ITextFileBuffer buffer) throws CoreException {
+	private static @Owning InputStream getContents(final ITextFileBuffer buffer) throws CoreException {
 		final IPath path = buffer.getLocation();
 		if (path != null) {
 			if (path.isAbsolute()) {

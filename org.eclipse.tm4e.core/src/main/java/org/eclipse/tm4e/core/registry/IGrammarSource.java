@@ -20,6 +20,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 
 import org.eclipse.jdt.annotation.Nullable;
+import org.eclipse.jdt.annotation.Owning;
 import org.eclipse.tm4e.core.internal.utils.ResourceUtils;
 
 public interface IGrammarSource {
@@ -53,7 +54,7 @@ public interface IGrammarSource {
 		final var contentType1 = contentType == null ? guessFileFormat(file.toString()) : contentType;
 		return new IGrammarSource() {
 			@Override
-			public Reader getReader() throws IOException {
+			public @Owning Reader getReader() throws IOException {
 				return Files.newBufferedReader(file, charset == null ? StandardCharsets.UTF_8 : charset);
 			}
 
@@ -90,7 +91,7 @@ public interface IGrammarSource {
 		final var contentType1 = contentType == null ? guessFileFormat(resourceName) : contentType;
 		return new IGrammarSource() {
 			@Override
-			public Reader getReader() throws IOException {
+			public @Owning Reader getReader() throws IOException {
 				return ResourceUtils.getResourceReader(clazz, resourceName, charset);
 			}
 
@@ -128,7 +129,7 @@ public interface IGrammarSource {
 		final long modified = System.currentTimeMillis();
 		return new IGrammarSource() {
 			@Override
-			public Reader getReader() {
+			public @Owning Reader getReader() {
 				return new StringReader(content);
 			}
 
@@ -155,6 +156,7 @@ public interface IGrammarSource {
 
 	URI getURI();
 
+	@Owning
 	Reader getReader() throws IOException;
 
 	/**

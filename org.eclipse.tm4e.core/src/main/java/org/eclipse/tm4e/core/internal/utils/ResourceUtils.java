@@ -28,20 +28,21 @@ import java.security.CodeSource;
 import java.util.jar.JarEntry;
 
 import org.eclipse.jdt.annotation.Nullable;
+import org.eclipse.jdt.annotation.Owning;
 
 public final class ResourceUtils {
 
 	/**
 	 * @throws FileNotFoundException if the resource isn't found on the classpath
 	 */
-	public static BufferedReader getResourceReader(final Class<?> clazz, final String resourceName) throws FileNotFoundException {
+	public static @Owning BufferedReader getResourceReader(final Class<?> clazz, final String resourceName) throws FileNotFoundException {
 		return getResourceReader(clazz, resourceName, null);
 	}
 
 	/**
 	 * @throws FileNotFoundException if the resource isn't found on the classpath
 	 */
-	public static BufferedReader getResourceReader(final Class<?> clazz, final String resourceName,
+	public static @Owning BufferedReader getResourceReader(final Class<?> clazz, final String resourceName,
 			final @Nullable Charset charset) throws FileNotFoundException {
 		final InputStream is = clazz.getResourceAsStream(resourceName);
 		if (is == null)

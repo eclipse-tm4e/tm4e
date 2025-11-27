@@ -60,6 +60,7 @@ public class Parser {
 	/**
 	 * Parse Current Token
 	 */
+	@SuppressWarnings("incomplete-switch")
 	private void tok(final InlineLexer inline) {
 		final var token = this.token;
 		if (token == null)

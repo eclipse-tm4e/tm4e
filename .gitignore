@@ -5,8 +5,9 @@ _LOCAL/
 /bin
 /*/bin
 **/.settings/*
-!**/.settings/org.eclipse.core.resoures.prefs
+!**/.settings/org.eclipse.core.resources.prefs
 !**/.settings/org.eclipse.jdt.core.prefs
+!**/.settings/org.eclipse.jdt.ui.prefs
 !**/.settings/org.eclipse.pde.core.prefs
 .pydevproject
 .tycho-consumer-pom.xml

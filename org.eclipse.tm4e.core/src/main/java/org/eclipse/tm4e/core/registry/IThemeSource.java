@@ -20,6 +20,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 
 import org.eclipse.jdt.annotation.Nullable;
+import org.eclipse.jdt.annotation.Owning;
 import org.eclipse.tm4e.core.internal.utils.ResourceUtils;
 
 public interface IThemeSource {
@@ -53,6 +54,7 @@ public interface IThemeSource {
 		final var contentType1 = contentType == null ? guessFileFormat(file.toString()) : contentType;
 		return new IThemeSource() {
 			@Override
+			@Owning
 			public Reader getReader() throws IOException {
 				return Files.newBufferedReader(file, charset == null ? StandardCharsets.UTF_8 : charset);
 			}
@@ -90,6 +92,7 @@ public interface IThemeSource {
 		final var contentType1 = contentType == null ? guessFileFormat(resourceName) : contentType;
 		return new IThemeSource() {
 			@Override
+			@Owning
 			public Reader getReader() throws IOException {
 				return ResourceUtils.getResourceReader(clazz, resourceName, charset);
 			}
@@ -151,6 +154,7 @@ public interface IThemeSource {
 
 	URI getURI();
 
+	@Owning
 	Reader getReader() throws IOException;
 
 	long lastModified() throws IOException;

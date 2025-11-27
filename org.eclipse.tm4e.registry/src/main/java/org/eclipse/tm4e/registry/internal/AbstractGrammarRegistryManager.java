@@ -29,6 +29,7 @@ import java.util.stream.Stream;
 
 import org.eclipse.core.runtime.content.IContentType;
 import org.eclipse.jdt.annotation.Nullable;
+import org.eclipse.jdt.annotation.Owning;
 import org.eclipse.tm4e.core.grammar.IGrammar;
 import org.eclipse.tm4e.core.registry.IGrammarSource;
 import org.eclipse.tm4e.core.registry.IRegistryOptions;
@@ -137,7 +138,7 @@ abstract class AbstractGrammarRegistryManager implements IGrammarRegistryManager
 					}
 
 					@Override
-					public Reader getReader() throws IOException {
+					public @Owning Reader getReader() throws IOException {
 						return new InputStreamReader(definition_.getInputStream(), StandardCharsets.UTF_8);
 					}
 

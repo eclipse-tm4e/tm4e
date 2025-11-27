@@ -233,7 +233,6 @@ class TMParserTest {
 	}
 
 	@Test
-	@SuppressWarnings("null")
 	void testLanguagePackGrammars() throws IOException {
 		final var count = new AtomicInteger();
 		Files.walkFileTree(Paths.get("../org.eclipse.tm4e.language_pack"), new SimpleFileVisitor<Path>() {

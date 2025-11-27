@@ -16,7 +16,6 @@ import org.junit.jupiter.api.Test;
 
 class OnigRegExpTest {
 
-	@SuppressWarnings("null")
 	private void assertOnigRegExpSearch(final String input, final @Nullable OnigResult result, final int startPosition,
 			final boolean shouldMatch, final String... expectedGroups) {
 		if (shouldMatch) {

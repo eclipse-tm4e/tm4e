@@ -190,7 +190,6 @@ public final class ContentTypeHelper {
 					}
 				} catch (final Exception ex) {
 					TMUIPlugin.logTrace(ex);
-					return null;
 				}
 			} /*else {
 				// TODO: manage other type of IEditorInput

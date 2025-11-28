@@ -99,7 +99,7 @@ public class TMTokenizationSupport implements ITokenizationSupport {
 				final String baseScope = _grammar.getScopeName();
 				final String preferredFromScopes = choosePreferredScope(token.scopes, baseScope);
 				final String tokenGrammarScope = token.grammarScope == null
-						|| (preferredFromScopes != null && !preferredFromScopes.equals(baseScope))
+						|| preferredFromScopes != null && !preferredFromScopes.equals(baseScope)
 								? preferredFromScopes
 								: token.grammarScope;
 				tmTokens.add(new TMToken(token.startIndex + offsetDelta, tokenType, token.scopes, tokenGrammarScope));

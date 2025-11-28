@@ -11,7 +11,7 @@
  */
 package org.eclipse.tm4e.ui.internal.themes;
 
-import static org.eclipse.tm4e.core.internal.utils.NullSafetyHelper.*;
+import static org.eclipse.tm4e.core.internal.utils.NullSafetyHelper.castNonNull;
 
 import java.util.Arrays;
 

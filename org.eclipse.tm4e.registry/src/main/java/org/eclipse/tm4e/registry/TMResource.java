@@ -30,7 +30,7 @@ public abstract class TMResource implements ITMResource {
 
 	private static final String PLATFORM_PLUGIN = "platform:/plugin/";
 
-	private String path;
+	private final String path;
 	private @Nullable String pluginId;
 
 	/**

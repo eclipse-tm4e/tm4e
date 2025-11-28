@@ -50,7 +50,7 @@ class DocumentInputStreamTest {
 		p.create(null);
 		p.open(null);
 
-		IFile testFile = p.getFile("testfile");
+		final IFile testFile = p.getFile("testfile");
 		testFile.create(new ByteArrayInputStream(TEST_UNICODE.getBytes()), true, null);
 		final var editorInput = new FileEditorInput(testFile);
 		documentProvider.connect(editorInput);

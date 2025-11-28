@@ -11,7 +11,7 @@
  */
 package org.eclipse.tm4e.core.internal.theme;
 
-import static org.eclipse.tm4e.core.internal.utils.StringUtils.*;
+import static org.eclipse.tm4e.core.internal.utils.StringUtils.strArrCmp;
 
 import java.util.ArrayList;
 import java.util.HashMap;

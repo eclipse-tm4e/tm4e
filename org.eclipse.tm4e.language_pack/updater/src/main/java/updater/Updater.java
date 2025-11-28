@@ -286,24 +286,26 @@ public class Updater {
 			final Path sourceRepoDir = sourceReposCacheDir.resolve(sourceId);
 			final var gitCheckoutState = gitSparseCheckout(sourceRepoDir, source.github);
 
-			if (source instanceof final Config.CustomSource src) {
-				final var extensionState = new State.ExtensionState();
-				extensionState.github = gitCheckoutState;
-				state.extensions.put(sourceId, extensionState);
-				new CustomSourceHandler(sourceId, src, sourceRepoDir, syntaxesDir, extensionState).handle();
-			} else if (source instanceof final Config.VSCodeSingleExtensionSource src) {
-				final var extensionState = new State.ExtensionState();
-				extensionState.github = gitCheckoutState;
-				state.extensions.put(sourceId, extensionState);
-
-				for (final String buildCommand : src.build) {
-					Sys.execVerbose(sourceRepoDir, (Sys.IS_WINDOWS ? "cmd /c " : "") + buildCommand);
+			switch (source) {
+				case final Config.CustomSource src -> {
+					final var extensionState = new State.ExtensionState();
+					extensionState.github = gitCheckoutState;
+					state.extensions.put(sourceId, extensionState);
+					new CustomSourceHandler(sourceId, src, sourceRepoDir, syntaxesDir, extensionState).handle();
 				}
-
-				new VSCodeSingleExtensionSourceHandler(sourceId, src, sourceRepoDir, syntaxesDir, extensionState).handle();
-			} else if (source instanceof final Config.VSCodeMultiExtensionsSource src) {
-				new VSCodeMultiExtensionsSourceHandler(sourceId, src, sourceRepoDir, gitCheckoutState, syntaxesDir, state.extensions)
-						.handle();
+				case final Config.VSCodeSingleExtensionSource src -> {
+					final var extensionState = new State.ExtensionState();
+					extensionState.github = gitCheckoutState;
+					state.extensions.put(sourceId, extensionState);
+					for (final String buildCommand : src.build) {
+						Sys.execVerbose(sourceRepoDir, (Sys.IS_WINDOWS ? "cmd /c " : "") + buildCommand);
+					}
+					new VSCodeSingleExtensionSourceHandler(sourceId, src, sourceRepoDir, syntaxesDir, extensionState).handle();
+				}
+				case final Config.VSCodeMultiExtensionsSource src -> new VSCodeMultiExtensionsSourceHandler(sourceId, src, sourceRepoDir,
+						gitCheckoutState, syntaxesDir, state.extensions).handle();
+				default -> {
+				}
 			}
 
 			logInfo("Saving state to [" + stateFile + "]");

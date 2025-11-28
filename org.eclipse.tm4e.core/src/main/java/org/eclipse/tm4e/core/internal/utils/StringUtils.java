@@ -119,7 +119,7 @@ public final class StringUtils {
 	/**
 	 * Returns true if `str` contains any Unicode character that is classified as "R" or "AL".
 	 */
-	public static boolean containsRTL(String str) {
+	public static boolean containsRTL(final String str) {
 		Pattern p = CONTAINS_RTL;
 		if (p == null) {
 			p = CONTAINS_RTL = makeContainsRtl();

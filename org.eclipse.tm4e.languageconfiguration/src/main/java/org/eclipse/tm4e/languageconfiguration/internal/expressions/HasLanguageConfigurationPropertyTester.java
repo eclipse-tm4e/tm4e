@@ -31,14 +31,19 @@ public final class HasLanguageConfigurationPropertyTester extends PropertyTester
 
 	@Override
 	public boolean test(final @Nullable Object receiver, final String property, final Object[] args, final @Nullable Object expectedValue) {
-		if (receiver instanceof final IFileEditorInput fileInput)
-			return hasLanguageConfiguration(ContentTypeHelper.findContentTypesByFileName(fileInput.getFile().getName()));
-
-		if (receiver instanceof final IPathEditorInput pathInput)
-			return hasLanguageConfiguration(ContentTypeHelper.findContentTypesByFileName(castNonNull(pathInput.getPath().lastSegment())));
-
-		if (receiver instanceof final IFile file)
-			return hasLanguageConfiguration(ContentTypeHelper.findContentTypesByFileName(file.getName()));
+		switch (receiver) {
+			case IFileEditorInput fileInput -> {
+				return hasLanguageConfiguration(ContentTypeHelper.findContentTypesByFileName(fileInput.getFile().getName()));
+			}
+			case IPathEditorInput pathInput -> {
+				return hasLanguageConfiguration(ContentTypeHelper.findContentTypesByFileName(castNonNull(pathInput.getPath().lastSegment())));
+			}
+			case IFile file -> {
+				return hasLanguageConfiguration(ContentTypeHelper.findContentTypesByFileName(file.getName()));
+			}
+			case null, default -> {
+			}
+		}
 
 		final var editor = Adapters.adapt(receiver, ITextEditor.class);
 		if (editor == null)

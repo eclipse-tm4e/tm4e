@@ -47,7 +47,7 @@ final class PreferenceHelper {
 		}.getType());
 	}
 
-	static void saveGrammars(Collection<IGrammarDefinition> definitions) throws BackingStoreException {
+	static void saveGrammars(final Collection<IGrammarDefinition> definitions) throws BackingStoreException {
 		// Save grammar definitions in the
 		// "${workspace_loc}/metadata/.plugins/org.eclipse.core.runtime/.settings/org.eclipse.tm4e.registry.prefs"
 		final var json = DEFAULT_GSON.toJson(definitions);

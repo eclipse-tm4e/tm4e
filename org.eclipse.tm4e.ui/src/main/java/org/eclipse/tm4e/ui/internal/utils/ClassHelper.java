@@ -27,7 +27,6 @@ public final class ClassHelper {
 			try {
 				return (T) f.get(object);
 			} catch (final Exception e) {
-				return null;
 			}
 		}
 		return null;

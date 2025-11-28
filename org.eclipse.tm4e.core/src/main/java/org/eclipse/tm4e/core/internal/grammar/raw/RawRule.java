@@ -149,15 +149,11 @@ public class RawRule extends PropertySettable.HashMap<@Nullable Object> implemen
 	@Override
 	public boolean isApplyEndPatternLast() {
 		final Object applyEndPatternLast = get(APPLY_END_PATTERN_LAST);
-		if (applyEndPatternLast == null) {
-			return false;
-		}
-		if (applyEndPatternLast instanceof final Boolean asBool) {
-			return asBool;
-		}
-		if (applyEndPatternLast instanceof final Integer asInt) {
-			return asInt == 1;
-		}
-		return false;
+		return switch (applyEndPatternLast) {
+			case null -> false;
+			case Boolean asBool -> asBool;
+			case Integer asInt -> asInt == 1;
+			default -> false;
+		};
 	}
 }

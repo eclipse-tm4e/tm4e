@@ -75,7 +75,7 @@ public final class BenchmarkRunner {
 
 			final var durationMS = System.currentTimeMillis() - startAt;
 			final var durationMSPerIteration = durationMS / (float) iterations;
-			final var iterationsPerSecond = (iterations / (float) durationMS) * 1_000;
+			final var iterationsPerSecond = iterations / (float) durationMS * 1_000;
 
 			if (measureHeapUsage) {
 				final var heapBytesPerIteration = (startFreeMem - RUNTIME.freeMemory()) / (float) iterations;

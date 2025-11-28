@@ -202,7 +202,7 @@ public class LanguageConfigurationCharacterPairMatcher implements ICharacterPair
 					if (hasQuotes) {
 						quotes = new char[surroundingQuotes.size()];
 						for (int i = 0; i < surroundingQuotes.size(); i++) {
-							quotes[i] = surroundingQuotes.get(i).charValue();
+							quotes[i] = surroundingQuotes.get(i);
 						}
 					} else {
 						quotes = NO_QUOTES;
@@ -366,8 +366,6 @@ public class LanguageConfigurationCharacterPairMatcher implements ICharacterPair
 				return null;
 			}
 		} catch (final BadLocationException e) {
-			// if token lookup fails, fall back to the original region
-			return region;
 		}
 		return region;
 	}
@@ -459,7 +457,7 @@ public class LanguageConfigurationCharacterPairMatcher implements ICharacterPair
 		for (int i = 0; i < tokens.size(); i++) {
 			final TMToken token = tokens.get(i);
 			final int tokenStart = token.startIndex;
-			final int tokenEnd = (i + 1 < tokens.size()) ? tokens.get(i + 1).startIndex : lineLength;
+			final int tokenEnd = i + 1 < tokens.size() ? tokens.get(i + 1).startIndex : lineLength;
 			if (column < tokenStart || column >= tokenEnd) {
 				continue;
 			}
@@ -498,8 +496,7 @@ public class LanguageConfigurationCharacterPairMatcher implements ICharacterPair
 			final int lineLength = document.getLineLength(line);
 			final String lineText = document.get(lineOffset, lineLength);
 
-			for (int i = 0; i < tokens.size(); i++) {
-				final TMToken token = tokens.get(i);
+			for (final TMToken token : tokens) {
 				final int tokenStartColumn = token.startIndex;
 				final int tokenStartOffset = lineOffset + tokenStartColumn;
 
@@ -633,7 +630,7 @@ public class LanguageConfigurationCharacterPairMatcher implements ICharacterPair
 		for (int i = 0; i < tokens.size(); i++) {
 			final TMToken token = tokens.get(i);
 			final int tokenStart = token.startIndex;
-			final int tokenEnd = (i + 1 < tokens.size()) ? tokens.get(i + 1).startIndex : lineLength;
+			final int tokenEnd = i + 1 < tokens.size() ? tokens.get(i + 1).startIndex : lineLength;
 			if (column < tokenStart || column >= tokenEnd) {
 				continue;
 			}

@@ -58,12 +58,12 @@ public final class TMDocumentModel extends TMModel implements ITMDocumentModel, 
 					final var isFullLineInsert = DocumentHelper.getStartLineCharIndex(event) == 0
 							&& event.getText().endsWith("\n");
 
-					final var linesAdded = (isFullLineInsert ? 0 : 1) + (endLineIndexOfAddedText - startLineIndex);
+					final var linesAdded = (isFullLineInsert ? 0 : 1) + endLineIndexOfAddedText - startLineIndex;
 					onLinesReplaced(startLineIndex, isFullLineInsert ? 0 : 1, linesAdded);
 					break;
 				}
 				case REMOVE: {
-					onLinesReplaced(startLineIndex, 1 + (endLineIndexOfRemovedText - startLineIndex), 1);
+					onLinesReplaced(startLineIndex, 1 + endLineIndexOfRemovedText - startLineIndex, 1);
 					break;
 				}
 				case REPLACE: {
@@ -72,8 +72,8 @@ public final class TMDocumentModel extends TMModel implements ITMDocumentModel, 
 							&& event.getText().endsWith("\n");
 
 					onLinesReplaced(startLineIndex,
-							(isFullLineInsert ? 0 : 1) + (endLineIndexOfRemovedText - startLineIndex),
-							(isFullLineInsert ? 0 : 1) + (endLineIndexOfAddedText - startLineIndex));
+							(isFullLineInsert ? 0 : 1) + endLineIndexOfRemovedText - startLineIndex,
+							(isFullLineInsert ? 0 : 1) + endLineIndexOfAddedText - startLineIndex);
 					break;
 				}
 			}

@@ -225,17 +225,23 @@ public final class RuleFactory {
 				}
 				boolean skipRule = false;
 
-				if (rule instanceof final IncludeOnlyRule ior) {
-					if (ior.hasMissingPatterns && ior.patterns.length == 0) {
-						skipRule = true;
+				switch (rule) {
+					case IncludeOnlyRule ior -> {
+						if (ior.hasMissingPatterns && ior.patterns.length == 0) {
+							skipRule = true;
+						}
 					}
-				} else if (rule instanceof final BeginEndRule ber) {
-					if (ber.hasMissingPatterns && ber.patterns.length == 0) {
-						skipRule = true;
+					case BeginEndRule ber -> {
+						if (ber.hasMissingPatterns && ber.patterns.length == 0) {
+							skipRule = true;
+						}
 					}
-				} else if (rule instanceof final BeginWhileRule bwr) {
-					if (bwr.hasMissingPatterns && bwr.patterns.length == 0) {
-						skipRule = true;
+					case BeginWhileRule bwr -> {
+						if (bwr.hasMissingPatterns && bwr.patterns.length == 0) {
+							skipRule = true;
+						}
+					}
+					case null, default -> {
 					}
 				}
 

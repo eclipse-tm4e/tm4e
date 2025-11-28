@@ -98,7 +98,7 @@ public final class MarkerUtils {
 				continue;
 			}
 
-			final int lineNumber = lineNumberObj.intValue();
+			final int lineNumber = lineNumberObj;
 			if (lineNumber < startLineNumber) {
 				continue; // this marker needs no update
 			}

@@ -23,7 +23,7 @@ public interface ITMScope {
 	/**
 	 * @param scopeName fully qualified ("source.batchfile@com.example.myplugin") or unqualified scopeName ("source.batchfile")
 	 */
-	static ITMScope parse(String scopeName) {
+	static ITMScope parse(final String scopeName) {
 		return TMScope.parse(scopeName);
 	}
 

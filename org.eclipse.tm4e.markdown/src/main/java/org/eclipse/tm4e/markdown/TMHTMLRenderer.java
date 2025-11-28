@@ -84,15 +84,15 @@ public class TMHTMLRenderer extends HTMLRenderer {
 				tokenText = line.substring(offset);
 			}
 
-			String className = "token";
+			StringBuilder className = new StringBuilder("token");
 			final String safeType = token.type.replaceAll("[^a-z0-9\\-]", " ");
 			if (!safeType.isEmpty()) {
-				className += ' ' + safeType;
+				className.append(' ').append(safeType);
 			}
 
 			html.append("<span ");
 			html.append("class=\"");
-			html.append(className);
+			html.append(className.toString());
 			html.append("\">");
 			html.append(Helpers.htmlEscape(tokenText));
 			html.append("</span>");

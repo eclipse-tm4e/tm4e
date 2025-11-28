@@ -59,7 +59,7 @@ public abstract class TableWithControlsWidget<T> extends Composite {
 		buttonsArea.setLayoutData(new GridData(GridData.VERTICAL_ALIGN_BEGINNING | GridData.FILL_VERTICAL));
 		createButtons();
 		if (buttonsArea.getChildren().length == 0) {
-			(castNonNull((GridLayout) parent.getLayout())).horizontalSpacing = 0;
+			castNonNull((GridLayout) parent.getLayout()).horizontalSpacing = 0;
 		}
 	}
 

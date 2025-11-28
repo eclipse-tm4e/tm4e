@@ -193,9 +193,9 @@ final class LineTokenizer {
 
 			// custom tm4e code - not from upstream (for TMPartitioner)
 			// make sure origin grammar scope is present when external
-			AttributedScopeStack baseNames = castNonNull(stack.contentNameScopesList);
+			final AttributedScopeStack baseNames = castNonNull(stack.contentNameScopesList);
 			final var nameScopesList = baseNames.pushAttributed(scopeName, grammar);
-			final String frameGrammarScope = (rule.grammarScope != null && !rule.grammarScope.equals(grammar.getScopeName()))
+			final String frameGrammarScope = rule.grammarScope != null && !rule.grammarScope.equals(grammar.getScopeName())
 					? rule.grammarScope
 					: stack.grammarScope;
 
@@ -508,11 +508,11 @@ final class LineTokenizer {
 				final var scopeName = captureRule.getName(lineTextContent, captureIndices);
 
 				// custom tm4e code - not from upstream (for TMPartitioner)
-				AttributedScopeStack baseNames = castNonNull(stack.contentNameScopesList);
+				final AttributedScopeStack baseNames = castNonNull(stack.contentNameScopesList);
 				final var retokenizeRule = grammar.getRule(retokenizeCapturedWithRuleId);
 				final var grammarScope = retokenizeRule.grammarScope;
 				final var nameScopesList = baseNames.pushAttributed(scopeName, grammar);
-				final String frameGrammarScope = (grammarScope != null && !grammarScope.equals(grammar.getScopeName()))
+				final String frameGrammarScope = grammarScope != null && !grammarScope.equals(grammar.getScopeName())
 						? grammarScope
 						: stack.grammarScope;
 

@@ -31,7 +31,7 @@ class IndentationTest {
 
 	@Test
 	void testNormalizeIndentation1() {
-		var cursorCfg = new CursorConfiguration(false, 4);
+		final var cursorCfg = new CursorConfiguration(false, 4);
 
 		assertThat(cursorCfg.normalizeIndentation("\t")).isEqualTo("\t");
 		assertThat(cursorCfg.normalizeIndentation("    ")).isEqualTo("\t");
@@ -60,7 +60,7 @@ class IndentationTest {
 
 	@Test
 	void testNormalizeIndentation2() {
-		var cursorCfg = new CursorConfiguration(true, 4);
+		final var cursorCfg = new CursorConfiguration(true, 4);
 
 		assertThat(cursorCfg.normalizeIndentation("\ta")).isEqualTo("    a");
 		assertThat(cursorCfg.normalizeIndentation("    a")).isEqualTo("    a");

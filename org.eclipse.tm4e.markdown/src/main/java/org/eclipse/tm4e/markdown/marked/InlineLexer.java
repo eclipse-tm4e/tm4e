@@ -87,7 +87,6 @@ public class InlineLexer {
 			if ((cap = this.rules.text.exec(src)) != null) {
 				src = src.substring(cap.group(0).length());
 				this.renderer.text(htmlEscape(this.smartypants(cap.group(0))));
-				continue;
 			}
 		}
 	}

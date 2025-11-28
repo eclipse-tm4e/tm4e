@@ -42,28 +42,30 @@ public final class ObjectCloner {
 		if (clone != null)
 			return (T) clone;
 
-		if (obj instanceof final List<?> list) {
-			final var listClone = shallowClone(list, () -> new ArrayList<>(list));
-			clones.put(list, listClone);
-			listClone.replaceAll(v -> deepCloneNullable(v, clones));
-			return (T) listClone;
-		}
-
-		if (obj instanceof final Set<?> set) {
-			final var setClone = (Set<@Nullable Object>) shallowClone(set, HashSet::new);
-			clones.put(set, setClone);
-			setClone.clear();
-			for (final var e : set) {
-				setClone.add(deepCloneNullable(e, clones));
+		switch (obj) {
+			case final List<?> list -> {
+				final var listClone = shallowClone(list, () -> new ArrayList<>(list));
+				clones.put(list, listClone);
+				listClone.replaceAll(v -> deepCloneNullable(v, clones));
+				return (T) listClone;
 			}
-			return (T) setClone;
-		}
-
-		if (obj instanceof final Map<?, ?> map) {
-			final var mapClone = shallowClone(map, () -> new HashMap<>(map));
-			clones.put(map, mapClone);
-			mapClone.replaceAll((k, v) -> deepCloneNullable(v, clones));
-			return (T) mapClone;
+			case final Set<?> set -> {
+				final var setClone = (Set<@Nullable Object>) shallowClone(set, HashSet::new);
+				clones.put(set, setClone);
+				setClone.clear();
+				for (final var e : set) {
+					setClone.add(deepCloneNullable(e, clones));
+				}
+				return (T) setClone;
+			}
+			case final Map<?, ?> map -> {
+				final var mapClone = shallowClone(map, () -> new HashMap<>(map));
+				clones.put(map, mapClone);
+				mapClone.replaceAll((k, v) -> deepCloneNullable(v, clones));
+				return (T) mapClone;
+			}
+			default -> {
+			}
 		}
 
 		if (obj.getClass().isArray()) {

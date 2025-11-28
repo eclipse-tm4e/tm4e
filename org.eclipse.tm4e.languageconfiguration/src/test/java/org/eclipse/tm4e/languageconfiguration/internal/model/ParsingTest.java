@@ -142,7 +142,7 @@ class ParsingTest {
 				},
 			}""");
 
-		var indentationRules = languageConfiguration.getIndentationRules();
+		final var indentationRules = languageConfiguration.getIndentationRules();
 		assert indentationRules != null;
 
 		assertThat(indentationRules.increaseIndentPattern).hasToString("(^.*\\{[^}]*$)");

@@ -182,8 +182,8 @@ public final class IndentForEnterHelper {
 
 		final var previousLineContent = model.getLineContent(previousLineIndex);
 		final int previousLineIndentMetadata = indentRulesSupport.getIndentMetadata(previousLineContent);
-		if (((previousLineIndentMetadata & (IndentConsts.INCREASE_MASK | IndentConsts.DECREASE_MASK)) == 0)
-				&& ((previousLineIndentMetadata & IndentConsts.INDENT_NEXTLINE_MASK) != 0)) {
+		if ((previousLineIndentMetadata & (IndentConsts.INCREASE_MASK | IndentConsts.DECREASE_MASK)) == 0
+				&& (previousLineIndentMetadata & IndentConsts.INDENT_NEXTLINE_MASK) != 0) {
 			int stopLineIndex = -1;
 			for (int i = previousLineIndex - 1; i >= 0; i--) {
 				if (indentRulesSupport.shouldIndentNextLine(model.getLineContent(i)))
@@ -250,13 +250,8 @@ public final class IndentForEnterHelper {
 			final IndentRulesSupport indentRulesSupport,
 			final OnEnterSupport onEnterSupport) throws BadLocationException {
 
-		final var virtualModel = new IVirtualModel() {
-			@Override
-			public String getLineContent(int lineIndex) throws BadLocationException {
-				return DocumentHelper.getLineText(doc, lineIndex, false);
-			}
-		};
-		InheritedIndentation indent = getInheritIndentForLine(virtualModel, true, lineIndex, indentRulesSupport);
+		final var virtualModel = (IVirtualModel) lineIndex1 -> DocumentHelper.getLineText(doc, lineIndex1, false);
+		final InheritedIndentation indent = getInheritIndentForLine(virtualModel, true, lineIndex, indentRulesSupport);
 
 		if (indent != null) {
 			final String lineContent = virtualModel.getLineContent(lineIndex);
@@ -351,15 +346,11 @@ public final class IndentForEnterHelper {
 			final String beforeEnterResult = beforeEnterText;
 			final String beforeEnterIndent = Strings.getLeadingWhitespace(beforeEnterText);
 
-			final var virtualModel = new IVirtualModel() {
-
-				@Override
-				public String getLineContent(int theLineIndex) throws BadLocationException {
-					if (theLineIndex == lineIndex) {
-						return beforeEnterResult;
-					}
-					return DocumentHelper.getLineText(doc, theLineIndex, false);
+			final var virtualModel = (IVirtualModel) theLineIndex -> {
+				if (theLineIndex == lineIndex) {
+					return beforeEnterResult;
 				}
+				return DocumentHelper.getLineText(doc, theLineIndex, false);
 			};
 
 			//final String currentLineIndent = TextUtils.getIndentationAtPosition(doc, offset);

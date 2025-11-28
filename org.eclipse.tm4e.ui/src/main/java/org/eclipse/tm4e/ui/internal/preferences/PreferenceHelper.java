@@ -11,7 +11,7 @@
  */
 package org.eclipse.tm4e.ui.internal.preferences;
 
-import static org.eclipse.tm4e.core.internal.utils.NullSafetyHelper.*;
+import static org.eclipse.tm4e.core.internal.utils.NullSafetyHelper.castNonNull;
 
 import java.io.IOException;
 import java.util.Collection;
@@ -115,7 +115,7 @@ public final class PreferenceHelper {
 		return TMUIPlugin.getPreference(PreferenceConstants.TMTOKEN_HOVER_ENABLED, false);
 	}
 
-	public static void saveTMTokenHoverEnabled(boolean isEnabled) throws BackingStoreException {
+	public static void saveTMTokenHoverEnabled(final boolean isEnabled) throws BackingStoreException {
 		final var prefs = InstanceScope.INSTANCE.getNode(TMUIPlugin.PLUGIN_ID);
 		prefs.putBoolean(PreferenceConstants.TMTOKEN_HOVER_ENABLED, isEnabled);
 		prefs.flush();

@@ -35,7 +35,7 @@ import org.eclipse.jface.text.Region;
  */
 public class MockDocument implements IDocument {
 
-	private String contentType;
+	private final String contentType;
 	private String text;
 
 	public MockDocument(final String contentType, final String text) {
@@ -44,7 +44,7 @@ public class MockDocument implements IDocument {
 	}
 
 	public int getOffsetAfter(final String searchFor) {
-		var idx = text.indexOf(searchFor);
+		final var idx = text.indexOf(searchFor);
 		if (idx > -1)
 			return idx + searchFor.length();
 		return idx;
@@ -55,62 +55,62 @@ public class MockDocument implements IDocument {
 	}
 
 	@Override
-	public void addDocumentListener(IDocumentListener listener) {
+	public void addDocumentListener(final IDocumentListener listener) {
 		throw new UnsupportedOperationException();
 	}
 
 	@Override
-	public void addDocumentPartitioningListener(IDocumentPartitioningListener listener) {
+	public void addDocumentPartitioningListener(final IDocumentPartitioningListener listener) {
 		throw new UnsupportedOperationException();
 	}
 
 	@Override
-	public void addPosition(Position position) {
+	public void addPosition(final Position position) {
 		throw new UnsupportedOperationException();
 	}
 
 	@Override
-	public void addPosition(String category, Position position) {
+	public void addPosition(final String category, final Position position) {
 		throw new UnsupportedOperationException();
 	}
 
 	@Override
-	public void addPositionCategory(String category) {
+	public void addPositionCategory(final String category) {
 		throw new UnsupportedOperationException();
 	}
 
 	@Override
-	public void addPositionUpdater(IPositionUpdater updater) {
+	public void addPositionUpdater(final IPositionUpdater updater) {
 		throw new UnsupportedOperationException();
 	}
 
 	@Override
-	public void addPrenotifiedDocumentListener(IDocumentListener documentAdapter) {
+	public void addPrenotifiedDocumentListener(final IDocumentListener documentAdapter) {
 		throw new UnsupportedOperationException();
 	}
 
 	@Override
-	public int computeIndexInCategory(String category, int offset) {
+	public int computeIndexInCategory(final String category, final int offset) {
 		throw new UnsupportedOperationException();
 	}
 
 	@Override
-	public int computeNumberOfLines(String text) {
+	public int computeNumberOfLines(final String text) {
 		throw new UnsupportedOperationException();
 	}
 
 	@Override
-	public ITypedRegion[] computePartitioning(int offset, int length) {
+	public ITypedRegion[] computePartitioning(final int offset, final int length) {
 		throw new UnsupportedOperationException();
 	}
 
 	@Override
-	public boolean containsPosition(String category, int offset, int length) {
+	public boolean containsPosition(final String category, final int offset, final int length) {
 		throw new UnsupportedOperationException();
 	}
 
 	@Override
-	public boolean containsPositionCategory(String category) {
+	public boolean containsPositionCategory(final String category) {
 		throw new UnsupportedOperationException();
 	}
 
@@ -123,7 +123,7 @@ public class MockDocument implements IDocument {
 	public String get(final int offset, final int length) throws BadLocationException {
 		try {
 			return this.text.substring(offset, offset + length);
-		} catch (IndexOutOfBoundsException ex) {
+		} catch (final IndexOutOfBoundsException ex) {
 			throw new BadLocationException(ex.getMessage());
 		}
 	}
@@ -132,13 +132,13 @@ public class MockDocument implements IDocument {
 	public char getChar(final int offset) throws BadLocationException {
 		try {
 			return this.text.charAt(offset);
-		} catch (IndexOutOfBoundsException ex) {
+		} catch (final IndexOutOfBoundsException ex) {
 			throw new BadLocationException(ex.getMessage());
 		}
 	}
 
 	@Override
-	public String getContentType(int offset) {
+	public String getContentType(final int offset) {
 		return contentType;
 	}
 
@@ -209,7 +209,7 @@ public class MockDocument implements IDocument {
 		try (var lineIndexReader = new LineNumberReader(new StringReader(text))) {
 			lineIndexReader.skip(offset);
 			return lineIndexReader.getLineNumber();
-		} catch (IOException ex) {
+		} catch (final IOException ex) {
 			throw new BadLocationException(ex.getMessage());
 		}
 	}
@@ -225,7 +225,7 @@ public class MockDocument implements IDocument {
 	}
 
 	@Override
-	public ITypedRegion getPartition(int offset) {
+	public ITypedRegion getPartition(final int offset) {
 		throw new UnsupportedOperationException();
 	}
 
@@ -235,7 +235,7 @@ public class MockDocument implements IDocument {
 	}
 
 	@Override
-	public Position[] getPositions(String category) {
+	public Position[] getPositions(final String category) {
 		throw new UnsupportedOperationException();
 	}
 
@@ -245,42 +245,42 @@ public class MockDocument implements IDocument {
 	}
 
 	@Override
-	public void insertPositionUpdater(IPositionUpdater updater, int index) {
+	public void insertPositionUpdater(final IPositionUpdater updater, final int index) {
 		throw new UnsupportedOperationException();
 	}
 
 	@Override
-	public void removeDocumentListener(IDocumentListener listener) {
+	public void removeDocumentListener(final IDocumentListener listener) {
 		throw new UnsupportedOperationException();
 	}
 
 	@Override
-	public void removeDocumentPartitioningListener(IDocumentPartitioningListener listener) {
+	public void removeDocumentPartitioningListener(final IDocumentPartitioningListener listener) {
 		throw new UnsupportedOperationException();
 	}
 
 	@Override
-	public void removePosition(Position position) {
+	public void removePosition(final Position position) {
 		throw new UnsupportedOperationException();
 	}
 
 	@Override
-	public void removePosition(String category, Position position) {
+	public void removePosition(final String category, final Position position) {
 		throw new UnsupportedOperationException();
 	}
 
 	@Override
-	public void removePositionCategory(String category) {
+	public void removePositionCategory(final String category) {
 		throw new UnsupportedOperationException();
 	}
 
 	@Override
-	public void removePositionUpdater(IPositionUpdater updater) {
+	public void removePositionUpdater(final IPositionUpdater updater) {
 		throw new UnsupportedOperationException();
 	}
 
 	@Override
-	public void removePrenotifiedDocumentListener(IDocumentListener documentAdapter) {
+	public void removePrenotifiedDocumentListener(final IDocumentListener documentAdapter) {
 		throw new UnsupportedOperationException();
 	}
 
@@ -288,13 +288,14 @@ public class MockDocument implements IDocument {
 	public void replace(final int offset, final int length, final String text) throws BadLocationException {
 		try {
 			this.text = new StringBuilder(this.text).replace(offset, offset + length, text).toString();
-		} catch (IndexOutOfBoundsException ex) {
+		} catch (final IndexOutOfBoundsException ex) {
 			throw new BadLocationException(ex.getMessage());
 		}
 	}
 
 	@Override
-	public int search(int startOffset, String findString, boolean forwardSearch, boolean caseSensitive, boolean wholeWord) {
+	public int search(final int startOffset, final String findString, final boolean forwardSearch, final boolean caseSensitive,
+			final boolean wholeWord) {
 		throw new UnsupportedOperationException();
 	}
 
@@ -304,7 +305,7 @@ public class MockDocument implements IDocument {
 	}
 
 	@Override
-	public void setDocumentPartitioner(@Nullable IDocumentPartitioner partitioner) {
+	public void setDocumentPartitioner(@Nullable final IDocumentPartitioner partitioner) {
 		throw new UnsupportedOperationException();
 	}
 

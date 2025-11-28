@@ -13,6 +13,7 @@ package org.eclipse.tm4e.ui.internal.model;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.eclipse.tm4e.core.registry.IGrammarSource.fromString;
+
 import org.eclipse.jface.text.Document;
 import org.eclipse.tm4e.core.registry.IGrammarSource.ContentType;
 import org.eclipse.tm4e.core.registry.Registry;

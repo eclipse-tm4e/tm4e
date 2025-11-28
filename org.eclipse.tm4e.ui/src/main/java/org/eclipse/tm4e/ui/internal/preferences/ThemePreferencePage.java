@@ -13,7 +13,7 @@
  *******************************************************************************/
 package org.eclipse.tm4e.ui.internal.preferences;
 
-import static org.eclipse.tm4e.core.internal.utils.NullSafetyHelper.*;
+import static org.eclipse.tm4e.core.internal.utils.NullSafetyHelper.lateNonNull;
 
 import java.nio.file.Path;
 import java.util.stream.Stream;
@@ -279,7 +279,7 @@ public final class ThemePreferencePage extends AbstractPreferencePage {
 			return;
 
 		final var selection = grammarsCombo.getStructuredSelection();
-		if (selection.getFirstElement() instanceof IGrammarDefinition definition) {
+		if (selection.getFirstElement() instanceof final IGrammarDefinition definition) {
 			// Preview the grammar
 			final IGrammar grammar = grammarManager.getGrammarForScope(definition.getScope());
 			themePreview.setTheme(theme);

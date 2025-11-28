@@ -10,7 +10,7 @@
 
     <!-- 4.32 = Eclipse 2024-06 -->
     <location includeAllPlatforms="false" includeConfigurePhase="true" includeMode="planner" includeSource="true" type="InstallableUnit">
-      <repository location="https://download.eclipse.org/eclipse/updates/4.29"/>
+      <repository location="https://download.eclipse.org/eclipse/updates/4.32"/>
       <unit id="org.eclipse.platform.feature.group" version="0.0.0"/>
       <unit id="org.eclipse.ui.trace" version="0.0.0"/>
       <unit id="org.eclipse.ui.tests.harness" version="0.0.0"/>

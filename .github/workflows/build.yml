@@ -81,12 +81,6 @@ jobs:
         include:
         - os: ubuntu-latest
           target-platform: staging
-        exclude:
-        - os: windows-11-arm
-          # "target-platform: oldest" fails on Windows 11 ARM with:
-          # An unexpected error occurred while launching the test runtime (process returned error code 13 
-          # (HRESULT Code 0xD, check for example https://www.hresult.info/ for further details)).
-          target-platform: oldest
 
 
     runs-on: ${{ matrix.os }}

@@ -109,7 +109,7 @@ jobs:
 
 
     - name: "Cache: Local Maven Repository"
-      uses: actions/cache/restore@v4
+      uses: actions/cache/restore@v5
       if: matrix.language == 'java'
       with:
         # Excluded sub directory not working https://github.com/actions/toolkit/issues/713
@@ -123,7 +123,7 @@ jobs:
 
 
     - name: "Cache: Local Tycho Repository"
-      uses: actions/cache/restore@v4
+      uses: actions/cache/restore@v5
       if: matrix.language == 'java'
       with:
         path: |

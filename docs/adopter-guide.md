@@ -134,16 +134,21 @@ TM4E also defines commands for toggling line comments and adding or removing blo
 
 ## Contributing Themes
 
-TM4E ships with built-in Light and Dark themes that are linked to the Eclipse appearance themes, but plugins can contribute additional CSS-based themes through the `org.eclipse.tm4e.ui.themes` extension point.
+TM4E ships with built-in Light and Dark themes that are linked to the Eclipse appearance themes, but plugins can contribute additional themes through the `org.eclipse.tm4e.ui.themes` extension point.
 
 ```xml
 <extension point="org.eclipse.tm4e.ui.themes">
-  <theme
+   <theme
       id="com.example.MyTheme"
       name="MyTheme"
       path="themes/MyTheme.css"/>
 </extension>
 ```
+
+The `path` attribute can point to:
+
+- a CSS theme file (`*.css`), or
+- a TextMate theme file (for example `*.tmTheme`, `*.plist`, `*.json`, `*.yaml`, `*.yml`).
 
 Themes can be flagged as more suitable for light or dark appearances and can be associated with specific grammar scopes so that, for example, a dedicated theme applies whenever a particular language is active.
 You declare one or more `<theme>` elements and then add `themeAssociation` elements that link themes to one or more scopes and optional dark/light variants.

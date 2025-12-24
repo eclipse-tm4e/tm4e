@@ -136,7 +136,7 @@ class Colorizer {
 							tokenStartIndex = damageRegion.getOffset() - startLineOffset;
 						} else {
 							tokenStartIndex = damageRegion.getOffset() - startLineOffset;
-							final IToken token = theme == null ? ITokenProvider.DEFAULT_TOKEN : theme.getToken(currentToken.type);
+							final IToken token = theme == null ? ITokenProvider.DEFAULT_TOKEN : theme.getToken(currentToken);
 							lastAttribute = getTokenTextAttribute(token);
 							length += getTokenLength(tokenStartIndex, nextToken, lineLength);
 							firstToken = false;
@@ -151,7 +151,7 @@ class Colorizer {
 						break;
 					}
 
-					final IToken token = theme == null ? ITokenProvider.DEFAULT_TOKEN : theme.getToken(currentToken.type);
+					final IToken token = theme == null ? ITokenProvider.DEFAULT_TOKEN : theme.getToken(currentToken);
 					final TextAttribute attribute = getTokenTextAttribute(token);
 					if (lastAttribute.equals(attribute)) {
 						length += getTokenLength(tokenStartIndex, nextToken, lineLength);

@@ -16,9 +16,11 @@ import static org.assertj.core.api.Assertions.assertThat;
 import java.io.ByteArrayInputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.List;
 
 import org.eclipse.jface.text.TextAttribute;
 import org.eclipse.swt.SWT;
+import org.eclipse.tm4e.core.model.TMToken;
 import org.eclipse.tm4e.core.registry.IThemeSource.ContentType;
 import org.eclipse.tm4e.core.theme.RGB;
 import org.eclipse.tm4e.ui.internal.themes.TMThemeTokenProvider;
@@ -155,6 +157,45 @@ class TMTokenProviderTest {
 			assertThat(token).isInstanceOf(TextAttribute.class);
 			attrs = (TextAttribute) token;
 			assertThat(attrs.getForeground()).isEqualTo(colors.getColor(RGB.fromHex("#00FF00")));
+		}
+	}
+
+	@Test
+	void testTMThemeMatchesAgainstScopesStack() throws Exception {
+		try (var in = new ByteArrayInputStream("""
+			{
+			  "name": "Scopes test",
+			  "tokenColors": [
+			    {
+			      "settings": {
+			        "foreground": "#000000"
+			      }
+			    },
+			    {
+			      "scope": "entity.other",
+			      "settings": {
+			        "foreground": "#D197D9"
+			      }
+			    }
+			  ]
+			}
+			""".getBytes())) {
+			final var theme = new TMThemeTokenProvider(ContentType.JSON, in);
+
+			final var token = new TMToken(
+					0,
+					"meta.java.other.definition.class.entity.inherited.classes.inherited-class",
+					List.of(
+							"source.java@org.eclipse.tm4e.language_pack",
+							"meta.class.java",
+							"meta.definition.class.inherited.classes.java",
+							"entity.other.inherited-class.java"),
+					null);
+
+			final var data = theme.getToken(token).getData();
+			assertThat(data).isInstanceOf(TextAttribute.class);
+			final var attrs = (TextAttribute) data;
+			assertThat(attrs.getForeground()).isEqualTo(colors.getColor(RGB.fromHex("#D197D9")));
 		}
 	}
 }

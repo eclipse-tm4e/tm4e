@@ -21,6 +21,7 @@ import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.jface.text.rules.IToken;
 import org.eclipse.swt.custom.StyledText;
 import org.eclipse.swt.graphics.Color;
+import org.eclipse.tm4e.core.model.TMToken;
 import org.eclipse.tm4e.core.internal.utils.StringUtils;
 import org.eclipse.tm4e.core.registry.IThemeSource.ContentType;
 import org.eclipse.tm4e.registry.TMResource;
@@ -96,6 +97,12 @@ public class Theme extends TMResource implements ITheme {
 	public IToken getToken(final String textMateTokenType) {
 		final ITokenProvider provider = getTokenProvider();
 		return provider == null ? ITokenProvider.DEFAULT_TOKEN : provider.getToken(textMateTokenType);
+	}
+
+	@Override
+	public IToken getToken(final TMToken token) {
+		final ITokenProvider provider = getTokenProvider();
+		return provider == null ? ITokenProvider.DEFAULT_TOKEN : provider.getToken(token);
 	}
 
 	private @Nullable Color getPriorityColor(final @Nullable Color themeColor, final String prefStoreKey) {

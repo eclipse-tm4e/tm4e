@@ -45,7 +45,12 @@ final class StyleRangesCollector implements ITMPresentationReconcilerListener {
 	public void onColorized(final TextPresentation presentation, final Throwable error) {
 		add(presentation);
 		if (waitForToLineNumber != null) {
-			final int offset = presentation.getExtent().getOffset() + presentation.getExtent().getLength();
+			final int endOffsetExclusive = presentation.getExtent().getOffset() + presentation.getExtent().getLength();
+			// The extent end offset is exclusive. If it points to the start of the next line,
+			// document.getLineOfOffset(endOffsetExclusive) would already return that next line
+			// even though the presentation does not actually cover it.
+			// We therefore check the line number of the last included character.
+			final int offset = presentation.getExtent().getLength() > 0 ? endOffsetExclusive - 1 : endOffsetExclusive;
 			try {
 				if (waitForToLineNumber != document.getLineOfOffset(offset)) {
 					return;

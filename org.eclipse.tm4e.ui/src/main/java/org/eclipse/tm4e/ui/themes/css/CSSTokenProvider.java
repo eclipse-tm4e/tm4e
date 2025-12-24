@@ -17,8 +17,10 @@ import java.util.Collections;
 import java.util.List;
 
 import org.eclipse.jdt.annotation.Nullable;
+import org.eclipse.jface.text.rules.IToken;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.tm4e.core.internal.utils.StringUtils;
+import org.eclipse.tm4e.core.model.TMToken;
 import org.eclipse.tm4e.core.theme.IStyle;
 import org.eclipse.tm4e.core.theme.css.CSSParser;
 import org.eclipse.tm4e.ui.TMUIPlugin;
@@ -92,5 +94,10 @@ public class CSSTokenProvider extends AbstractTokenProvider {
 	@Override
 	public @Nullable Color getEditorCurrentLineHighlight() {
 		return getColor(false, "editor", "lineHighlight");
+	}
+
+	@Override
+	public IToken getToken(final TMToken token) {
+		return getToken(token.type);
 	}
 }

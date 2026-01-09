@@ -180,7 +180,14 @@ public class Tm4eTemplateCompletionProcessor extends TemplateCompletionProcessor
 			}
 		}
 
-		// TODO use language-specific context type mappers from extensions
+		// Check language-specific context types
+		final String id = TMUIPlugin.PLUGIN_ID + ".templates.context." + textMateToken.grammarScope;
+		final TemplateContextType contextType = plugin.getTemplateContextRegistry().getContextType(id);
+		if (contextType != null) {
+			return contextType;
+		}
+
+		// TODO Also check language-specific context types from extensions?
 
 		// last option
 		return contextTypeRegistry.getContextType(DefaultTm4eTemplateContextType.CONTEXT_ID);
@@ -225,6 +232,7 @@ public class Tm4eTemplateCompletionProcessor extends TemplateCompletionProcessor
 
 		final TemplateStore templateStore = plugin.getTemplateStore();
 		final Template[] customTemplates = templateStore.getTemplates(contextTypeId);
+
 		if (customTemplates == null || customTemplates.length == 0) {
 			return NO_TEMPLATES;
 		}

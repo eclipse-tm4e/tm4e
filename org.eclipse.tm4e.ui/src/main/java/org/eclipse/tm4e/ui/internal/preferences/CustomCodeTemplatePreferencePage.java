@@ -11,16 +11,35 @@
  *******************************************************************************/
 package org.eclipse.tm4e.ui.internal.preferences;
 
+import java.util.Arrays;
+
 import org.eclipse.jdt.annotation.Nullable;
+import org.eclipse.jface.text.Document;
+import org.eclipse.jface.text.IDocument;
+import org.eclipse.jface.text.presentation.IPresentationReconciler;
+import org.eclipse.jface.text.source.ISourceViewer;
 import org.eclipse.jface.text.source.SourceViewer;
+import org.eclipse.jface.text.source.SourceViewerConfiguration;
 import org.eclipse.jface.text.templates.Template;
+import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.window.Window;
+import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Shell;
+import org.eclipse.text.templates.TemplatePersistenceData;
+import org.eclipse.tm4e.core.grammar.IGrammar;
+import org.eclipse.tm4e.registry.IGrammarDefinition;
+import org.eclipse.tm4e.registry.ITMScope;
+import org.eclipse.tm4e.registry.TMEclipseRegistryPlugin;
 import org.eclipse.tm4e.ui.TMUIPlugin;
+import org.eclipse.tm4e.ui.internal.model.TMDocumentModel;
+import org.eclipse.tm4e.ui.text.TMPresentationReconciler;
 import org.eclipse.ui.texteditor.templates.TemplatePreferencePage;
 
 public class CustomCodeTemplatePreferencePage extends TemplatePreferencePage {
+
+	private @Nullable TMDocumentModel model;
+	private @Nullable TMPresentationReconciler reconsiler;
 
 	public CustomCodeTemplatePreferencePage() {
 		final TMUIPlugin plugin = TMUIPlugin.getDefault();
@@ -70,18 +89,65 @@ public class CustomCodeTemplatePreferencePage extends TemplatePreferencePage {
 
 	@Override
 	protected SourceViewer createViewer(final @Nullable Composite parent) {
-		final SourceViewer sourceViewer = super.createViewer(parent);
-
 		// TODO configure source viewer for syntax highlighting with TM4E (adapt highlighting depending on context type)
-//		sourceViewer.configure(new SourceViewerConfiguration() {
-//			@Override
-//			public IPresentationReconciler getPresentationReconciler(@Nullable final ISourceViewer sourceViewer) {
-//				// TODO check if we need special config for highlighting template variables
-//				return new TMPresentationReconciler();
-//			}
-//		});
 
-		return sourceViewer;
+		final SourceViewer viewer = new SourceViewer(parent, null, null, false, SWT.BORDER | SWT.V_SCROLL | SWT.H_SCROLL);
+		final SourceViewerConfiguration configuration = new SourceViewerConfiguration() {
+			@Override
+			public IPresentationReconciler getPresentationReconciler(@Nullable final ISourceViewer sourceViewer) {
+				// TODO check if we need special config for highlighting template variables
+				reconsiler = new TMPresentationReconciler();
+				return reconsiler;
+			}
+		};
+		viewer.configure(configuration);
+		final IDocument document = new Document();
+		viewer.setDocument(document);
+//		model = TMModelManager.INSTANCE.connect(document);
+		getTableViewer().addSelectionChangedListener(e -> selectionChanged());
+		return viewer;
+	}
+
+	private void selectionChanged() {
+		final Template selectedTemplate = getSelectedTemplate();
+
+		if (selectedTemplate != null /*&& model != null*/) {
+
+			final String id = selectedTemplate.getContextTypeId();
+
+			final IGrammarDefinition[] grammarDefinitions = TMEclipseRegistryPlugin.getGrammarRegistryManager().getDefinitions();
+			final ITMScope scope = Arrays.stream(grammarDefinitions)
+					.map(IGrammarDefinition::getScope)
+					.filter(s -> id.endsWith(s.getQualifiedName()))
+					.findFirst().orElse(null);
+
+			if (scope != null) {
+				final IGrammar languageGrammar = TMEclipseRegistryPlugin.getGrammarRegistryManager().getGrammarForScope(scope);
+				if (languageGrammar != null && reconsiler != null) {
+//					model.setGrammar(languageGrammar);
+					reconsiler.setGrammar(languageGrammar);
+					return;
+
+//					getViewer().invalidateTextPresentation();
+				}
+
+			}
+		}
+		if (reconsiler != null) {
+			reconsiler.setGrammar(null);
+		}
+	}
+
+	private @Nullable Template getSelectedTemplate() {
+		final IStructuredSelection selection = getTableViewer().getStructuredSelection();
+
+		if (selection != null && selection.size() == 1) {
+			final TemplatePersistenceData data = (TemplatePersistenceData) selection.getFirstElement();
+			if (data != null) {
+				return data.getTemplate();
+			}
+		}
+		return null;
 	}
 
 }

@@ -27,7 +27,11 @@ import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.jface.text.templates.TemplateContextType;
 import org.eclipse.jface.text.templates.persistence.TemplateStore;
 import org.eclipse.text.templates.ContextTypeRegistry;
+import org.eclipse.tm4e.core.grammar.IGrammar;
 import org.eclipse.tm4e.core.internal.utils.NullSafetyHelper;
+import org.eclipse.tm4e.registry.IGrammarDefinition;
+import org.eclipse.tm4e.registry.ITMScope;
+import org.eclipse.tm4e.registry.TMEclipseRegistryPlugin;
 import org.eclipse.tm4e.ui.internal.model.TMModelManager;
 import org.eclipse.tm4e.ui.internal.samples.SampleManager;
 import org.eclipse.tm4e.ui.internal.themes.ThemeManager;
@@ -36,6 +40,7 @@ import org.eclipse.tm4e.ui.samples.ISampleManager;
 import org.eclipse.tm4e.ui.templates.CommentTemplateContextType;
 import org.eclipse.tm4e.ui.templates.DefaultTm4eTemplateContextType;
 import org.eclipse.tm4e.ui.templates.DocumentationCommentTemplateContextType;
+import org.eclipse.tm4e.ui.templates.Tm4eLanguageTemplateContextType;
 import org.eclipse.tm4e.ui.themes.ColorManager;
 import org.eclipse.tm4e.ui.themes.IThemeManager;
 import org.eclipse.ui.editors.text.templates.ContributionContextTypeRegistry;
@@ -193,7 +198,25 @@ public class TMUIPlugin extends AbstractUIPlugin {
 			result.addContextType(CommentTemplateContextType.CONTEXT_ID);
 			result.addContextType(DocumentationCommentTemplateContextType.CONTEXT_ID);
 
-			// TODO add language-specific context types, probably from extensions
+			// Add language-specific context types
+			// TODO also load context types from extensions?
+			final IGrammarDefinition[] grammarDefinitions = TMEclipseRegistryPlugin.getGrammarRegistryManager().getDefinitions();
+			for (final IGrammarDefinition definition : grammarDefinitions) {
+				final ITMScope languageScope = definition.getScope();
+				final String contextTypeIdSuffix = languageScope.getQualifiedName();
+				final IGrammar languageGrammar = TMEclipseRegistryPlugin.getGrammarRegistryManager().getGrammarForScope(languageScope);
+				if (languageGrammar != null) {
+					String name = languageGrammar.getName();
+					if (name == null) {
+						name = "";
+					}
+					name += " (" + languageScope.getName() + ")";
+					final Tm4eLanguageTemplateContextType languageContextType = new Tm4eLanguageTemplateContextType(
+							name, contextTypeIdSuffix);
+					result.addContextType(languageContextType);
+				}
+			}
+
 		} else {
 			result = NullSafetyHelper.castNonNull(contextTypeRegistry);
 		}

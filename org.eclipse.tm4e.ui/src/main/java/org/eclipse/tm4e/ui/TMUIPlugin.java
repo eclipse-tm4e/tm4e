@@ -8,9 +8,12 @@
  *
  * Contributors:
  * Angelo Zerr <angelo.zerr@gmail.com> - initial API and implementation
+ * Dietrich Travkin (SOLUNAR GmbH) - Additions for custom code templates
  */
 package org.eclipse.tm4e.ui;
 
+import java.io.IOException;
+import java.util.Iterator;
 import java.util.logging.Handler;
 import java.util.logging.Level;
 import java.util.logging.LogRecord;
@@ -19,14 +22,24 @@ import java.util.logging.Logger;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.core.runtime.Status;
+import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
+import org.eclipse.jface.text.templates.TemplateContextType;
+import org.eclipse.jface.text.templates.persistence.TemplateStore;
+import org.eclipse.text.templates.ContextTypeRegistry;
+import org.eclipse.tm4e.core.internal.utils.NullSafetyHelper;
 import org.eclipse.tm4e.ui.internal.model.TMModelManager;
 import org.eclipse.tm4e.ui.internal.samples.SampleManager;
 import org.eclipse.tm4e.ui.internal.themes.ThemeManager;
 import org.eclipse.tm4e.ui.model.ITMModelManager;
 import org.eclipse.tm4e.ui.samples.ISampleManager;
+import org.eclipse.tm4e.ui.templates.CommentTemplateContextType;
+import org.eclipse.tm4e.ui.templates.DefaultTm4eTemplateContextType;
+import org.eclipse.tm4e.ui.templates.DocumentationCommentTemplateContextType;
 import org.eclipse.tm4e.ui.themes.ColorManager;
 import org.eclipse.tm4e.ui.themes.IThemeManager;
+import org.eclipse.ui.editors.text.templates.ContributionContextTypeRegistry;
+import org.eclipse.ui.editors.text.templates.ContributionTemplateStore;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.framework.BundleContext;
 
@@ -39,8 +52,16 @@ public class TMUIPlugin extends AbstractUIPlugin {
 	public static final String PLUGIN_ID = "org.eclipse.tm4e.ui"; //$NON-NLS-1$
 	private static final String TRACE_ID = PLUGIN_ID + "/trace"; //$NON-NLS-1$
 
+	// IDs for custom code templates
+	private static final String CUSTOM_TEMPLATES_KEY = PLUGIN_ID + ".text.templates.custom"; //$NON-NLS-1$
+	private static final String TEMPLATES_REGISTRY_ID = PLUGIN_ID + ".templates"; //$NON-NLS-1$
+
 	// The shared instance
 	private static volatile @Nullable TMUIPlugin plugin;
+
+	// registry and store for custom code templates
+	private @Nullable ContributionContextTypeRegistry contextTypeRegistry = null;
+	private @Nullable TemplateStore templateStore = null;
 
 	/**
 	 * Returns the shared instance
@@ -146,12 +167,91 @@ public class TMUIPlugin extends AbstractUIPlugin {
 				}
 			});
 		}
+
+		TMImages.initalize(getImageRegistry());
 	}
 
 	@Override
 	public void stop(final BundleContext context) throws Exception {
+		if (templateStore != null) {
+			templateStore.stopListeningForPreferenceChanges();
+		}
 		ColorManager.getInstance().dispose();
 		plugin = null;
 		super.stop(context);
 	}
+
+	public ContextTypeRegistry getTemplateContextRegistry() {
+		@NonNull
+		ContributionContextTypeRegistry result;
+
+		if (contextTypeRegistry == null) {
+			result = new ContributionContextTypeRegistry(TEMPLATES_REGISTRY_ID);
+			contextTypeRegistry = result;
+
+			result.addContextType(DefaultTm4eTemplateContextType.CONTEXT_ID);
+			result.addContextType(CommentTemplateContextType.CONTEXT_ID);
+			result.addContextType(DocumentationCommentTemplateContextType.CONTEXT_ID);
+
+			// TODO add language-specific context types, probably from extensions
+		} else {
+			result = NullSafetyHelper.castNonNull(contextTypeRegistry);
+		}
+		return result;
+	}
+
+	@SuppressWarnings("deprecation")
+	private static class ContextTypeRegistryWrapper extends org.eclipse.jface.text.templates.ContextTypeRegistry {
+
+		private final ContextTypeRegistry delegate;
+
+		public ContextTypeRegistryWrapper(final ContextTypeRegistry registry) {
+			this.delegate = registry;
+			delegate.contextTypes();
+		}
+
+		@Override
+		public Iterator<TemplateContextType> contextTypes() {
+			return delegate.contextTypes();
+		}
+
+		@Override
+		public void addContextType(final @Nullable TemplateContextType contextType) {
+			delegate.addContextType(contextType);
+		}
+
+		@Override
+		public @Nullable TemplateContextType getContextType(final @Nullable String id) {
+			return delegate.getContextType(id);
+		}
+
+	}
+
+	public static ContextTypeRegistryWrapper from(final ContextTypeRegistry registry) {
+		return new ContextTypeRegistryWrapper(registry);
+	}
+
+	public TemplateStore getTemplateStore() {
+		@NonNull
+		TemplateStore result;
+
+		if (templateStore == null) {
+			result = new ContributionTemplateStore(from(getTemplateContextRegistry()), getPreferenceStore(),
+					CUSTOM_TEMPLATES_KEY);
+			templateStore = result;
+
+			try {
+				result.load();
+			} catch (final IOException e) {
+				Platform.getLog(this.getClass()).error(e.getMessage(), e);
+			}
+
+			result.startListeningForPreferenceChanges();
+		} else {
+			result = NullSafetyHelper.castNonNull(templateStore);
+		}
+
+		return result;
+	}
+
 }

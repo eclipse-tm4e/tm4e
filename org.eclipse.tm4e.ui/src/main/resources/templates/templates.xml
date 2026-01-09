@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<templates>
+
+    <template
+        name="author"
+        description="%author.description"
+        id="org.eclipse.tm4e.ui.templates.author"
+        context="org.eclipse.tm4e.ui.templates.context.comment.doc"
+        enabled="true"
+        autoinsert="false">%author.pattern</template>
+
+</templates>

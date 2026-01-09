@@ -71,6 +71,11 @@
             class="org.eclipse.tm4e.ui.internal.preferences.ThemePreferencePage"
             id="org.eclipse.tm4e.ui.preferences.ThemePreferencePage"
             category="org.eclipse.tm4e.ui.preferences.TextMatePreferencePage" />
+      <page name="%TemplatesPreferencePage.name"
+            class="org.eclipse.tm4e.ui.internal.preferences.CustomCodeTemplatePreferencePage"
+            id="org.eclipse.tm4e.ui.preferences.CustomCodeTemplatePreferencePage"
+            category="org.eclipse.tm4e.ui.preferences.TextMatePreferencePage">
+      </page>
    </extension>
 
    <!-- Wizards -->
@@ -155,4 +160,39 @@
             class="org.eclipse.tm4e.ui.internal.hover.TMTokenTextHover"
             contentType="org.eclipse.core.runtime.text" />
    </extension>
+
+   <extension point="org.eclipse.ui.editors.templates">
+      <contextType
+            class="org.eclipse.tm4e.ui.templates.DefaultTm4eTemplateContextType"
+            id="org.eclipse.tm4e.ui.templates.context"
+            name="Default context (TM4E)"
+            registryId="org.eclipse.tm4e.ui.templates">
+      </contextType>
+      <contextType
+            class="org.eclipse.tm4e.ui.templates.CommentTemplateContextType"
+            id="org.eclipse.tm4e.ui.templates.context.comment"
+            name="Comment (TM4E)"
+            registryId="org.eclipse.tm4e.ui.templates">
+      </contextType>
+      <contextType
+            class="org.eclipse.tm4e.ui.templates.DocumentationCommentTemplateContextType"
+            id="org.eclipse.tm4e.ui.templates.context.comment.doc"
+            name="Documentation Comment (TM4E)"
+            registryId="org.eclipse.tm4e.ui.templates">
+      </contextType>
+      <include
+            file="src/main/resources/templates/templates.xml"
+            translations="src/main/resources/templates/templates.properties">
+     </include>
+      <contextTypeRegistry
+            id="org.eclipse.tm4e.ui.templates">
+     </contextTypeRegistry>
+   </extension>
+
+   <extension point="org.eclipse.ui.genericeditor.contentAssistProcessors">
+      <contentAssistProcessor
+            class="org.eclipse.tm4e.ui.internal.templates.Tm4eTemplateCompletionProcessor"
+            contentType="org.eclipse.core.runtime.text" />
+   </extension>
+
 </plugin>

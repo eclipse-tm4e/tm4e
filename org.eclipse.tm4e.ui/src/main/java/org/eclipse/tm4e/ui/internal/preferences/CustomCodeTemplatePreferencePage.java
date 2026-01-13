@@ -53,7 +53,7 @@ public class CustomCodeTemplatePreferencePage extends TemplatePreferencePage {
 	private static class TMEditTemplateDialog extends TemplatePreferencePage.EditTemplateDialog {
 
 		public TMEditTemplateDialog(final Shell shell, final Template template, final boolean edit, final boolean isNameModifiable,
-				final org.eclipse.jface.text.templates.ContextTypeRegistry contextTypeRegistry) {
+				@SuppressWarnings("deprecation") final org.eclipse.jface.text.templates.ContextTypeRegistry contextTypeRegistry) {
 			super(shell, template, edit, isNameModifiable, contextTypeRegistry);
 		}
 

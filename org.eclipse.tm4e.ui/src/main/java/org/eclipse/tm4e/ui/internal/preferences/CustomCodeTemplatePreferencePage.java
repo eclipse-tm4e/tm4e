@@ -11,8 +11,6 @@
  *******************************************************************************/
 package org.eclipse.tm4e.ui.internal.preferences;
 
-import java.util.Arrays;
-
 import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.jface.text.Document;
 import org.eclipse.jface.text.IDocument;
@@ -28,7 +26,6 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.text.templates.TemplatePersistenceData;
 import org.eclipse.tm4e.core.grammar.IGrammar;
-import org.eclipse.tm4e.registry.IGrammarDefinition;
 import org.eclipse.tm4e.registry.ITMScope;
 import org.eclipse.tm4e.registry.TMEclipseRegistryPlugin;
 import org.eclipse.tm4e.ui.TMUIPlugin;
@@ -108,12 +105,7 @@ public class CustomCodeTemplatePreferencePage extends TemplatePreferencePage {
 		if (selectedTemplate != null) {
 
 			final String id = selectedTemplate.getContextTypeId();
-
-			final IGrammarDefinition[] grammarDefinitions = TMEclipseRegistryPlugin.getGrammarRegistryManager().getDefinitions();
-			final ITMScope scope = Arrays.stream(grammarDefinitions)
-					.map(IGrammarDefinition::getScope)
-					.filter(s -> id.equals(CodeTemplateContextTypeUtils.toContextTypeId(s)))
-					.findFirst().orElse(null);
+			final ITMScope scope = CodeTemplateContextTypeUtils.findScopeFor(id);
 
 			if (scope != null) {
 				final IGrammar languageGrammar = TMEclipseRegistryPlugin.getGrammarRegistryManager().getGrammarForScope(scope);

@@ -11,7 +11,12 @@
  *******************************************************************************/
 package org.eclipse.tm4e.ui.internal.utils;
 
+import java.util.Arrays;
+
+import org.eclipse.jdt.annotation.Nullable;
+import org.eclipse.tm4e.registry.IGrammarDefinition;
 import org.eclipse.tm4e.registry.ITMScope;
+import org.eclipse.tm4e.registry.TMEclipseRegistryPlugin;
 import org.eclipse.tm4e.ui.TMUIPlugin;
 
 public class CodeTemplateContextTypeUtils {
@@ -26,6 +31,15 @@ public class CodeTemplateContextTypeUtils {
 		final String contextTypeIdSuffix = languageScope.getQualifiedName();
 
 		return CONTEXT_TYPE_ID_PREFIX + contextTypeIdSuffix;
+	}
+
+	public static @Nullable ITMScope findScopeFor(final String contextTypeId) {
+		final IGrammarDefinition[] grammarDefinitions = TMEclipseRegistryPlugin.getGrammarRegistryManager().getDefinitions();
+
+		return Arrays.stream(grammarDefinitions)
+				.map(IGrammarDefinition::getScope)
+				.filter(scope -> contextTypeId.equals(CodeTemplateContextTypeUtils.toContextTypeId(scope)))
+				.findFirst().orElse(null);
 	}
 
 }

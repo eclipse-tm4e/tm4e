@@ -199,7 +199,7 @@ public class TMUIPlugin extends AbstractUIPlugin {
 			result.addContextType(DocumentationCommentTemplateContextType.CONTEXT_ID);
 
 			// Add language-specific context types
-			// TODO also load context types from extensions?
+			// TODO Skip certain grammars? Some grammars have no name or are only used for highlighting code snippets, e.g. in Markdown
 			final IGrammarDefinition[] grammarDefinitions = TMEclipseRegistryPlugin.getGrammarRegistryManager().getDefinitions();
 			for (final IGrammarDefinition definition : grammarDefinitions) {
 				final ITMScope languageScope = definition.getScope();

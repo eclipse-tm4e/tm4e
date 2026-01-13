@@ -32,13 +32,11 @@ import org.eclipse.tm4e.registry.IGrammarDefinition;
 import org.eclipse.tm4e.registry.ITMScope;
 import org.eclipse.tm4e.registry.TMEclipseRegistryPlugin;
 import org.eclipse.tm4e.ui.TMUIPlugin;
-import org.eclipse.tm4e.ui.internal.model.TMDocumentModel;
 import org.eclipse.tm4e.ui.text.TMPresentationReconciler;
 import org.eclipse.ui.texteditor.templates.TemplatePreferencePage;
 
 public class CustomCodeTemplatePreferencePage extends TemplatePreferencePage {
 
-	private @Nullable TMDocumentModel model;
 	private @Nullable TMPresentationReconciler reconsiler;
 
 	public CustomCodeTemplatePreferencePage() {
@@ -89,8 +87,6 @@ public class CustomCodeTemplatePreferencePage extends TemplatePreferencePage {
 
 	@Override
 	protected SourceViewer createViewer(final @Nullable Composite parent) {
-		// TODO configure source viewer for syntax highlighting with TM4E (adapt highlighting depending on context type)
-
 		final SourceViewer viewer = new SourceViewer(parent, null, null, false, SWT.BORDER | SWT.V_SCROLL | SWT.H_SCROLL);
 		final SourceViewerConfiguration configuration = new SourceViewerConfiguration() {
 			@Override
@@ -103,7 +99,6 @@ public class CustomCodeTemplatePreferencePage extends TemplatePreferencePage {
 		viewer.configure(configuration);
 		final IDocument document = new Document();
 		viewer.setDocument(document);
-//		model = TMModelManager.INSTANCE.connect(document);
 		getTableViewer().addSelectionChangedListener(e -> selectionChanged());
 		return viewer;
 	}
@@ -111,7 +106,7 @@ public class CustomCodeTemplatePreferencePage extends TemplatePreferencePage {
 	private void selectionChanged() {
 		final Template selectedTemplate = getSelectedTemplate();
 
-		if (selectedTemplate != null /*&& model != null*/) {
+		if (selectedTemplate != null) {
 
 			final String id = selectedTemplate.getContextTypeId();
 
@@ -124,13 +119,9 @@ public class CustomCodeTemplatePreferencePage extends TemplatePreferencePage {
 			if (scope != null) {
 				final IGrammar languageGrammar = TMEclipseRegistryPlugin.getGrammarRegistryManager().getGrammarForScope(scope);
 				if (languageGrammar != null && reconsiler != null) {
-//					model.setGrammar(languageGrammar);
 					reconsiler.setGrammar(languageGrammar);
 					return;
-
-//					getViewer().invalidateTextPresentation();
 				}
-
 			}
 		}
 		if (reconsiler != null) {

@@ -66,9 +66,7 @@ public class CustomCodeTemplatePreferencePage extends TemplatePreferencePage {
 
 	@Override
 	protected String getFormatterPreferenceKey() {
-		return super.getFormatterPreferenceKey();
-		// TODO adapt pref key
-		//return PreferenceConstants.TEMPLATES_USE_CODEFORMATTER;
+		return PreferenceConstants.TEMPLATES_USE_CODEFORMATTER;
 	}
 
 	@Override

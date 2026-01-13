@@ -203,7 +203,6 @@ public class TMUIPlugin extends AbstractUIPlugin {
 			final IGrammarDefinition[] grammarDefinitions = TMEclipseRegistryPlugin.getGrammarRegistryManager().getDefinitions();
 			for (final IGrammarDefinition definition : grammarDefinitions) {
 				final ITMScope languageScope = definition.getScope();
-				final String contextTypeIdSuffix = languageScope.getQualifiedName();
 				final IGrammar languageGrammar = TMEclipseRegistryPlugin.getGrammarRegistryManager().getGrammarForScope(languageScope);
 				if (languageGrammar != null) {
 					String name = languageGrammar.getName();
@@ -212,7 +211,7 @@ public class TMUIPlugin extends AbstractUIPlugin {
 					}
 					name += " (" + languageScope.getName() + ")";
 					final TMLanguageTemplateContextType languageContextType = new TMLanguageTemplateContextType(
-							name, contextTypeIdSuffix);
+							name, languageScope);
 					result.addContextType(languageContextType);
 				}
 			}

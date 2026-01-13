@@ -32,6 +32,7 @@ import org.eclipse.tm4e.registry.IGrammarDefinition;
 import org.eclipse.tm4e.registry.ITMScope;
 import org.eclipse.tm4e.registry.TMEclipseRegistryPlugin;
 import org.eclipse.tm4e.ui.TMUIPlugin;
+import org.eclipse.tm4e.ui.internal.utils.CodeTemplateContextTypeUtils;
 import org.eclipse.tm4e.ui.text.TMPresentationReconciler;
 import org.eclipse.ui.texteditor.templates.TemplatePreferencePage;
 
@@ -111,7 +112,7 @@ public class CustomCodeTemplatePreferencePage extends TemplatePreferencePage {
 			final IGrammarDefinition[] grammarDefinitions = TMEclipseRegistryPlugin.getGrammarRegistryManager().getDefinitions();
 			final ITMScope scope = Arrays.stream(grammarDefinitions)
 					.map(IGrammarDefinition::getScope)
-					.filter(s -> id.endsWith(s.getQualifiedName()))
+					.filter(s -> id.equals(CodeTemplateContextTypeUtils.toContextTypeId(s)))
 					.findFirst().orElse(null);
 
 			if (scope != null) {

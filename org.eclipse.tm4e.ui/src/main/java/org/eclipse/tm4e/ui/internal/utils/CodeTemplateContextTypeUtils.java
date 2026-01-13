@@ -9,18 +9,23 @@
  * Contributors:
  * Dietrich Travkin (SOLUNAR GmbH) - initial implementation
  *******************************************************************************/
-package org.eclipse.tm4e.ui.templates;
+package org.eclipse.tm4e.ui.internal.utils;
 
 import org.eclipse.tm4e.registry.ITMScope;
-import org.eclipse.tm4e.ui.internal.utils.CodeTemplateContextTypeUtils;
+import org.eclipse.tm4e.ui.TMUIPlugin;
 
-/**
- * Language-specific default code template context type. It is created for each language with a registered TM4E grammar.
- */
-public class TMLanguageTemplateContextType extends AbstractTMTemplateContextType {
+public class CodeTemplateContextTypeUtils {
 
-	public TMLanguageTemplateContextType(final String contextTypeName, final ITMScope languageScope) {
-		super(CodeTemplateContextTypeUtils.toContextTypeId(languageScope), contextTypeName);
+	private static final String CONTEXT_TYPE_ID_PREFIX = TMUIPlugin.PLUGIN_ID + ".templates.context."; //$NON-NLS-1$
+
+	private CodeTemplateContextTypeUtils() {
+		// no instantiation desired
+	}
+
+	public static String toContextTypeId(final ITMScope languageScope) {
+		final String contextTypeIdSuffix = languageScope.getQualifiedName();
+
+		return CONTEXT_TYPE_ID_PREFIX + contextTypeIdSuffix;
 	}
 
 }

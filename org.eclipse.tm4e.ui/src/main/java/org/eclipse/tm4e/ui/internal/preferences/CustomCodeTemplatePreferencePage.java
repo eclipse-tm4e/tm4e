@@ -37,7 +37,7 @@ import org.eclipse.ui.texteditor.templates.TemplatePreferencePage;
 
 public class CustomCodeTemplatePreferencePage extends TemplatePreferencePage {
 
-	private @Nullable TMPresentationReconciler reconsiler;
+	private @Nullable TMPresentationReconciler previewReconsiler;
 
 	public CustomCodeTemplatePreferencePage() {
 		final TMUIPlugin plugin = TMUIPlugin.getDefault();
@@ -59,7 +59,7 @@ public class CustomCodeTemplatePreferencePage extends TemplatePreferencePage {
 
 		@Override
 		protected SourceViewer createViewer(final @Nullable Composite parent) {
-			// TODO configure viewer
+			// TODO Can we adapt the SourceViewerConfiguration from super.createViewer and add our own presentation reconsiler that adapts to the selected context type?
 			return super.createViewer(parent);
 		}
 	}
@@ -90,18 +90,18 @@ public class CustomCodeTemplatePreferencePage extends TemplatePreferencePage {
 			@Override
 			public IPresentationReconciler getPresentationReconciler(@Nullable final ISourceViewer sourceViewer) {
 				// TODO check if we need special config for highlighting template variables
-				reconsiler = new TMPresentationReconciler();
-				return reconsiler;
+				previewReconsiler = new TMPresentationReconciler();
+				return previewReconsiler;
 			}
 		};
 		viewer.configure(configuration);
 		final IDocument document = new Document();
 		viewer.setDocument(document);
-		getTableViewer().addSelectionChangedListener(e -> selectionChanged());
+		getTableViewer().addSelectionChangedListener(e -> selectedCodeTemplateChanged());
 		return viewer;
 	}
 
-	private void selectionChanged() {
+	private void selectedCodeTemplateChanged() {
 		final Template selectedTemplate = getSelectedTemplate();
 
 		if (selectedTemplate != null) {
@@ -116,14 +116,14 @@ public class CustomCodeTemplatePreferencePage extends TemplatePreferencePage {
 
 			if (scope != null) {
 				final IGrammar languageGrammar = TMEclipseRegistryPlugin.getGrammarRegistryManager().getGrammarForScope(scope);
-				if (languageGrammar != null && reconsiler != null) {
-					reconsiler.setGrammar(languageGrammar);
+				if (languageGrammar != null && previewReconsiler != null) {
+					previewReconsiler.setGrammar(languageGrammar);
 					return;
 				}
 			}
 		}
-		if (reconsiler != null) {
-			reconsiler.setGrammar(null);
+		if (previewReconsiler != null) {
+			previewReconsiler.setGrammar(null);
 		}
 	}
 

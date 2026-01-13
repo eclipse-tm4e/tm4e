@@ -230,11 +230,12 @@ public class TMUIPlugin extends AbstractUIPlugin {
 
 		public ContextTypeRegistryWrapper(final ContextTypeRegistry registry) {
 			this.delegate = registry;
-			delegate.contextTypes();
 		}
 
+		// TODO How can this null-safety check be handled correctly?
+		@SuppressWarnings("null")
 		@Override
-		public Iterator<TemplateContextType> contextTypes() {
+		public Iterator<@Nullable TemplateContextType> contextTypes() {
 			return delegate.contextTypes();
 		}
 

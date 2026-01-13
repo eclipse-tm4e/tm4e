@@ -163,21 +163,21 @@
 
    <extension point="org.eclipse.ui.editors.templates">
       <contextType
-            class="org.eclipse.tm4e.ui.templates.DefaultTm4eTemplateContextType"
+            class="org.eclipse.tm4e.ui.templates.DefaultTmTemplateContextType"
             id="org.eclipse.tm4e.ui.templates.context"
-            name="Default context (TM4E)"
+            name="Default context"
             registryId="org.eclipse.tm4e.ui.templates">
       </contextType>
       <contextType
             class="org.eclipse.tm4e.ui.templates.CommentTemplateContextType"
             id="org.eclipse.tm4e.ui.templates.context.comment"
-            name="Comment (TM4E)"
+            name="Comment"
             registryId="org.eclipse.tm4e.ui.templates">
       </contextType>
       <contextType
             class="org.eclipse.tm4e.ui.templates.DocumentationCommentTemplateContextType"
             id="org.eclipse.tm4e.ui.templates.context.comment.doc"
-            name="Documentation Comment (TM4E)"
+            name="Documentation Comment"
             registryId="org.eclipse.tm4e.ui.templates">
       </contextType>
       <include
@@ -191,7 +191,7 @@
 
    <extension point="org.eclipse.ui.genericeditor.contentAssistProcessors">
       <contentAssistProcessor
-            class="org.eclipse.tm4e.ui.internal.templates.Tm4eTemplateCompletionProcessor"
+            class="org.eclipse.tm4e.ui.internal.templates.TmTemplateCompletionProcessor"
             contentType="org.eclipse.core.runtime.text" />
    </extension>
 

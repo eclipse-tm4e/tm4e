@@ -38,9 +38,9 @@ import org.eclipse.tm4e.ui.internal.themes.ThemeManager;
 import org.eclipse.tm4e.ui.model.ITMModelManager;
 import org.eclipse.tm4e.ui.samples.ISampleManager;
 import org.eclipse.tm4e.ui.templates.CommentTemplateContextType;
-import org.eclipse.tm4e.ui.templates.DefaultTm4eTemplateContextType;
+import org.eclipse.tm4e.ui.templates.DefaultTmTemplateContextType;
 import org.eclipse.tm4e.ui.templates.DocumentationCommentTemplateContextType;
-import org.eclipse.tm4e.ui.templates.Tm4eLanguageTemplateContextType;
+import org.eclipse.tm4e.ui.templates.TmLanguageTemplateContextType;
 import org.eclipse.tm4e.ui.themes.ColorManager;
 import org.eclipse.tm4e.ui.themes.IThemeManager;
 import org.eclipse.ui.editors.text.templates.ContributionContextTypeRegistry;
@@ -194,7 +194,7 @@ public class TMUIPlugin extends AbstractUIPlugin {
 			result = new ContributionContextTypeRegistry(TEMPLATES_REGISTRY_ID);
 			contextTypeRegistry = result;
 
-			result.addContextType(DefaultTm4eTemplateContextType.CONTEXT_ID);
+			result.addContextType(DefaultTmTemplateContextType.CONTEXT_ID);
 			result.addContextType(CommentTemplateContextType.CONTEXT_ID);
 			result.addContextType(DocumentationCommentTemplateContextType.CONTEXT_ID);
 
@@ -211,7 +211,7 @@ public class TMUIPlugin extends AbstractUIPlugin {
 						name = "";
 					}
 					name += " (" + languageScope.getName() + ")";
-					final Tm4eLanguageTemplateContextType languageContextType = new Tm4eLanguageTemplateContextType(
+					final TmLanguageTemplateContextType languageContextType = new TmLanguageTemplateContextType(
 							name, contextTypeIdSuffix);
 					result.addContextType(languageContextType);
 				}

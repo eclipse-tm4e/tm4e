@@ -52,9 +52,9 @@ public class CustomCodeTemplatePreferencePage extends TemplatePreferencePage {
 		setContextTypeRegistry(TMUIPlugin.from(plugin.getTemplateContextRegistry()));
 	}
 
-	private static class Tm4eEditTemplateDialog extends TemplatePreferencePage.EditTemplateDialog {
+	private static class TmEditTemplateDialog extends TemplatePreferencePage.EditTemplateDialog {
 
-		public Tm4eEditTemplateDialog(final Shell shell, final Template template, final boolean edit, final boolean isNameModifiable,
+		public TmEditTemplateDialog(final Shell shell, final Template template, final boolean edit, final boolean isNameModifiable,
 				final org.eclipse.jface.text.templates.ContextTypeRegistry contextTypeRegistry) {
 			super(shell, template, edit, isNameModifiable, contextTypeRegistry);
 		}
@@ -79,7 +79,7 @@ public class CustomCodeTemplatePreferencePage extends TemplatePreferencePage {
 			return null;
 		}
 
-		final Tm4eEditTemplateDialog dialog = new Tm4eEditTemplateDialog(getShell(), template, edit, isNameModifiable,
+		final TmEditTemplateDialog dialog = new TmEditTemplateDialog(getShell(), template, edit, isNameModifiable,
 				getContextTypeRegistry());
 		if (dialog.open() == Window.OK) {
 			return dialog.getTemplate();

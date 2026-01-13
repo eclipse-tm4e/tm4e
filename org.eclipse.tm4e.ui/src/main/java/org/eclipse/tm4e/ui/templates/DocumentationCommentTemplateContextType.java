@@ -16,12 +16,12 @@ import org.eclipse.tm4e.ui.TMUIPlugin;
 /**
  * Language-independent code template context type for documentation comments, e.g. for javadoc comments.
  */
-public class DocumentationCommentTemplateContextType extends AbstractTm4eTemplateContextType {
+public class DocumentationCommentTemplateContextType extends AbstractTmTemplateContextType {
 
 	public static final String CONTEXT_ID = TMUIPlugin.PLUGIN_ID + ".templates.context.comment.doc"; //$NON-NLS-1$
 
 	public DocumentationCommentTemplateContextType() {
-		super(CONTEXT_ID, "Documentation Comment (TM4E)");
+		super(CONTEXT_ID, "Documentation Comment");
 	}
 
 }

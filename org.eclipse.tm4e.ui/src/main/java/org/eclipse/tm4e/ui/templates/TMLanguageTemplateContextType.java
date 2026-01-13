@@ -17,11 +17,11 @@ import org.eclipse.tm4e.ui.TMUIPlugin;
 /**
  * Language-specific default code template context type. It is created for each language with a registered TM4E grammar.
  */
-public class TmLanguageTemplateContextType extends AbstractTmTemplateContextType {
+public class TMLanguageTemplateContextType extends AbstractTMTemplateContextType {
 
 	private static final String CONTEXT_TYPE_ID_PREFIX = TMUIPlugin.PLUGIN_ID + ".templates.context."; //$NON-NLS-1$
 
-	public TmLanguageTemplateContextType(final String contextTypeName, final String contextTypeIdSuffix) {
+	public TMLanguageTemplateContextType(final String contextTypeName, final String contextTypeIdSuffix) {
 		super(CONTEXT_TYPE_ID_PREFIX + contextTypeIdSuffix, contextTypeName);
 	}
 

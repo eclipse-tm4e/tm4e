@@ -17,11 +17,11 @@ import org.eclipse.tm4e.ui.TMUIPlugin;
  * Language-independent default code template context type.
  * It is used by TM4E as a fallback if case no other applicable context type can be found.
  */
-public class DefaultTmTemplateContextType extends AbstractTmTemplateContextType {
+public class DefaultTMTemplateContextType extends AbstractTMTemplateContextType {
 
 	public static final String CONTEXT_ID = TMUIPlugin.PLUGIN_ID + ".templates.context"; //$NON-NLS-1$
 
-	public DefaultTmTemplateContextType() {
+	public DefaultTMTemplateContextType() {
 		super(CONTEXT_ID, "Default context");
 	}
 

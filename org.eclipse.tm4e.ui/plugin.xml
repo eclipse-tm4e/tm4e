@@ -163,7 +163,7 @@
 
    <extension point="org.eclipse.ui.editors.templates">
       <contextType
-            class="org.eclipse.tm4e.ui.templates.DefaultTmTemplateContextType"
+            class="org.eclipse.tm4e.ui.templates.DefaultTMTemplateContextType"
             id="org.eclipse.tm4e.ui.templates.context"
             name="Default context"
             registryId="org.eclipse.tm4e.ui.templates">
@@ -191,7 +191,7 @@
 
    <extension point="org.eclipse.ui.genericeditor.contentAssistProcessors">
       <contentAssistProcessor
-            class="org.eclipse.tm4e.ui.internal.templates.TmTemplateCompletionProcessor"
+            class="org.eclipse.tm4e.ui.internal.templates.TMTemplateCompletionProcessor"
             contentType="org.eclipse.core.runtime.text" />
    </extension>
 

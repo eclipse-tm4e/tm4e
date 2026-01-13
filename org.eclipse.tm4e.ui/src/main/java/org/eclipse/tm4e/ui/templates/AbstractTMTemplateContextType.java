@@ -18,9 +18,9 @@ import org.eclipse.jface.text.templates.TemplateVariableResolver;
 /**
  * Default implementation for new, language-specific code template context types.
  */
-public abstract class AbstractTmTemplateContextType extends TemplateContextType {
+public abstract class AbstractTMTemplateContextType extends TemplateContextType {
 
-	public AbstractTmTemplateContextType(final String contextTypeId, final String contextTypeName) {
+	public AbstractTMTemplateContextType(final String contextTypeId, final String contextTypeName) {
 		super(contextTypeId, contextTypeName);
 		addTemplateVariableResolvers();
 	}

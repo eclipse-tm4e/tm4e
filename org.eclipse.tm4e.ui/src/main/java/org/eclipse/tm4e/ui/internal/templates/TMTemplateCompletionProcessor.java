@@ -37,10 +37,10 @@ import org.eclipse.tm4e.ui.TMUIPlugin;
 import org.eclipse.tm4e.ui.internal.utils.UI;
 import org.eclipse.tm4e.ui.model.ITMDocumentModel;
 import org.eclipse.tm4e.ui.templates.CommentTemplateContextType;
-import org.eclipse.tm4e.ui.templates.DefaultTmTemplateContextType;
+import org.eclipse.tm4e.ui.templates.DefaultTMTemplateContextType;
 import org.eclipse.tm4e.ui.templates.DocumentationCommentTemplateContextType;
 
-public class TmTemplateCompletionProcessor extends TemplateCompletionProcessor {
+public class TMTemplateCompletionProcessor extends TemplateCompletionProcessor {
 
 	private static final ICompletionProposal[] NO_PROPOSALS = {};
 	private static final Template[] NO_TEMPLATES = {};
@@ -50,7 +50,7 @@ public class TmTemplateCompletionProcessor extends TemplateCompletionProcessor {
 		// TODO check why Invalid thread access exception occurs here without syncExec()
 		final ArrayList<ICompletionProposal> templateProposals = new ArrayList<>();
 		UI.getDisplay().syncExec(() -> {
-			final ICompletionProposal[] proposalsFromParent = TmTemplateCompletionProcessor.super.computeCompletionProposals(
+			final ICompletionProposal[] proposalsFromParent = TMTemplateCompletionProcessor.super.computeCompletionProposals(
 					viewer, offset);
 			Collections.addAll(templateProposals, proposalsFromParent);
 		});
@@ -190,7 +190,7 @@ public class TmTemplateCompletionProcessor extends TemplateCompletionProcessor {
 		// TODO Also check language-specific context types from extensions?
 
 		// last option
-		return contextTypeRegistry.getContextType(DefaultTmTemplateContextType.CONTEXT_ID);
+		return contextTypeRegistry.getContextType(DefaultTMTemplateContextType.CONTEXT_ID);
 	}
 
 	@Override
@@ -215,7 +215,7 @@ public class TmTemplateCompletionProcessor extends TemplateCompletionProcessor {
 		}
 
 		return plugin.getTemplateContextRegistry()
-				.getContextType(DefaultTmTemplateContextType.CONTEXT_ID);
+				.getContextType(DefaultTMTemplateContextType.CONTEXT_ID);
 	}
 
 	@Override

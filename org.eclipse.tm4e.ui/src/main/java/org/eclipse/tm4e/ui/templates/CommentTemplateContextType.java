@@ -16,7 +16,7 @@ import org.eclipse.tm4e.ui.TMUIPlugin;
 /**
  * Language-independent code template context type for comments.
  */
-public class CommentTemplateContextType extends AbstractTmTemplateContextType {
+public class CommentTemplateContextType extends AbstractTMTemplateContextType {
 
 	public static final String CONTEXT_ID = TMUIPlugin.PLUGIN_ID + ".templates.context.comment"; //$NON-NLS-1$
 

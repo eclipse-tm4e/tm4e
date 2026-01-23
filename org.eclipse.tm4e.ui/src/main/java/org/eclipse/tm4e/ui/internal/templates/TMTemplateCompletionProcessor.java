@@ -21,19 +21,18 @@ import org.eclipse.jface.text.BadLocationException;
 import org.eclipse.jface.text.IDocument;
 import org.eclipse.jface.text.IRegion;
 import org.eclipse.jface.text.ITextViewer;
-import org.eclipse.jface.text.contentassist.CompletionProposal;
 import org.eclipse.jface.text.contentassist.ICompletionProposal;
 import org.eclipse.jface.text.templates.Template;
 import org.eclipse.jface.text.templates.TemplateCompletionProcessor;
 import org.eclipse.jface.text.templates.TemplateContextType;
 import org.eclipse.jface.text.templates.persistence.TemplateStore;
 import org.eclipse.swt.graphics.Image;
-import org.eclipse.swt.graphics.Point;
 import org.eclipse.text.templates.ContextTypeRegistry;
 import org.eclipse.tm4e.core.internal.utils.NullSafetyHelper;
 import org.eclipse.tm4e.core.model.TMToken;
 import org.eclipse.tm4e.ui.TMImages;
 import org.eclipse.tm4e.ui.TMUIPlugin;
+import org.eclipse.tm4e.ui.internal.utils.CodeTemplateContextTypeUtils;
 import org.eclipse.tm4e.ui.internal.utils.UI;
 import org.eclipse.tm4e.ui.model.ITMDocumentModel;
 import org.eclipse.tm4e.ui.templates.CommentTemplateContextType;
@@ -61,26 +60,7 @@ public class TMTemplateCompletionProcessor extends TemplateCompletionProcessor {
 			return proposals;
 		}
 
-		if (viewer == null || viewer.getDocument() == null) {
-			return NO_PROPOSALS;
-		}
-
-		// add dummy proposal if nothing else applies
-		final List<Point> selectionRangeList = new ArrayList<>(1);
-		// avoid illegal thread access exception:
-		UI.getDisplay().syncExec(() -> {
-			final Point selectionRange = viewer.getSelectedRange();
-			selectionRangeList.add(selectionRange);
-		});
-
-		final int replacementOffset = selectionRangeList.get(0).x;
-		final int replacementLength = selectionRangeList.get(0).y;
-
-		final String replacementText = "test completion"; //$NON-NLS-1$
-		return new ICompletionProposal[] {
-			new CompletionProposal(replacementText, replacementOffset, replacementLength, replacementText.length(), getImage(null),
-					"Dummy code proposal", null,
-					replacementText) };
+		return NO_PROPOSALS;
 	}
 
 	private static class TmTokenRegion implements IRegion {
@@ -166,6 +146,7 @@ public class TMTemplateCompletionProcessor extends TemplateCompletionProcessor {
 			return null;
 		}
 
+		// check language-agnostic context types (comment context types)
 		final ContextTypeRegistry contextTypeRegistry = plugin.getTemplateContextRegistry();
 		if (textMateToken.type.contains("comment")) {
 			TemplateContextType contextType;
@@ -181,22 +162,14 @@ public class TMTemplateCompletionProcessor extends TemplateCompletionProcessor {
 		}
 
 		// Check language-specific context types
-		final String id = TMUIPlugin.PLUGIN_ID + ".templates.context." + textMateToken.grammarScope;
-		final TemplateContextType contextType = plugin.getTemplateContextRegistry().getContextType(id);
+		final TemplateContextType contextType = plugin.getTemplateContextRegistry().getContextType(
+				CodeTemplateContextTypeUtils.toContextTypeId(textMateToken));
 		if (contextType != null) {
 			return contextType;
 		}
 
-		// TODO Also check language-specific context types from extensions?
-
 		// last option
 		return contextTypeRegistry.getContextType(DefaultTMTemplateContextType.CONTEXT_ID);
-	}
-
-	@Override
-	public @Nullable String getErrorMessage() {
-		// TODO add error message if applicable
-		return null;
 	}
 
 	@Override

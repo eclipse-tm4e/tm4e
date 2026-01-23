@@ -14,6 +14,7 @@ package org.eclipse.tm4e.ui.internal.utils;
 import java.util.Arrays;
 
 import org.eclipse.jdt.annotation.Nullable;
+import org.eclipse.tm4e.core.model.TMToken;
 import org.eclipse.tm4e.registry.IGrammarDefinition;
 import org.eclipse.tm4e.registry.ITMScope;
 import org.eclipse.tm4e.registry.TMEclipseRegistryPlugin;
@@ -28,9 +29,11 @@ public class CodeTemplateContextTypeUtils {
 	}
 
 	public static String toContextTypeId(final ITMScope languageScope) {
-		final String contextTypeIdSuffix = languageScope.getQualifiedName();
+		return CONTEXT_TYPE_ID_PREFIX + languageScope.getQualifiedName();
+	}
 
-		return CONTEXT_TYPE_ID_PREFIX + contextTypeIdSuffix;
+	public static String toContextTypeId(final TMToken textMateToken) {
+		return CONTEXT_TYPE_ID_PREFIX + textMateToken.grammarScope;
 	}
 
 	public static @Nullable ITMScope findScopeFor(final String contextTypeId) {

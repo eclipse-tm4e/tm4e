@@ -19,6 +19,7 @@ import org.eclipse.tm4e.ui.internal.utils.CodeTemplateContextTypeUtils;
  */
 public class TMLanguageTemplateContextType extends AbstractTMTemplateContextType {
 
+	// TODO What could be a good approach for adding language-specific code template variables (resolvers)?
 	public TMLanguageTemplateContextType(final String contextTypeName, final ITMScope languageScope) {
 		super(CodeTemplateContextTypeUtils.toContextTypeId(languageScope), contextTypeName);
 	}

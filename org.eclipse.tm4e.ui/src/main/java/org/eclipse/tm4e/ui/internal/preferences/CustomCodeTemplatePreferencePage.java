@@ -87,7 +87,7 @@ public class CustomCodeTemplatePreferencePage extends TemplatePreferencePage {
 		final SourceViewerConfiguration configuration = new SourceViewerConfiguration() {
 			@Override
 			public IPresentationReconciler getPresentationReconciler(@Nullable final ISourceViewer sourceViewer) {
-				// TODO check if we need special config for highlighting template variables
+				// TODO Is there a hopefully easy way of adding highlighting for code template variables in all grammars?
 				previewReconsiler = new TMPresentationReconciler();
 				return previewReconsiler;
 			}

@@ -22,8 +22,11 @@ import org.eclipse.jface.text.templates.Template;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.window.Window;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Shell;
+import org.eclipse.swt.widgets.Text;
 import org.eclipse.text.templates.TemplatePersistenceData;
 import org.eclipse.tm4e.core.grammar.IGrammar;
 import org.eclipse.tm4e.registry.ITMScope;
@@ -53,6 +56,30 @@ public class CustomCodeTemplatePreferencePage extends TemplatePreferencePage {
 		public TMEditTemplateDialog(final Shell shell, final Template template, final boolean edit, final boolean isNameModifiable,
 				@SuppressWarnings("deprecation") final org.eclipse.jface.text.templates.ContextTypeRegistry contextTypeRegistry) {
 			super(shell, template, edit, isNameModifiable, contextTypeRegistry);
+		}
+
+		@Override
+		protected Control createDialogArea(final Composite ancestor) {
+			final Control result = super.createDialogArea(ancestor);
+
+			// work-around: find the name text field and set a minimum width
+			for (final Control childControlLvl1 : ancestor.getChildren()) {
+				if (childControlLvl1 instanceof final Composite childL1) {
+					for (final Control childControlLvl2 : childL1.getChildren()) {
+						if (childControlLvl2 instanceof final Composite childL2) {
+							for (final Control childControlLvl3 : childL2.getChildren()) {
+								if (childControlLvl3 instanceof final Text nameTextField
+										&& nameTextField.getLayoutData() instanceof final GridData gridData) {
+									gridData.minimumWidth = 50;
+									return result;
+								}
+							}
+						}
+					}
+				}
+			}
+
+			return result;
 		}
 
 		@Override

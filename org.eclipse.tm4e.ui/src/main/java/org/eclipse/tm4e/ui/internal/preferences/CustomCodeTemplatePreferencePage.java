@@ -90,8 +90,9 @@ public class CustomCodeTemplatePreferencePage extends TemplatePreferencePage {
 	}
 
 	@Override
-	protected String getFormatterPreferenceKey() {
-		return PreferenceConstants.TEMPLATES_USE_CODEFORMATTER;
+	protected boolean isShowFormatterSetting() {
+		// Do not show a checkbox for formatting template code, since TM4E can't do that
+		return false;
 	}
 
 	@Override

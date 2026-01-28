@@ -27,8 +27,6 @@ public final class PreferenceConstants {
 
 	public static final String TMTOKEN_HOVER_ENABLED = "org.eclipse.tm4e.ui.tmScopeHoverEnabled";
 
-	public static final String TEMPLATES_USE_CODEFORMATTER = "org.eclipse.tm4e.ui.templates.useCodeFormatter";
-
 	private PreferenceConstants() {
 	}
 }

@@ -14,6 +14,8 @@ package org.eclipse.tm4e.ui.internal.utils;
 import java.util.Arrays;
 
 import org.eclipse.jdt.annotation.Nullable;
+import org.eclipse.tm4e.core.grammar.IGrammar;
+import org.eclipse.tm4e.core.internal.utils.NullSafetyHelper;
 import org.eclipse.tm4e.core.model.TMToken;
 import org.eclipse.tm4e.registry.IGrammarDefinition;
 import org.eclipse.tm4e.registry.ITMScope;
@@ -42,6 +44,27 @@ public class CodeTemplateContextTypeUtils {
 		return Arrays.stream(grammarDefinitions)
 				.map(IGrammarDefinition::getScope)
 				.filter(scope -> contextTypeId.equals(CodeTemplateContextTypeUtils.toContextTypeId(scope)))
+				.findFirst().orElse(null);
+	}
+
+	public static String toContextTypeName(final IGrammar grammar) {
+		String name = grammar.getName();
+		if (name == null) {
+			name = "";
+		}
+		name += " (" + grammar.getScopeName() + ")";
+		return name;
+	}
+
+	public static @Nullable IGrammar toGrammar(final String contextTypeName) {
+		final IGrammarDefinition[] grammarDefinitions = TMEclipseRegistryPlugin.getGrammarRegistryManager().getDefinitions();
+
+		return Arrays.stream(grammarDefinitions)
+				.map(IGrammarDefinition::getScope)
+				.map(scope -> TMEclipseRegistryPlugin.getGrammarRegistryManager().getGrammarForScope(scope))
+				.filter(grammar -> grammar != null)
+				.map(NullSafetyHelper::castNonNull)
+				.filter(grammar -> contextTypeName.equals(toContextTypeName(grammar)))
 				.findFirst().orElse(null);
 	}
 

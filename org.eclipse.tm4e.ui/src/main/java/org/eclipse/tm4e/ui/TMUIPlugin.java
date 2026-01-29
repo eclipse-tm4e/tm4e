@@ -35,6 +35,7 @@ import org.eclipse.tm4e.registry.TMEclipseRegistryPlugin;
 import org.eclipse.tm4e.ui.internal.model.TMModelManager;
 import org.eclipse.tm4e.ui.internal.samples.SampleManager;
 import org.eclipse.tm4e.ui.internal.themes.ThemeManager;
+import org.eclipse.tm4e.ui.internal.utils.CodeTemplateContextTypeUtils;
 import org.eclipse.tm4e.ui.model.ITMModelManager;
 import org.eclipse.tm4e.ui.samples.ISampleManager;
 import org.eclipse.tm4e.ui.templates.CommentTemplateContextType;
@@ -205,13 +206,9 @@ public class TMUIPlugin extends AbstractUIPlugin {
 				final ITMScope languageScope = definition.getScope();
 				final IGrammar languageGrammar = TMEclipseRegistryPlugin.getGrammarRegistryManager().getGrammarForScope(languageScope);
 				if (languageGrammar != null) {
-					String name = languageGrammar.getName();
-					if (name == null) {
-						name = "";
-					}
-					name += " (" + languageScope.getName() + ")";
+					final String contextTypeName = CodeTemplateContextTypeUtils.toContextTypeName(languageGrammar);
 					final TMLanguageTemplateContextType languageContextType = new TMLanguageTemplateContextType(
-							name, languageScope);
+							contextTypeName, languageScope);
 					result.addContextType(languageContextType);
 				}
 			}

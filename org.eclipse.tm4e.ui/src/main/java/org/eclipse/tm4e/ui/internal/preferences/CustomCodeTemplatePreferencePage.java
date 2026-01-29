@@ -27,7 +27,6 @@ import org.eclipse.jface.text.contentassist.IContentAssistProcessor;
 import org.eclipse.jface.text.contentassist.IContentAssistant;
 import org.eclipse.jface.text.presentation.IPresentationReconciler;
 import org.eclipse.jface.text.source.ISourceViewer;
-import org.eclipse.jface.text.source.ISourceViewerExtension2;
 import org.eclipse.jface.text.source.SourceViewer;
 import org.eclipse.jface.text.source.SourceViewerConfiguration;
 import org.eclipse.jface.text.templates.Template;
@@ -234,29 +233,28 @@ public class CustomCodeTemplatePreferencePage extends TemplatePreferencePage {
 			// work-around 3: re-use source viewer from parent class, but add our reconsiler for syntax highlighting
 			// by un-configuring and re-configuring the source viewer with a modified SourceViewerConfiguration
 			final IContentAssistProcessor templateVariableProcessor = getTemplateProcessor();
-			if (originalViewer instanceof final ISourceViewerExtension2 viewerExtension) {
-				viewerExtension.unconfigure();
 
-				final SourceViewerConfiguration configuration = new SourceViewerConfiguration() {
-					@Override
-					public @Nullable IContentAssistant getContentAssistant(@Nullable final ISourceViewer sourceViewer) {
+			originalViewer.unconfigure();
 
-						final ContentAssistant assistant = new ContentAssistant();
-						assistant.enableAutoActivation(true);
-						assistant.enableAutoInsert(true);
-						assistant.setContentAssistProcessor(templateVariableProcessor, IDocument.DEFAULT_CONTENT_TYPE);
-						return assistant;
-					}
+			final SourceViewerConfiguration configuration = new SourceViewerConfiguration() {
+				@Override
+				public @Nullable IContentAssistant getContentAssistant(@Nullable final ISourceViewer sourceViewer) {
 
-					@Override
-					public IPresentationReconciler getPresentationReconciler(@Nullable final ISourceViewer sourceViewer) {
-						editTemplatePresentationReconsiler = new TMCodeTemplatePresentationReconsiler();
-						return editTemplatePresentationReconsiler;
-					}
-				};
+					final ContentAssistant assistant = new ContentAssistant();
+					assistant.enableAutoActivation(true);
+					assistant.enableAutoInsert(true);
+					assistant.setContentAssistProcessor(templateVariableProcessor, IDocument.DEFAULT_CONTENT_TYPE);
+					return assistant;
+				}
 
-				originalViewer.configure(configuration);
-			}
+				@Override
+				public IPresentationReconciler getPresentationReconciler(@Nullable final ISourceViewer sourceViewer) {
+					editTemplatePresentationReconsiler = new TMCodeTemplatePresentationReconsiler();
+					return editTemplatePresentationReconsiler;
+				}
+			};
+
+			originalViewer.configure(configuration);
 
 			originalViewer.addTextListener(event -> updateSyntaxHighlighting());
 

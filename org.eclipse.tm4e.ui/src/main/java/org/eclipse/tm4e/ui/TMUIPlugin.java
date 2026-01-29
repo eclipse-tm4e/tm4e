@@ -206,6 +206,7 @@ public class TMUIPlugin extends AbstractUIPlugin {
 				final ITMScope languageScope = definition.getScope();
 				final IGrammar languageGrammar = TMEclipseRegistryPlugin.getGrammarRegistryManager().getGrammarForScope(languageScope);
 				if (languageGrammar != null) {
+					// TODO It seems TemplatePreferencePage.EditTemplateDialog requires the context type names to be unique. Can we shorten the names somehow?
 					final String contextTypeName = CodeTemplateContextTypeUtils.toContextTypeName(languageGrammar);
 					final TMLanguageTemplateContextType languageContextType = new TMLanguageTemplateContextType(
 							contextTypeName, languageScope);

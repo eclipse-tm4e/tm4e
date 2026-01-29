@@ -11,9 +11,17 @@
  *******************************************************************************/
 package org.eclipse.tm4e.ui.internal.preferences;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 import org.eclipse.jdt.annotation.Nullable;
+import org.eclipse.jface.text.BadLocationException;
 import org.eclipse.jface.text.Document;
 import org.eclipse.jface.text.IDocument;
+import org.eclipse.jface.text.IRegion;
+import org.eclipse.jface.text.ITextViewer;
+import org.eclipse.jface.text.Region;
+import org.eclipse.jface.text.TextPresentation;
 import org.eclipse.jface.text.contentassist.ContentAssistant;
 import org.eclipse.jface.text.contentassist.IContentAssistProcessor;
 import org.eclipse.jface.text.contentassist.IContentAssistant;
@@ -26,6 +34,8 @@ import org.eclipse.jface.text.templates.Template;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.window.Window;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.custom.StyleRange;
+import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
@@ -39,6 +49,7 @@ import org.eclipse.tm4e.registry.ITMScope;
 import org.eclipse.tm4e.registry.TMEclipseRegistryPlugin;
 import org.eclipse.tm4e.ui.TMUIPlugin;
 import org.eclipse.tm4e.ui.internal.utils.CodeTemplateContextTypeUtils;
+import org.eclipse.tm4e.ui.text.ITMPresentationReconcilerListener;
 import org.eclipse.tm4e.ui.text.TMPresentationReconciler;
 import org.eclipse.ui.texteditor.templates.TemplatePreferencePage;
 
@@ -57,9 +68,105 @@ public class CustomCodeTemplatePreferencePage extends TemplatePreferencePage {
 		setContextTypeRegistry(TMUIPlugin.from(plugin.getTemplateContextRegistry()));
 	}
 
+	private static class TMTemplateVariableHighlighter {
+
+		// pattern for code template variables like ${variable_name} or ${horizontal:link(FILL, BEGINNING, CENTER, END)}
+		private static final Pattern VARIABLE_PATTERN = Pattern.compile("\\$\\{[^\\r\\n\\}]*\\}");
+		private static final Color VAR_COLOR_FOREGROUND = new Color(181, 123, 21);
+
+		private @Nullable IDocument document;
+
+		public void setDocument(@Nullable final IDocument document) {
+			this.document = document;
+		}
+
+		public void createPresentation(final @Nullable TextPresentation presentation, final @Nullable IRegion damage) {
+			if (presentation == null || damage == null || document == null) {
+				return;
+			}
+
+			try {
+				final String code = NullSafetyHelper.castNonNull(document).get(damage.getOffset(), damage.getLength());
+				final Matcher varMatcher = VARIABLE_PATTERN.matcher(code);
+				while (varMatcher.find()) {
+					final int offset = damage.getOffset() + varMatcher.start();
+					final int length = varMatcher.end() - varMatcher.start();
+					presentation.mergeStyleRange(new StyleRange(offset, length, VAR_COLOR_FOREGROUND, null, SWT.ITALIC));
+				}
+			} catch (final BadLocationException e) {
+				// do nothing
+			}
+		}
+
+	}
+
+	private static class TMCodeTemplatePresentationReconsiler extends TMPresentationReconciler {
+
+		private final TMTemplateVariableHighlighter templateVariableDamagerRepairer = new TMTemplateVariableHighlighter();
+		private @Nullable ITextViewer viewer;
+
+		@Override
+		public void install(final ITextViewer viewer) {
+			super.install(viewer);
+
+			this.viewer = viewer;
+		}
+
+		@Override
+		public void setGrammar(@Nullable final IGrammar newGrammar) {
+			super.setGrammar(newGrammar);
+
+			this.addListener(new ITMPresentationReconcilerListener() {
+
+				@Override
+				public void onUninstalled() {
+				}
+
+				@Override
+				public void onInstalled(final ITextViewer viewer, final IDocument document) {
+				}
+
+				@Override
+				public void onColorized(final TextPresentation presentation, @Nullable final Throwable error) {
+					if (viewer != null && viewer.getDocument() != null) {
+						final ITextViewer theViewer = NullSafetyHelper.castNonNull(viewer);
+
+						final IDocument document = theViewer.getDocument();
+						templateVariableDamagerRepairer.setDocument(document);
+
+						// highlight code template variables
+						final IRegion region = presentation.getExtent();
+						templateVariableDamagerRepairer.createPresentation(presentation, region);
+
+						theViewer.changeTextPresentation(presentation, false);
+					}
+				}
+			});
+
+			if (newGrammar == null && viewer != null && viewer.getDocument() != null) {
+				final ITextViewer theViewer = NullSafetyHelper.castNonNull(viewer);
+
+				final IDocument document = NullSafetyHelper.castNonNull(theViewer.getDocument());
+				templateVariableDamagerRepairer.setDocument(document);
+
+				// create default style range for whole document
+				final IRegion region = new Region(0, document.getLength());
+				final TextPresentation presentation = new TextPresentation(region, 100);
+				presentation.setDefaultStyleRange(new StyleRange(region.getOffset(), region.getLength(), null, null));
+
+				// highlight code template variables
+				templateVariableDamagerRepairer.createPresentation(presentation, region);
+
+				theViewer.changeTextPresentation(presentation, false);
+			}
+		}
+
+	}
+
 	private static class TMEditTemplateDialog extends TemplatePreferencePage.EditTemplateDialog {
 
 		private @Nullable TMPresentationReconciler editTemplatePresentationReconsiler = null;
+		private @Nullable Combo contextTypeDropDownList = null;
 
 		public TMEditTemplateDialog(final Shell shell, final Template template, final boolean edit, final boolean isNameModifiable,
 				@SuppressWarnings("deprecation") final org.eclipse.jface.text.templates.ContextTypeRegistry contextTypeRegistry) {
@@ -85,13 +192,14 @@ public class CustomCodeTemplatePreferencePage extends TemplatePreferencePage {
 									foundNameField = true;
 								} else if (childControlLvl3 instanceof final Combo dropDownList) {
 									foundDropDownList = true;
+
+									contextTypeDropDownList = dropDownList;
+
+									updateSyntaxHighlighting();
+
 									dropDownList.addModifyListener(e -> {
-										if (editTemplatePresentationReconsiler != null
-												&& e.widget instanceof final Combo combo
-												&& !combo.isDisposed()) {
-											final String activeContextTypeName = combo.getText();
-											final IGrammar grammar = CodeTemplateContextTypeUtils.toGrammar(activeContextTypeName);
-											NullSafetyHelper.castNonNull(editTemplatePresentationReconsiler).setGrammar(grammar);
+										if (e.widget instanceof Combo) {
+											updateSyntaxHighlighting();
 										}
 									});
 								}
@@ -106,6 +214,17 @@ public class CustomCodeTemplatePreferencePage extends TemplatePreferencePage {
 			}
 
 			return result;
+		}
+
+		private void updateSyntaxHighlighting() {
+			if (editTemplatePresentationReconsiler == null || contextTypeDropDownList == null
+					|| NullSafetyHelper.castNonNull(contextTypeDropDownList).isDisposed()) {
+				return;
+			}
+
+			final String activeContextTypeName = NullSafetyHelper.castNonNull(contextTypeDropDownList).getText();
+			final IGrammar grammar = CodeTemplateContextTypeUtils.toGrammar(activeContextTypeName);
+			NullSafetyHelper.castNonNull(editTemplatePresentationReconsiler).setGrammar(grammar);
 		}
 
 		@Override
@@ -131,14 +250,15 @@ public class CustomCodeTemplatePreferencePage extends TemplatePreferencePage {
 
 					@Override
 					public IPresentationReconciler getPresentationReconciler(@Nullable final ISourceViewer sourceViewer) {
-						// TODO Is there a hopefully easy way of adding highlighting for code template variables in all grammars?
-						editTemplatePresentationReconsiler = new TMPresentationReconciler();
+						editTemplatePresentationReconsiler = new TMCodeTemplatePresentationReconsiler();
 						return editTemplatePresentationReconsiler;
 					}
 				};
 
 				originalViewer.configure(configuration);
 			}
+
+			originalViewer.addTextListener(event -> updateSyntaxHighlighting());
 
 			return originalViewer;
 		}
@@ -170,8 +290,7 @@ public class CustomCodeTemplatePreferencePage extends TemplatePreferencePage {
 		final SourceViewerConfiguration configuration = new SourceViewerConfiguration() {
 			@Override
 			public IPresentationReconciler getPresentationReconciler(@Nullable final ISourceViewer sourceViewer) {
-				// TODO Is there a hopefully easy way of adding highlighting for code template variables in all grammars?
-				previewReconsiler = new TMPresentationReconciler();
+				previewReconsiler = new TMCodeTemplatePresentationReconsiler();
 				return previewReconsiler;
 			}
 		};

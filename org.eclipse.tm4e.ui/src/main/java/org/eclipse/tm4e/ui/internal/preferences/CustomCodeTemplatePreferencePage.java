@@ -43,7 +43,6 @@ import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.text.templates.TemplatePersistenceData;
 import org.eclipse.tm4e.core.grammar.IGrammar;
-import org.eclipse.tm4e.core.internal.utils.NullSafetyHelper;
 import org.eclipse.tm4e.registry.ITMScope;
 import org.eclipse.tm4e.registry.TMEclipseRegistryPlugin;
 import org.eclipse.tm4e.ui.TMUIPlugin;
@@ -80,12 +79,13 @@ public class CustomCodeTemplatePreferencePage extends TemplatePreferencePage {
 		}
 
 		public void createPresentation(final @Nullable TextPresentation presentation, final @Nullable IRegion damage) {
+			final var document = this.document;
 			if (presentation == null || damage == null || document == null) {
 				return;
 			}
 
 			try {
-				final String code = NullSafetyHelper.castNonNull(document).get(damage.getOffset(), damage.getLength());
+				final String code = document.get(damage.getOffset(), damage.getLength());
 				final Matcher varMatcher = VARIABLE_PATTERN.matcher(code);
 				while (varMatcher.find()) {
 					final int offset = damage.getOffset() + varMatcher.start();
@@ -127,25 +127,23 @@ public class CustomCodeTemplatePreferencePage extends TemplatePreferencePage {
 
 				@Override
 				public void onColorized(final TextPresentation presentation, @Nullable final Throwable error) {
+					final var viewer = TMCodeTemplatePresentationReconsiler.this.viewer;
 					if (viewer != null && viewer.getDocument() != null) {
-						final ITextViewer theViewer = NullSafetyHelper.castNonNull(viewer);
-
-						final IDocument document = theViewer.getDocument();
+						final IDocument document = viewer.getDocument();
 						templateVariableDamagerRepairer.setDocument(document);
 
 						// highlight code template variables
 						final IRegion region = presentation.getExtent();
 						templateVariableDamagerRepairer.createPresentation(presentation, region);
 
-						theViewer.changeTextPresentation(presentation, false);
+						viewer.changeTextPresentation(presentation, false);
 					}
 				}
 			});
 
-			if (newGrammar == null && viewer != null && viewer.getDocument() != null) {
-				final ITextViewer theViewer = NullSafetyHelper.castNonNull(viewer);
-
-				final IDocument document = NullSafetyHelper.castNonNull(theViewer.getDocument());
+			final var viewer = this.viewer;
+			final var document = viewer != null ? viewer.getDocument() : null;
+			if (newGrammar == null && viewer != null && document != null) {
 				templateVariableDamagerRepairer.setDocument(document);
 
 				// create default style range for whole document
@@ -156,7 +154,7 @@ public class CustomCodeTemplatePreferencePage extends TemplatePreferencePage {
 				// highlight code template variables
 				templateVariableDamagerRepairer.createPresentation(presentation, region);
 
-				theViewer.changeTextPresentation(presentation, false);
+				viewer.changeTextPresentation(presentation, false);
 			}
 		}
 
@@ -216,14 +214,16 @@ public class CustomCodeTemplatePreferencePage extends TemplatePreferencePage {
 		}
 
 		private void updateSyntaxHighlighting() {
+			final var editTemplatePresentationReconsiler = this.editTemplatePresentationReconsiler;
+			final var contextTypeDropDownList = this.contextTypeDropDownList;
 			if (editTemplatePresentationReconsiler == null || contextTypeDropDownList == null
-					|| NullSafetyHelper.castNonNull(contextTypeDropDownList).isDisposed()) {
+					|| contextTypeDropDownList.isDisposed()) {
 				return;
 			}
 
-			final String activeContextTypeName = NullSafetyHelper.castNonNull(contextTypeDropDownList).getText();
+			final String activeContextTypeName = contextTypeDropDownList.getText();
 			final IGrammar grammar = CodeTemplateContextTypeUtils.toGrammar(activeContextTypeName);
-			NullSafetyHelper.castNonNull(editTemplatePresentationReconsiler).setGrammar(grammar);
+			editTemplatePresentationReconsiler.setGrammar(grammar);
 		}
 
 		@Override

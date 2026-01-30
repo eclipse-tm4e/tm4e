@@ -28,7 +28,6 @@ import org.eclipse.jface.text.templates.TemplateContextType;
 import org.eclipse.jface.text.templates.persistence.TemplateStore;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.text.templates.ContextTypeRegistry;
-import org.eclipse.tm4e.core.internal.utils.NullSafetyHelper;
 import org.eclipse.tm4e.core.model.TMToken;
 import org.eclipse.tm4e.ui.TMImages;
 import org.eclipse.tm4e.ui.TMUIPlugin;
@@ -174,21 +173,20 @@ public class TMTemplateCompletionProcessor extends TemplateCompletionProcessor {
 
 	@Override
 	protected @Nullable TemplateContextType getContextType(final ITextViewer viewer, final IRegion region) {
-		if (viewer.getDocument() != null) {
-			final TmTokenRegion tokenRegion = retrieveTmTokenFor(
-					NullSafetyHelper.castNonNull(viewer.getDocument()), region.getOffset());
+		final var plugin = TMUIPlugin.getDefault();
+		if (plugin == null) {
+			return null;
+		}
+
+		final var document = viewer.getDocument();
+		if (document != null) {
+			final TmTokenRegion tokenRegion = retrieveTmTokenFor(document, region.getOffset());
 			if (tokenRegion != null) {
 				return retrieveTemplateContextType(tokenRegion.getToken());
 			}
 		}
 
-		final TMUIPlugin plugin = TMUIPlugin.getDefault();
-		if (plugin == null) {
-			return null;
-		}
-
-		return plugin.getTemplateContextRegistry()
-				.getContextType(DefaultTMTemplateContextType.CONTEXT_ID);
+		return plugin.getTemplateContextRegistry().getContextType(DefaultTMTemplateContextType.CONTEXT_ID);
 	}
 
 	@Override

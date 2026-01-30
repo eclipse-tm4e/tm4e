@@ -22,13 +22,11 @@ import java.util.logging.Logger;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.core.runtime.Status;
-import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.jface.text.templates.TemplateContextType;
 import org.eclipse.jface.text.templates.persistence.TemplateStore;
 import org.eclipse.text.templates.ContextTypeRegistry;
 import org.eclipse.tm4e.core.grammar.IGrammar;
-import org.eclipse.tm4e.core.internal.utils.NullSafetyHelper;
 import org.eclipse.tm4e.registry.IGrammarDefinition;
 import org.eclipse.tm4e.registry.ITMScope;
 import org.eclipse.tm4e.registry.TMEclipseRegistryPlugin;
@@ -188,36 +186,34 @@ public class TMUIPlugin extends AbstractUIPlugin {
 	}
 
 	public ContextTypeRegistry getTemplateContextRegistry() {
-		@NonNull
-		ContributionContextTypeRegistry result;
-
-		if (contextTypeRegistry == null) {
-			result = new ContributionContextTypeRegistry(TEMPLATES_REGISTRY_ID);
-			contextTypeRegistry = result;
-
-			result.addContextType(DefaultTMTemplateContextType.CONTEXT_ID);
-			result.addContextType(CommentTemplateContextType.CONTEXT_ID);
-			result.addContextType(DocumentationCommentTemplateContextType.CONTEXT_ID);
-
-			// Add language-specific context types
-			// TODO Skip certain grammars? Some grammars have no name or are only used for highlighting code snippets, e.g. in Markdown
-			final IGrammarDefinition[] grammarDefinitions = TMEclipseRegistryPlugin.getGrammarRegistryManager().getDefinitions();
-			for (final IGrammarDefinition definition : grammarDefinitions) {
-				final ITMScope languageScope = definition.getScope();
-				final IGrammar languageGrammar = TMEclipseRegistryPlugin.getGrammarRegistryManager().getGrammarForScope(languageScope);
-				if (languageGrammar != null) {
-					// TODO It seems TemplatePreferencePage.EditTemplateDialog requires the context type names to be unique. Can we shorten the names somehow?
-					final String contextTypeName = CodeTemplateContextTypeUtils.toContextTypeName(languageGrammar);
-					final TMLanguageTemplateContextType languageContextType = new TMLanguageTemplateContextType(
-							contextTypeName, languageScope);
-					result.addContextType(languageContextType);
-				}
-			}
-
-		} else {
-			result = NullSafetyHelper.castNonNull(contextTypeRegistry);
+		final var contextTypeRegistry = this.contextTypeRegistry;
+		if (contextTypeRegistry != null) {
+			return contextTypeRegistry;
 		}
-		return result;
+
+		final var newContextTypeRegistry = new ContributionContextTypeRegistry(TEMPLATES_REGISTRY_ID);
+		this.contextTypeRegistry = newContextTypeRegistry;
+
+		newContextTypeRegistry.addContextType(DefaultTMTemplateContextType.CONTEXT_ID);
+		newContextTypeRegistry.addContextType(CommentTemplateContextType.CONTEXT_ID);
+		newContextTypeRegistry.addContextType(DocumentationCommentTemplateContextType.CONTEXT_ID);
+
+		// Add language-specific context types
+		// TODO Skip certain grammars? Some grammars have no name or are only used for highlighting code snippets, e.g. in Markdown
+		final IGrammarDefinition[] grammarDefinitions = TMEclipseRegistryPlugin.getGrammarRegistryManager().getDefinitions();
+		for (final IGrammarDefinition definition : grammarDefinitions) {
+			final ITMScope languageScope = definition.getScope();
+			final IGrammar languageGrammar = TMEclipseRegistryPlugin.getGrammarRegistryManager().getGrammarForScope(languageScope);
+			if (languageGrammar != null) {
+				// TODO It seems TemplatePreferencePage.EditTemplateDialog requires the context type names to be unique. Can we shorten the names somehow?
+				final String contextTypeName = CodeTemplateContextTypeUtils.toContextTypeName(languageGrammar);
+				final TMLanguageTemplateContextType languageContextType = new TMLanguageTemplateContextType(
+						contextTypeName, languageScope);
+				newContextTypeRegistry.addContextType(languageContextType);
+			}
+		}
+
+		return newContextTypeRegistry;
 	}
 
 	@SuppressWarnings("deprecation")
@@ -251,26 +247,25 @@ public class TMUIPlugin extends AbstractUIPlugin {
 	}
 
 	public TemplateStore getTemplateStore() {
-		@NonNull
-		TemplateStore result;
+		final var templateStore = this.templateStore;
 
-		if (templateStore == null) {
-			result = new ContributionTemplateStore(from(getTemplateContextRegistry()), getPreferenceStore(),
-					CUSTOM_TEMPLATES_KEY);
-			templateStore = result;
-
-			try {
-				result.load();
-			} catch (final IOException e) {
-				Platform.getLog(this.getClass()).error(e.getMessage(), e);
-			}
-
-			result.startListeningForPreferenceChanges();
-		} else {
-			result = NullSafetyHelper.castNonNull(templateStore);
+		if (templateStore != null) {
+			return templateStore;
 		}
 
-		return result;
+		final TemplateStore newTemplateStore = new ContributionTemplateStore(
+				from(getTemplateContextRegistry()), getPreferenceStore(), CUSTOM_TEMPLATES_KEY);
+		this.templateStore = newTemplateStore;
+
+		try {
+			newTemplateStore.load();
+		} catch (final IOException e) {
+			Platform.getLog(this.getClass()).error(e.getMessage(), e);
+		}
+
+		newTemplateStore.startListeningForPreferenceChanges();
+
+		return newTemplateStore;
 	}
 
 }

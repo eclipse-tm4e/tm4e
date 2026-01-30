@@ -229,20 +229,19 @@ public class TMUIPlugin extends AbstractUIPlugin {
 			this.delegate = registry;
 		}
 
-		// TODO How can this null-safety check be handled correctly?
-		@SuppressWarnings("null")
+		// TODO Why does my IDE complain about mismatching types, but Maven doesn't?
 		@Override
-		public Iterator<@Nullable TemplateContextType> contextTypes() {
+		public Iterator<TemplateContextType> contextTypes() {
 			return delegate.contextTypes();
 		}
 
 		@Override
-		public void addContextType(final @Nullable TemplateContextType contextType) {
+		public void addContextType(final TemplateContextType contextType) {
 			delegate.addContextType(contextType);
 		}
 
 		@Override
-		public @Nullable TemplateContextType getContextType(final @Nullable String id) {
+		public @Nullable TemplateContextType getContextType(final String id) {
 			return delegate.getContextType(id);
 		}
 

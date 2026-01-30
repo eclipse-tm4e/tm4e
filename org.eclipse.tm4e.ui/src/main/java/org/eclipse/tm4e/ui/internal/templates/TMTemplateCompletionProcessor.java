@@ -173,8 +173,8 @@ public class TMTemplateCompletionProcessor extends TemplateCompletionProcessor {
 	}
 
 	@Override
-	protected @Nullable TemplateContextType getContextType(final @Nullable ITextViewer viewer, final @Nullable IRegion region) {
-		if (viewer != null && region != null && viewer.getDocument() != null) {
+	protected @Nullable TemplateContextType getContextType(final ITextViewer viewer, final IRegion region) {
+		if (viewer.getDocument() != null) {
 			final TmTokenRegion tokenRegion = retrieveTmTokenFor(
 					NullSafetyHelper.castNonNull(viewer.getDocument()), region.getOffset());
 			if (tokenRegion != null) {
@@ -192,21 +192,21 @@ public class TMTemplateCompletionProcessor extends TemplateCompletionProcessor {
 	}
 
 	@Override
-	protected @Nullable Image getImage(final @Nullable Template template) {
+	protected @Nullable Image getImage(final Template template) {
 		return TMImages.getImage(TMImages.IMG_TEMPLATE);
 	}
 
 	@Override
-	protected Template[] getTemplates(final @Nullable String contextTypeId) {
+	protected Template[] getTemplates(final String contextTypeId) {
 		final TMUIPlugin plugin = TMUIPlugin.getDefault();
-		if (contextTypeId == null || plugin == null) {
+		if (plugin == null) {
 			return NO_TEMPLATES;
 		}
 
 		final TemplateStore templateStore = plugin.getTemplateStore();
 		final Template[] customTemplates = templateStore.getTemplates(contextTypeId);
 
-		if (customTemplates == null || customTemplates.length == 0) {
+		if (customTemplates.length == 0) {
 			return NO_TEMPLATES;
 		}
 		return customTemplates;

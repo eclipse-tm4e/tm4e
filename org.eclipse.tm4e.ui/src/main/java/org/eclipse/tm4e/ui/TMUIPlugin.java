@@ -229,7 +229,6 @@ public class TMUIPlugin extends AbstractUIPlugin {
 			this.delegate = registry;
 		}
 
-		// TODO Why does my IDE complain about mismatching types, but Maven doesn't?
 		@Override
 		public Iterator<TemplateContextType> contextTypes() {
 			return delegate.contextTypes();

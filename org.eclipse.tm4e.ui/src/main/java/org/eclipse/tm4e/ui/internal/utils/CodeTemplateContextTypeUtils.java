@@ -12,10 +12,11 @@
 package org.eclipse.tm4e.ui.internal.utils;
 
 import java.util.Arrays;
+import java.util.Collection;
 
+import org.eclipse.core.runtime.content.IContentType;
 import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.tm4e.core.grammar.IGrammar;
-import org.eclipse.tm4e.core.internal.utils.NullSafetyHelper;
 import org.eclipse.tm4e.core.model.TMToken;
 import org.eclipse.tm4e.registry.IGrammarDefinition;
 import org.eclipse.tm4e.registry.ITMScope;
@@ -47,12 +48,27 @@ public class CodeTemplateContextTypeUtils {
 				.findFirst().orElse(null);
 	}
 
-	public static String toContextTypeName(final IGrammar grammar) {
-		String name = grammar.getName();
-		if (name == null) {
-			name = "";
+	public static @Nullable String getContentTypeName(final ITMScope languageScope) {
+		@Nullable
+		final Collection<IContentType> contentTypes = TMEclipseRegistryPlugin.getGrammarRegistryManager()
+				.getContentTypesForScope(languageScope);
+
+		if (contentTypes != null && contentTypes.size() > 0) {
+			// we only consider the first content type
+			return contentTypes.iterator().next().getName();
 		}
-		name += " (" + grammar.getScopeName() + ")";
+		return null;
+	}
+
+	public static String toContextTypeName(final ITMScope languageScope) {
+		final String contentTypeName = getContentTypeName(languageScope);
+
+		String name = "";
+		if (contentTypeName != null) {
+			name = contentTypeName;
+		}
+
+		name += " (" + languageScope.getQualifiedName() + ")";
 		return name;
 	}
 
@@ -61,10 +77,8 @@ public class CodeTemplateContextTypeUtils {
 
 		return Arrays.stream(grammarDefinitions)
 				.map(IGrammarDefinition::getScope)
+				.filter(scope -> contextTypeName.equals(toContextTypeName(scope)))
 				.map(scope -> TMEclipseRegistryPlugin.getGrammarRegistryManager().getGrammarForScope(scope))
-				.filter(grammar -> grammar != null)
-				.map(NullSafetyHelper::castNonNull)
-				.filter(grammar -> contextTypeName.equals(toContextTypeName(grammar)))
 				.findFirst().orElse(null);
 	}
 

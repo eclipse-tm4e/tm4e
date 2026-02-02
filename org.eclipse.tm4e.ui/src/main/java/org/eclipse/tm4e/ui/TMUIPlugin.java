@@ -26,7 +26,6 @@ import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.jface.text.templates.TemplateContextType;
 import org.eclipse.jface.text.templates.persistence.TemplateStore;
 import org.eclipse.text.templates.ContextTypeRegistry;
-import org.eclipse.tm4e.core.grammar.IGrammar;
 import org.eclipse.tm4e.registry.IGrammarDefinition;
 import org.eclipse.tm4e.registry.ITMScope;
 import org.eclipse.tm4e.registry.TMEclipseRegistryPlugin;
@@ -203,14 +202,13 @@ public class TMUIPlugin extends AbstractUIPlugin {
 		final IGrammarDefinition[] grammarDefinitions = TMEclipseRegistryPlugin.getGrammarRegistryManager().getDefinitions();
 		for (final IGrammarDefinition definition : grammarDefinitions) {
 			final ITMScope languageScope = definition.getScope();
-			final IGrammar languageGrammar = TMEclipseRegistryPlugin.getGrammarRegistryManager().getGrammarForScope(languageScope);
-			if (languageGrammar != null) {
-				// TODO It seems TemplatePreferencePage.EditTemplateDialog requires the context type names to be unique. Can we shorten the names somehow?
-				final String contextTypeName = CodeTemplateContextTypeUtils.toContextTypeName(languageGrammar);
-				final TMLanguageTemplateContextType languageContextType = new TMLanguageTemplateContextType(
-						contextTypeName, languageScope);
-				newContextTypeRegistry.addContextType(languageContextType);
-			}
+
+			// TODO It seems TemplatePreferencePage.EditTemplateDialog requires the context type names to be unique. Can we shorten the names somehow?
+			final String contextTypeName = CodeTemplateContextTypeUtils.toContextTypeName(languageScope);
+
+			final TMLanguageTemplateContextType languageContextType = new TMLanguageTemplateContextType(
+					contextTypeName, languageScope);
+			newContextTypeRegistry.addContextType(languageContextType);
 		}
 
 		return newContextTypeRegistry;

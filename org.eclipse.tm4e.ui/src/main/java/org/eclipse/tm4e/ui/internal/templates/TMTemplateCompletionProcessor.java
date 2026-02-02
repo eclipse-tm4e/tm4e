@@ -11,8 +11,6 @@
  *******************************************************************************/
 package org.eclipse.tm4e.ui.internal.templates;
 
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 import org.eclipse.core.runtime.Platform;
@@ -40,26 +38,12 @@ import org.eclipse.tm4e.ui.templates.DocumentationCommentTemplateContextType;
 
 public class TMTemplateCompletionProcessor extends TemplateCompletionProcessor {
 
-	private static final ICompletionProposal[] NO_PROPOSALS = {};
 	private static final Template[] NO_TEMPLATES = {};
 
 	@Override
 	public ICompletionProposal[] computeCompletionProposals(final ITextViewer viewer, final int offset) {
-		// TODO check why Invalid thread access exception occurs here without syncExec()
-		final ArrayList<ICompletionProposal> templateProposals = new ArrayList<>();
-		UI.getDisplay().syncExec(() -> {
-			final ICompletionProposal[] proposalsFromParent = TMTemplateCompletionProcessor.super.computeCompletionProposals(
-					viewer, offset);
-			Collections.addAll(templateProposals, proposalsFromParent);
-		});
-
-		if (templateProposals.size() > 0) {
-			final ICompletionProposal[] proposals = templateProposals
-					.toArray(new ICompletionProposal[templateProposals.size()]);
-			return proposals;
-		}
-
-		return NO_PROPOSALS;
+		// TODO Check why Invalid thread access exception occurs here without UI.runSync()
+		return UI.runSync(() -> TMTemplateCompletionProcessor.super.computeCompletionProposals(viewer, offset));
 	}
 
 	private static class TmTokenRegion implements IRegion {

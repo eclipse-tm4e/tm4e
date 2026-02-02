@@ -195,9 +195,7 @@ public class CustomCodeTemplatePreferencePage extends TemplatePreferencePage {
 									updateSyntaxHighlighting();
 
 									dropDownList.addModifyListener(e -> {
-										if (e.widget instanceof Combo) {
-											updateSyntaxHighlighting();
-										}
+										updateSyntaxHighlighting();
 									});
 								}
 

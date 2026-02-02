@@ -174,8 +174,15 @@ public class CustomCodeTemplatePreferencePage extends TemplatePreferencePage {
 		protected Control createDialogArea(final Composite ancestor) {
 			final Control result = super.createDialogArea(ancestor);
 
+			findContextTypeComboAndSetMinNameFieldWidth(ancestor);
+
+			return result;
+		}
+
+		private void findContextTypeComboAndSetMinNameFieldWidth(final Composite ancestor) {
 			// work-around 1: find the name text field and set a minimum width
-			// work-around 2: find the combo box (drop-down list) and register a modify listener for updating the reconsiler's grammar to the current context type
+			// work-around 2: find the combo box (drop-down list) and register a modify listener for updating
+			// the reconsiler's grammar to the current context type
 			boolean foundNameField = false;
 			boolean foundDropDownList = false;
 			for (final Control childControlLvl1 : ancestor.getChildren()) {
@@ -200,15 +207,13 @@ public class CustomCodeTemplatePreferencePage extends TemplatePreferencePage {
 								}
 
 								if (foundNameField && foundDropDownList) {
-									return result;
+									return;
 								}
 							}
 						}
 					}
 				}
 			}
-
-			return result;
 		}
 
 		private void updateSyntaxHighlighting() {

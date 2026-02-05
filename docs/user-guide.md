@@ -57,7 +57,26 @@ Language-configuration files enable additional editor behavior for a language. T
 These behaviors are applied on top of whatever the underlying editor already provides.
 TM4E can add these behaviors to simple text editors, or refine them when an editor or language server already offers partial support.
 
-### 3) Diagnostic tools (token hover)
+### 3) Custom code templates and code proposals
+
+TM4E offers support for defining and proposing custom code templates for the languages available through a TextMate grammar.
+Users can specify their own code templates using the `TextMate > Templates` preferences page.
+
+Each template is registered to a context type, i.e. a language or grammar (technically a TextMate scope).
+In addition to available grammars, TM4E offers two special context types for comments.
+Templates registered for these context types can be used in all languages having such comments in their grammar.
+
+For example, users can register custom C/C++ or JavaScript statements, but also generally usable comment texts like a Copyright notice, a license, or a TODO comment with the user's name.
+Having a TM4E-based editor open, they'll get that code snippets suggested via code completion triggered by Ctrl + Space.
+
+The two generic context types for comments are:
+
+- Comment (any comment that is not a documentation comment, i.e. line comments and standard block comments like code between `/*` and `*/` in Java / C++)
+- Documentation comment (a comment that is used for code documentation, e.g. javadoc comments in Java, i.e. code between `/**` and `*/`)
+
+![Custom Code Proposal](img/code_template_proposal.png)
+
+### 4) Diagnostic tools (token hover)
 
 For advanced users, some editors expose a TextMate token hover that shows the token scopes and partition information at the caret location.
 
@@ -101,6 +120,9 @@ Most user-facing configuration lives under the `TextMate` section in the Eclipse
 
 1. `TextMate > Task Tags` lets you define tags in comments (such as `TODO` or `FIXME`) that should be treated as tasks or problems, and configure how they are marked in the workspace.\
    ![Task Tags Preferences](img/task_tags_preferences.png)
+
+1. `TextMate > Templates` lets you specify custom code templates for available TextMate grammars (languages). These will be used in code proposals triggered by Ctrl + Space.\
+   ![Templates Preferences](img/templates_preferences.png)
 
 1. `TextMate > Themes` lets you choose between built-in Light and Dark themes and any additional themes contributed by installed plugins, as well as import extra theme files and set the default theme for light and dark modes.
    You can also switch themes from the editor's context menu under `TextMate`.\

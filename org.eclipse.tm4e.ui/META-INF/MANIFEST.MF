@@ -29,6 +29,7 @@ Export-Package: org.eclipse.tm4e.ui,
  org.eclipse.tm4e.ui.internal.widgets;x-friends:="org.eclipse.tm4e.languageconfiguration",
  org.eclipse.tm4e.ui.model,
  org.eclipse.tm4e.ui.samples,
+ org.eclipse.tm4e.ui.templates,
  org.eclipse.tm4e.ui.text,
  org.eclipse.tm4e.ui.themes,
  org.eclipse.tm4e.ui.themes.css

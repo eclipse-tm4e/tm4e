@@ -163,17 +163,30 @@ public class LanguageConfigurationAutoEditStrategy implements IAutoEditStrategy 
 
 						final var newIndent = registry.getGoodIndentForLine(doc, lineIndex, contentType, IIndentConverter.of(cursorCfg));
 						if (newIndent != null) {
+							final var normalizedIndent = cursorCfg.normalizeIndentation(newIndent);
 							final var lineStartOffset = doc.getLineOffset(lineIndex);
-
-							// check if the content was pasted into a line while the cursor was not at the beginning of the line
-							// but inside or at the end of an existing line indentation
 							final var offsetInLine = command.offset - lineStartOffset;
-							if (offsetInLine > 0 && doc.get(lineStartOffset, offsetInLine).isBlank()) {
-								command.offset = lineStartOffset;
-								command.length += offsetInLine;
+							final int firstNewline = command.text.indexOf('\n');
+
+							if (firstNewline >= 0) {
+								final var firstLine = command.text.substring(0, firstNewline + 1);
+								final var reindentedRest = TextUtils.replaceIndent(
+										command.text.substring(firstNewline + 1), cursorCfg.indentSize, normalizedIndent, false);
+
+								if (offsetInLine > 0 && !doc.get(lineStartOffset, offsetInLine).isBlank()) {
+									command.text = firstLine + reindentedRest;
+								} else {
+									if (offsetInLine > 0) {
+										command.offset = lineStartOffset;
+										command.length += offsetInLine;
+									}
+									command.text = normalizedIndent + firstLine.stripLeading() + reindentedRest;
+								}
+							} else {
+								command.text = TextUtils
+										.replaceIndent(command.text, cursorCfg.indentSize, normalizedIndent, false)
+										.toString();
 							}
-							command.text = TextUtils.replaceIndent(command.text, cursorCfg.indentSize,
-									cursorCfg.normalizeIndentation(newIndent), false).toString();
 							command.shiftsCaret = true;
 						}
 					}

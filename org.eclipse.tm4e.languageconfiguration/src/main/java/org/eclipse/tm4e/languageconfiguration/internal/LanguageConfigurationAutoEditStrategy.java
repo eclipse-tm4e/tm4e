@@ -185,7 +185,7 @@ public class LanguageConfigurationAutoEditStrategy implements IAutoEditStrategy 
 										command.offset = lineStartOffset;
 										command.length += offsetInLine;
 									}
-									command.text = normalizedIndent + firstLine.stripLeading() + reindentedRest;
+									command.text = normalizedIndent + firstLine.replaceFirst("^[ \\t]+", "") + reindentedRest;
 								}
 							} else {
 								// Single-line paste: straightforward indent replacement

@@ -58,6 +58,18 @@ public class TestIndentationRules {
 		text.insert("function bar() {\n}");
 		assertThat(text.getText()).isEqualTo("public class Foo {\n\tfunction bar() {\n\t}\n}");
 
+		// insert a code snippet with unindented first line and expect the snippet to be correctly indented
+		text.setText("public class Foo {\n\n}");
+		text.setSelection(19);
+		text.insert("function bar() {\n\t\t\n\t}");
+		assertThat(text.getText()).isEqualTo("public class Foo {\n\tfunction bar() {\n\t\t\n\t}\n}");
+
+		// insert an else code snippet with unindented first line after the if code snippet and expect the snippet to be correctly indented
+		text.setText("public class Foo {\n\tfunction foo() {\n\t\tif (cond) {\n\t\t} \n\t}\n}");
+		text.setSelection(55);
+		text.insert("else {\n\t\t}");
+		assertThat(text.getText()).isEqualTo("public class Foo {\n\tfunction foo() {\n\t\tif (cond) {\n\t\t} else {\n\t\t}\n\t}\n}");
+
 		// insert single line text and ensure the text is only indented in blank lines
 		text.setText("public class Foo {\n\n}");
 		text.setSelection(19);

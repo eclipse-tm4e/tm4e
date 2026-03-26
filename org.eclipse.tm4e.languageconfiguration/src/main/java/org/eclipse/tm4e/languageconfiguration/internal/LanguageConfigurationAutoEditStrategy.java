@@ -163,17 +163,36 @@ public class LanguageConfigurationAutoEditStrategy implements IAutoEditStrategy 
 
 						final var newIndent = registry.getGoodIndentForLine(doc, lineIndex, contentType, IIndentConverter.of(cursorCfg));
 						if (newIndent != null) {
+							final var normalizedIndent = cursorCfg.normalizeIndentation(newIndent);
 							final var lineStartOffset = doc.getLineOffset(lineIndex);
-
-							// check if the content was pasted into a line while the cursor was not at the beginning of the line
-							// but inside or at the end of an existing line indentation
 							final var offsetInLine = command.offset - lineStartOffset;
-							if (offsetInLine > 0 && doc.get(lineStartOffset, offsetInLine).isBlank()) {
-								command.offset = lineStartOffset;
-								command.length += offsetInLine;
+							final int firstNewline = command.text.indexOf('\n');
+
+							if (firstNewline >= 0) {
+								final var firstLine = command.text.substring(0, firstNewline + 1);
+								// Re-indent lines after the first line
+								final var reindentedRest = TextUtils.replaceIndent(
+										command.text.substring(firstNewline + 1), cursorCfg.indentSize, normalizedIndent, false);
+
+								if (offsetInLine > 0 && !doc.get(lineStartOffset, offsetInLine).isBlank()) {
+									// Content was pasted midline after non-whitespace
+									// First pasted line continues existing content, don't replace indentation
+									command.text = firstLine + reindentedRest;
+								} else {
+									// Content was pasted at the start of the line, or preceded only by whitespace
+									// Replace any existing leading whitespace with the correct indent
+									if (offsetInLine > 0) {
+										command.offset = lineStartOffset;
+										command.length += offsetInLine;
+									}
+									command.text = normalizedIndent + firstLine.replaceFirst("^[ \\t]+", "") + reindentedRest;
+								}
+							} else {
+								// Single-line paste: straightforward indent replacement
+								command.text = TextUtils
+										.replaceIndent(command.text, cursorCfg.indentSize, normalizedIndent, false)
+										.toString();
 							}
-							command.text = TextUtils.replaceIndent(command.text, cursorCfg.indentSize,
-									cursorCfg.normalizeIndentation(newIndent), false).toString();
 							command.shiftsCaret = true;
 						}
 					}

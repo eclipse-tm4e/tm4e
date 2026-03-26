@@ -170,12 +170,17 @@ public class LanguageConfigurationAutoEditStrategy implements IAutoEditStrategy 
 
 							if (firstNewline >= 0) {
 								final var firstLine = command.text.substring(0, firstNewline + 1);
+								// Re-indent lines after the first line
 								final var reindentedRest = TextUtils.replaceIndent(
 										command.text.substring(firstNewline + 1), cursorCfg.indentSize, normalizedIndent, false);
 
 								if (offsetInLine > 0 && !doc.get(lineStartOffset, offsetInLine).isBlank()) {
+									// Content was pasted midline after non-whitespace
+									// First pasted line continues existing content, don't replace indentation
 									command.text = firstLine + reindentedRest;
 								} else {
+									// Content was pasted at the start of the line, or preceded only by whitespace
+									// Replace any existing leading whitespace with the correct indent
 									if (offsetInLine > 0) {
 										command.offset = lineStartOffset;
 										command.length += offsetInLine;
@@ -183,6 +188,7 @@ public class LanguageConfigurationAutoEditStrategy implements IAutoEditStrategy 
 									command.text = normalizedIndent + firstLine.stripLeading() + reindentedRest;
 								}
 							} else {
+								// Single-line paste: straightforward indent replacement
 								command.text = TextUtils
 										.replaceIndent(command.text, cursorCfg.indentSize, normalizedIndent, false)
 										.toString();

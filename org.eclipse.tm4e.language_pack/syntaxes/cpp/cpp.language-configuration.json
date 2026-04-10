@@ -128,5 +128,31 @@
 				"appendText": "// "
 			}
 		},
+		// Start of /* or /** -> create block comment and indent
+		{
+			"beforeText": {
+				"pattern": "^\\s*/\\*\\*?"
+			},
+			"afterText": {
+				"pattern": "^\\s*(\\*/)?$"
+			},
+			"action": {
+				"indent": "indentOutdent",
+				"appendText": " * "
+			}
+		},
+		// Inside block comment -> keep inside block comment and don't indent
+		{
+			"beforeText": {
+				"pattern": "^\\s*\\*(?!/)(?!.*\\*/\\s*$).*"
+			},
+			"afterText": {
+				"pattern": "^\\s*"
+			},
+			"action": {
+				"indent": "none",
+				"appendText": "* "
+			}
+		}		
 	]
 }

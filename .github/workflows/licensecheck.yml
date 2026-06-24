@@ -73,7 +73,7 @@ jobs:
 
 
     - name: "Cache: Local Maven Repository"
-      uses: actions/cache/restore@v5
+      uses: actions/cache/restore@v6
       with:
         # Excluded sub directory not working https://github.com/actions/toolkit/issues/713
         path: |
@@ -86,7 +86,7 @@ jobs:
 
 
     - name: "Cache: Local Tycho Repository"
-      uses: actions/cache/restore@v5
+      uses: actions/cache/restore@v6
       with:
         path: |
           ~/.m2/repository/.cache/tycho

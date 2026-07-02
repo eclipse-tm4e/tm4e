@@ -23,6 +23,7 @@ import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.jdt.annotation.Nullable;
+import org.eclipse.jface.resource.ImageRegistry;
 import org.eclipse.jface.text.templates.TemplateContextType;
 import org.eclipse.jface.text.templates.persistence.TemplateStore;
 import org.eclipse.text.templates.ContextTypeRegistry;
@@ -170,8 +171,11 @@ public class TMUIPlugin extends AbstractUIPlugin {
 				}
 			});
 		}
+	}
 
-		TMImages.initalize(getImageRegistry());
+	@Override
+	protected void initializeImageRegistry(final ImageRegistry registry) {
+		TMImages.initalize(registry);
 	}
 
 	@Override

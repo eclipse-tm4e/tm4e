@@ -12,6 +12,15 @@
    <bundle id="com.google.gson" version="0.0.0">
       <category name="Dependencies"/>
    </bundle>
+   <!--
+     This is a transitive dependency of org.apache.batik.css.
+     It provides package org.w3c.dom.svg version 1.1.0 and org.w3c.css.sac version 1.3.0.
+     Without this bundle in the update site, tm4e cannot be installed unless those packages are provided by some other update site.
+     The Eclipse Platform 4.41 no longer provides this bundle in its update site nor includes it in the installation.
+   -->
+   <bundle id="org.eclipse.orbit.xml-apis-ext" version="0.0.0">
+      <category name="Dependencies"/>
+   </bundle>
    <bundle id="org.apache.batik.constants" version="0.0.0">
       <category name="Dependencies"/>
    </bundle>

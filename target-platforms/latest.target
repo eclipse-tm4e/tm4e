@@ -24,17 +24,11 @@
     <location includeAllPlatforms="false" includeConfigurePhase="true" includeMode="planner" includeSource="true" type="InstallableUnit">
       <repository location="https://download.eclipse.org/tools/orbit/simrel/orbit-aggregation/2025-12/"/>
       <unit id="assertj-core" version="0.0.0"/>
-      <unit id="assertj-core.source" version="0.0.0"/>
       <unit id="com.google.gson" version="0.0.0"/>
-      <unit id="com.google.gson.source" version="0.0.0"/>
       <unit id="org.apache.batik.css" version="0.0.0"/>
-      <unit id="org.apache.batik.css.source" version="0.0.0"/>
       <unit id="org.jcodings" version="0.0.0"/>
-      <unit id="org.jcodings.source" version="0.0.0"/>
       <unit id="org.joni" version="0.0.0"/>
-      <unit id="org.joni.source" version="0.0.0"/>
       <unit id="org.snakeyaml.engine" version="0.0.0"/>
-      <unit id="org.snakeyaml.engine.source" version="0.0.0"/>
       <unit id="org.junit" version="0.0.0"/>
 
       <!-- Pinning JUnit 5 for now -->

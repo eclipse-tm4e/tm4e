@@ -8,9 +8,9 @@
       <unit id="org.eclipse.license.feature.group" version="2.0.2.v20181016-2210"/>
     </location>
 
-    <!-- 4.36 = Eclipse 2025-12 -->
+    <!-- 4.40 = Eclipse 2026-06 -->
     <location includeAllPlatforms="false" includeConfigurePhase="true" includeMode="planner" includeSource="true" type="InstallableUnit">
-      <repository location="https://download.eclipse.org/eclipse/updates/4.38"/>
+      <repository location="https://download.eclipse.org/eclipse/updates/4.40"/>
       <unit id="org.eclipse.platform.feature.group" version="0.0.0"/>
       <unit id="org.eclipse.ui.trace" version="0.0.0"/>
       <unit id="org.eclipse.ui.tests.harness" version="0.0.0"/>
@@ -22,7 +22,7 @@
     </location>
 
     <location includeAllPlatforms="false" includeConfigurePhase="true" includeMode="planner" includeSource="true" type="InstallableUnit">
-      <repository location="https://download.eclipse.org/tools/orbit/simrel/orbit-aggregation/2025-12/"/>
+      <repository location="https://download.eclipse.org/tools/orbit/simrel/orbit-aggregation/2026-06/"/>
       <unit id="assertj-core" version="0.0.0"/>
       <unit id="com.google.gson" version="0.0.0"/>
       <unit id="org.apache.batik.css" version="0.0.0"/>

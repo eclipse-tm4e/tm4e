@@ -98,4 +98,22 @@ class OnigRegExpTest {
 		assertOnigRegExpSearch("(?<=\\s*\\.)\\w+", ".foo", 0, true, ".foo");
 		assertOnigRegExpSearch("(?<=\\s*\\.)\\w+", "  .foo", 0, true, "  .foo");
 	}
+
+	@Test
+	void testMarkdownBackReferenceInLookBehind() {
+		// Keep the exact Markdown strikethrough pattern so this test exercises the same Joni compatibility path as the grammar.
+		final var pattern =
+				"(?<!\\\\)(~{2,})(?!(?<=\\w~~)_)((?:[^~]|(?!(?<![~\\\\])\\1(?!~))~)*+)(\\1)(?!(?<=_\\1)\\w)";
+
+		// Capture groups are part of the grammar contract and must stay unchanged when the assertion is rewritten.
+		assertOnigRegExpSearch(pattern, "~~text~~", 0, true, "~~text~~", "~~", "text", "~~");
+
+		// Underscores next to either delimiter must not create intraword strikethrough.
+		assertOnigRegExpSearch(pattern, "abc~~_~~x", 0, false);
+		assertOnigRegExpSearch(pattern, "~~foo_~~bar", 0, false);
+		assertOnigRegExpSearch(pattern, "~~foo_~~!", 0, true, "~~foo_~~", "~~", "foo_", "~~");
+
+		// Escaping the opening delimiter must continue to suppress the match after the rewrite.
+		assertOnigRegExpSearch(pattern, "\\~~text~~", 0, false);
+	}
 }

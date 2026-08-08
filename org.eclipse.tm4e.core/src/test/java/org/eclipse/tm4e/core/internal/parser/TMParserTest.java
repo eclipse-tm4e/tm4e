@@ -26,6 +26,7 @@ import java.nio.file.attribute.BasicFileAttributes;
 import java.util.Collection;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.regex.Pattern;
 
 import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.tm4e.core.Data;
@@ -42,6 +43,8 @@ import org.junit.jupiter.api.TestMethodOrder;
 
 @TestMethodOrder(MethodOrderer.MethodName.class)
 class TMParserTest {
+	// Mirrors RegExpSource's package-private runtime check for begin-capture references.
+	private static final Pattern HAS_BACK_REFERENCES = Pattern.compile("\\\\(\\d+)");
 
 	private void validateCaptures(final RawGrammar grammar) {
 		assertThat(grammar.getPatterns()).isNotNull();
@@ -208,15 +211,22 @@ class TMParserTest {
 	private void assertParseablePattern(final @Nullable String pattern) {
 		if (pattern == null)
 			return;
-		try {
-			assertThat(new OnigRegExp(pattern)).isNotNull();
-		} catch (final RuntimeException ex) {
-			final var msg = ex.getMessage();
-			if (msg != null && msg.contains("invalid backref number/name")) {
-				// ignore
-			} else
-				throw ex;
-		}
+		assertThat(new OnigRegExp(pattern)).isNotNull();
+	}
+
+	private void assertParseableEndOrWhilePattern(final @Nullable String pattern) {
+		if (pattern == null)
+			return;
+		// Runtime replacements are regex-escaped begin captures. A fixed literal preserves
+		// the surrounding syntax and gives look-behinds a concrete width for this check.
+		assertParseablePattern(HAS_BACK_REFERENCES.matcher(pattern).replaceAll("x"));
+	}
+
+	private void assertParseableRule(final IRawRule rule) {
+		assertParseablePattern(rule.getBegin());
+		assertParseableEndOrWhilePattern(rule.getEnd());
+		assertParseablePattern(rule.getMatch());
+		assertParseableEndOrWhilePattern(rule.getWhile());
 	}
 
 	private void assertParseablePatterns(final @Nullable Collection<IRawRule> patterns) {
@@ -224,10 +234,7 @@ class TMParserTest {
 			return;
 
 		for (final var rule : patterns) {
-			assertParseablePattern(rule.getBegin());
-			assertParseablePattern(rule.getEnd());
-			assertParseablePattern(rule.getMatch());
-			assertParseablePattern(rule.getWhile());
+			assertParseableRule(rule);
 			assertParseablePatterns(rule.getPatterns());
 		}
 	}
@@ -254,6 +261,10 @@ class TMParserTest {
 						final var patterns = castNonNull(rawGrammar.getPatterns());
 						assertThat(patterns).isNotEmpty();
 						assertParseablePatterns(patterns);
+						// TextMate include rules reference named repository entries by string, so walking
+						// getPatterns() never reaches their regex fields. Keep this check to the named rule;
+						// recursively expanding repository subtrees exposes separate existing incompatibilities.
+						rawGrammar.getRepository().putEntries((name, rule) -> assertParseableRule(rule));
 
 						final var reg = new Registry();
 						final var grammar = reg.addGrammar(IGrammarSource.fromFile(file));

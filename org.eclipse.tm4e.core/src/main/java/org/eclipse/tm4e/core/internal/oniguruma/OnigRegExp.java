@@ -94,7 +94,7 @@ public final class OnigRegExp {
 	}
 
 	/**
-	 * Rewrites the given pattern to work around limitations of the Joni library, which does not support variable-length lookbehinds.
+	 * Rewrites the given pattern to work around lookbehind limitations of the Joni library.
 	 *
 	 * Strategy:
 	 * <ul>
@@ -107,6 +107,7 @@ public final class OnigRegExp {
 	 * </ul>
 	 *
 	 * @see <a href="https://github.com/eclipse-tm4e/tm4e/issues/677">github.com/eclipse-tm4e/tm4e/issues/677</a>
+	 * @see <a href="https://github.com/eclipse-tm4e/tm4e/issues/1027">github.com/eclipse-tm4e/tm4e/issues/1027</a>
 	 */
 	private String rewritePatternIfRequired(final String pattern) {
 		if (pattern.isEmpty())
@@ -144,7 +145,12 @@ public final class OnigRegExp {
 		if (pattern.startsWith(negLB))
 			return "(?<!\\.)\\s*" + pattern.substring(negLB.length());
 
-		return pattern;
+		// --- Backreferences in lookbehinds ----------------------------------------
+		// Used in markdown.tmLanguage.json: (\1)(?!(?<=_\1)\w) ==> (?!(?<=_)\1\w)(\1)
+		// Joni rejects backreferences inside lookbehinds. Test Markdown's closing delimiter before consuming it so the
+		// backreference stays outside the lookbehind and the original capture groups and boundary semantics are preserved.
+		// Keep this rewrite narrow because arbitrary backreference lookbehinds cannot be moved without changing their meaning.
+		return pattern.replace("(\\1)(?!(?<=_\\1)\\w)", "(?!(?<=_)\\1\\w)(\\1)");
 	}
 
 	/**

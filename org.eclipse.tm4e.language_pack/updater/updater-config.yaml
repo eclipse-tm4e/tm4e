@@ -100,9 +100,10 @@ sources:
   vscode-extensions:
     type: vscode-extensions
     github:
+      # https://github.com/microsoft/vscode/tree/main/extensions
       repo: microsoft/vscode
       path: extensions
-      ref: "1.106.0"  # https://gitlab.eclipse.org/eclipsefdn/emo-team/iplab/-/issues/24751
+      ref: "1.132.0"  # https://gitlab.eclipse.org/eclipsefdn/emo-team/iplab/-/work_items/30091
     license-download: false
     include-all-by-default: true
     extensions:

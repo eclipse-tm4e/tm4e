@@ -195,7 +195,7 @@
   <!-- ======================================== -->
   <extension point="org.eclipse.core.contenttype.contentTypes">
     <content-type id="org.eclipse.tm4e.language_pack.cpp" name="C++" base-type="org.eclipse.tm4e.language_pack.basetype" priority="low"
-                  file-extensions="c++,c++m,cc,ccm,cpp,cppm,cxx,cxxm,h,h++,hh,hpp,hxx,ii,inl,ino,ipp,ixx,tpp,txx" file-patterns="*.h.in,*.hpp.in" />
+                  file-extensions="c++,c++m,cc,ccm,cpp,cppm,cxx,cxxm,h,h++,hh,hpp,hxx,ii,inl,ino,ipp,ixx,mpp,mxx,tpp,txx" file-patterns="*.h.in,*.hpp.in" />
   </extension>
   <extension point="org.eclipse.tm4e.registry.grammars">
     <grammar scopeName="source.cpp" path="syntaxes/cpp/cpp.tmLanguage.json" />
@@ -668,7 +668,7 @@
   <!-- ======================================== -->
   <extension point="org.eclipse.core.contenttype.contentTypes">
     <content-type id="org.eclipse.tm4e.language_pack.jsonc" name="JSON with Comments" base-type="org.eclipse.tm4e.language_pack.basetype" priority="low"
-                  file-extensions="babelrc,eslintrc,hintrc,jsfmtrc,jshintrc,jsonc,swcrc" file-names=".babelrc.json,.ember-cli,babel.config.json,bun.lock,typedoc.json" file-patterns="*.eslintrc.json,*.toolset.jsonc" />
+                  file-extensions="babelrc,eslintrc,hintrc,jsfmtrc,jshintrc,jsonc,swcrc" file-names=".babelrc.json,.ember-cli,babel.config.json,bun.lock,typedoc.json" file-patterns="**/.github/hooks/*.json,*.eslintrc.json,*.toolset.jsonc" />
   </extension>
   <extension point="org.eclipse.tm4e.registry.grammars">
     <grammar scopeName="source.json.comments" path="syntaxes/json/jsonc.tmLanguage.json" />
@@ -892,7 +892,7 @@
   <!-- ======================================== -->
   <extension point="org.eclipse.core.contenttype.contentTypes">
     <content-type id="org.eclipse.tm4e.language_pack.markdown" name="Markdown" base-type="org.eclipse.tm4e.language_pack.basetype" priority="low"
-                  file-extensions="markdn,markdown,md,mdown,mdtext,mdtxt,mdwn,mkd,workbook" />
+                  file-extensions="litcoffee,markdn,markdown,md,mdown,mdtext,mdtxt,mdwn,mkd,mkdn,ron,ronn,workbook" file-patterns="**/.cursor/**/*.mdc" />
   </extension>
   <extension point="org.eclipse.tm4e.registry.grammars">
     <grammar scopeName="text.html.markdown" path="syntaxes/markdown/markdown.tmLanguage.json" />
@@ -1115,7 +1115,7 @@
   <!-- ======================================== -->
   <extension point="org.eclipse.core.contenttype.contentTypes">
     <content-type id="org.eclipse.tm4e.language_pack.r" name="R" base-type="org.eclipse.tm4e.language_pack.basetype" priority="low"
-                  file-extensions="r,rhistory,rprofile,rt" />
+                  file-extensions="R,Rhistory,Rprofile,rt" />
   </extension>
   <extension point="org.eclipse.tm4e.registry.grammars">
     <grammar scopeName="source.r" path="syntaxes/r/r.tmLanguage.json" />
@@ -1418,7 +1418,7 @@
   <!-- ======================================== -->
   <extension point="org.eclipse.core.contenttype.contentTypes">
     <content-type id="org.eclipse.tm4e.language_pack.xml" name="XML" base-type="org.eclipse.tm4e.language_pack.basetype" priority="low"
-                  file-extensions="ascx,atom,axaml,axml,bpmn,cpt,csl,csproj,dita,ditamap,dtd,dtml,ent,fsproj,fxml,iml,isml,jmx,launch,menu,mod,mxml,nuspec,opml,owl,proj,props,pt,publishsettings,pubxml,rbxlx,rbxmx,rdf,rng,rss,shproj,slnx,storyboard,svg,targets,tld,tmx,vbproj,vcxproj,wsdl,wxi,wxl,wxs,xaml,xbl,xib,xlf,xliff,xml,xoml,xpdl,xsd,xul" file-patterns="*.csproj.user,*.pubxml.user,*.vbproj.user,*.vcxproj.filters" />
+                  file-extensions="ascx,atom,axaml,axml,bpmn,cpt,csl,csproj,dita,ditamap,dtd,dtml,ent,fsproj,fxml,iml,isml,jmx,launch,menu,mod,mxml,nuspec,opml,owl,proj,props,pt,publishsettings,pubxml,rbxlx,rbxmx,rdf,rng,rss,shproj,slnx,storyboard,svg,targets,tld,tmx,vbproj,vcxproj,wixproj,wsdl,wxi,wxl,wxs,xaml,xbl,xib,xlf,xliff,xml,xoml,xpdl,xsd,xul" file-patterns="*.csproj.user,*.pubxml.user,*.vbproj.user,*.vcxproj.filters" />
   </extension>
   <extension point="org.eclipse.tm4e.registry.grammars">
     <grammar scopeName="text.xml" path="syntaxes/xml/xml.tmLanguage.json" />

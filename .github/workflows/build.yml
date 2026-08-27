@@ -143,14 +143,14 @@ jobs:
 
 
     - name: "Install: JDK 21 for Compilation ☕"
-      uses: actions/setup-java@v5  # https://github.com/actions/setup-java
+      uses: actions/setup-java@v6  # https://github.com/actions/setup-java
       with:
         distribution: temurin
         java-version: 21
 
 
     - name: "Install: JDK 25 for Maven/Tycho ☕"
-      uses: actions/setup-java@v5  # https://github.com/actions/setup-java
+      uses: actions/setup-java@v6  # https://github.com/actions/setup-java
       if: matrix.os != 'windows-11-arm'  # TODO not yet available
       with:
         distribution: temurin

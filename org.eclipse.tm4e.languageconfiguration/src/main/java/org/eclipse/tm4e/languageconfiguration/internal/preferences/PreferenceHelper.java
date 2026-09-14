@@ -79,7 +79,11 @@ public final class PreferenceHelper {
 	}
 
 	public static ILanguageConfigurationDefinition[] loadLanguageConfigurationDefinitions(final String json) {
-		return Arrays.stream(DEFAULT_GSON.fromJson(json, LanguageConfigurationDefinition[].class))
+		final var definitions = DEFAULT_GSON.fromJson(json, LanguageConfigurationDefinition[].class);
+		if (definitions == null)
+			return new ILanguageConfigurationDefinition[0];
+
+		return Arrays.stream(definitions)
 				.filter(Objects::nonNull)
 				.toArray(ILanguageConfigurationDefinition[]::new);
 	}

@@ -185,8 +185,7 @@ public final class ContentTypeHelper {
 					final IStorage storage = storageInput.getStorage();
 					final String fileName = storage.getName();
 					try (InputStream input = storage.getContents()) {
-						final var contentTypes = getContentTypeManager().findContentTypesFor(input, fileName);
-						return contentTypes == null ? null : new ContentTypeInfo(fileName, contentTypes);
+						return new ContentTypeInfo(fileName, getContentTypeManager().findContentTypesFor(input, fileName));
 					}
 				} catch (final Exception ex) {
 					TMUIPlugin.logTrace(ex);

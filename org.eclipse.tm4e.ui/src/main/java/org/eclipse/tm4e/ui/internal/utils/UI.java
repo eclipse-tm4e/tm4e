@@ -105,10 +105,9 @@ public final class UI {
 			return PlatformUI.getWorkbench().getDisplay();
 
 		final var display = Display.getCurrent();
-		if (display != null)
-			return display;
-
-		return Display.getDefault();
+		return display == null //
+				? Display.getDefault()
+				: display;
 	}
 
 	public static boolean selectFirstElement(final TableViewer viewer) {
@@ -126,7 +125,7 @@ public final class UI {
 
 			@Override
 			public void modifyText(final ModifyEvent e) {
-				final var display = UI.getDisplay();
+				final var display = getDisplay();
 				// Cancel previous scheduled call
 				display.timerExec(-1, later);
 

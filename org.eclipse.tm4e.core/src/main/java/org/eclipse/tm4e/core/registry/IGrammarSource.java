@@ -151,7 +151,12 @@ public interface IGrammarSource {
 	}
 
 	default ContentType getContentType() {
-		return guessFileFormat(getURI().getPath());
+		final var uri = getURI();
+		final var path = uri.getPath();
+		if (path == null) {
+			throw new IllegalArgumentException("Cannot determine content type from URI without a path: " + uri);
+		}
+		return guessFileFormat(path);
 	}
 
 	URI getURI();

@@ -28,8 +28,8 @@ public final class ThemeLabelProvider extends LabelProvider implements ITableLab
 	}
 
 	@Override
-	public @Nullable String getText(final Object element) {
-		return ((ITheme) element).getName();
+	public @Nullable String getText(final @Nullable Object element) {
+		return element instanceof final ITheme theme ? theme.getName() : null;
 	}
 
 	@Override

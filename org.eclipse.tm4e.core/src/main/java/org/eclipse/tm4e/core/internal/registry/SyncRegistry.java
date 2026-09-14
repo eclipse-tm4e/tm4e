@@ -38,8 +38,8 @@ import org.eclipse.tm4e.core.internal.utils.ScopeNames;
  */
 public class SyncRegistry implements IGrammarRepository, IThemeProvider {
 
-	private final Map<String, Grammar> _grammars = new HashMap<>();
-	private final Map<String, @Nullable IRawGrammar> _rawGrammars = new HashMap<>();
+	private final Map<String, @Nullable Grammar> _grammars = new HashMap<>();
+	private final Map<String, IRawGrammar> _rawGrammars = new HashMap<>();
 	private final Map<String, Collection<String>> _injectionGrammars = new HashMap<>();
 	private Theme _theme;
 

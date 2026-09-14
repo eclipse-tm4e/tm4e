@@ -58,7 +58,7 @@ public abstract class TableWidget<T> extends TableViewer {
 		}
 
 		@Override
-		public @Nullable String getText(final Object element) {
+		public @Nullable String getText(final @Nullable Object element) {
 			return getColumnText(element, 0);
 		}
 	}
@@ -214,6 +214,7 @@ public abstract class TableWidget<T> extends TableViewer {
 		setSelection(getElements().stream().filter(selector).toList());
 	}
 
+	@SuppressWarnings("null")
 	public void setSelection(final boolean reveal, @SuppressWarnings("unchecked") final T... selection) {
 		setSelection(selection);
 		if (reveal) {

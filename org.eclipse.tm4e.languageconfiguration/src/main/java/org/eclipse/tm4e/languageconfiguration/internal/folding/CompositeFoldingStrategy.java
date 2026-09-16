@@ -35,58 +35,60 @@ import org.eclipse.jface.text.reconciler.IReconcilingStrategyExtension;
 public final class CompositeFoldingStrategy
 		implements IReconcilingStrategy, IReconcilingStrategyExtension, ITextViewerLifecycle {
 
-	private static final List<AbstractFoldingStrategy> DELEGATES = List.of(
+	/**
+	 * Each strategy stores its editor's document and viewer.
+	 * Sharing strategies between editors would let opening or closing one editor
+	 * overwrite or clear another editor's folding state.
+	 */
+	private final List<AbstractFoldingStrategy> delegates = List.of(
 			new IndentationFoldingStrategy(),
 			new TMFoldingStrategy());
 
-	public CompositeFoldingStrategy() {
-	}
-
 	@Override
 	public void initialReconcile() {
-		for (final AbstractFoldingStrategy delegate : DELEGATES) {
+		for (final AbstractFoldingStrategy delegate : delegates) {
 			delegate.initialReconcile();
 		}
 	}
 
 	@Override
 	public void install(final ITextViewer textViewer) {
-		for (final AbstractFoldingStrategy delegate : DELEGATES) {
+		for (final AbstractFoldingStrategy delegate : delegates) {
 			delegate.install(textViewer);
 		}
 	}
 
 	@Override
 	public void reconcile(final DirtyRegion dirtyRegion, final @Nullable IRegion subRegion) {
-		for (final AbstractFoldingStrategy delegate : DELEGATES) {
+		for (final AbstractFoldingStrategy delegate : delegates) {
 			delegate.reconcile(dirtyRegion, subRegion);
 		}
 	}
 
 	@Override
 	public void reconcile(final IRegion partition) {
-		for (final AbstractFoldingStrategy delegate : DELEGATES) {
+		for (final AbstractFoldingStrategy delegate : delegates) {
 			delegate.reconcile(partition);
 		}
 	}
 
 	@Override
 	public void setDocument(final @Nullable IDocument document) {
-		for (final AbstractFoldingStrategy delegate : DELEGATES) {
+		for (final AbstractFoldingStrategy delegate : delegates) {
 			delegate.setDocument(document);
 		}
 	}
 
 	@Override
 	public void setProgressMonitor(final @Nullable IProgressMonitor monitor) {
-		for (final AbstractFoldingStrategy delegate : DELEGATES) {
+		for (final AbstractFoldingStrategy delegate : delegates) {
 			delegate.setProgressMonitor(monitor);
 		}
 	}
 
 	@Override
 	public void uninstall() {
-		for (final AbstractFoldingStrategy delegate : DELEGATES) {
+		for (final AbstractFoldingStrategy delegate : delegates) {
 			delegate.uninstall();
 		}
 	}

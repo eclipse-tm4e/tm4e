@@ -75,6 +75,8 @@ public interface ITMModel extends ModelTokensChangedEvent.Listenable {
 
 	/**
 	 * Sets the grammar to use to parse the lines of the document.
+	 * Changing the grammar schedules all lines for tokenization again.
+	 * The model and its listeners are retained.
 	 */
 	void setGrammar(IGrammar grammar);
 

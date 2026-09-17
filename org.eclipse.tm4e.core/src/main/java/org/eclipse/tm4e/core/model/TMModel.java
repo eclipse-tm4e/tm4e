@@ -375,13 +375,10 @@ public abstract class TMModel implements ITMModel {
 	public synchronized void setGrammar(final IGrammar grammar) {
 		if (!Objects.equals(grammar, this.grammar)) {
 			this.grammar = grammar;
-			final var tokenizer = this.tokenizer = new TMTokenizationSupport(grammar);
-			synchronized (linesWriteLock) {
-				if (!lines.isEmpty()) {
-					lines.get(0).startState = tokenizer.getInitialState();
-				}
-				onLinesReplaced(0, 1, 1);
-			}
+			tokenizer = new TMTokenizationSupport(grammar);
+			// Reset every line because different grammars can produce equal parser states.
+			// Equal counts keep the line count unchanged. applyEdit bounds the reset after earlier queued text edits.
+			edits.add(new Edit(0, Integer.MAX_VALUE, Integer.MAX_VALUE));
 			startTokenizerThread();
 		}
 	}

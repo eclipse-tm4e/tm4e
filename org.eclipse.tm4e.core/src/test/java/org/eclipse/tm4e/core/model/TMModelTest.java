@@ -11,14 +11,61 @@ package org.eclipse.tm4e.core.model;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.eclipse.tm4e.core.registry.IGrammarSource.fromResource;
+import static org.eclipse.tm4e.core.registry.IGrammarSource.fromString;
+
+import java.util.List;
+import java.util.concurrent.LinkedBlockingQueue;
+import java.util.concurrent.TimeUnit;
 
 import org.eclipse.tm4e.core.Data;
 import org.eclipse.tm4e.core.internal.grammar.StateStack;
 import org.eclipse.tm4e.core.model.ITMModel.BackgroundTokenizationState;
+import org.eclipse.tm4e.core.registry.IGrammarSource.ContentType;
 import org.eclipse.tm4e.core.registry.Registry;
 import org.junit.jupiter.api.Test;
 
+/**
+ * Verifies background tokenization and grammar changes without replacing the model or its listeners.
+ */
 class TMModelTest {
+
+	@Test
+	void changingGrammarRefreshesEveryLine() throws Exception {
+		// Separate registries allow different rules for the same root scope, as when an imported grammar is replaced.
+		final var first = new Registry().addGrammar(fromString(ContentType.JSON, """
+			{"scopeName":"source.test","patterns":[{"match":"body","name":"keyword.first"}]}
+			"""));
+		final var second = new Registry().addGrammar(fromString(ContentType.JSON, """
+			{"scopeName":"source.test","patterns":[{"match":"body","name":"keyword.second"}]}
+			"""));
+		// Different token scopes with equal parser states must still invalidate cached tokens on every line.
+		assertThat(first.tokenizeLine("body").getRuleStack()).isEqualTo(second.tokenizeLine("body").getRuleStack());
+		final var model = new TMModel(3) {
+			@Override
+			public String getLineText(final int lineIndex) {
+				return "body";
+			}
+		};
+		final var changes = new LinkedBlockingQueue<ModelTokensChangedEvent>();
+		try {
+			model.addModelTokensChangedListener(event -> {
+				if (event.ranges.stream().anyMatch(range -> range.toLineNumber == 3))
+					changes.add(event);
+			});
+			for (final var grammar : List.of(first, second)) {
+				model.setGrammar(grammar);
+				assertThat(changes.poll(5, TimeUnit.SECONDS)).isNotNull();
+				assertThat(model.getNumberOfLines()).isEqualTo(3);
+				final var expectedScopes = grammar.tokenizeLine("body").getTokens()[0].getScopes();
+				for (int line = 0; line < 3; line++) {
+					assertThat(model.getLineTokens(line)).isNotEmpty()
+							.allSatisfy(token -> assertThat(token.scopes).containsExactlyElementsOf(expectedScopes));
+				}
+			}
+		} finally {
+			model.dispose();
+		}
+	}
 
 	@Test
 	void testTokenizeWithTimeout() {

@@ -14,6 +14,7 @@ package org.eclipse.tm4e.registry.internal;
 
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.Set;
 
 import org.eclipse.core.runtime.content.IContentType;
@@ -24,12 +25,13 @@ import org.eclipse.tm4e.registry.ITMScope;
 import org.osgi.service.prefs.BackingStoreException;
 
 /**
- * Working copy of grammar registry manager used by e.g. tm4e.ui/GrammarPreferencePage.
+ * Edits grammar imports without changing the live registry until the session is saved.
  */
 class WorkingCopyGrammarRegistryManager extends AbstractGrammarRegistryManager implements IGrammarRegistryManager.EditSession {
 
 	private final GrammarRegistryManager manager;
-	private final Set<IGrammarDefinition> added = new HashSet<>();
+	// The first import wins when several grammars share a scope, so saving must keep insertion order.
+	private final Set<IGrammarDefinition> added = new LinkedHashSet<>();
 	private final Set<IGrammarDefinition> removed = new HashSet<>();
 	private boolean isDirty = false;
 
@@ -40,14 +42,8 @@ class WorkingCopyGrammarRegistryManager extends AbstractGrammarRegistryManager i
 
 	@Override
 	public void reset() {
-		pluginDefinitions.byQualifiedScopeName.clear();
-		pluginDefinitions.byQualifiedScopeName.putAll(manager.pluginDefinitions.byQualifiedScopeName);
-		pluginDefinitions.byUnqualifiedScopeName.clear();
-		pluginDefinitions.byUnqualifiedScopeName.putAll(manager.pluginDefinitions.byUnqualifiedScopeName);
-		userDefinitions.byQualifiedScopeName.clear();
-		userDefinitions.byQualifiedScopeName.putAll(manager.userDefinitions.byQualifiedScopeName);
-		userDefinitions.byUnqualifiedScopeName.clear();
-		userDefinitions.byUnqualifiedScopeName.putAll(manager.userDefinitions.byUnqualifiedScopeName);
+		pluginDefinitions.copyFrom(manager.pluginDefinitions);
+		userDefinitions.copyFrom(manager.userDefinitions);
 
 		added.clear();
 		removed.clear();

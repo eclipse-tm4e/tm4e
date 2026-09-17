@@ -37,6 +37,10 @@ import org.eclipse.tm4e.registry.IGrammarDefinition;
 import org.eclipse.tm4e.registry.IGrammarRegistryManager;
 import org.eclipse.tm4e.registry.ITMScope;
 
+/**
+ * Resolves registered grammars by scope, content type and file extension.
+ * Shared base for the live registry and its editable copies.
+ */
 abstract class AbstractGrammarRegistryManager implements IGrammarRegistryManager {
 
 	private static record ContentTypeToScopeBinding(IContentType contentType, TMScope scope) {
@@ -48,6 +52,14 @@ abstract class AbstractGrammarRegistryManager implements IGrammarRegistryManager
 	static final class GrammarDefinitions {
 		final Map<String, @Nullable IGrammarDefinition> byQualifiedScopeName = new HashMap<>();
 		final Map<String /*scopeName*/, List<IGrammarDefinition>> byUnqualifiedScopeName = new HashMap<>();
+
+		void copyFrom(final GrammarDefinitions source) {
+			byQualifiedScopeName.clear();
+			byQualifiedScopeName.putAll(source.byQualifiedScopeName);
+			byUnqualifiedScopeName.clear();
+			// Each edit session needs separate lists. Otherwise an unsaved addition or removal would change the live registry too.
+			source.byUnqualifiedScopeName.forEach((scope, definitions) -> byUnqualifiedScopeName.put(scope, new ArrayList<>(definitions)));
+		}
 
 		void add(final IGrammarDefinition definition) {
 			final ITMScope scope = definition.getScope();

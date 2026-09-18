@@ -23,11 +23,13 @@ import java.util.List;
 
 import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.jface.text.BadLocationException;
+import org.eclipse.jface.text.IDocument;
 import org.eclipse.jface.text.IRegion;
 import org.eclipse.jface.text.Position;
 import org.eclipse.jface.text.reconciler.DirtyRegion;
 import org.eclipse.jface.text.source.Annotation;
 import org.eclipse.jface.text.source.projection.ProjectionAnnotation;
+import org.eclipse.jface.text.source.projection.ProjectionAnnotationModel;
 import org.eclipse.tm4e.languageconfiguration.LanguageConfigurationPlugin;
 import org.eclipse.tm4e.languageconfiguration.internal.utils.TextEditorPrefs;
 import org.eclipse.tm4e.ui.internal.model.DocumentHelper;
@@ -57,6 +59,7 @@ public final class IndentationFoldingStrategy extends AbstractFoldingStrategy {
 
 	@Override
 	public void reconcile(final DirtyRegion dirtyRegion, final @Nullable IRegion subRegion) {
+		final long version = beginReconcile();
 		final var document = this.document;
 		final var annoModel = projectionAnnotationModel;
 		final var textViewer = this.textViewer;
@@ -82,8 +85,8 @@ public final class IndentationFoldingStrategy extends AbstractFoldingStrategy {
 			int prevLineIdx = -1;
 
 			for (int lineIndex = startLineIndex; lineIndex < endLineIndexExclusive; lineIndex++) {
-				if (document != this.document)
-					return; // abort on changed document
+				if (!isCurrentReconcile(version))
+					return;
 
 				final String lineText = DocumentHelper.getLineText(document, lineIndex, false);
 				final boolean isBlank = lineText.isBlank();
@@ -121,7 +124,15 @@ public final class IndentationFoldingStrategy extends AbstractFoldingStrategy {
 
 			// ignore single line foldingRanges
 			foldingRanges.removeIf(r -> r.endLineIndex - r.startLineIndex == 0);
+			updateAnnotations(version, annoModel, () -> updateAnnotations(document, annoModel, foldingRanges));
+		} catch (final BadLocationException ex) {
+			LanguageConfigurationPlugin.logError(ex);
+		}
+	}
 
+	private void updateAnnotations(final IDocument document, final ProjectionAnnotationModel annoModel,
+			final List<FoldingRange> foldingRanges) {
+		try {
 			/*
 			 * Diff against existing annotations
 			 */
@@ -130,12 +141,9 @@ public final class IndentationFoldingStrategy extends AbstractFoldingStrategy {
 			final var newRanges = new HashSet<>(foldingRanges);
 
 			// Iterate over existing annotations to find those that must be kept or removed
-			final var scanOffset = document.getLineOffset(startLineIndex);
+			final var scanOffset = document.getLineOffset(0);
 			final var scanLength = document.getLength() - scanOffset;
 			for (final Iterator<Annotation> it = annoModel.getAnnotationIterator(scanOffset, scanLength, true, true); it.hasNext();) {
-				if (document != this.document)
-					return; // abort on changed document
-
 				if (!(it.next() instanceof final IndentationFoldingAnno anno)) {
 					continue; // ignore foreign annotations
 				}
@@ -175,9 +183,7 @@ public final class IndentationFoldingStrategy extends AbstractFoldingStrategy {
 			/*
 			 * Apply changes to the annotation model
 			 */
-			if (document != this.document)
-				return; // abort on changed document
-			modifyAnnotations(deletions, additions, List.of());
+			modifyAnnotations(annoModel, deletions, additions, List.of());
 		} catch (final BadLocationException ex) {
 			LanguageConfigurationPlugin.logError(ex);
 		}

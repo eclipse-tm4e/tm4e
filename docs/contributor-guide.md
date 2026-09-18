@@ -185,6 +185,10 @@ For editors that use TM4E's folding integration (via the `org.eclipse.ui.generic
   - `IndentationFoldingStrategy`, which derives folding ranges purely from indentation changes.
   - `TMFoldingStrategy`, which derives folding ranges from language-configuration folding markers or, as a fallback, from TextMate grammar folding markers.
 
+Folding scans compute ranges in the background and apply annotation changes on the UI thread.
+Editing the text, changing the input document, toggling folding, or closing the editor invalidates pending results
+without waiting for the scan.
+
 From a contributor perspective, most feature-level integrations with Eclipse editors live in `org.eclipse.tm4e.ui`.
 When making changes in this area, keep in mind how the language-configuration and folding support described here interacts with the Generic Editor and with custom editors through presentation reconcilers, partitioning, folding strategies, and preferences.
 

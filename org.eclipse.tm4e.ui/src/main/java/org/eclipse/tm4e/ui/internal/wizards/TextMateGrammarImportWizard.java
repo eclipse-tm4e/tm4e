@@ -17,6 +17,7 @@ import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.wizard.Wizard;
 import org.eclipse.tm4e.registry.IGrammarDefinition;
 import org.eclipse.tm4e.registry.IGrammarRegistryManager;
+import org.eclipse.tm4e.registry.TMEclipseRegistryPlugin;
 import org.eclipse.tm4e.ui.TMUIPlugin;
 import org.eclipse.ui.IImportWizard;
 import org.eclipse.ui.IWorkbench;
@@ -33,6 +34,11 @@ public final class TextMateGrammarImportWizard extends Wizard implements IImport
 
 	private SelectGrammarWizardPage mainPage = lateNonNull();
 	private IGrammarDefinition createdDefinition = lateNonNull();
+
+	/** Eclipse uses this constructor for File > Import, where Finish must save the wizard's own edit session. */
+	public TextMateGrammarImportWizard() {
+		this(TMEclipseRegistryPlugin.getGrammarRegistryManager().newEditSession(), true);
+	}
 
 	public TextMateGrammarImportWizard(final IGrammarRegistryManager.EditSession manager, final boolean saveOnFinish) {
 		this.manager = manager;

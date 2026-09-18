@@ -54,14 +54,18 @@ public final class TextMateGrammarImportWizard extends Wizard implements IImport
 	@Override
 	public boolean performFinish() {
 		final IGrammarDefinition definition = mainPage.getGrammarDefinition();
-		manager.registerGrammarDefinition(definition);
-		if (saveOnFinish) {
-			try {
+		try {
+			manager.registerGrammarDefinition(definition);
+			if (saveOnFinish) {
 				manager.save();
-			} catch (final BackingStoreException ex) {
-				TMUIPlugin.logError(ex);
-				return false;
 			}
+		} catch (final IllegalArgumentException ex) {
+			// Page validation checks the file, but only the registry can detect a conflicting earlier import.
+			mainPage.setErrorMessage(ex.getMessage());
+			return false;
+		} catch (final BackingStoreException ex) {
+			TMUIPlugin.logError(ex);
+			return false;
 		}
 		createdDefinition = definition;
 		return true;

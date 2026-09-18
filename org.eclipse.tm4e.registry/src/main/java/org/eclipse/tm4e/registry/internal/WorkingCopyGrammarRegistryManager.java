@@ -67,6 +67,15 @@ class WorkingCopyGrammarRegistryManager extends AbstractGrammarRegistryManager i
 
 	@Override
 	public void registerGrammarDefinition(final IGrammarDefinition definition) {
+		if (definition.getPluginId() == null) {
+			final var existing = userDefinitions.stream().filter(item -> sourceKey(item).equals(sourceKey(definition))).findFirst();
+			if (existing.isPresent()) {
+				// Reimporting must keep the original entry and its priority among grammars sharing a scope.
+				if (!existing.get().getScope().equals(definition.getScope()))
+					throw new IllegalArgumentException("This file was imported with a different scope. Remove the old import first.");
+				return;
+			}
+		}
 		super.registerGrammarDefinition(definition);
 		removed.remove(definition);
 		added.add(definition);

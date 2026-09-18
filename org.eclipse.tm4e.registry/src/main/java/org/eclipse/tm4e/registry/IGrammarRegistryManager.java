@@ -32,8 +32,11 @@ public interface IGrammarRegistryManager {
 
 		/**
 		 * Add grammar definition to the registry.
+		 * Importing the same file again keeps its existing definition and priority in this session.
 		 * <p/>
 		 * <b>NOTE:</b> you must call {@link #save()} method to make the changes persistent.
+		 *
+		 * @throws IllegalArgumentException if the file is already imported with a different scope
 		 */
 		void registerGrammarDefinition(IGrammarDefinition definition);
 

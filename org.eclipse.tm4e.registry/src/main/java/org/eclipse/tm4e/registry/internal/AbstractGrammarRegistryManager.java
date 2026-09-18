@@ -30,12 +30,14 @@ import java.util.stream.Stream;
 import org.eclipse.core.runtime.content.IContentType;
 import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.jdt.annotation.Owning;
+import org.eclipse.tm4e.core.TMException;
 import org.eclipse.tm4e.core.grammar.IGrammar;
 import org.eclipse.tm4e.core.registry.IGrammarSource;
 import org.eclipse.tm4e.core.registry.IRegistryOptions;
 import org.eclipse.tm4e.registry.IGrammarDefinition;
 import org.eclipse.tm4e.registry.IGrammarRegistryManager;
 import org.eclipse.tm4e.registry.ITMScope;
+import org.eclipse.tm4e.registry.TMEclipseRegistryPlugin;
 
 /**
  * Resolves registered grammars by scope, content type and file extension.
@@ -167,6 +169,10 @@ abstract class AbstractGrammarRegistryManager implements IGrammarRegistryManager
 		registry = new ReloadingRegistry(options);
 	}
 
+	static String sourceKey(final IGrammarDefinition definition) {
+		return definition.getURI().normalize().toString();
+	}
+
 	@Override
 	public @Nullable IGrammar getGrammarFor(final IContentType... contentTypes) {
 		// -> used by TMPresentationReconciler
@@ -246,10 +252,16 @@ abstract class AbstractGrammarRegistryManager implements IGrammarRegistryManager
 		final Optional<IGrammar> result = Stream //
 				.concat(userDefinitions.stream(), pluginDefinitions.stream())
 				.map(definition -> {
-					final IGrammar grammarForScope = getGrammarForScope(definition.getScope());
-					return grammarForScope != null && grammarForScope.getFileTypes().contains(desiredFileExt)
-							? grammarForScope
-							: null;
+					try {
+						final IGrammar grammarForScope = getGrammarForScope(definition.getScope());
+						return grammarForScope != null && grammarForScope.getFileTypes().contains(desiredFileExt)
+								? grammarForScope
+								: null;
+					} catch (final TMException ex) {
+						// Loading precedes the fileTypes check, so one missing import must not disable unrelated languages.
+						TMEclipseRegistryPlugin.logError("Cannot load grammar candidate " + definition.getPath(), ex);
+						return null;
+					}
 				})
 				.filter(Objects::nonNull)
 				.findFirst();

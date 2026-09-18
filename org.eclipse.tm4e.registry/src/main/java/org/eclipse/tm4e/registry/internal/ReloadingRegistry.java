@@ -99,37 +99,44 @@ public class ReloadingRegistry extends Registry {
 	private GrammarCacheState loadGrammarSource(final String scopeName) {
 		final long nowNanos = System.nanoTime();
 
-		return grammarCacheStates.compute(scopeName, (key, oldState) -> {
-			final IGrammarSource source = _grammarSourceForScopeName(key);
-			final URI sourceUri = source == null ? null : source.getURI();
+		try {
+			return grammarCacheStates.compute(scopeName, (key, oldState) -> {
+				final IGrammarSource source = _grammarSourceForScopeName(key);
+				final URI sourceUri = source == null ? null : source.getURI();
 
-			// Removing or replacing an import can select another file for the same scope. Check the URI before
-			// the timestamp delay: the replacement can be older, and comparing URIs needs no filesystem access.
-			if (oldState == null || !Objects.equals(sourceUri, oldState.sourceUri())) {
-				final boolean isLoaded = _doLoadSingleGrammar(key);
-				final long lastModified = Math.max(source == null ? 0 : source.getLastModified(), 0);
-				return new GrammarCacheState(sourceUri, isLoaded, lastModified, nowNanos);
-			}
+				// Removing or replacing an import can select another file for the same scope. Check the URI before
+				// the timestamp delay: the replacement can be older, and comparing URIs needs no filesystem access.
+				if (oldState == null || !Objects.equals(sourceUri, oldState.sourceUri())) {
+					final boolean isLoaded = _doLoadSingleGrammar(key);
+					final long lastModified = Math.max(source == null ? 0 : source.getLastModified(), 0);
+					return new GrammarCacheState(sourceUri, isLoaded, lastModified, nowNanos);
+				}
 
-			// Skip re-check if within interval
-			if (nowNanos - oldState.lastCheckedAt() < RECHECK_INTERVAL_NANOS) {
-				return oldState;
-			}
+				// Skip re-check if within interval
+				if (nowNanos - oldState.lastCheckedAt() < RECHECK_INTERVAL_NANOS) {
+					return oldState;
+				}
 
-			if (source == null) {
-				// No source available: update lastCheckedAt only
+				if (source == null) {
+					// No source available: update lastCheckedAt only
+					return new GrammarCacheState(sourceUri, oldState.isLoaded(), oldState.modifiedAt(), nowNanos);
+				}
+
+				final long lastModified = source.getLastModified();
+				if (lastModified != oldState.modifiedAt()) {
+					// Deletion reports zero, and replacements can be older. Read the source to distinguish absence from a valid timestamp.
+					final boolean isLoaded = _doLoadSingleGrammar(key);
+					return new GrammarCacheState(sourceUri, isLoaded, lastModified, nowNanos);
+				}
+
+				// No change: update lastCheckedAt only
 				return new GrammarCacheState(sourceUri, oldState.isLoaded(), oldState.modifiedAt(), nowNanos);
-			}
-
-			final long lastModified = source.getLastModified();
-			if (lastModified > oldState.modifiedAt()) {
-				// Reload grammar
-				final boolean isLoaded = _doLoadSingleGrammar(key);
-				return new GrammarCacheState(sourceUri, isLoaded, lastModified, nowNanos);
-			}
-
-			// No change: update lastCheckedAt only
-			return new GrammarCacheState(sourceUri, oldState.isLoaded(), oldState.modifiedAt(), nowNanos);
-		});
+			});
+		} catch (final RuntimeException ex) {
+			// compute keeps the old entry if loading fails. Clear it here for both roots and dependencies,
+			// so restoring a file with its old timestamp still forces a fresh read.
+			grammarCacheStates.remove(scopeName);
+			throw ex;
+		}
 	}
 }

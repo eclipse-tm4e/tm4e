@@ -9,6 +9,12 @@ updates:
     prefix: ci
     prefix-development: ci
     include: scope
+  groups:
+    # github/codeql-action/init and .../analyze must always be on the same version,
+    # so bump them together in a single PR
+    codeql-action:
+      patterns:
+        - github/codeql-action*
 
 - package-ecosystem: maven
   directory: /

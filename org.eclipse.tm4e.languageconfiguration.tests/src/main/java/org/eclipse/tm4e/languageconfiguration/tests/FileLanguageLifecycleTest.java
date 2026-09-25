@@ -297,6 +297,29 @@ class FileLanguageLifecycleTest {
 	}
 
 	@Test
+	void taskMarkerCoversTextAfterNestedComment() throws Exception {
+		// Nested block comments (as in Rust) stack "comment.block" scopes with identical words. The document model keeps
+		// the nested part as separate tokens, but the task text must still run to the end of the outer comment.
+		final var typeManager = Platform.getContentTypeManager();
+		final var extension = "nested-" + id;
+		final var plainType = typeManager.addContentType("org.eclipse.tm4e.tests." + extension, "Plain text",
+				typeManager.getContentType("org.eclipse.core.runtime.text"));
+		types.add(plainType);
+		plainType.addFileSpec(extension, IContentType.FILE_EXTENSION_SPEC);
+		final var grammar = registerGrammar("source.nested-" + id,
+				"{\"begin\":\"/\\\\*\",\"end\":\"\\\\*/\",\"name\":\"comment.block\",\"patterns\":[{\"include\":\"$self\"}]}");
+		final var file = createFile("comments." + extension, "/* TODO outer /* nested */ remaining */\n");
+		openEditor(file);
+		FileLanguageSelection.setLanguage(file, new Language(grammar.getScope().getQualifiedName(), null));
+		TestUtils.waitForAndAssertCondition(5_000, () -> file.findMarkers("org.eclipse.tm4e.ui.taskmarker", false,
+				IResource.DEPTH_ZERO).length == 1);
+		final var task = file.findMarkers("org.eclipse.tm4e.ui.taskmarker", false, IResource.DEPTH_ZERO)[0];
+		assertThat(task.getAttribute(IMarker.MESSAGE)).isEqualTo("TODO outer /* nested */ remaining */");
+		assertThat(task.getAttribute(IMarker.CHAR_START)).isEqualTo(3);
+		assertThat(task.getAttribute(IMarker.CHAR_END)).isEqualTo(39);
+	}
+
+	@Test
 	void pendingTokenizationKeepsExistingMarkers() throws Exception {
 		final var file = createFile("pending.m", "// TODO task\n// NOTE problem\n");
 		final var document = connect(file);

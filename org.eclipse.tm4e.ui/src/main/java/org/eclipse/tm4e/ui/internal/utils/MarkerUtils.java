@@ -136,12 +136,23 @@ public final class MarkerUtils {
 			final var outdatedMarkers = markersByLineNumber.getOrDefault(lineNumberObj, Collections.emptyList());
 
 			// iterate over all tokens of the current line
-			int tokenIndex = -1;
-			for (final TMToken token : tokens) {
-				tokenIndex++;
+			for (int tokenIndex = 0; tokenIndex < tokensCount; tokenIndex++) {
+				final TMToken token = tokens.get(tokenIndex);
 
 				if (!token.type.contains("comment") || token.type.contains("definition"))
 					continue;
+
+				// Scan a run of adjacent tokens with the same type as one comment. The document model keeps tokens apart
+				// whenever their scopes differ, e.g. a nested block comment stacks another "comment.block" scope, but the
+				// task text must still cover the whole equal-type run, as the single merged token did before. Tokens of
+				// another type, like comment delimiters, still end the run. Skipping the run also avoids reporting the same
+				// tag once per token.
+				int lastTokenIndexOfComment = tokenIndex;
+				while (lastTokenIndexOfComment + 1 < tokensCount
+						&& tokens.get(lastTokenIndexOfComment + 1).type.equals(token.type)) {
+					lastTokenIndexOfComment++;
+				}
+				tokenIndex = lastTokenIndexOfComment;
 
 				final @Nullable TMToken nextToken = tokenIndex + 1 < tokensCount ? tokens.get(tokenIndex + 1) : null;
 				try {

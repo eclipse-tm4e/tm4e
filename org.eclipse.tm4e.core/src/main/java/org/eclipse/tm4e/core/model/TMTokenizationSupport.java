@@ -24,6 +24,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.function.BiFunction;
 
 import org.eclipse.jdt.annotation.NonNull;
@@ -36,6 +37,9 @@ import org.eclipse.tm4e.core.internal.utils.MoreCollections;
 import org.eclipse.tm4e.core.internal.utils.StringUtils;
 
 /**
+ * Turns grammar tokens into document tokens for themes, partitions, and editing features.
+ * Adjacent tokens are merged only when their scopes and grammar origin are identical.
+ *
  * @see <a href=
  *      "https://github.com/microsoft/vscode/blob/ba2cf46e20df3edf77bdd905acde3e175d985f70/src/vs/workbench/services/textMate/browser/tokenizationSupport/textMateTokenizationSupport.ts#L14">
  *      github.com/microsoft/vscode/main/src/vs/workbench/services/textMate/browser/tokenizationSupport/textMateTokenizationSupport.ts
@@ -83,12 +87,22 @@ public class TMTokenizationSupport implements ITokenizationSupport {
 
 		// Create the result early and fill in the tokens later
 		final var tmTokens = new ArrayList<TMToken>(tokens.length < 10 ? tokens.length : 10);
-		String lastTokenType = null;
+		@Nullable
+		Token lastPushedToken = null;
 		for (final Token token : tokens) {
 			final String tokenType = decodeTextMateTokenCached.apply(decodeMap, token.scopes);
 
-			// do not push a new token if the type is exactly the same (also helps with ligatures)
-			if (!tokenType.equals(lastTokenType)) {
+			// Upstream merges binary tokens by their encoded metadata (language, token type, style). TMToken keeps the
+			// scopes instead, which themes, partitions, and auto-closing read, so only merge tokens with equal scopes and
+			// grammar scope; equal scopes imply an equal type. The decoded type is no substitute: it is the unordered set of
+			// the scopes' words, so different scope stacks can share it, e.g. "variable.assignment.coffee" nested in
+			// "meta.variable.assignment.destructured.array.coffee".
+			// Comparing the raw grammar scope is sufficient but conservative: with equal scopes, the stored grammar scope
+			// below depends only on it, yet different raw values can still yield the same stored one and stay separate.
+			// Colorizer joins adjacent tokens with equal text attributes, so ligatures still render within one style range.
+			// Consumers that need a whole comment, like MarkerUtils, join equal-type runs themselves.
+			if (lastPushedToken == null || !token.scopes.equals(lastPushedToken.scopes)
+					|| !Objects.equals(token.grammarScope, lastPushedToken.grammarScope)) {
 
 				// custom tm4e code - not from upstream (for TMPartitioner)
 				// Why we look up a preferred root from scopes:
@@ -103,7 +117,7 @@ public class TMTokenizationSupport implements ITokenizationSupport {
 								? preferredFromScopes
 								: token.grammarScope;
 				tmTokens.add(new TMToken(token.startIndex + offsetDelta, tokenType, token.scopes, tokenGrammarScope));
-				lastTokenType = tokenType;
+				lastPushedToken = token;
 			}
 		}
 

@@ -152,8 +152,8 @@ public interface IGrammarRegistryManager {
 	IGrammar getGrammarForFileExtension(String fileExtension);
 
 	/**
+	 * Matches the exact scope, including its contributor when qualified.
 	 * Includes plugin bindings even when a user choice overrides them for a document.
-	 * Embedded languages still need these bindings to find their content types.
 	 *
 	 * @return the list of content types bound with the given scope name and null otherwise.
 	 */

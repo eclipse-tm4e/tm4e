@@ -12,9 +12,7 @@
  */
 package org.eclipse.tm4e.ui.text;
 
-import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
 
 import org.eclipse.core.runtime.content.IContentType;
 import org.eclipse.jdt.annotation.Nullable;
@@ -22,8 +20,8 @@ import org.eclipse.jface.text.IDocument;
 import org.eclipse.jface.text.IDocumentExtension3;
 import org.eclipse.tm4e.core.grammar.IGrammar;
 import org.eclipse.tm4e.registry.IGrammarDefinition;
-import org.eclipse.tm4e.registry.ITMScope;
 import org.eclipse.tm4e.registry.TMEclipseRegistryPlugin;
+import org.eclipse.tm4e.registry.internal.GrammarRegistryManager;
 import org.eclipse.tm4e.ui.internal.text.TMPartitioner;
 import org.eclipse.tm4e.ui.internal.utils.ContentTypeHelper;
 import org.eclipse.tm4e.ui.internal.utils.ContentTypeInfo;
@@ -106,18 +104,10 @@ public final class TMPartitions {
 				return documentContentTypes;
 		}
 
-		// Partition scopes have no plugin IDs. Find matching plugin bindings for the document and its embedded languages.
+		// Partition scopes have no plugin IDs. Find plugin bindings for the document and its embedded languages,
+		// including bindings contributed by a bundle other than the grammar's.
 		// Ignore user bindings for other documents, even when they use the same scope.
-		final List<IContentType> result = new ArrayList<>();
-		for (final IGrammarDefinition def : mgr.getDefinitions()) {
-			final ITMScope defScope = def.getScope();
-			if (def.getPluginId() != null && scopeName.equals(defScope.getName())) {
-				final Collection<IContentType> mapped = mgr.getContentTypesForScope(defScope);
-				if (mapped != null && !mapped.isEmpty()) {
-					result.addAll(mapped);
-				}
-			}
-		}
+		final Collection<IContentType> result = GrammarRegistryManager.getInstance().getContributedContentTypesForScope(scopeName);
 		return result.isEmpty() //
 				? NO_CONTENT_TYPES
 				: result.toArray(IContentType[]::new);

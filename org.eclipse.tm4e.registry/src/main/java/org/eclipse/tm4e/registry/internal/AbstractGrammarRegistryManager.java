@@ -387,8 +387,38 @@ abstract class AbstractGrammarRegistryManager implements IGrammarRegistryManager
 				.map(Map.Entry::getKey).sorted()
 				.map(id -> Platform.getContentTypeManager().getContentType(id))
 				.filter(Objects::nonNull);
-		// Keep plugin bindings for embedded languages even when a user choice overrides the document's language.
+		// Show contributed bindings even when a workspace choice overrides them for a document.
 		return Stream.concat(contributed, user).distinct().toList();
+	}
+
+	/**
+	 * Returns the contributed content types bound to an unqualified grammar scope.
+	 * Used to find the editing rules for TM partitions, whose scopes carry no contributor.
+	 * <p>
+	 * A binding matches by scope name alone, because the bundle contributing a binding need not own the grammar.
+	 * Workspace bindings are excluded: they choose a grammar for documents of one content type
+	 * and must not apply editing rules to regions of other documents.
+	 * <p>
+	 * Editing features use the first returned type that has a configuration, so the order is part of the contract:
+	 * bindings contributed by the bundle of the scope's grammar come first, then those of other bundles.
+	 * Each group is ordered by content-type ID.
+	 */
+	public List<IContentType> getContributedContentTypesForScope(final String scopeName) {
+		// Use the plugin grammar that getGrammarSource() loads for an unqualified scope, so the rules come from the same
+		// bundle as the tokens. An imported grammar may shadow it, but imported grammars have no contributed bindings.
+		// Contributed bindings always carry a plugin ID, so without a plugin grammar all of them fall into the second group.
+		final @Nullable IGrammarDefinition owner = pluginDefinitions.getBestForScope(scopeName);
+		final @Nullable String ownerPluginId = owner == null ? null : owner.getPluginId();
+		return contentTypeToScopeBindings.values().stream()
+				.filter(binding -> scopeName.equals(binding.scope.getName()))
+				// Bindings from other bundles only add fallbacks. Otherwise any bundle binding its own content type to
+				// this scope would replace the owner's editing rules everywhere, merely because its ID sorts first.
+				// The bindings map has no stable order, so the ID keeps the result stable within each group.
+				.sorted(Comparator
+						.comparingInt((final ContentTypeToScopeBinding binding) -> Objects.equals(binding.scope.getPluginId(), ownerPluginId) ? 0 : 1)
+						.thenComparing(binding -> binding.contentType.getId()))
+				.map(ContentTypeToScopeBinding::contentType)
+				.toList();
 	}
 
 	protected void registerContentTypeToScopeBinding(final String pluginId, final IContentType contentType, final String scopeName) {

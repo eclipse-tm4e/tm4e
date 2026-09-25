@@ -11,6 +11,16 @@
             contentTypeId="org.eclipse.tm4e.ui.tests.testContentType"
             scopeName="source.ts">
       </scopeNameContentTypeBinding>
+      <!-- Also bound by org.eclipse.tm4e.languageconfiguration.tests (cross-bundle bindings). This owner binding's ID
+           sorts after those, so a pure ID order would not put it first. -->
+      <grammar
+            path="grammars/cross-bundle.tmLanguage.json"
+            scopeName="source.tm4e-cross-bundle">
+      </grammar>
+      <scopeNameContentTypeBinding
+            contentTypeId="org.eclipse.tm4e.ui.tests.crossBundleOwner"
+            scopeName="source.tm4e-cross-bundle">
+      </scopeNameContentTypeBinding>
    </extension>
    <extension
          point="org.eclipse.core.contenttype.contentTypes">
@@ -26,6 +36,12 @@
             file-names="child.ts"
             id="org.eclipse.tm4e.ui.tests.testContentType.child"
             name="Child of test content-type"
+            priority="normal">
+      </content-type>
+      <content-type
+            base-type="org.eclipse.core.runtime.text"
+            id="org.eclipse.tm4e.ui.tests.crossBundleOwner"
+            name="Test content type bound by the grammar's own bundle"
             priority="normal">
       </content-type>
    </extension>

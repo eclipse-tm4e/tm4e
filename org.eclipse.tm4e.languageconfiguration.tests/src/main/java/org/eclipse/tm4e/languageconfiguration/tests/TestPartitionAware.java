@@ -13,9 +13,13 @@
 package org.eclipse.tm4e.languageconfiguration.tests;
 
 import static org.assertj.core.api.Assertions.*;
+import static org.eclipse.tm4e.core.internal.utils.NullSafetyHelper.castNonNull;
 
 import java.io.ByteArrayInputStream;
+import java.nio.charset.StandardCharsets;
 
+import org.eclipse.core.filebuffers.FileBuffers;
+import org.eclipse.core.filebuffers.LocationKind;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.ResourcesPlugin;
@@ -302,5 +306,33 @@ public class TestPartitionAware {
 		final var jsPart = TMPartitions.getPartition(doc, jsIdx);
 		assertThat(jsPart.getType()).isEqualTo("tm4e:source.js");
 		assertThat(jsPart.getGrammarScope()).isEqualTo("source.js");
+	}
+
+	@Test
+	public void testPartitionContentTypesIncludeBindingsFromOtherBundles() throws Exception {
+		// The grammar and one binding are contributed by org.eclipse.tm4e.ui.tests, two more bindings by this bundle (see plugin.xml)
+		final IProject p = ResourcesPlugin.getWorkspace().getRoot().getProject(getClass().getName() + System.currentTimeMillis());
+		p.create(null);
+		p.open(null);
+		final IFile file = p.getFile("example.lc-cross");
+		file.create(new ByteArrayInputStream("text".getBytes(StandardCharsets.UTF_8)), true, null);
+
+		final var buffers = FileBuffers.getTextFileBufferManager();
+		buffers.connect(file.getFullPath(), LocationKind.IFILE, null);
+		try {
+			final IDocument doc = castNonNull(buffers.getTextFileBuffer(file.getFullPath(), LocationKind.IFILE)).getDocument();
+			TestUtils.waitForAndAssertCondition(5_000, () -> {
+				final var part = TMPartitions.getPartition(doc, 0);
+				return part != null && part.getGrammarScope().equals("source.tm4e-cross-bundle");
+			});
+			// All bindings apply. Editing features use the first type with a configuration, so the grammar owner's binding
+			// must come first even though its ID sorts last; the other bundles' bindings follow in ID order.
+			assertThat(TMPartitions.getContentTypesForOffset(doc, 0)).extracting(IContentType::getId).containsExactly(
+					"org.eclipse.tm4e.ui.tests.crossBundleOwner",
+					"org.eclipse.tm4e.languageconfiguration.tests.crossBundleA",
+					"org.eclipse.tm4e.languageconfiguration.tests.crossBundleZ");
+		} finally {
+			buffers.disconnect(file.getFullPath(), LocationKind.IFILE, null);
+		}
 	}
 }

@@ -16,6 +16,7 @@ import static org.eclipse.tm4e.languageconfiguration.internal.utils.TextUtils.*;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.regex.Pattern;
 
 import org.eclipse.core.runtime.content.IContentType;
 import org.eclipse.jdt.annotation.Nullable;
@@ -46,6 +47,16 @@ import org.eclipse.tm4e.ui.text.TMPartitions;
 public class LanguageConfigurationAutoEditStrategy implements IAutoEditStrategy {
 
 	private static final IContentType[] EMPTY_CONTENT_TYPES = new IContentType[0];
+
+	/**
+	 * Mirrors the standard token type classification of TM4E's package-private port of vscode-textmate's
+	 * BasicScopeAttributesProvider: the first match within a scope name classifies that scope.
+	 *
+	 * @see <a href=
+	 *      "https://github.com/microsoft/vscode-textmate/blob/76ab07aecfbd7e959ee4b55de3976f7a3ee95f38/src/grammar/basicScopesAttributeProvider.ts#L18">
+	 *      github.com/microsoft/vscode-textmate/blob/main/src/grammar/basicScopesAttributeProvider.ts</a>
+	 */
+	private static final Pattern STANDARD_TOKEN_TYPE = Pattern.compile("\\b(comment|string|regex|meta\\.embedded)\\b");
 
 	private IContentType[] contentTypes = EMPTY_CONTENT_TYPES;
 	private @Nullable IDocument document;
@@ -234,7 +245,9 @@ public class LanguageConfigurationAutoEditStrategy implements IAutoEditStrategy 
 				final var lineIndex = doc.getLineOfOffset(offset);
 				final var tokens = docModel.getLineTokens(lineIndex);
 				if (tokens != null) {
-					final var lineCharOffset = offset - doc.getLineOffset(lineIndex) - 1;
+					// Inspect the character before the edit. At line start, use the first token like VS Code does,
+					// so continuation lines of multi-line strings and comments are still classified.
+					final var lineCharOffset = Math.max(0, offset - doc.getLineOffset(lineIndex) - 1);
 					TMToken tokenAtOffset = null;
 					for (final var token : tokens) {
 						if (token.startIndex > lineCharOffset)
@@ -242,9 +255,15 @@ public class LanguageConfigurationAutoEditStrategy implements IAutoEditStrategy 
 						tokenAtOffset = token;
 					}
 					if (tokenAtOffset != null) {
-						for (final var notIn : pair.notIn) {
-							if (tokenAtOffset.type.contains(notIn))
-								return false;
+						// The flattened token type loses nesting and matches arbitrary substrings. Like VS Code, the innermost
+						// classified scope wins, and meta.embedded resets an enclosing string or comment (e.g. `${...}` in
+						// template strings) while strings and comments inside the embedded code classify again.
+						for (final String scope : tokenAtOffset.scopes.reversed()) {
+							final var matcher = STANDARD_TOKEN_TYPE.matcher(scope);
+							if (matcher.find()) {
+								final String type = matcher.group(1);
+								return "meta.embedded".equals(type) || !pair.notIn.contains(type);
+							}
 						}
 					}
 				}

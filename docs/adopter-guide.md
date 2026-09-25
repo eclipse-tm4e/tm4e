@@ -114,6 +114,12 @@ TM4E reads `language-configuration.json` files in the same way as VS Code, with 
 - `onEnterRules` are declared in the JSON file.
 - Regular expressions are provided as JSON strings, so backslashes must be escaped just as in VS Code.
 - Indent actions are expressed as string values (for example `"Indent"`, `"Outdent"`, `"IndentOutdent"`, or `"none"`), which TM4E maps internally to the corresponding indentation behavior.
+- The `notIn` values of conditional `autoClosingPairs` are matched against token classifications, as in VS Code:
+  - Only `string`, `comment`, and `regex` are recognized.
+    Other values do not match substrings of token scopes.
+  - The innermost classified scope at the edit position wins.
+  - A `meta.embedded.*` scope, for example the `${...}` part of a JavaScript template string, resets an enclosing string or comment.
+    Strings and comments inside the embedded code apply their own restrictions.
 
 The recommended way to define language configuration is always via JSON `language-configuration.json` files, either contributed through the `languageConfigurations` extension point or added by users in the preferences. Directly implementing TM4E's internal language-configuration interfaces in Java is not required for typical plug-ins and is not considered a stable API surface.
 

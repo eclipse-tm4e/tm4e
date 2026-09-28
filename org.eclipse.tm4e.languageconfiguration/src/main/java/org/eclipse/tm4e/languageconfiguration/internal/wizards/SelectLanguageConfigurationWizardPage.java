@@ -64,7 +64,36 @@ import org.eclipse.ui.dialogs.ResourceSelectionDialog;
 final class SelectLanguageConfigurationWizardPage extends WizardPage implements Listener {
 	private static final String PAGE_NAME = SelectLanguageConfigurationWizardPage.class.getName();
 
-	private static final String[] TEXTMATE_EXTENSIONS = { "*language-configuration.json" }; //$NON-NLS-1$
+	/**
+	 * Filter patterns for the native file dialog. Each entry is paired with the label at the same index in
+	 * {@link #FILE_FILTER_NAMES}.
+	 */
+	static final String[] FILE_FILTER_EXTENSIONS = {
+			// The three patterns look redundant, but no single pattern works on all platforms (#258, #989):
+			// - Windows and GTK support real globs, so the leading glob alone matches every "*language-configuration.json"
+			//   name there, including names like "php-language-configuration.json".
+			// - SWT's macOS dialog only understands "*.ext" suffixes and exact file names. It can never match the
+			//   leading glob, so that pattern alone greys out every file there.
+			// The exact name "language-configuration.json" also happens to match "foo.language-configuration.json"
+			// on macOS, because SWT additionally tests it as a suffix. "*.language-configuration.json" is kept so that
+			// dotted names do not depend on that implementation detail.
+			"*language-configuration.json;*.language-configuration.json;language-configuration.json", //$NON-NLS-1$
+			// Names like "php-language-configuration.json" cannot be matched by the first filter on macOS.
+			"*.json", //$NON-NLS-1$
+			// "*" and not "*.*", because GTK takes "*.*" literally and would hide files without an extension.
+			"*" //$NON-NLS-1$
+	};
+
+	/**
+	 * Labels for {@link #FILE_FILTER_EXTENSIONS}.
+	 * <p>
+	 * Must have the same length: SWT on GTK reads both arrays with the same index without a bounds check.
+	 */
+	static final String[] FILE_FILTER_NAMES = {
+			SelectLanguageConfigurationWizardPage_filter_languageConfigurationFiles,
+			SelectLanguageConfigurationWizardPage_filter_jsonFiles,
+			SelectLanguageConfigurationWizardPage_filter_allFiles
+	};
 
 	private Text fileText = lateNonNull();
 	private Text contentTypeText = lateNonNull();
@@ -156,7 +185,8 @@ final class SelectLanguageConfigurationWizardPage extends WizardPage implements 
 			@Override
 			public void widgetSelected(final SelectionEvent e) {
 				final var dialog = new FileDialog(parent.getShell());
-				dialog.setFilterExtensions(TEXTMATE_EXTENSIONS);
+				dialog.setFilterExtensions(FILE_FILTER_EXTENSIONS);
+				dialog.setFilterNames(FILE_FILTER_NAMES);
 				dialog.setFilterPath(fileText.getText());
 				final String result = dialog.open();
 				if (result != null && !result.isEmpty()) {

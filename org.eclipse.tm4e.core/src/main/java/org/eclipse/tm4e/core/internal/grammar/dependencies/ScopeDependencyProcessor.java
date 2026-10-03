@@ -21,8 +21,10 @@ import static org.eclipse.tm4e.core.internal.utils.NullSafetyHelper.castNonNull;
 
 import java.util.ArrayDeque;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Deque;
 import java.util.HashSet;
+import java.util.IdentityHashMap;
 import java.util.List;
 import java.util.Set;
 
@@ -36,6 +38,9 @@ import org.eclipse.tm4e.core.internal.grammar.raw.IRawRule;
 import org.eclipse.tm4e.core.internal.registry.IGrammarRepository;
 
 /**
+ * Collects grammar dependencies from include rules and injections.
+ * The registry loads the queued grammars before the next collection pass.
+ *
  * @see <a href=
  *      "https://github.com/microsoft/vscode-textmate/blob/76ab07aecfbd7e959ee4b55de3976f7a3ee95f38/src/grammar/grammarDependencies.ts#L59">
  *      github.com/microsoft/vscode-textmate/blob/main/src/grammar/grammarDependencies.ts</a>
@@ -46,7 +51,8 @@ public final class ScopeDependencyProcessor {
 
 		final Deque<AbsoluteRuleReference> references = new ArrayDeque<>();
 		final Deque<String> seenReferenceKeys = new ArrayDeque<>();
-		final Set<IRawRule> visitedRule = new HashSet<>();
+		// Match upstream's object identity: equal rules can resolve includes in different repositories.
+		final Set<IRawRule> visitedRule = Collections.newSetFromMap(new IdentityHashMap<>());
 
 		void add(final AbsoluteRuleReference reference) {
 			final var key = reference.toKey();
@@ -196,6 +202,7 @@ public final class ScopeDependencyProcessor {
 			if (result.visitedRule.contains(rule)) {
 				continue;
 			}
+			// Record the rule before following includes so recursive references stop at the same object.
 			result.visitedRule.add(rule);
 
 			final var patternRepository = rule.getRepository() == null

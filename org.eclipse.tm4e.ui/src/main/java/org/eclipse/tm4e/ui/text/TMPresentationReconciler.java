@@ -277,7 +277,8 @@ public class TMPresentationReconciler implements IPresentationReconciler {
 
 			// case 1) changed text: propagate previous style (which will be overridden later asynchronously by TMModel.TokenizerThread)
 			if (event.getDocumentEvent() != null) {
-				final int diff = event.getText().length() - event.getLength();
+				final String text = event.getText(); // null when text was removed via IDocument#replace(offset, length, null)
+				final int diff = (text == null ? 0 : text.length()) - event.getLength();
 				if (diff == 0 || event.getOffset() <= 0)
 					return;
 

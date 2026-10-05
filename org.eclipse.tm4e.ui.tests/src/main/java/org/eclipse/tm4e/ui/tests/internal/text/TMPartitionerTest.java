@@ -140,10 +140,10 @@ class TMPartitionerTest {
 
 	@Test
 	void documentRemoveDoesNotThrowOnNullText() throws Exception {
-		// Remove a single character using Document#remove, which yields a DocumentEvent with null text
+		// IDocument has no remove(); clients such as bracket inserters delete text with replace(offset, length, null),
+		// which yields a DocumentEvent with null text
 		final int pos = Math.max(0, doc.get().indexOf("<html>") - 1);
-		// IDocument has no remove(); simulate deletion with replace and empty text
-		doc.replace(pos, 1, "");
+		doc.replace(pos, 1, null);
 
 		// Should not throw; partitioning remains contiguous over new length
 		final int len = doc.getLength();

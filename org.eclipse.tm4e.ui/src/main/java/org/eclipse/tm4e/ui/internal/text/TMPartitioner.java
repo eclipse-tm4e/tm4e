@@ -454,7 +454,8 @@ public final class TMPartitioner implements ITMPartitioner {
 		// as a simple strategy, trim partitions from the change offset and mark as base until tokenization catches up
 		final int changeStart = Math.max(0, event.getOffset());
 		final int replacedLen = Math.max(0, event.getLength()); // length in old doc
-		final int addedLen = Math.max(0, event.getText().length());
+		final String addedText = event.getText(); // null when text was removed via IDocument#replace(offset, length, null)
+		final int addedLen = addedText == null ? 0 : addedText.length();
 		final int oldEnd = changeStart + replacedLen; // coordinates in old partitions map
 		final int newEnd = changeStart + addedLen;   // coordinates in new document
 

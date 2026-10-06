@@ -13,6 +13,8 @@ Require-Bundle: org.apache.batik.css,
  assertj-core
 Import-Package: org.junit.jupiter.api,
  org.junit.jupiter.api.function,
+ org.junit.jupiter.params,
+ org.junit.jupiter.params.provider,
  org.w3c.css.sac,
  org.w3c.css.sac.helpers
 Bundle-RequiredExecutionEnvironment: JavaSE-21

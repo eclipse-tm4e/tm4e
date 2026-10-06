@@ -13,18 +13,23 @@
 package org.eclipse.tm4e.languageconfiguration.internal;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 
 import org.eclipse.core.runtime.content.IContentType;
 import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.jface.text.BadLocationException;
 import org.eclipse.jface.text.IDocument;
+import org.eclipse.jface.text.IDocumentExtension4;
 import org.eclipse.jface.text.IRegion;
 import org.eclipse.jface.text.Region;
 import org.eclipse.jface.text.source.DefaultCharacterPairMatcher;
 import org.eclipse.jface.text.source.ICharacterPairMatcher;
 import org.eclipse.jface.text.source.ICharacterPairMatcherExtension;
 import org.eclipse.tm4e.core.model.ITMModel;
+import org.eclipse.tm4e.core.model.ModelTokensChangedEvent;
 import org.eclipse.tm4e.core.model.TMToken;
 import org.eclipse.tm4e.languageconfiguration.internal.model.AutoClosingPair;
 import org.eclipse.tm4e.languageconfiguration.internal.registry.LanguageConfigurationRegistryManager;
@@ -41,6 +46,7 @@ public class LanguageConfigurationCharacterPairMatcher implements ICharacterPair
 	private static final DefaultCharacterPairMatcher NOOP_MATCHER = new DefaultCharacterPairMatcher(new char[0]);
 	private static final char[] NO_BRACKETS = new char[0];
 	private static final char[] NO_QUOTES = new char[0];
+	private static final int SCAN_CHUNK_SIZE = 64 * 1024;
 
 	private @Nullable DefaultCharacterPairMatcher matcher;
 	private @Nullable IDocument document;
@@ -48,6 +54,18 @@ public class LanguageConfigurationCharacterPairMatcher implements ICharacterPair
 	private char[] bracketPairs = NO_BRACKETS;
 	private char[] quoteChars = NO_QUOTES;
 	private int anchor = -1;
+	private final Map<String, Boolean> ignoredScopes = new HashMap<>();
+
+	// last TM bracket scan, reused while neither the document nor its tokens change
+	private @Nullable IDocument cachedDocument;
+	private long cachedStamp = IDocumentExtension4.UNKNOWN_MODIFICATION_STAMP;
+	private int cachedTokensVersion;
+	private int cachedBracketOffset = -1;
+	private char cachedBracketChar;
+	private int cachedMateOffset = -1;
+	private @Nullable ITMModel watchedModel;
+	private volatile int tokensVersion;
+	private final ModelTokensChangedEvent.Listener modelChangeListener = e -> tokensVersion++;
 
 	@Override
 	public @Nullable IRegion match(final IDocument document, final int offset) {
@@ -142,6 +160,7 @@ public class LanguageConfigurationCharacterPairMatcher implements ICharacterPair
 		bracketPairs = NO_BRACKETS;
 		quoteChars = NO_QUOTES;
 		anchor = -1;
+		unwatchTokens();
 	}
 
 	@Override
@@ -150,6 +169,7 @@ public class LanguageConfigurationCharacterPairMatcher implements ICharacterPair
 			matcher.clear();
 		}
 		anchor = -1;
+		cachedDocument = null;
 	}
 
 	/**
@@ -163,8 +183,12 @@ public class LanguageConfigurationCharacterPairMatcher implements ICharacterPair
 			if (matcher != null && matcher != NOOP_MATCHER) {
 				matcher.dispose();
 			}
+			if (!document.equals(this.document)) {
+				unwatchTokens();
+			}
 			this.document = document;
 			fileSelection = selection;
+			cachedDocument = null;
 
 			// initialize a DefaultCharacterPairMatcher by using character pairs of the language configuration.
 			final ContentTypeInfo info = ContentTypeHelper.findContentTypes(document);
@@ -313,51 +337,132 @@ public class LanguageConfigurationCharacterPairMatcher implements ICharacterPair
 			if (mate == '\0')
 				return null;
 
-			if (searchForward) {
-				final int startPos = bracketOffset + 1;
-				int nesting = 0;
-				for (int pos = startPos; pos < docLength; pos++) {
-					if (isInsideStringCommentOrCharacterToken(tmModel, document, pos)) {
-						continue;
-					}
-					final char c = document.getChar(pos);
-					if (c == bracketChar) {
-						nesting++;
-					} else if (c == mate) {
-						if (nesting == 0) {
-							anchor = ICharacterPairMatcher.LEFT;
-							final int start = bracketOffset;
-							final int end = pos;
-							return new Region(Math.min(start, end), Math.abs(end - start) + 1);
-						}
-						nesting--;
-					}
-				}
-			} else {
-				final int startPos = bracketOffset - 1;
-				int nesting = 0;
-				for (int pos = startPos; pos >= 0; pos--) {
-					if (isInsideStringCommentOrCharacterToken(tmModel, document, pos)) {
-						continue;
-					}
-					final char c = document.getChar(pos);
-					if (c == bracketChar) {
-						nesting++;
-					} else if (c == mate) {
-						if (nesting == 0) {
-							anchor = ICharacterPairMatcher.RIGHT;
-							final int start = pos;
-							final int end = bracketOffset;
-							return new Region(Math.min(start, end), Math.abs(end - start) + 1);
-						}
-						nesting--;
-					}
-				}
+			final int mateOffset = findMateBracketCached(tmModel, document, bracketOffset, bracketChar, mate, searchForward);
+			if (mateOffset != -1) {
+				anchor = searchForward ? ICharacterPairMatcher.LEFT : ICharacterPairMatcher.RIGHT;
+				final int start = Math.min(bracketOffset, mateOffset);
+				return new Region(start, Math.abs(mateOffset - bracketOffset) + 1);
 			}
 		} catch (final BadLocationException e) {
 			// ignore and fall through to default matcher
 		}
 		return null;
+	}
+
+	private int findMateBracketCached(final ITMModel tmModel, final IDocument document, final int bracketOffset,
+			final char bracketChar, final char mate, final boolean forward) throws BadLocationException {
+		if (watchedModel != tmModel) {
+			unwatchTokens();
+			tmModel.addModelTokensChangedListener(modelChangeListener);
+			watchedModel = tmModel;
+		}
+		final long stamp = document instanceof final IDocumentExtension4 ext
+				? ext.getModificationStamp()
+				: IDocumentExtension4.UNKNOWN_MODIFICATION_STAMP;
+		final int version = tokensVersion;
+		if (stamp != IDocumentExtension4.UNKNOWN_MODIFICATION_STAMP && document == cachedDocument && stamp == cachedStamp
+				&& version == cachedTokensVersion && bracketOffset == cachedBracketOffset && bracketChar == cachedBracketChar)
+			return cachedMateOffset;
+
+		final int mateOffset = findMateBracket(tmModel, document, bracketOffset, bracketChar, mate, forward);
+		cachedDocument = document;
+		cachedStamp = stamp;
+		cachedTokensVersion = version;
+		cachedBracketOffset = bracketOffset;
+		cachedBracketChar = bracketChar;
+		cachedMateOffset = mateOffset;
+		return mateOffset;
+	}
+
+	private void unwatchTokens() {
+		final var model = watchedModel;
+		if (model != null) {
+			model.removeModelTokensChangedListener(modelChangeListener);
+			watchedModel = null;
+		}
+		cachedDocument = null;
+	}
+
+	/**
+	 * Scans token by token for the bracket's peer, skipping string, comment and character tokens.
+	 */
+	private int findMateBracket(final ITMModel tmModel, final IDocument document, final int bracketOffset,
+			final char bracketChar, final char mate, final boolean forward) throws BadLocationException {
+		final int step = forward ? 1 : -1;
+		final int lineCount = document.getNumberOfLines();
+		final int startLine = document.getLineOfOffset(bracketOffset);
+		final int docLength = document.getLength();
+		int nesting = 0;
+		int lineOffset = document.getLineOffset(startLine);
+		// read the text in bounded chunks, a String per line dominates the scan of short lines
+		String chunk = "";
+		int chunkOffset = 0;
+		for (int line = startLine; line >= 0 && line < lineCount; line += step) {
+			final int lineLength = document.getLineLength(line);
+			if (!forward && line != startLine) {
+				lineOffset -= lineLength;
+			}
+			final List<TMToken> lineTokens = tmModel.getLineTokens(line);
+			final List<TMToken> tokens = lineTokens == null ? List.of() : lineTokens;
+			final int first = line != startLine ? (forward ? 0 : lineLength - 1) : bracketOffset - lineOffset + step;
+
+			// segment -1 is the untokenized part before the first token
+			for (int seg = forward ? -1 : tokens.size() - 1; seg >= -1 && seg < tokens.size(); seg += step) {
+				final int segStart = seg < 0 ? 0 : Math.min(tokens.get(seg).startIndex, lineLength);
+				final int segEnd = seg + 1 < tokens.size() ? Math.min(tokens.get(seg + 1).startIndex, lineLength) : lineLength;
+				// classify the token lazily, most tokens contain no bracket at all
+				boolean classified = seg < 0;
+				for (int col = forward ? Math.max(segStart, first) : Math.min(segEnd - 1, first); col >= segStart
+						&& col < segEnd; col += step) {
+					final int pos = lineOffset + col;
+					if (pos < chunkOffset || pos >= chunkOffset + chunk.length()) {
+						chunkOffset = forward ? pos : Math.max(0, pos + 1 - SCAN_CHUNK_SIZE);
+						chunk = document.get(chunkOffset, forward ? Math.min(SCAN_CHUNK_SIZE, docLength - pos) : pos + 1 - chunkOffset);
+					}
+					final char c = chunk.charAt(pos - chunkOffset);
+					if (c != bracketChar && c != mate)
+						continue;
+					if (!classified) {
+						if (isIgnoredToken(tokens.get(seg)))
+							break;
+						classified = true;
+					}
+					if (c == bracketChar) {
+						nesting++;
+					} else if (c == mate) {
+						if (nesting == 0)
+							return lineOffset + col;
+						nesting--;
+					}
+				}
+			}
+			if (forward) {
+				lineOffset += lineLength;
+			}
+		}
+		return -1;
+	}
+
+	private boolean isIgnoredToken(final TMToken token) {
+		for (final String scope : token.scopes) {
+			if (ignoredScopes.computeIfAbsent(scope, LanguageConfigurationCharacterPairMatcher::isStringCommentOrCharacterScope))
+				return true;
+		}
+		return false;
+	}
+
+	private static boolean isStringCommentOrCharacterScope(final String scope) {
+		return scope.startsWith("string.") || scope.contains(".string.")
+				|| scope.startsWith("comment.") || scope.contains(".comment.")
+				|| scope.contains("constant.character");
+	}
+
+	private static boolean isStringCommentOrCharacterToken(final TMToken token) {
+		for (final String scope : token.scopes) {
+			if (isStringCommentOrCharacterScope(scope))
+				return true;
+		}
+		return false;
 	}
 
 	private @Nullable IRegion filterBracketRegion(final IDocument document, final @Nullable IRegion region) {
@@ -648,14 +753,7 @@ public class LanguageConfigurationCharacterPairMatcher implements ICharacterPair
 			if (column < tokenStart || column >= tokenEnd) {
 				continue;
 			}
-			for (final String scope : token.scopes) {
-				if (scope.startsWith("string.") || scope.contains(".string.")
-						|| scope.startsWith("comment.") || scope.contains(".comment.")
-						|| scope.contains("constant.character")) {
-					return true;
-				}
-			}
-			return false;
+			return isStringCommentOrCharacterToken(token);
 		}
 		return false;
 	}

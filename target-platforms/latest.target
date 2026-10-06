@@ -25,7 +25,6 @@
       <repository location="https://download.eclipse.org/tools/orbit/simrel/orbit-aggregation/2026-09/"/>
       <unit id="assertj-core" version="0.0.0"/>
       <unit id="com.google.gson" version="0.0.0"/>
-      <unit id="org.apache.batik.css" version="0.0.0"/>
       <unit id="org.jcodings" version="0.0.0"/>
       <unit id="org.joni" version="0.0.0"/>
       <unit id="org.snakeyaml.engine" version="0.0.0"/>

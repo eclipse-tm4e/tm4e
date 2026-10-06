@@ -32,7 +32,7 @@ class CSSParserTest {
 	private static final Path TEST_THEME = Path.of("src/main/resources/css/test-theme.css");
 
 	@Test
-	void testCSSParser() throws Exception {
+	void testCSSParser() {
 		final var parser = new CSSParser("""
 			.invalid { background-color: rgb(255,128,128); }
 			.storage.invalid { background-color: red; }
@@ -73,9 +73,58 @@ class CSSParserTest {
 			".keyword[lang] { color: red; }",
 			".a > .b { color: red; }",
 			".a .b { color: red; }",
-			".a { color: unknowncolor; }" })
+			".a { color: unknowncolor; }",
+			".a { color: \"red\"; }",
+			".a { color: rgb(1,2); }",
+			".a { color: rgb(abc,2,3); }",
+			".a { font-weight: 700; }" })
 	void testUnsupportedStylesheetIsRejected(final String css) {
-		assertThatThrownBy(() -> new CSSParser(".before { color: red; }\n" + css)).isInstanceOf(Exception.class);
+		assertThatThrownBy(() -> new CSSParser(".before { color: red; }\n" + css)).isInstanceOf(IllegalArgumentException.class);
+	}
+
+	/**
+	 * Verifies that a syntactically malformed declaration is skipped without affecting the rest of the stylesheet.
+	 */
+	@ParameterizedTest
+	@ValueSource(strings = {
+			"rgb(1,2,)",
+			"rgb(1,,3)",
+			"rgb()",
+			"rgb(.,2,3)",
+			"rgb(+,2,3)",
+			"rgb(1,2,3",
+			"#12",
+			"#12345g",
+			"-moz-x",
+			"." })
+	void testMalformedDeclarationIsSkipped(final String value) {
+		final var parser = new CSSParser(".a { color: red; color: " + value + "; } .b { color: blue; }");
+
+		assertThat(parser.getBestStyle("a").getColor()).isEqualTo(new RGB(255, 0, 0));
+		assertThat(parser.getBestStyle("b").getColor()).isEqualTo(new RGB(0, 0, 255));
+	}
+
+	@Test
+	void testSkippedConstructs() {
+		final var parser = new CSSParser("""
+			@font-face { src: "}{"; }
+			.a., .c { color: green; }
+			.a { content: "};{"; color: red !important; .c { color: green; } }
+			};
+			.b { color: blue; }
+			/* unterminated""");
+
+		assertThat(parser.getBestStyle("a").getColor()).isEqualTo(new RGB(255, 0, 0));
+		assertThat(parser.getBestStyle("b").getColor()).isEqualTo(new RGB(0, 0, 255));
+		assertThat(parser.getBestStyle("c")).isNull();
+	}
+
+	@Test
+	void testDeeplyNestedMediaRules() {
+		final var parser = new CSSParser("@media a {".repeat(100_000) + ".a { color: red; }" + "}".repeat(100_000) + ".b { color: blue; }");
+
+		assertThat(parser.getBestStyle("a").getColor()).isEqualTo(new RGB(255, 0, 0));
+		assertThat(parser.getBestStyle("b").getColor()).isEqualTo(new RGB(0, 0, 255));
 	}
 
 	private static String describe(final IStyle style) {

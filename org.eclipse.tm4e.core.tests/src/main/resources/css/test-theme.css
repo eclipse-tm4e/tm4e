@@ -1,0 +1,39 @@
+/* every construct the theme parser accepts, see test-theme.css.result */
+@import url("other.css");
+
+.rgb { color: rgb(1, 2, 3); background-color: rgb(4,5,6); }
+.hex { color: #3F7F5F; background-color: #2a00ff; }
+.hexShort { color: #fa0; }
+.named { color: white; background-color: navy; }
+
+.bold { font-weight: bold; }
+.italic { font-style: italic; font-family: monospace; }
+.normal { font-weight: normal; font-style: normal; }
+.underline { text-decoration: underline; }
+.strike { text-decoration: line-through; }
+
+.entity { color: rgb(1, 0, 0); }
+.entity.name { color: rgb(2, 0, 0); }
+.entity.name.tag { color: rgb(3, 0, 0); }
+.name.tag { color: rgb(4, 0, 0); }
+.tag.entity { color: rgb(5, 0, 0); }
+
+.keyword, .storage.type { color: rgb(10, 20, 30); }
+.keyword { font-weight: bold; }
+
+.comment /* inline */ { color: rgb(96, 139, 78); /* trailing */ }
+/* .string { color: rgb(1, 1, 1); } */
+
+body { color: rgb(9, 9, 9); }
+.shorthand {
+  margin: 0 10px;
+  background: transparent url(image.gif) no-repeat;
+  font: italic 1.1em/2.2 georgia;
+  color: rgb(7, 7, 7);
+}
+
+@media screen { .media { color: rgb(8, 8, 8); } }
+
+.editor { color: rgb(0, 0, 1); background-color: rgb(0, 0, 2); }
+.editor.selection { background-color: rgb(0, 0, 3); }
+.editor.lineHighlight { background-color: rgb(0, 0, 4); }

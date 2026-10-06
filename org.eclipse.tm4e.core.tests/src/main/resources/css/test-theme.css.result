@@ -1,0 +1,26 @@
+rgb -> color=RGB(1,2,3) background=RGB(4,5,6)
+hex -> color=RGB(63,127,95) background=RGB(42,0,255)
+hexShort -> color=RGB(255,170,0) background=null
+named -> color=RGB(255,255,255) background=RGB(0,0,128)
+bold -> color=null background=null bold
+italic -> color=null background=null italic
+normal -> color=null background=null
+underline -> color=null background=null underline
+strike -> color=null background=null strikethrough
+entity -> color=RGB(1,0,0) background=null
+entity.name -> color=RGB(2,0,0) background=null
+entity.name.tag.html -> color=RGB(3,0,0) background=null
+name -> none
+tag.entity -> color=RGB(5,0,0) background=null
+tag.name -> color=RGB(4,0,0) background=null
+storage.type -> color=RGB(10,20,30) background=null
+keyword -> color=null background=null bold
+comment -> color=RGB(96,139,78) background=null
+string -> none
+body -> none
+shorthand -> color=RGB(7,7,7) background=null
+media -> color=RGB(8,8,8) background=null
+editor -> color=RGB(0,0,1) background=RGB(0,0,2)
+editor.selection -> color=null background=RGB(0,0,3)
+editor.lineHighlight -> color=null background=RGB(0,0,4)
+unknown.scope -> none

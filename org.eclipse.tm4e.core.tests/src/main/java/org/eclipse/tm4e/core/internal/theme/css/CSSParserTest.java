@@ -22,7 +22,6 @@ import java.util.List;
 
 import org.eclipse.tm4e.core.theme.IStyle;
 import org.eclipse.tm4e.core.theme.RGB;
-import org.eclipse.tm4e.core.theme.css.CSSParser;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;

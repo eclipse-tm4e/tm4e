@@ -551,6 +551,10 @@ The release process for TM4E follows these high-level steps:
    - `git fetch eclipse main && git checkout FETCH_HEAD`
    - `git tag x.y.z`
    - `git push eclipse x.y.z`
+
+   Pushing the tag triggers the **Deploy to Maven Central** stage in the Jenkins pipeline, which publishes `org.eclipse.tm4e:org.eclipse.tm4e.core` to Maven Central automatically.
+   To verify it succeeded, check the build log at https://ci.eclipse.org/tm4e/job/TM4E/ and, once published, confirm the artifact appears on https://central.sonatype.com/artifact/org.eclipse.tm4e/org.eclipse.tm4e.core.
+
 3. Trigger a fresh build on the Eclipse CI instance at https://ci.eclipse.org/tm4e/job/TM4E/job/main/ and verify that it passes.
 4. After a successful build, run the promotion job at https://ci.eclipse.org/tm4e/job/promote-snapshot-to-release/ with the new version `x.y.z`.
 5. Create a new `x.y.z` release entry on GitHub based on the `x.y.z` tag.

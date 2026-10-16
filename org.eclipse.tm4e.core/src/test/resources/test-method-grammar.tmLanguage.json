@@ -1,0 +1,51 @@
+{
+  "scopeName": "source.testmethod",
+  "patterns": [
+    { "include": "#methods" }
+  ],
+  "repository": {
+    "methods": {
+      "name": "meta.definition.method.test",
+      "begin": "(?<=^)(?=\\s*(?:def)\\s+\\w+\\s*\\()",
+      "end": "}|(?=[^{])",
+      "applyEndPatternLast": 1,
+      "patterns": [
+        { "include": "#method-content" }
+      ]
+    },
+    "method-content": {
+      "patterns": [
+        { "match": "\\s" },
+        {
+          "name": "meta.method.return-type.test",
+          "begin": "(?=\\w[^\\(]*\\s+\\w+\\s*\\()",
+          "end": "(?=\\w+\\s*\\()",
+          "patterns": [
+            {
+              "match": "\\b(def)\\b",
+              "name": "storage.type.def.test",
+              "captures": {
+                "1": { "name": "storage.type.def.test" }
+              }
+            }
+          ]
+        },
+        {
+          "name": "meta.definition.method.signature.test",
+          "begin": "([\\w$]+)\\s*\\(",
+          "beginCaptures": {
+            "1": { "name": "entity.name.function.test" }
+          },
+          "end": "\\)",
+          "patterns": []
+        },
+        {
+          "name": "meta.method.body.test",
+          "begin": "\\{",
+          "end": "(?=})",
+          "patterns": []
+        }
+      ]
+    }
+  }
+}

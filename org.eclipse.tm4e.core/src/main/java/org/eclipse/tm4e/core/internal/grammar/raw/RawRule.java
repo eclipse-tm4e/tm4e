@@ -152,7 +152,7 @@ public class RawRule extends PropertySettable.HashMap<@Nullable Object> implemen
 		return switch (applyEndPatternLast) {
 			case null -> false;
 			case Boolean asBool -> asBool;
-			case Integer asInt -> asInt == 1;
+			case Number asNum -> asNum.intValue() == 1;
 			default -> false;
 		};
 	}

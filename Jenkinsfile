@@ -138,5 +138,45 @@ pipeline {
 				}
 			}
 		}
+
+		stage('Deploy to Maven Central') {
+			// Publishes org.eclipse.tm4e.core as a standalone JAR to Maven Central
+			// so it can be used as a plain Java dependency outside of Eclipse:
+			//
+			//   <dependency>
+			//       <groupId>org.eclipse.tm4e</groupId>
+			//       <artifactId>org.eclipse.tm4e.core</artifactId>
+			//       <version>0.18.1</version>
+			//   </dependency>
+			//
+			// Uses a separate pom-central.xml (standard Maven, not Tycho) to build
+			// the JAR with proper packaging, dependencies, sources, javadoc, and GPG signatures.
+			//
+			// Prerequisites:
+			//   - Jenkins credential 'ossrh': Sonatype OSSRH username/password
+			//     (request access via https://gitlab.eclipse.org/eclipsefdn/helpdesk)
+			//   - Jenkins credential 'gpg-passphrase': already configured for p2 signing
+			//
+			// See: https://github.com/eclipse-tm4e/tm4e/issues/83
+			when {
+				buildingTag()
+			}
+			steps {
+				withCredentials([
+					usernamePassword(credentialsId: 'ossrh', usernameVariable: 'MAVEN_USERNAME', passwordVariable: 'MAVEN_PASSWORD'),
+					string(credentialsId: 'gpg-passphrase', variable: 'KEYRING_PASSPHRASE')
+				]) {
+					sh """./mvnw -f org.eclipse.tm4e.core/pom-central.xml \
+						--no-transfer-progress --batch-mode \
+						-t /tmp/toolchains.xml \
+						-Possrh \
+						-Dgpg.passphrase="\$KEYRING_PASSPHRASE" \
+						-DserverId=ossrh \
+						-DserverUsername="\$MAVEN_USERNAME" \
+						-DserverPassword="\$MAVEN_PASSWORD" \
+						clean deploy"""
+				}
+			}
+		}
 	}
 }

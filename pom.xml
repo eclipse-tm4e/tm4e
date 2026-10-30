@@ -8,6 +8,10 @@
 	<version>0.18.1-SNAPSHOT</version>
 	<packaging>pom</packaging>
 
+	<name>Eclipse TM4E</name>
+	<description>TextMate support for Eclipse IDE</description>
+	<url>https://github.com/eclipse-tm4e/tm4e</url>
+
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<maven.minimum.version>3.9.9</maven.minimum.version>
@@ -50,6 +54,19 @@
 		<module>org.eclipse.tm4e.language_pack.feature</module>
 		<module>org.eclipse.tm4e.repository</module>
 	</modules>
+
+	<developers>
+		<developer>
+			<id>azerr</id>
+			<name>Angelo Zerr</name>
+			<url>https://github.com/angelozerr</url>
+		</developer>
+		<developer>
+			<id>sebthom</id>
+			<name>Sebastian Thomschke</name>
+			<url>https://github.com/sebthom</url>
+		</developer>
+	</developers>
 
 	<scm>
 		<url>https://github.com/eclipse-tm4e/tm4e</url>

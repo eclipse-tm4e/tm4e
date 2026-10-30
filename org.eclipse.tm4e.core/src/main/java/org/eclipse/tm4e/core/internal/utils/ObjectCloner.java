@@ -46,7 +46,7 @@ public final class ObjectCloner {
 			case final List<?> list -> {
 				final var listClone = shallowClone(list, () -> new ArrayList<>(list));
 				clones.put(list, listClone);
-				listClone.replaceAll(v -> deepCloneNullable(v, clones));
+				((List<@Nullable Object>) listClone).replaceAll(v -> deepCloneNullable(v, clones));
 				return (T) listClone;
 			}
 			case final Set<?> set -> {
@@ -61,7 +61,7 @@ public final class ObjectCloner {
 			case final Map<?, ?> map -> {
 				final var mapClone = shallowClone(map, () -> new HashMap<>(map));
 				clones.put(map, mapClone);
-				mapClone.replaceAll((k, v) -> deepCloneNullable(v, clones));
+				((Map<@Nullable Object, @Nullable Object>) mapClone).replaceAll((k, v) -> deepCloneNullable(v, clones));
 				return (T) mapClone;
 			}
 			default -> {

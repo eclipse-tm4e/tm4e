@@ -16,7 +16,7 @@ pipeline {
 
 	// https://www.jenkins.io/doc/book/pipeline/syntax/#options
 	options {
-		timeout(time: 20, unit: 'MINUTES')
+		timeout(time: 60, unit: 'MINUTES')
 		buildDiscarder(logRotator(numToKeepStr: '10'))
 		disableConcurrentBuilds(abortPrevious: false)
 	}
@@ -35,7 +35,10 @@ pipeline {
 
 		stage('initialize PGP') {
 			when {
-				branch 'main'
+				anyOf {
+					branch 'main'
+					buildingTag()
+				}
 			}
 			steps {
 				withCredentials([file(credentialsId: 'secret-subkeys.asc', variable: 'KEYRING')]) {
@@ -135,6 +138,54 @@ pipeline {
 						scp -r org.eclipse.tm4e.repository/target/repository/* genie.tm4e@projects-storage.eclipse.org:${DOWNLOAD_AREA}
 						scp org.eclipse.tm4e.repository/target/org.eclipse.tm4e.repository-*-SNAPSHOT.zip genie.tm4e@projects-storage.eclipse.org:${DOWNLOAD_AREA}/repository.zip
 					'''
+				}
+			}
+		}
+
+		stage('Deploy to Maven Central') {
+			// Publishes org.eclipse.tm4e.core as a standalone JAR to Maven Central
+			// so it can be used as a plain Java dependency outside of Eclipse:
+			//
+			//   <dependency>
+			//       <groupId>org.eclipse.tm4e</groupId>
+			//       <artifactId>org.eclipse.tm4e.core</artifactId>
+			//       <version>0.18.1</version>
+			//   </dependency>
+			//
+			// Uses a separate pom-central.xml (standard Maven, not Tycho) to build
+			// the JAR with proper packaging, dependencies, sources, javadoc, and GPG signatures.
+			//
+			// Prerequisites:
+			//   - Sonatype Central Portal namespace registered via
+			//     https://gitlab.eclipse.org/eclipsefdn/helpdesk
+			//   - Jenkins default Maven settings already contain the 'central' server credentials
+			//     (see https://eclipse.dev/cbi/jiro/Nexus-Maven-Central/)
+			//   - Jenkins credential 'gpg-passphrase': already configured for p2 signing
+			//
+			// See: https://github.com/eclipse-tm4e/tm4e/issues/83
+			when {
+				buildingTag()
+			}
+			steps {
+				withCredentials([
+					string(credentialsId: 'gpg-passphrase', variable: 'KEYRING_PASSPHRASE')
+				]) {
+					sh '''
+						# derive release version from git tag (e.g. v0.18.1 -> 0.18.1)
+						RELEASE_VERSION="${TAG_NAME#v}"
+						echo "Publishing version: ${RELEASE_VERSION}"
+						./mvnw -f org.eclipse.tm4e.core/pom-central.xml \
+							--no-transfer-progress --batch-mode \
+							versions:set -DnewVersion="${RELEASE_VERSION}"
+						sed -i "s/^Bundle-Version: .*/Bundle-Version: ${RELEASE_VERSION}/" \
+							org.eclipse.tm4e.core/META-INF/MANIFEST.MF
+					'''
+					sh """./mvnw -f org.eclipse.tm4e.core/pom-central.xml \
+						--no-transfer-progress --batch-mode \
+						-t /tmp/toolchains.xml \
+						-Pcentral \
+						-Dgpg.passphrase="\$KEYRING_PASSPHRASE" \
+						clean deploy"""
 				}
 			}
 		}

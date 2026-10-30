@@ -55,7 +55,7 @@ for root, dirs, files in os.walk(THIS_FILE_DIR):
 
     for file in files:
         match file:
-            case 'pom.xml':
+            case 'pom.xml' | 'pom-central.xml':
                 filepath = os.path.join(root, file)
                 print(f"Updating [{filepath}]...")
                 with open(filepath, "rt", encoding = 'utf-8') as fh:

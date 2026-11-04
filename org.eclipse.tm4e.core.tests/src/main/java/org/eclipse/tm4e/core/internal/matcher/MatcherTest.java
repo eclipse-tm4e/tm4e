@@ -74,7 +74,15 @@ public class MatcherTest {
 				{ "expression": "foo bar - (yo man)", "input": ["foo", "bar", "yo"], "result": true },
 				{ "expression": "foo bar - (yo man)", "input": ["foo", "bar", "yo", "man"], "result": false },
 				{ "expression": "foo bar - (yo | man)", "input": ["foo", "bar", "yo", "man"], "result": false },
-				{ "expression": "foo bar - (yo | man)", "input": ["foo", "bar", "yo"], "result": false }
+				{ "expression": "foo bar - (yo | man)", "input": ["foo", "bar", "yo"], "result": false },
+
+				{ "expression": "source", "input": ["source"], "result": true },
+				{ "expression": "source", "input": ["source.js"], "result": true },
+				{ "expression": "source", "input": ["source.js.regexp"], "result": true },
+				{ "expression": "source", "input": ["sources"], "result": false },
+				{ "expression": "source.js", "input": ["source"], "result": false },
+				{ "expression": "source.js", "input": ["source.js"], "result": true },
+				{ "expression": "source.js", "input": ["source.js.regexp"], "result": true }
 			]
 			""";
 		final var listType = new TypeToken<List<MatcherTestImpl>>() {

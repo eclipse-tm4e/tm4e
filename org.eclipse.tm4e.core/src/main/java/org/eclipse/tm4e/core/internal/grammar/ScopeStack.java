@@ -50,6 +50,7 @@ public final class ScopeStack {
 
 	public final @Nullable ScopeStack parent;
 	public final String scopeName;
+	private @Nullable List<String> cachedSegments;
 
 	ScopeStack(final @Nullable ScopeStack parent, final String scopeName) {
 		this.parent = parent;
@@ -61,15 +62,42 @@ public final class ScopeStack {
 	}
 
 	public List<String> getSegments() {
-		@Nullable
-		ScopeStack item = this;
-		final var result = new ArrayList<String>();
-		while (item != null) {
-			result.add(item.scopeName);
-			item = item.parent;
+		var segments = cachedSegments;
+		if (segments == null) {
+			final var parent = this.parent;
+			if (parent == null) {
+				segments = List.of(scopeName);
+			} else {
+				// Walk iteratively to the nearest cached ancestor
+				int uncachedCount = 1;
+				@Nullable List<String> ancestorSegments = null;
+				for (@Nullable ScopeStack a = parent; a != null; a = a.parent) {
+					ancestorSegments = a.cachedSegments;
+					if (ancestorSegments != null)
+						break;
+					uncachedCount++;
+				}
+
+				// Collect uncached names in root-to-leaf order
+				final var names = new String[uncachedCount];
+				@Nullable ScopeStack node = this;
+				for (int i = uncachedCount - 1; i >= 0 && node != null; i--) {
+					names[i] = node.scopeName;
+					node = node.parent;
+				}
+
+				// Build result: ancestor segments + uncached names
+				final int baseSize = ancestorSegments != null ? ancestorSegments.size() : 0;
+				final var result = new ArrayList<String>(baseSize + uncachedCount);
+				if (ancestorSegments != null) {
+					result.addAll(ancestorSegments);
+				}
+				Collections.addAll(result, names);
+				segments = Collections.unmodifiableList(result);
+			}
+			cachedSegments = segments;
 		}
-		Collections.reverse(result);
-		return result;
+		return segments;
 	}
 
 	@Override

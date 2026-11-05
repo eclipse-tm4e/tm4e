@@ -56,7 +56,7 @@ public interface NameMatcher<T> {
 			}
 			final int len = scopeName.length();
 			return thisScopeName.length() > len
-					&& thisScopeName.substring(0, len).equals(scopeName)
+					&& thisScopeName.startsWith(scopeName)
 					&& thisScopeName.charAt(len) == '.';
 		}
 	};

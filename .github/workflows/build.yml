@@ -156,6 +156,7 @@ jobs:
       with:
         distribution: temurin
         java-version: 21
+        problem-matcher: true
 
 
     - name: "Install: JDK 25 for Maven/Tycho ☕"
@@ -165,6 +166,7 @@ jobs:
       with:
         distribution: temurin
         java-version: 25
+        problem-matcher: true
 
 
     - name: "Cache: Local Maven Repository"

@@ -14,6 +14,7 @@ package org.eclipse.tm4e.languageconfiguration.internal.registry;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
+import java.util.regex.Pattern;
 
 import org.eclipse.core.runtime.content.IContentType;
 import org.eclipse.jdt.annotation.Nullable;
@@ -53,14 +54,36 @@ abstract class AbstractLanguageConfigurationRegistryManager implements ILanguage
 
 	@Override
 	public @Nullable LanguageConfiguration getLanguageConfigurationForResolvedTypes(final IContentType... contentTypes) {
+		final var definition = getDefinitionForResolvedTypes(contentTypes);
+		return definition == null ? null : definition.getLanguageConfiguration();
+	}
+
+	/**
+	 * Returns the word pattern of the language that {@link #getLanguageConfigurationFor(IContentType...)} selects.
+	 */
+	public @Nullable Pattern getWordPatternFor(final IContentType... contentTypes) {
+		return getWordPatternForResolvedTypes(
+				TMEclipseRegistryPlugin.getGrammarRegistryManager().getEffectiveContentTypes(contentTypes));
+	}
+
+	/**
+	 * Returns the word pattern of the language that {@link #getLanguageConfigurationForResolvedTypes(IContentType...)}
+	 * selects.
+	 */
+	public @Nullable Pattern getWordPatternForResolvedTypes(final IContentType... contentTypes) {
+		final var definition = getDefinitionForResolvedTypes(contentTypes);
+		return definition == null ? null : definition.getWordPattern();
+	}
+
+	private @Nullable ILanguageConfigurationDefinition getDefinitionForResolvedTypes(final IContentType... contentTypes) {
 		for (final IContentType contentType : contentTypes) {
 			final var userDefinition = userDefinitions.get(contentType);
 			if (userDefinition != null) {
-				return userDefinition.getLanguageConfiguration();
+				return userDefinition;
 			}
 			final var pluginDefinition = pluginDefinitions.get(contentType);
 			if (pluginDefinition != null) {
-				return pluginDefinition.getLanguageConfiguration();
+				return pluginDefinition;
 			}
 		}
 		return null;

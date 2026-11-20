@@ -60,12 +60,25 @@ public final class LanguageConfigurationRegistryManager extends AbstractLanguage
 			if (iDefinition instanceof final LanguageConfigurationDefinition definition) {
 				final var definitionContentType = definition.getContentType();
 				if (contentType.isKindOf(definitionContentType)
-						&& (bestFit == null || definitionContentType.isKindOf(bestFit.getContentType()))) {
+						&& (bestFit == null || fitsBetter(definition, bestFit))) {
 					bestFit = definition;
 				}
 			}
 		}
 		return bestFit;
+	}
+
+	/**
+	 * A more specific content type fits better. For the same content type, a user definition fits better than a plugin
+	 * definition, as in {@link #getLanguageConfigurationForResolvedTypes(IContentType...)}.
+	 */
+	private static boolean fitsBetter(final LanguageConfigurationDefinition definition,
+			final LanguageConfigurationDefinition bestFit) {
+		final var contentType = definition.getContentType();
+		if (contentType.equals(bestFit.getContentType())) {
+			return definition.getPluginId() == null && bestFit.getPluginId() != null;
+		}
+		return contentType.isKindOf(bestFit.getContentType());
 	}
 
 	private LanguageConfigurationRegistryManager() {

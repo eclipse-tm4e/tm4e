@@ -14,6 +14,7 @@ import static org.eclipse.tm4e.core.internal.utils.NullSafetyHelper.castNonNull;
 
 import java.io.ByteArrayInputStream;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Pattern;
@@ -26,6 +27,7 @@ import org.eclipse.core.runtime.Platform;
 import org.eclipse.core.runtime.content.IContentType;
 import org.eclipse.jface.text.IDocument;
 import org.eclipse.tm4e.languageconfiguration.LanguageConfigurationPlugin;
+import org.eclipse.tm4e.languageconfiguration.internal.registry.LanguageConfigurationDefinition;
 import org.eclipse.tm4e.languageconfiguration.internal.registry.LanguageConfigurationRegistryManager;
 import org.eclipse.tm4e.ui.internal.utils.UI;
 import org.eclipse.tm4e.ui.tests.support.TestUtils;
@@ -154,6 +156,43 @@ class WordPatternTest {
 		} finally {
 			UI.getActivePage().closeAllEditors(false);
 			project.delete(true, true, null);
+		}
+	}
+
+	@Test
+	void userDefinitionComesBeforePluginDefinition() throws Exception {
+		final var typeScript = contentType("org.eclipse.tm4e.language_pack.typescript");
+		final var file = Files.createTempFile("user-typescript", ".language-configuration.json");
+		final var userDefinition = new LanguageConfigurationDefinition(typeScript, file.toString());
+		final var registry = LanguageConfigurationRegistryManager.getInstance();
+		try {
+			Files.writeString(file, "{ \"wordPattern\": \"[a-z]+\" }");
+			final var session = registry.newEditSession();
+			session.registerLanguageConfigurationDefinition(userDefinition);
+			session.save();
+			// both the lookup by content types and the lookup of the best fitting definition use the user definition
+			assertThat(castNonNull(LanguageConfigurationPlugin.getWordPattern(typeScript)).pattern()).isEqualTo("[a-z]+");
+			assertThat(castNonNull(registry.getWordPattern(typeScript)).pattern()).isEqualTo("[a-z]+");
+		} finally {
+			final var session = registry.newEditSession();
+			session.unregisterLanguageConfigurationDefinition(userDefinition);
+			session.save();
+			Files.deleteIfExists(file);
+		}
+		assertThat(castNonNull(registry.getWordPattern(typeScript)).matcher("$el").matches()).isTrue();
+	}
+
+	@Test
+	void failedLoadIsNotCached() throws Exception {
+		final var file = Files.createTempFile("word-pattern", ".language-configuration.json");
+		Files.delete(file);
+		try {
+			final var definition = new LanguageConfigurationDefinition(contentType("org.eclipse.core.runtime.text"), file.toString());
+			assertThat(definition.getWordPattern()).isNull();
+			Files.writeString(file, "{ \"wordPattern\": \"[a-z]+\" }");
+			assertThat(castNonNull(definition.getWordPattern()).pattern()).isEqualTo("[a-z]+");
+		} finally {
+			Files.deleteIfExists(file);
 		}
 	}
 

@@ -156,7 +156,10 @@ public final class LanguageConfigurationDefinition extends TMResource implements
 		var wordPattern = this.wordPattern;
 		if (wordPattern == null) {
 			final LanguageConfiguration conf = getLanguageConfiguration();
-			wordPattern = conf == null ? null : conf.getWordRegExp();
+			if (conf == null) {
+				return null; // try again next time, as the other getters do
+			}
+			wordPattern = conf.getWordRegExp();
 			if (wordPattern == null) {
 				wordPattern = NO_WORD_PATTERN;
 			}

@@ -12,14 +12,16 @@
 package org.eclipse.tm4e.languageconfiguration.internal.registry;
 
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
+import java.util.LinkedHashSet;
 import java.util.regex.Pattern;
 
 import org.eclipse.core.runtime.content.IContentType;
 import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.tm4e.languageconfiguration.internal.model.LanguageConfiguration;
 import org.eclipse.tm4e.registry.TMEclipseRegistryPlugin;
+
 
 /**
  * Looks up editing configurations for content types, with or without applying workspace grammar bindings.
@@ -31,10 +33,15 @@ abstract class AbstractLanguageConfigurationRegistryManager implements ILanguage
 
 	@Override
 	public ILanguageConfigurationDefinition[] getDefinitions() {
-		final var definitions = new HashSet<ILanguageConfigurationDefinition>();
-		userDefinitions.values().forEach(definitions::add);
-		pluginDefinitions.values().forEach(definitions::add);
-		return definitions.toArray(ILanguageConfigurationDefinition[]::new);
+		Set<ILanguageConfigurationDefinition> definitions =
+				new LinkedHashSet<>();
+
+		definitions.addAll(pluginDefinitions.values());
+		definitions.addAll(userDefinitions.values());
+
+		return definitions.toArray(
+				ILanguageConfigurationDefinition[]::new
+		);
 	}
 
 	void registerLanguageConfigurationDefinition(final ILanguageConfigurationDefinition definition) {

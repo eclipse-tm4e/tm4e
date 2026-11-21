@@ -11,6 +11,8 @@
  */
 package org.eclipse.tm4e.languageconfiguration.internal.registry;
 
+import java.util.regex.Pattern;
+
 import org.eclipse.core.runtime.content.IContentType;
 import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.tm4e.languageconfiguration.internal.model.LanguageConfiguration;
@@ -32,6 +34,14 @@ public interface ILanguageConfigurationDefinition extends ITMResource {
 	 */
 	@Nullable
 	LanguageConfiguration getLanguageConfiguration();
+
+	/**
+	 * Returns the word pattern of the language configuration as a Java pattern.
+	 *
+	 * @return the word pattern, or {@code null} if the language configuration has no word pattern or Java cannot compile it
+	 */
+	@Nullable
+	Pattern getWordPattern();
 
 	/**
 	 * Returns whether on-enter actions are enabled for this language configuration content type pair

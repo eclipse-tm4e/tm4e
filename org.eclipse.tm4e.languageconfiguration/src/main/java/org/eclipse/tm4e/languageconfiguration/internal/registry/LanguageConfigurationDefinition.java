@@ -13,6 +13,7 @@ package org.eclipse.tm4e.languageconfiguration.internal.registry;
 
 import java.io.InputStreamReader;
 import java.nio.charset.Charset;
+import java.util.regex.Pattern;
 
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IConfigurationElement;
@@ -46,6 +47,10 @@ public final class LanguageConfigurationDefinition extends TMResource implements
 	private @Nullable OnEnterSupport onEnter;
 	private @Nullable IndentRulesSupport indentRules;
 	private @Nullable CommentSupport comment;
+	private volatile @Nullable Pattern wordPattern;
+
+	/** The value of {@link #wordPattern} when the language configuration has no word pattern */
+	private static final Pattern NO_WORD_PATTERN = Pattern.compile(""); //$NON-NLS-1$
 
 	public LanguageConfigurationDefinition(final IContentType contentType, final String path) {
 		super(path);
@@ -144,6 +149,23 @@ public final class LanguageConfigurationDefinition extends TMResource implements
 			this.comment = new CommentSupport(conf.getComments());
 		}
 		return comment;
+	}
+
+	@Override
+	public @Nullable Pattern getWordPattern() {
+		var wordPattern = this.wordPattern;
+		if (wordPattern == null) {
+			final LanguageConfiguration conf = getLanguageConfiguration();
+			if (conf == null) {
+				return null; // try again next time, as the other getters do
+			}
+			wordPattern = conf.getWordRegExp();
+			if (wordPattern == null) {
+				wordPattern = NO_WORD_PATTERN;
+			}
+			this.wordPattern = wordPattern;
+		}
+		return wordPattern == NO_WORD_PATTERN ? null : wordPattern;
 	}
 
 	@Override

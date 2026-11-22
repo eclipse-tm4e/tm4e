@@ -163,4 +163,41 @@ class ParsingTest {
 		assertThat(indentationRules.increaseIndentPattern).hasToString("(^.*\\{[^}]*$)");
 		assertThat(indentationRules.decreaseIndentPattern).hasToString("^\\s*\\}");
 	}
+
+	@Test
+	void testWordPattern() {
+		var conf = loadLanguageConfigFromString("""
+			{ "wordPattern": "[a-z]+" }""");
+		assertThat(conf.getWordPattern()).isEqualTo("[a-z]+");
+		assertThat(castNonNull(conf.getWordRegExp()).matcher("ABC").matches()).isFalse();
+
+		conf = loadLanguageConfigFromString("""
+			{ "wordPattern": { "pattern": "[a-z]+", "flags": "i" } }""");
+		assertThat(conf.getWordPattern()).isEqualTo("[a-z]+");
+		assertThat(castNonNull(conf.getWordRegExp()).matcher("ABC").matches()).isTrue();
+
+		conf = loadLanguageConfigFromString("""
+			{ "wordPattern": { "pattern": "[a-z]+" } }""");
+		assertThat(castNonNull(conf.getWordRegExp()).matcher("abc").matches()).isTrue();
+
+		conf = loadLanguageConfigFromString("""
+			{ "wordPattern": null }""");
+		assertThat(conf.getWordPattern()).isNull();
+		assertThat(conf.getWordRegExp()).isNull();
+
+		conf = loadLanguageConfigFromString("""
+			{ "wordPattern": { "flags": "i" } }""");
+		assertThat(conf.getWordPattern()).isNull();
+		assertThat(conf.getWordRegExp()).isNull();
+
+		conf = loadLanguageConfigFromString("""
+			{ "brackets": [] }""");
+		assertThat(conf.getWordRegExp()).isNull();
+
+		// a pattern that Java cannot compile
+		conf = loadLanguageConfigFromString("""
+			{ "wordPattern": "(" }""");
+		assertThat(conf.getWordPattern()).isEqualTo("(");
+		assertThat(conf.getWordRegExp()).isNull();
+	}
 }

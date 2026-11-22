@@ -20,12 +20,15 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
+import java.util.regex.Pattern;
+import java.util.regex.PatternSyntaxException;
 import java.util.stream.Collectors;
 
 import org.eclipse.jdt.annotation.NotOwning;
 import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.tm4e.languageconfiguration.LanguageConfigurationPlugin;
 import org.eclipse.tm4e.languageconfiguration.internal.model.EnterAction.IndentAction;
+import org.eclipse.tm4e.languageconfiguration.internal.utils.JavaScriptRegExp;
 
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonDeserializer;
@@ -73,6 +76,7 @@ public final class LanguageConfiguration {
 		final var jsonString = removeTrailingCommas(new BufferedReader(reader).lines().collect(Collectors.joining("\n")));
 		final var gsonBuilder = new GsonBuilder()
 				.registerTypeAdapter(String.class, (JsonDeserializer<String>) (json, typeOfT, context) -> {
+					// wordPattern has its own adapter, see WordPattern
 					if (json.isJsonObject()) {
 						/* for example:
 						 * "wordPattern": {
@@ -90,6 +94,16 @@ public final class LanguageConfiguration {
 					 * "wordPattern": "...",
 					 */
 					return json.getAsString();
+				})
+
+				.registerTypeAdapter(WordPattern.class, (JsonDeserializer<WordPattern>) (json, typeOfT, context) -> {
+					if (json.isJsonObject()) {
+						final var jsonObj = json.getAsJsonObject();
+						final var pattern = getAsString(jsonObj.get("pattern")); //$NON-NLS-1$
+						return pattern == null ? null : new WordPattern(pattern, getAsString(jsonObj.get("flags"))); //$NON-NLS-1$
+					}
+					final var pattern = getAsString(json);
+					return pattern == null ? null : new WordPattern(pattern, null);
 				})
 
 				.registerTypeAdapter(OnEnterRule.class, (JsonDeserializer<OnEnterRule>) (json, typeOfT, context) -> {
@@ -301,6 +315,16 @@ public final class LanguageConfiguration {
 			} else {
 				langCfg.colorizedBracketPairs.removeIf(Objects::isNull);
 			}
+
+			final var wordPattern = langCfg.wordPattern;
+			if (wordPattern != null) {
+				try {
+					langCfg.wordRegExp = JavaScriptRegExp.toPattern(wordPattern.pattern(), wordPattern.flags());
+				} catch (final PatternSyntaxException ex) {
+					LanguageConfigurationPlugin.logError(
+							"Failed to convert word pattern [" + wordPattern.pattern() + "] to a Java pattern.", ex);
+				}
+			}
 			return langCfg;
 		} catch (final Exception ex) {
 			LanguageConfigurationPlugin.logError("Failed to load language configuration: " + ex, ex);
@@ -379,7 +403,14 @@ public final class LanguageConfiguration {
 		return brackets;
 	}
 
-	private @Nullable String wordPattern;
+	/** A word pattern from the JSON file: a JavaScript regular expression and its flags. */
+	private record WordPattern(String pattern, @Nullable String flags) {
+	}
+
+	private @Nullable WordPattern wordPattern;
+
+	/** The word pattern as a Java pattern. It is not read from the JSON file. */
+	private transient @Nullable Pattern wordRegExp;
 
 	/**
 	 * Returns the language's definition of a word. This is the regex used when referring to a word.
@@ -387,7 +418,17 @@ public final class LanguageConfiguration {
 	 * @return the language's word pattern.
 	 */
 	public @Nullable String getWordPattern() {
-		return wordPattern;
+		final var wordPattern = this.wordPattern;
+		return wordPattern == null ? null : wordPattern.pattern();
+	}
+
+	/**
+	 * Returns the language's definition of a word as a Java pattern.
+	 *
+	 * @return the language's word pattern, or {@code null} if the language has no word pattern or Java cannot compile it
+	 */
+	public @Nullable Pattern getWordRegExp() {
+		return wordRegExp;
 	}
 
 	private @Nullable IndentationRules indentationRules;

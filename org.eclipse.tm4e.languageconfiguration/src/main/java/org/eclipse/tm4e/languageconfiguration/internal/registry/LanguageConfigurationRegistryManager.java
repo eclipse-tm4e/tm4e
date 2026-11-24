@@ -16,6 +16,7 @@ package org.eclipse.tm4e.languageconfiguration.internal.registry;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.regex.Pattern;
 
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.Platform;
@@ -200,6 +201,14 @@ public final class LanguageConfigurationRegistryManager extends AbstractLanguage
 	public @Nullable CommentSupport getCommentSupport(final IContentType contentType) {
 		final var definition = this.getDefinition(contentType);
 		return definition == null ? null : definition.getCommentSupport();
+	}
+
+	/**
+	 * Returns the word pattern of the language configuration that fits the given content type best.
+	 */
+	public @Nullable Pattern getWordPattern(final IContentType contentType) {
+		final var definition = this.getDefinition(contentType);
+		return definition == null ? null : definition.getWordPattern();
 	}
 
 	private @Nullable OnEnterSupport _getOnEnterSupport(final IContentType contentType) {
